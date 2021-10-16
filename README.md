@@ -17,6 +17,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 启用模块后打开一次地图即可切换区域至US，无需飞行模式、关闭定位、更改国家地区语言   
 macOS/iOS适用  
     作用:  
+    
     - [x] 更改为海外版Apple Maps    
     - [x] 激活Apple News    
     - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」   
@@ -30,6 +31,7 @@ macOS/iOS适用
 macOS/iOS适用  
 如启用后无效果，可以使用Geo_Services.sgmodule模块激活一下此功能，激活后可关闭Geo_Services.sgmodule  
     在以下位置可用: 
+
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
     - [ ] Safari浏览器(Safari)
