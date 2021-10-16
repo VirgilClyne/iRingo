@@ -18,7 +18,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * macOS/iOS适用  
     * 作用:  
     - [x] 更改为海外版Apple Maps    
-    - [x] 激活Apple News    
+    - [x] 激活/使用Apple News时不需要保持飞行模式或关闭定位服务(IP检测不在此模块解决范围)    
     - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 
 ---
