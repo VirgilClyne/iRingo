@@ -4,19 +4,19 @@ Committed to providing a complete Apple service experience.
 
 ---
 
-> 目录
+> 目录  
 
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search)    
 
 ---
 
-### <a id="Location Services"> 定位服务 </a>
+### <a id="Location Services"> 定位服务 </a>    
 [Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule " Rewrite Apple Geo Services Country Code")   
 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Geo_Services.sgmodule   
-启用模块后打开一次地图即可切换区域至US  
+启用模块后打开一次地图即可切换区域至US，无需飞行模式、关闭定位、更改国家地区语言   
 macOS/iOS适用  
-无需飞行模式、关闭定位、更改国家地区语言  
+   
     作用:  
     - [x] 更改为海外版Apple Maps    
     - [x] 激活Apple News    
@@ -27,10 +27,19 @@ macOS/iOS适用
 ### <a id="Siri & Search"> Siri与搜索 </a>  
 [Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")  
 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Siri_Suggestions.sgmodule  
-启用模块即可保持「来自APPLE的内容(CONTENT FROM APPLE)\来自APPLE的建议(SUGGESTIONS FROM APPLE)\Siri建议\Siri Suggestions」持续可用   
+启用模块即可保持「来自APPLE的内容(CONTENT FROM APPLE)\来自APPLE的建议(SUGGESTIONS FROM APPLE)\」持续可用   
 macOS/iOS适用  
-可能需要启用Geo_Services.sgmodule模块激活一下此功能，激活后可关闭Geo_Services.sgmodule  
-    作用:  
+如启用后无效果，可以使用Geo_Services.sgmodule模块激活一下此功能，激活后可关闭Geo_Services.sgmodule  
+
+    在以下位置可用: 
+    - [x] 聚焦搜索(Spotlight)
+    - [x] 查询(Look Up)
+    - [ ] Safari浏览器(Safari)
+    启用的功能:  
+    - [x] 来自APPLE的内容(CONTENT FROM APPLE)
+    - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
+    - [x] Siri建议(Siri Suggestions)
+    已知可用的信息卡片:  
     - [x] Siri资料(Siri Knowledge)  
     - [x] Siri建议的网站(siri Suggested Websites)   
     - [x] 维基百科  
