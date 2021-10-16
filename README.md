@@ -2,7 +2,7 @@
 Committed to providing a complete Apple service experience.  
 以下模块在macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过  
   
-[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule " Rewrite Apple Geo Services Country Code") 
+[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule " Rewrite Apple Geo Services Country Code")   
 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Geo_Services.sgmodule   
 启用模块后打开一次地图即可切换区域至US  
 macOS/iOS适用  
