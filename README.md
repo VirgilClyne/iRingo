@@ -6,12 +6,12 @@ Committed to providing a complete Apple service experience.
 
 > 目录
 
-* [地理位置解锁](#Location%20Services)  
-* [Siri建议](#Siri%20&amp;%20Search)    
+* [定位服务](#Location%20Services)  
+* [Siri与搜索](#Siri%20&amp;%20Search)    
 
 ---
 
-### <a id="Location Services"> 地理位置解锁 </a>
+### <a id="Location Services"> 定位服务 </a>
 [Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule " Rewrite Apple Geo Services Country Code")   
 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Geo_Services.sgmodule   
 启用模块后打开一次地图即可切换区域至US  
@@ -20,11 +20,11 @@ macOS/iOS适用
     作用:  
     - [x] 更改为海外版Apple Maps    
     - [x] 激活Apple News    
-    - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议)」   
+    - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 
 ---
 
-### <a id="Siri & Search"> Siri建议 </a>  
+### <a id="Siri & Search"> Siri与搜索 </a>  
 [Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")  
 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Siri_Suggestions.sgmodule  
 启用模块即可保持「来自APPLE的内容(CONTENT FROM APPLE)\来自APPLE的建议(SUGGESTIONS FROM APPLE)\Siri建议\Siri Suggestions」持续可用   
