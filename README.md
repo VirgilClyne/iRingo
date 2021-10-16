@@ -51,10 +51,11 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
       - [x] Apple Music  截图:[macOS](./ScreenShots/Apple%20Music%20-%20Spotlight%20-%20macOS.png?raw=true "Apple Music - Spotlight - macOS")    
     - [x] 新闻  
 
-注：对北美地区「Siri建议」服务器无效(SSL Pinning)  
+* 注：对北美地区「Siri建议」服务器无效(SSL Pinning)   
+    * 可通过Surge的`工具`-`最近请求`查看最近的*.smoot.apple.com前缀判断，如MitM失败可以重启手机、开关飞行模式、清除DNS缓存、更改VPN线路等方式刷新线路至支持的服务器     
 https://api.smoot.apple.com             （有效）  
-https://api-aka-*.smoot.apple.com       （有效）  
+https://api-aka.smoot.apple.com       （有效）  
 https://api-glb.smoot.apple.com         （有效）  
-https://api-glb-usw*.smoot.apple.com    （北美地区：无效）  
-https://api-glb-euc*.smoot.apple.com    （欧洲地区：有效）  
-https://api-glb-apne*.smoot.apple.com   （亚太地区：有效）  
+https://api-glb-usw.smoot.apple.com    （北美地区：无效）  
+https://api-glb-euc.smoot.apple.com    （欧洲地区：有效）  
+https://api-glb-apne.smoot.apple.com   （亚太地区：有效）  
