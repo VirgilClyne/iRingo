@@ -1,6 +1,6 @@
 # iRingo
-Committed to providing a complete Apple service experience.  
-以下模块在macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过  
+解锁完整的Apple搜索功能和集成服务 
+macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过  
 
 ---
 
