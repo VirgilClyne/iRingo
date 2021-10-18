@@ -12,9 +12,9 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 
 ---
 
-### <a id="Location Services"> 定位服务 </a>    
-[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Rewrite Apple Geo Services Country Code")   
-* 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Geo_Services.sgmodule   
+### <a id="Location Services"> 定位服务 </a>     
+* 安装链接:     
+  * [Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Rewrite Apple Geo Services Country Code")     
 * 启用模块后打开一次地图即可切换区域至US，无需开启飞行模式、关闭定位、更改国家地区语言等   
 * 需触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问)   
 * macOS/iOS适用  
@@ -25,9 +25,10 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 
 ---
 
-### <a id="Siri & Search"> Siri与搜索 </a>  
-[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")  
-* 安装链接: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/sgmodule/Siri_Suggestions.sgmodule  
+### <a id="Siri & Search"> Siri与搜索 </a>   
+* 安装链接:     
+  * [Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
+  * [Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
 * 启用模块即可保持「来自APPLE的内容(CONTENT FROM APPLE)\来自APPLE的建议(SUGGESTIONS FROM APPLE)\」持续可用   
 * macOS/iOS适用  
 * 如启用后无效果，可以使用Geo_Services.sgmodule模块激活一下此功能，激活后可关闭Geo_Services.sgmodule  
