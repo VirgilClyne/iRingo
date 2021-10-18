@@ -1,0 +1,28 @@
+#!name= Location-Based Siri Suggestions for Spotlight & Look Up & Safari
+#!desc=All Function Location-Based Siri Suggestions(Siri建议) for Spotlight(聚焦搜索) & Look Up(查询) & Safari(Safari浏览器).
+
+[Rule]
+# > Look Up (查询, macOS, Wikipedia, Surge Enhance Mode enabled required)
+# PROCESS-NAME,LookupViewService,🌑Proxy
+# PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService,🌑Proxy
+# DOMAIN,lookup-api.apple.com,🌑Proxy
+DOMAIN,lookup-api.apple.com.edgekey.net,🌑Proxy
+DOMAIN,e16991.b.akamaiedge.net,🌑Proxy
+
+[URL Rewrite]
+# Redirect Siri Suggestions Service 
+# Bag (iOS/macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/bag.*)(cc=[A-Z]{2})(.*) $1com$3cc=HK$5 header
+# General Spotlight & Look Up Search (iOS/macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cc=[A-Z]{2})(.*) $1com$3cc=HK$5 header
+# General Info Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=[^kg][^tv])(.*) $1com$3card_locale=zh-Hans_CN$5cc=HK$7$8$9 header
+# Siri Knowledge(Siri资料) Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=kg)(.*) $1com$3card_locale=zh-Hans_CN$5cc=HK$7$8$9 header
+# Siri Knowledge(Siri资料) Card (iOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cardDomain=kg)(.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*) $1com$3$4$5card_locale=zh-Hans_CN$7cc=HK$9 header
+# tv Movies and TV Show Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:tv|movies))(.*)(q=(?:tv|movies)%3A)(.*)(%2F)([a-z]{2}-[A-Z]{2})(.*) $1com$3card_locale=zh-Hans_CN$5cc=HK$7$8$9$10$11$12zh-HK$14 header
+
+[MITM]
+hostname = %APPEND% -api-glb-usw2b.smoot.apple.com, *.smoot.apple.com, *.smoot.apple.cn, lookup-api.apple.com
