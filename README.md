@@ -31,7 +31,8 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * [Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
 * 启用模块即可保持「来自APPLE的内容(CONTENT FROM APPLE)\来自APPLE的建议(SUGGESTIONS FROM APPLE)\」持续可用   
 * macOS/iOS适用  
-* 如启用后无效果，可以使用Geo_Services.sgmodule模块激活一下此功能，激活后可关闭Geo_Services.sgmodule  
+* macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`, iOS需要开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
+* 如启用后无效果，可以开关一下上述的功能开关，并使用`Geo_Services.sgmodule`模块激活一下此功能，激活后可关闭`Geo_Services.sgmodule`  
     * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
