@@ -82,6 +82,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * 针对代理组为🌑Proxy的配置文件(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为Apple的配置文件:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
+  * 针对代理组为Apple News的配置文件:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
 * 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改国家地区语言等   
 * 可能需触发一次定位检测？行为待测试(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问)   
 * macOS/iOS适用 
