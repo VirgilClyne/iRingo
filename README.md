@@ -9,7 +9,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search)    
-
+* [Apple News](#Apple%20News) (测试中，别催了，人要傻了😵‍💫)
 ---
 
 ### <a id="Location Services"> 定位服务 </a>     
@@ -22,6 +22,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     - [x] 更改为海外版Apple Maps    
     - [x] 激活/使用Apple News时不需要保持飞行模式或关闭定位服务(IP检测不在此模块解决范围)    
     - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
+* 注:本模块只修改定位服务，不修改其他域名线路规则(如:Siri建议,Apple News等服务)
 
 ---
 
@@ -29,9 +30,9 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * 安装链接:     
   * 针对代理组为PROXY的配置文件:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
   * 针对代理组为Proxy的配置文件:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-  * 针对代理组为🌑Proxy的配置文件(如神机规则):[Siri_Suggestions_for_🌑Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_🌑Proxy.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
+  * 针对代理组为🌑Proxy的配置文件(如:DivineEngine\神机规则):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
   * 针对代理组为Apple的配置文件:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-  * 针对代理组为🍎Apple的配置文件:[Siri_Suggestions_for_🍎Apple.sgmodule](./sgmodule/Siri_Suggestions_for_🍎Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
+  * 针对代理组为🍎Apple的配置文件(如ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
 * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 * macOS/iOS适用  
 * macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`
@@ -61,7 +62,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
       - [x] iTunes  
     - [x] 新闻  
 
-* 注：对北美地区「Siri建议」服务器无效(SSL Pinning)   
+* 注:对北美地区「Siri建议」服务器无效(SSL Pinning)   
 * 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器
 * 如分配至api-glb-usw服务器且MitM失败，可以通过开关飞行模式、清除DNS缓存、更改VPN线路等方式刷新至支持的服务器
     * 「Siri建议」服务器支持情况:     
@@ -71,3 +72,16 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     - [ ] https://api-glb-usw.smoot.apple.com   (北美地区：无效)  
     - [x] https://api-glb-euc.smoot.apple.com   (欧洲地区：有效)
     - [x] https://api-glb-apne.smoot.apple.com  (亚太地区：有效) 
+
+---
+
+### <a id="Apple News"> Apple News </a>  
+* 安装链接:     
+  * 针对代理组为PROXY的配置文件:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect")
+  * 针对代理组为Proxy的配置文件:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
+  * 针对代理组为🌑Proxy的配置文件(如神机规则\DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
+  * 针对代理组为Apple的配置文件:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
+  * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
+* 启用模块后打开一次地图即可切换区域至US，无需开启飞行模式、关闭定位、更改国家地区语言等   
+* 需触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问)   
+* macOS/iOS适用 

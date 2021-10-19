@@ -2,25 +2,25 @@
 #!desc=Unlock Apple News without SIM Card Detect
 [Rule]
 # > Apple News 
-PROCESS-NAME,News
-PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News
-PROCESS-NAME,NewsTag
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag
-PROCESS-NAME,NewsToday2
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2
-PROCESS-NAME,NewsTodayIntents
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents
-USER-AGENT,AppleNews*
-DOMAIN,news-assets.apple.com
-DOMAIN,news-client.apple.com
-DOMAIN,news-edge.apple.com
-DOMAIN,news-events.apple.com
-DOMAIN,apple.comscoreresearch.com
+PROCESS-NAME,News,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,PROXY
+PROCESS-NAME,NewsTag,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,PROXY
+PROCESS-NAME,NewsToday2,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,PROXY
+PROCESS-NAME,NewsTodayIntents,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,PROXY
+USER-AGENT,AppleNews*,PROXY
+DOMAIN,news-assets.apple.com,PROXY
+DOMAIN,news-client.apple.com,PROXY
+DOMAIN,news-edge.apple.com,PROXY
+DOMAIN,news-events.apple.com,PROXY
+DOMAIN,apple.comscoreresearch.com,PROXY
 
 [URL Rewrite]
 # Redirect GeoServices
 (^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=HK$5 header
 
 [MITM]
-hostname = %APPEND% gspe35-ssl.ls.apple.com, c.apple.news
+hostname = %APPEND% gspe35-ssl.ls.apple.com
 
