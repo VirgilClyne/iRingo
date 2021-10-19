@@ -19,7 +19,7 @@ DOMAIN,apple.comscoreresearch.com,Apple
 
 [URL Rewrite]
 # Redirect GeoServices
-(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=HK$5 header
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=US$5 header
 
 [MITM]
 hostname = %APPEND% gspe35-ssl.ls.apple.com
