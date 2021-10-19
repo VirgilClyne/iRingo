@@ -59,10 +59,12 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     - [x] 新闻  
 
 * 注：对北美地区「Siri建议」服务器无效(SSL Pinning)   
-    * 可通过Surge的`工具`-`最近请求`查看最近的*.smoot.apple.com前缀判断，如MitM失败可以重启手机、开关飞行模式、清除DNS缓存、更改VPN线路等方式刷新线路至支持的服务器     
-https://api.smoot.apple.com             （有效）  
-https://api-aka.smoot.apple.com       （有效）  
-https://api-glb.smoot.apple.com         （有效）  
-https://api-glb-usw.smoot.apple.com    （北美地区：无效）  
-https://api-glb-euc.smoot.apple.com    （欧洲地区：有效）  
-https://api-glb-apne.smoot.apple.com   （亚太地区：有效）  
+* 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器
+* 如分配至api-glb-usw服务器且MitM失败，可以通过开关飞行模式、清除DNS缓存、更改VPN线路等方式刷新至支持的服务器
+    * 「Siri建议」服务器支持情况:     
+    - [x] https://api.smoot.apple.com           (有效)  
+    - [x] https://api-aka.smoot.apple.com       (有效)    
+    - [x] https://api-glb.smoot.apple.com       (有效)    
+    - [ ] https://api-glb-usw.smoot.apple.com   (北美地区：无效)  
+    - [x] https://api-glb-euc.smoot.apple.com   (欧洲地区：有效)
+    - [x] https://api-glb-apne.smoot.apple.com  (亚太地区：有效) 
