@@ -22,5 +22,5 @@ DOMAIN,apple.comscoreresearch.com,🌑Proxy
 (^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=HK$5 header
 
 [MITM]
-hostname = %APPEND% gspe35-ssl.ls.apple.com, configuration.ls.apple.com, gsp-ssl.ls.apple.com, bag.itunes.apple.com, play.itunes.apple.com, news-events.apple.com, api-edge.apps.apple.com
+hostname = %APPEND% gspe35-ssl.ls.apple.com, configuration.ls.apple.com, gsp-ssl.ls.apple.com, news-assets.apple.com, news-client.apple.com, news-edge.apple.com, news-events.apple.com, api-edge.apps.apple.com
 
