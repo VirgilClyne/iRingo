@@ -1,0 +1,15 @@
+# > Apple News 
+PROCESS-NAME,News
+PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News
+PROCESS-NAME,NewsTag
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag
+PROCESS-NAME,NewsToday2
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2
+PROCESS-NAME,NewsTodayIntents
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents
+USER-AGENT,AppleNews*
+DOMAIN,news-assets.apple.com
+DOMAIN,news-client.apple.com
+DOMAIN,news-edge.apple.com
+DOMAIN,news-events.apple.com
+DOMAIN,apple.comscoreresearch.com
