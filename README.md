@@ -1,7 +1,7 @@
 # iRingo
 解锁完整的Apple搜索功能和集成服务   
 macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过  
-需要启用MitM功能
+需要启用MitM功能,以下功能及模块互无依赖，均可单独使用
 
 ---
 
@@ -10,7 +10,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search) 
 * [Apple Map](#Apple%20Map) (todo)   
-* [Apple News](#Apple%20News) (测试中，别催了，人要傻了😵‍💫)
+* [Apple News](#Apple%20News) (todo)
 ---
 
 ### <a id="Location Services"> 定位服务 </a>     
@@ -34,7 +34,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * 针对代理组为🌑Proxy的配置文件(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
   * 针对代理组为Apple的配置文件:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-  * 不包含规则组的配置文件，方便自定义:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari"),规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
+  * 自定义规则组的配置文件:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari"),规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
 * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 * macOS/iOS适用  
 * macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`
@@ -71,9 +71,10 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     - [x] https://api.smoot.apple.com           (有效)  
     - [x] https://api-aka.smoot.apple.com       (有效)    
     - [x] https://api-glb.smoot.apple.com       (有效)    
-    - [ ] https://api-glb-usw.smoot.apple.com   (北美地区：无效)  
-    - [x] https://api-glb-euc.smoot.apple.com   (欧洲地区：有效)
-    - [x] https://api-glb-apne.smoot.apple.com  (亚太地区：有效) 
+    - [ ] https://api-glb-usw.smoot.apple.com   (美西：无效)  
+    - [x] https://api-glb-euc.smoot.apple.com   (欧洲中：有效)
+    - [x] https://api-glb-apne.smoot.apple.com  (亚太东北：有效) 
+    - [x] https://api-glb-apse.smoot.apple.com  (亚太东南：有效)
 
 ---
 
@@ -85,8 +86,10 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * 针对代理组为Apple的配置文件:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为Apple News的配置文件:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-  * 不包含规则组的配置文件，方便自定义:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
-* 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改语言等  
+  * 自定义规则组的配置文件[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
+* 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改语言等 
 * 此模块包含`Geo_Services.sgmodule`模块内容，区别是修改地区为US而非HK
-* 可能需触发一次定位检测？行为待测试(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问)   
-* macOS/iOS适用 
+* macOS/iOS适用  
+  * 使用方法: 
+    1. iOS需要设置`设置`-`新闻`-`位置：永不`和`蜂窝数据：关闭`  
+    2. 打开`地图`触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问) 
