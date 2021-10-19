@@ -1,0 +1,18 @@
+#!name= Unlock OverSea/International Apple Map
+#!desc=Unlock OverSea/International Apple Map.
+
+[Rule]
+# > Apple Map 
+PROCESS-NAME,Maps,PROXY
+PROCESS-NAME,/System/Applications/Maps.app/Contents/MacOS/Maps,PROXY
+PROCESS-NAME,com.apple.geod,PROXY
+PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod,PROXY
+USER-AGENT,geod*,PROXY
+USER-AGENT,com.apple.geod*,PROXY
+
+[URL Rewrite]
+# Redirect GeoServices
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=HK$5 header
+
+[MITM]
+hostname = %APPEND% gspe35-ssl.ls.apple.com
