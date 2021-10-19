@@ -21,7 +21,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     * 作用:  
     - [x] 更改为海外版Apple Maps    
     - [x] 激活/使用Apple News时不需要保持飞行模式或关闭定位服务(IP检测不在此模块解决范围)    
-    - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」   
+    - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
 
 ---
 
@@ -29,11 +29,11 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * 安装链接:     
   * [Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
   * [Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-* 启用模块即可保持「来自APPLE的内容(CONTENT FROM APPLE)\来自APPLE的建议(SUGGESTIONS FROM APPLE)\」持续可用   
+* 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 * macOS/iOS适用  
 * macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`
 * iOS需要开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
-* 如启用后无效果，可以开关一下上述的功能开关，或使用`Geo_Services.sgmodule`模块激活一下此功能，激活后可关闭`Geo_Services.sgmodule`  
+* 如启用后无效果，可以开关一下上述的功能开关，或使用`Geo_Services.sgmodule`模块激活一下，激活后可关闭`Geo_Services.sgmodule`  
     * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
