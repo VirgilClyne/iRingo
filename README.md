@@ -79,7 +79,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * 安装链接:     
   * 针对代理组为PROXY的配置文件:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect")
   * 针对代理组为Proxy的配置文件:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-  * 针对代理组为🌑Proxy的配置文件(如神机规则\DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
+  * 针对代理组为🌑Proxy的配置文件(如DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为Apple的配置文件:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
 * 启用模块后打开一次地图即可切换区域至US，无需开启飞行模式、关闭定位、更改国家地区语言等   
