@@ -34,6 +34,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * 针对代理组为🌑Proxy的配置文件(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
   * 针对代理组为Apple的配置文件:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
+  * 不包含规则组的配置文件，方便自定义:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari"),规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
 * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 * macOS/iOS适用  
 * macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`
@@ -84,7 +85,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * 针对代理组为Apple的配置文件:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为Apple News的配置文件:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-  * 不包含规则组的配置文件，方便自定义:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
+  * 不包含规则组的配置文件，方便自定义:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
 * 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改语言等  
 * 此模块包含`Geo_Services.sgmodule`模块内容，区别是修改地区为US而非HK
 * 可能需触发一次定位检测？行为待测试(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问)   
