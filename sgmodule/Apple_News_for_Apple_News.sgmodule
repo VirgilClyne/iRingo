@@ -1,7 +1,15 @@
 #!name= Unlock Apple News without SIM Card Detect
 #!desc=Unlock Apple News without SIM Card Detect
 [Rule]
-# > Apple News 
+# > com.apple.geod
+PROCESS-NAME,com.apple.geod,Apple News
+PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod,Apple News
+USER-AGENT,geod*,Apple News
+USER-AGENT,com.apple.geod*,Apple News
+# > Apple Map
+DOMAIN,gsp-ssl.ls.apple.com,Apple News
+DOMAIN,gsp64-ssl.ls.apple.com,Apple News
+# > Apple News
 PROCESS-NAME,News,Apple News
 PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,Apple News
 PROCESS-NAME,NewsTag,Apple News

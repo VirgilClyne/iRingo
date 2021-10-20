@@ -10,7 +10,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search) 
 * [Apple Map](#Apple%20Map) (todo)   
-* [Apple News](#Apple%20News) (todo)
+* [Apple News](#Apple%20News) (🚧施工中)
 ---
 
 ### <a id="Location Services"> 定位服务 </a>     
@@ -40,10 +40,12 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`
 * iOS需要开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
 * 如启用后无效果，可以开关一下上述的功能开关，或使用`Geo_Services.sgmodule`模块激活一下，激活后可关闭`Geo_Services.sgmodule`  
+* 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
     * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
     - [x] Safari浏览器(Safari)
+    - [ ] Siri语音 (iOS:国内版/macOS：海外版)
     * 启用的功能:  
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)

@@ -1,3 +1,11 @@
+# > com.apple.geod
+PROCESS-NAME,com.apple.geod
+PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod
+USER-AGENT,geod*
+USER-AGENT,com.apple.geod*
+# > Apple Map
+DOMAIN,gsp-ssl.ls.apple.com
+DOMAIN,gsp64-ssl.ls.apple.com
 # > Apple News 
 PROCESS-NAME,News
 PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News
