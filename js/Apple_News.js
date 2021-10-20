@@ -15,7 +15,7 @@ if (url.indexOf(path1) != -1) {
 }
 
 if (url.indexOf(path2) != -1) {
-    let SIM = /"mobileData":\{.*\}/;
+    let SIM = /"mobileData": \{.*\}/;
     body = body.match(SIM);
     var obj = JSON.parse(body);
     if (obj.countryCode) obj.countryCode = "310";
