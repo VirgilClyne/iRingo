@@ -37,7 +37,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Siri_Suggestions.conf](./conf/Siri_Suggestions.conf?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:Telgram:@YiEwha)
+    * [Siri_Suggestions.conf](./conf/Siri_Suggestions.conf?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:Telegram:@YiEwha)
   * Surge:     
     * 针对代理组为PROXY的配置文件:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
     * 针对代理组为Proxy的配置文件:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
