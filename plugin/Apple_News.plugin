@@ -2,28 +2,28 @@
 
 [Rule]
 # > com.apple.geod
-PROCESS-NAME,com.apple.geod
-PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod
-USER-AGENT,geod*
-USER-AGENT,com.apple.geod*
+PROCESS-NAME,com.apple.geod,PROXY
+PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod,PROXY
+USER-AGENT,geod*,PROXY
+USER-AGENT,com.apple.geod*,PROXY
 # > Apple Map
-DOMAIN,gsp-ssl.ls.apple.com
-DOMAIN,gsp64-ssl.ls.apple.com
+DOMAIN,gsp-ssl.ls.apple.com,PROXY
+DOMAIN,gsp64-ssl.ls.apple.com,PROXY
 # > Apple News
-PROCESS-NAME,News
-PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News
-PROCESS-NAME,NewsTag
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag
-PROCESS-NAME,NewsToday2
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2
-PROCESS-NAME,NewsTodayIntents
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents
-USER-AGENT,AppleNews*
-DOMAIN,news-assets.apple.com
-DOMAIN,news-client.apple.com
+PROCESS-NAME,News,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,PROXY
+PROCESS-NAME,NewsTag,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,PROXY
+PROCESS-NAME,NewsToday2,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,PROXY
+PROCESS-NAME,NewsTodayIntents,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,PROXY
+USER-AGENT,AppleNews*,PROXY
+DOMAIN,news-assets.apple.com,PROXY
+DOMAIN,news-client.apple.com,PROXY
 DOMAIN,news-edge.apple.com,REJECT
 DOMAIN,news-events.apple.com,REJECT-DROP
-DOMAIN,apple.comscoreresearch.com
+DOMAIN,apple.comscoreresearch.com,PROXY
 
 [URL Rewrite]
 # Redirect GeoServices
