@@ -17,6 +17,8 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
 * 安装链接: 
   * Loon:
     * [Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Rewrite Apple Geo Services Country Code") (Author:@Tartarus2014)
+  * Quantumult X:
+    * [Geo_Services.conf](./conf/Geo_Services.conf?raw=true " Rewrite Apple Geo Services Country Code")
   * Surge:    
     * [Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Rewrite Apple Geo Services Country Code")     
 * 启用模块后打开一次地图即可切换区域至`HK`(香港)，无需开启飞行模式、关闭定位、更改国家地区语言等   
