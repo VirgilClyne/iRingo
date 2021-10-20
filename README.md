@@ -45,7 +45,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
     - [x] Safari浏览器(Safari)
-    - [ ] Siri语音 (iOS:国内版/macOS：海外版)
+    - [ ] Siri语音 (iOS:国内版/macOS:海外版)
     * 启用的功能:  
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)

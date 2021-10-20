@@ -3,9 +3,9 @@
 
 [Rule]
 # > Look Up (查询, macOS, Wikipedia, Surge Enhance Mode enabled required)
-# PROCESS-NAME,LookupViewService,🌑Proxy
-# PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService,🌑Proxy
-# DOMAIN,lookup-api.apple.com,🌑Proxy
+PROCESS-NAME,LookupViewService,🌑Proxy
+PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService,🌑Proxy
+DOMAIN,lookup-api.apple.com,🌑Proxy
 DOMAIN,lookup-api.apple.com.edgekey.net,🌑Proxy
 DOMAIN,e16991.b.akamaiedge.net,🌑Proxy
 
