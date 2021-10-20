@@ -45,7 +45,7 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
     - [x] Safari浏览器(Safari)
-    - [ ] Siri语音 (iOS:国内版/macOS:海外版)
+    - [ ] 询问Siri (Ask Siri on iOS:国内版/macOS:海外版)
     * 启用的功能:  
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
@@ -89,9 +89,11 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
   * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 针对代理组为Apple News的配置文件:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
   * 自定义规则组的配置文件[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
-* 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改语言等 
-* 此模块包含`Geo_Services.sgmodule`模块内容，区别是修改地区为US而非HK
+* 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需开启飞行模式、移除SIM卡、关闭定位、更改语言等 
+* 此模块包含`Geo_Services.sgmodule`模块内容，区别是修改地区为`US`而非`HK`
 * macOS/iOS适用  
   * 使用方法: 
-    1. iOS需要设置`设置`-`新闻`-`位置：永不`和`蜂窝数据：关闭`  
-    2. 打开`地图`触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问) 
+    1. 修改相关线路为🇺🇸美国
+    2. ~~iOS需要修改`设置`-`新闻`-`位置：永不`和`蜂窝数据：关闭`~~  
+    3. 打开`地图`触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问) (不确定此步骤是否必须🤔)
+    4. 打开Apple News
