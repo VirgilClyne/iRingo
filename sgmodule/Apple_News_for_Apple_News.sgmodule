@@ -21,8 +21,8 @@ PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.app
 USER-AGENT,AppleNews*,Apple News
 DOMAIN,news-assets.apple.com,Apple News
 DOMAIN,news-client.apple.com,Apple News
-DOMAIN,news-edge.apple.com,Apple News
-DOMAIN,news-events.apple.com,Apple News
+DOMAIN,news-edge.apple.com,REJECT
+DOMAIN,news-events.apple.com,REJECT-DROP
 DOMAIN,apple.comscoreresearch.com,Apple News
 
 [URL Rewrite]
