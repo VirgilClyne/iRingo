@@ -1,0 +1,48 @@
+#!name= Unlock Apple News without SIM Card Detect
+#!desc=(🚧test)Unlock Apple News without SIM Card Detect
+[Rule]
+# > com.apple.geod
+# macOS规则:
+PROCESS-NAME,com.apple.geod,PROXY
+PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod,PROXY
+USER-AGENT,com.apple.geod*,PROXY
+# iOS规则:
+# Block辅助定位1:https://gspe1-ssl.ls.apple.com
+DOMAIN,gspe1-ssl.ls.apple.com,REJECT-DROP
+# Block定位修正2:https://gsp-ssl.ls.apple.com/dispatcher.arpc
+DOMAIN,gsp-ssl.ls.apple.com,REJECT-DROP
+# Block定位修正3:https://gsp64-ssl.ls.apple.com/hvr/v3/use
+DOMAIN,gsp64-ssl.ls.apple.com,REJECT-DROP
+# Block定位修正4:https://dispatcher.is.autonavi.com/dispatcher
+DOMAIN,dispatcher.is.autonavi.com,REJECT-DROP
+# 其余放行:
+USER-AGENT,geod*,PROXY
+
+# > Apple News
+# macOS规则:
+PROCESS-NAME,News,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,PROXY
+PROCESS-NAME,NewsTag,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,PROXY
+PROCESS-NAME,NewsToday2,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,PROXY
+PROCESS-NAME,NewsTodayIntents,PROXY
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,PROXY
+# iOS规则:
+USER-AGENT,AppleNews*,PROXY
+DOMAIN,news-assets.apple.com,PROXY
+DOMAIN,news-client.apple.com,PROXY
+DOMAIN,news-edge.apple.com,PROXY
+DOMAIN,news-events.apple.com,PROXY
+DOMAIN,apple.comscoreresearch.com,PROXY
+
+[URL Rewrite]
+# Redirect GeoServices
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=US$5 header
+
+
+[Script]
+http-request ^https?:\/\/news-(edge|events)\.apple\.com(/v1/configs|/analyticseventsv2/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
+
+[MITM]
+hostname = %APPEND% gspe35-ssl.ls.apple.com, news-edge.apple.com, news-events.apple.com
