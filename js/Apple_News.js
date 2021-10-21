@@ -10,7 +10,7 @@ var body = $request.body;
 
 if (url.indexOf(path1) != -1) {
     var obj = JSON.parse(body);
-    if (obj.countryCode) countryCode = US;
+    if (obj.countryCode) countryCode = "US";
     body = JSON.stringify(obj);
 }
 
