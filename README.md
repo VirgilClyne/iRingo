@@ -1,7 +1,8 @@
 # iRingo
 解锁完整的Apple搜索功能和集成服务   
 macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过  
-需要启用MitM功能,以下功能及模块互无依赖，均可单独使用
+需要启用MitM功能  
+以下功能及模块互无依赖，均可单独使用  
 
 ---
 
@@ -47,9 +48,12 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
     * 自定义规则组的配置文件:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari"),规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
 * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」   
 * macOS/iOS适用  
-* macOS需要开启`系统偏好设置`-`聚焦`-`Siri建议`
-* iOS需要开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
-* 如启用后无效果，可以开关一下上述的功能开关，或使用`Geo_Services.sgmodule`模块激活一下，激活后可关闭`Geo_Services.sgmodule`  
+* 如启用本模块后未立刻生效，可采用下列方法手动刷新激活「Siri建议」:
+  1. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
+  2. iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
+  3. 更改`设置`-`通用`-`语言与地区`-`地区`  
+  4. 启用`Geo_Services.sgmodule`模块并打开`Apple Maps`，刷新地图后再关闭`Geo_Services.sgmodule`
+  5. 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
 * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
     * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
