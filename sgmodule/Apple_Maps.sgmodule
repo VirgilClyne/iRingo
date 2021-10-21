@@ -1,0 +1,13 @@
+#!name= Unlock OverSea/International Apple Map
+#!desc=Unlock OverSea/International Apple Map.
+
+[URL Rewrite]
+# Redirect GeoServices
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=US$5 header
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z]{4,})(.*) $1$2$3environment=prodcn$5 header
+
+[Script]
+http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services.js, requires-body=true, timeout=10, tag=Geo_Services
+
+[MITM]
+hostname = %APPEND% gspe1-ssl.ls.apple.com, gspe35-ssl.ls.apple.com
