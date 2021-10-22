@@ -3,7 +3,7 @@
 
 [Rule]
 # > Apple News
-DOMAIN,news-edge.apple.com,🌑Proxy
+DOMAIN,news-edge.apple.com,🍎Apple
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(/v1/configs|/analyticseventsv2/async) script-path=https://gist.githubusercontent.com/VirgilClyne/ba3358bdd471da5e29d8a2cc9fcd88df/raw/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News

@@ -1,34 +1,12 @@
-#!name= Unlock Apple News without SIM Card Detect
-#!desc=Unlock Apple News without SIM Card Detect
-[Rule]
-# > com.apple.geod
-PROCESS-NAME,com.apple.geod,Apple
-PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod,Apple
-USER-AGENT,geod*,Apple
-USER-AGENT,com.apple.geod*,Apple
-# > Apple Map
-DOMAIN,gsp-ssl.ls.apple.com,Apple
-DOMAIN,gsp64-ssl.ls.apple.com,Apple
-# > Apple News
-PROCESS-NAME,News,Apple
-PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,Apple
-PROCESS-NAME,NewsTag,Apple
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,Apple
-PROCESS-NAME,NewsToday2,Apple
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,Apple
-PROCESS-NAME,NewsTodayIntents,Apple
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,Apple
-USER-AGENT,AppleNews*,Apple
-DOMAIN,news-assets.apple.com,Apple
-DOMAIN,news-client.apple.com,Apple
-DOMAIN,news-edge.apple.com,REJECT
-DOMAIN,news-events.apple.com,REJECT-DROP
-DOMAIN,apple.comscoreresearch.com,Apple
+#!name= Unlock Apple News 🇺🇸US
+#!desc=Unlock 🇺🇸US Apple News
 
-[URL Rewrite]
-# Redirect GeoServices
-(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=US$5 header
+[Rule]
+# > Apple News
+DOMAIN,news-edge.apple.com,Apple
+
+[Script]
+http-request ^https?:\/\/news-(edge|events)\.apple\.com(/v1/configs|/analyticseventsv2/async) script-path=https://gist.githubusercontent.com/VirgilClyne/ba3358bdd471da5e29d8a2cc9fcd88df/raw/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
 
 [MITM]
-hostname = %APPEND% gspe35-ssl.ls.apple.com
-
+hostname = %APPEND% news-client.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com
