@@ -22,7 +22,9 @@ todo
 
 ---
 
-### <a id="Location Services"> 定位服务 </a>     
+### <a id="Location Services"> 定位服务 </a>   
+* 简介:
+  * 启用模块后直连即可修改至对应地区，无需更改代理线路、开启飞行模式、关闭定位、更改国家地区语言等     
 * 安装链接: 
   * Loon:
     * 旧版未更新:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Rewrite Apple Geo Services Country Code") (Author:@Tartarus2014) 
@@ -31,7 +33,7 @@ todo
   * Surge:    
     * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")        
-* 启用模块后无需开启飞行模式、关闭定位、更改代理线路、更改国家地区语言等即可修改至对应地区   
+
 * 需触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问) 
 * 可通过重启、完全重开地图应用、开关定位服务等触发检测  
 * macOS/iOS适用  
@@ -44,20 +46,24 @@ todo
 
 ---
 
-### <a id="Siri & Search"> Siri与搜索 </a>   
+### <a id="Siri & Search"> Siri与搜索 </a> 
+* 简介:
+  * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」    
 * 安装链接:
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
     * [Siri_Suggestions.conf](./conf/Siri_Suggestions.conf?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:Telegram:@YiEwha)
-  * Surge:     
-    * 针对代理组为PROXY的配置文件:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
-    * 针对代理组为Proxy的配置文件:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-    * 针对代理组为🌑Proxy的配置文件(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-    * 针对代理组为Apple的配置文件:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-    * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-    * 自定义规则组的配置文件:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari"),规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
-* 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」   
+  * Surge:    
+    * 仅适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
+      * macOS用规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
+        * 此规则组只作用于macOS的维基百科搜索集成,iOS/iPadOS不需要此规则组
+    * macOS/iOS通用模块: 
+      * 针对代理组为PROXY的模块:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
+      * 针对代理组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
+      * 针对代理组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
+      * 针对代理组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
+      * 针对代理组为🍎Apple的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")  
 * macOS/iOS适用  
 * 如启用本模块后未立刻生效，可采用下列方法手动刷新激活「Siri建议」:
   1. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
@@ -129,7 +135,7 @@ todo
     * 针对代理组为Apple News的配置文件:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
     * 自定义规则组的配置文件[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
 * 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需开启飞行模式、移除SIM卡、关闭定位、更改语言等 
-* 此模块包含`Geo_Services.sgmodule`模块内容，区别是修改地区为`US`而非`HK`
+* 此模块不包含`Geo_Services.sgmodule`模块内容，需要同时启用`Geo_Services.sgmodule`模块达成修改地区功能
 * macOS/iOS适用  
   * 使用方法: 
     1. 修改相关线路为🇺🇸美国
