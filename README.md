@@ -18,8 +18,8 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 todo  
 例如，同时启用以下三个模块:   
 `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
-效果:地区检测为US，Apple Maps为高德地图，Apple News可用(不需要美区线路，直连即可)   
-(有SIM卡的设备,如iPhone，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，进入APP后可关闭飞行模式正常使用)    
+效果:地区检测为US，Apple Maps为高德地图，Apple News可用   
+(有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，进入APP后可关闭飞行模式正常使用)    
 
 ---
 
@@ -54,19 +54,20 @@ todo
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」    
 * 安装链接:
   * Loon:
-    * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+    * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Siri_Suggestions.conf](./conf/Siri_Suggestions.conf?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") (Author:Telegram:@YiEwha)
+    * [Siri_Suggestions.conf](./conf/Siri_Suggestions.conf?raw=true " Enable Siri Suggestions") (Author:Telegram:@YiEwha)
   * Surge:    
-    * 仅适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
+    * 仅适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用规则组:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
         * 此规则组只作用于macOS的维基百科搜索集成,iOS/iPadOS不需要此规则组
     * macOS/iOS通用模块: 
-      * 针对代理组为PROXY的模块:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")
-      * 针对代理组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-      * 针对代理组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-      * 针对代理组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari") 
-      * 针对代理组为🍎Apple的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Location-Based Siri Suggestions for Spotlight & Look Up & Safari")  
+      * 针对代理组为PROXY的模块:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
+      * 针对代理组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 针对代理组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 针对代理组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 针对代理组为🍎Apple的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
+      * 针对代理组为🍎 苹果服务的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")    
 * macOS/iOS适用  
 * 如启用本模块后未立刻生效，可采用下列方法手动刷新激活「Siri建议」:
   1. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
@@ -126,22 +127,36 @@ todo
 ---
 
 ### <a id="Apple News"> Apple News </a>  
+* 简介:
+  * 保持模块启用,即可正常使用「Apple News」(依赖其他模块)
 * 安装链接:
   * Loon:
-    * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News without SIM Card Detect") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
-  * Surge:  
-    * 针对代理组为PROXY的配置文件:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect")
-    * 针对代理组为Proxy的配置文件:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-    * 针对代理组为🌑Proxy的配置文件(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-    * 针对代理组为Apple的配置文件:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-    * 针对代理组为🍎Apple的配置文件(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-    * 针对代理组为Apple News的配置文件:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News without SIM Card Detect") 
-    * 自定义规则组的配置文件[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News without SIM Card Detect"),规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
-* 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需开启飞行模式、移除SIM卡、关闭定位、更改语言等 
-* 此模块不包含`Geo_Services.sgmodule`模块内容，需要同时启用`Geo_Services.sgmodule`模块达成修改地区功能
-* macOS/iOS适用  
-  * 使用方法: 
-    1. 修改相关线路为🇺🇸美国
-    2. ~~iOS需要修改`设置`-`新闻`-`位置：永不`和`蜂窝数据：关闭`~~  
-    3. 打开`地图`触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问) (不确定此步骤是否必须🤔)
+    * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+  * Surge: 
+    * 不含规则组的模块:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 规则组:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
+    * 针对代理组为PROXY的模块:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+    * 针对代理组为Proxy的模块:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+    * 针对代理组为🌑Proxy的模块(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+    * 针对代理组为Apple的模块:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+    * 针对代理组为🍎Apple的模块:[Apple_News_for_Apple_icon.sgmodule](./sgmodule/Apple_News_for_Apple_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+    * 针对代理组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+    * 针对代理组为Apple News的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+* 需要同时启用`Geo_Services.sgmodule`模块达成修改地区功能
+* 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改语言等 
+* macOS/iOS适用
+* 教程&步骤:  
+  * iOS(有SIM卡的设备，如iPhone)使用方法: 
+    1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
+    1. 修改相关线路为🇺🇸美国(优化中)
+    2. 打开飞行模式
+    3. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
     4. 打开Apple News
+    5. 关闭飞行模式
+    6. Enjoy
+  * iPadOS/macOS使用方法: 
+    1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
+    2. 修改相关线路为🇺🇸美国(优化中)
+    3. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
+    4. 打开Apple News
+    5. Enjoy
