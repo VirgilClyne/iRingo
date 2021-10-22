@@ -19,16 +19,9 @@ DOMAIN,news-edge.apple.com,🇺🇸美国
 DOMAIN,news-events.apple.com,🇺🇸美国
 DOMAIN,apple.comscoreresearch.com,🇺🇸美国
 
-[URL Rewrite]
-# Redirect Apple Maps to CN
-(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=CN$5 header
-(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z]{4,})(.*) $1$2$3environment=prodcn$5 header
-
 [Script]
-# Redirect Geo Services to US
-http-response ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services.js, requires-body=true, timeout=10, tag=Geo_Services
 # Redirect Apple News to US
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(/v1/configs|/analyticseventsv2/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
 
 [MITM]
-hostname = %APPEND% gspe1-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, *.ls.apple.com, news-client.apple.com, news-edge.apple.com, news-events.apple.com
+hostname = %APPEND% news-client.apple.com, news-edge.apple.com, news-events.apple.com
