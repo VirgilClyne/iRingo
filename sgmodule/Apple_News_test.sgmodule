@@ -1,16 +1,6 @@
 #!name= Unlock Apple News without SIM Card Detect
 #!desc=(🚧test) Unlock Apple News without SIM Card Detect
 [Rule]
-# > com.apple.geod
-# macOS:
-PROCESS-NAME,com.apple.geod,🇺🇸美国
-PROCESS-NAME,/System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod,🇺🇸美国
-USER-AGENT,com.apple.geod*,🇺🇸美国
-# iOS:
-USER-AGENT,geod*,🇺🇸美国
-DOMAIN-SUFFIX,ls.apple.com,🇺🇸美国
-DOMAIN,dispatcher.is.autonavi.com,🇺🇸美国
-
 # > Apple News
 # macOS:
 PROCESS-NAME,News,🇺🇸美国
@@ -31,10 +21,12 @@ DOMAIN,apple.comscoreresearch.com,🇺🇸美国
 
 [URL Rewrite]
 # Redirect GeoServices
-(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=US$5 header
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=CN$5 header
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z]{4,})(.*) $1$2$3environment=prodcn$5 header
 
 [Script]
+http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services.js, requires-body=true, timeout=10, tag=Geo_Services
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(/v1/configs|/analyticseventsv2/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
 
 [MITM]
-hostname = %APPEND% *.ls.apple.com, news-client.apple.com, news-edge.apple.com, news-events.apple.com
+hostname = %APPEND% gspe1-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, *.ls.apple.com, news-client.apple.com, news-edge.apple.com, news-events.apple.com
