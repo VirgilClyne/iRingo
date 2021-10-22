@@ -16,9 +16,10 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ### <a id="General Configuration"> 教程:通用配置 </a>  
 todo  
-三个模块:   
-`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US` = 地区检测US，Apple Maps高德地图，Apple News可用   
-(有SIM卡的设备，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，进入APP后可关闭飞行模式正常使用)    
+例如，同时启用以下三个模块:   
+`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
+效果:地区检测为US，Apple Maps为高德地图，Apple News可用(不需要美区线路，直连即可)   
+(有SIM卡的设备,如iPhone，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，进入APP后可关闭飞行模式正常使用)    
 
 ---
 
@@ -27,10 +28,12 @@ todo
   * 启用模块后直连即可修改至对应地区，无需更改代理线路、开启飞行模式、关闭定位、更改国家地区语言等     
 * 安装链接: 
   * Loon:
-    * 旧版未更新:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Rewrite Apple Geo Services Country Code") (Author:@Tartarus2014) 
+    * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
+    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
   * Quantumult X:
-    * 旧版未更新:[Geo_Services.conf](./conf/Geo_Services.conf?raw=true " Rewrite Apple Geo Services Country Code")
-  * Surge:    
+    * 修改地区检测为🇺🇸US:[Geo_Services.conf](./conf/Geo_Services.conf?raw=true " Redirect Geo Services to 🇺🇸US")
+    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.conf](./conf/Geo_Services_CN.conf?raw=true " Redirect Geo Services to 🇨🇳CN")
+  * Surge:
     * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")        
 
