@@ -1,5 +1,5 @@
 #!name= Location-Based Siri Suggestions for Spotlight & Look Up & Safari
-#!desc=All Function Location-Based Siri Suggestions(Siri建议) for Spotlight(聚焦搜索) & Look Up(查询) & Safari(Safari浏览器).
+#!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
 
 [Rule]
 # > Look Up (查询, macOS, Wikipedia, Surge Enhance Mode enabled required)
