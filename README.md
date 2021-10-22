@@ -1,33 +1,41 @@
 # iRingo
 解锁完整的Apple搜索功能和集成服务   
-macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过  
+macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过  
 需要启用MitM功能  
-以下功能及模块互无依赖，均可单独使用  
+以下功能及模块互无依赖，均可单独或搭配使用  
 
 ---
 
 > 目录  
-
+* [教程:通用配置](General#%20Configuration) (todo)    
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search) 
-* [Apple Map](#Apple%20Map) (todo)   
-* [Apple News](#Apple%20News) (🚧施工中)
+* [Apple Maps](#Apple%20Maps) (todo)   
+* [Apple News](#Apple%20News) (🚧施工中，暂不可用)
+---
+
+### <a id="General Configuration"> 教程:通用配置 </a>  
+todo
+
 ---
 
 ### <a id="Location Services"> 定位服务 </a>     
 * 安装链接: 
   * Loon:
-    * [Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Rewrite Apple Geo Services Country Code") (Author:@Tartarus2014)
+    * 旧版未更新:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Rewrite Apple Geo Services Country Code") (Author:@Tartarus2014) 
   * Quantumult X:
-    * [Geo_Services.conf](./conf/Geo_Services.conf?raw=true " Rewrite Apple Geo Services Country Code")
+    * 旧版未更新:[Geo_Services.conf](./conf/Geo_Services.conf?raw=true " Rewrite Apple Geo Services Country Code")
   * Surge:    
-    * [Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Rewrite Apple Geo Services Country Code")     
-* 启用模块后打开一次地图即可切换区域至`HK`(香港)，无需开启飞行模式、关闭定位、更改国家地区语言等   
-* 需触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe35-ssl.ls.apple.com`二连访问)   
+    * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
+    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")        
+* 启用模块后无需开启飞行模式、关闭定位、更改代理线路、更改国家地区语言等即可修改至对应地区   
+* 需触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问) 
+* 可通过重启、完全重开地图应用、开关定位服务等触发检测  
 * macOS/iOS适用  
     * 作用:  
-    - [x] 更改为海外版Apple Maps    
-    - [x] 激活/使用Apple News时不需要保持飞行模式或关闭定位服务(IP检测不在此模块解决范围)    
+    - [x] 更改地区检测至模块指定地区
+    - [x] 副作用:会同时影响Apple Maps和Apple News等的地区判断(可通过相应的模块单独修改)   
+    - [x] 激活Apple News时不需要全局代理、关闭定位服务 (IP检测不在此模块解决范围)  
     - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
 * 注:本模块只修改定位服务，不修改其他进程、链接、域名、线路规则(如:Siri建议,AppleMap,Apple News等服务)
 
@@ -80,18 +88,24 @@ macOS 12.0 beta 10, iOS 15.0.2, iOS 14.7.1 测试通过
       - [x] iTunes  
     - [x] 新闻  
 
-* 注:对北美地区「Siri建议」服务器无效(SSL Pinning)   
+* ~~注:对北美地区「Siri建议」服务器无效(SSL Pinning)~~
+* 经群友测试对美西「Siri建议」服务器有效
 * 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器
-* 如分配至api-glb-usw服务器且MitM失败，可以通过开关飞行模式、清除DNS缓存、更改VPN线路、更新/更换GeoIP数据库等方式刷新至支持的服务器
+* ~~如分配至api-glb-usw服务器且MitM失败，可以通过开关飞行模式、清除DNS缓存、更改VPN线路、更新/更换GeoIP数据库等方式刷新至支持的服务器~~
 * 
     * 「Siri建议」服务器支持情况:     
     - [x] https://api.smoot.apple.com           (有效)  
     - [x] https://api-aka.smoot.apple.com       (有效)    
     - [x] https://api-glb.smoot.apple.com       (有效)    
-    - [ ] https://api-glb-usw.smoot.apple.com   (美西：无效)  
+    - [x] https://api-glb-usw.smoot.apple.com   (美西：有效)  
     - [x] https://api-glb-euc.smoot.apple.com   (欧洲中：有效)
     - [x] https://api-glb-apne.smoot.apple.com  (亚太东北：有效) 
     - [x] https://api-glb-apse.smoot.apple.com  (亚太东南：有效)
+
+---
+
+### <a id="Apple Maps"> Apple Maps </a>  
+todo
 
 ---
 
