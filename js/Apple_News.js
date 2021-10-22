@@ -13,7 +13,7 @@ if (url.indexOf(path1) != -1) {
         obj["deviceInfo"]["preferredLanguages"] = ["zh-CN","zh-HK","zh-US","en-US"];
         obj["deviceInfo"]["countryCode"] = "US";
     body = JSON.stringify(obj);
-}
+};
 
 if (url.indexOf(path2) != -1) {
     let obj = JSON.parse(body);
@@ -21,6 +21,6 @@ if (url.indexOf(path2) != -1) {
         obj["data"]["mobileData"]["carrier"] = "Google Fi";
         obj["data"]["mobileData"]["networkCode"] = "260";
     body = JSON.stringify(obj);
-}
+};
 
 $done({body});
