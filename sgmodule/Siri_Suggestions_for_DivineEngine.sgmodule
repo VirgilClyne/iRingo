@@ -22,7 +22,7 @@ DOMAIN,e16991.b.akamaiedge.net,🌑Proxy
 # Siri Knowledge(Siri资料) Card (Spotlight@iOS)
 (^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cardDomain=kg)(.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*) $1com$3$4$5card_locale=zh-Hans_CN$7cc=TW$9 header
 # tv Movies and TV Show Card (macOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:tv|movies))(.*)(q=(?:tv|movies)%3A)(.*)(%2F)([a-z]{2}-[A-Z]{2})(.*) $1com$3card_locale=zh-Hans_CN$5cc=TW$7$8$9$10$11$12zh-HK$14 header
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:tv|movies))(.*)(q=(?:tv|movies)%3A)(.*)(%2F)([a-z]{2}-[A-Z]{2})(.*) $1com$3card_locale=zh-Hans_CN$5cc=TW$7$8$9$10$11$12zh-TW$14 header
 
 [MITM]
 hostname = %APPEND% *.smoot.apple.com, *.smoot.apple.cn
