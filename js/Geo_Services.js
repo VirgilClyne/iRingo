@@ -11,6 +11,6 @@ if (url.indexOf(path1) != -1) {
     let obj = body; 
         obj = "US";
     body = obj;
-}
+};
 
 $done({body});
