@@ -7,7 +7,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 ---
 
 > 目录  
-* [教程:通用配置](General#%20Configuration) (todo)    
+* [教程:通用配置](#General#%20Configuration) (todo)    
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search) 
 * [Apple Maps](#Apple%20Maps) (todo)   
