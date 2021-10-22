@@ -16,6 +16,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ### <a id="General Configuration"> 教程:通用配置 </a>  
 todo
+三个模块: `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US` = Apple Maps是高德地图，同时Apple News可用(有SIM卡的设备，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，打开后可关闭飞行模式)
 
 ---
 
@@ -105,6 +106,10 @@ todo
 ---
 
 ### <a id="Apple Maps"> Apple Maps </a>  
+* 安装链接: 
+  * Surge:    
+    * 修改Apple Maps为🇺🇸US:[Apple Maps.sgmodule](./sgmodule/Apple_Maps.sgmodule?raw=true " Redirect Apple Maps to 🇺🇸US")
+    * 修改Apple Maps为🇨🇳CN:[Apple Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")      
 todo
 
 ---
