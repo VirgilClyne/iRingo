@@ -11,7 +11,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 * [定位服务](#Location%20Services)  
 * [Siri与搜索](#Siri%20&amp;%20Search) 
 * [Apple Maps](#Apple%20Maps) (todo)   
-* [Apple News](#Apple%20News) (🚧施工中，暂不可用)
+* [Apple News](#Apple%20News) (🚧测试中，有问题请反馈)
 ---
 
 ### <a id="General Configuration"> 教程:通用配置 </a>  
