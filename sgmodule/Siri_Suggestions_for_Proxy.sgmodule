@@ -2,7 +2,7 @@
 #!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
 
 [Rule]
-# > Look Up (only for Wikipedia@macOS, Surge Enhance Mode enabled required)
+# > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
 PROCESS-NAME,LookupViewService,Proxy
 PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService,Proxy
 DOMAIN,lookup-api.apple.com,Proxy

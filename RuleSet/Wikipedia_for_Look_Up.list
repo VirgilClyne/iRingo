@@ -1,4 +1,4 @@
-# > Look Up (查询, macOS, Wikipedia, Surge Enhance Mode enabled required)
+# > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
 PROCESS-NAME,LookupViewService
 PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService
 DOMAIN,lookup-api.apple.com
