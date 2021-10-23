@@ -17,9 +17,9 @@ if (url.indexOf(path1) != -1) {
 
 if (url.indexOf(path2) != -1) {
     let obj = JSON.parse(body);
-        obj["data"]["mobileData"]["countryCode"] = "310";
-        obj["data"]["mobileData"]["carrier"] = "Google Fi";
-        obj["data"]["mobileData"]["networkCode"] = "260";
+        obj["data"]["session"]["mobileData"]["countryCode"] = "310";
+        obj["data"]["session"]["mobileData"]["carrier"] = "Google Fi";
+        obj["data"]["session"]["mobileData"]["networkCode"] = "260";
     body = JSON.stringify(obj);
 };
 
