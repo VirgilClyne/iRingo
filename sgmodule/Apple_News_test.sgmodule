@@ -11,8 +11,8 @@ PROCESS-NAME,NewsToday2,🇺🇸美国
 PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,🇺🇸美国
 PROCESS-NAME,NewsTodayIntents,🇺🇸美国
 PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,🇺🇸美国
-USER-AGENT,AppleNews*,🇺🇸美国
 # iOS:
+USER-AGENT,AppleNews*,🇺🇸美国
 DOMAIN,news-assets.apple.com,🇺🇸美国
 DOMAIN,news-client.apple.com,🇺🇸美国
 DOMAIN,news-edge.apple.com,🇺🇸美国

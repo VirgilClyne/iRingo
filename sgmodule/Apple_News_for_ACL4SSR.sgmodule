@@ -3,7 +3,22 @@
 
 [Rule]
 # > Apple News
+# macOS:
+PROCESS-NAME,News,🍎 苹果服务
+PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,🍎 苹果服务
+PROCESS-NAME,NewsTag,🍎 苹果服务
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,🍎 苹果服务
+PROCESS-NAME,NewsToday2,🍎 苹果服务
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,🍎 苹果服务
+PROCESS-NAME,NewsTodayIntents,🍎 苹果服务
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,🍎 苹果服务
+# iOS:
+USER-AGENT,AppleNews*,🍎 苹果服务
+DOMAIN,news-assets.apple.com,🍎 苹果服务
+DOMAIN,news-client.apple.com,🍎 苹果服务
 DOMAIN,news-edge.apple.com,🍎 苹果服务
+DOMAIN,news-events.apple.com,🍎 苹果服务
+DOMAIN,apple.comscoreresearch.com,🍎 苹果服务
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
