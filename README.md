@@ -26,7 +26,7 @@ todo
 
 ### <a id="Location Services"> 定位服务 </a>   
 * 简介:
-  * 启用模块后直连即可修改至对应地区，无需更改代理线路、开启飞行模式、关闭定位、更改国家地区语言等     
+  * 保持模块启用,即可强制「定位服务」通过互联网检测的所在地始终为特定地区，无需准备代理线路、开启飞行模式、关闭定位、更改国家地区语言等。     
 * 安装链接: 
   * Loon:
     * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
@@ -38,15 +38,16 @@ todo
     * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")        
 
-* 需触发一次定位检测(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问) 
-* 可通过重启、完全重开地图应用、开关定位服务等触发检测  
+* 需触发一次基于网络的定位检测(`com.apple.geod`进程对`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`的二连访问) 
+* 可通过完全重开地图应用、开关定位服务等触发检测  
 * macOS/iOS适用  
     * 作用:  
     - [x] 更改地区检测至模块指定地区
-    - [x] 副作用:会同时影响Apple Maps和Apple News等的地区判断(可通过相应的模块单独修改)   
-    - [x] 激活Apple News时不需要全局代理、关闭定位服务 (IP检测不在此模块解决范围)  
+    - [x] 副作用:单独使用此模块会影响天气的数据源、iTunes Store的CDN分配、Apple Maps的地区版本和Apple News的可用性判断等(可通过其他模块单独修改)   
+    - [x] 激活Apple News时不需要全局代理、关闭定位服务 
     - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
 * 注:本模块只修改定位服务，不修改其他进程、链接、域名、线路规则(如:Siri建议,AppleMap,Apple News等服务)
+* 注2:基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围 
 
 ---
 
