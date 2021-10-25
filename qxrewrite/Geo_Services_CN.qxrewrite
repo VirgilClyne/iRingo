@@ -4,4 +4,4 @@
 # Redirect Geo Services to CN
 ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services_CN.js
 
-hostname = gspe35-ssl.ls.apple.com
+hostname = gspe1-ssl.ls.apple.com
