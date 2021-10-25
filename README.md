@@ -118,17 +118,22 @@ todo
 ---
 
 ### <a id="Apple Maps"> Apple Maps </a>  
+* 简介:
+  * 保持模块启用,即可强制「Apple Maps」始终为特定版本。
 * 安装链接: 
+  * Loon:
+  * Quantumult X:
   * Surge:    
     * 修改Apple Maps为🇺🇸US:[Apple Maps.sgmodule](./sgmodule/Apple_Maps.sgmodule?raw=true " Redirect Apple Maps to 🇺🇸US")
-    * 修改Apple Maps为🇨🇳CN:[Apple Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")      
-todo  
+    * 修改Apple Maps为🇨🇳CN:[Apple Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")    
+* macOS/iOS适用  
+* todo  
 
 ---
 
 ### <a id="Apple News"> Apple News </a>  
 * 简介:
-  * 保持模块启用,即可正常使用「Apple News」(依赖其他模块)
+  * 保持模块启用,即可正常使用「Apple News」(依赖其他模块辅助实现)。
 * 安装链接:
   * Loon:
     * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
