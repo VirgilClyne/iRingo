@@ -18,8 +18,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 todo  
 例如，同时启用以下三个模块:   
 `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
-效果:地区检测为US，Apple Maps为高德地图，Apple News可用   
-(有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，进入APP后可关闭飞行模式正常使用)    
+效果 = 地区检测为US + Apple Maps为高德地图 + Apple News可用   
+* 注:有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启飞行模式跳过SIM卡检测，进入APP后可关闭飞行模式正常使用  
+* 注2:有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，均会恢复到Apple News未解锁状态     
 
 ---
 
