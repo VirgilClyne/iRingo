@@ -19,8 +19,8 @@ todo
 例如，同时启用以下三个模块:   
 `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
 效果 = 地区检测为US + Apple Maps为高德地图 + Apple News可用   
-* 注:有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启“飞行模式”跳过SIM卡检测，进入APP后可关闭飞行模式正常使用  
-* 注2:有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，均会恢复到Apple News未解锁状态     
+    * 注:有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启“飞行模式”跳过SIM卡检测，进入APP后可关闭飞行模式正常使用  
+    * 注2:有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，均会恢复到Apple News未解锁状态     
 
 ---
 
@@ -41,8 +41,14 @@ todo
   * 可通过完全重开地图应用、开关定位服务、重开Apple News等操作触发检测 
 </details>
 
-* 注:本模块只修改定位服务，不修改其他进程、链接、域名、线路规则(如:Siri建议,AppleMap,Apple News等服务)
-* 注2:基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围  
+    * 注:本模块只修改定位服务，不修改其他进程、链接、域名、线路规则(如:Siri建议,AppleMap,Apple News等服务)
+    * 注2:基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围  
+
+* 作用与副作用:  
+  - [x] 更改地区检测至模块指定地区
+  - [ ] 副作用:单独使用此模块会影响天气的数据源、iTunes Store的CDN分配、Apple Maps的地区版本和Apple News的可用性判断等(可通过其他模块单独修改)   
+  - [x] 激活Apple News时不需要全局代理、关闭定位服务 
+  - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
 
 * 安装链接: 
   * Loon:
@@ -54,12 +60,6 @@ todo
   * Surge:
     * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")        
-
-    * 作用:  
-    - [x] 更改地区检测至模块指定地区
-    - [x] 副作用:单独使用此模块会影响天气的数据源、iTunes Store的CDN分配、Apple Maps的地区版本和Apple News的可用性判断等(可通过其他模块单独修改)   
-    - [x] 激活Apple News时不需要全局代理、关闭定位服务 
-    - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
 
 ---
 
@@ -80,7 +80,7 @@ todo
   6. 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
 </details>
 
-* 注:「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
+     * 注:「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
 
 * 安装链接:
   * Loon:
@@ -181,7 +181,7 @@ todo
     5. Enjoy
 </details>
 
-* 注:需要同时启用`Geo_Services.sgmodule`模块对所在地区进行修改
+    * 注:需要同时启用`Geo_Services.sgmodule`模块对所在地区进行修改
 
 * 安装链接:
   * Loon:
