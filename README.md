@@ -76,11 +76,12 @@ todo
       * 针对策略组为🍎Apple的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
       * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")     
 * 如启用本模块后未立刻生效，可采用下列几种方法手动刷新激活「Siri建议」:
-  1. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
-  2. iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
-  3. 更改`设置`-`通用`-`语言与地区`-`地区`  
-  4. 启用`Geo_Services.sgmodule`模块并打开`Apple Maps`，刷新地图后再关闭`Geo_Services.sgmodule`
-  5. 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
+  1. 开启再关闭`飞行模式`
+  2. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
+  3. iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
+  4. 更改`设置`-`通用`-`语言与地区`-`地区`  
+  5. 启用`Geo_Services.sgmodule`模块并打开`Apple Maps`，刷新地图后再关闭`Geo_Services.sgmodule`
+  6. 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
 * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
     * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
@@ -150,20 +151,20 @@ todo
     * 针对策略组为🍎Apple的模块:[Apple_News_for_Apple_icon.sgmodule](./sgmodule/Apple_News_for_Apple_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
     * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
     * 针对策略组为Apple News的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-* 需要同时启用`Geo_Services.sgmodule`模块达成修改地区功能
+* 需要同时启用`Geo_Services.sgmodule`模块对所在地区进行修改
 * 启用模块后打开一次地图即可切换区域至`US`(美国)且可以使用Apple News，无需保持飞行模式开启、移除SIM卡、关闭定位、更改语言等 
 * 教程&步骤:  
   * iOS(有SIM卡的设备，如iPhone)使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
-    2. 修改相关线路为🇺🇸美国(优化中)
-    3. 打开飞行模式
+    2. 修改相关代理线路为🇺🇸美国(优化中)
+    3. 打开`飞行模式`
     4. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
-    5. 打开Apple News
-    6. 关闭飞行模式
+    5. 打开`Apple News`
+    6. 关闭`飞行模式`
     7. Enjoy
   * iPadOS/macOS使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
-    2. 修改相关线路为🇺🇸美国(优化中)
+    2. 修改相关代理线路为🇺🇸美国(优化中)
     3. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
-    4. 打开Apple News
+    4. 打开`Apple News`
     5. Enjoy
