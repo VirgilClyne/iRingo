@@ -1,0 +1,7 @@
+#!name= Redirect Geo Services to 🇺🇸US
+#!desc=只作用于检测地区，不修改Apple Maps和Apple News，可以通过搭配使用其他模块达成混合效果。
+
+# Redirect Geo Services to US
+^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services.js
+
+hostname = gspe35-ssl.ls.apple.com

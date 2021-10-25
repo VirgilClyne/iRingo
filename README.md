@@ -31,8 +31,8 @@ todo
     * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
   * Quantumult X:
-    * 修改地区检测为🇺🇸US:[Geo_Services.conf](./conf/Geo_Services.conf?raw=true " Redirect Geo Services to 🇺🇸US")
-    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.conf](./conf/Geo_Services_CN.conf?raw=true " Redirect Geo Services to 🇨🇳CN")
+    * 修改地区检测为🇺🇸US:[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Redirect Geo Services to 🇺🇸US")
+    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.qxrewrite](./qxrewrite/Geo_Services_CN.qxrewrite?raw=true " Redirect Geo Services to 🇨🇳CN")
   * Surge:
     * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")        
@@ -56,7 +56,7 @@ todo
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Siri_Suggestions.conf](./conf/Siri_Suggestions.conf?raw=true " Enable Siri Suggestions") (Author:Telegram:@YiEwha)
+    * [Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions") (Author:Telegram:@YiEwha)
   * Surge:    
     * 仅适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
@@ -132,6 +132,8 @@ todo
 * 安装链接:
   * Loon:
     * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+  * Quantumult X:
+    * [Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
   * Surge: 
     * 不含规则集的模块:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
@@ -148,12 +150,12 @@ todo
 * 教程&步骤:  
   * iOS(有SIM卡的设备，如iPhone)使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
-    1. 修改相关线路为🇺🇸美国(优化中)
-    2. 打开飞行模式
-    3. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
-    4. 打开Apple News
-    5. 关闭飞行模式
-    6. Enjoy
+    2. 修改相关线路为🇺🇸美国(优化中)
+    3. 打开飞行模式
+    4. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
+    5. 打开Apple News
+    6. 关闭飞行模式
+    7. Enjoy
   * iPadOS/macOS使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
     2. 修改相关线路为🇺🇸美国(优化中)

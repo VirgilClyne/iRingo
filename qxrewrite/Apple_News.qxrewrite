@@ -1,0 +1,6 @@
+#!name= Unlock Apple News 🇺🇸US
+#!desc=Unlock 🇺🇸US Apple News
+
+^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js
+
+hostname = news-client.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com
