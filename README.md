@@ -22,8 +22,8 @@ todo
     * `Siri与搜索`
     * 效果: `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用   
   * 同时启用以下两个模块: 
-    * `地区检测为🇺🇸US` + `修改Apple Maps为🇺🇸US`
-    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`TOMTOM` + `指南针`经纬度与海拔功能正常 
+    * `地区检测为🇨🇳CN` + `修改Apple Maps为🇺🇸US`
+    * 效果: `基于网络的地区检测`为`CN` + `Apple Maps`为`TOMTOM` + `指南针`经纬度与海拔功能正常 
   * 同时启用以下三个模块:   
     * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
     * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`无经纬度与海拔(iOS 15.1) + `Apple News`可用 
