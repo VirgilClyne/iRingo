@@ -4,7 +4,7 @@
 [URL Rewrite]
 # Redirect Apple Maps to CN
 (^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) $1$2$3country_code=CN$5 header
-(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z]{4,})(.*) $1$2$3environment=prodcn$5 header
+(^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z/-]{4,})(.*) $1$2$3environment=prod-cn$5 header
 
 [MITM]
 hostname = gspe35-ssl.ls.apple.com, *.ls.apple.com
