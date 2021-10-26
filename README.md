@@ -102,27 +102,11 @@ todo
 </details>
 
   * 注:
-    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
+    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求   
 
-* 安装链接:
-  * Loon:
-    * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
-  * Quantumult X:
-    * [Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions") (Author:Telegram:@YiEwha)
-  * Surge:    
-    * 不含策略组&适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
-      * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
-        * 此域名集只作用于macOS的维基百科搜索集成,iOS/iPadOS不需要此域名集。
-    * macOS/iOS通用模块: 
-      * 针对策略组为PROXY的模块:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
-      * 针对策略组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 针对策略组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 针对策略组为🍎Apple的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
-      * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")     
-
+* 功能列表
 <details>
-<summary>功能列表</summary>
+<summary><font color=#0000EE>点击查看功能列表</font></summary>
 
   * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
@@ -150,8 +134,9 @@ todo
     - [x] 新闻 
 </details>
 
+* 关于「Siri建议」服务器
 <details>
-<summary>关于「Siri建议」服务器</summary>
+<summary><font color=#0000EE>点击查看关于「Siri建议」服务器</font></summary>
 
 * 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器 
     * 「Siri建议」服务器支持情况:     
@@ -163,6 +148,23 @@ todo
     - [x] https://api-glb-apne.smoot.apple.com  (亚太东北：有效) 
     - [x] https://api-glb-apse.smoot.apple.com  (亚太东南：有效)
 </details>
+
+* 安装链接:
+  * Loon:
+    * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+  * Quantumult X:
+    * [Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions") (Author:Telegram:@YiEwha)
+  * Surge:    
+    * 不含策略组&适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
+      * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
+        * 此域名集只作用于macOS的维基百科搜索集成,iOS/iPadOS不需要此域名集。
+    * macOS/iOS通用模块: 
+      * 针对策略组为PROXY的模块:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
+      * 针对策略组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 针对策略组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 针对策略组为🍎Apple的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
+      * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")  
 
 ---
 
