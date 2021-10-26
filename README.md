@@ -222,7 +222,7 @@ todo
     * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
     * 不含规则集的模块:[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
-      * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
+      * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") (需要自行添加至`分流规则`引用并设置`策略偏好`)
   * Surge: 
     * 不含规则集的模块:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
