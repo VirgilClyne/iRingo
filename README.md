@@ -3,6 +3,7 @@
 macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过  
 需要启用`重写`、`脚本`、`MitM`功能  
 如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS，模块间互无依赖，均可单独或搭配使用  
+有问题请至Issue页面反馈或移步Telegram讨论组:[NobyDa Script](https://t.me/joinchat/JtzRlVY-WyJPDavvhKjrbw)  
 
 ---
 
