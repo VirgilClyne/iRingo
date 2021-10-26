@@ -58,12 +58,12 @@ todo
     * 基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围  
 
 * 作用与副作用:
-    * 作用:  
+  * 作用:  
   - [x] 更改地区检测结果至模块指定地区  
   - [x] 激活Apple News时不需要全局代理、关闭定位服务 
   - [x] 协助激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用) 
   - [x] 指南针的海拔经纬度功能
-    * 副作用(单独使用此模块会有下列影响):
+  * 副作用(单独使用此模块会有下列影响):
   - [ ] 天气的数据源
   - [ ] iTunes Store的CDN分配
   - [ ] Apple Maps的地区版本
