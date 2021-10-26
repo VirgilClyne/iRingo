@@ -7,4 +7,4 @@
 (^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z/-]{4,})(.*) $1$2$3environment=prod$5 header
 
 [MITM]
-hostname = %APPEND% gspe35-ssl.ls.apple.com, *.ls.apple.com
+hostname = %APPEND% gspe35-ssl.ls.apple.com
