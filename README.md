@@ -22,14 +22,14 @@ todo
     * `Siri与搜索`
     * 效果: `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用   
   * 同时启用以下两个模块: 
-    * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN`
-    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`经纬度与海拔功能正常 
+    * `地区检测为🇺🇸US` + `修改Apple Maps为🇺🇸US`
+    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`TOMTOM` + `指南针`经纬度与海拔功能正常 
   * 同时启用以下三个模块:   
     * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
-    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`经纬度与海拔功能正常 + `Apple News`可用 
+    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`无经纬度与海拔(iOS 15.1) + `Apple News`可用 
   * 同时启用以下四个模块:   
     * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US` + `Siri与搜索`
-    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`经纬度与海拔功能正常 + `Apple News`可用 + `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用
+    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`无经纬度与海拔(iOS 15.1) + `Apple News`可用 + `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用
 
   * 注:  
     * 有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启“飞行模式”跳过SIM卡检测，进入APP后可关闭飞行模式正常使用  
@@ -171,6 +171,10 @@ todo
 ### <a id="Apple Maps"> Apple Maps </a>  
 * 简介:
   * 保持模块启用,即可强制「Apple Maps」始终为特定版本。
+
+  * 注:
+    * iOS 15.1起，Apple Maps为🇨🇳CN时，`指南针`无经纬度与海拔
+
 * 安装链接: 
   * Loon:
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.plugin](./plugin/Apple_Maps.plugin?raw=true " Redirect Apple Maps to 🇺🇸US")
