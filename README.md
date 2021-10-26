@@ -32,9 +32,9 @@ todo
 
 * 激活方式
 <details>
-<summary>点击查看激活方式</summary>
+<summary><font color=#0000EE>点击查看激活方式</font></summary>
 
-* 需触发一次基于网络的定位检测
+* 需触发一次基于网络的地区检测
   * 指`com.apple.geod`进程对`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`的二连访问
   * 是Wi-Fi版iPad与mac的标准检测方式
   * 仅Wi-Fi模式/有线网络下可触发“基于网络的定位检测”
@@ -47,11 +47,17 @@ todo
     * 本模块只修改定位服务，不修改其他进程、链接、域名、线路规则(如:Siri建议,AppleMap,Apple News等服务)
     * 基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围  
 
-* 作用与副作用:  
-  - [x] 更改地区检测至模块指定地区
-  - [ ] 副作用:单独使用此模块会影响天气的数据源、iTunes Store的CDN分配、Apple Maps的地区版本和Apple News的可用性判断等(可通过其他模块单独修改)   
+* 作用与副作用:
+    * 作用:  
+  - [x] 更改地区检测结果至模块指定地区  
   - [x] 激活Apple News时不需要全局代理、关闭定位服务 
-  - [x] 激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用)   
+  - [x] 协助激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用) 
+    * 副作用(单独使用此模块会有下列影响):
+  - [ ] 天气的数据源
+  - [ ] iTunes Store的CDN分配
+  - [ ] Apple Maps的地区版本
+  - [ ] Apple News的可用性判断(可通过其他模块单独修改) 
+  - [ ] 待发现  
 
 * 安装链接: 
   * Loon:
@@ -72,7 +78,7 @@ todo
 
 * 激活方式
 <details>
-<summary>点击查看激活方式</summary>
+<summary><font color=#0000EE>点击查看激活方式</font></summary>
 
 * 如启用本模块后未立刻生效，可采用下列几种方法手动刷新激活「Siri建议」:
   1. 开启再关闭`飞行模式`
@@ -167,7 +173,7 @@ todo
 
 * 激活方式
 <details>
-<summary>点击查看激活方式</summary>
+<summary><font color=#0000EE>点击查看激活方式</font></summary>
  
   * iOS(有SIM卡的设备，如iPhone)使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
@@ -192,7 +198,8 @@ todo
   * Loon:
     * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
+    * 不含规则集的模块:[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
+      * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
   * Surge: 
     * 不含规则集的模块:[Apple_News_noRuleSet.sgmodule](./sgmodule/Apple_News_noRuleSet.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
