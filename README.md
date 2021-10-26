@@ -15,10 +15,20 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 ---
 
 ### <a id="General Configuration"> 教程:通用配置 </a>  
-todo  
-例如，同时启用以下三个模块:   
-`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
-效果 = 地区检测为US + Apple Maps为高德地图 + Apple News可用 
+todo
+* 例如:
+  * 同时启用以下一个模块:
+    * `Siri与搜索`
+    * 效果: `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用   
+  * 同时启用以下两个模块: 
+    * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN`
+    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`经纬度与海拔功能正常 
+  * 同时启用以下三个模块:   
+    * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
+    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`经纬度与海拔功能正常 + `Apple News`可用 
+  * 同时启用以下四个模块:   
+    * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US` + `Siri与搜索`
+    * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`经纬度与海拔功能正常 + `Apple News`可用 + `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用
 
   * 注:  
     * 有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启“飞行模式”跳过SIM卡检测，进入APP后可关闭飞行模式正常使用  
