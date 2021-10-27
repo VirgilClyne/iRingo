@@ -9,25 +9,25 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 > 目录  
 - [iRingo](#iringo)
-- [<a id="General Configuration"> 通用配置 </a>](#-通用配置-)
+- [通用配置](#通用配置)
   - [todo](#todo)
   - [示例](#示例)
-- [<a id="Location Services"> 定位服务 </a>](#-定位服务-)
+- [定位服务](#定位服务)
   - [简介](#简介)
   - [激活方式](#激活方式)
   - [作用与副作用](#作用与副作用)
   - [安装链接](#安装链接)
-- [<a id="Siri & Search"> Siri与搜索 </a>](#-siri与搜索-)
+- [Siri与搜索](#siri与搜索)
   - [简介](#简介-1)
   - [激活方式](#激活方式-1)
   - [功能列表](#功能列表)
   - [关于「Siri建议」服务器](#关于siri建议服务器)
   - [安装链接](#安装链接-1)
-- [<a id="Apple Maps"> Apple Maps </a>](#-apple-maps-)
+- [Apple Maps](#apple-maps)
   - [简介](#简介-2)
   - [安装链接](#安装链接-2)
   - [todo](#todo-1)
-- [<a id="Apple News"> Apple News </a>](#-apple-news-)
+- [Apple News](#apple-news)
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
   - [解锁状态说明](#解锁状态说明)
@@ -35,7 +35,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ---
 
-# <a id="General Configuration"> 通用配置 </a>  
+# 通用配置
 ## todo
 ## 示例
   * 同时启用以下一个模块:
@@ -57,7 +57,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ---
 
-# <a id="Location Services"> 定位服务 </a>   
+# 定位服务
 ## 简介
   * 保持模块启用,即可强制「定位服务」通过互联网检测的所在地始终为特定地区，无需准备代理线路、保持`✈️飞行模式`开启、关闭定位、更改国家地区语言等。   
 
@@ -100,7 +100,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ---
 
-# <a id="Siri & Search"> Siri与搜索 </a> 
+# Siri与搜索
 ## 简介
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
@@ -176,7 +176,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 -----------------
 
-# <a id="Apple Maps"> Apple Maps </a>  
+# Apple Maps
 ## 简介
   * 保持模块启用,即可强制「Apple Maps」始终为特定版本。
 
@@ -197,7 +197,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ---
 
-# <a id="Apple News"> Apple News </a>  
+# Apple News
 ## 简介
   * 保持模块启用,即可正常使用「Apple News」(依赖其他模块辅助实现)。
 
