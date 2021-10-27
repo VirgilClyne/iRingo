@@ -8,16 +8,36 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 ---
 
 > 目录  
-* [教程:通用配置](#General#%20Configuration) (todo)    
-* [定位服务](#Location%20Services)  
-* [Siri与搜索](#Siri%20&amp;%20Search) 
-* [Apple Maps](#Apple%20Maps) (todo)   
-* [Apple News](#Apple%20News) (🚧测试中，有问题请反馈)
+- [iRingo](#iringo)
+- [<a id="General Configuration"> 通用配置 </a>](#-通用配置-)
+  - [todo](#todo)
+  - [示例](#示例)
+- [<a id="Location Services"> 定位服务 </a>](#-定位服务-)
+  - [简介](#简介)
+  - [激活方式](#激活方式)
+  - [作用与副作用](#作用与副作用)
+  - [安装链接](#安装链接)
+- [<a id="Siri & Search"> Siri与搜索 </a>](#-siri与搜索-)
+  - [简介](#简介-1)
+  - [激活方式](#激活方式-1)
+  - [功能列表](#功能列表)
+  - [关于「Siri建议」服务器](#关于siri建议服务器)
+  - [安装链接](#安装链接-1)
+- [<a id="Apple Maps"> Apple Maps </a>](#-apple-maps-)
+  - [简介](#简介-2)
+  - [安装链接](#安装链接-2)
+  - [todo](#todo-1)
+- [<a id="Apple News"> Apple News </a>](#-apple-news-)
+  - [简介:](#简介-3)
+  - [激活方式](#激活方式-2)
+  - [解锁状态说明](#解锁状态说明)
+  - [安装链接](#安装链接-3)
+
 ---
 
-### <a id="General Configuration"> 教程:通用配置 </a>  
-todo
-* 例如:
+# <a id="General Configuration"> 通用配置 </a>  
+## todo
+## 示例
   * 同时启用以下一个模块:
     * `Siri与搜索`
     * 效果: `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用   
@@ -32,33 +52,29 @@ todo
     * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`无经纬度与海拔(iOS 15.1) + `Apple News`可用 + `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用
 
   * 注:  
-    * 有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启“飞行模式”跳过SIM卡检测，进入APP后可关闭飞行模式正常使用  
+    * 有SIM卡的设备，如iPhone，第一次打开Apple News前，需要开启`✈️飞行模式`跳过SIM卡检测，进入APP后可关闭`✈️飞行模式`正常使用  
     * 有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，均会恢复到Apple News未解锁状态     
 
 ---
 
-### <a id="Location Services"> 定位服务 </a>   
-* 简介:
-  * 保持模块启用,即可强制「定位服务」通过互联网检测的所在地始终为特定地区，无需准备代理线路、保持飞行模式开启、关闭定位、更改国家地区语言等。   
+# <a id="Location Services"> 定位服务 </a>   
+## 简介
+  * 保持模块启用,即可强制「定位服务」通过互联网检测的所在地始终为特定地区，无需准备代理线路、保持`✈️飞行模式`开启、关闭定位、更改国家地区语言等。   
 
-* 激活方式
-<details>
-<summary><font color=#0000EE>点击查看激活方式</font></summary>
-
+## 激活方式
 * 需触发一次基于网络的地区检测
   * 指`com.apple.geod`进程对`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`的二连访问
   * 是Wi-Fi版iPad与mac的标准检测方式
   * 仅Wi-Fi模式/有线网络下可触发“基于网络的定位检测”
   * 纯移动蜂窝网络下不触发此定位检测，将直接采用基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」进行检测
-  * iPhone与移动蜂窝网络版ipad触发此检测需要预先开启“飞行模式”后，再触发检测
+  * iPhone与移动蜂窝网络版ipad触发此检测需要预先开启`✈️飞行模式`后，再触发检测
   * 可通过完全重开地图应用、开关定位服务、重开Apple News等操作触发检测 
-</details>
   
   * 注:
     * 本模块只修改定位服务，不修改其他进程、链接、域名、线路规则(如:Siri建议,AppleMap,Apple News等服务)
     * 基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围  
 
-* 作用与副作用:
+## 作用与副作用
   * 作用:  
   - [x] 更改地区检测结果至模块指定地区  
   - [x] 激活Apple News时不需要全局代理、关闭定位服务 
@@ -71,7 +87,7 @@ todo
   - [ ] Apple News的可用性判断(可通过其他模块单独修改) 
   - [ ] 待发现  
 
-* 安装链接: 
+## 安装链接 
   * Loon:
     * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
@@ -84,30 +100,23 @@ todo
 
 ---
 
-### <a id="Siri & Search"> Siri与搜索 </a> 
-* 简介:
+# <a id="Siri & Search"> Siri与搜索 </a> 
+## 简介
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
-* 激活方式
-<details>
-<summary><font color=#0000EE>点击查看激活方式</font></summary>
-
+## 激活方式
 * 如启用本模块后未立刻生效，可采用下列几种方法手动刷新激活「Siri建议」:
-  1. 开启再关闭`飞行模式`
+  1. 开启再关闭`✈️飞行模式`
   2. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
   3. iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
   4. 更改`设置`-`通用`-`语言与地区`-`地区`  
   5. 启用`Geo_Services.sgmodule`模块并打开`Apple Maps`，刷新地图后再关闭`Geo_Services.sgmodule`
   6. 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
-</details>
 
   * 注:
     * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求   
 
-* 功能列表
-<details>
-<summary><font color=#0000EE>点击查看功能列表</font></summary>
-
+## 功能列表
   * 在以下位置及功能中可用: 
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
@@ -135,12 +144,8 @@ todo
       - [x] iTunes  
     - [x] 新闻 
     - [ ] Twitter集成
-</details>
 
-* 关于「Siri建议」服务器
-<details>
-<summary><font color=#0000EE>点击查看关于「Siri建议」服务器</font></summary>
-
+## 关于「Siri建议」服务器
 * 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器 
     * 「Siri建议」服务器支持情况:     
     - [x] https://api.smoot.apple.com           (有效)  
@@ -150,9 +155,8 @@ todo
     - [x] https://api-glb-euc.smoot.apple.com   (欧洲中：有效)
     - [x] https://api-glb-apne.smoot.apple.com  (亚太东北：有效) 
     - [x] https://api-glb-apse.smoot.apple.com  (亚太东南：有效)
-</details>
 
-* 安装链接:
+## 安装链接
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
@@ -170,16 +174,16 @@ todo
       * 针对策略组为🍎 Apple的模块:[Siri_Suggestions_for_Apple_blank_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_blank_icon.sgmodule?raw=true " Enable Siri Suggestions")
       * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")  
 
----
+-----------------
 
-### <a id="Apple Maps"> Apple Maps </a>  
-* 简介:
+# <a id="Apple Maps"> Apple Maps </a>  
+## 简介
   * 保持模块启用,即可强制「Apple Maps」始终为特定版本。
 
   * 注:
     * iOS 15.1起，Apple Maps为🇨🇳CN时，`指南针`无经纬度与海拔
 
-* 安装链接: 
+## 安装链接
   * Loon:
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.plugin](./plugin/Apple_Maps.plugin?raw=true " Redirect Apple Maps to 🇺🇸US")
     * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")   
@@ -189,25 +193,22 @@ todo
   * Surge:    
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.sgmodule](./sgmodule/Apple_Maps.sgmodule?raw=true " Redirect Apple Maps to 🇺🇸US")
     * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")     
-* todo  
+## todo  
 
 ---
 
-### <a id="Apple News"> Apple News </a>  
-* 简介:
+# <a id="Apple News"> Apple News </a>  
+## 简介:
   * 保持模块启用,即可正常使用「Apple News」(依赖其他模块辅助实现)。
 
-* 激活方式
-<details>
-<summary><font color=#0000EE>点击查看激活方式</font></summary>
- 
+## 激活方式
   * iOS(有SIM卡的设备，如iPhone)使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
     2. 修改相关代理线路为🇺🇸美国(优化中)
-    3. 打开`飞行模式`
+    3. 打开`✈️飞行模式`
     4. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
     5. 打开`Apple News`
-    6. 关闭`飞行模式`
+    6. 关闭`✈️飞行模式`
     7. Enjoy
   * iPadOS/macOS使用方法: 
     1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
@@ -215,12 +216,19 @@ todo
     3. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
     4. 打开`Apple News`
     5. Enjoy
-</details>
 
   * 注:
     * 需要同时启用`Geo_Services.sgmodule`模块对所在地区进行修改
 
-* 安装链接:
+## 解锁状态说明
+|  未解锁  | 解锁成功 | 解锁失效 | 
+|   :-:   |   :-:   |   :-:   |
+| 未通过地区检测  | 已成功通过地区检测 | 通过检测后，再次触发检测时未通过检测  |
+| 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  | 对应地区线路`全局代理`下触发第一次数据加载 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  |
+|![🔒](./ScreenShots/Apple%20News%20-%20Locked%20-%20iOS.jpeg?raw=true "Apple News - Locked - iOS")|![🔓](./ScreenShots/Apple%20News%20-%20Unlock%20Success%20-%20iOS.jpeg?raw=true "Apple News - Unlock Success - iOS")|![🔒](./ScreenShots/Apple%20News%20-%20Unlock%20Invalid%20-%20iOS.jpeg?raw=true "Apple News - Unlock Invalid - iOS")|
+
+
+## 安装链接
   * Loon:
     * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
