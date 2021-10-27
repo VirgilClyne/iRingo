@@ -118,10 +118,13 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   2. 启用`Geo_Services_*.sgmodule`模块（🇨🇳CN版除外）
   3. 开启`✈️飞行模式`
   4. 重新打开一次`地图`应用
-  5. 此时应观察到`基于网络的地区检测`gspe1-ssl.ls.apple.com`链接与激活`Siri建议`的`api.smoot.apple.com/bag`链接
-  6. 关闭`✈️飞行模式`
-  7. 关闭`Geo_Services_*.sgmodule`模块
-  8. 正常使用
+  5. 此时应观察到：
+     1. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接
+     2. 激活`Siri建议`的`api.smoot.apple.com/bag`链接
+  6. 执行一次Spotlight搜索，测试「来自APPLE的内容\来自APPLE的建议\Siri建议」是否正常工作
+  7. 关闭`✈️飞行模式`
+  8. 关闭`Geo_Services_*.sgmodule`模块
+  9. 正常使用
 
 ## 切换「Siri建议」服务器地区
 * 不同地区的服务器提供的功能、搜索结果、建议有所不同，可通过下列手段刷新
