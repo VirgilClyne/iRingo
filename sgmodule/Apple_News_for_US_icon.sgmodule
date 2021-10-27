@@ -1,0 +1,27 @@
+#!name= Unlock Apple News 🇺🇸US
+#!desc=Unlock 🇺🇸US Apple News
+
+[Rule]
+# > Apple News
+# macOS:
+PROCESS-NAME,News,🇺🇸美国
+PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,🇺🇸美国
+PROCESS-NAME,NewsTag,🇺🇸美国
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,🇺🇸美国
+PROCESS-NAME,NewsToday2,🇺🇸美国
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,🇺🇸美国
+PROCESS-NAME,NewsTodayIntents,🇺🇸美国
+PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,🇺🇸美国
+# iOS:
+USER-AGENT,AppleNews*,🇺🇸美国
+DOMAIN,news-assets.apple.com,🇺🇸美国
+DOMAIN,news-client.apple.com,🇺🇸美国
+DOMAIN,news-edge.apple.com,🇺🇸美国
+DOMAIN,news-events.apple.com,🇺🇸美国
+DOMAIN,apple.comscoreresearch.com,🇺🇸美国
+
+[Script]
+http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
+
+[MITM]
+hostname = %APPEND% news-client.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com
