@@ -5,6 +5,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS，模块间互无依赖，均可单独或搭配使用  
 有问题请至Issue页面反馈或移步Telegram讨论组:[NobyDa Script](https://t.me/joinchat/JtzRlVY-WyJPDavvhKjrbw)  
 
+正在征集`Apple News+`订阅用户的`https://newsletter-edge.apple.com/v1/subscriptions``抓取流量`信息
+
+
 ---
 
 > 目录  
