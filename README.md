@@ -20,8 +20,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 - [Siri与搜索](#siri与搜索)
   - [简介](#简介-1)
   - [激活方式](#激活方式-1)
+  - [切换「Siri建议」服务器地区](#切换siri建议服务器地区)
   - [功能列表](#功能列表)
-  - [关于「Siri建议」服务器](#关于siri建议服务器)
+  - [已知「Siri建议」服务器列表](#已知siri建议服务器列表)
   - [安装链接](#安装链接-1)
 - [Apple Maps](#apple-maps)
   - [简介](#简介-2)
@@ -107,17 +108,27 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 ## 简介
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
-## 激活方式
-* 如启用本模块后未立刻生效，可采用下列几种方法手动刷新激活「Siri建议」:
-  1. 开启再关闭`✈️飞行模式`
-  2. macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
-  3. iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
-  4. 更改`设置`-`通用`-`语言与地区`-`地区`  
-  5. 启用`Geo_Services.sgmodule`模块并打开`Apple Maps`，刷新地图后再关闭`Geo_Services.sgmodule`
-  6. 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
-
   * 注:
-    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求   
+    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
+
+## 激活方式
+* 装有SIM卡的iOS/iPadOS设备，如启用本模块后未立刻生效，可采用下列步骤方法手动刷新激活「Siri建议」:
+  1. 保持`Wi-Fi`或`有线网络`连接
+  2. 启用`Geo_Services_*.sgmodule`模块（🇨🇳CN版除外）
+  3. 开启`✈️飞行模式`
+  4. 重新打开一次`地图`应用
+  5. 此时应观察到`基于网络的地区检测`gspe1-ssl.ls.apple.com`链接与激活`Siri建议`的`api.smoot.apple.com/bag`链接
+  6. 关闭`✈️飞行模式`
+  7. 关闭`Geo_Services_*.sgmodule`模块
+  8. 正常使用
+
+## 切换「Siri建议」服务器地区
+* 不同地区的服务器提供的功能、搜索结果、建议有所不同，可通过下列手段刷新
+  * macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
+  * iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
+  * 更改`设置`-`通用`-`语言与地区`-`地区`  
+  * 等待约半小时，「Siri建议」会向服务器`*.smoot.apple.com/bag`请求刷新区域设置与功能可用状态
+  * 激活过程中采用不同地区的`Geo_Services_*.sgmodule`模块
 
 ## 功能列表
   * 在以下位置及功能中可用: 
@@ -148,16 +159,27 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     - [x] 新闻 
     - [ ] Twitter集成
 
-## 关于「Siri建议」服务器
-* 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器 
-    * 「Siri建议」服务器支持情况:     
-    - [x] https://api.smoot.apple.com           (有效)  
-    - [x] https://api-aka.smoot.apple.com       (有效)    
-    - [x] https://api-glb.smoot.apple.com       (有效)    
-    - [x] https://api-glb-usw.smoot.apple.com   (美西：有效)  
-    - [x] https://api-glb-euc.smoot.apple.com   (欧洲中：有效)
-    - [x] https://api-glb-apne.smoot.apple.com  (亚太东北：有效) 
-    - [x] https://api-glb-apse.smoot.apple.com  (亚太东南：有效)
+## 已知「Siri建议」服务器列表
+* 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器   
+
+|  域名前缀  | 对应地区 | MitM |
+|   :-:   |   :-:   |   :-:   |
+|api|未知|有效|
+|api-aka|未知|有效|
+|api-glb|未知|有效|
+|api-glb-apne|亚太东北|有效|
+|api-glb-apse|亚太东南|有效|
+|api-glb-usw|西美|有效|
+|api-glb-euc|中欧|有效|
+|api-glb-euw|西欧|有效|
+|api-glb-nyc|纽约|未知|
+|api-glb-ash|未知|未知|
+|api-glb-sjc|圣何塞|未知|
+|api-glb-ams|未知|未知|
+|api-glb-fra|未知|未知|
+|api-glb-man|未知|未知|
+|api-glb-jnb|未知|未知|
+|api-chi|未知|未知|
 
 ## 安装链接
   * Loon:
