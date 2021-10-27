@@ -112,7 +112,8 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
 
 ## 激活方式
-* 装有SIM卡的iOS/iPadOS设备，如启用本模块后未立刻生效，可采用下列步骤方法手动刷新激活「Siri建议」:
+* 如启用本模块后未立刻生效，可按照下列步骤激活「来自APPLE的内容\来自APPLE的建议\Siri建议」:
+  * 未装有SIM卡的iOS/iPadOS/macOS设备，可省略`✈️飞行模式`相关步骤
   1. 保持`Wi-Fi`或`有线网络`连接
   2. 启用`Geo_Services_*.sgmodule`模块（🇨🇳CN版除外）
   3. 开启`✈️飞行模式`
