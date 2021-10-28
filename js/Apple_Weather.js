@@ -10,7 +10,7 @@ const path2 = "/v2/weather/";
 
 if (url.indexOf(path1) != -1) {
     let weather = JSON.parse(body);
-        if (weather.airQuality && weather.airQuality.airQualityScale) weather.airQuality.airQualityScale = "EPA_NowCast.2115";
+        if (weather.airQuality && weather.airQuality.airQualityScale) weather.airQuality.airQualityScale = "EPA_NowCast.2113";
     body = JSON.stringify(weather);
     console.log('/v1/weather');
 };
