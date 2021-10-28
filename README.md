@@ -231,23 +231,20 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 保持模块启用,即可正常使用「Apple News」(依赖其他模块辅助实现)。
 
 ## 激活方式
-  * iOS(有SIM卡的设备，如iPhone)使用方法: 
-    1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
-    2. 修改相关代理线路为🇺🇸美国(优化中)
-    3. 打开`✈️飞行模式`
-    4. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
-    5. 打开`Apple News`
-    6. 关闭`✈️飞行模式`
-    7. Enjoy
-  * iPadOS/macOS使用方法: 
-    1. 启用`地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
-    2. 修改相关代理线路为🇺🇸美国(优化中)
-    3. 打开`地图`触发一次地区检测，地图维持为高德地图。(`com.apple.geod`进程的`configuration.ls.apple.com`, `gspe1-ssl.ls.apple.com`二连访问)
-    4. 打开`Apple News`
-    5. Enjoy
+  * 未装有SIM卡的iOS/iPadOS/macOS设备，可省略`✈️飞行模式`相关步骤
+  1. 启用`修改地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`三个模块
+  2. 指定相关代理线路为🇺🇸美国或其他可用地区,或者`全局模式`
+  3. 打开`✈️飞行模式`
+  4. 重新打开一次`地图`应用
+  5. 此时应观察到：
+     1. `检测设备信息`的`configuration.ls.apple.com`链接
+     2. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接，且流量抓取结果不是`CN`
+  6. 打开`Apple News`，此时应是[解锁状态说明](#解锁状态说明)中的`解锁成功`状态
+  7. 关闭`✈️飞行模式`
+  8. 正常使用
 
   * 注:
-    * 需要同时启用`Geo_Services.sgmodule`模块对所在地区进行修改
+    * 关闭`✈️飞行模式`后，如再次触发了基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测，则Apple News会回到[解锁状态说明](#解锁状态说明)中的`解锁失效`状态。
 
 ## 解锁状态说明
 |  未解锁  | 解锁成功 | 解锁失效 | 
