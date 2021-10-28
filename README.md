@@ -66,6 +66,10 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 保持模块启用,即可切换「天气」`空气质量`使用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)数值。
 
 ## 安装链接 
+  * Loon:
+    * [Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Enable Apple Weather 🇺🇸US")
+  * Quantumult X:
+    * [Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Enable Apple Weather 🇺🇸US")
   * Surge:
     * [Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Enable Apple Weather 🇺🇸US")
 ---
