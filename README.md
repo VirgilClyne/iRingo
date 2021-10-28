@@ -177,13 +177,13 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 |api-glb-euc|中欧|有效|
 |api-glb-euw|西欧|有效|
 |api-glb-nyc|纽约|未知|
-|api-glb-ash|未知|未知|
+|api-glb-ash|Nashua(US)|未知|
 |api-glb-sjc|圣何塞|未知|
-|api-glb-ams|未知|未知|
-|api-glb-fra|未知|未知|
-|api-glb-man|未知|未知|
-|api-glb-jnb|未知|未知|
-|api-chi|未知|未知|
+|api-glb-ams|阿姆斯特丹|未知|
+|api-glb-fra|法兰克福|未知|
+|api-glb-man|曼彻斯特|未知|
+|api-glb-jnb|约翰内斯堡|未知|
+|api-chi|芝加哥|未知|
 
 ## 安装链接
   * Loon:
