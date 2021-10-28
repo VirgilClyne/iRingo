@@ -1,9 +1,6 @@
 #!name= Enable Apple Weather 🇺🇸US
 #!desc=切换空气质量标准为AQI(US)
 
-hostname = weather-data.apple.com
+^https?:\/\/weather-data\.apple\.com\/(v1|v2)(\/weather)(.*)((?:include|dataSets)=[A-Za-z,_])(.*) url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js
 
-# Apple Weather@iOS14 & Apple Maps@macOS
-^https?:\/\/weather-data\.apple\.com(\/v1\/weather)(.*)(include=[A-Z/a-z/,/_])(.*) url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js
-# Apple Weather@iOS15 & WeatherWidget@macOS
-^https?:\/\/weather-data\.apple\.com(\/v2\/weather)(.*)(dataSets=[A-Z/a-z/,])(.*) url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js
+hostname = weather-data.apple.com

@@ -2,10 +2,7 @@
 #!desc=切换空气质量标准为AQI(US)
 
 [Script]
-# Apple Weather@iOS14 & Apple Maps@macOS
-http-response ^https?:\/\/weather-data\.apple\.com(\/v1\/weather)(.*)(include=[A-Z/a-z/,/_])(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
-# Apple Weather@iOS15 & WeatherWidget@macOS
-http-response ^https?:\/\/weather-data\.apple\.com(\/v2\/weather)(.*)(dataSets=[A-Z/a-z/,])(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)(\/weather)(.*)((?:include|dataSets)=[A-Za-z,_])(.*) script-path=https://gist.githubusercontent.com/VirgilClyne/ba3358bdd471da5e29d8a2cc9fcd88df/raw/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
 
 [MITM]
 hostname = weather-data.apple.com
