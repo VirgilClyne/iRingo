@@ -239,9 +239,10 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   5. 此时应观察到：
      1. `检测设备信息`的`configuration.ls.apple.com`链接
      2. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接，且流量抓取结果不是`CN`
-  6. 打开`Apple News`，此时应是[解锁状态说明](#解锁状态说明)中的`解锁成功`状态
-  7. 关闭`✈️飞行模式`
-  8. 正常使用
+  6. 首次加载`Apple News`需保证`gateway.icloud.com`为海外线路
+  7. 打开`Apple News`，此时应是[解锁状态说明](#解锁状态说明)中的`解锁成功`状态
+  8. 关闭`✈️飞行模式`
+  9. 正常使用
 
   * 注:
     * 关闭`✈️飞行模式`后，如再次触发了基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测，则Apple News会回到[解锁状态说明](#解锁状态说明)中的`解锁失效`状态。
@@ -250,7 +251,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 |  未解锁  | 解锁成功 | 解锁失效 | 
 |   :-:   |   :-:   |   :-:   |
 | 未通过地区检测  | 已成功通过地区检测 | 通过检测后，再次触发检测时未通过检测  |
-| 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  | 对应地区线路`全局代理`下触发第一次数据加载 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  |
+| 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  | 首次加载内容`gateway.icloud.com`需走代理，之后可直连 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  |
 |![🔒](./ScreenShots/Apple%20News%20-%20Locked%20-%20iOS.jpeg?raw=true "Apple News - Locked - iOS")|![🔓](./ScreenShots/Apple%20News%20-%20Unlock%20Success%20-%20iOS.jpeg?raw=true "Apple News - Unlock Success - iOS")|![🔒](./ScreenShots/Apple%20News%20-%20Unlock%20Invalid%20-%20iOS.jpeg?raw=true "Apple News - Unlock Invalid - iOS")|
 
 
