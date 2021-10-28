@@ -12,7 +12,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 - [通用配置](#通用配置)
   - [todo](#todo)
   - [示例](#示例)
-- [天气(🚧施工中，不可用)](#天气施工中不可用)
+- [天气](#天气)
   - [简介](#简介)
   - [功能列表](#功能列表)
   - [安装链接](#安装链接)
@@ -62,7 +62,10 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ---
 
-# 天气(🚧施工中，不可用)
+# 天气
+<details>
+<summary>🚧施工中，不可用</summary>
+
 ## 简介
   * 保持模块启用,即可切换「天气」`空气质量`使用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)数值。
 
@@ -79,6 +82,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     * [Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Enable Apple Weather 🇺🇸US")
   * Surge:
     * [Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Enable Apple Weather 🇺🇸US")
+</details>
 
 ---
 
