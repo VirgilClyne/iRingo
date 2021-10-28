@@ -1,6 +1,21 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
+let languagev1 = "zh-CN_CN"
+let languagev2 = "zh-Hans-CN"
+let include = "air_quality,current_observations,hourly_forecast,daily_forecast,now_links,severe_weather,next_hour_forecast"
+let dataSets = "currentWeather,forecastDaily,forecastHourly,severeWeather,airQuality,forecastNextHour";
+let country = "CN";
+
+if (typeof $argument != "undefined") {
+    let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+    console.log(JSON.stringify(arg));
+    languagev1 = arg.languagev1;
+    languagev2 = arg.languagev2;
+    include = arg.include;
+    dataSets = arg.dataSets;
+    country = arg.country;
+};
 
 const url = $request.url;
 var body = $response.body;
