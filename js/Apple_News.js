@@ -19,11 +19,11 @@ if (url.indexOf(path1) != -1) {
 
 if (url.indexOf(path2) != -1) {
     let async = JSON.parse(body);
-        async.data.session.mobileData = [{
-            "countryCode": "310",
-            "carrier": "Google Fi",
-            "networkCode": "260"
-        }];
+        if (async.data.session.mobileData) {
+            async.data.session.mobileData.countryCode = "310";
+            async.data.session.mobileData.carrier = "Google Fi";
+            async.data.session.mobileData.networkCode = "260";
+        };
     body = JSON.stringify(async);
     console.log('async');
 };

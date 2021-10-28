@@ -3,18 +3,6 @@
 
 [Rule]
 # > Apple News
-# macOS:
-PROCESS-NAME,News,Apple News
-PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,Apple News
-PROCESS-NAME,NewsTag,Apple News
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,Apple News
-PROCESS-NAME,NewsToday2,Apple News
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,Apple News
-PROCESS-NAME,NewsTodayIntents,Apple News
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,Apple News
-# iOS:
-USER-AGENT,AppleNews*,Apple News
-DOMAIN,news-assets.apple.com,Apple News
 DOMAIN,news-client.apple.com,Apple News
 DOMAIN,news-edge.apple.com,Apple News
 DOMAIN,news-events.apple.com,Apple News

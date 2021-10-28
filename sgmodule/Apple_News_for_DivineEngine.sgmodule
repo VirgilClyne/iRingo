@@ -3,18 +3,6 @@
 
 [Rule]
 # > Apple News
-# macOS:
-PROCESS-NAME,News,🌑Proxy
-PROCESS-NAME,/System/Applications/News.app/Contents/MacOS/News,🌑Proxy
-PROCESS-NAME,NewsTag,🌑Proxy
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTag.appex/Contents/MacOS/NewsTag,🌑Proxy
-PROCESS-NAME,NewsToday2,🌑Proxy
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsToday2.appex/Contents/MacOS/NewsToday2,🌑Proxy
-PROCESS-NAME,NewsTodayIntents,🌑Proxy
-PROCESS-NAME,/System/Applications/News.app/Contents/PlugIns/NewsTodayIntents.appex/Contents/MacOS/NewsTodayIntents,🌑Proxy
-# iOS:
-USER-AGENT,AppleNews*,🌑Proxy
-DOMAIN,news-assets.apple.com,🌑Proxy
 DOMAIN,news-client.apple.com,🌑Proxy
 DOMAIN,news-edge.apple.com,🌑Proxy
 DOMAIN,news-events.apple.com,🌑Proxy
