@@ -27,11 +27,11 @@ var body = $response.body;
 const OriginParameter = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d?)\/(-?\d+\.\d?).*(country=[A-Z]{2})?.*/
 const [dataServer， apiVer, language, lat, lng, countryCode] = url.match(OriginParameter)
 
-//Search Nearest WeatherStation Function
+//Search Nearest WeatherStation
 //https://api.waqi.info/mapq/nearest/?geo=1/lat/lng
 const nearest = search(lat, lng)
 
-//Show Nearest WeatherStation Function
+//Show Nearest WeatherStation
 //https://api.waqi.info/api/feed/@station.uid/aqi.json
 const station = showStation(nearest.d.x)
 
@@ -64,6 +64,7 @@ if (apiVer == "V1") {
             weather.air_quality.metadata.version = "";
             weather.air_quality.metadata.language = "";
             weather.air_quality.metadata.data_source = "";
+    //    body = JSON.stringify(weather);
     console.log('/v1/weather');
 };
 
