@@ -89,7 +89,7 @@ function search(lat, lng) {
         } else {
           alert('Your query count: ' + data.query.count);
         }
-      );
+    });
     console.log("Geo:" + lat + "/" + lng );
 }
 
@@ -104,7 +104,7 @@ function showStation(idx) {
         } else {
           alert('Your query count: ' + data.query.count);
         }
-      );
+    });
     console.log("station.uid:" + idx );
 }
 
