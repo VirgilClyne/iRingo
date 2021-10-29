@@ -25,7 +25,7 @@ var body = $response.body;
 
 // Get Origin Parameter
 const OriginParameter = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d?)\/(-?\d+\.\d?).*(country=[A-Z]{2})?.*/
-const [dataServer， apiVer, language, lat, lng, countryCode] = url.match(OriginParameter)
+const [dataServer, apiVer, language, lat, lng, countryCode] = url.match(OriginParameter)
 
 //Search Nearest WeatherStation
 //https://api.waqi.info/mapq/nearest/?geo=1/lat/lng
@@ -51,7 +51,7 @@ if (apiVer == "V1") {
             weather.air_quality.pollutants.CO.amount = "";
             weather.air_quality.pollutants.SO2.amount = "";
             weather.air_quality.pollutants.NO2.amount = "";
-            weather.air_quality.pollutants.["PM2.5"].amount = "";
+            weather.air_quality.pollutants["PM2.5"].amount = "";
             weather.air_quality.pollutants.OZONE.amount = "";
             weather.air_quality.pollutants.PM10.amount = "";
             weather.air_quality.metadata.reported_time = "";
