@@ -64,8 +64,6 @@ if (apiVer == "V1") {
             weather.air_quality.metadata.version = "";
             weather.air_quality.metadata.language = "";
             weather.air_quality.metadata.data_source = "";
-
-    body = JSON.stringify(weather);
     console.log('/v1/weather');
 };
 
