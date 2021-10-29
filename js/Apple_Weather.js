@@ -42,7 +42,7 @@ const pathv2 = "/v2/weather/";
 
 
 if (apiVer == "V1") {
-    //let weather = JSON.parse(showStation);
+    let weather = JSON.parse(body);
             weather.air_quality.source = nearest.d.nna;
             weather.air_quality.learnMoreURL = "";
             weather.air_quality.airQualityIndex = "nearest.d.v";
@@ -64,7 +64,7 @@ if (apiVer == "V1") {
             weather.air_quality.metadata.version = "";
             weather.air_quality.metadata.language = "";
             weather.air_quality.metadata.data_source = "";
-    //    body = JSON.stringify(weather);
+        body = JSON.stringify(weather);
     console.log('/v1/weather');
 };
 
