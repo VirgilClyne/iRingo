@@ -24,7 +24,7 @@ const url = $request.url;
 var body = $response.body;
 
 // Get Origin Parameter
-const OriginParameter = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d?)\/(-?\d+\.\d?).*(country=[A-Z]{2})?.*/
+const OriginParameter = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/
 const [dataServer, apiVer, language, lat, lng, countryCode] = url.match(OriginParameter)
 
 //Search Nearest WeatherStation
