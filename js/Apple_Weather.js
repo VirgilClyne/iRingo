@@ -24,28 +24,27 @@ const url = $request.url;
 var body = $response.body;
 
 // Get Origin Parameter
-const OriginParameter = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/
-const [dataServer, apiVer, language, lat, lng, countryCode] = url.match(OriginParameter)
+const OriginParameter = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
+const [dataServer, apiVer, language, lat, lng, countryCode] = url.match(OriginParameter);
 
 //Search Nearest WeatherStation
 //https://api.waqi.info/mapq/nearest/?geo=1/lat/lng
-const nearest = search(lat, lng)
+var nearest = JSON.parse(Get("https://api.waqi.info/mapq/nearest/?&geo=1/" + lat + "/" + lng));
 
 //Show Nearest WeatherStation
 //https://api.waqi.info/api/feed/@station.uid/aqi.json
-const station = showStation(nearest.d.x)
+const station = JSON.parse(Get("https://api.waqi.info/api/feed/@" + nearest.d.x + "/aqi.json"));
 
 /*
 const pathv1 = "/v1/weather/";
 const pathv2 = "/v2/weather/";
 */
 
-
 if (apiVer == "V1") {
     let weather = JSON.parse(body);
             weather.air_quality.source = nearest.d.nna;
             weather.air_quality.learnMoreURL = "";
-            weather.air_quality.airQualityIndex = "nearest.d.v";
+            weather.air_quality.airQualityIndex = nearest.d.v;
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
             weather.air_quality.primaryPollutant = nearest.d.pol;
             weather.air_quality.pollutants.CO.amount = "";
@@ -77,38 +76,16 @@ if (apiVer == "V2") {
 
 $done({body});
 
-
-//Search Nearest WeatherStation Function
-//https://api.waqi.info/mapq/nearest/?geo=1/lat/lng
-function search(lat, lng) {   
-    getJSON(
-      "//api.waqi.info/mapq/nearest/?&geo=1/" + lat + "/" + lng,
-      function(err, data) {
-        if (err !== null) {
-          alert('Something went wrong: ' + err);
-        } else {
-          alert('Your query count: ' + data.query.count);
-        }
-    });
-    console.log("Geo:" + lat + "/" + lng );
+//get
+//https://stackoverflow.com/a/24767591
+function Get(Url){
+        var Httpreq = new XMLHttpRequest(); // a new request
+        Httpreq.open("GET",Url,false);
+        Httpreq.send(null);
+        return Httpreq.responseText;          
 }
 
-//Show Nearest WeatherStation Function
-//https://api.waqi.info/api/feed/@station.uid/aqi.json
-function showStation(idx) {   
-    getJSON(
-      "//api.waqi.info/api/feed/@" + idx + "/aqi.json",
-      function(err, data) {
-        if (err !== null) {
-          alert('Something went wrong: ' + err);
-        } else {
-          alert('Your query count: ' + data.query.count);
-        }
-    });
-    console.log("station.uid:" + idx );
-}
-
-
+//getJSON
 //https://stackoverflow.com/posts/35970894/revisions
 var getJSON = function(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -120,7 +97,10 @@ var getJSON = function(url, callback) {
         callback(null, xhr.response);
       } else {
         callback(status, xhr.response);
-      }
+      };
     };
     xhr.send();
-};
+}
+
+/***************** Env *****************/
+// prettier-ignore
