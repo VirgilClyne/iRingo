@@ -81,7 +81,7 @@ $done({body});
 //Search Nearest WeatherStation Function
 //https://api.waqi.info/mapq/nearest/?geo=1/lat/lng
 function search(lat, lng) {   
-    $.getJSON(
+    getJSON(
       "//api.waqi.info/mapq/nearest/?&geo=1/" + lat + "/" + lng,
       );
     console.log("Geo:" + lat + "/" + lng );
@@ -90,7 +90,7 @@ function search(lat, lng) {
 //Show Nearest WeatherStation Function
 //https://api.waqi.info/api/feed/@station.uid/aqi.json
 function showStation(idx) {   
-    $.getJSON(
+    getJSON(
       "//api.waqi.info/api/feed/@" + idx + "/aqi.json",
       );
     console.log("station.uid:" + idx );
