@@ -217,8 +217,8 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Siri_Suggestions.qxrewrite TW](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")
-    * [Siri_Suggestions.qxrewrite US](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:Telegram:@YiEwha)
+    * [Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")
+    * [Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:Telegram:@YiEwha)
   * Surge:    
     * 不含策略组&适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
