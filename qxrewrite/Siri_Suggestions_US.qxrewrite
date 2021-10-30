@@ -1,0 +1,18 @@
+#!name= Enable Siri Suggestions United States version
+#!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
+
+# Redirect Siri Suggestions Service 
+# Bag (iOS/macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/bag.*)(cc=[A-Z]{2})(.*) url 302 $1com$3cc=US$5
+# General Spotlight & Look Up Search (iOS/macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cc=[A-Z]{2})(.*) url 302 $1com$3cc=US$5
+# General Info Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=[^kg][^tv][^movies])(.*) url 302 $1com$3card_locale=en-US$5cc=US$7$8$9
+# Siri Knowledge(Siri资料) Card (Spotlight@macOS & Siri@iOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:kgcn|kg))(.*) url 302 $1com$3card_locale=en-US$5cc=US$7$8$9
+# Siri Knowledge(Siri资料) Card (Spotlight@iOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cardDomain=kg)(.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*) url 302 $1com$3$4$5card_locale=en-US$7cc=US$9
+# tv Movies and TV Show Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:tv|movies))(.*)(q=(?:tv|movies)%3A)(.*)(%2F)([a-z]{2}-[A-Z]{2})(.*) url 302 $1com$3card_locale=en-US$5cc=US$7$8$9$10$11$12en-US$14
+
+hostname = *.smoot.apple.com, *.smoot.apple.cn
