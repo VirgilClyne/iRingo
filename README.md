@@ -15,6 +15,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 - [天气(🚧测试中，有问题请反馈)](#天气测试中有问题请反馈)
   - [简介](#简介)
   - [功能列表](#功能列表)
+  - [todo](#todo-1)
   - [安装链接](#安装链接)
 - [定位服务](#定位服务)
   - [简介](#简介-1)
@@ -31,7 +32,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 - [Apple Maps](#apple-maps)
   - [简介](#简介-3)
   - [安装链接](#安装链接-3)
-  - [todo](#todo-1)
+  - [todo](#todo-2)
 - [Apple News](#apple-news)
   - [简介](#简介-4)
   - [激活方式](#激活方式-2)
@@ -64,13 +65,17 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 # 天气(🚧测试中，有问题请反馈)
 ## 简介
-  * 保持模块启用,即可切换「天气」`空气质量`数据源为[World Air Quality Index Project](https://waqi.info/)[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)数据。
+  * 保持模块启用,即可切换「天气」`空气质量`数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
 
 ## 功能列表
   * 在以下位置及功能中可用: 
     - [x] 天气
     - [x] 地图
     - [x] 小组件
+
+## todo
+    - [ ]  Watch 支持？（请反馈屏蔽  Watch 专用天气API`api.weather.com`后，是否回退查询`weather-data.apple.com`)
+    - [ ] 历史天气数据？
 
 ## 安装链接 
   * Loon:
@@ -167,7 +172,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 启用的功能:  
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
-    - [x] Siri建议(Siri Suggestions) (Safari浏览器起始页中的「Siri建议」暂不可用)
+    - [x] Siri建议(Siri Suggestions)
   * 已知可用的信息卡片:
     - [ ] 天气  
     - [x] Siri资料(Siri Knowledge)  截图:[macOS](./ScreenShots/Siri%20Knowledge%20-%20Spotlight%20-%20macOS.png?raw=true "Siri Knowledge - Spotlight - macOS")   
@@ -213,8 +218,8 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")
-    * [Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:Telegram:@YiEwha)
+    * [Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")(Author:Telegram:@YiEwha)
+    * [Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:@edgexyz)
   * Surge:    
     * 不含策略组&适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")

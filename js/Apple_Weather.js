@@ -6,7 +6,8 @@ const $ = new Env('Apple_Weather');
 !(async () => {
   await getOrigin($request.url)
   await getNearest($.lat, $.lng)
-  await getStation($.idx)
+  await getToken($.idx)
+  await getStation($.idx, undefined, $.token, $.uid, undefined)
   await outputData($.apiVer)
 })()
   .catch((e) => $.logErr(e))
@@ -50,7 +51,7 @@ function getNearest(lat,lng) {
 }
 
 //Get Nearest WeatherStation Token
-//https://api.waqi.info/api/token/@station.uid
+//https://api.waqi.info/api/token/station.uid
 function getToken(idx) {
     return new Promise((resove) => {
         const url = { url: `https://api.waqi.info/api/token/${idx}`, headers: {} }
@@ -60,12 +61,14 @@ function getToken(idx) {
                 //const body = JSON.parse(response.body)
                 //const response = JSON.parse(response)
                 if (error) throw new Error(error)
-                //if (_response.status == '200') {
-                $.token = _data.obs[0].msg.token;
-                $.uid = _data.obs[0].msg.uid;
-                //$.dt = _data.dt;
-                //$.nearest = _body.d[0];
-            //}
+                if (_data.rxs.obs[0].msg.status == "ok") {
+                  $.token = _data.rxs.obs[0].msg.token;
+                  $.uid = _data.rxs.obs[0].msg.uid;
+                }
+                else{
+                  $.token = "na";
+                  $.uid = "-1";
+                }
             } catch (e) {
                 $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
@@ -79,9 +82,13 @@ function getToken(idx) {
 
 //Show Nearest WeatherStation
 //https://api.waqi.info/api/feed/@station.uid/aqi.json
-function getStation(idx) {
+function getStation(idx, key = "-1", token = "na", uid = "-1") {
     return new Promise((resove) => {
-        const url = { url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`, headers: {} }
+        const url = { 
+          url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`,
+          body: `key=${key}&token=${token}&uid=${uid}&rqc=4`,
+          headers: {}
+        }
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
