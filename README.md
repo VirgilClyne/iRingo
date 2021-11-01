@@ -15,7 +15,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 - [天气(🚧测试中，有问题请反馈)](#天气测试中有问题请反馈)
   - [简介](#简介)
   - [功能列表](#功能列表)
-  - [todo](#todo-1)
+  - [todo？](#todo-1)
   - [安装链接](#安装链接)
 - [定位服务](#定位服务)
   - [简介](#简介-1)
@@ -73,9 +73,11 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     - [x] 地图
     - [x] 小组件
 
-## todo
-    - [ ]  Watch 支持？（请反馈屏蔽  Watch 专用天气API`api.weather.com`后，是否回退查询`weather-data.apple.com`)
+## todo？
+  * 可能会有的功能: 
+    - [ ]  Watch 支持？（请反馈屏蔽  Watch 天气API`api.weather.com`后，是否回退查询`weather-data.apple.com`)
     - [ ] 历史天气数据？
+    - [ ] 天气变化？
 
 ## 安装链接 
   * Loon:

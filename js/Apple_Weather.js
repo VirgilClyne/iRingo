@@ -20,30 +20,35 @@ function getOrigin(url) {
     const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
     [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
     //return parameter = $request.url.match(url);
-    $.log(`⚠️ ${$.name}, getOrigin`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode)
+    //$.log(`⚠️ ${$.name}, getOrigin`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode)
 }
 
 //Search Nearest WeatherStation
-//https://api.waqi.info/mapq/nearest/?geo=1/lat/lng
+//https://api.waqi.info/mapq2/nearest/?geo=1/lat/lng
 function getNearest(lat,lng) {
     return new Promise((resove) => {
-        const url = { url: `https://api.waqi.info/mapq/nearest/?&geo=1/${lat}/${lng}`, headers: {} }
+        const url = { 
+          url: `https://api.waqi.info/mapq2/nearest?n=1&geo=1/${lat}/${lng}`, 
+          headers: {
+            'origin': `https://aqicn.org`,
+            'referer': `https://aqicn.org/`
+          }
+        }
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
                 //const body = JSON.parse(response.body)
                 //const response = JSON.parse(response)
                 if (error) throw new Error(error)
-                //if (_response.status == '200') {
-                $.nearest = _data.d[0];
-                $.idx = _data.d[0].x;
-                //$.dt = _data.dt;
-                //$.nearest = _body.d[0];
-            //}
+                if (_data.status == 'ok') {
+                $.stations = _data.data.stations[0];
+                $.idx = $.stations.idx;
+                $.country = $.stations.country
+                }
             } catch (e) {
                 $.log(`❗️ ${$.name}, getNearest执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getNearest`, `response = ${JSON.stringify(response)}`, '')
+                //$.log(`⚠️ ${$.name}, getNearest`, `response = ${JSON.stringify(response)}`, '')
                 resove()
             }
         });
@@ -53,15 +58,19 @@ function getNearest(lat,lng) {
 //Get Nearest WeatherStation Token
 //https://api.waqi.info/api/token/station.uid
 function getToken(idx) {
+  //if ($.country = 'CN')
     return new Promise((resove) => {
-        const url = { url: `https://api.waqi.info/api/token/${idx}`, headers: {} }
+        const url = {
+          url: `https://api.waqi.info/api/token/${idx}`,
+          headers: {}
+        }
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
                 //const body = JSON.parse(response.body)
                 //const response = JSON.parse(response)
                 if (error) throw new Error(error)
-                if (_data.rxs.obs[0].msg.status == "ok") {
+                if (_data.rxs.obs[0].status == "ok") {
                   $.token = _data.rxs.obs[0].msg.token;
                   $.uid = _data.rxs.obs[0].msg.uid;
                 }
@@ -72,7 +81,7 @@ function getToken(idx) {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
+                //$.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
                 resove()
             }
         });
@@ -83,13 +92,17 @@ function getToken(idx) {
 //Show Nearest WeatherStation
 //https://api.waqi.info/api/feed/@station.uid/aqi.json
 function getStation(idx, key = "-1", token = "na", uid = "-1") {
+  //if ($.country = 'CN')
     return new Promise((resove) => {
         const url = { 
           url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`,
           body: `key=${key}&token=${token}&uid=${uid}&rqc=4`,
-          headers: {}
+          headers: {
+            'origin': `https://aqicn.org`,
+            'referer': `https://aqicn.org/`
+          }
         }
-        $.get(url, (error, response, data) => {
+        $.post(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
                 if (error) throw new Error(error)
@@ -99,7 +112,7 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getStation`, `response = ${JSON.stringify(response)}`, '')
+                //$.log(`⚠️ ${$.name}, getStation`, `response = ${JSON.stringify(response)}`, '')
                 resove()
             }
         })
@@ -112,11 +125,14 @@ function outputData(apiVer) {
     let weather = JSON.parse(body);
     if (apiVer == "v1") {
       console.log('/v1/weather');
-      if ($.nearest) {
-        weather.air_quality.source = $.nearest.nna; //From Nearest
-        weather.air_quality.airQualityIndex = $.nearest.v; //From Nearest
+      if ($.stations) { //From Nearest
+        weather.air_quality.source = $.stations.name;
+        weather.air_quality.airQualityIndex = $.stations.aqi;
         weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-        weather.air_quality.primaryPollutant = $.nearest.pol; //From Nearest
+        //weather.air_quality.primaryPollutant = $.nearest.pol; //mapq1
+        weather.air_quality.metadata.reported_time = $.stations.utime;
+        weather.air_quality.metadata.longitude = $.stations.geo[0];
+        weather.air_quality.metadata.latitude = $.stations.geo[1];
       }
       if ($.obs) {
         weather.air_quality.source = $.obs.city.name;
@@ -146,11 +162,14 @@ function outputData(apiVer) {
 
   if (apiVer == "v2") {
     console.log('/v2/weather/');
-      if ($.nearest) {
-        weather.airQuality.source = $.nearest.nna; //From Nearest
-        weather.airQuality.index = $.nearest.v; //From Nearest
+      if ($.stations) { //From Nearest
+        weather.airQuality.source = $.stations.name;
+        weather.airQuality.index = $.stations.aqi;
         weather.airQuality.scale = "EPA_NowCast.2115";
-        weather.airQuality.primaryPollutant = $.nearest.pol; //From Nearest
+        //weather.airQuality.primaryPollutant = $.nearest.pol; //mapq1
+        weather.airQuality.metadata.longitude = $.stations.geo[0];
+        weather.airQuality.metadata.latitude = $.stations.geo[1];
+        weather.airQuality.metadata.reportedTime = $.stations.utime;
       }
       if ($.obs) {
         weather.airQuality.source = $.obs.city.name;
@@ -177,7 +196,7 @@ function outputData(apiVer) {
     };
 
   body = JSON.stringify(weather);
-  $.log(`⚠️ ${$.name}, outputData`, $.apiVer)
+  //$.log(`⚠️ ${$.name}, outputData`, $.apiVer)
   $done({body});
 }
 
