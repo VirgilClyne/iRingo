@@ -125,7 +125,7 @@ function outputData(apiVer) {
                 weather.air_quality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
                 weather.air_quality.metadata.reported_time = $.obs.iso;
                 weather.air_quality.metadata.longitude = $.obs.city.geo[0];
-                //weather.air_quality.metadata.provider_name = "";
+                weather.air_quality.metadata.provider_name = $.obs.attributions[2].name;
                 //weather.air_quality.metadata.expire_time = "";
                 //weather.air_quality.metadata.provider_logo = "";
                 //weather.air_quality.metadata.read_time = "";
@@ -154,7 +154,7 @@ function outputData(apiVer) {
             weather.airQuality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
             weather.airQuality.metadata.longitude = $.obs.city.geo[0];
             //weather.airQuality.metadata.providerLogo = "";
-            //weather.airQuality.metadata.providerName = "";
+            weather.airQuality.metadata.providerName = $.obs.attributions[2].name;
             //weather.airQuality.metadata.expireTime = "";
             weather.airQuality.metadata.language = $.language;
             weather.airQuality.metadata.latitude = $.obs.city.geo[1];
