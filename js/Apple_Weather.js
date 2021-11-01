@@ -174,22 +174,6 @@ function outputData(apiVer) {
   $done({body});
 }
 
-/*
-$.get(inputurl,
-	(err, resp, data) => {
-		try {
-			if (err) {
-				reject(err);
-				$.done({ body });
-			} else {
-				let body = resp.body;
-				$.done({ body });
-			}
-		}
-	}
-);
-*/
-
 /***************** Env *****************/
 // prettier-ignore
 // https://github.com/chavyleung/scripts/blob/master/Env.min.js
