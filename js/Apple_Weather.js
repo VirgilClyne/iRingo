@@ -40,7 +40,7 @@ function getNearest(lat,lng) {
                 //$.nearest = _body.d[0];
             //}
             } catch (e) {
-                $.log(`❗️ ${$.name}, getNearest执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, $.idx, $.dt, '')
+                $.log(`❗️ ${$.name}, getNearest执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
                 $.log(`⚠️ ${$.name}, getNearest`, `response = ${JSON.stringify(response)}`, '')
                 resove()
@@ -67,7 +67,7 @@ function getToken(idx) {
                 //$.nearest = _body.d[0];
             //}
             } catch (e) {
-                $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, $.idx, $.dt, '')
+                $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
                 $.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
                 resove()
@@ -120,7 +120,7 @@ function outputData(apiVer) {
                 weather.air_quality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
                 weather.air_quality.metadata.reported_time = $.obs.iso;
                 weather.air_quality.metadata.longitude = $.obs.city.geo[0];
-                weather.air_quality.metadata.provider_name = $.obs.attributions[2].name;
+                weather.air_quality.metadata.provider_name = $.obs.attributions[$.obs.attributions.length - 1].name;
                 //weather.air_quality.metadata.expire_time = "";
                 weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
                 //weather.air_quality.metadata.read_time = "";
@@ -151,14 +151,14 @@ function outputData(apiVer) {
                 weather.airQuality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
                 weather.airQuality.metadata.longitude = $.obs.city.geo[0];
                 weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
-                weather.airQuality.metadata.providerName = $.obs.attributions[2].name;
+                weather.airQuality.metadata.providerName = $.obs.attributions[$.obs.attributions.length - 1].name;
                 //weather.airQuality.metadata.expireTime = "";
                 weather.airQuality.metadata.language = $.language;
                 weather.airQuality.metadata.latitude = $.obs.city.geo[1];
                 weather.airQuality.metadata.reportedTime = $.obs.iso;
                 //weather.airQuality.metadata.readTime = "";
                 //weather.airQuality.metadata.units = "m";
-                body = JSON.stringify(weather);
+            body = JSON.stringify(weather);
             }
         console.log('/v2/weather/');
     };
