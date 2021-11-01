@@ -19,7 +19,7 @@ function getOrigin(url) {
     const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
     [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
     //return parameter = $request.url.match(url);
-    $.log(`getOrigin`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode)
+    $.log(`⚠️ ${$.name}, getOrigin`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode)
 }
 
 //Search Nearest WeatherStation
@@ -49,13 +49,11 @@ function getNearest(lat,lng) {
     })
 }
 
-/*
-function getNearest(lat,lng) {
-    const nearest = $.nearest
-    const idx = $.idx
-    const dt = $.dt   
+//Get Nearest WeatherStation Token
+//https://api.waqi.info/api/token/@station.uid
+function getToken(idx) {
     return new Promise((resove) => {
-        const url = { url: `https://api.waqi.info/mapq/nearest/?&geo=1/${lat}/${lng}`, headers: {} }
+        const url = { url: `https://api.waqi.info/api/token/${idx}`, headers: {} }
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
@@ -63,25 +61,21 @@ function getNearest(lat,lng) {
                 //const response = JSON.parse(response)
                 if (error) throw new Error(error)
                 //if (_response.status == '200') {
-                $.nearest = _data.d[0];
-                $.idx = _data.d[0].x;
-                $.dt = _data.dt;
-            //$.nearest = _body.d[0];
+                $.token = _data.obs[0].msg.token;
+                $.uid = _data.obs[0].msg.uid;
+                //$.dt = _data.dt;
+                //$.nearest = _body.d[0];
             //}
-        } catch (e) {
-            $.log(`❗️ ${$.name}, getNearest执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
-        } finally {
-            resove($.dt)
-        }
-    });
-    $.log(`getNearest`, `dt = ${JSON.stringify($.dt)}`)
-  })
+            } catch (e) {
+                $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, $.idx, $.dt, '')
+            } finally {
+                $.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
+                resove()
+            }
+        });
+    })
 }
-*/
 
-//function ParseNearest(body) {
-//    let status = body.status
-//}
 
 //Show Nearest WeatherStation
 //https://api.waqi.info/api/feed/@station.uid/aqi.json
@@ -109,7 +103,8 @@ function getStation(idx) {
 function outputData(apiVer) {   
     let body = $response.body
     if (apiVer == "v1") {
-        let weather = JSON.parse(body);
+        if ($.nearest && $.obs) {
+            let weather = JSON.parse(body);
                 weather.air_quality.source = $.nearest.nna; //From Nearest
                 weather.air_quality.learnMoreURL = $.obs.city.url;
                 //weather.air_quality.airQualityIndex = $.nearest.v; //From Nearest
@@ -127,45 +122,48 @@ function outputData(apiVer) {
                 weather.air_quality.metadata.longitude = $.obs.city.geo[0];
                 weather.air_quality.metadata.provider_name = $.obs.attributions[2].name;
                 //weather.air_quality.metadata.expire_time = "";
-                //weather.air_quality.metadata.provider_logo = "";
+                weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
                 //weather.air_quality.metadata.read_time = "";
                 weather.air_quality.metadata.latitude = $.obs.city.geo[1];
                 //weather.air_quality.metadata.version = "";
                 weather.air_quality.metadata.language = $.language;
                 //weather.air_quality.metadata.data_source = "";
             body = JSON.stringify(weather);
+        }
         console.log('/v1/weather');
     };
     
     if (apiVer == "v2") {
-        let weather = JSON.parse(body);
-            weather.airQuality.source = $.nearest.nna; //From Nearest
-            weather.airQuality.learnMoreURL = $.obs.city.url;
-            //weather.airQuality.index = $.nearest.v; //From Nearest
-            weather.airQuality.index = $.obs.aqi;
-            weather.airQuality.scale = "EPA_NowCast.2115";
-            //weather.airQuality.primaryPollutant = $.nearest.pol; //From Nearest
-            weather.airQuality.primaryPollutant = $.obs.dominentpol;
-            weather.airQuality.pollutants.CO.amount = $.obs.iaqi.co.v;
-            weather.airQuality.pollutants.SO2.amount = $.obs.iaqi.so2.v;
-            weather.airQuality.pollutants.NO2.amount = $.obs.iaqi.no2.v;
-            weather.airQuality.pollutants["PM2.5"].amount = $.obs.iaqi.pm25.v;
-            //weather.airQuality.pollutants.OZONE.amount = "";
-            weather.airQuality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
-            weather.airQuality.metadata.longitude = $.obs.city.geo[0];
-            //weather.airQuality.metadata.providerLogo = "";
-            weather.airQuality.metadata.providerName = $.obs.attributions[2].name;
-            //weather.airQuality.metadata.expireTime = "";
-            weather.airQuality.metadata.language = $.language;
-            weather.airQuality.metadata.latitude = $.obs.city.geo[1];
-            weather.airQuality.metadata.reportedTime = $.obs.iso;
-            //weather.airQuality.metadata.readTime = "";
-            //weather.airQuality.metadata.units = "m";
-            body = JSON.stringify(weather);
+        if ($.nearest && $.obs) {
+            let weather = JSON.parse(body);
+                weather.airQuality.source = $.nearest.nna; //From Nearest
+                weather.airQuality.learnMoreURL = $.obs.city.url;
+                //weather.airQuality.index = $.nearest.v; //From Nearest
+                weather.airQuality.index = $.obs.aqi;
+                weather.airQuality.scale = "EPA_NowCast.2115";
+                //weather.airQuality.primaryPollutant = $.nearest.pol; //From Nearest
+                weather.airQuality.primaryPollutant = $.obs.dominentpol;
+                weather.airQuality.pollutants.CO.amount = $.obs.iaqi.co.v;
+                weather.airQuality.pollutants.SO2.amount = $.obs.iaqi.so2.v;
+                weather.airQuality.pollutants.NO2.amount = $.obs.iaqi.no2.v;
+                weather.airQuality.pollutants["PM2.5"].amount = $.obs.iaqi.pm25.v;
+                //weather.airQuality.pollutants.OZONE.amount = "";
+                weather.airQuality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
+                weather.airQuality.metadata.longitude = $.obs.city.geo[0];
+                weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
+                weather.airQuality.metadata.providerName = $.obs.attributions[2].name;
+                //weather.airQuality.metadata.expireTime = "";
+                weather.airQuality.metadata.language = $.language;
+                weather.airQuality.metadata.latitude = $.obs.city.geo[1];
+                weather.airQuality.metadata.reportedTime = $.obs.iso;
+                //weather.airQuality.metadata.readTime = "";
+                //weather.airQuality.metadata.units = "m";
+                body = JSON.stringify(weather);
+            }
         console.log('/v2/weather/');
     };
     
-    $.log(`outputData`, $.apiVer)
+    $.log(`⚠️ ${$.name}, outputData`, $.apiVer)
     $done({body});
 }
 
