@@ -157,7 +157,7 @@ function outputData(apiVer) {
       }
       */
       if ($.obs) {
-        weather.air_quality.source = $.obs.city.name;
+        //weather.air_quality.source = $.obs.city.name;
         weather.air_quality.learnMoreURL = $.obs.city.url;
         weather.air_quality.airQualityIndex = $.obs.aqi;
         weather.air_quality.airQualityScale = "EPA_NowCast.2115";
@@ -196,7 +196,7 @@ function outputData(apiVer) {
       }
       */
       if ($.obs) {
-        weather.airQuality.source = $.obs.city.name;
+        //weather.airQuality.source = $.obs.city.name;
         weather.airQuality.learnMoreURL = $.obs.city.url;
         weather.airQuality.index = $.obs.aqi;
         weather.airQuality.primaryPollutant = SwitchPollutantsType($.obs.dominentpol);
