@@ -123,15 +123,18 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * Loon:
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
     * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
+    * 修改地区检测为🇯🇵JP:[Geo_Services_JP.plugin](./plugin/Geo_Services_JP.plugin?raw=true " Redirect Geo Services to 🇯🇵JP")
   * Quantumult X:
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.qxrewrite](./qxrewrite/Geo_Services_CN.qxrewrite?raw=true " Redirect Geo Services to 🇨🇳CN")
     * 修改地区检测为🇺🇸US:[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Redirect Geo Services to 🇺🇸US")
+    * 修改地区检测为🇯🇵JP:[Geo_Services_JP.qxrewrite](./qxrewrite/Geo_Services_JP.qxrewrite?raw=true " Redirect Geo Services to 🇯🇵JP")
   * Surge:
     * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")
     * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
     * 修改地区检测为🇬🇧UK:[Geo_Services_UK.sgmodule](./sgmodule/Geo_Services_UK.sgmodule?raw=true " Redirect Geo Services to 🇬🇧UK")
     * 修改地区检测为🇭🇰HK:[Geo_Services_HK.sgmodule](./sgmodule/Geo_Services_HK.sgmodule?raw=true " Redirect Geo Services to 🇭🇰HK")
     * 修改地区检测为🇹🇼TW:[Geo_Services_TW.sgmodule](./sgmodule/Geo_Services_TW.sgmodule?raw=true " Redirect Geo Services to 🇹🇼TW")
+    * 修改地区检测为🇯🇵JP:[Geo_Services_JP.sgmodule](./sgmodule/Geo_Services_JP.sgmodule?raw=true " Redirect Geo Services to 🇯🇵JP")
 
 ---
 
@@ -140,7 +143,8 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
   * 注:
-    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
+    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求。
+    * 经反馈，本模块不再强制`Siri卡片`框架语言为`zh-CN`，将根据用户设备`语言与地区`设置进行变更。
 
 ## 激活方式
 * 如启用本模块后未立刻生效，可按照下列步骤激活「来自APPLE的内容\来自APPLE的建议\Siri建议」:
@@ -220,8 +224,8 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * Loon:
     * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
-    * [Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")(Author:Telegram:@YiEwha)
-    * [Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:@edgexyz)
+    * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")(Author:Telegram:@YiEwha)
+    * 修改地区为🇺🇸US:[Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:@edgexyz)
   * Surge:    
     * 不含策略组&适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
