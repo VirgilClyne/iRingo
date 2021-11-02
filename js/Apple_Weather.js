@@ -20,7 +20,7 @@ function getOrigin(url) {
     const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
     [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
     //return parameter = $request.url.match(url);
-    //$.log(`⚠️ ${$.name}, getOrigin`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode)
+    $.log(`⚠️ ${$.name}, getOrigin`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode, '')
 }
 
 //Search Nearest WeatherStation
@@ -48,7 +48,7 @@ function getNearest(lat,lng) {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getNearest执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                //$.log(`⚠️ ${$.name}, getNearest`, `response = ${JSON.stringify(response)}`, '')
+                $.log(`⚠️ ${$.name}, getNearest`, `response = ${JSON.stringify(response)}`, '')
                 resove()
             }
         });
@@ -81,7 +81,7 @@ function getToken(idx) {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                //$.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
+                $.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
                 resove()
             }
         });
@@ -112,13 +112,33 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                //$.log(`⚠️ ${$.name}, getStation`, `response = ${JSON.stringify(response)}`, '')
+                $.log(`⚠️ ${$.name}, getStation`, `response = ${JSON.stringify(response)}`, '')
                 resove()
             }
         })
     })
 }
 
+function SwitchPollutantsType(pollutant) {
+	switch (pollutant) {
+		case 'co':
+			return 'CO2';
+		case 'so2':
+			return 'SO2';
+		case 'no2':
+			return 'NO2';
+		case 'nox':
+			return 'NOX'
+		case 'pm25':
+			return 'PM2.5';
+		case 'pm10':
+			return 'PM10';
+		case 'o3':
+			return 'OZONE';
+		default:
+			return "OTHER";
+	}
+}
 
 function outputData(apiVer) {   
     let body = $response.body
@@ -129,7 +149,7 @@ function outputData(apiVer) {
         weather.air_quality.source = $.stations.name;
         weather.air_quality.airQualityIndex = $.stations.aqi;
         weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-        //weather.air_quality.primaryPollutant = $.nearest.pol; //mapq1
+        //weather.air_quality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
         weather.air_quality.metadata.reported_time = $.stations.utime;
         weather.air_quality.metadata.longitude = $.stations.geo[0];
         weather.air_quality.metadata.latitude = $.stations.geo[1];
@@ -139,7 +159,7 @@ function outputData(apiVer) {
         weather.air_quality.learnMoreURL = $.obs.city.url;
         weather.air_quality.airQualityIndex = $.obs.aqi;
         weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-        weather.air_quality.primaryPollutant = $.obs.dominentpol;
+        weather.air_quality.primaryPollutant = SwitchPollutantsType($.obs.dominentpol);
         if ($.obs.iaqi.co) weather.air_quality.pollutants.CO.amount = $.obs.iaqi.co.v;
         if ($.obs.iaqi.so2) weather.air_quality.pollutants.SO2.amount = $.obs.iaqi.so2.v;
         if ($.obs.iaqi.no2) weather.air_quality.pollutants.NO2.amount = $.obs.iaqi.no2.v;
@@ -166,7 +186,7 @@ function outputData(apiVer) {
         weather.airQuality.source = $.stations.name;
         weather.airQuality.index = $.stations.aqi;
         weather.airQuality.scale = "EPA_NowCast.2115";
-        //weather.airQuality.primaryPollutant = $.nearest.pol; //mapq1
+        //weather.airQuality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
         weather.airQuality.metadata.longitude = $.stations.geo[0];
         weather.airQuality.metadata.latitude = $.stations.geo[1];
         weather.airQuality.metadata.reportedTime = $.stations.utime;
@@ -175,7 +195,7 @@ function outputData(apiVer) {
         weather.airQuality.source = $.obs.city.name;
         weather.airQuality.learnMoreURL = $.obs.city.url;
         weather.airQuality.index = $.obs.aqi;
-        weather.airQuality.primaryPollutant = $.obs.dominentpol;
+        weather.airQuality.primaryPollutant = SwitchPollutantsType($.obs.dominentpol);
         if ($.obs.iaqi.co) weather.airQuality.pollutants.CO.amount = $.obs.iaqi.co.v;
         if ($.obs.iaqi.so2) weather.airQuality.pollutants.SO2.amount = $.obs.iaqi.so2.v;
         if ($.obs.iaqi.no2) weather.airQuality.pollutants.NO2.amount = $.obs.iaqi.no2.v;
@@ -196,7 +216,7 @@ function outputData(apiVer) {
     };
 
   body = JSON.stringify(weather);
-  //$.log(`⚠️ ${$.name}, outputData`, $.apiVer)
+  $.log(`⚠️ ${$.name}, outputData`, $.apiVer)
   $done({body});
 }
 
