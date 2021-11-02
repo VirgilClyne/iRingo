@@ -48,7 +48,7 @@ function getNearest(lat,lng) {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getNearest执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getNearest`, `response = ${JSON.stringify(response)}`, '')
+                $.log(`⚠️ ${$.name}, getNearest`,  `data = ${data}`, '')
                 resove()
             }
         });
@@ -81,7 +81,7 @@ function getToken(idx) {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getToken执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getToken`, `response = ${JSON.stringify(response)}`, '')
+                $.log(`⚠️ ${$.name}, getToken`, `data = ${data}`, '')
                 resove()
             }
         });
@@ -112,7 +112,7 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
             } catch (e) {
                 $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getStation`, `response = ${JSON.stringify(response)}`, '')
+                $.log(`⚠️ ${$.name}, getStation`, `data = ${data}`, '')
                 resove()
             }
         })
@@ -145,8 +145,9 @@ function outputData(apiVer) {
     let weather = JSON.parse(body);
     if (apiVer == "v1") {
       console.log('/v1/weather');
+      /*
       if ($.stations) { //From Nearest
-        //weather.air_quality.source = $.stations.name;
+        weather.air_quality.source = $.stations.name;
         weather.air_quality.airQualityIndex = $.stations.aqi;
         weather.air_quality.airQualityScale = "EPA_NowCast.2115";
         //weather.air_quality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
@@ -154,6 +155,7 @@ function outputData(apiVer) {
         weather.air_quality.metadata.longitude = $.stations.geo[0];
         weather.air_quality.metadata.latitude = $.stations.geo[1];
       }
+      */
       if ($.obs) {
         weather.air_quality.source = $.obs.city.name;
         weather.air_quality.learnMoreURL = $.obs.city.url;
@@ -182,8 +184,9 @@ function outputData(apiVer) {
 
   if (apiVer == "v2") {
     console.log('/v2/weather/');
+    /*
       if ($.stations) { //From Nearest
-        //weather.airQuality.source = $.stations.name;
+        weather.airQuality.source = $.stations.name;
         weather.airQuality.index = $.stations.aqi;
         weather.airQuality.scale = "EPA_NowCast.2115";
         //weather.airQuality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
@@ -191,6 +194,7 @@ function outputData(apiVer) {
         weather.airQuality.metadata.latitude = $.stations.geo[1];
         weather.airQuality.metadata.reportedTime = $.stations.utime;
       }
+      */
       if ($.obs) {
         weather.airQuality.source = $.obs.city.name;
         weather.airQuality.learnMoreURL = $.obs.city.url;
