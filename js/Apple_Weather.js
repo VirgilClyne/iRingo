@@ -146,7 +146,7 @@ function outputData(apiVer) {
     if (apiVer == "v1") {
       console.log('/v1/weather');
       if ($.stations) { //From Nearest
-        weather.air_quality.source = $.stations.name;
+        //weather.air_quality.source = $.stations.name;
         weather.air_quality.airQualityIndex = $.stations.aqi;
         weather.air_quality.airQualityScale = "EPA_NowCast.2115";
         //weather.air_quality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
@@ -183,7 +183,7 @@ function outputData(apiVer) {
   if (apiVer == "v2") {
     console.log('/v2/weather/');
       if ($.stations) { //From Nearest
-        weather.airQuality.source = $.stations.name;
+        //weather.airQuality.source = $.stations.name;
         weather.airQuality.index = $.stations.aqi;
         weather.airQuality.scale = "EPA_NowCast.2115";
         //weather.airQuality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
