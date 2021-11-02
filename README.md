@@ -16,6 +16,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   - [简介](#简介)
   - [功能列表](#功能列表)
   - [todo？](#todo-1)
+  - [关于天气API](#关于天气api)
   - [安装链接](#安装链接)
 - [定位服务](#定位服务)
   - [简介](#简介-1)
@@ -77,8 +78,15 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 可能会有的功能: 
     - [ ] 历史天气数据？
     - [ ] 天气变化？
+    - [ ]  Watch 支持（有群友反馈API为`weather-data.apple.com`可被修改，请求系统版本设置型号等内容，疑似与地区设置有关)
   * 不会有的功能: 
-    - [ ] ~~~ Watch 支持（屏蔽  Watch 天气API`api.weather.com`后，不回退查询`weather-data.apple.com`，不可MitM)~~~
+    - [ ] --
+
+## 关于天气API
+  * 目前有三种
+    * `api.weather.com`:部分Watch
+    * `weather-data.apple.com`:iOS天气APP、macOS天气小组件、地图、部分Watch
+    * `weather-data-origin.apple.com`:iOS天气小组件、iOS天气APP的回退查询
 
 ## 安装链接 
   * Loon:
