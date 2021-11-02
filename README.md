@@ -75,7 +75,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ## todo？
   * 可能会有的功能: 
-    - [ ]  Watch 支持？（请反馈屏蔽  Watch 天气API`api.weather.com`后，是否回退查询`weather-data.apple.com`)
+    - [ ] ~~~ Watch 支持（屏蔽  Watch 天气API`api.weather.com`后，不回退查询`weather-data.apple.com`，不可MitM)~~~
     - [ ] 历史天气数据？
     - [ ] 天气变化？
 
