@@ -2,7 +2,7 @@
 解锁完整的Apple功能和集成服务   
 macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过  
 需要启用`重写`、`脚本`、`MitM`功能  
-如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS，模块间互无依赖，均可单独或搭配使用  
+如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用  
 有问题请至Issue页面反馈或移步Telegram讨论组:[NobyDa Script](https://t.me/joinchat/JtzRlVY-WyJPDavvhKjrbw)  
 
 ---
@@ -78,15 +78,18 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 可能会有的功能: 
     - [ ] 历史天气数据？
     - [ ] 天气变化？
-    - [ ]  Watch 支持（有群友反馈API为`weather-data.apple.com`可被修改，请求系统版本设置型号等内容，疑似与地区设置有关)
+    - [ ] Watch 支持（有群友反馈API为`weather-data.apple.com`可被修改，请求系统版本设置型号等内容，疑似与地区设置有关)
   * 不会有的功能: 
     - [ ] --
 
 ## 关于天气API
-  * 目前有三种
-    * `api.weather.com`:部分Watch
-    * `weather-data.apple.com`:iOS天气APP、macOS天气小组件、地图、部分Watch
-    * `weather-data-origin.apple.com`:iOS天气小组件、iOS天气APP的回退查询
+  * 三种来源:
+    * `api.weather.com`:部分Watch（不可修改）
+    * `weather-data.apple.com`:iOS天气APP、macOS天气小组件、地图、部分Watch（可修改）
+    * `weather-data-origin.apple.com`:iOS天气小组件、iOS天气APP的回退查询（不确定）
+  * 两种版本：
+    * `v1`:Watch、地图、iOS15以下的天气APP、macOS12以下的天气小组件
+    * `v2`:iOS15以上的天气APP、macOS12以上的天气小组件
 
 ## 安装链接 
   * Loon:
