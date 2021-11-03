@@ -150,7 +150,7 @@ function outputData(apiVer, stations, obs) {
             weather.air_quality = {
                 "isSignificant": true,
                 "airQualityCategoryIndex": 2,
-                "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "μg\/m3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "μg\/m3" }, "NO2": { "name": "NO2", "amount": 19.7, "unit": "μg\/m3" }, "PM2.5": { "name": "PM2.5", "amount": 139, "unit": "μg\/m3" }, "OZONE": { "name": "OZONE", "amount": 26.9, "unit": "μg\/m3" }, "PM10": { "name": "PM10", "amount": 72, "unit": "μg\/m3" } },
+                "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "μg\/m3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "μg\/m3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "μg\/m3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "μg\/m3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "μg\/m3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "μg\/m3" } },
                 "metadata": {
                     "version": 1,
                 },
