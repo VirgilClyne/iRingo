@@ -4,19 +4,17 @@ README:https://github.com/VirgilClyne/iRingo
 
 const $ = new Env('Apple_Weather');
 !(async () => {
-  await getOrigin($request.url)
+  await getOrigin($request.url, $response.body)
   await getNearest($.lat, $.lng)
   await getToken($.idx)
   await getStation($.idx, undefined, $.token, $.uid, undefined)
-  await outputData($.apiVer)
+  await outputData($.apiVer, $.stations, $.obs)
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
 
 // Get Origin Parameter
-function getOrigin(url) {    
-    //const url
-    //const parameter
+function getOrigin(url) {
     const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
     [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
     //return parameter = $request.url.match(url);
@@ -138,90 +136,112 @@ function SwitchPollutantsType(pollutant) {
 		default:
 			return "OTHER";
 	}
-}
+};
 
-function outputData(apiVer) {   
+function outputData(apiVer, stations, obs) {   
     let body = $response.body
     let weather = JSON.parse(body);
-    if (apiVer == "v1") {
-      console.log('/v1/weather');
-      /*
-      if ($.stations) { //From Nearest
-        weather.air_quality.source = $.stations.name;
-        weather.air_quality.airQualityIndex = $.stations.aqi;
-        weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-        //weather.air_quality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
-        weather.air_quality.metadata.reported_time = $.stations.utime;
-        weather.air_quality.metadata.longitude = $.stations.geo[0];
-        weather.air_quality.metadata.latitude = $.stations.geo[1];
-      }
-      */
-      if ($.obs) {
-        //weather.air_quality.source = $.obs.city.name;
-        weather.air_quality.learnMoreURL = $.obs.city.url;
-        weather.air_quality.airQualityIndex = $.obs.aqi;
-        weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-        weather.air_quality.primaryPollutant = SwitchPollutantsType($.obs.dominentpol);
-        if ($.obs.iaqi.co) weather.air_quality.pollutants.CO.amount = $.obs.iaqi.co.v;
-        if ($.obs.iaqi.so2) weather.air_quality.pollutants.SO2.amount = $.obs.iaqi.so2.v;
-        if ($.obs.iaqi.no2) weather.air_quality.pollutants.NO2.amount = $.obs.iaqi.no2.v;
-        if ($.obs.iaqi.nox) weather.air_quality.pollutants.NOX.amount = $.obs.iaqi.nox.v;
-        if ($.obs.iaqi.pm25) weather.air_quality.pollutants["PM2.5"].amount = $.obs.iaqi.pm25.v;
-        if ($.obs.iaqi.o3) weather.air_quality.pollutants.OZONE.amount = $.obs.iaqi.o3.v;
-        if ($.obs.iaqi.pm10) weather.air_quality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
-        weather.air_quality.metadata.reported_time = $.obs.iso;
-        weather.air_quality.metadata.longitude = $.obs.city.geo[0];
-        weather.air_quality.metadata.provider_name = $.obs.attributions[$.obs.attributions.length - 1].name;
-        //weather.air_quality.metadata.expire_time = "";
-        weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
-        //weather.air_quality.metadata.read_time = "";
-        weather.air_quality.metadata.latitude = $.obs.city.geo[1];
-        //weather.air_quality.metadata.version = "";
-        //weather.air_quality.metadata.language = $.language;
-        weather.air_quality.metadata.data_source = $.obs.attributions[$.obs.attributions.length - 1].name;
-      };
-  };
-
-  if (apiVer == "v2") {
-    console.log('/v2/weather/');
-    /*
-      if ($.stations) { //From Nearest
-        weather.airQuality.source = $.stations.name;
-        weather.airQuality.index = $.stations.aqi;
-        weather.airQuality.scale = "EPA_NowCast.2115";
-        //weather.airQuality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
-        weather.airQuality.metadata.longitude = $.stations.geo[0];
-        weather.airQuality.metadata.latitude = $.stations.geo[1];
-        weather.airQuality.metadata.reportedTime = $.stations.utime;
-      }
-      */
-      if ($.obs) {
-        //weather.airQuality.source = $.obs.city.name;
-        weather.airQuality.learnMoreURL = $.obs.city.url;
-        weather.airQuality.index = $.obs.aqi;
-        weather.airQuality.primaryPollutant = SwitchPollutantsType($.obs.dominentpol);
-        if ($.obs.iaqi.co) weather.airQuality.pollutants.CO.amount = $.obs.iaqi.co.v;
-        if ($.obs.iaqi.so2) weather.airQuality.pollutants.SO2.amount = $.obs.iaqi.so2.v;
-        if ($.obs.iaqi.no2) weather.airQuality.pollutants.NO2.amount = $.obs.iaqi.no2.v;
-        if ($.obs.iaqi.nox) weather.airQuality.pollutants.NOX.amount = $.obs.iaqi.nox.v;
-        if ($.obs.iaqi.pm25) weather.airQuality.pollutants["PM2.5"].amount = $.obs.iaqi.pm25.v;
-        if ($.obs.iaqi.o3) weather.airQuality.pollutants.OZONE.amount = $.obs.iaqi.o3.v;
-        if ($.obs.iaqi.pm10) weather.airQuality.pollutants.PM10.amount = $.obs.iaqi.pm10.v;
-        weather.airQuality.metadata.longitude = $.obs.city.geo[0];
-        weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
-        weather.airQuality.metadata.providerName = $.obs.attributions[$.obs.attributions.length - 1].name;
-        //weather.airQuality.metadata.expireTime = "";
-        //weather.airQuality.metadata.language = $.language;
-        weather.airQuality.metadata.latitude = $.obs.city.geo[1];
-        weather.airQuality.metadata.reportedTime = $.obs.iso;
-        //weather.airQuality.metadata.readTime = "";
-        //weather.airQuality.metadata.units = "m";
-      }    
+    
+    //Input Data
+    if (apiVer == "v1" ) {
+    console.log('/v1/weather');
+        if (!weather.air_quality) {
+            console.log('不存在AQ,创建');
+            weather.air_quality = {
+                "isSignificant": true,
+                "airQualityCategoryIndex": 2,
+                "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "μg\/m3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "μg\/m3" }, "NO2": { "name": "NO2", "amount": 19.7, "unit": "μg\/m3" }, "PM2.5": { "name": "PM2.5", "amount": 139, "unit": "μg\/m3" }, "OZONE": { "name": "OZONE", "amount": 26.9, "unit": "μg\/m3" }, "PM10": { "name": "PM10", "amount": 72, "unit": "μg\/m3" } },
+                "metadata": {
+                    "version": 1,
+                },
+                "name": "AirQuality",
+            };
+        }
+        if (stations) { //From Nearest List
+            weather.air_quality.source = stations.name;
+            weather.air_quality.airQualityIndex = stations.aqi;
+            weather.air_quality.airQualityScale = "EPA_NowCast.2115";
+            //weather.air_quality.primaryPollutant = SwitchPollutantsType($.nearest.pol); //mapq1
+            weather.air_quality.metadata.reported_time = stations.utime;
+            weather.air_quality.metadata.longitude = stations.geo[0];
+            weather.air_quality.metadata.latitude = stations.geo[1];
+        }
+        if (obs) { //From Observation Station
+            weather.air_quality.source = obs.city.name;
+            weather.air_quality.learnMoreURL = obs.city.url;
+            weather.air_quality.airQualityIndex = obs.aqi;
+            weather.air_quality.airQualityScale = "EPA_NowCast.2115";
+            weather.air_quality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
+            if (obs.iaqi.co) weather.air_quality.pollutants.CO.amount = obs.iaqi.co.v;
+            if (obs.iaqi.so2) weather.air_quality.pollutants.SO2.amount = obs.iaqi.so2.v;
+            if (obs.iaqi.no2) weather.air_quality.pollutants.NO2.amount = obs.iaqi.no2.v;
+            if (obs.iaqi.nox) weather.air_quality.pollutants.NOX.amount = obs.iaqi.nox.v;
+            if (obs.iaqi.pm25) weather.air_quality.pollutants["PM2.5"].amount = obs.iaqi.pm25.v;
+            if (obs.iaqi.o3) weather.air_quality.pollutants.OZONE.amount = obs.iaqi.o3.v;
+            if (obs.iaqi.pm10) weather.air_quality.pollutants.PM10.amount = obs.iaqi.pm10.v;
+            weather.air_quality.metadata.reported_time = obs.iso;
+            weather.air_quality.metadata.longitude = obs.city.geo[0];
+            weather.air_quality.metadata.provider_name = obs.attributions[$.obs.attributions.length - 1].name;
+            //weather.air_quality.metadata.expire_time = "";
+            weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
+            //weather.air_quality.metadata.read_time = "";
+            weather.air_quality.metadata.latitude = obs.city.geo[1];
+            //weather.air_quality.metadata.version = "";
+            //weather.air_quality.metadata.language = $.language;
+            weather.air_quality.metadata.data_source = obs.attributions[$.obs.attributions.length - 1].name;
+        }
     };
-
-  body = JSON.stringify(weather);
-  $.log(`⚠️ ${$.name}, outputData`, $.apiVer)
-  $done({body});
+    if (apiVer == "v2") {
+    console.log('/v2/weather/');
+        if (!weather.airQuality) {
+            console.log('不存在AQ,创建');
+            weather.airQuality = {
+                "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "microgramsPerM3" }, "NO": { "name": "NO", "amount": 0, "unit": "microgramsPerM3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "microgramsPerM3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "microgramsPerM3" }, "NOX": { "name": "NOX", "amount": 0, "unit": "microgramsPerM3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "microgramsPerM3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "microgramsPerM3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "microgramsPerM3" } },
+                "metadata": {
+                    "version": 2,
+                    "units": "m",
+                },
+                "sourceType": "station",
+                "isSignificant": true,
+                "name": "AirQuality",
+                "categoryIndex": 2,
+            }
+        }
+        if (stations) { //From Nearest List
+            weather.airQuality.source = stations.name;
+            weather.airQuality.index = stations.aqi;
+            weather.airQuality.scale = "EPA_NowCast.2115";
+            //weather.airQuality.primaryPollutant = SwitchPollutantsType(nearest.pol); //mapq1
+            weather.airQuality.metadata.longitude = stations.geo[0];
+            weather.airQuality.metadata.latitude = stations.geo[1];
+            weather.airQuality.metadata.reportedTime = stations.utime;
+        }
+        if (obs) { //From Observation Station
+            weather.airQuality.source = obs.city.name;
+            weather.airQuality.learnMoreURL = obs.city.url;
+            weather.airQuality.index = obs.aqi;
+            weather.airQuality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
+            if (obs.iaqi.co) weather.airQuality.pollutants.CO.amount = obs.iaqi.co.v;
+            if (obs.iaqi.so2) weather.airQuality.pollutants.SO2.amount = obs.iaqi.so2.v;
+            if (obs.iaqi.no2) weather.airQuality.pollutants.NO2.amount = obs.iaqi.no2.v;
+            if (obs.iaqi.nox) weather.airQuality.pollutants.NOX.amount = obs.iaqi.nox.v;
+            if (obs.iaqi.pm25) weather.airQuality.pollutants["PM2.5"].amount = obs.iaqi.pm25.v;
+            if (obs.iaqi.o3) weather.airQuality.pollutants.OZONE.amount = obs.iaqi.o3.v;
+            if (obs.iaqi.pm10) weather.airQuality.pollutants.PM10.amount = obs.iaqi.pm10.v;
+            weather.airQuality.metadata.longitude = obs.city.geo[0];
+            weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
+            weather.airQuality.metadata.providerName = obs.attributions[obs.attributions.length - 1].name;
+            //weather.airQuality.metadata.expireTime = "";
+            //weather.airQuality.metadata.language = $.language;
+            weather.airQuality.metadata.latitude = obs.city.geo[1];
+            weather.airQuality.metadata.reportedTime = obs.iso;
+            //weather.airQuality.metadata.readTime = "";
+            //weather.airQuality.metadata.units = "m";
+        }
+    };
+body = JSON.stringify(weather);
+$.log(`⚠️ ${$.name}, outputData`, $.apiVer)
+$done({body});
 }
 
 /***************** Env *****************/
