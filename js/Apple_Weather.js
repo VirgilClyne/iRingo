@@ -179,7 +179,7 @@ function TimeConverter(time, action) {
 			time.setMinutes(0, 0, 0);
 			break;
 		default:
-			console.log('Error time converting action.');
+			$.log(`⚠️ ${$.name}, Error time converting action.`);
 	}
     if ($.apiVer == "v1" ) {
         let timeString = time.getTime() / 1000;
@@ -199,9 +199,9 @@ function outputData(stations, obs) {
     
     //Input Data
     if ($.apiVer == "v1" ) {
-    $.log('⚠️ ${$.name}, AQ data Ver.1');
+    $.log(`⚠️ ${$.name}, AQ data Ver.1`);
         if (!weather.air_quality) {
-            $.log('⚠️ ${$.name}, non-existent AQ data Ver.1 , creating');
+            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.1 , creating`);
             weather.air_quality = {
                 "isSignificant": true,
                 "airQualityCategoryIndex": 2,
@@ -251,9 +251,9 @@ function outputData(stations, obs) {
         }
     };
     if ($.apiVer == "v2") {
-    $.log('⚠️ ${$.name}, AQ data Ver.2');
+    $.log(`⚠️ ${$.name}, AQ data Ver.2`);
         if (!weather.airQuality) {
-            $.log('⚠️ ${$.name}, non-existent AQ data Ver.2 , creating');
+            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.2 , creating`);
             weather.airQuality = {
                 "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "microgramsPerM3" }, "NO": { "name": "NO", "amount": 0, "unit": "microgramsPerM3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "microgramsPerM3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "microgramsPerM3" }, "NOX": { "name": "NOX", "amount": 0, "unit": "microgramsPerM3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "microgramsPerM3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "microgramsPerM3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "microgramsPerM3" } },
                 "metadata": {
