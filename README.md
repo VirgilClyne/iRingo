@@ -147,6 +147,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     * 修改地区检测为🇭🇰HK:[Geo_Services_HK.sgmodule](./sgmodule/Geo_Services_HK.sgmodule?raw=true " Redirect Geo Services to 🇭🇰HK")
     * 修改地区检测为🇹🇼TW:[Geo_Services_TW.sgmodule](./sgmodule/Geo_Services_TW.sgmodule?raw=true " Redirect Geo Services to 🇹🇼TW")
     * 修改地区检测为🇯🇵JP:[Geo_Services_JP.sgmodule](./sgmodule/Geo_Services_JP.sgmodule?raw=true " Redirect Geo Services to 🇯🇵JP")
+    * 修改地区检测为🇦🇺AU:[Geo_Services_AU.sgmodule](./sgmodule/Geo_Services_AU.sgmodule?raw=true " Redirect Geo Services to 🇦🇺AU")
 
 ---
 
