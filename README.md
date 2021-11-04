@@ -70,9 +70,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ## 功能列表
   * 在以下位置及功能中可用: 
-    - [x] 天气
-    - [x] 地图
-    - [x] 小组件
+    - [x] 天气(`WeatherKit_Weather_iOS_Version XX.X`)
+    - [x] 地图(`Maps_WeatherFoundation`)
+    - [x] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
 
 ## todo？
   * 可能会有的功能: 
