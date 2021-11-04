@@ -19,7 +19,7 @@ function getOrigin(url) {
     const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
     [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
     //return parameter = $request.url.match(url);
-    $.log(`⚠️ ${$.name}, getOrigin`, `Finish`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode, '')
+    $.log(`🎉 ${$.name}, getOrigin`, `Finish`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode, '')
 }
 
 // Step 2
@@ -48,7 +48,7 @@ function getNearest(lat,lng) {
                 } catch (e) {
                     $.log(`❗️ ${$.name}, getNearest`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
                 } finally {
-                    $.log(`⚠️ ${$.name}, getNearest`, `Finish`,  `data = ${data}`, '')
+                    $.log(`🎉 ${$.name}, getNearest`, `Finish`,  `data = ${data}`, '')
                     resove()
                 }
             })
@@ -68,14 +68,17 @@ function getNearest(lat,lng) {
                     const _data = JSON.parse(data)
                     if (error) throw new Error(error)
                     if (_data.status == 'ok') {
-                    $.stations = _data.data.stations[0];
-                    $.idx = $.stations.idx;
-                    $.country = $.stations.country
+                        $.stations = _data.data.stations[0];
+                        $.idx = $.stations.idx;
+                        $.country = $.stations.country
+                    }
+                    else {
+                        $.log(`⚠️ ${$.name}, getNearest`, `Error`,  `data = ${data}`, '')
                     }
                 } catch (e) {
                     $.log(`❗️ ${$.name}, getNearest`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
                 } finally {
-                    $.log(`⚠️ ${$.name}, getNearest`, `Finish`,  `data = ${data}`, '')
+                    $.log(`🎉 ${$.name}, getNearest`, `Finish`,  `data = ${data}`, '')
                     resove()
                 }
             })
@@ -101,18 +104,19 @@ function getToken(idx) {
                 const _data = JSON.parse(data)
 
                 if (error) throw new Error(error)
-                if (_data.rxs.obs[0].status == "ok") {
-                  $.token = _data.rxs.obs[0].msg.token;
-                  $.uid = _data.rxs.obs[0].msg.uid;
+                if (_data.rxs.status == "ok") {
+                    $.token = _data.rxs.obs[0].msg.token;
+                    $.uid = _data.rxs.obs[0].msg.uid;
                 }
                 else{
-                  $.token = "na";
-                  $.uid = "-1";
+                    $.token = "na";
+                    $.uid = "-1";
+                    $.log(`⚠️ ${$.name}, getToken`, `Error`, `data = ${data}`, '')
                 }
             } catch (e) {
                 $.log(`❗️ ${$.name}, getToken`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
-                $.log(`⚠️ ${$.name}, getToken`, `Finish`, `data = ${data}`, '')
+                $.log(`🎉 ${$.name}, getToken`, `Finish`, '')
                 resove()
             }
         });
@@ -137,14 +141,17 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
             try {
                 const _data = JSON.parse(data)
                 if (error) throw new Error(error)
-                //if (_data.rxs.status == `OK`) {
-                $.obs = _data.rxs.obs[0].msg;
-                //}
+                if (_data.rxs.status == "ok") {
+                    $.obs = _data.rxs.obs[0].msg;
+                }
+                else{
+                    $.log(`⚠️ ${$.name}, getStation`, `Error`, `data = ${data}`, '')
+                }
             } catch (e) {
                 $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
             } finally {
                 //$.log(`⚠️ ${$.name}, getStation`, `Finish`, `data = ${data}`, '')
-                $.log(`⚠️ ${$.name}, getStation`, `Finish`, '')
+                $.log(`🎉 ${$.name}, getStation`, `Finish`, '')
                 resove()
             }
         })
@@ -159,9 +166,9 @@ function outputData(stations, obs) {
     
     // Input Data
     if ($.apiVer == "v1" ) {
-    $.log(`⚠️ ${$.name}, Detect`, `AQ data Ver.1`);
+    $.log(`⚠️ ${$.name}, Detect`, `AQ data Ver.1`, '');
         if (!weather.air_quality) {
-            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.1`, `creating`);
+            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.1`, `creating`, '');
             weather.air_quality = {
                 "isSignificant": true,
                 "airQualityCategoryIndex": 2,
@@ -186,7 +193,7 @@ function outputData(stations, obs) {
         }
         if (obs) { // From Observation Station
             weather.air_quality.source = obs.city.name;
-            weather.air_quality.learnMoreURL = obs.city.url + `/${$.country}/m`;
+            weather.air_quality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.air_quality.airQualityIndex = obs.aqi;
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
             weather.air_quality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
@@ -211,9 +218,9 @@ function outputData(stations, obs) {
         }
     };
     if ($.apiVer == "v2") {
-    $.log(`⚠️ ${$.name}, Detect`, `AQ data Ver.2`);
+    $.log(`⚠️ ${$.name}, Detect`, `AQ data Ver.2`, '');
         if (!weather.airQuality) {
-            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.2`, `creating`);
+            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.2`, `creating`, '');
             weather.airQuality = {
                 "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "microgramsPerM3" }, "NO": { "name": "NO", "amount": 0, "unit": "microgramsPerM3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "microgramsPerM3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "microgramsPerM3" }, "NOX": { "name": "NOX", "amount": 0, "unit": "microgramsPerM3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "microgramsPerM3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "microgramsPerM3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "microgramsPerM3" } },
                 "metadata": {
@@ -263,7 +270,7 @@ function outputData(stations, obs) {
         }
     };
 body = JSON.stringify(weather);
-$.log(`⚠️ ${$.name}, outputData`, `Finish`)
+$.log(`🎉 ${$.name}, outputData`, `Finish`, '')
 $done({body});
 };
 
@@ -304,7 +311,7 @@ function TimeConverter(time, action) {
 			time.setMinutes(0, 0, 0);
 			break;
 		default:
-			$.log(`❗️ ${$.name}, Time Converter`, `Error`, '');
+			$.log(`⚠️ ${$.name}, Time Converter`, `Error`, '');
 	}
     if ($.apiVer == "v1" ) {
         let timeString = time.getTime() / 1000;
