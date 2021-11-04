@@ -6,7 +6,7 @@ const $ = new Env('Apple_Weather_Map');
 !(async () => {
     await getOrigin($request.url)
     await ConvertGeo($.lat, $.lng)
-    await getTiles(wgs84togcj02[0], wgs84togcj02[1], $.alt)
+    await getTiles($.wgs84togcj02[0], $.wgs84togcj02[1], $.alt)
     //await ConvertTiles(png)
     await outputData($.Tiles)
 })()
@@ -26,8 +26,8 @@ function getOrigin(url) {
 // Convert Geo Coordinates
 function ConvertGeo(lat, lng) {
 //wgs84转国测局坐标
-var wgs84togcj02 = coordtransform.wgs84togcj02(lat, lng);
-return wgs84togcj02
+$.wgs84togcj02 = coordtransform.wgs84togcj02(lat, lng);
+return $.wgs84togcj02
 };
 
 // Step 3
