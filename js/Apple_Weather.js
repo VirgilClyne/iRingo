@@ -5,6 +5,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env('Apple_Weather');
 !(async () => {
     await getOrigin($request.url)
+    await AQIstatus($response.body)
     await getNearest($.lat, $.lng)
     await getToken($.idx)
     await getStation($.idx, undefined, $.token, $.uid, undefined)
@@ -23,6 +24,33 @@ function getOrigin(url) {
 }
 
 // Step 2
+// AQI Source Status
+function AQIstatus(body) {
+    let weather = JSON.parse(body);
+    if ($.apiVer == 'v1' && weather.air_quality) {
+        $.log(`⚠️ ${$.name}, AQIstatus`, `AQ data ${$.apiVer}`, `${weather.air_quality.metadata.provider_name}`, '');
+        if (weather.air_quality.metadata.provider_name != '和风天气') {
+            $.log(`⚠️ ${$.name}, AQIstatus, Abort`, '');
+            $.done()
+        } else {
+            $.log(`🎉 ${$.name}, AQIstatus, Continue`, '')
+        }
+    } else if ($.apiVer == 'v2' && weather.airQuality) {
+        $.log(`⚠️ ${$.name}, AQIstatus`, `AQ data ${$.apiVer}`, `${weather.airQuality.metadata.providerName}`, '');
+        if (weather.airQuality.metadata.providerName != '和风天气') {
+            $.log(`⚠️ ${$.name}, AQIstatus, Abort`, '');
+            $.done()
+        } else {
+            $.log(`🎉 ${$.name}, AQIstatus, Continue`, '')
+        }
+    } else {
+        $.log(`🎉 ${$.name}, AQIstatus, Continue`, '')
+    }
+};
+        
+        
+
+// Step 3
 // Search Nearest Observation Station
 // https://api.waqi.info/mapq/nearest/?n=1&geo=1/lat/lng
 // https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
@@ -86,7 +114,7 @@ function getNearest(lat, lng) {
     }
 };
 
-// Step 3
+// Step 4
 // Get Nearest Observation Station Token
 // https://api.waqi.info/api/token/station.uid
 function getToken(idx) {
@@ -123,7 +151,7 @@ function getToken(idx) {
     })
 }
 
-// Step 4
+// Step 5
 // Show Nearest Observation Station AQI Data
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
 function getStation(idx, key = "-1", token = "na", uid = "-1") {
@@ -158,7 +186,7 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
     })
 };
 
-// Step 5
+// Step 6
 // Output Data
 function outputData(stations, obs) {
     let body = $response.body
@@ -166,9 +194,9 @@ function outputData(stations, obs) {
 
     // Input Data
     if ($.apiVer == "v1") {
-        $.log(`⚠️ ${$.name}, Detect`, `AQ data Ver.1`, '');
+        $.log(`⚠️ ${$.name}, Detect`, `AQ data ${$.apiVer}`, '');
         if (!weather.air_quality) {
-            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.1`, `creating`, '');
+            $.log(`⚠️ ${$.name}, non-existent AQ data`, `creating`, '');
             weather.air_quality = {
                 "isSignificant": true,
                 "airQualityCategoryIndex": 2,
@@ -218,9 +246,9 @@ function outputData(stations, obs) {
         }
     };
     if ($.apiVer == "v2") {
-        $.log(`⚠️ ${$.name}, Detect`, `AQ data Ver.2`, '');
+        $.log(`⚠️ ${$.name}, Detect`, `AQ data ${$.apiVer}`, '');
         if (!weather.airQuality) {
-            $.log(`⚠️ ${$.name}, non-existent AQ data Ver.2`, `creating`, '');
+            $.log(`⚠️ ${$.name}, non-existent AQ data`, `creating`, '');
             weather.airQuality = {
                 "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "microgramsPerM3" }, "NO": { "name": "NO", "amount": 0, "unit": "microgramsPerM3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "microgramsPerM3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "microgramsPerM3" }, "NOX": { "name": "NOX", "amount": 0, "unit": "microgramsPerM3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "microgramsPerM3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "microgramsPerM3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "microgramsPerM3" } },
                 "metadata": {
@@ -274,7 +302,7 @@ function outputData(stations, obs) {
     $done({ body });
 };
 
-// Step 5.1
+// Step 6.1
 // Switch Pollutants Type
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
 function SwitchPollutantsType(pollutant) {
@@ -298,7 +326,7 @@ function SwitchPollutantsType(pollutant) {
     }
 };
 
-// Step 5.2
+// Step 6.2
 // Convert Time Format
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
 function TimeConverter(time, action) {
