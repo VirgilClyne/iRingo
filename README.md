@@ -73,6 +73,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     - [x] 天气(`WeatherKit_Weather_iOS_Version XX.X`)
     - [x] 地图(`Maps_WeatherFoundation`)
     - [x] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
+  * 切换逻辑
+    * 切换所有`和风天气`的`空气质量`信息为[World Air Quality Index Project](https://waqi.info/)
+    * 填补全球没有`空气质量`信息的为[World Air Quality Index Project](https://waqi.info/)  
 
 ## todo？
   * 可能会有的功能: 
@@ -123,6 +126,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   - [x] 协助激活`Apple News` 
   - [x] 协助激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用) 
   - [x] `指南针`的海拔经纬度功能
+  - [x] `询问Siri`切换为国际版(SIM卡设备会因「MCC / MNC」检测回退至国内百度版)
   * 副作用(单独使用此模块会有下列影响):
   - [ ] `天气`的数据源
   - [ ] `Siri建议`的服务器分配
