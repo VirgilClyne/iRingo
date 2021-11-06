@@ -5,7 +5,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env('Apple_Weather');
 !(async () => {
     await getOrigin($request.url)
-    await AQIstatus($response.body)
+    await getAQIstatus($response.body)
     await getNearest($.lat, $.lng)
     await getToken($.idx)
     await getStation($.idx, undefined, $.token, $.uid, undefined)
@@ -25,27 +25,37 @@ function getOrigin(url) {
 
 // Step 2
 // AQI Source Status
-function AQIstatus(body) {
-    let weather = JSON.parse(body);
-    if ($.apiVer == 'v1' && weather.air_quality) {
-        $.log(`⚠️ ${$.name}, AQIstatus`, `AQ data ${$.apiVer}`, `${weather.air_quality.metadata.provider_name}`, '');
-        if (weather.air_quality.metadata.provider_name != '和风天气') {
-            $.log(`⚠️ ${$.name}, AQIstatus, Abort`, '');
-            $.done()
-        } else {
-            $.log(`🎉 ${$.name}, AQIstatus, Continue`, '')
+function getAQIstatus(body) {
+    return new Promise((resove) => {
+        const weather = JSON.parse(body);
+        const provider = ['和风天气', 'QWeather']
+        try {
+            if ($.apiVer == 'v1' && weather.air_quality) {
+                $.log(`⚠️ ${$.name}, getAQIstatus`, `AQ data ${$.apiVer}`, '');
+                if (provider.includes(weather.air_quality.metadata.provider_name)) {    
+                    $.log(`🎉 ${$.name}, getAQIstatus, Continue`, `${weather.air_quality.metadata.provider_name}`, '')
+                    resove()
+                } else {
+                    $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, `${weather.air_quality.metadata.provider_name}`, '');
+                    $.done()
+                }
+            } else if ($.apiVer == 'v2' && weather.airQuality) {
+                $.log(`⚠️ ${$.name}, getAQIstatus`, `AQ data ${$.apiVer}`, '');
+                if (provider.includes(weather.airQuality.metadata.providerName)) { 
+                    $.log(`🎉 ${$.name}, getAQIstatus, Continue`, `${weather.airQuality.metadata.providerName}`, '')
+                    resove()
+                } else {
+                    $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, `${weather.airQuality.metadata.providerName}`, '');
+                    $.done()
+                }
+            } else {
+                $.log(`🎉 ${$.name}, getAQIstatus, non-existent AQI data, Continue`, '')
+                resove()
+            }
+        } catch (e) {
+            $.log(`❗️ ${$.name}, getAQIstatus`, `Failure`, ` error = ${e}`, '')
         }
-    } else if ($.apiVer == 'v2' && weather.airQuality) {
-        $.log(`⚠️ ${$.name}, AQIstatus`, `AQ data ${$.apiVer}`, `${weather.airQuality.metadata.providerName}`, '');
-        if (weather.airQuality.metadata.providerName != '和风天气') {
-            $.log(`⚠️ ${$.name}, AQIstatus, Abort`, '');
-            $.done()
-        } else {
-            $.log(`🎉 ${$.name}, AQIstatus, Continue`, '')
-        }
-    } else {
-        $.log(`🎉 ${$.name}, AQIstatus, Continue`, '')
-    }
+    })
 };
         
         
@@ -109,7 +119,7 @@ function getNearest(lat, lng) {
                     $.log(`🎉 ${$.name}, getNearest`, `Finish`, `data = ${data}`, '')
                     resove()
                 }
-            })
+            });
         })
     }
 };
@@ -149,7 +159,7 @@ function getToken(idx) {
             }
         });
     })
-}
+};
 
 // Step 5
 // Show Nearest Observation Station AQI Data
@@ -182,7 +192,7 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
                 $.log(`🎉 ${$.name}, getStation`, `Finish`, '')
                 resove()
             }
-        })
+        });
     })
 };
 
