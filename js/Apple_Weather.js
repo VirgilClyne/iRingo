@@ -78,11 +78,16 @@ function getNearest(lat, lng) {
                 try {
                     const _data = JSON.parse(data)
                     if (error) throw new Error(error)
-                    //if (_data.status == 'ok') {
-                    $.stations = _data.d[0];
-                    $.idx = $.stations.x;
-                    $.country = $.stations.cca2
-                    //}
+                    if (_data.d[0]) {
+                        $.stations = _data.d[0];
+                        $.idx = $.stations.x;
+                        $.country = $.stations.cca2
+                        resove()
+                    }
+                    else {
+                        $.log(`❗️ ${$.name}, getNearest`, `Error`, `d[0]: ${_data.d[0]}`, `data = ${data}`, '')
+                        $.done()
+                    }
                 } catch (e) {
                     $.log(`❗️ ${$.name}, getNearest`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
                 } finally {
@@ -105,13 +110,15 @@ function getNearest(lat, lng) {
                 try {
                     const _data = JSON.parse(data)
                     if (error) throw new Error(error)
-                    if (_data.status == 'ok') {
+                    if (_data.status == "ok") {
                         $.stations = _data.data.stations[0];
                         $.idx = $.stations.idx;
                         $.country = $.stations.country
+                        resove()
                     }
                     else {
-                        $.log(`⚠️ ${$.name}, getNearest`, `Error`, `data = ${data}`, '')
+                        $.log(`⚠️ ${$.name}, getNearest`, `Error`, `status: ${_data.status}`, `data = ${data}`, '')
+                        $.done()
                     }
                 } catch (e) {
                     $.log(`❗️ ${$.name}, getNearest`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
@@ -140,16 +147,17 @@ function getToken(idx) {
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
-
                 if (error) throw new Error(error)
                 if (_data.rxs.status == "ok") {
                     $.token = _data.rxs.obs[0].msg.token;
                     $.uid = _data.rxs.obs[0].msg.uid;
+                    resove()
                 }
                 else {
+                    $.log(`⚠️ ${$.name}, getToken`, `Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
                     $.token = "na";
                     $.uid = "-1";
-                    $.log(`⚠️ ${$.name}, getToken`, `Error`, `data = ${data}`, '')
+                    resove()
                 }
             } catch (e) {
                 $.log(`❗️ ${$.name}, getToken`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
@@ -180,10 +188,18 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
                 const _data = JSON.parse(data)
                 if (error) throw new Error(error)
                 if (_data.rxs.status == "ok") {
-                    $.obs = _data.rxs.obs[0].msg;
+                    if (_data.rxs.obs[0].status == "ok") {
+                        $.obs = _data.rxs.obs[0].msg;
+                        resove()
+                    }
+                    else {
+                        $.log(`⚠️ ${$.name}, getStation`, `Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
+                        resove()
+                    }
                 }
                 else {
-                    $.log(`⚠️ ${$.name}, getStation`, `Error`, `data = ${data}`, '')
+                    $.log(`⚠️ ${$.name}, getStation`, `Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
+                    resove()
                 }
             } catch (e) {
                 $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
@@ -220,7 +236,7 @@ function outputData(stations, obs) {
             weather.air_quality.source = stations.nna;
             weather.air_quality.airQualityIndex = stations.v;
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-            weather.air_quality.primaryPollutant = SwitchPollutantsType(stations.pol); //mapq1
+            weather.air_quality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
             weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(stations.v);
             weather.air_quality.metadata.reported_time = TimeConverter(new Date(stations.t), 'remain');
             weather.air_quality.metadata.expire_time = TimeConverter(new Date(stations.t), 'add-1h-floor');
@@ -234,7 +250,7 @@ function outputData(stations, obs) {
             weather.air_quality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.air_quality.airQualityIndex = obs.aqi;
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-            weather.air_quality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
+            weather.air_quality.primaryPollutant = switchPollutantsType(obs.dominentpol);
             weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs.aqi);
             if (obs.iaqi.co) weather.air_quality.pollutants.CO.amount = obs.iaqi.co.v;
             if (obs.iaqi.so2) weather.air_quality.pollutants.SO2.amount = obs.iaqi.so2.v;
@@ -243,12 +259,12 @@ function outputData(stations, obs) {
             if (obs.iaqi.pm25) weather.air_quality.pollutants["PM2.5"].amount = obs.iaqi.pm25.v;
             if (obs.iaqi.o3) weather.air_quality.pollutants.OZONE.amount = obs.iaqi.o3.v;
             if (obs.iaqi.pm10) weather.air_quality.pollutants.PM10.amount = obs.iaqi.pm10.v;
-            weather.air_quality.metadata.reported_time = TimeConverter(new Date(obs.time.v), 'remain');
+            weather.air_quality.metadata.reported_time = convertTime(new Date(obs.time.v), 'remain');
             weather.air_quality.metadata.longitude = obs.city.geo[0];
             weather.air_quality.metadata.provider_name = obs.attributions[obs.attributions.length - 1].name;
-            weather.air_quality.metadata.expire_time = TimeConverter(new Date(obs.time.v), 'add-1h-floor');
+            weather.air_quality.metadata.expire_time = convertTime(new Date(obs.time.v), 'add-1h-floor');
             weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
-            weather.air_quality.metadata.read_time = TimeConverter(new Date(), 'remain');
+            weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain');
             weather.air_quality.metadata.latitude = obs.city.geo[1];
             //weather.air_quality.metadata.version = "";
             if (!weather.air_quality.metadata.language) weather.air_quality.metadata.language = weather.current_observations.metadata.language
@@ -275,21 +291,21 @@ function outputData(stations, obs) {
             weather.airQuality.source = stations.name;
             weather.airQuality.index = stations.aqi;
             weather.airQuality.scale = "EPA_NowCast.2115";
-            //weather.airQuality.primaryPollutant = SwitchPollutantsType(stations.pol); //mapq1
+            //weather.airQuality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
             weather.airQuality.categoryIndex = classifyAirQualityLevel(stations.aqi);
             weather.airQuality.metadata.longitude = stations.geo[0];
             weather.airQuality.metadata.latitude = stations.geo[1];
             if (!weather.airQuality.metadata.language) weather.airQuality.metadata.language = weather.currentWeather.metadata.language;
-            weather.airQuality.metadata.expireTime = TimeConverter(new Date(stations.utime), 'add-1h-floor');
-            weather.airQuality.metadata.reportedTime = TimeConverter(new Date(stations.utime), 'remain');
-            weather.airQuality.metadata.readTime = TimeConverter(new Date(), 'remain');
+            weather.airQuality.metadata.expireTime = convertTime(new Date(stations.utime), 'add-1h-floor');
+            weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain');
+            weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain');
         }
         if (obs) { // From Observation Station
             weather.airQuality.source = obs.city.name;
             weather.airQuality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.airQuality.index = obs.aqi;
             weather.airQuality.scale = "EPA_NowCast.2115";
-            weather.airQuality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
+            weather.airQuality.primaryPollutant = switchPollutantsType(obs.dominentpol);
             weather.airQuality.categoryIndex = classifyAirQualityLevel(obs.aqi);
             if (obs.iaqi.co) weather.airQuality.pollutants.CO.amount = obs.iaqi.co.v;
             if (obs.iaqi.so2) weather.airQuality.pollutants.SO2.amount = obs.iaqi.so2.v;
@@ -301,12 +317,12 @@ function outputData(stations, obs) {
             weather.airQuality.metadata.longitude = obs.city.geo[0];
             weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
             weather.airQuality.metadata.providerName = obs.attributions[obs.attributions.length - 1].name;
-            weather.airQuality.metadata.expireTime = TimeConverter(new Date(obs.time.iso), 'add-1h-floor');
+            weather.airQuality.metadata.expireTime = convertTime(new Date(obs.time.iso), 'add-1h-floor');
             if (!weather.airQuality.metadata.language) weather.airQuality.metadata.language = weather.currentWeather.metadata.language;
             //weather.airQuality.metadata.language = $.language;
             weather.airQuality.metadata.latitude = obs.city.geo[1];
-            weather.airQuality.metadata.reportedTime = TimeConverter(new Date(obs.time.iso), 'remain');
-            weather.airQuality.metadata.readTime = TimeConverter(new Date(), 'remain');
+            weather.airQuality.metadata.reportedTime = convertTime(new Date(obs.time.iso), 'remain');
+            weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain');
             //weather.airQuality.metadata.units = "m";
         }
     };
@@ -318,7 +334,7 @@ function outputData(stations, obs) {
 // Step 6.1
 // Switch Pollutants Type
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
-function SwitchPollutantsType(pollutant) {
+function switchPollutantsType(pollutant) {
     switch (pollutant) {
         case 'co':
             return 'CO2';
@@ -342,7 +358,7 @@ function SwitchPollutantsType(pollutant) {
 // Step 6.2
 // Convert Time Format
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
-function TimeConverter(time, action) {
+function convertTime(time, action) {
     switch (action) {
         case 'remain':
             time.setMilliseconds(0);
@@ -364,7 +380,7 @@ function TimeConverter(time, action) {
     }
 };
 
-// Step 6.2
+// Step 6.3
 // Calculate Air Quality Level
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
 function classifyAirQualityLevel(aqiIndex) {
