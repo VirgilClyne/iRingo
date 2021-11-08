@@ -209,7 +209,6 @@ function outputData(stations, obs) {
             $.log(`⚠️ ${$.name}, non-existent AQ data`, `creating`, '');
             weather.air_quality = {
                 "isSignificant": true,
-                "airQualityCategoryIndex": 2,
                 "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "μg\/m3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "μg\/m3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "μg\/m3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "μg\/m3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "μg\/m3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "μg\/m3" } },
                 "metadata": {
                     "version": 1,
@@ -222,6 +221,7 @@ function outputData(stations, obs) {
             weather.air_quality.airQualityIndex = stations.v;
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
             weather.air_quality.primaryPollutant = SwitchPollutantsType(stations.pol); //mapq1
+            weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(stations.v);
             weather.air_quality.metadata.reported_time = TimeConverter(new Date(stations.t), 'remain');
             weather.air_quality.metadata.expire_time = TimeConverter(new Date(stations.t), 'add-1h-floor');
             weather.air_quality.metadata.read_time = TimeConverter(new Date(), 'remain');
@@ -235,6 +235,7 @@ function outputData(stations, obs) {
             weather.air_quality.airQualityIndex = obs.aqi;
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
             weather.air_quality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
+            weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs.aqi);
             if (obs.iaqi.co) weather.air_quality.pollutants.CO.amount = obs.iaqi.co.v;
             if (obs.iaqi.so2) weather.air_quality.pollutants.SO2.amount = obs.iaqi.so2.v;
             if (obs.iaqi.no2) weather.air_quality.pollutants.NO2.amount = obs.iaqi.no2.v;
@@ -268,7 +269,6 @@ function outputData(stations, obs) {
                 "sourceType": "station",
                 "isSignificant": true,
                 "name": "AirQuality",
-                "categoryIndex": 2,
             }
         }
         if (stations) { // From Nearest List
@@ -276,6 +276,7 @@ function outputData(stations, obs) {
             weather.airQuality.index = stations.aqi;
             weather.airQuality.scale = "EPA_NowCast.2115";
             //weather.airQuality.primaryPollutant = SwitchPollutantsType(stations.pol); //mapq1
+            weather.airQuality.categoryIndex = classifyAirQualityLevel(stations.aqi);
             weather.airQuality.metadata.longitude = stations.geo[0];
             weather.airQuality.metadata.latitude = stations.geo[1];
             if (!weather.airQuality.metadata.language) weather.airQuality.metadata.language = weather.currentWeather.metadata.language;
@@ -288,6 +289,7 @@ function outputData(stations, obs) {
             weather.airQuality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.airQuality.index = obs.aqi;
             weather.airQuality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
+            weather.airQuality.categoryIndex = classifyAirQualityLevel(obs.aqi);
             if (obs.iaqi.co) weather.airQuality.pollutants.CO.amount = obs.iaqi.co.v;
             if (obs.iaqi.so2) weather.airQuality.pollutants.SO2.amount = obs.iaqi.so2.v;
             if (obs.iaqi.no2) weather.airQuality.pollutants.NO2.amount = obs.iaqi.no2.v;
@@ -360,6 +362,25 @@ function TimeConverter(time, action) {
         return timeString;
     }
 };
+
+// Step 6.2
+// Convert Air Quality Level
+// https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+function classifyAirQualityLevel(aqiIndex) {
+	if (aqiIndex >= 0 && aqiIndex <= 50) {
+		return AirQualityLevel.GOOD;
+	} else if (aqiIndex >= 51 && aqiIndex <= 100) {
+		return AirQualityLevel.MODERATE;
+	} else if (aqiIndex >= 101 && aqiIndex <= 150) {
+		return AirQualityLevel.UNHEALTHY_FOR_SENSITIVE;
+	} else if (aqiIndex >= 151 && aqiIndex <= 200) {
+		return AirQualityLevel.UNHEALTHY;
+	} else if (aqiIndex >= 201 && aqiIndex <= 300) {
+		return AirQualityLevel.VERY_UNHEALTHY;
+	} else if (aqiIndex >= 301) {
+		return AirQualityLevel.HAZARDOUS;
+	}
+}
 
 /***************** Env *****************/
 // prettier-ignore
