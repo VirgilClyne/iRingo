@@ -3,11 +3,11 @@
 
 [URL Rewrite]
 # Rewrite Apple Weather Air Quality Map
-# ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?x=(-?\d+)&y=(-?\d+)&z=(-?\d+).*(country=CN)?.* https://tiles.waqi.info/tiles/usepa-aqi/$4/$2/$3.png?&scale=2&country=US&colorFormat=agr header
+# ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?x=(-?\d+)&y=(-?\d+)&z=(-?\d+).*(country=CN).* https://tiles.waqi.info/tiles/usepa-aqi/$4/$2/$3.png header
 
 [Script]
 # Convert Apple Weather Air Quality Map
-http-response ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?x=(-?\d+)&y=(-?\d+)&z=(-?\d+).*(country=CN)?.* script-path=https://gist.githubusercontent.com/VirgilClyne/ba3358bdd471da5e29d8a2cc9fcd88df/raw/Apple_Weather_Map.js, requires-body=true, timeout=10, tag=Apple_Weather_Map
+http-response ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?x=(-?\d+)&y=(-?\d+)&z=(-?\d+).*(country=CN)?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather_Map.js, requires-body=true, timeout=10, tag=Apple_Weather_Map
 
 [MITM]
 hostname = %APPEND% weather-map.apple.com, tiles.waqi.info, tiles.aqicn.org
