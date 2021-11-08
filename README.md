@@ -96,9 +96,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ## 安装链接 
   * Loon:
-    * [Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info")
+    * 空气质量数据:[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info")
   * Quantumult X:
-    * [Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
+    * 空气质量数据:[Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
   * Surge:
     * 空气质量数据:[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
     * 空气质量地图(可用，可行性验证，未修正图层和坐标):[Apple_Weather_Map.beta.sgmodule](./sgmodule/Apple_Weather_Map.beta.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
