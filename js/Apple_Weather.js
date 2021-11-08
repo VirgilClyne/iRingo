@@ -238,9 +238,9 @@ function outputData(stations, obs) {
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
             weather.air_quality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
             weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(stations.v);
-            weather.air_quality.metadata.reported_time = TimeConverter(new Date(stations.t), 'remain');
-            weather.air_quality.metadata.expire_time = TimeConverter(new Date(stations.t), 'add-1h-floor');
-            weather.air_quality.metadata.read_time = TimeConverter(new Date(), 'remain');
+            weather.air_quality.metadata.reported_time = convertTime(new Date(stations.t), 'remain');
+            weather.air_quality.metadata.expire_time = convertTime(new Date(stations.t), 'add-1h-floor');
+            weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain');
             weather.air_quality.metadata.longitude = stations.geo[0];
             weather.air_quality.metadata.latitude = stations.geo[1];
             if (!weather.air_quality.metadata.language) weather.air_quality.metadata.language = weather.current_observations.metadata.language
