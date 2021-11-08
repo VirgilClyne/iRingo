@@ -32,11 +32,11 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   - [安装链接](#安装链接-2)
 - [Apple Maps](#apple-maps)
   - [简介](#简介-3)
+  - [激活方式](#激活方式-2)
   - [安装链接](#安装链接-3)
-  - [todo](#todo-2)
 - [Apple News](#apple-news)
   - [简介](#简介-4)
-  - [激活方式](#激活方式-2)
+  - [激活方式](#激活方式-3)
   - [解锁状态说明](#解锁状态说明)
   - [安装链接](#安装链接-4)
 
@@ -170,7 +170,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   2. 启用`Geo_Services_*.sgmodule`模块（🇨🇳CN版除外，可辅以`全局代理`确保稳定）
   3. 开启`✈️飞行模式`
   4. 重新打开一次`地图`应用
-  5. 此时应观察到：
+  5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
      1. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接
      2. 激活`Siri建议`的`api.smoot.apple.com/bag`链接
   6. 执行一次Spotlight搜索，测试「来自APPLE的内容\来自APPLE的建议\Siri建议」是否正常工作
@@ -216,7 +216,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
     - [ ] Twitter集成
 
 ## 已知「Siri建议」服务器列表
-* 可通过Surge的`工具`-`最近请求`或`请求查看器`查看最近的*.smoot.apple.com前缀判断当前服务器   
+* 可通过Surge的`工具`-`最近请求`或`请求查看器`或`Quantumult X`的`网络活动`查看最近的*.smoot.apple.com前缀判断当前服务器   
 
 |  域名前缀  | 对应地区 | MitM |
 |   :-:   |   :-:   |   :-:   |
@@ -239,16 +239,26 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 ## 安装链接
   * Loon:
-    * [Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+    * 该插件需要匹配代理策略组
+    * 修改地区为🇹🇼TW且强制优先使用简体中文:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014)
+    * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.plugin](./plugin/Siri_Suggestions_TW.plugin?raw=true " Enable Siri Suggestions 🇹🇼TW")
+    * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.plugin](./plugin/Siri_Suggestions_JP.plugin?raw=true " Enable Siri Suggestions 🇯🇵JP")
+    * 修改地区为🇺🇸US:[Siri_Suggestions_US.plugin](./plugin/Siri_Suggestions_US.plugin?raw=true " Enable Siri Suggestions 🇺🇸US")
   * Quantumult X:
-    * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions Taiwan version")(Author:Telegram:@YiEwha)
-    * 修改地区为🇺🇸US:[Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions United States version")(Author:@edgexyz)
-  * Surge:    
-    * 不含策略组&适用于iOS/iPadOS的模块:[Siri_Suggestions_noRuleSet.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
-      * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
-        * 此域名集只作用于macOS的维基百科搜索集成,iOS/iPadOS不需要此域名集。
-    * macOS/iOS通用模块: 
-      * 针对策略组为PROXY的模块:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
+    * 修改地区为🇹🇼TW且优先使用简体中文:[Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions") (Author:Telegram:@YiEwha)
+    * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions 🇹🇼TW") (Author:@edgexyz)
+    * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.qxrewrite](./qxrewrite/Siri_Suggestions_JP.qxrewrite?raw=true " Enable Siri Suggestions 🇯🇵JP")
+    * 修改地区为🇺🇸US:[Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions 🇺🇸US") (Author:@edgexyz)
+  * Surge:
+    * 适用于iOS/iPadOS,不含macOS策略组的模块:
+      * 修改地区为🇹🇼TW且强制优先使用简体中文:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
+      * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.sgmodule](./sgmodule/Siri_Suggestions_TW.sgmodule?raw=true " Enable Siri Suggestions 🇹🇼TW")
+      * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.sgmodule](./sgmodule/Siri_Suggestions_JP.sgmodule?raw=true " Enable Siri Suggestions 🇯🇵JP")
+      * 修改地区为🇺🇸US:[Siri_Suggestions_US.sgmodule](./sgmodule/Siri_Suggestions_US.sgmodule?raw=true " Enable Siri Suggestions 🇺🇸US")
+        * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
+          * 此域名集只作用于macOS的`词典`和维基百科搜索集成,且需要开启`增强模式`,iOS/iPadOS不需要此域名集。
+    * macOS/iOS通用模块(修改地区为🇹🇼TW且强制优先使用简体中文):
+      * 针对策略组为PROXY的模块:[Siri_Suggestions_for_Uppercase_PROXY.sgmodule](./sgmodule/Siri_Suggestions_for_Uppercase_PROXY.sgmodule?raw=true " Enable Siri Suggestions")
       * 针对策略组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
       * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
       * 针对策略组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
@@ -265,6 +275,21 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 注:
     * iOS 15.1起，Apple Maps为🇨🇳CN时，`指南针`无经纬度与海拔
 
+## 激活方式
+* 如启用本模块后重新打开`地图`未生效，可按照下列步骤激活:
+  * 未装有SIM卡的iOS/iPadOS/macOS设备，可省略`✈️飞行模式`相关步骤
+  1. 保持`Wi-Fi`或`有线网络`连接
+  2. 启用`Apple_Maps_*.sgmodule`模块
+  3. 开启`✈️飞行模式`
+  4. 重新打开一次`地图`应用
+  5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
+     1. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接
+     2. 设置`地图`区域的`gspe35-ssl.ls.apple.com`链接
+  6. 执行一次Spotlight搜索，测试「来自APPLE的内容\来自APPLE的建议\Siri建议」是否正常工作
+  7. 关闭`✈️飞行模式`
+  8. 关闭`Geo_Services_*.sgmodule`模块
+  9. 正常使用
+
 ## 安装链接
   * Loon:
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.plugin](./plugin/Apple_Maps.plugin?raw=true " Redirect Apple Maps to 🇺🇸US")
@@ -275,7 +300,6 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * Surge:    
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.sgmodule](./sgmodule/Apple_Maps.sgmodule?raw=true " Redirect Apple Maps to 🇺🇸US")
     * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")     
-## todo  
 
 ---
 
@@ -289,7 +313,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   2. 指定相关代理线路为🇺🇸美国或其他可用地区,或者`全局模式`
   3. 打开`✈️飞行模式`
   4. 重新打开一次`地图`应用
-  5. 此时应观察到：
+  5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
      1. `检测设备信息`的`configuration.ls.apple.com`链接
      2. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接，且流量抓取结果不是`CN`
   6. 首次加载`Apple News`需保证`gateway.icloud.com`为海外线路
