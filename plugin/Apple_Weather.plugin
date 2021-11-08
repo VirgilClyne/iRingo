@@ -1,4 +1,4 @@
-#!name= Enable Apple Weather 🇺🇸US
+#!name= Replace Apple Weather with 🇺🇸US @waqi.info
 #!desc=切换空气质量数据源为waqi.info，并更改标准为AQI(US)
 
 [Script]

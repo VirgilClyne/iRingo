@@ -1,4 +1,4 @@
-#!name= Enable Apple Weather 🇺🇸US
+#!name= Replace Apple Weather with 🇺🇸US @waqi.info
 #!desc=切换空气质量数据源为waqi.info，并更改标准为AQI(US)
 
 ^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather.*(include=[a-z,_]{1,}|dataSets=[A-Za-z,]{1,}).*(country=[A-Z]{2})?.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js
