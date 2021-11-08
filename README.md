@@ -285,10 +285,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
      1. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接
      2. 设置`地图`区域的`gspe35-ssl.ls.apple.com`链接
-  6. 执行一次Spotlight搜索，测试「来自APPLE的内容\来自APPLE的建议\Siri建议」是否正常工作
+  6. 查看地图角标是否有`高德地图`
   7. 关闭`✈️飞行模式`
-  8. 关闭`Geo_Services_*.sgmodule`模块
-  9. 正常使用
+  8. 正常使用
 
 ## 安装链接
   * Loon:
