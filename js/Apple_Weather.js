@@ -288,6 +288,7 @@ function outputData(stations, obs) {
             weather.airQuality.source = obs.city.name;
             weather.airQuality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.airQuality.index = obs.aqi;
+            weather.airQuality.scale = "EPA_NowCast.2115";
             weather.airQuality.primaryPollutant = SwitchPollutantsType(obs.dominentpol);
             weather.airQuality.categoryIndex = classifyAirQualityLevel(obs.aqi);
             if (obs.iaqi.co) weather.airQuality.pollutants.CO.amount = obs.iaqi.co.v;
@@ -364,23 +365,23 @@ function TimeConverter(time, action) {
 };
 
 // Step 6.2
-// Convert Air Quality Level
+// Calculate Air Quality Level
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
 function classifyAirQualityLevel(aqiIndex) {
 	if (aqiIndex >= 0 && aqiIndex <= 50) {
-		return AirQualityLevel.GOOD;
+		return 1;
 	} else if (aqiIndex >= 51 && aqiIndex <= 100) {
-		return AirQualityLevel.MODERATE;
+		return 2;
 	} else if (aqiIndex >= 101 && aqiIndex <= 150) {
-		return AirQualityLevel.UNHEALTHY_FOR_SENSITIVE;
+		return 3;
 	} else if (aqiIndex >= 151 && aqiIndex <= 200) {
-		return AirQualityLevel.UNHEALTHY;
+		return 4;
 	} else if (aqiIndex >= 201 && aqiIndex <= 300) {
-		return AirQualityLevel.VERY_UNHEALTHY;
+		return 5;
 	} else if (aqiIndex >= 301) {
-		return AirQualityLevel.HAZARDOUS;
+		return 6;
 	}
-}
+};
 
 /***************** Env *****************/
 // prettier-ignore
