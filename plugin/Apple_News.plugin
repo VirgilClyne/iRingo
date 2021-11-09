@@ -1,9 +1,14 @@
 #!name= Unlock Apple News 🇺🇸US
-#!desc=Unlock 🇺🇸US Apple News
+#!desc=解锁🇺🇸US地区的News，注：使用过程中gateway.icloud.com会走与News相同的外区线路。
 # 该插件需要匹配代理策略组
 
 [Rule]
+# > iCloud
+DOMAIN,gateway.icloud.com,PROXY
+
 # > Apple News
+DOMAIN,c.apple.news,DIRECT
+DOMAIN,news-assets.apple.com,DIRECT
 DOMAIN,news-client.apple.com,PROXY
 DOMAIN,news-edge.apple.com,PROXY
 DOMAIN,news-events.apple.com,PROXY

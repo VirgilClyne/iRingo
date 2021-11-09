@@ -1,12 +1,5 @@
 #!name= Unlock Apple News 🇺🇸US
-#!desc=Unlock 🇺🇸US Apple News
-
-[Rule]
-# > Apple News
-DOMAIN,news-client.apple.com,PROXY
-DOMAIN,news-edge.apple.com,PROXY
-DOMAIN,news-events.apple.com,PROXY
-DOMAIN,apple.comscoreresearch.com,PROXY
+#!desc=解锁🇺🇸US地区的News，注：使用过程中gateway.icloud.com需走外区线路。
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News

@@ -1,8 +1,13 @@
 #!name= Unlock Apple News 🇺🇸US
-#!desc=(GAMMA) Unlock 🇺🇸US Apple News
+#!desc=解锁🇺🇸US地区的News，注：使用过程中gateway.icloud.com会走与News相同的外区线路。
 
 [Rule]
+# > iCloud
+DOMAIN,gateway.icloud.com,Proxy
+
 # > Apple News
+DOMAIN,c.apple.news,DIRECT
+DOMAIN,news-assets.apple.com,DIRECT
 DOMAIN,news-client.apple.com,Proxy
 DOMAIN,news-edge.apple.com,Proxy
 DOMAIN,news-events.apple.com,Proxy
