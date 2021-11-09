@@ -2,8 +2,6 @@
 host-suffix,gateway.icloud.com,Apple News
 
 # > Apple News
-host-suffix,c.apple.news,DIRECT
-host-suffix,news-assets.apple.com,DIRECT
 host-suffix,news-client.apple.com,Apple News
 host-suffix,news-edge.apple.com,Apple News
 host-suffix,news-events.apple.com,Apple News

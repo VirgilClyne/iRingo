@@ -1,13 +1,11 @@
 #!name= Unlock Apple News 🇺🇸US
-#!desc=解锁🇺🇸US地区的News，注：使用过程中gateway.icloud.com会走与News相同的外区线路。
+#!desc=解锁🇺🇸US地区的News，注：使用过程中gateway.icloud.com会走与News相同的代理线路。
 
 [Rule]
 # > iCloud
 DOMAIN,gateway.icloud.com,🍎 苹果服务
 
 # > Apple News
-DOMAIN,c.apple.news,DIRECT
-DOMAIN,news-assets.apple.com,DIRECT
 DOMAIN,news-client.apple.com,🍎 苹果服务
 DOMAIN,news-edge.apple.com,🍎 苹果服务
 DOMAIN,news-events.apple.com,🍎 苹果服务
