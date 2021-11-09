@@ -36,7 +36,8 @@ if (url.indexOf(path1) != -1) {
         'Content-Encoding': 'identity'
     };
     response.body = GeoCountryCode;
-    $done({response});
+    if (isQuanX) $done(response);
+    if (isSurge || isLoon) $done({response});
 }
 else {
     done({})
