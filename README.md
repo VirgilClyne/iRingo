@@ -15,7 +15,6 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 - [天气](#天气)
   - [简介](#简介)
   - [功能列表](#功能列表)
-  - [todo？](#todo-1)
   - [关于天气API](#关于天气api)
   - [安装链接](#安装链接)
 - [定位服务](#定位服务)
@@ -68,6 +67,9 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 ## 简介
   * 保持模块启用,即可切换「天气」`空气质量`数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
 
+  * 注:
+    * 天气信息来源为`weather-data.apple.com`的Watch可使用本模块改写天气信息，需要在Watch上安装相同的证书以进行MitM。
+
 ## 功能列表
   * 在以下位置及功能中可用: 
     - [x] 天气(`WeatherKit_Weather_iOS_Version XX.X`)
@@ -76,14 +78,6 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
   * 切换逻辑
     * 切换所有`和风天气`的`空气质量`信息为[World Air Quality Index Project](https://waqi.info/)
     * 填补全球没有`空气质量`信息的为[World Air Quality Index Project](https://waqi.info/)  
-
-## todo？
-  * 可能会有的功能: 
-    - [ ] 历史天气数据？
-    - [ ] 天气变化？
-    - [ ] Watch 支持（有群友反馈API为`weather-data.apple.com`可被修改，请求系统版本设置型号等内容，疑似与地区设置有关)
-  * 不会有的功能: 
-    - [ ] --
 
 ## 关于天气API
   * 三种来源:
