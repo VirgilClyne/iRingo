@@ -90,7 +90,7 @@ function outputData(png) {
     let body = $response.rawBody
     if (png) body = png
     $.log(`🎉 ${$.name}, outputData`, `Finish`, '')
-    $done(rawBody);
+    $done({rawBody});
 };
 
 // Step 5.1
