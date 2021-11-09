@@ -1,4 +1,7 @@
-# > Apple News 
+# > iCloud
+DOMAIN,gateway.icloud.com
+
+# > Apple News
 DOMAIN,news-client.apple.com
 DOMAIN,news-edge.apple.com
 DOMAIN,news-events.apple.com
