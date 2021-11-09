@@ -17,7 +17,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [功能列表](#功能列表)
   - [关于天气API](#关于天气api)
   - [安装链接](#安装链接)
-- [定位服务](#定位服务)
+- [定位服务(有更新)](#定位服务有更新)
   - [简介](#简介-1)
   - [激活方式](#激活方式)
   - [作用与副作用](#作用与副作用)
@@ -33,7 +33,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
   - [安装链接](#安装链接-3)
-- [Apple News](#apple-news)
+- [Apple News(有更新)](#apple-news有更新)
   - [简介](#简介-4)
   - [激活方式](#激活方式-3)
   - [解锁状态说明](#解锁状态说明)
@@ -100,9 +100,14 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ---
 
-# 定位服务
+# 定位服务(有更新)
 ## 简介
-  * 保持模块启用,即可强制「定位服务」通过互联网检测`基于网络的地区检测`始终为特定地区，无需准备代理线路、保持`✈️飞行模式`开启、关闭定位、更改国家地区语言等。   
+  * 保持模块启用,即可强制「定位服务」通过`基于网络的地区检测`始终为特定地区，无需互联网连接，准备代理线路、保持`✈️飞行模式`开启、关闭定位、更改国家地区语言等。
+
+  * 注:
+    * 已更改实现方式，由“改写返回的`网络请求`”变更为“直接返回构造的`本地请求`”，过程中不进行实际的网络请求，不进行联网操作，全本地完成。
+    * 名称为` Response Geo Services`为“直接返回构造的`本地请求`”的新实现方式
+    * 名称为` Redirect Geo Services`为“改写返回的`网络请求`”的旧实现方式
 
 ## 激活方式
 * 需触发一次`基于网络的地区检测`
@@ -133,21 +138,30 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 安装链接 
   * Loon:
-    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
-    * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
-    * 修改地区检测为🇯🇵JP:[Geo_Services_JP.plugin](./plugin/Geo_Services_JP.plugin?raw=true " Redirect Geo Services to 🇯🇵JP")
+    * 新版,“直接返回构造的`本地请求`”的新实现方式:
+      * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
+    * 旧版,“改写返回的`网络请求`”的旧实现方式:
+      * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
+      * 修改地区检测为🇺🇸US:[Geo_Services_US.plugin](./plugin/Geo_Services_US.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
+      * 修改地区检测为🇯🇵JP:[Geo_Services_JP.plugin](./plugin/Geo_Services_JP.plugin?raw=true " Redirect Geo Services to 🇯🇵JP")
   * Quantumult X:
-    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.qxrewrite](./qxrewrite/Geo_Services_CN.qxrewrite?raw=true " Redirect Geo Services to 🇨🇳CN")
-    * 修改地区检测为🇺🇸US:[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Redirect Geo Services to 🇺🇸US")
-    * 修改地区检测为🇯🇵JP:[Geo_Services_JP.qxrewrite](./qxrewrite/Geo_Services_JP.qxrewrite?raw=true " Redirect Geo Services to 🇯🇵JP")
+    * 新版,“直接返回构造的`本地请求`”的新实现方式:
+      * 修改地区检测为🇺🇸US:[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
+    * 旧版,“改写返回的`网络请求`”的旧实现方式:
+      * 修改地区检测为🇨🇳CN:[Geo_Services_CN.qxrewrite](./qxrewrite/Geo_Services_CN.qxrewrite?raw=true " Redirect Geo Services to 🇨🇳CN")
+      * 修改地区检测为🇺🇸US:[Geo_Services_US.qxrewrite](./qxrewrite/Geo_Services_US.qxrewrite?raw=true " Redirect Geo Services to 🇺🇸US")
+      * 修改地区检测为🇯🇵JP:[Geo_Services_JP.qxrewrite](./qxrewrite/Geo_Services_JP.qxrewrite?raw=true " Redirect Geo Services to 🇯🇵JP")
   * Surge:
-    * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")
-    * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
-    * 修改地区检测为🇬🇧UK:[Geo_Services_UK.sgmodule](./sgmodule/Geo_Services_UK.sgmodule?raw=true " Redirect Geo Services to 🇬🇧UK")
-    * 修改地区检测为🇭🇰HK:[Geo_Services_HK.sgmodule](./sgmodule/Geo_Services_HK.sgmodule?raw=true " Redirect Geo Services to 🇭🇰HK")
-    * 修改地区检测为🇹🇼TW:[Geo_Services_TW.sgmodule](./sgmodule/Geo_Services_TW.sgmodule?raw=true " Redirect Geo Services to 🇹🇼TW")
-    * 修改地区检测为🇯🇵JP:[Geo_Services_JP.sgmodule](./sgmodule/Geo_Services_JP.sgmodule?raw=true " Redirect Geo Services to 🇯🇵JP")
-    * 修改地区检测为🇦🇺AU:[Geo_Services_AU.sgmodule](./sgmodule/Geo_Services_AU.sgmodule?raw=true " Redirect Geo Services to 🇦🇺AU")
+    * 新版,“直接返回构造的`本地请求`”的新实现方式:
+      * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
+    * 旧版,“改写返回的`网络请求`”的旧实现方式:
+      * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Redirect Geo Services to 🇨🇳CN")
+      * 修改地区检测为🇺🇸US:[Geo_Services_US.sgmodule](./sgmodule/Geo_Services_US.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
+      * 修改地区检测为🇬🇧UK:[Geo_Services_UK.sgmodule](./sgmodule/Geo_Services_UK.sgmodule?raw=true " Redirect Geo Services to 🇬🇧UK")
+      * 修改地区检测为🇭🇰HK:[Geo_Services_HK.sgmodule](./sgmodule/Geo_Services_HK.sgmodule?raw=true " Redirect Geo Services to 🇭🇰HK")
+      * 修改地区检测为🇹🇼TW:[Geo_Services_TW.sgmodule](./sgmodule/Geo_Services_TW.sgmodule?raw=true " Redirect Geo Services to 🇹🇼TW")
+      * 修改地区检测为🇯🇵JP:[Geo_Services_JP.sgmodule](./sgmodule/Geo_Services_JP.sgmodule?raw=true " Redirect Geo Services to 🇯🇵JP")
+      * 修改地区检测为🇦🇺AU:[Geo_Services_AU.sgmodule](./sgmodule/Geo_Services_AU.sgmodule?raw=true " Redirect Geo Services to 🇦🇺AU")
 
 ---
 
@@ -298,10 +312,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ---
 
-# Apple News
+# Apple News(有更新)
 ## 简介
   * 保持模块启用,即可正常使用「Apple News」。
-
 
   * 注:
     * 需要同时启用`定位服务`的`Geo_Services`模块配合使用。

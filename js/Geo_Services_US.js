@@ -10,22 +10,14 @@ if (typeof $argument != "undefined") {
 };
 
 const url = $request.url;
+var body = $response.body;
 
 const path1 = "/pep/gcc";
 
 if (url.indexOf(path1) != -1) {
-    var today = new Date();
-    var UTCstring = today.toUTCString();
-    var response = {
-        status: 200,
-        headers: {
-            'Content-Type': 'text/html',
-            'Date': UTCstring,
-            'Connection': 'keep-alive',
-            'Content-Encoding': 'identity'
-        },
-        body: GeoCountryCode,
-    }
+    let obj = body; 
+        obj = GeoCountryCode;
+    body = obj;
 };
 
-$done({response});
+$done({body});
