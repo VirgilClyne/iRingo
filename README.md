@@ -10,8 +10,8 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 > 目录  
 - [iRingo](#iringo)
 - [通用配置](#通用配置)
-  - [todo](#todo)
   - [示例](#示例)
+  - [建议配置](#建议配置)
 - [天气](#天气)
   - [简介](#简介)
   - [功能列表](#功能列表)
@@ -42,7 +42,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 ---
 
 # 通用配置
-## todo
+
 ## 示例
   * 同时启用以下一个模块:
     * `Siri与搜索`
@@ -59,7 +59,31 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
   * 注:  
     * 有SIM卡的设备，如iPhone，第一次打开`Apple News`前，需要开启`✈️飞行模式`跳过SIM卡检测，进入APP后可关闭`✈️飞行模式`正常使用  
-    * 有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，均会恢复到`Apple News`未解锁状态     
+    * 有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，`Apple News`会回到[解锁状态说明](#解锁状态说明)中的`解锁失效`状态。
+
+## 建议配置
+  * Loon:
+    1. [天气](#天气)：[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info") 
+    2. [定位服务(🆕有更新)](#定位服务有更新)：[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
+    3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014)
+    4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")
+    5. [Apple News(🆕有更新)](#apple-news有更新)：[Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+  * Quantumult X:
+    1. [天气](#天气)：[Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
+    2. [定位服务(🆕有更新)](#定位服务有更新)：[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
+    3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
+    4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")
+    5. [Apple News(🆕有更新)](#apple-news有更新)：[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
+      * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`分流规则`引用并设置`策略偏好`)
+  * Surge:
+    1. [天气](#天气)：[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
+    2. [定位服务(🆕有更新)](#定位服务有更新)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
+    3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
+      * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
+        * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，Loon与Quantumult X无效且不适用。
+    4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
+    5. [Apple News(🆕有更新)](#apple-news有更新)：[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
 
 ---
 
@@ -108,6 +132,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     * 已更改实现方式，由“改写返回的`网络请求`”变更为“直接返回构造的`本地请求`”，过程中不进行实际的网络请求，不进行联网操作，全本地完成。（可理解为本地劫持返回抢答结果）
     * 名称为` Response Geo Services`为“直接返回构造的`本地请求`”的新实现方式
     * 名称为` Redirect Geo Services`为“改写返回的`网络请求`”的旧实现方式
+    * 验证模块生效方式：浏览器访问 https://gspe1-ssl.ls.apple.com/pep/gcc ，页面显示的两个字母即为当前修改的地区代码
 
 ## 激活方式
 * 需触发一次`基于网络的地区检测`
@@ -116,7 +141,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * 仅Wi-Fi模式/有线网络下可触发“基于网络的定位检测”
   * 纯移动蜂窝网络下不触发此定位检测，将直接采用基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」进行检测
   * iPhone与移动蜂窝网络版ipad触发此检测需要预先开启`✈️飞行模式`后，再触发检测
-  * 可通过完全重开`地图`应用、开关`定位服务`、重开`Apple News`等操作触发检测 
+  * 可通过完全重开`地图`应用、开关`定位服务`、重开`Apple News`等操作触发检测
   
   * 注:
     * 基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测不在此模块解决范围  
@@ -249,7 +274,6 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 安装链接
   * Loon:
-    * 该插件需要匹配代理策略组
     * 修改地区为🇹🇼TW且强制优先使用简体中文:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014)
     * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.plugin](./plugin/Siri_Suggestions_TW.plugin?raw=true " Enable Siri Suggestions 🇹🇼TW")
     * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.plugin](./plugin/Siri_Suggestions_JP.plugin?raw=true " Enable Siri Suggestions 🇯🇵JP")
@@ -266,7 +290,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
       * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.sgmodule](./sgmodule/Siri_Suggestions_JP.sgmodule?raw=true " Enable Siri Suggestions 🇯🇵JP")
       * 修改地区为🇺🇸US:[Siri_Suggestions_US.sgmodule](./sgmodule/Siri_Suggestions_US.sgmodule?raw=true " Enable Siri Suggestions 🇺🇸US")
         * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
-          * 此域名集只作用于macOS的`词典`和维基百科搜索集成,且需要开启`增强模式`,iOS/iPadOS不需要此域名集。
+          * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，Loon与Quantumult X无效且不适用。
     * macOS/iOS通用模块(修改地区为🇹🇼TW且强制优先使用简体中文):
       * 针对策略组为PROXY的模块:[Siri_Suggestions_for_Uppercase_PROXY.sgmodule](./sgmodule/Siri_Suggestions_for_Uppercase_PROXY.sgmodule?raw=true " Enable Siri Suggestions")
       * 针对策略组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
@@ -302,13 +326,13 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 ## 安装链接
   * Loon:
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.plugin](./plugin/Apple_Maps.plugin?raw=true " Redirect Apple Maps to 🇺🇸US")
-    * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")   
+    * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")
   * Quantumult X:
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.qxrewrite](./qxrewrite/Apple_Maps.qxrewrite?raw=true " Redirect Apple Maps to 🇺🇸US")
-    * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")   
+    * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")
   * Surge:    
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.sgmodule](./sgmodule/Apple_Maps.sgmodule?raw=true " Redirect Apple Maps to 🇺🇸US")
-    * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")     
+    * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
 
 ---
 
@@ -354,14 +378,14 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
       * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`分流规则`引用并设置`策略偏好`)
   * Surge: 
     * 不含规则集的模块:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News") 
+      * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
     * 预置策略组的模块:
       * 针对策略组为PROXY的模块:[Apple_News_for_Uppercase_PROXY.sgmodule](./sgmodule/Apple_News_for_Uppercase_PROXY.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为Proxy的模块:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为Apple的模块:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为🍎Apple的模块:[Apple_News_for_Apple_icon.sgmodule](./sgmodule/Apple_News_for_Apple_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为🍎 Apple的模块:[Apple_News_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_News_for_Apple_blank_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为Apple News的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
-      * 针对策略组为🇺🇸美国的模块:[Apple_News_for_US_icon.sgmodule](./sgmodule/Apple_News_for_US_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US") 
+      * 针对策略组为Proxy的模块:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为Apple的模块:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为🍎Apple的模块:[Apple_News_for_Apple_icon.sgmodule](./sgmodule/Apple_News_for_Apple_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为🍎 Apple的模块:[Apple_News_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_News_for_Apple_blank_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为Apple News的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为🇺🇸美国的模块:[Apple_News_for_US_icon.sgmodule](./sgmodule/Apple_News_for_US_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
