@@ -26,7 +26,7 @@ const path1 = "/pep/gcc";
 if (url.indexOf(path1) != -1) {
     var today = new Date();
     var UTCstring = today.toUTCString();
-    var response = {}
+    var response = {};
     if (isQuanX) response.status = 'HTTP/1.1 200 OK';
     if (isSurge || isLoon) response.status = 200;
     response.headers = {
@@ -35,9 +35,9 @@ if (url.indexOf(path1) != -1) {
         'Connection': 'keep-alive',
         'Content-Encoding': 'identity'
     };
-    response.body = GeoCountryCode,
-        $done({ response });
+    response.body = GeoCountryCode;
+    $done({response});
 }
 else {
     done({})
-};
+}
