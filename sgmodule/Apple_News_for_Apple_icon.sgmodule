@@ -10,6 +10,8 @@ DOMAIN,news-client.apple.com,🍎Apple
 DOMAIN,news-edge.apple.com,🍎Apple
 DOMAIN,news-events.apple.com,🍎Apple
 DOMAIN,apple.comscoreresearch.com,🍎Apple
+# News+ Audio
+URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,🍎Apple
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News

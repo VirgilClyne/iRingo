@@ -10,6 +10,8 @@ DOMAIN,news-client.apple.com,🌑Proxy
 DOMAIN,news-edge.apple.com,🌑Proxy
 DOMAIN,news-events.apple.com,🌑Proxy
 DOMAIN,apple.comscoreresearch.com,🌑Proxy
+# News+ Audio
+URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,🌑Proxy
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
