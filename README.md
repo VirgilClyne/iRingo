@@ -81,9 +81,11 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions_noRuleSet.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
         * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，Loon与Quantumult X无效且不适用。
+      * 更多预置策略组的模块请见[安装链接](#安装链接-2)
     4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
     5. [Apple News(🆕有更新)](#apple-news有更新)：[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
+      * 更多预置策略组的模块请见[安装链接](#安装链接-4)
 
 ---
 
