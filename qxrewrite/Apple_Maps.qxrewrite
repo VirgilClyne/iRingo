@@ -5,4 +5,4 @@
 (^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(country_code=[A-Z]{2})(.*) url 302 $1$2$3country_code=US$5
 (^https?:\/\/gspe\d*-ssl\.ls\.apple\.)(com|cn)(\/.*)(environment=[a-z/-]{4,})(.*) url 302 $1$2$3environment=prod$5
 
-hostname = %APPEND% gspe35-ssl.ls.apple.com
+hostname = gspe35-ssl.ls.apple.com
