@@ -1,6 +1,6 @@
 # iRingo
 解锁完整的Apple功能和集成服务   
-macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过  
+macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过  
 需要启用`重写`、`脚本`、`MitM`功能  
 如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用  
 有问题请至Issue页面反馈或移步Telegram讨论组:[NobyDa Script](https://t.me/joinchat/JtzRlVY-WyJPDavvhKjrbw)  
@@ -300,7 +300,12 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 
 # Apple News
 ## 简介
-  * 保持模块启用,即可正常使用「Apple News」(依赖其他模块辅助实现)。
+  * 保持模块启用,即可正常使用「Apple News」。
+
+
+  * 注:
+    * 需要同时启用`定位服务`的`Geo_Services`模块配合使用。
+    * 加载「Apple News」内容需`gateway.icloud.com`走代理（已包含在“预置策略组的模块”中）。
 
 ## 激活方式
   * 未装有SIM卡的iOS/iPadOS/macOS设备，可省略`✈️飞行模式`相关步骤
