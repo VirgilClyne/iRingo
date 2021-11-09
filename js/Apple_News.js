@@ -3,7 +3,6 @@ README:https://github.com/VirgilClyne/iRingo
 */
 
 const url = $request.url;
-const method = $request.method;
 var body = $request.body;
 
 const path1 = "/v1/configs";
