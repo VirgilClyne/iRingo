@@ -335,7 +335,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 安装链接
   * Loon:
-    * [Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+    * 预置策略组的模块:[Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
     * 不含规则集的模块:[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
       * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`分流规则`引用并设置`策略偏好`)
