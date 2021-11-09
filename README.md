@@ -324,6 +324,7 @@ macOS 12.0.1, iOS 15.0.2, iOS 14.8 测试通过
 |   :-:   |   :-:   |   :-:   |
 | 未通过地区检测  | 已成功通过地区检测 | 通过检测后，再次触发检测时未通过检测  |
 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  | 首次加载内容`gateway.icloud.com`需走代理，之后可直连 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  |
+|<p> Apple News isn't supported in your current region. </p>|<p> **Feed Unavailable**  <br> There may be a problem with the sever or network. Plase try again later. </p>|<p> **Feed Unavailable** <br> Apple News isn't supported in your current region. </p>|
 |![🔒](./ScreenShots/Apple%20News%20-%20Locked%20-%20iOS.jpeg?raw=true "Apple News - Locked - iOS")|![🔓](./ScreenShots/Apple%20News%20-%20Unlock%20Success%20-%20iOS.jpeg?raw=true "Apple News - Unlock Success - iOS")|![🔒](./ScreenShots/Apple%20News%20-%20Unlock%20Invalid%20-%20iOS.jpeg?raw=true "Apple News - Unlock Invalid - iOS")|
 
 
