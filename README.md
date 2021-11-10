@@ -156,7 +156,8 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [x] 协助激活`Apple News` 
   - [x] 协助激活「来自APPLE的内容\来自APPLE的建议\Siri建议」(不需要保持`Geo_Services.sgmodule`一直启用) 
   - [x] `指南针`的海拔经纬度功能
-  - [x] `询问Siri`切换为国际版(SIM卡设备会因「MCC / MNC」检测回退至国内百度版)
+  - [x] `询问Siri`切换为国际版（维基百科）
+    - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版（百度百科)
   * 副作用(单独使用此模块会有下列影响):
   - [ ] `天气`的数据源
   - [ ] `Siri建议`的服务器分配
@@ -200,7 +201,8 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
   * 注:
-    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求。
+    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
+    * 「询问Siri」的版本可被[定位服务(🆕有更新)](#定位服务有更新)模块修改切换至海外版
     * 经反馈，本模块不再强制`Siri卡片`框架语言为`zh-CN`，将根据用户设备`语言与地区`设置进行变更。
 
 ## 激活方式
@@ -231,7 +233,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
     - [x] Safari浏览器(Safari)
-    - [ ] 询问Siri (Ask Siri on iOS:国内版/macOS:海外版)
+    - [ ] 询问Siri(Ask Siri)
+      - [x] 无SIM卡设备可被[定位服务(🆕有更新)](#定位服务有更新)模块修改切换至海外版(维基百科)
+      - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版（百度百科)
   * 启用的功能:  
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
