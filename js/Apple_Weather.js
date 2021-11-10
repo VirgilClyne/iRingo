@@ -189,16 +189,19 @@ function getStation(idx, key = "-1", token = "na", uid = "-1") {
                 if (error) throw new Error(error)
                 if (_data.rxs.status == "ok") {
                     if (_data.rxs.obs[0].status == "ok") {
+                        if (_data.rxs.obs[0].msg) {
                         $.obs = _data.rxs.obs[0].msg;
                         resove()
-                    }
-                    else {
-                        $.log(`⚠️ ${$.name}, getStation`, `Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
+                        } else {
+                            $.log(`❗️ ${$.name}, getStation`, `OBS MSG Empty`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, `连接正常，数据为空`, `请用浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看是否可获得元数据`, `一般出现此问题的原因：网络不畅或获取数据过于频繁被限制`,`解决方法，更换当前网络环境或更换IP地址`, '')
+                            resove()
+                        }
+                    } else {
+                        $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
                         resove()
                     }
-                }
-                else {
-                    $.log(`⚠️ ${$.name}, getStation`, `Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
+                } else {
+                    $.log(`❗️ ${$.name}, getStation`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
                     resove()
                 }
             } catch (e) {
@@ -245,7 +248,7 @@ function outputData(stations, obs) {
             weather.air_quality.metadata.latitude = stations.geo[1];
             if (!weather.air_quality.metadata.language) weather.air_quality.metadata.language = weather.current_observations.metadata.language
         }
-        if (obs) { // From Observation Station
+        if (obs && obs.aqi) { // From Observation Station
             weather.air_quality.source = obs.city.name;
             weather.air_quality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.air_quality.airQualityIndex = obs.aqi;
@@ -300,7 +303,7 @@ function outputData(stations, obs) {
             weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain');
             weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain');
         }
-        if (obs) { // From Observation Station
+        if (obs && obs.aqi) { // From Observation Station
             weather.airQuality.source = obs.city.name;
             weather.airQuality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.airQuality.index = obs.aqi;
