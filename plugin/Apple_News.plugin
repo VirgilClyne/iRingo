@@ -4,15 +4,15 @@
 
 [Rule]
 # > iCloud
-DOMAIN,gateway.icloud.com,PROXY
+DOMAIN,gateway.icloud.com,Apple News
 
 # > Apple News
-DOMAIN,news-client.apple.com,PROXY
-DOMAIN,news-edge.apple.com,PROXY
-DOMAIN,news-events.apple.com,PROXY
-DOMAIN,apple.comscoreresearch.com,PROXY
+DOMAIN,news-client.apple.com,Apple News
+DOMAIN,news-edge.apple.com,Apple News
+DOMAIN,news-events.apple.com,Apple News
+DOMAIN,apple.comscoreresearch.com,Apple News
 # News+ Audio
-URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,
+URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,Apple News
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
