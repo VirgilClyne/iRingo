@@ -63,6 +63,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 建议配置
   * Loon:
+    * plugin安装于`仪表`-`插件`-`+`
     1. [天气](#天气)：[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info") 
     2. [定位服务(🆕有更新)](#定位服务有更新)：[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
     3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014)
