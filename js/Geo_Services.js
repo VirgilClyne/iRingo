@@ -39,7 +39,7 @@ if (url.indexOf(path1) != -1) {
         'Content-Encoding': 'identity'
     };
     response.body = GeoCountryCode;
-    if (isQuanX) {       
+    if (isQuanX) {
         response.status = "HTTP/1.1 200 OK";
         done(response);
     }
