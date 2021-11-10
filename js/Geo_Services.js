@@ -6,6 +6,11 @@ const isSurge = typeof $httpClient != "undefined";
 const isQuanX = typeof $task != "undefined";
 // 判断是否是Loon
 const isLoon = typeof $loon != "undefined";
+// 关闭请求
+const done = (value = {}) => {
+    if (isQuanX) return $done(value);
+    if (isSurge) isRequest ? $done(value) : $done();
+};
 
 /*
 README:https://github.com/VirgilClyne/iRingo
@@ -27,8 +32,6 @@ if (url.indexOf(path1) != -1) {
     var today = new Date();
     var UTCstring = today.toUTCString();
     var response = {};
-    if (isQuanX) response.status = 'HTTP/1.1 200 OK';
-    if (isSurge || isLoon) response.status = 200;
     response.headers = {
         'Content-Type': 'text/html',
         'Date': UTCstring,
@@ -36,9 +39,14 @@ if (url.indexOf(path1) != -1) {
         'Content-Encoding': 'identity'
     };
     response.body = GeoCountryCode;
-    if (isQuanX) $done(response);
-    if (isSurge || isLoon) $done({response});
-}
-else {
-    done({})
+    if (isQuanX) {       
+        response.status = "HTTP/1.1 200 OK";
+        done(response);
+    }
+    if (isSurge || isLoon) {
+        response.status = 200;
+        done({response});
+    }
+} else {
+    done()
 }
