@@ -24,7 +24,7 @@ function getOrigin(url) {
 }
 
 // Step 2
-// AQI Source Status
+// Get AQI Source Status
 function getAQIstatus(body) {
     return new Promise((resove) => {
         const weather = JSON.parse(body);
@@ -188,7 +188,7 @@ function getToken(idx) {
 };
 
 // Step 5
-// Show Nearest Observation Station AQI Data
+// Get Nearest Observation Station AQI Data
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
 function getStation(token = "na", idx, timeout = 0) {
     //if ($.country = 'CN')
@@ -249,9 +249,9 @@ function outputData(stations, obs) {
 
     // Input Data
     if ($.apiVer == "v1") {
-        $.log(`⚠️ ${$.name}, Detect`, `AQ data ${$.apiVer}`, '');
+        $.log(`⚠️ ${$.name}, Detect`, `data ${$.apiVer}`, '');
         if (!weather.air_quality) {
-            $.log(`⚠️ ${$.name}, non-existent AQ data`, `creating`, '');
+            $.log(`⚠️ ${$.name}, non-existent Air Quality data`, `creating`, '');
             weather.air_quality = {
                 "isSignificant": true,
                 "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "μg\/m3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "μg\/m3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "μg\/m3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "μg\/m3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "μg\/m3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "μg\/m3" } },
@@ -302,9 +302,9 @@ function outputData(stations, obs) {
         }
     };
     if ($.apiVer == "v2") {
-        $.log(`⚠️ ${$.name}, Detect`, `AQ data ${$.apiVer}`, '');
+        $.log(`⚠️ ${$.name}, Detect`, `data ${$.apiVer}`, '');
         if (!weather.airQuality) {
-            $.log(`⚠️ ${$.name}, non-existent AQ data`, `creating`, '');
+            $.log(`⚠️ ${$.name}, non-existent Air Quality data`, `creating`, '');
             weather.airQuality = {
                 "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "microgramsPerM3" }, "NO": { "name": "NO", "amount": 0, "unit": "microgramsPerM3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "microgramsPerM3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "microgramsPerM3" }, "NOX": { "name": "NOX", "amount": 0, "unit": "microgramsPerM3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "microgramsPerM3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "microgramsPerM3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "microgramsPerM3" } },
                 "metadata": {
