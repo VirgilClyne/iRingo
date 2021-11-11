@@ -8,7 +8,7 @@ const $ = new Env('Apple_Weather');
     await getAQIstatus($response.body)
     await getNearest($.lat, $.lng)
     await getToken($.idx)
-    await getStation($.idx, undefined, $.token, $.uid, undefined)
+    await getStation($.token, $.idx)
     await outputData($.stations, $.obs)
 })()
     .catch((e) => $.logErr(e))
@@ -70,8 +70,14 @@ function getNearest(lat, lng) {
             const url = {
                 url: `https://api.waqi.info/mapq/nearest/?geo=1/${lat}/${lng}`,
                 headers: {
-                    'origin': `https://aqicn.org`,
-                    'referer': `https://aqicn.org/`
+                    'Host' : `api.waqi.info`,
+                    'Content-Type' : `application/x-www-form-urlencoded`,
+                    'Origin': `https://waqi.info`,
+                    'Accept-Encoding' : `gzip, deflate, br`,
+                    'Connection' : `keep-alive`,
+                    'Accept': `*/*`,
+                    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
+                    'Referer': `https://waqi.info/`,
                 }
             }
             $.get(url, (error, response, data) => {
@@ -102,8 +108,14 @@ function getNearest(lat, lng) {
             const url = {
                 url: `https://api.waqi.info/mapq2/nearest?n=1&geo=1/${lat}/${lng}`,
                 headers: {
-                    'origin': `https://aqicn.org`,
-                    'referer': `https://aqicn.org/`
+                    'Host' : `api.waqi.info`,
+                    'Content-Type' : `application/x-www-form-urlencoded`,
+                    'Origin': `https://waqi.info`,
+                    'Accept-Encoding' : `gzip, deflate, br`,
+                    'Connection' : `keep-alive`,
+                    'Accept': `*/*`,
+                    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
+                    'Referer': `https://waqi.info/`,
                 }
             }
             $.get(url, (error, response, data) => {
@@ -140,8 +152,14 @@ function getToken(idx) {
         const url = {
             url: `https://api.waqi.info/api/token/${idx}`,
             headers: {
-                'origin': `https://aqicn.org`,
-                'referer': `https://aqicn.org/`
+                'Host' : `api.waqi.info`,
+                'Content-Type' : `application/x-www-form-urlencoded`,
+                'Origin': `https://waqi.info`,
+                'Accept-Encoding' : `gzip, deflate, br`,
+                'Connection' : `keep-alive`,
+                'Accept': `*/*`,
+                'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
+                'Referer': `https://waqi.info/`,
             }
         }
         $.get(url, (error, response, data) => {
@@ -172,46 +190,54 @@ function getToken(idx) {
 // Step 5
 // Show Nearest Observation Station AQI Data
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
-function getStation(idx, key = "-1", token = "na", uid = "-1") {
+function getStation(token = "na", idx, timeout = 0) {
     //if ($.country = 'CN')
     return new Promise((resove) => {
-        const url = {
-            url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`,
-            body: `key=${key}&token=${token}&uid=${uid}&rqc=4`,
-            headers: {
-                'origin': `https://aqicn.org`,
-                'referer': `https://aqicn.org/`
+        setTimeout( ()=>{
+            const url = {
+                url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`,
+                body: `token=${token}&id=${idx}`,
+                headers: {
+                    'Host' : `api.waqi.info`,
+                    'Content-Type' : `application/x-www-form-urlencoded`,
+                    'Origin': `https://waqi.info`,
+                    'Accept-Encoding' : `gzip, deflate, br`,
+                    'Connection' : `keep-alive`,
+                    'Accept': `*/*`,
+                    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
+                    'Referer': `https://waqi.info/`,
+                }
             }
-        }
-        $.post(url, (error, response, data) => {
-            try {
-                const _data = JSON.parse(data)
-                if (error) throw new Error(error)
-                if (_data.rxs.status == "ok") {
-                    if (_data.rxs.obs[0].status == "ok") {
-                        if (_data.rxs.obs[0].msg) {
-                        $.obs = _data.rxs.obs[0].msg;
-                        resove()
+            $.post(url, (error, response, data) => {
+                try {
+                    const _data = JSON.parse(data)
+                    if (error) throw new Error(error)
+                    if (_data.rxs.status == "ok") {
+                        if (_data.rxs.obs[0].status == "ok") {
+                            if (_data.rxs.obs[0].msg) {
+                            $.obs = _data.rxs.obs[0].msg;
+                            resove()
+                            } else {
+                                $.log(`❗️ ${$.name}, getStation`, `OBS MSG Empty`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, `连接正常，数据为空`, `请用浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看是否可获得元数据`, `一般出现此问题的原因：网络不畅或获取数据过于频繁被限制`,`解决方法，更换当前网络环境或更换IP地址`, '')
+                                resove()
+                            }
                         } else {
-                            $.log(`❗️ ${$.name}, getStation`, `OBS MSG Empty`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, `连接正常，数据为空`, `请用浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看是否可获得元数据`, `一般出现此问题的原因：网络不畅或获取数据过于频繁被限制`,`解决方法，更换当前网络环境或更换IP地址`, '')
+                            $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
                             resove()
                         }
                     } else {
-                        $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
+                        $.log(`❗️ ${$.name}, getStation`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
                         resove()
                     }
-                } else {
-                    $.log(`❗️ ${$.name}, getStation`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
+                } catch (e) {
+                    $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+                } finally {
+                    //$.log(`⚠️ ${$.name}, getStation`, `Finish`, `data = ${data}`, '')
+                    $.log(`🎉 ${$.name}, getStation`, `Finish`, '')
                     resove()
                 }
-            } catch (e) {
-                $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
-            } finally {
-                //$.log(`⚠️ ${$.name}, getStation`, `Finish`, `data = ${data}`, '')
-                $.log(`🎉 ${$.name}, getStation`, `Finish`, '')
-                resove()
-            }
-        });
+            })
+        },timeout)
     })
 };
 
