@@ -272,7 +272,7 @@ function outputData(stations, obs) {
             weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain');
             weather.air_quality.metadata.longitude = stations.geo[0];
             weather.air_quality.metadata.latitude = stations.geo[1];
-            if (!weather.air_quality.metadata.language) weather.air_quality.metadata.language = weather.current_observations.metadata.language
+            weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
         }
         if (obs && obs.aqi) { // From Observation Station
             weather.air_quality.source = obs.city.name;
@@ -296,7 +296,7 @@ function outputData(stations, obs) {
             weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain');
             weather.air_quality.metadata.latitude = obs.city.geo[1];
             //weather.air_quality.metadata.version = "";
-            if (!weather.air_quality.metadata.language) weather.air_quality.metadata.language = weather.current_observations.metadata.language
+            weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
             //weather.air_quality.metadata.language = $.language;
             weather.air_quality.metadata.data_source = obs.attributions[obs.attributions.length - 1].name;
         }
@@ -324,7 +324,7 @@ function outputData(stations, obs) {
             weather.airQuality.categoryIndex = classifyAirQualityLevel(stations.aqi);
             weather.airQuality.metadata.longitude = stations.geo[0];
             weather.airQuality.metadata.latitude = stations.geo[1];
-            if (!weather.airQuality.metadata.language) weather.airQuality.metadata.language = weather.currentWeather.metadata.language;
+            weather.airQuality.metadata.language ? weather.airQuality.metadata.language : weather.currentWeather.metadata.language;
             weather.airQuality.metadata.expireTime = convertTime(new Date(stations.utime), 'add-1h-floor');
             weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain');
             weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain');
@@ -347,7 +347,7 @@ function outputData(stations, obs) {
             weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
             weather.airQuality.metadata.providerName = obs.attributions[obs.attributions.length - 1].name;
             weather.airQuality.metadata.expireTime = convertTime(new Date(obs.time.iso), 'add-1h-floor');
-            if (!weather.airQuality.metadata.language) weather.airQuality.metadata.language = weather.currentWeather.metadata.language;
+            weather.airQuality.metadata.language ? weather.airQuality.metadata.language : weather.currentWeather.metadata.language;
             //weather.airQuality.metadata.language = $.language;
             weather.airQuality.metadata.latitude = obs.city.geo[1];
             weather.airQuality.metadata.reportedTime = convertTime(new Date(obs.time.iso), 'remain');
