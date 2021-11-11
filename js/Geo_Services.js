@@ -47,6 +47,4 @@ if (url.indexOf(path1) != -1) {
         response.status = 200;
         done({response});
     }
-} else {
-    done()
-}
+} else done()

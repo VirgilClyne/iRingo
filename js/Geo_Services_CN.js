@@ -7,10 +7,6 @@ var body = $response.body;
 
 const path1 = "/pep/gcc";
 
-if (url.indexOf(path1) != -1) {
-    let obj = body; 
-        obj = "CN";
-    body = obj;
-};
+if (url.indexOf(path1) != -1) body = "CN";
 
 $done({body});
