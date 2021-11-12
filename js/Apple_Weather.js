@@ -148,21 +148,15 @@ function getStation(token = "na", idx, timeout = 5) {
                     const _data = JSON.parse(data)
                     if (error) throw new Error(error)
                     else if (_data.rxs.status == "ok") {
-                        if (_data.rxs.obs[0].status == "ok") {
+                        if (_data.rxs.obs[0].status == "ok" || _data.rxs.obs[1].status == "ok") {
                             if (_data.rxs.obs[0].msg) {
                                 $.obs = _data.rxs.obs[0].msg;
                                 resove()
+                            } else if (_data.rxs.obs[1].msg) {  
+                                $.obs = _data.rxs.obs[1].msg;
+                                resove()  
                             } else {
                                 $.log(`❗️ ${$.name}, getStation`, `OBS MSG Empty`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, `连接正常，数据为空`, `请用浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看是否可获得元数据`, `一般出现此问题的原因：网络不畅或获取数据过于频繁被限制`, `解决方法，更换当前网络环境或更换IP地址`, '')
-                                resove()
-                            }
-                        } else if (_data.rxs.obs[0].status == "nug") {
-                            $.log(`⚠️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, '')
-                            if (_data.rxs.obs[1].msg) {
-                                $.obs = _data.rxs.obs[1].msg;
-                                resove()
-                            } else {
-                                $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
                                 resove()
                             }
                         } else {
