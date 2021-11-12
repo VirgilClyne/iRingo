@@ -214,10 +214,11 @@ function outputData(api, stations, obs) {
         if (!weather.air_quality) {
             $.log(`⚠️ ${$.name}, non-existent Air Quality data, creating`, '');
             weather.air_quality = {
-                "isSignificant": true,
-                "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "μg\/m3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "μg\/m3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "μg\/m3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "μg\/m3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "μg\/m3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "μg\/m3" } },
+                "isSignificant": true, //重要/置顶
+                "pollutants": {},
                 "metadata": {
                     "version": 1,
+                    "data_source": 0, //来自XX读数 0:监测站 1:模型
                 },
                 "name": "AirQuality",
             };
@@ -242,13 +243,14 @@ function outputData(api, stations, obs) {
             weather.air_quality.airQualityScale = "EPA_NowCast.2115";
             weather.air_quality.primaryPollutant = switchPollutantsType(obs.dominentpol);
             weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs.aqi);
-            if (obs.iaqi.co) weather.air_quality.pollutants.CO.amount = obs.iaqi.co.v;
-            if (obs.iaqi.so2) weather.air_quality.pollutants.SO2.amount = obs.iaqi.so2.v;
-            if (obs.iaqi.no2) weather.air_quality.pollutants.NO2.amount = obs.iaqi.no2.v;
-            if (obs.iaqi.nox) weather.air_quality.pollutants.NOX.amount = obs.iaqi.nox.v;
-            if (obs.iaqi.pm25) weather.air_quality.pollutants["PM2.5"].amount = obs.iaqi.pm25.v;
-            if (obs.iaqi.o3) weather.air_quality.pollutants.OZONE.amount = obs.iaqi.o3.v;
-            if (obs.iaqi.pm10) weather.air_quality.pollutants.PM10.amount = obs.iaqi.pm10.v;
+            weather.air_quality.pollutants.CO = { "name": "CO", "amount": obs.iaqi.co?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants.NO = { "name": "NO", "amount": obs.iaqi.no?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants.NO2 = { "name": "NO2", "amount": obs.iaqi.no2?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants.SO2 = { "name": "SO2", "amount": obs.iaqi.so2?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants.OZONE = { "name": "OZONE", "amount": obs.iaqi.o3?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants.NOX = { "name": "NOX", "amount": obs.iaqi.nox?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants["PM2.5"] = { "name": "PM2.5", "amount": obs.iaqi.pm25?.v || -1, "unit": "μg\/m3" };
+            weather.air_quality.pollutants.PM10 = { "name": "PM10", "amount": obs.iaqi.pm10?.v || -1, "unit": "μg\/m3" };
             weather.air_quality.metadata.reported_time = convertTime(new Date(obs.time.v), 'remain', api);
             weather.air_quality.metadata.longitude = obs.city.geo[0];
             weather.air_quality.metadata.provider_name = obs.attributions[obs.attributions.length - 1].name;
@@ -259,7 +261,7 @@ function outputData(api, stations, obs) {
             //weather.air_quality.metadata.version = "";
             weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
             //weather.air_quality.metadata.language = $.language;
-            weather.air_quality.metadata.data_source = obs.attributions[obs.attributions.length - 1].name;
+            //weather.air_quality.metadata.data_source = 0;
         }
     };
     if (api == "v2") {
@@ -267,13 +269,13 @@ function outputData(api, stations, obs) {
         if (!weather.airQuality) {
             $.log(`⚠️ ${$.name}, non-existent Air Quality data, creating`, '');
             weather.airQuality = {
-                "pollutants": { "CO": { "name": "CO", "amount": 0, "unit": "microgramsPerM3" }, "NO": { "name": "NO", "amount": 0, "unit": "microgramsPerM3" }, "NO2": { "name": "NO2", "amount": 0, "unit": "microgramsPerM3" }, "SO2": { "name": "SO2", "amount": 0, "unit": "microgramsPerM3" }, "NOX": { "name": "NOX", "amount": 0, "unit": "microgramsPerM3" }, "OZONE": { "name": "OZONE", "amount": 0, "unit": "microgramsPerM3" }, "PM10": { "name": "PM10", "amount": 0, "unit": "microgramsPerM3" }, "PM2.5": { "name": "PM2.5", "amount": 0, "unit": "microgramsPerM3" } },
+                "pollutants": {},
                 "metadata": {
                     "units": "m",
                     "version": 2,
                 },
-                "sourceType": "station",
-                "isSignificant": true,
+                "sourceType": "station", //station:监测站 modeled:模型
+                "isSignificant": true, //重要/置顶
                 "name": "AirQuality",
             }
         }
@@ -297,13 +299,14 @@ function outputData(api, stations, obs) {
             weather.airQuality.scale = "EPA_NowCast.2115";
             weather.airQuality.primaryPollutant = switchPollutantsType(obs.dominentpol);
             weather.airQuality.categoryIndex = classifyAirQualityLevel(obs.aqi);
-            if (obs.iaqi.co) weather.airQuality.pollutants.CO.amount = obs.iaqi.co.v;
-            if (obs.iaqi.so2) weather.airQuality.pollutants.SO2.amount = obs.iaqi.so2.v;
-            if (obs.iaqi.no2) weather.airQuality.pollutants.NO2.amount = obs.iaqi.no2.v;
-            if (obs.iaqi.nox) weather.airQuality.pollutants.NOX.amount = obs.iaqi.nox.v;
-            if (obs.iaqi.pm25) weather.airQuality.pollutants["PM2.5"].amount = obs.iaqi.pm25.v;
-            if (obs.iaqi.o3) weather.airQuality.pollutants.OZONE.amount = obs.iaqi.o3.v;
-            if (obs.iaqi.pm10) weather.airQuality.pollutants.PM10.amount = obs.iaqi.pm10.v;
+            weather.airQuality.pollutants.CO = { "name": "CO", "amount": obs.iaqi.co?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants.NO = { "name": "NO", "amount": obs.iaqi.no?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants.NO2 = { "name": "NO2", "amount": obs.iaqi.no2?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants.SO2 = { "name": "SO2", "amount": obs.iaqi.so2?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants.OZONE = { "name": "OZONE", "amount": obs.iaqi.o3?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants.NOX = { "name": "NOX", "amount": obs.iaqi.nox?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants["PM2.5"] = { "name": "PM2.5", "amount": obs.iaqi.pm25?.v || -1, "unit": "microgramsPerM3" };
+            weather.airQuality.pollutants.PM10 = { "name": "PM10", "amount": obs.iaqi.pm10?.v || -1, "unit": "microgramsPerM3" };
             weather.airQuality.metadata.longitude = obs.city.geo[0];
             weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
             weather.airQuality.metadata.providerName = obs.attributions[obs.attributions.length - 1].name;
@@ -327,12 +330,13 @@ function outputData(api, stations, obs) {
 function switchPollutantsType(pollutant) {
     switch (pollutant) {
         case 'co': return 'CO2';
-        case 'so2': return 'SO2';
+        case 'no': return 'NO';
         case 'no2': return 'NO2';
+        case 'so2': return 'SO2';
+        case 'o3': return 'OZONE';
         case 'nox': return 'NOX';
         case 'pm25': return 'PM2.5';
         case 'pm10': return 'PM10';
-        case 'o3': return 'OZONE';
         default: return "OTHER";
     }
 };
@@ -374,7 +378,7 @@ function classifyAirQualityLevel(aqiIndex) {
     else if (aqiIndex >= 301 && aqiIndex <= 500) return 6;
     else {
         $.log(`⚠️ ${$.name}, classifyAirQualityLevel, Error`, `aqiIndex: ${aqiIndex}`, '');
-        return 6;
+        return 0;
     }
 };
 
