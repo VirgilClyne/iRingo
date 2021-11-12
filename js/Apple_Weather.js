@@ -163,7 +163,7 @@ function getStation(token = "na", idx, timeout = 5) {
                         resove()
                     }
                 } catch (e) {
-                    $.log(`❗️ ${$.name}, getStation执行失败!`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+                    $.log(`❗️ ${$.name}, getStation执行失败!`, `浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 看看是不是空数据`, `原因：网络不畅或者获取太频繁导致被封`, `error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
                 } finally {
                     //$.log(`⚠️ ${$.name}, getStation, Finish`, `data = ${data}`, '')
                     $.log(`🎉 ${$.name}, getStation, Finish`, '')
