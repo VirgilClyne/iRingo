@@ -157,9 +157,9 @@ function getStation(token = "na", idx, timeout = 5) {
                                 resove()
                             }
                         } else if (_data.rxs.obs[0].status == "nug") {
-                            if (_data.rxs.obs[0].msg) {
-                                $.obs = _data.rxs.obs[0].msg;
-                                $.log(`⚠️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, '')
+                            $.log(`⚠️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, '')
+                            if (_data.rxs.obs[1].msg) {
+                                $.obs = _data.rxs.obs[1].msg;
                                 resove()
                             } else {
                                 $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
