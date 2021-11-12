@@ -95,7 +95,7 @@ function getNearest(api, lat, lng) {
                     $.country = $.stations.country
                     resove()
                 } else {
-                    $.log(`❗️ ${$.name}, getNearest, Error, api: ${api}`, `data = ${data}`, '')
+                    $.log(`❗️ ${$.name}, getNearest, Error, api: ${api}`, `station: ${_data.d[0]}`, `data = ${data}`, '')
                     $.done()
                 }
             } catch (e) {
@@ -148,14 +148,11 @@ function getStation(token = "na", idx, timeout = 5) {
                     const _data = JSON.parse(data)
                     if (error) throw new Error(error)
                     else if (_data.rxs.status == "ok") {
-                        if (_data.rxs.obs[0].status == "ok" && _data.rxs.obs[0].msg) {
-                            $.obs = _data.rxs.obs[0].msg;
-                            resove()
-                        } else if (_data.rxs.obs[1].status == "ok" && _data.rxs.obs[1].msg) {
-                            $.obs = _data.rxs.obs[1].msg;
-                            resove()
-                        } else if (!_data.rxs.obs[0].msg && !_data.rxs.obs[1].msg) {
-                            $.log(`❗️ ${$.name}, getStation`, `OBS MSG Empty`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, `连接正常，数据为空`, `请用浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看是否可获得元数据`, `一般出现此问题的原因：网络不畅或获取数据过于频繁被限制`, `解决方法，更换当前网络环境或更换IP地址`, '')
+                        if (_data.rxs.obs.some(o => o.status == 'ok')) {
+                            let i = _data.rxs.obs.findIndex(o => o.status == 'ok')
+                            let m = _data.rxs.obs.findIndex(o => o.msg)
+                            $.obs = _data.rxs.obs[i].msg;
+                            $.log(`⚠️ ${$.name}, getStation, i = ${i}, m = ${m}`, '')
                             resove()
                         } else {
                             $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
@@ -281,7 +278,7 @@ function outputData(api, stations, obs) {
             //weather.airQuality.metadata.units = "m";
         }
         else if (stations) { // From Nearest List
-            weather.airQuality.source = stations.name;
+            weather.airQuality.source = stations.name.match(/\((.+)\)/g);
             weather.airQuality.index = stations.aqi;
             weather.airQuality.scale = "EPA_NowCast.2115";
             //weather.airQuality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
