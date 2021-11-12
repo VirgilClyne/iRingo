@@ -3,6 +3,17 @@ README:https://github.com/VirgilClyne/iRingo
 */
 
 const $ = new Env('Apple_Weather');
+$.VAL_headers =  {
+    'Host': `api.waqi.info`,
+    'Content-Type': `application/x-www-form-urlencoded`,
+    'Origin': `https://waqi.info`,
+    'Accept-Encoding': `gzip, deflate, br`,
+    'Connection': `keep-alive`,
+    'Accept': `*/*`,
+    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
+    'Referer': `https://waqi.info/`,
+}
+
 !(async () => {
     await getOrigin($request.url)
     await getAQIstatus($.apiVer, $response.body)
@@ -67,20 +78,8 @@ function getAQIstatus(api, body) {
 function getNearest(api, lat, lng) {
     return new Promise((resove) => {
         if (api == "v1") mapq = 'mapq'
-        if (api == "v2") mapq = 'mapq2'
-        const url = {
-            url: `https://api.waqi.info/${mapq}/nearest?n=1&geo=1/${lat}/${lng}`,
-            headers: {
-                'Host': `api.waqi.info`,
-                'Content-Type': `application/x-www-form-urlencoded`,
-                'Origin': `https://waqi.info`,
-                'Accept-Encoding': `gzip, deflate, br`,
-                'Connection': `keep-alive`,
-                'Accept': `*/*`,
-                'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
-                'Referer': `https://waqi.info/`,
-            }
-        }
+        else if (api == "v2") mapq = 'mapq2'
+        const url = { url: `https://api.waqi.info/${mapq}/nearest?n=1&geo=1/${lat}/${lng}`, headers: $.VAL_headers }
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
@@ -114,19 +113,7 @@ function getNearest(api, lat, lng) {
 // https://api.waqi.info/api/token/station.uid
 function getToken(idx) {
     return new Promise((resove) => {
-        const url = {
-            url: `https://api.waqi.info/api/token/${idx}`,
-            headers: {
-                'Host': `api.waqi.info`,
-                'Content-Type': `application/x-www-form-urlencoded`,
-                'Origin': `https://waqi.info`,
-                'Accept-Encoding': `gzip, deflate, br`,
-                'Connection': `keep-alive`,
-                'Accept': `*/*`,
-                'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
-                'Referer': `https://waqi.info/`,
-            }
-        }
+        const url = { url: `https://api.waqi.info/api/token/${idx}`, headers: $.VAL_headers }
         $.get(url, (error, response, data) => {
             try {
                 const _data = JSON.parse(data)
@@ -155,20 +142,7 @@ function getToken(idx) {
 function getStation(token = "na", idx, timeout = 5) {
     return new Promise((resove) => {
         setTimeout(() => {
-            const url = {
-                url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`,
-                body: `token=${token}&id=${idx}`,
-                headers: {
-                    'Host': `api.waqi.info`,
-                    'Content-Type': `application/x-www-form-urlencoded`,
-                    'Origin': `https://waqi.info`,
-                    'Accept-Encoding': `gzip, deflate, br`,
-                    'Connection': `keep-alive`,
-                    'Accept': `*/*`,
-                    'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
-                    'Referer': `https://waqi.info/`,
-                }
-            }
+            const url = { url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`, body: `token=${token}&id=${idx}`, headers: $.VAL_headers }
             $.post(url, (error, response, data) => {
                 try {
                     const _data = JSON.parse(data)
@@ -223,20 +197,7 @@ function outputData(api, stations, obs) {
                 "name": "AirQuality",
             };
         }
-        if (stations) { // From Nearest List
-            weather.air_quality.source = stations.nna;
-            weather.air_quality.airQualityIndex = stations.v;
-            weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-            weather.air_quality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
-            weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(stations.v);
-            weather.air_quality.metadata.reported_time = convertTime(new Date(stations.t), 'remain', api);
-            weather.air_quality.metadata.expire_time = convertTime(new Date(stations.t), 'add-1h-floor', api);
-            weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
-            weather.air_quality.metadata.longitude = stations.geo[0];
-            weather.air_quality.metadata.latitude = stations.geo[1];
-            weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
-        }
-        if (obs && obs.aqi) { // From Observation Station
+        if (obs?.aqi) { // From Observation Station
             weather.air_quality.source = obs.city.name;
             weather.air_quality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.air_quality.airQualityIndex = obs.aqi;
@@ -263,6 +224,19 @@ function outputData(api, stations, obs) {
             //weather.air_quality.metadata.language = $.language;
             //weather.air_quality.metadata.data_source = 0;
         }
+        else if (stations) { // From Nearest List
+            weather.air_quality.source = stations.nna;
+            weather.air_quality.airQualityIndex = stations.v;
+            weather.air_quality.airQualityScale = "EPA_NowCast.2115";
+            weather.air_quality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
+            weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(stations.v);
+            weather.air_quality.metadata.reported_time = convertTime(new Date(stations.t), 'remain', api);
+            weather.air_quality.metadata.expire_time = convertTime(new Date(stations.t), 'add-1h-floor', api);
+            weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
+            weather.air_quality.metadata.longitude = stations.geo[0];
+            weather.air_quality.metadata.latitude = stations.geo[1];
+            weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
+        }
     };
     if (api == "v2") {
         $.log(`⚠️ ${$.name}, Detect`, `data ${api}`, '');
@@ -279,20 +253,7 @@ function outputData(api, stations, obs) {
                 "name": "AirQuality",
             }
         }
-        if (stations) { // From Nearest List
-            weather.airQuality.source = stations.name;
-            weather.airQuality.index = stations.aqi;
-            weather.airQuality.scale = "EPA_NowCast.2115";
-            //weather.airQuality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
-            weather.airQuality.categoryIndex = classifyAirQualityLevel(stations.aqi);
-            weather.airQuality.metadata.longitude = stations.geo[0];
-            weather.airQuality.metadata.latitude = stations.geo[1];
-            weather.airQuality.metadata.language ? weather.airQuality.metadata.language : weather.currentWeather.metadata.language;
-            weather.airQuality.metadata.expireTime = convertTime(new Date(stations.utime), 'add-1h-floor', api);
-            weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain', api);
-            weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
-        }
-        if (obs && obs.aqi) { // From Observation Station
+        if (obs?.aqi) { // From Observation Station
             weather.airQuality.source = obs.city.name;
             weather.airQuality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
             weather.airQuality.index = obs.aqi;
@@ -317,6 +278,19 @@ function outputData(api, stations, obs) {
             weather.airQuality.metadata.reportedTime = convertTime(new Date(obs.time.iso), 'remain', api);
             weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
             //weather.airQuality.metadata.units = "m";
+        }
+        else if (stations) { // From Nearest List
+            weather.airQuality.source = stations.name;
+            weather.airQuality.index = stations.aqi;
+            weather.airQuality.scale = "EPA_NowCast.2115";
+            //weather.airQuality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
+            weather.airQuality.categoryIndex = classifyAirQualityLevel(stations.aqi);
+            weather.airQuality.metadata.longitude = stations.geo[0];
+            weather.airQuality.metadata.latitude = stations.geo[1];
+            weather.airQuality.metadata.language ? weather.airQuality.metadata.language : weather.currentWeather.metadata.language;
+            weather.airQuality.metadata.expireTime = convertTime(new Date(stations.utime), 'add-1h-floor', api);
+            weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain', api);
+            weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
         }
     };
     body = JSON.stringify(weather);
