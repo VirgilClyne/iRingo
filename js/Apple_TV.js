@@ -1231,8 +1231,8 @@ if (url.indexOf(path1) != -1) {
     configurations.data.userProps.utsc = "1:18943";
     configurations.data.userProps.countryCode = countryCode;
     configurations.data.userProps.gac = true;
-    body = JSON.stringify(configs);
-    console.log('configs');
+    body = JSON.stringify(configurations);
+    console.log('configurations');
 }
 
 $done({body});
