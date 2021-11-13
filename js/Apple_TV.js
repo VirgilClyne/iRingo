@@ -36,7 +36,7 @@ function outputData(api, platform, region) {
     if (platform == "desktop") OriginalsTitle = "Apple TV+"
     else if (platform == "iphone") OriginalsTitle = "原创内容"
     else OriginalsTitle = "Apple TV+"
-    
+
     if (api == "v1") $done()
     else if (api == "v2") $done()
     else if (api == "v3") {
@@ -153,10 +153,10 @@ function outputData(api, platform, region) {
             "ageVerification": true,
             "seasonTitles": true
         };
-        //configurations.data.userProps.activeUser = true;
+        configurations.data.userProps.activeUser = true;
         //configurations.data.userProps.utsc = "1:18943";
-        configurations.data.userProps.countryCode = region;
-        //configurations.data.userProps.gac = true;
+        configurations.data.userProps.country = region;
+        configurations.data.userProps.gac = true;
     }
     else $done();
     body = JSON.stringify(configurations);
