@@ -53,6 +53,7 @@ if (url.indexOf(path1) != -1) {
         ],
         "title": "电影",
         "destinationType": "Target",
+        "secondaryEnabled": true,
         "target": {
             "id": "tahoma_movies",
             "type": "Root",
@@ -60,13 +61,14 @@ if (url.indexOf(path1) != -1) {
         },
         "type": "Movies"
     },
-    
+
     configurations.data.applicationProps.tabs[3] = {
         "universalLinks": [
             "https:\/\/tv.apple.com\/tv-shows"
         ],
         "title": "电视节目",
         "destinationType": "Target",
+        "secondaryEnabled": true,
         "target": {
             "id": "tahoma_tvshows",
             "type": "Root",
