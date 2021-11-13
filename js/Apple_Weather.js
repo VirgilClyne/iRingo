@@ -4,12 +4,8 @@ README:https://github.com/VirgilClyne/iRingo
 
 const $ = new Env('Apple_Weather');
 $.VAL_headers =  {
-    'Host': `api.waqi.info`,
     'Content-Type': `application/x-www-form-urlencoded`,
     'Origin': `https://waqi.info`,
-    'Accept-Encoding': `gzip, deflate, br`,
-    'Connection': `keep-alive`,
-    'Accept': `*/*`,
     'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/605.1.15`,
     'Referer': `https://waqi.info/`,
 }
@@ -278,7 +274,7 @@ function outputData(api, stations, obs) {
             //weather.airQuality.metadata.units = "m";
         }
         else if (stations) { // From Nearest List
-            weather.airQuality.source = stations.name.match(/\((.+)\)/g);
+            weather.airQuality.source = stations.name;
             weather.airQuality.index = stations.aqi;
             weather.airQuality.scale = "EPA_NowCast.2115";
             //weather.airQuality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
