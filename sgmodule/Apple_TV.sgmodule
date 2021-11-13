@@ -1,5 +1,5 @@
 #!name= Enable Apple TV app
-#!desc=(BETA) 
+#!desc=(BETA) 解锁TV app全功能并强制优先使用简体中文(zh-Hans)
 
 [URL Rewrite]
 # Switch CN Apple TV configurations to TW
