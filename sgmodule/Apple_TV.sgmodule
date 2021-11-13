@@ -1,0 +1,15 @@
+#!name= Enable Apple TV app
+#!desc=(BETA) 
+
+[URL Rewrite]
+# Switch CN Apple TV configurations to TW
+# (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/configurations)(.*)(region=CN)(.*) $1$2$3$4$5region=TW$7 header
+# Redirect Apple TV app to zh-Hans
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(.*)(locale=zh-Hant)(.*) $1$2$3$4locale=zh-Hans$6 header
+
+[Script]
+# Enable Apple TV app All Tabs
+http-response ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)(\/configurations).*(region=CN).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_TV.js, requires-body=true, timeout=10, tag=Apple_TV
+
+[MITM]
+hostname = %APPEND% uts-api.itunes.apple.com
