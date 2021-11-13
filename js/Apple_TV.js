@@ -1205,7 +1205,6 @@ if (url.indexOf(path1) != -1) {
             ],
             "title": "体育节目",
             "destinationType": "Target",
-            "secondaryEnabled": true,
             "target": {
                 "id": "tahoma_sports",
                 "type": "Root",
