@@ -149,7 +149,8 @@ function getStation(token = "na", idx, timeout = 5000) {
                             let i = _data.rxs.obs.findIndex(o => o.status == 'ok')
                             let m = _data.rxs.obs.findIndex(o => o.msg)
                             $.obs = _data.rxs.obs[i].msg;
-                            $.log(`⚠️ ${$.name}, getStation, i = ${i}, m = ${m}`, '')
+                            if (i >= 0 && m >= 0) $.log(`🎉 ${$.name}, getStation,  i = ${i}, m = ${m}`, '')
+                            else if (i < 0 || m < 0) $.log(`❗️ ${$.name}, getStation`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
                             resove()
                         } else {
                             $.log(`❗️ ${$.name}, getStation`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')

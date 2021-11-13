@@ -17,7 +17,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [功能列表](#功能列表)
   - [关于天气API](#关于天气api)
   - [安装链接](#安装链接)
-- [定位服务(🆕有更新)](#定位服务有更新)
+- [定位服务](#定位服务)
   - [简介](#简介-1)
   - [激活方式](#激活方式)
   - [作用与副作用](#作用与副作用)
@@ -33,11 +33,16 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
   - [安装链接](#安装链接-3)
-- [Apple News(🆕有更新)](#apple-news有更新)
+- [Apple TV app(🆕测试中🚧有问题请反馈)](#apple-tv-app测试中有问题请反馈)
   - [简介](#简介-4)
   - [激活方式](#激活方式-3)
-  - [解锁状态说明](#解锁状态说明)
+  - [功能列表](#功能列表-2)
   - [安装链接](#安装链接-4)
+- [Apple News](#apple-news)
+  - [简介](#简介-5)
+  - [激活方式](#激活方式-4)
+  - [解锁状态说明](#解锁状态说明)
+  - [安装链接](#安装链接-5)
 
 ---
 
@@ -65,28 +70,28 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * Loon:
     * plugin安装于`仪表`-`插件`-`+`
     1. [天气](#天气)：[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info") 
-    2. [定位服务](#定位服务有更新)：[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
+    2. [定位服务](#定位服务)：[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
     3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions") (Author:@Tartarus2014)
     4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")
-    5. [Apple News](#apple-news有更新)：[Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
+    5. [Apple News](#apple-news)：[Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
   * Quantumult X:
     * qxrewrite安装于`设置`-`重写`-`引用`
     1. [天气](#天气)：[Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
-    2. [定位服务](#定位服务有更新)：[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
+    2. [定位服务](#定位服务)：[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
     3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions")
     4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")
-    5. [Apple News](#apple-news有更新)：[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
+    5. [Apple News](#apple-news)：[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
       * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`设置`-`分流`-`引用`并设置`策略偏好`)
   * Surge:
     * sgmodule安装于`模块`-`安装新模块…`
     1. [天气](#天气)：[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
-    2. [定位服务](#定位服务有更新)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
+    2. [定位服务](#定位服务)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
     3. [Siri与搜索](#siri与搜索)：[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
         * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，Loon与Quantumult X无效且不适用。
       * 更多预置策略组的模块请见[安装链接](#安装链接-2)
     4. [Apple Maps](#apple-maps)：[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
-    5. [Apple News](#apple-news有更新)：[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+    5. [Apple News](#apple-news)：[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
       * 更多预置策略组的模块请见[安装链接](#安装链接-4)
 
@@ -130,7 +135,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ---
 
-# 定位服务(🆕有更新)
+# 定位服务
 ## 简介
   * 保持模块启用,即可强制「定位服务」通过`基于网络的地区检测`始终为特定地区，无需互联网连接，准备代理线路、保持`✈️飞行模式`开启、关闭定位、更改国家地区语言等。
 
@@ -204,7 +209,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
   * 注:
     * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
-    * 「询问Siri」的版本可被[定位服务(🆕有更新)](#定位服务有更新)模块修改切换至海外版
+    * 「询问Siri」的版本可被[定位服务](#定位服务)模块修改切换至海外版
     * 经反馈，本模块不再强制`Siri卡片`框架语言为`zh-CN`，将根据用户设备`语言与地区`设置进行变更。
 
 ## 激活方式
@@ -236,7 +241,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [x] 查询(Look Up)
     - [x] Safari浏览器(Safari)
     - [ ] 询问Siri(Ask Siri)
-      - [x] 无SIM卡设备可被[定位服务(🆕有更新)](#定位服务有更新)模块修改切换至海外版(维基百科)
+      - [x] 无SIM卡设备可被[定位服务](#定位服务)模块修改切换至海外版(维基百科)
       - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版（百度百科)
   * 启用的功能:  
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
@@ -347,7 +352,56 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ---
 
-# Apple News(🆕有更新)
+# Apple TV app(🆕测试中🚧有问题请反馈)
+## 简介
+  * 保持模块启用,即可在全设备平台解锁TV app全部已知功能，并优先使用简体中文(zh-Hans)。
+
+  * 注:
+    * 如账号所在地区不提供简体中文(zh-Hans)元数据，将按照当地语言回退
+    * 对于不提供「体育节目」及「儿童」分类功能的账号及地区，直接调用US地区页面及功能
+    * macOS版Apple TV app不支持第三方流媒体平台关联及媒体库调用及播放记录同步，故调用iPad版
+    * macOS版Apple TV app不支持「体育节目」相关功能，故调用iPad版
+    * 第三方流媒体平台app关联操作请在iOS/iPadOS/tvOS上完成
+    * 如果你看不出来用了这个模块后功能有什么区别，说明你缺乏多设备平台多账号地区Apple TV服务对比经验，不要再问了
+
+## 激活方式
+  * 如启用本模块后重新打开`Apple TV`未生效，可按照下列步骤激活:
+    1. 打开`Apple TV`app
+    2. 点击右上角头像
+    3. 点击`退出登录`
+    4. 重新输入`Apple ID`与`密码`登入（🇨🇳CN地区账号无效）
+    5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
+      1. `Apple TV`的`https://uts-api.itunes.apple.com/uts/v3/configitions`链接
+    6. 查看`Apple TV`app的`立即观看`页面是否有`电影`、`电视节目`、`体育节目`、`儿童`四个入口
+    7. 正常使用
+
+## 功能列表
+  * 硬件及平台
+    - [x] macOS
+    - [x] iPad
+    - [x] iPhone
+    - [x] Apple TV (需Surge for Mac`网关模式`)
+    - [ ] Android TV (需Surge for Mac`网关模式`) (待测试)
+    - [ ] Web(待测试)
+  * 分类页面
+    - [x] 立即观看
+    - [x] TV+
+    - [x] 电影
+    - [x] 电视节目
+    - [x] 体育节目 (macOS无关注「喜爱的球队」功能和显示比分功能)
+    - [x] 儿童 (macOS限制最多6个标签页，故macOS版隐藏「儿童」标签页)
+    - [x] 资料库
+    - [x] 搜索
+
+## 安装链接
+  * Loon:
+  * Quantumult X:
+  * Surge: 
+    * [Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
+
+---
+
+# Apple News
 ## 简介
   * 保持模块启用,即可正常使用「Apple News」。
 

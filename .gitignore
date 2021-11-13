@@ -4,3 +4,6 @@ com_apple_MobileAsset_SharingDeviceAssets.xml
 com_apple_MobileAsset_LinguisticData.xml
 com_apple_MobileAsset_GeoPolygonDataAssets.xml
 nearest.json
+js/configurationsTW.js
+js/configurationsUS.js
+js/configurationsUSiphone.js
