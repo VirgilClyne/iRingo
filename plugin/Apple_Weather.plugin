@@ -2,7 +2,7 @@
 #!desc=切换空气质量数据源为waqi.info，并更改标准为AQI(US)
 
 [Script]
-http-response ^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather.*(include=[a-z,_]{1,}|dataSets=[A-Za-z,]{1,}).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
 
 [MITM]
 hostname = weather-data.apple.com
