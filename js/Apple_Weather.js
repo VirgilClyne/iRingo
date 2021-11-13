@@ -134,6 +134,7 @@ function getToken(idx) {
 
 // Step 5
 // Get Nearest Observation Station AQI Data
+// https://api.waqi.info/api/feed/@station.uid/now.json
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
 function getStation(token = "na", idx, timeout = 5) {
     return new Promise((resove) => {
