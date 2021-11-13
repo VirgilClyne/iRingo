@@ -102,9 +102,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 ## 功能列表
   * 在以下位置及功能中可用: 
     - [x] 天气(`WeatherKit_Weather_iOS_Version XX.X`)
-    - [x] 天气的`下一小时降水强度`(`WeatherKit_weatherd_iOS_Version`)
+    - [ ] 天气的`下一小时降水强度`(`WeatherKit_weatherd_iOS_Version`)
     - [x] 地图(`Maps_WeatherFoundation`)
-    - [x] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
+    - [ ] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
   * 切换逻辑
     * 切换所有`和风天气`的`空气质量`信息为[World Air Quality Index Project](https://waqi.info/)
     * 填补全球没有`空气质量`信息的为[World Air Quality Index Project](https://waqi.info/)  
