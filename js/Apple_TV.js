@@ -127,7 +127,7 @@ function outputData(api, platform, region) {
                 "type": "Root",
                 "url": "https:\/\/tv.apple.com\/kids"
             },
-            "type": "Sports"
+            "type": "Kids"
         };
         configurations.data.applicationProps.tabs[6] = {
             "title": "资料库",
