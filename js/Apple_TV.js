@@ -33,9 +33,13 @@ function outputData(api, platform, region) {
     let body = $response.body
     let configurations = JSON.parse(body);
 
-    if (platform == "desktop") OriginalsTitle = "Apple TV+"
-    else if (platform == "iphone") OriginalsTitle = "原创内容"
-    else OriginalsTitle = "Apple TV+"
+    if (platform == "desktop") OriginalsTitle = "Apple TV+";
+    else if (platform == "iphone") OriginalsTitle = "原创内容";
+    else if (platform == "ipad") OriginalsTitle = "原创内容";
+    else if (platform == "appletv") OriginalsTitle = "Apple TV+";
+    else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
+    else if (platform == "web") OriginalsTitle = "Apple TV+";
+    else OriginalsTitle = "Apple TV+";
 
     if (api == "v1") $done()
     else if (api == "v2") $done()
@@ -112,11 +116,25 @@ function outputData(api, platform, region) {
             "type": "Sports"
         };
         configurations.data.applicationProps.tabs[5] = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/kids"
+            ],
+            "title": "儿童",
+            "destinationType": "Target",
+            "secondaryEnabled": true,
+            "target": {
+                "id": "tahoma_kids",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/kids"
+            },
+            "type": "Sports"
+        };
+        configurations.data.applicationProps.tabs[6] = {
             "title": "资料库",
             "type": "Library",
             "destinationType": "Client"
         };
-        configurations.data.applicationProps.tabs[6] = {
+        configurations.data.applicationProps.tabs[7] = {
             "universalLinks": [
                 "https:\/\/tv.apple.com\/search"
             ],
@@ -150,8 +168,8 @@ function outputData(api, platform, region) {
             "topShelf": true,
             "unw": true,
             "imageBasedSubtitles": true,
-            "ageVerification": true,
-            "seasonTitles": true
+            "ageVerification": false,
+            "seasonTitles": false
         };
         configurations.data.userProps.activeUser = true;
         //configurations.data.userProps.utsc = "1:18943";
