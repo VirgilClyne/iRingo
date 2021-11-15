@@ -7,7 +7,7 @@
 # Redirect TV app language to zh-Hans
 (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(.*)(locale=[\w-_]{2,})(.*) $1$2$3$4locale=zh-Hans$6 header
 # Redirect TV app Sports tab to US
-(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/sports)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5locale=zh-Hans$7sf=143441$9 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)?(\/sports)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5$6locale=zh-Hans$8sf=143441$10 header
 
 [Script]
 # Enable TV app All Tabs
