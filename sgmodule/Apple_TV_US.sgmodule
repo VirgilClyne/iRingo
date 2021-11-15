@@ -1,4 +1,4 @@
-#!name= Enable Apple TV app
+#!name= Redirect Apple TV app to 🇺🇸US
 #!desc=(BETA) 解锁TV app全功能：全部使用🇺🇸US内容页面，优先简体中文(zh-Hans)
 
 [URL Rewrite]
