@@ -136,7 +136,7 @@ function getToken(idx) {
 // Get Nearest Observation Station AQI Data
 // https://api.waqi.info/api/feed/@station.uid/now.json
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
-function getStation(token = "na", idx, timeout = 5) {
+function getStation(token = "na", idx, timeout = 5000) {
     return new Promise((resove) => {
         setTimeout(() => {
             const url = { url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`, body: `token=${token}&id=${idx}`, headers: $.VAL_headers }
