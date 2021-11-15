@@ -40,20 +40,7 @@ function outputData(api, platform, region) {
         //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
         configurations.data.applicationProps.tabs = createTabsGroup(platform);
         configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-        configurations.data.applicationProps.enabledClientFeatures = [
-            {
-                "name": "expanse",
-                "domain": "tvapp"
-            },
-            {
-                "name": "syndication",
-                "domain": "tvapp"
-            },
-            {
-                "name": "snwpcr",
-                "domain": "tvapp"
-            }
-        ];
+        configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
         configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
         //configurations.data.applicationProps.storefront.storefrontId = 143470;
         configurations.data.applicationProps.featureEnablers = {
