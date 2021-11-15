@@ -38,8 +38,7 @@ function outputData(api, platform, region) {
     else if (api == "v3") {
         //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
         //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-        if (platform == "desktop") configurations.data.applicationProps.tabs = createTabsGroup(WatchNow, Originals, Movies, TV, Sports, Library, Search);
-        else configurations.data.applicationProps.tabs = createTabsGroup(WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search);
+        configurations.data.applicationProps.tabs = createTabsGroup(platform);
         configurations.data.applicationProps.tvAppEnabledInStorefront = true;
         configurations.data.applicationProps.enabledClientFeatures = [
             {
