@@ -3,10 +3,10 @@
 
 [URL Rewrite]
 # TV app Watch Now tab
-#(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/watchNow)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5$6locale=zh-Hans$8sf=143441$10 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/watchNow)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5$6locale=zh-Hans$8sf=143441$10 header
 # TV app Movies tab
-#(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/movies)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5$6locale=zh-Hans$8sf=143441$10 header
-#(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/movies)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5locale=zh-Hans$7sf=143441$9 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/movies)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5$6locale=zh-Hans$8sf=143441$10 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/movies)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5locale=zh-Hans$7sf=143441$9 header
 # TV app TV Shows tab
 (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/tv)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5$6locale=zh-Hans$8sf=143441$10 header
 (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/shows)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5locale=zh-Hans$7sf=143441$9 header
