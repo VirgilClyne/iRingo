@@ -368,8 +368,8 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [x] macOS
     - [x] iPad
     - [x] iPhone
-    - [x] Apple TV (需Surge for Mac路由模式)
-    - [ ] Android TV (需Surge for Mac路由模式) (待测试)
+    - [x] Apple TV (需Surge for Mac`网关模式`)
+    - [ ] Android TV (需Surge for Mac`网关模式`) (待测试)
     - [ ] Web(待测试)
   * 分类页面
     - [x] 立即观看
