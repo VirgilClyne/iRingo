@@ -33,14 +33,6 @@ function outputData(api, platform, region) {
     let body = $response.body
     let configurations = JSON.parse(body);
 
-    if (platform == "desktop") OriginalsTitle = "Apple TV+";
-    else if (platform == "iphone") OriginalsTitle = "原创内容";
-    else if (platform == "ipad") OriginalsTitle = "原创内容";
-    else if (platform == "appletv") OriginalsTitle = "Apple TV+";
-    else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
-    else if (platform == "web") OriginalsTitle = "Apple TV+";
-    else OriginalsTitle = "Apple TV+";
-
     if (api == "v1") $done()
     else if (api == "v2") $done()
     else if (api == "v3") {
@@ -85,7 +77,15 @@ function outputData(api, platform, region) {
 
 // Step 2.1
 // Create Tabs Group
-function createTabsGroup(type) {
+function createTabsGroup(platform) {
+    if (platform == "desktop") OriginalsTitle = "Apple TV+";
+    else if (platform == "iphone") OriginalsTitle = "原创内容";
+    else if (platform == "ipad") OriginalsTitle = "原创内容";
+    else if (platform == "appletv") OriginalsTitle = "Apple TV+";
+    else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
+    else if (platform == "web") OriginalsTitle = "Apple TV+";
+    else OriginalsTitle = "Apple TV+";
+
     let WatchNow = {
         "universalLinks": [
             "https:\/\/tv.apple.com\/watch-now"
@@ -187,7 +187,15 @@ function createTabsGroup(type) {
         },
         "type": "Search"
     };
-    let Tabs = [type];
+
+    if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
+    else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+    else if (platform == "ipad") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+    else if (platform == "appletv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+    else if (platform == "atv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+    else if (platform == "web") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+    else Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+    
     return Tabs;
 };
 
