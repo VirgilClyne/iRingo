@@ -64,6 +64,8 @@ function outputData(api, platform, region) {
 // Step 2.1
 // Create Tabs Group
 function createTabsGroup(platform) {
+    OriginalsTitle = (platform == "iphone" || platform == "ipad") ? "原创内容" : "Apple TV+";
+    /*
     if (platform == "desktop") OriginalsTitle = "Apple TV+";
     else if (platform == "iphone") OriginalsTitle = "原创内容";
     else if (platform == "ipad") OriginalsTitle = "原创内容";
@@ -71,6 +73,7 @@ function createTabsGroup(platform) {
     else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
     else if (platform == "web") OriginalsTitle = "Apple TV+";
     else OriginalsTitle = "Apple TV+";
+    */
 
     let WatchNow = {
         "universalLinks": [
