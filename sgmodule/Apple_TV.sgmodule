@@ -2,13 +2,15 @@
 #!desc=(BETA) 解锁TV app全功能并强制优先使用简体中文(zh-Hans)
 
 [URL Rewrite]
-# Switch CN Apple TV configurations to TW
+# Switch CN TV configurations to TW
 # (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/configurations)(.*)(region=CN)(.*) $1$2$3$4$5region=TW$7 header
-# Redirect Apple TV app to zh-Hans
+# Redirect TV app language to zh-Hans
 (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(.*)(locale=[\w-_]{2,})(.*) $1$2$3$4locale=zh-Hans$6 header
+# Redirect TV app Sports tab to US
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/sports)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{4,})(.*) $1$2$3$4$5locale=zh-Hans$7sf=143441$9 header
 
 [Script]
-# Enable Apple TV app All Tabs
+# Enable TV app All Tabs
 http-response ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_TV.js, requires-body=true, timeout=10, tag=Apple_TV
 
 [MITM]
