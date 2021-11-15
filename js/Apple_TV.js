@@ -129,6 +129,7 @@ function outputData(api, platform, region) {
             },
             "type": "Kids"
         };
+        else configurations.data.applicationProps.tabs[5] = {};
         configurations.data.applicationProps.tabs[6] = {
             "title": "资料库",
             "type": "Library",
