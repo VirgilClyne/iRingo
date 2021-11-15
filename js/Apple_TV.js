@@ -115,7 +115,7 @@ function outputData(api, platform, region) {
             },
             "type": "Sports"
         };
-        configurations.data.applicationProps.tabs[5] = {
+        if (platform != "desktop") configurations.data.applicationProps.tabs[5] = {
             "universalLinks": [
                 "https:\/\/tv.apple.com\/kids"
             ],
