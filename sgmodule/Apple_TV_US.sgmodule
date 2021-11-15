@@ -1,5 +1,5 @@
 #!name= Enable Apple TV app
-#!desc=(BETA) 解锁TV app全功能并全部使用🇺🇸US内容和优先简体中文(zh-Hans)
+#!desc=(BETA) 解锁TV app全功能：全部使用🇺🇸US内容页面，优先简体中文(zh-Hans)
 
 [URL Rewrite]
 # TV app Watch Now tab
