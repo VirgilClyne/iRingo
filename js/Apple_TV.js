@@ -1,192 +1,205 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-//let countryCode = "TW";
 const $ = new Env('Apple_TV');
+const url = $request.url;
 
-/*
-if (typeof $argument != "undefined") {
-    let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-    console.log(JSON.stringify(arg));
-    countryCode = arg.countryCode;
-};
-*/
+const path1 = "/configurations";
+const path2 = "/favorites";
 
-!(async () => {
-    await getOrigin($request.url)
-    await outputData($.apiVer, $.platform, $.region)
-})()
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done())
-
-// Step 1
-// Get Origin Parameter
-function getOrigin(url) {
-    const Regular = /^https?:\/\/(uts-api)\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*pfm=(\w{2,}).*region=([A-Z]{2}).*/;
-    [$.url, $.dataServer, $.apiVer, $.platform, $.region] = url.match(Regular);
-    $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, $.dataServer, $.apiVer, $.platform, $.region, '')
-};
-
-// Step 2
-// Output Data
-function outputData(api, platform, region) {
-    let body = $response.body
-    let configurations = JSON.parse(body);
-
-    if (api == "v1") $done()
-    else if (api == "v2") $done()
-    else if (api == "v3") {
-        //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
-        //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-        configurations.data.applicationProps.tabs = createTabsGroup(platform);
-        configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-        configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
-        configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
-        //configurations.data.applicationProps.storefront.storefrontId = 143470;
-        configurations.data.applicationProps.featureEnablers = {
-            "topShelf": true,
-            "unw": true,
-            "imageBasedSubtitles": true,
-            "ageVerification": false,
-            "seasonTitles": false
-        };
-        configurations.data.userProps.activeUser = true;
-        //configurations.data.userProps.utsc = "1:18943";
-        configurations.data.userProps.country = region;
-        configurations.data.userProps.gac = true;
-    }
-    else $done();
-    body = JSON.stringify(configurations);
-    $.log(`🎉 ${$.name}, outputData, Finish`, '')
-    $done({ body });
-};
-
-// Step 2.1
-// Create Tabs Group
-function createTabsGroup(platform) {
-    OriginalsTitle = (platform == "iphone" || platform == "ipad") ? "原创内容" : "Apple TV+";
-    /*
-    if (platform == "desktop") OriginalsTitle = "Apple TV+";
-    else if (platform == "iphone") OriginalsTitle = "原创内容";
-    else if (platform == "ipad") OriginalsTitle = "原创内容";
-    else if (platform == "appletv") OriginalsTitle = "Apple TV+";
-    else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
-    else if (platform == "web") OriginalsTitle = "Apple TV+";
-    else OriginalsTitle = "Apple TV+";
-    */
-
-    let WatchNow = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/watch-now"
-        ],
-        "title": "立即观看",
-        "destinationType": "Target",
-        "target": {
-            "id": "tahoma_watchnow",
-            "type": "Root",
-            "url": "https:\/\/tv.apple.com\/watch-now"
-        },
-        "type": "WatchNow"
-    };
-    let Originals = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/channel\/tvs.sbd.4000",
-            "https:\/\/tv.apple.com\/atv"
-        ],
-        "title": OriginalsTitle,
-        "destinationType": "Target",
-        "target": {
-            "id": "tvs.sbd.4000",
-            "type": "Brand",
-            "url": "https:\/\/tv.apple.com\/us\/channel\/tvs.sbd.4000"
-        },
-        "type": "Originals"
-    };
-    let Movies = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/movies"
-        ],
-        "title": "电影",
-        "destinationType": "Target",
-        "secondaryEnabled": true,
-        "target": {
-            "id": "tahoma_movies",
-            "type": "Root",
-            "url": "https:\/\/tv.apple.com\/movies"
-        },
-        "type": "Movies"
-    };
-    let TV = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/tv-shows"
-        ],
-        "title": "电视节目",
-        "destinationType": "Target",
-        "secondaryEnabled": true,
-        "target": {
-            "id": "tahoma_tvshows",
-            "type": "Root",
-            "url": "https:\/\/tv.apple.com\/tv-shows"
-        },
-        "type": "TV"
-    };
-    let Sports = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/sports"
-        ],
-        "title": "体育节目",
-        "destinationType": "Target",
-        "secondaryEnabled": true,
-        "target": {
-            "id": "tahoma_sports",
-            "type": "Root",
-            "url": "https:\/\/tv.apple.com\/sports"
-        },
-        "type": "Sports"
-    };
-    let Kids = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/kids"
-        ],
-        "title": "儿童",
-        "destinationType": "Target",
-        "secondaryEnabled": true,
-        "target": {
-            "id": "tahoma_kids",
-            "type": "Root",
-            "url": "https:\/\/tv.apple.com\/kids"
-        },
-        "type": "Kids"
-    };
-    let Library = {
-        "title": "资料库",
-        "type": "Library",
-        "destinationType": "Client"
-    };
-    let Search = {
-        "universalLinks": [
-            "https:\/\/tv.apple.com\/search"
-        ],
-        "title": "搜索",
-        "destinationType": "Target",
-        "target": {
-            "id": "tahoma_searchlanding",
-            "type": "Root",
-            "url": "https:\/\/tv.apple.com\/search"
-        },
-        "type": "Search"
-    };
-
-    if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
-    else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "ipad") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "appletv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "atv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "web") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+if (url.indexOf(path1) != -1) {
+    !(async () => {
+        await getOrigin(url)
+        await outputData($.apiVer, $.platform, $.region)
+    })()
+        .catch((e) => $.logErr(e))
+        .finally(() => $.done())
     
-    return Tabs;
+    // Step 1
+    // Get Origin Parameter
+    function getOrigin(url) {
+        const Regular = /^https?:\/\/(uts-api)\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*pfm=(\w{2,}).*region=([A-Z]{2}).*/;
+        [$.url, $.dataServer, $.apiVer, $.platform, $.region] = url.match(Regular);
+        $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, $.dataServer, $.apiVer, $.platform, $.region, '')
+    };
+    
+    // Step 2
+    // Output Data
+    function outputData(api, platform, region) {
+        let body = $response.body
+        let configurations = JSON.parse(body);
+    
+        if (api == "v1") $done()
+        else if (api == "v2") $done()
+        else if (api == "v3") {
+            //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
+            //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
+            configurations.data.applicationProps.tabs = createTabsGroup(platform);
+            configurations.data.applicationProps.tvAppEnabledInStorefront = true;
+            configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
+            configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
+            //configurations.data.applicationProps.storefront.storefrontId = 143470;
+            configurations.data.applicationProps.featureEnablers = {
+                "topShelf": true,
+                "unw": true,
+                "imageBasedSubtitles": true,
+                "ageVerification": false,
+                "seasonTitles": false
+            };
+            configurations.data.userProps.activeUser = true;
+            //configurations.data.userProps.utsc = "1:18943";
+            configurations.data.userProps.country = region;
+            configurations.data.userProps.gac = true;
+        }
+        else $done();
+        body = JSON.stringify(configurations);
+        $.log(`🎉 ${$.name}, outputData, Finish`, '')
+        $done({ body });
+    };
+    
+    // Step 2.1
+    // Create Tabs Group
+    function createTabsGroup(platform) {
+        OriginalsTitle = (platform == "iphone" || platform == "ipad") ? "原创内容" : "Apple TV+";
+        /*
+        if (platform == "desktop") OriginalsTitle = "Apple TV+";
+        else if (platform == "iphone") OriginalsTitle = "原创内容";
+        else if (platform == "ipad") OriginalsTitle = "原创内容";
+        else if (platform == "appletv") OriginalsTitle = "Apple TV+";
+        else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
+        else if (platform == "web") OriginalsTitle = "Apple TV+";
+        else OriginalsTitle = "Apple TV+";
+        */
+    
+        let WatchNow = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/watch-now"
+            ],
+            "title": "立即观看",
+            "destinationType": "Target",
+            "target": {
+                "id": "tahoma_watchnow",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/watch-now"
+            },
+            "type": "WatchNow"
+        };
+        let Originals = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/channel\/tvs.sbd.4000",
+                "https:\/\/tv.apple.com\/atv"
+            ],
+            "title": OriginalsTitle,
+            "destinationType": "Target",
+            "target": {
+                "id": "tvs.sbd.4000",
+                "type": "Brand",
+                "url": "https:\/\/tv.apple.com\/us\/channel\/tvs.sbd.4000"
+            },
+            "type": "Originals"
+        };
+        let Movies = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/movies"
+            ],
+            "title": "电影",
+            "destinationType": "Target",
+            "secondaryEnabled": true,
+            "target": {
+                "id": "tahoma_movies",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/movies"
+            },
+            "type": "Movies"
+        };
+        let TV = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/tv-shows"
+            ],
+            "title": "电视节目",
+            "destinationType": "Target",
+            "secondaryEnabled": true,
+            "target": {
+                "id": "tahoma_tvshows",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/tv-shows"
+            },
+            "type": "TV"
+        };
+        let Sports = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/sports"
+            ],
+            "title": "体育节目",
+            "destinationType": "Target",
+            "secondaryEnabled": true,
+            "target": {
+                "id": "tahoma_sports",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/sports"
+            },
+            "type": "Sports"
+        };
+        let Kids = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/kids"
+            ],
+            "title": "儿童",
+            "destinationType": "Target",
+            "secondaryEnabled": true,
+            "target": {
+                "id": "tahoma_kids",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/kids"
+            },
+            "type": "Kids"
+        };
+        let Library = {
+            "title": "资料库",
+            "type": "Library",
+            "destinationType": "Client"
+        };
+        let Search = {
+            "universalLinks": [
+                "https:\/\/tv.apple.com\/search"
+            ],
+            "title": "搜索",
+            "destinationType": "Target",
+            "target": {
+                "id": "tahoma_searchlanding",
+                "type": "Root",
+                "url": "https:\/\/tv.apple.com\/search"
+            },
+            "type": "Search"
+        };
+    
+        Tabs = (platform == "desktop") ? [WatchNow, Originals, Movies, TV, Sports, Library, Search] : [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        /*
+        if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
+        else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        else if (platform == "ipad") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        else if (platform == "appletv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        else if (platform == "atv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        else if (platform == "web") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        else Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        */
+        return Tabs;
+    };
 };
+
+if (url.indexOf(path2) != -1) {
+    let body = $request.body
+    let favorites = body;
+    body = favorites.replace(sf=/[\d]{6}/g,sf=143441);
+    $.log(`🎉 ${$.name}, redirectFavorites, Finish`, `data = ${body}`, '')
+    /*
+    const Regular = /(.*)(locale=[\w-_]{2,})(.*)(pfm=[\w]{3,})(.*)(sf=[\d]{6})(.*)/;
+    [$.url, $.group1, $.locale, $.group3, $.platform, $.group5, $.storefront, group7] = url.match(Regular);
+    console.log('favorites');
+    */
+    $done({ body });
+}
+
 
 /***************** Env *****************/
 // prettier-ignore
