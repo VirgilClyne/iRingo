@@ -10,7 +10,7 @@ const path2 = "/favorites";
 if (url.indexOf(path1) != -1) {
     !(async () => {
         await getOrigin(url)
-        await outputData($.apiVer, $.platform, $.region)
+        await outputData($.apiVer, $.caller, $.platform, $.region)
     })()
         .catch((e) => $.logErr(e))
         .finally(() => $.done())
@@ -20,12 +20,12 @@ if (url.indexOf(path1) != -1) {
     function getOrigin(url) {
         const Regular = /^https?:\/\/(uts-api|uts-api-siri)\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*caller=(wlk|js|com\.apple\.iTunes).*pfm=(\w{2,}).*(?:region|country)=([A-Z]{2})(?:.*locale=([\w-_]{2,}))?.*/;
         [$.url, $.dataServer, $.apiVer, $.caller, $.platform, $.region, $.locale] = url.match(Regular);
-        $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.platform}, ${$.region}, ${$.locale}`, '')
+        $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.caller}, ${$.platform}, ${$.region}, ${$.locale}`, '')
     };
     
     // Step 2
     // Output Data
-    function outputData(api, platform, region) {
+    function outputData(api, caller, platform, region) {
         let body = $response.body
         let configurations = JSON.parse(body);
     
@@ -34,7 +34,7 @@ if (url.indexOf(path1) != -1) {
         else if (api == "v3") {
             //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
             //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-            configurations.data.applicationProps.tabs = createTabsGroup(platform);
+            configurations.data.applicationProps.tabs = createTabsGroup(caller, platform);
             configurations.data.applicationProps.tvAppEnabledInStorefront = true;
             configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
             configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
@@ -59,7 +59,7 @@ if (url.indexOf(path1) != -1) {
     
     // Step 2.1
     // Create Tabs Group
-    function createTabsGroup(platform) {
+    function createTabsGroup(caller, platform) {
         OriginalsTitle = (platform == "iphone" || platform == "ipad") ? "原创内容" : "Apple TV+";
         /*
         if (platform == "desktop") OriginalsTitle = "Apple TV+";
@@ -172,8 +172,9 @@ if (url.indexOf(path1) != -1) {
             },
             "type": "Search"
         };
-    
+        
         Tabs = (platform == "desktop") ? [WatchNow, Originals, Movies, TV, Sports, Library, Search] : [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+        Tabs = (caller == "com.apple.iTunes") ? [WatchNow, Originals, Movies, TV, Kids, Library, Search] : [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         /*
         if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
         else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
