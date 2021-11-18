@@ -18,9 +18,9 @@ if (url.indexOf(path1) != -1) {
     // Step 1
     // Get Origin Parameter
     function getOrigin(url) {
-        const Regular = /^https?:\/\/(uts-api)\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*pfm=(\w{2,}).*region=([A-Z]{2}).*/;
-        [$.url, $.dataServer, $.apiVer, $.platform, $.region] = url.match(Regular);
-        $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, $.dataServer, $.apiVer, $.platform, $.region, '')
+        const Regular = /^https?:\/\/(uts-api|uts-api-siri)\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*caller=(wlk|js|com\.apple\.iTunes).*pfm=(\w{2,}).*(?:region|country)=([A-Z]{2})(?:.*locale=([\w-_]{2,}))?.*/;
+        [$.url, $.dataServer, $.apiVer, $.caller, $.platform, $.region, $.locale] = url.match(Regular);
+        $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.platform}, ${$.region}, ${$.locale}`, '')
     };
     
     // Step 2
