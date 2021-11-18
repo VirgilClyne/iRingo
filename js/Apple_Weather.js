@@ -27,7 +27,7 @@ function getOrigin(url) {
     const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
     [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
     //return parameter = $request.url.match(url);
-    $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode, '')
+    $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.language}, ${$.lat}, ${$.lng}, ${$.countryCode}`, '')
 }
 
 // Step 2
