@@ -2,9 +2,9 @@
 #!desc=解锁TV app全功能：使用🇺🇸US「体育节目」和「儿童」页面，优先简体中文(zh-Hans)
 
 [URL Rewrite]
-# TV app Watch Now tab, Redirect Desktop Platform to iPad
-(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/watchNow)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8$9$10$11$12 header
-(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/shelves)(\/uts.col.UpNext)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8pfm=ipad$10$11$12 header
+# TV app Watch Now tab, Redirect Desktop Platform to AppleTV
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/watchNow)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8pfm=appletv$10$11$12 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/shelves)(\/uts.col.UpNext)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8pfm=appletv$10$11$12 header
 # TV app TV+ tab, no-redirect
 # (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Channels)(\/tvs.sbd.4000)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8$9$10 header
 # TV app Movies tab, Redirect desktop Platform to iPad
