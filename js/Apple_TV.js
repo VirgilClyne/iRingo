@@ -173,17 +173,20 @@ if (url.indexOf(path1) != -1) {
             "type": "Search"
         };
         
+        /*
         Tabs = (platform == "desktop") ? [WatchNow, Originals, Movies, TV, Sports, Library, Search] : [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         Tabs = (caller == "com.apple.iTunes") ? [WatchNow, Originals, Movies, TV, Kids, Library, Search] : [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-        /*
-        if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
+        */
+
+        if (caller == "com.apple.iTunes" && platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
+        else if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
         else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else if (platform == "ipad") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else if (platform == "appletv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else if (platform == "atv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else if (platform == "web") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-        */
+
         return Tabs;
     };
 };
