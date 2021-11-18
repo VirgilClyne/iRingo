@@ -3,8 +3,8 @@
 
 [URL Rewrite]
 # TV app Watch Now tab, Redirect Desktop Platform to iPad
-(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/watchNow)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8pfm=appletv$10$11$12 header
-(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/shelves)(\/uts.col.UpNext)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8pfm=appletv$10$11$12 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Roots)(\/watchNow)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8$9$10$11$12 header
+(^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/shelves)(\/uts.col.UpNext)(.*)(locale=[\w-_]{2,})(.*)(pfm=desktop)(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8pfm=ipad$10$11$12 header
 # TV app TV+ tab, no-redirect
 # (^https?:\/\/uts-api\.itunes\.apple\.com)(\/uts\/)(v1|v2|v3)(\/canvases\/Channels)(\/tvs.sbd.4000)(.*)(locale=[\w-_]{2,})(.*)(sf=[\d]{6})(.*) $1$2$3$4$5$6locale=zh-Hans$8$9$10 header
 # TV app Movies tab, Redirect desktop Platform to iPad
