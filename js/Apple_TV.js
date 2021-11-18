@@ -179,7 +179,7 @@ if (url.indexOf(path1) != -1) {
         */
 
         if (caller == "com.apple.iTunes" && platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
-        else if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
+        else if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
         else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else if (platform == "ipad") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
         else if (platform == "appletv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
