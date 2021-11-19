@@ -130,8 +130,8 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     * 空气质量数据:[Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
   * Surge:
     * 空气质量数据:[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
-    * 空气质量地图(可用，可行性验证，未修正图层和坐标):[Apple_Weather_Map.beta.sgmodule](./sgmodule/Apple_Weather_Map.beta.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
-    * 空气质量地图(施工中，不可用，修正坐标和图层):[Apple_Weather_Map.alpha.sgmodule](./sgmodule/Apple_Weather_Map.alpha.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
+    * 空气质量地图(可用，可行性验证，未修正图层和坐标):[Apple_Weather_Map.sgmodule](./sgmodule/Apple_Weather_Map.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
+    * 空气质量地图(施工中，不可用，修正坐标和图层):[Apple_Weather_Map.beta.sgmodule](https://github.com/VirgilClyne/iRingo/blob/beta/sgmodule/Apple_Weather_Map.beta.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
 
 ---
 
@@ -372,17 +372,19 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     4. 重新输入`Apple ID`与`密码`登入（🇨🇳CN地区账号无效）
     5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
       1. `Apple TV`的`https://uts-api.itunes.apple.com/uts/v3/configitions`链接
-    6. 查看`Apple TV`app的`立即观看`页面是否有`电影`、`电视节目`、`体育节目`、`儿童`四个入口
-    7. 正常使用
+    6. 查看`Apple TV`app的`立即观看`页面是否有`电影`、`电视节目`、`体育节目`、`儿童`四个二级入口(iOS/iPadOS)
+    7. 查看`Apple TV`app的顶部是否有`立即观看`、`tv+`、`电影`、`电视节目`、`体育节目`、`资料库`五个标签页按钮(macOS/tvOS)
+    8. 如没有请重开一次app
+    9. 正常使用
 
 ## 功能列表
   * 硬件及平台
     - [x] macOS
     - [x] iPad
     - [x] iPhone
-    - [x] Apple TV (需Surge for Mac`网关模式`)
-    - [ ] Android TV (需Surge for Mac`网关模式`) (待测试)
-    - [ ] Web(待测试)
+    - [x] Apple TV (需Surge for Mac`网关模式`或Quantumult X`代理服务器`) (Quantumult X效果待测试，不确定是否可用)
+    - [ ] Android TV (需Surge for Mac`网关模式`或Quantumult X`代理服务器`) (Android TV效果待测试，不确定是否可用)
+    - [ ] Web(待测试，不确定是否可用)
   * 分类页面
     - [x] 立即观看
     - [x] TV+
@@ -395,7 +397,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 安装链接
   * Loon:
+    * [Apple_TV.plugin](./plugin/Apple_TV.plugin?raw=true " Enable Apple TV app") 
   * Quantumult X:
+    * [Apple_TV.qxrewrite](./qxrewrite/Apple_TV.qxrewrite?raw=true " Enable Apple TV app")
   * Surge: 
     * [Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
 
@@ -427,12 +431,12 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     * 关闭`✈️飞行模式`后，如再次触发了基于SIM卡的[移动设备网络代码](https://zh.wikipedia.org/wiki/移动设备网络代码)「MCC / MNC」检测，则Apple News会回到[解锁状态说明](#解锁状态说明)中的`解锁失效`状态。
 
 ## 解锁状态说明
-|  未解锁  | 解锁成功 | 解锁失效 | 
+|  锁定状态  | 解锁成功 | 解锁失效 | 
 |   :-:   |   :-:   |   :-:   |
 | 未通过地区检测  | 已成功通过地区检测 | 通过检测后，再次触发检测时未通过检测  |
 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  | `gateway.icloud.com`需走代理才能完整加载内容 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  |
 |<p> Apple News isn't supported in your current region. </p>|<p> **Feed Unavailable**  <br> There may be a problem with the sever or network. Plase try again later. </p>|<p> **Feed Unavailable** <br> Apple News isn't supported in your current region. </p>|
-|![🔒未解锁截图](./ScreenShots/Apple%20News%20-%20Locked%20-%20iOS.jpeg?raw=true "Apple News - Locked - iOS")|![🔓解锁成功截图](./ScreenShots/Apple%20News%20-%20Unlock%20Success%20-%20iOS.jpeg?raw=true "Apple News - Unlock Success - iOS")|![🔒解锁失效截图](./ScreenShots/Apple%20News%20-%20Unlock%20Invalid%20-%20iOS.jpeg?raw=true "Apple News - Unlock Invalid - iOS")|
+|![🔒锁定状态截图](./ScreenShots/Apple%20News%20-%20Locked%20-%20iOS.jpeg?raw=true "Apple News - Locked - iOS")|![🔓解锁成功截图](./ScreenShots/Apple%20News%20-%20Unlock%20Success%20-%20iOS.jpeg?raw=true "Apple News - Unlock Success - iOS")|![🔒解锁失效截图](./ScreenShots/Apple%20News%20-%20Unlock%20Invalid%20-%20iOS.jpeg?raw=true "Apple News - Unlock Invalid - iOS")|
 
 
 ## 安装链接
