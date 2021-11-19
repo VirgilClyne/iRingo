@@ -3,11 +3,13 @@ README:https://github.com/VirgilClyne/iRingo
 */
 var url = $request.url;
 
-QueryProcessing(url, variable1, parameter1)
-QueryProcessing(url, variable2, parameter2)
-QueryProcessing(url, variable3, parameter3)
-QueryProcessing(url, variable4, parameter4)
-QueryProcessing(url, variable5, parameter5)
+if (processQuery(url, variable0) == "parameter0") {
+    processQuery(url, variable1, parameter1)
+    processQuery(url, variable2, parameter2)
+}
+processQuery(url, variable3, parameter3)
+processQuery(url, variable4, parameter4)
+processQuery(url, variable5, parameter5)
 
 $done({ url });
 
