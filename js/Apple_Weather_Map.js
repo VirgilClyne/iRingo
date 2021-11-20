@@ -50,15 +50,17 @@ function getOrigin(url) {
 // Convert Geo Coordinates
 function convertGeo(lat, lng) {
     return new Promise((resove) => {
-        const oldCoord = [lat, lng];
+        //const oldCoord = [lat, lng];
         try {
             //wgs84转国测局坐标      
-            wgs84togcj02 = coordtransform.wgs84togcj02(oldCoord[0], oldCoord[1]);
-            $.newCoord = wgs84togcj02;
+            //wgs84togcj02 = coordtransform.wgs84togcj02(lat, lng);
+            gcj02towgs84 = coordtransform.gcj02towgs84(lat, lng);
+            $.newLat = gcj02towgs84[0];
+            $.newLng = gcj02towgs84[1];
         } catch (e) {
-                $.log(`❗️ ${$.name}, convertGeo`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+                $.log(`❗️ ${$.name}, convertGeo`, `Failure`, ` error = ${error || e}`, '')
         } finally {
-                $.log(`🎉 ${$.name}, convertGeo`, `Finish`, `wgs84${oldCoord} => gcj02${$.newCoord}`, '')
+                $.log(`🎉 ${$.name}, convertGeo`, `Finish`, `${lat, lng} =>${$.newLat, $.newLng}`, '')
                 resove()
         }
     })
