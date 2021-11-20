@@ -18,7 +18,7 @@ $done({ url });
 // 合成下面两者，完整版
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
 function processQuery(url, variable, parameter) {
-    console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, url, ``);
+    console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
     if (url.indexOf("?") != -1) {
         if (parameter == undefined) {
             console.log(`getQueryVariable, INPUT: variable: ${variable}`, ``);
