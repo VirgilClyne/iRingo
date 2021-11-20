@@ -30,7 +30,8 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
 
 if (url.search(configurations) != -1) {
     getOrigin(url)
-    outputData($.apiVer, $.caller, $.platform)
+    if ($.caller != 'wta') outputData($.apiVer, $.caller, $.platform)
+    else $.done();
 } else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
     if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'appletv');
     $.done({ url });
@@ -264,7 +265,7 @@ function createTabsGroup(caller, platform) {
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
 function processQuery(url, variable, parameter) {
-    console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, url, ``);
+    console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
     if (url.indexOf("?") != -1) {
         if (parameter == undefined) {
             console.log(`getQueryVariable, INPUT: variable: ${variable}`, ``);
