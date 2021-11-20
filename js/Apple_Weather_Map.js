@@ -15,7 +15,7 @@ $.VAL_headers =  {
 
 !(async () => {
     await getOrigin(url)
-    await ConvertGeo($.lat, $.lng)
+    await convertGeo($.lat, $.lng)
     await outputUrl('usepa-aqi', $.wgs84togcj02[0], $.wgs84togcj02[1], $.alt)
     //await getTiles('usepa-aqi', $.wgs84togcj02[0], $.wgs84togcj02[1], $.alt)
     //await ConvertTiles(png)
@@ -48,10 +48,20 @@ function getOrigin(url) {
 
 // Step 2
 // Convert Geo Coordinates
-function ConvertGeo(lat, lng) {
-//wgs84转国测局坐标
-$.wgs84togcj02 = coordtransform.wgs84togcj02(lat, lng);
-return $.wgs84togcj02
+function convertGeo(lat, lng) {
+    return new Promise((resove) => {
+        const oldCoord = [lat, lng];
+        try {
+            //wgs84转国测局坐标      
+            wgs84togcj02 = coordtransform.wgs84togcj02(oldCoord[0], oldCoord[1]);
+            $.newCoord = wgs84togcj02;
+        } catch (e) {
+                $.log(`❗️ ${$.name}, convertGeo`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+        } finally {
+                $.log(`🎉 ${$.name}, convertGeo`, `Finish`, `wgs84${oldCoord} => gcj02${newCoord}`, '')
+                resove()
+        }
+    })
 };
 
 // Step 3
