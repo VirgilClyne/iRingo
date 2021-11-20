@@ -3,6 +3,7 @@ README:https://github.com/VirgilClyne/iRingo
 */
 
 const $ = new Env('Apple_Weather');
+var url = $request.url;
 $.VAL_headers =  {
     'Content-Type': `application/x-www-form-urlencoded`,
     'Origin': `https://waqi.info`,
@@ -11,7 +12,7 @@ $.VAL_headers =  {
 }
 
 !(async () => {
-    await getOrigin($request.url)
+    await getOrigin(url)
     await getAQIstatus($.apiVer, $response.body)
     await getNearest($.apiVer, $.lat, $.lng)
     await getToken($.idx)
