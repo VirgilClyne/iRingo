@@ -1,8 +1,8 @@
 #!name= Replace Apple Weather with 🇺🇸US @waqi.info
-#!desc=切换空气质量数据源为waqi.info，并更改标准为AQI(US)
+#!desc=(BETA) 切换空气质量数据源为waqi.info，并更改标准为AQI(US)
 
 [Script]
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Apple_Weather.js, requires-body=true, timeout=10, tag=Apple_Weather
 
 [MITM]
 hostname = %APPEND% weather-data.apple.com
