@@ -58,7 +58,7 @@ function convertGeo(lat, lng) {
         } catch (e) {
                 $.log(`❗️ ${$.name}, convertGeo`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
         } finally {
-                $.log(`🎉 ${$.name}, convertGeo`, `Finish`, `wgs84${oldCoord} => gcj02${newCoord}`, '')
+                $.log(`🎉 ${$.name}, convertGeo`, `Finish`, `wgs84${oldCoord} => gcj02${$.newCoord}`, '')
                 resove()
         }
     })
