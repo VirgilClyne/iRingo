@@ -16,7 +16,7 @@ $.VAL_headers =  {
 !(async () => {
     await getOrigin(url)
     await convertGeo($.lat, $.lng)
-    await outputUrl('usepa-aqi', $.wgs84togcj02[0], $.wgs84togcj02[1], $.alt)
+    await outputUrl('usepa-aqi', $.newCoord[0], $.newCoord[1], $.alt)
     //await getTiles('usepa-aqi', $.wgs84togcj02[0], $.wgs84togcj02[1], $.alt)
     //await ConvertTiles(png)
     //await outputData($.Tiles)
