@@ -53,10 +53,9 @@ function convertGeo(lat, lng) {
         //const oldCoord = [lat, lng];
         try {
             //wgs84转国测局坐标      
-            //wgs84togcj02 = coordtransform.wgs84togcj02(lat, lng);
-            gcj02towgs84 = coordtransform.gcj02towgs84(lat, lng);
-            $.newLat = gcj02towgs84[0];
-            $.newLng = gcj02towgs84[1];
+            wgs84togcj02 = coordtransform.wgs84togcj02(lat, lng);
+            $.newLat = wgs84togcj02[0];
+            $.newLng = wgs84togcj02[1];
         } catch (e) {
                 $.log(`❗️ ${$.name}, convertGeo`, `Failure`, ` error = ${error || e}`, '')
         } finally {
