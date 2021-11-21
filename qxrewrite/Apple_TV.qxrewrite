@@ -22,4 +22,4 @@
 # TV Product View, no Redirect
 # ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/view\/product\/.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_TV.js
 
-hostname = %APPEND% uts-api.itunes.apple.com
+hostname = uts-api.itunes.apple.com
