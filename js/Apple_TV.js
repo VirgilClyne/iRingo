@@ -30,8 +30,8 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
 
 if (url.search(configurations) != -1) {
     getOrigin(url)
-    if ($.caller == 'wta') $.done()
-    else outputData($.apiVer, $.caller, $.platform);
+    if ($.caller != 'wta') outputData($.apiVer, $.caller, $.platform)
+    else $.done();
 } else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
     if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'appletv');
     $.done({ url });
@@ -109,7 +109,7 @@ function outputData(api, caller, platform) {
     else if (api == "v3") {
         //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
         //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-        configurations.data.applicationProps.tabs = createTabsGroup(caller, platform, configurations.data.applicationProps.tabs);
+        configurations.data.applicationProps.tabs = createTabsGroup(caller, platform);
         configurations.data.applicationProps.tvAppEnabledInStorefront = true;
         configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
         configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
@@ -121,7 +121,7 @@ function outputData(api, caller, platform) {
             "ageVerification": false,
             "seasonTitles": false
         };
-        //configurations.data.userProps.activeUser = true;
+        configurations.data.userProps.activeUser = true;
         //configurations.data.userProps.utsc = "1:18943";
         //configurations.data.userProps.country = country;
         configurations.data.userProps.gac = true;
@@ -134,7 +134,7 @@ function outputData(api, caller, platform) {
 
 // Funtion 3
 // Create Tabs Group
-function createTabsGroup(caller, platform, tab) {
+function createTabsGroup(caller, platform) {
     OriginalsTitle = (platform == "iphone" || platform == "ipad") ? "原创内容" : "Apple TV+";
     /*
     if (platform == "desktop") OriginalsTitle = "Apple TV+";
@@ -295,24 +295,6 @@ function processQuery(url, variable, parameter) {
         return url;
     }
 };
-
-// Funtion 4
-// 查询替换数组元素
-// https://cloud.tencent.com/developer/ask/31155
-function addTabsGroup(group, type, title, tab, region) {
-    let newTab = group.find((o, i) => {
-        if (o.type === type) {
-            arr[i] = tab;
-            if (region != 'CN') arr[i].title = title
-            return true; // stop searching
-        }
-        else {
-            group.unshift(tab);
-            return true; // stop searching
-        }
-    });
-    return newTab;
-}
 
 /***************** Env *****************/
 // prettier-ignore
