@@ -16,7 +16,8 @@ URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,🇺🇸美
 
 [URL Rewrite]
 # Redirect Apple News, Redirect StoreFront to US (143441)
-(^https?:\/\/news-client-search\.ls\.apple\.com)(\/v1\/search\?)(.*)(parsecParameters=)(.*)(storeFront%22:%22)([\d]{6})(-[\d]{1,2},[\d]{1,2}%22,)(.*) $1$2$3$4$5$6143441$8$9 header
+# (^https?:\/\/news-client-search\.ls\.apple\.com)(\/v1\/search\?)(.*)(parsecParameters=)(.*)(storeFront%22:%22)([\d]{6})(-[\d]{1,2},[\d]{1,2}%22,)(.*) $1$2$3$4$5$6143441$8$9 header
+(^https?:\/\/news-client-search\.ls\.apple\.com)(\/v1\/search\?)(.*)(storefrontID=[\d]{6})(.*) $1$2$3storefrontID=143441$5 header
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
