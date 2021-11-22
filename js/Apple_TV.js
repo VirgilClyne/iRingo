@@ -266,10 +266,10 @@ function createTabsGroup(caller, platform) {
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
 function processQuery(url, variable, parameter) {
-    console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
+    //console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
     if (url.indexOf("?") != -1) {
         if (parameter == undefined) {
-            console.log(`getQueryVariable, INPUT: variable: ${variable}`, ``);
+            //console.log(`getQueryVariable, INPUT: variable: ${variable}`, ``);
             var query = url.split("?")[1];
             var vars = query.split("&");
             for (var i = 0; i < vars.length; i++) {
@@ -282,7 +282,7 @@ function processQuery(url, variable, parameter) {
             console.log(`getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
             return false;
         } else {
-            console.log(`replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
+            //console.log(`replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
             var re = new RegExp('(' + variable + '=)([^&]*)', 'gi')
             var newUrl = url.replace(re, variable + '=' + parameter)
             console.log(`replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
