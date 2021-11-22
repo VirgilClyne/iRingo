@@ -17,4 +17,4 @@ URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,🌑Proxy
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, timeout=10, tag=Apple_News
 
 [MITM]
-hostname = %APPEND% news-client.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com
+hostname = %APPEND% news-client.apple.com, news-client-search.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com

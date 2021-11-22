@@ -14,9 +14,8 @@ if (url.indexOf(path1) != -1) {
         configs.deviceInfo.countryCode = "US";
     body = JSON.stringify(configs);
     console.log('configs');
-};
-
-if (url.indexOf(path2) != -1) {
+    $done({body});
+} else if (url.indexOf(path2) != -1) {
     let async = JSON.parse(body);
         if (async.data.session.mobileData) {
             async.data.session.mobileData.countryCode = "310";
@@ -25,6 +24,5 @@ if (url.indexOf(path2) != -1) {
         };
     body = JSON.stringify(async);
     console.log('async');
-};
-
-$done({body});
+    $done({body});
+} else $done({});
