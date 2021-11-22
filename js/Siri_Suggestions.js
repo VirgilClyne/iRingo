@@ -8,8 +8,8 @@ const locale = processQuery(url, 'locale'); //Region Setting
 const card_locale = locale //Infomation Card Locale, same as Region Setting
 //const siri_locale = processQuery(url, 'siri_locale'); //Siri Locale Setting
 const storefront = processQuery(url, 'storefront') //StoreFront Setting, from App Store Region
-if (storefront) sf = storefront.match(/[\d]{6}/g) //StoreFront ID, from App Store Region
-if (locale) cc = locale.match(/[A-Z]{2}/g) //CountryCode, same as Region Setting
+if (storefront) var sf = storefront.match(/[\d]{6}/g) //StoreFront ID, from App Store Region
+if (locale) var cc = locale.match(/[A-Z]{2}/g) //CountryCode, same as Region Setting
 console.log(`locale=${locale}, esl=, cc=${cc}, card_locale=${card_locale}, siri_locale=, sf=${sf}`, ``);
 
 const path0 = "smoot.apple.cn";
