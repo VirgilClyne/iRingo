@@ -9,20 +9,14 @@ DOMAIN,lookup-api.apple.com,🌑Proxy
 DOMAIN,lookup-api.apple.com.edgekey.net,🌑Proxy
 DOMAIN,e16991.b.akamaiedge.net,🌑Proxy
 
-[URL Rewrite]
+[Script]
 # Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/bag.*)(cc=[A-Z]{2})(.*) $1com$3cc=SG$5 header
-# General Spotlight & Look Up Search (iOS/macOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cc=[A-Z]{2})(.*) $1com$3cc=SG$5 header
-# General Info Card (macOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=[^kg][^tv][^movies])(.*) $1com$3card_locale=zh-Hans_CN$5cc=SG$7$8$9 header
-# Siri Knowledge(Siri资料) Card (Spotlight@macOS & Siri@iOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:kgcn|kg))(.*) $1com$3card_locale=zh-Hans_CN$5cc=SG$7$8$9 header
-# Siri Knowledge(Siri资料) Card (Spotlight@iOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cardDomain=kg)(.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(storefront=[\d]{6})(.*) $1com$3$4$5card_locale=zh-Hans_CN$7cc=SG$9storefront=143441$11 header
-# tv Movies and TV Show Card (macOS)
-(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:tv|movies))(.*)(q=(?:tv|movies)%3A)(.*)(%2F)([a-z]{2}-[A-Z]{2})(.*)(storefront=[\d]{6})(.*) $1com$3card_locale=zh-Hans_CN$5cc=SG$7$8$9$10$11$12zh-US$14storefront=143441$16 header
+http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
+# Spotlight & Look Up Search (iOS/macOS)
+http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
+# Siri Infomation Card (macOS)
+http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
 
 [MITM]
-hostname = %APPEND% *.smoot.apple.com, *.smoot.apple.cn
+hostname = %APPEND% *.smoot.apple.com, *.smoot.apple.cn, -cdn*.smoot.apple.com, -fbs.smoot.apple.com
