@@ -10,7 +10,7 @@ const card_locale = locale //Infomation Card Locale, same as Region Setting
 const storefront = processQuery(url, 'storefront') //StoreFront Setting, from App Store Region
 if (storefront) var sf = storefront.match(/[\d]{6}/g) //StoreFront ID, from App Store Region
 if (locale) var cc = locale.match(/[A-Z]{2}/g) //CountryCode, same as Region Setting
-console.log(`locale=${locale}, esl=, cc=${cc}, card_locale=${card_locale}, siri_locale=, sf=${sf}`, ``);
+console.log(`locale=${locale}, cc=${cc}, card_locale=${card_locale}, storefront=${storefront}`, ``);
 
 const path0 = "smoot.apple.cn";
 const path1 = "/bag?";
@@ -60,7 +60,8 @@ else if (url.indexOf(path3) != -1) {
 }
 else $done({});
 
-
+// Function 1
+// process Query URL
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
 function processQuery(url, variable, parameter) {
@@ -79,16 +80,13 @@ function processQuery(url, variable, parameter) {
             }
             console.log(`getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
             return false;
-        } else if (parameter != undefined) {
+        } else {
             //console.log(`replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
             var re = new RegExp('(' + variable + '=)([^&]*)', 'gi')
             var newUrl = url.replace(re, variable + '=' + parameter)
             //console.log(`replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
             return newUrl
-        } else {
-            console.log(`processQuery, ERROR: No such variable: ${variable}, Skip`, ``);
-            return url;
-        }
+        };
     } else {
         console.log(`processQuery, ERROR: No such URL ,Skip`, url, ``);
         return url;
