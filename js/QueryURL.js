@@ -14,6 +14,7 @@ processQuery(url, variable5, parameter5)
 $done({ url });
 
 // Function 1
+// process Query URL
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
 // 合成下面两者，完整版
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
@@ -33,16 +34,13 @@ function processQuery(url, variable, parameter) {
             }
             console.log(`getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
             return false;
-        } else if (parameter != undefined) {
+        } else {
             console.log(`replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
             var re = new RegExp('(' + variable + '=)([^&]*)', 'gi')
             var newUrl = url.replace(re, variable + '=' + parameter)
             console.log(`replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
             return newUrl
-        } else {
-            console.log(`processQuery, ERROR: No such variable: ${variable}, Skip`, ``);
-            return url;
-        }
+        };
     } else {
         console.log(`processQuery, ERROR: No such URL ,Skip`, url, ``);
         return url;
