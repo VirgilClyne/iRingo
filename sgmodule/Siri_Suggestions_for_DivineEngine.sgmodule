@@ -1,5 +1,5 @@
 #!name= Enable Siri Suggestions
-#!desc=(BETA) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
+#!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
 
 [Rule]
 # > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
@@ -11,13 +11,12 @@ DOMAIN,e16991.b.akamaiedge.net,🌑Proxy
 
 [Script]
 # Redirect Siri Suggestions Service 
-# Bag
-http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
-# Search
-http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
-# Card
-http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
+# Bag (iOS/macOS)
+http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
+# Spotlight & Look Up Search (iOS/macOS)
+http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
+# Siri Infomation Card (macOS)
+http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
 
 [MITM]
-hostname = %APPEND% -cdn.smoot.apple.com, -cdn1.smoot.apple.com, -cdn2.smoot.apple.com, *.smoot.apple.com, *.smoot.apple.cn
-
+hostname = %APPEND% *.smoot.apple.com, *.smoot.apple.cn, -cdn*.smoot.apple.com, -fbs.smoot.apple.com
