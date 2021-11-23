@@ -30,8 +30,8 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
 
 if (url.search(configurations) != -1) {
     getOrigin(url)
-    if ($.caller != 'wta') outputData($.apiVer, $.caller, $.platform)
-    else $.done();
+    if ($.caller == 'wta') $.done() // 丢弃caller=wta的configurations数据
+    else outputData($.apiVer, $.caller, $.platform, $.locale, $.region);
 } else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
     if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'appletv');
     $.done({ url });
@@ -100,7 +100,7 @@ function getOrigin(url) {
 
 // Funtion 2
 // Output Tabs Data
-function outputData(api, caller, platform) {
+function outputData(api, caller, platform, locale, region) {
     let body = $response.body;
     let configurations = JSON.parse(body);
 
@@ -109,7 +109,7 @@ function outputData(api, caller, platform) {
     else if (api == "v3") {
         //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
         //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-        configurations.data.applicationProps.tabs = createTabsGroup(caller, platform);
+        configurations.data.applicationProps.tabs = createTabsGroup(caller, platform, locale, region);
         configurations.data.applicationProps.tvAppEnabledInStorefront = true;
         configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
         configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
@@ -134,23 +134,13 @@ function outputData(api, caller, platform) {
 
 // Funtion 3
 // Create Tabs Group
-function createTabsGroup(caller, platform) {
-    OriginalsTitle = (platform == "iphone" || platform == "ipad") ? "原创内容" : "Apple TV+";
-    /*
-    if (platform == "desktop") OriginalsTitle = "Apple TV+";
-    else if (platform == "iphone") OriginalsTitle = "原创内容";
-    else if (platform == "ipad") OriginalsTitle = "原创内容";
-    else if (platform == "appletv") OriginalsTitle = "Apple TV+";
-    else if (platform == "atv") OriginalsTitle = "Apple TV+"; //Android TV
-    else if (platform == "web") OriginalsTitle = "Apple TV+";
-    else OriginalsTitle = "Apple TV+";
-    */
-
+function createTabsGroup(caller, platform, locale, region) {
+    //构建Tab内容
     let WatchNow = {
         "universalLinks": [
             "https:\/\/tv.apple.com\/watch-now"
         ],
-        "title": "立即观看",
+        "title": "Watch Now",
         "destinationType": "Target",
         "target": {
             "id": "tahoma_watchnow",
@@ -164,7 +154,7 @@ function createTabsGroup(caller, platform) {
             "https:\/\/tv.apple.com\/channel\/tvs.sbd.4000",
             "https:\/\/tv.apple.com\/atv"
         ],
-        "title": OriginalsTitle,
+        "title": "Originals",
         "destinationType": "Target",
         "target": {
             "id": "tvs.sbd.4000",
@@ -177,7 +167,7 @@ function createTabsGroup(caller, platform) {
         "universalLinks": [
             "https:\/\/tv.apple.com\/movies"
         ],
-        "title": "电影",
+        "title": "Movies",
         "destinationType": "Target",
         "secondaryEnabled": true,
         "target": {
@@ -191,7 +181,7 @@ function createTabsGroup(caller, platform) {
         "universalLinks": [
             "https:\/\/tv.apple.com\/tv-shows"
         ],
-        "title": "电视节目",
+        "title": "TV",
         "destinationType": "Target",
         "secondaryEnabled": true,
         "target": {
@@ -205,7 +195,7 @@ function createTabsGroup(caller, platform) {
         "universalLinks": [
             "https:\/\/tv.apple.com\/sports"
         ],
-        "title": "体育节目",
+        "title": "Sports",
         "destinationType": "Target",
         "secondaryEnabled": true,
         "target": {
@@ -219,7 +209,7 @@ function createTabsGroup(caller, platform) {
         "universalLinks": [
             "https:\/\/tv.apple.com\/kids"
         ],
-        "title": "儿童",
+        "title": "Kids",
         "destinationType": "Target",
         "secondaryEnabled": true,
         "target": {
@@ -230,7 +220,7 @@ function createTabsGroup(caller, platform) {
         "type": "Kids"
     };
     let Library = {
-        "title": "资料库",
+        "title": "Library",
         "type": "Library",
         "destinationType": "Client"
     };
@@ -238,7 +228,7 @@ function createTabsGroup(caller, platform) {
         "universalLinks": [
             "https:\/\/tv.apple.com\/search"
         ],
-        "title": "搜索",
+        "title": "Search",
         "destinationType": "Target",
         "target": {
             "id": "tahoma_searchlanding",
@@ -248,6 +238,7 @@ function createTabsGroup(caller, platform) {
         "type": "Search"
     };
 
+    // 设备与平台区别
     if (caller == "com.apple.iTunes" && platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
     else if (caller == "wta" && platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
     else if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
@@ -257,6 +248,25 @@ function createTabsGroup(caller, platform) {
     else if (platform == "atv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
     else if (platform == "web") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
     else Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+
+
+    //简体中文改Tabs语言
+    if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
+    if (esl == "zh_Hans" || region == "CN") {
+        if (platform == "iphone" || platform == "ipad") var maps = new Map([['Watch Now', '立即观看'], ['Originals', '原创内容'], ['Movies', '电影'], ['TV', '电视节目'], ['Sports', '体育节目'], ['Kids', '儿童'], ['Library', '资料库'], ['Search', '搜索']])
+        else var maps = new Map([['Watch Now', '立即观看'], ['Apple TV+', 'Apple TV+'], ['Movies', '电影'], ['TV', '电视节目'], ['Sports', '体育节目'], ['Kids', '儿童'], ['Library', '资料库'], ['Search', '搜索']]);
+        Tabs = Tabs.map(element => { element.title = maps.get(element.title); return element; });
+    };
+    /*
+    if (platform == "desktop" && esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "Apple TV+"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else if (platform == "iphone" && esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "原创内容"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else if (platform == "ipad" && esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "原创内容"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else if (platform == "appletv" && esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "Apple TV+"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else if (platform == "atv" && esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "Apple TV+"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else if (platform == "web" && esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "Apple TV+"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else if (esl == "zh_Hans") { WatchNow.title = "立即观看"; Originals.title = "Apple TV+"; Movies.title = "电影"; TV.title = "电视节目"; Sports.title = "体育节目"; Kids.title = "儿童"; Library.title = "资料库"; Search.title = "搜索" }
+    else 
+    */
 
     return Tabs;
 };
