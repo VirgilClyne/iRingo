@@ -1,13 +1,9 @@
 #!name= Enable Siri Suggestions
-#!desc=(BETA) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
+#!desc=(BETA) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
 
 [Rule]
 # > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
-PROCESS-NAME,LookupViewService,PROXY
-PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService,PROXY
-DOMAIN,lookup-api.apple.com,PROXY
-DOMAIN,lookup-api.apple.com.edgekey.net,PROXY
-DOMAIN,e16991.b.akamaiedge.net,PROXY
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Wikipedia_for_Look_Up.list,PROXY
 
 [Script]
 # Redirect Siri Suggestions Service 

@@ -1,5 +1,5 @@
 #!name= Enable Siri Suggestions
-#!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
+#!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
 
 [Script]
 # Redirect Siri Suggestions Service 
