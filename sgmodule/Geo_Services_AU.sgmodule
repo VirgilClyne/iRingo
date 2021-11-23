@@ -3,7 +3,7 @@
 
 [Script]
 # Response Geo Services to AU
-http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(\/pep\/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services.js, argument=GeoCountryCode=AU, requires-body=false, timeout=10, tag=Geo_Services
+http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(\/pep\/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Geo_Services.js, argument=GeoCountryCode=AU, requires-body=false, tag=Geo_Services
 
 [MITM]
 hostname = %APPEND% gspe1-ssl.ls.apple.com
