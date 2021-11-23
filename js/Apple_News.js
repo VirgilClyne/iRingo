@@ -10,13 +10,14 @@ const path2 = "/analyticseventsv2/async";
 const path3 = "/v1/search?";
 
 if (url.indexOf(path1) != -1) {
+    console.log(path1);
     let configs = JSON.parse(body);
     configs.deviceInfo.preferredLanguages = ["zh-CN", "zh-HK", "zh-US", "en-US"];
     configs.deviceInfo.countryCode = "US";
     body = JSON.stringify(configs);
-    console.log('/v1/configs');
     $done({ body });
 } else if (url.indexOf(path2) != -1) {
+    console.log(path2);
     let async = JSON.parse(body);
     if (async.data.session.mobileData) {
         async.data.session.mobileData.countryCode = "310";
@@ -24,15 +25,14 @@ if (url.indexOf(path1) != -1) {
         async.data.session.mobileData.networkCode = "260";
     };
     body = JSON.stringify(async);
-    console.log('/analyticseventsv2/async');
     $done({ body });
 } else if (url.indexOf(path3) != -1) {
+    console.log(path3);
     if (processQuery(url, 'storefrontID') == '143441') $done({ url }) //US
     else if (processQuery(url, 'storefrontID') == '143455') $done({ url }) //CA
     else if (processQuery(url, 'storefrontID') == '143444') $done({ url }) //UK
     else if (processQuery(url, 'storefrontID') == '143460') $done({ url }) //AU
     else url = processQuery(url, 'storefrontID', '143441'); $done({ url }); //Other Region, Redirect StoreFrontID to US (143441)
-    console.log('/v1/search?');
 } else $done({});
 
 // Function 1
