@@ -19,6 +19,7 @@ README:https://github.com/VirgilClyne/iRingo
 // Default GeoCountryCode: US
 let GeoCountryCode = "US";
 // Default Location Services Configs (test)
+let GEOAddressCorrectionEnabled = true;
 let ShouldEnableLagunaBeach = true;
 let PedestrianAREnabled = true;
 
@@ -27,6 +28,7 @@ if (typeof $argument != "undefined") {
     let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
     console.log(JSON.stringify(arg));
     GeoCountryCode = arg.GeoCountryCode;
+    GEOAddressCorrectionEnabled = arg.GEOAddressCorrectionEnabled;
     ShouldEnableLagunaBeach = arg.ShouldEnableLagunaBeach;
     PedestrianAREnabled = arg.PedestrianAREnabled;
 };
@@ -38,35 +40,16 @@ const path1 = "/pep/gcc";
 
 if (url.indexOf(path0) != -1) {
     console.log(path0);
-    var body = $response.body;
-
-    //不支持DOMParser，调用第三方实现
-    /*
-    const domparser = new DOMParser()
-    const errorNode = doc.querySelector('parsererror');
-    config = domparser.parseFromString(body, "text/xml"); //将存储在字符串中的 XML 或 HTML 源代码解析为一个 DOM Document
-    if (errorNode) {
-        console.log(`parsing failed`);
-        // parsing failed
-      } else {
-        console.log(`parsing succeeded`);
-        // parsing succeeded
-        console.log(config.body.firstChild.textContent);
-      }
-
-    const serializer = new XMLSerializer()
-    var body = serializer.serializeToString(body); //把 XML 序列化为字符串
-    */
-
+    let body = $response.body;
     //创建一个x2js对象进行转换
     const x2js = new x2js();
     var config = x2js.xml_str2json(body);
-    done({ config });
+    body = JSON.stringify(config);
     //config.com.apple.GEO.
 
     //var body = x2js.json2xml_str(config)
 
-    //done({ body });
+    done({ body });
 };
 
 
