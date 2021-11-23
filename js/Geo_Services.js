@@ -16,19 +16,51 @@ const done = (value = {}) => {
 README:https://github.com/VirgilClyne/iRingo
 */
 
+// Default GeoCountryCode: US
 let GeoCountryCode = "US";
+// Default Location Services Configs (test)
+let ShouldEnableLagunaBeach = true;
+let PedestrianAREnabled = true;
 
+// Argument Function Supported
 if (typeof $argument != "undefined") {
     let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
     console.log(JSON.stringify(arg));
     GeoCountryCode = arg.GeoCountryCode;
+    ShouldEnableLagunaBeach = arg.ShouldEnableLagunaBeach;
+    PedestrianAREnabled = arg.PedestrianAREnabled;
 };
 
 const url = $request.url;
 
+const path0 = "/config/defaults";
 const path1 = "/pep/gcc";
 
+if (url.indexOf(path0) != -1) {
+    console.log(path0);
+    var body = $response.body;
+
+    const domparser = new DOMParser()
+    const errorNode = doc.querySelector('parsererror');
+    config = domparser.parseFromString(body, "text/xml"); //将存储在字符串中的 XML 或 HTML 源代码解析为一个 DOM Document
+    if (errorNode) {
+        console.log(`parsing failed`);
+        // parsing failed
+      } else {
+        console.log(`parsing succeeded`);
+        // parsing succeeded
+        console.log(config.body.firstChild.textContent);
+      }
+
+    const serializer = new XMLSerializer()
+    var body = serializer.serializeToString(body); //把 XML 序列化为字符串
+
+    done({ body });
+};
+
+
 if (url.indexOf(path1) != -1) {
+    console.log(path1);
     var today = new Date();
     var UTCstring = today.toUTCString();
     var response = {};
@@ -45,6 +77,6 @@ if (url.indexOf(path1) != -1) {
     }
     if (isSurge || isLoon) {
         response.status = 200;
-        done({response});
+        done({ response });
     }
-} else done()
+} else done();
