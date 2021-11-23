@@ -211,9 +211,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
   * 注:
-    * 🆕新版用脚本功能实现，自动修改「来自APPLE的内容\来自APPLE的建议\Siri建议」的地区，为`设置`-`通用`-`语言与地区`中所设置的语言及地区（中国大陆地区无此服务，所以修改为台湾地区）。
-    * 「询问Siri」的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
-    * 「询问Siri」的版本可被[定位服务](#定位服务)模块修改切换至海外版
+    * 🆕新版用脚本功能实现，自动修改「来自APPLE的内容\来自APPLE的建议\Siri建议」的地区与语言设置为`设置`-`通用`-`语言与地区`相同设置的语言及地区（中国大陆地区无此服务，所以默认修改为台湾地区）。
+    * 「询问Siri」(“Hey Siri.”)的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
+    * 「询问Siri」(“Hey Siri.”)的版本可被[定位服务](#定位服务)模块修改切换至海外版
     * 经反馈，本模块不再强制`Siri卡片`框架语言为`zh-CN`，将根据用户设备`语言与地区`设置进行变更。
 
 ## 激活方式
@@ -294,24 +294,24 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 安装链接
   * Loon:
-    * 🆕新版:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions")
+    * 🆕新版，自动改为`语言与地区`相同设置:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions")
     * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.plugin](./plugin/Siri_Suggestions_TW.plugin?raw=true " Enable Siri Suggestions 🇹🇼TW")
     * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.plugin](./plugin/Siri_Suggestions_JP.plugin?raw=true " Enable Siri Suggestions 🇯🇵JP")
     * 修改地区为🇺🇸US:[Siri_Suggestions_US.plugin](./plugin/Siri_Suggestions_US.plugin?raw=true " Enable Siri Suggestions 🇺🇸US")
   * Quantumult X:
-    * 🆕新版:[Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions")
+    * 🆕新版，自动改为`语言与地区`相同设置:[Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions")
     * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions 🇹🇼TW") (Author:@edgexyz)
     * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.qxrewrite](./qxrewrite/Siri_Suggestions_JP.qxrewrite?raw=true " Enable Siri Suggestions 🇯🇵JP")
     * 修改地区为🇺🇸US:[Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions 🇺🇸US") (Author:@edgexyz)
   * Surge:
     * 适用于iOS/iPadOS,不含macOS规则集的模块:
-      * 🆕新版:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
+      * 🆕新版，自动改为`语言与地区`相同设置:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
       * 修改地区为🇹🇼TW:[Siri_Suggestions_TW.sgmodule](./sgmodule/Siri_Suggestions_TW.sgmodule?raw=true " Enable Siri Suggestions 🇹🇼TW")
       * 修改地区为🇯🇵JP:[Siri_Suggestions_JP.sgmodule](./sgmodule/Siri_Suggestions_JP.sgmodule?raw=true " Enable Siri Suggestions 🇯🇵JP")
       * 修改地区为🇺🇸US:[Siri_Suggestions_US.sgmodule](./sgmodule/Siri_Suggestions_US.sgmodule?raw=true " Enable Siri Suggestions 🇺🇸US")
         * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
           * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，Loon与Quantumult X无效且不适用。
-    * macOS/iOS通用模块(🆕新版):
+    * macOS/iOS通用模块(🆕新版，自动改为`语言与地区`相同设置):
       * 🆕针对策略组为PROXY的模块:[Siri_Suggestions_for_Uppercase_PROXY.sgmodule](./sgmodule/Siri_Suggestions_for_Uppercase_PROXY.sgmodule?raw=true " Enable Siri Suggestions")
       * 🆕针对策略组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
       * 🆕针对策略组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
