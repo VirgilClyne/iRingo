@@ -10,7 +10,7 @@ const $ = new Env('Apple_Weather');
     await getOrigin($request.url)
     await getNextHourStatus($response.body)
     await getGridWeatherMinutely($.lat, $.lng, key)
-    await outputData($.stations, $.obs)
+    await outputData($.lat, $.lng, $.GridWeather)
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
@@ -74,7 +74,7 @@ function getGridWeatherMinutely(lat, lng, key, timeout = 0) {
                     try {
                         const _data = JSON.parse(data)
                         if (error) throw new Error(error)
-                        if (code == "200") {
+                        if (_data.code == "200") {
                             $.GridWeather = _data
                             $.Minutely = _data.minutely
                             /*                           
@@ -105,7 +105,7 @@ function getGridWeatherMinutely(lat, lng, key, timeout = 0) {
 
 // Step 6
 // Output Data
-function outputData(obs) {
+function outputData(lat, lng, obs) {
     let body = $response.body
     let weather = JSON.parse(body);
 
@@ -130,30 +130,27 @@ function outputData(obs) {
                 "summary": []
             }
         }
-        if (obs && obs.aqi) { // From Observation Station
-            weather.forecastNextHour.source = obs.city.name;
-            weather.forecastNextHour.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
-            weather.forecastNextHour.index = obs.aqi;
-            weather.forecastNextHour.scale = "EPA_NowCast.2115";
-            weather.forecastNextHour.primaryPollutant = switchPollutantsType(obs.dominentpol);
-            weather.forecastNextHour.categoryIndex = classifyAirQualityLevel(obs.aqi);
-            if (obs.iaqi.co) weather.forecastNextHour.pollutants.CO.amount = obs.iaqi.co.v;
-            if (obs.iaqi.so2) weather.forecastNextHour.pollutants.SO2.amount = obs.iaqi.so2.v;
-            if (obs.iaqi.no2) weather.forecastNextHour.pollutants.NO2.amount = obs.iaqi.no2.v;
-            if (obs.iaqi.nox) weather.forecastNextHour.pollutants.NOX.amount = obs.iaqi.nox.v;
-            if (obs.iaqi.pm25) weather.forecastNextHour.pollutants["PM2.5"].amount = obs.iaqi.pm25.v;
-            if (obs.iaqi.o3) weather.forecastNextHour.pollutants.OZONE.amount = obs.iaqi.o3.v;
-            if (obs.iaqi.pm10) weather.forecastNextHour.pollutants.PM10.amount = obs.iaqi.pm10.v;
-            weather.forecastNextHour.metadata.longitude = obs.city.geo[0];
-            weather.forecastNextHour.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
-            weather.forecastNextHour.metadata.providerName = obs.attributions[obs.attributions.length - 1].name;
-            weather.forecastNextHour.metadata.expireTime = convertTime(new Date(obs.time.iso), 'add-1h-floor');
+        if (obs) { // From Observation Station
+            weather.forecastNextHour.source = obs.refer.sources[0];
+            weather.forecastNextHour.learnMoreURL = obs.fxLink;
+            weather.forecastNextHour.metadata.longitude = lng;
+            weather.forecastNextHour.metadata.providerLogo = "";
+            weather.forecastNextHour.metadata.providerName = obs.refer.sources[0];
+            weather.forecastNextHour.metadata.expireTime = convertTime(new Date(obs.updateTime), 'add-1h-floor');
             if (!weather.forecastNextHour.metadata.language) weather.forecastNextHour.metadata.language = weather.currentWeather.metadata.language;
             //weather.forecastNextHour.metadata.language = $.language;
-            weather.forecastNextHour.metadata.latitude = obs.city.geo[1];
-            weather.forecastNextHour.metadata.reportedTime = convertTime(new Date(obs.time.iso), 'remain');
+            weather.forecastNextHour.metadata.latitude = lat;
+            weather.forecastNextHour.metadata.reportedTime = convertTime(new Date(obs.updateTime), 'remain');
             weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain');
             //weather.forecastNextHour.metadata.units = "m";
+        }
+        if (obs.minutely) { // From Observation Station
+            var maps= new Map([['fxTime','startTime'],['precip','precipIntensity']]);
+            obs.minutely = obs.minutely.map(element =>{
+                element.placeCode = maps.get(element.placeCode);
+                return element;
+            });
+            weather.forecastNextHour.minutes = obs.minutely
         }
     };
     body = JSON.stringify(weather);
