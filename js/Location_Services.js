@@ -34,20 +34,21 @@ if (typeof $argument != "undefined") {
 };
 
 const url = $request.url;
-var body = $response.body;
 
 const path0 = "/config/defaults";
 const path1 = "/pep/gcc";
 
 if (url.indexOf(path0) != -1) {
     console.log(path0);
-    //创建一个x2js对象进行转换
-    const x2js = new x2js();
+    var body = $response.body;
+
+    // 创建一个x2js对象进行转换
+    const x2js = new window.X2JS();
+
     var config = x2js.xml_str2json(body);
     body = JSON.stringify(config);
-    //config.com.apple.GEO.
 
-    //var body = x2js.json2xml_str(config)
+    var body = x2js.json2xml_str(config)
 
     done({ body });
 };
