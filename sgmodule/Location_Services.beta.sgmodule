@@ -1,5 +1,5 @@
 #!name= Response Location Services to 🇺🇸US
-#!desc=(BETA) 只作用于定位服务(Location Services)，可以通过搭配使用其他模块达成混合效果。
+#!desc=(BETA) 修改定位服务(Location Services)配置文件(Configs)和GCC(Geo Country Code)检测结果。
 
 [Script]
 # Response Location Services to US
