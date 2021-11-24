@@ -16,8 +16,8 @@ const done = (value = {}) => {
 README:https://github.com/VirgilClyne/iRingo
 */
 
-    // 创建一个x2js对象进行转换
-    const x2js = new globalThis.X2JS();
+// 创建一个x2js对象进行转换
+const x2js = new this.X2JS();
 
 // Default GeoCountryCode: US
 let GeoCountryCode = "US";
