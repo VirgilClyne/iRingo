@@ -50,7 +50,7 @@ if (url.indexOf(path0) != -1) {
     if (isResponse) {
         var body = $response.body;
         // Create a new instance of the parser with your input
-        plist = new PlistParser(body);
+        plist = new this.PlistParser(body);
 
         // Validate the input
 		if(plist.validate()){
