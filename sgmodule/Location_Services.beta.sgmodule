@@ -1,11 +1,12 @@
-#!name= Response Location Services to 🇺🇸US
+#!name= Modify Location Services to 🇺🇸US
 #!desc=(BETA) 修改定位服务(Location Services)配置文件(Configs)和GCC(Geo Country Code)检测结果。
 
 [Script]
-# Response Location Services to US
-Location_Services = type=http-request,pattern=^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(\/pep\/gcc), requires-body=0, binary-body-mode=0, max-size=0, script-update-interval=0, argument=GeoCountryCode=US, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js
-# Rewrite Location Services Configuration Functions
-Location_Services = type=http-response,pattern=^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).*, requires-body=1, binary-body-mode=0, max-size=0 ,script-update-interval=0, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js
+# Response Location Services Geo Country Code Check Result to US
+Location_Services = type=http-request,pattern=^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(\/pep\/gcc), requires-body=0, binary-body-mode=0, max-size=0, script-update-interval=0, argument=GeoCountryCode=US, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js
+# Rewrite Location Services Configuration Functions Internationalization
+Location_Services = type=http-request,pattern=^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).*, requires-body=0, binary-body-mode=0, max-size=0 ,script-update-interval=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js
+Location_Services = type=http-response,pattern=^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).*, requires-body=1, binary-body-mode=0, max-size=0 ,script-update-interval=0, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js
 
 [MITM]
 hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com
