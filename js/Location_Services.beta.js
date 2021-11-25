@@ -49,11 +49,11 @@ if (url.indexOf(path0) != -1) {
     }
     if (isResponse) {
         var body = $response.body;
-        var plist = XMLParser(body);
+        var config = plist.parse(body);
 
         //config = body.replace(variable, parameter);
 
-        done({ body });
+        done({ config });
     }
 };
 
