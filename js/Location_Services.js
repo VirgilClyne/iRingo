@@ -49,7 +49,6 @@ if (url.indexOf(path0) != -1) {
     }
     if (isResponse) {
         var body = $response.body;
-
         //var comappleGEO = /(<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s{0,}))(.*)((?:\n\s{0,})<\/dict>(?:\n\s{0,})<\/plist>)/m;
         //var CountryProviders = /<key>CountryProviders<\/key>/m;
         var CN = /(<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s{0,}))(.*)((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>)/m;
@@ -59,11 +58,11 @@ if (url.indexOf(path0) != -1) {
         var PedestrianAREnabled = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>PedestrianAREnabled<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
 
         //body = config.replace(variable, parameter);
-        body = config.replace(EnableAlberta, '$1false$3');
-        body = config.replace(GEOAddressCorrectionEnabled, '$1true$3');
-        body = config.replace(LocalitiesAndLandmarksSupported, '$1true$3');
-        body = config.replace(PedestrianAREnabled, '$1true$3');
-        body = config.replace(CN, '$1$2/n                    <key>ShouldEnableLagunaBeach</key>/n                     <true/>$3');
+        body = body.replace(EnableAlberta, '$1false$3');
+        body = body.replace(GEOAddressCorrectionEnabled, '$1true$3');
+        body = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
+        body = body.replace(PedestrianAREnabled, '$1true$3');
+        body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n$2$3');
 
 
         done({ body });
