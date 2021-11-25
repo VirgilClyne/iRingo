@@ -1,5 +1,6 @@
 // 判断是否是重写
 const isRequest = typeof $request != "undefined";
+const isResponse = typeof $response != "undefined";
 // 判断是否是Surge
 const isSurge = typeof $httpClient != "undefined";
 // 判断是否是QuanX
