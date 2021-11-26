@@ -9,8 +9,8 @@ const isQuanX = typeof $task != "undefined";
 const isLoon = typeof $loon != "undefined";
 // 关闭请求
 const done = (value = {}) => {
-  if (isQuanX) return $done(value);
-  if (isSurge) isRequest ? $done(value) : $done();
+    if (isQuanX) return $done(value);
+    if (isSurge) isRequest ? $done(value) : $done();
 };
 
 /*
@@ -26,13 +26,13 @@ let GeoCountryCode = "US";
 
 // Argument Function Supported
 if (typeof $argument != "undefined") {
-  let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-  console.log(JSON.stringify(arg));
-  //GeoCountryCode = arg.GeoCountryCode;
-  //EnableAlberta = arg.EnableAlberta;
-  //GEOAddressCorrectionEnabled = arg.GEOAddressCorrectionEnabled;
-  //ShouldEnableLagunaBeach = arg.ShouldEnableLagunaBeach;
-  //PedestrianAREnabled = arg.PedestrianAREnabled;
+    let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+    console.log(JSON.stringify(arg));
+    //GeoCountryCode = arg.GeoCountryCode;
+    //EnableAlberta = arg.EnableAlberta;
+    //GEOAddressCorrectionEnabled = arg.GEOAddressCorrectionEnabled;
+    //ShouldEnableLagunaBeach = arg.ShouldEnableLagunaBeach;
+    //PedestrianAREnabled = arg.PedestrianAREnabled;
 };
 
 const url = $request.url;
@@ -41,137 +41,56 @@ const path0 = "/config/defaults";
 const path1 = "/pep/gcc";
 
 if (url.indexOf(path0) != -1) {
-  console.log(path0);
-  if (isRequest && !isResponse) {
-    var headers = $request.headers;
-    headers['If-None-Match'] = '';
-    done({ headers });
-  }
-  if (isResponse) {
-    var body = $response.body;
-    // Create a new instance of the parser with your input
-    plist = new p2js(body);
+    console.log(path0);
+    if (isRequest && !isResponse) {
+        var headers = $request.headers;
+        headers['If-None-Match'] = '';
+        done({ headers });
+    } else if (isResponse) {
+        var body = $response.body;
+        if (isQuanX) {
+            config = XMLDocument(body);
+        } else if (isSurge || isLoon) {
+            //var comappleGEO = /(<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s{0,}))(.*)((?:\n\s{0,})<\/dict>(?:\n\s{0,})<\/plist>)/m;
+            //var CountryProviders = /<key>CountryProviders<\/key>/m;
+            var CN = /(<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s{0,}))(.*)((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>)/m;
+            var EnableAlberta = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>EnableAlberta<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
+            var GEOAddressCorrectionEnabled = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>GEOAddressCorrectionEnabled<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
+            var GEOGeocoderIsEncrypted = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>GEOGeocoderIsEncrypted<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
+            var LocalitiesAndLandmarksSupported = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>LocalitiesAndLandmarksSupported<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
+            var PedestrianAREnabled = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>PedestrianAREnabled<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
 
-    // Validate the input
-    if (plist.validate()) {
-      // Parse the input, returning a JS object
-      config = plist.parse();
+            //body = config.replace(variable, parameter);
+            //body = body.replace(EnableAlberta, '$1false$3');
+            body = body.replace(GEOAddressCorrectionEnabled, '$1true$3');
+            body = body.replace(GEOGeocoderIsEncrypted, '$1true$3');
+            body = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
+            body = body.replace(PedestrianAREnabled, '$1true$3');
+            body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n				$2$3');
+        };
+
+        done({ body });
     }
-    //config = body.replace(variable, parameter);
-
-    done({ config });
-  }
 };
 
-
 if (url.indexOf(path1) != -1) {
-  console.log(path1);
-  var today = new Date();
-  var UTCstring = today.toUTCString();
-  var response = {};
-  response.headers = {
-    'Content-Type': 'text/html',
-    'Date': UTCstring,
-    'Connection': 'keep-alive',
-    'Content-Encoding': 'identity'
-  };
-  response.body = GeoCountryCode;
-  if (isQuanX) {
-    response.status = "HTTP/1.1 200 OK";
-    done(response);
-  }
-  if (isSurge || isLoon) {
-    response.status = 200;
-    done({ response });
-  }
-} else done();
-
-/***************** PlistParser *****************/
-// prettier-ignore
-function p2js(input) {
-  var input = $('#input').val();
-  var plist = $.parseXML(input);
-  console.log("before:" + plist);
-  plist = cleanWhitespace(plist);
-  console.log("after:" + plist);
-  var json = parsePlist(plist);
-  console.log("json:" + json);
-  var formatted = JSON.stringify(json, null, 4);
-  return formatted
-}
-
-cleanWhitespace = function (element) {
-  console.log(element);
-  console.log(element.childNodes);
-  if (element.childNodes !== undefined) {
-    for (var i = 0; i < element.childNodes.length; i++) {
-      var node = element.childNodes[i];
-      console.log("n:" + node);
-      if (node.nodeType == 3 && !/\S/.test(node.nodeValue)) {
-        console.log("removing node");
-        element.remove(node);
-      }
+    console.log(path1);
+    var today = new Date();
+    var UTCstring = today.toUTCString();
+    var response = {};
+    response.headers = {
+        'Content-Type': 'text/html',
+        'Date': UTCstring,
+        'Connection': 'keep-alive',
+        'Content-Encoding': 'identity'
+    };
+    response.body = GeoCountryCode;
+    if (isQuanX) {
+        response.status = "HTTP/1.1 200 OK";
+        done(response);
     }
-  }
-  return element;
-}
-
-parsePlist = function (plistDoc) {
-  var doc = plistDoc.childNodes[1];
-  // main dict
-  var dict = doc.childNodes[1];
-  console.log(dict);
-
-  for (i in dict.childNodes) {
-    node = dict.childNodes[i];
-    console.log("n:" + node);
-  }
-
-  return parsePlistValue(dict);
-}
-
-parsePlistDict = function (dictNode) {
-  var result = new Object();
-  var keyNodes = dictNode.getElementsByTagName("key");
-  for (var i = 0, n = keyNodes.length; i < n; i++) {
-    var key = keyNodes[i].firstChild.nodeValue;
-    var val = parsePlistValue(keyNodes[i].nextSibling.nextSibling);
-    result[key] = val;
-  }
-  return result;
-}
-
-parsePlistValue = function (valueNode) {
-  var result = null;
-  switch (valueNode.nodeName) {
-    case "true":
-      result = true;
-      break;
-    case "false":
-      result = false;
-      break;
-    case "string":
-      if (valueNode.firstChild != undefined) {
-        result = valueNode.firstChild.nodeValue;
-        // result = unescape(result);
-        // result = result.replace(/\+/g, " ");
-      }
-      console.log("string value not defined");
-      break;
-    case "dict":
-      result = parsePlistDict(valueNode);
-      break;
-    case "array":
-      result = [];
-      for (var i = 0, n = valueNode.childNodes.length; i < n; i++) {
-        node = valueNode.childNodes[i];
-        if (/\S/.test(node.nodeValue)) {
-          result.push(parsePlistValue(node));
-        }
-      }
-      break;
-    default:
-      console.log("ERROR can't parse " + valueNode.nodeName + " of type " + valueNode.nodeType);
-  }
-  return result;
-}
+    if (isSurge || isLoon) {
+        response.status = 200;
+        done({ response });
+    }
+} else done();
