@@ -1,0 +1,10 @@
+#!name= Response Location Services to 🇺🇸US
+#!desc=(BETA) 修改定位服务(Location Services)配置文件(Configs)和GCC(Geo Country Code)检测结果。
+
+# Redirect Geo Services to US
+^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) url script-echo-response https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js
+# Redirect Location Services Configuration Functions
+^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js
+^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js
+
+hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com

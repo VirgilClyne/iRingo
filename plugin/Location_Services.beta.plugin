@@ -3,9 +3,10 @@
 
 [Script]
 # Response Location Services to US
-http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location_Services.js, tag=Location_Services
+http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js, tag=Location_Services
 # Redirect Location Services Configuration Functions
-http-response ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true, requires-body=true, tag=Location_Services
+http-request ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js, requires-body=true, tag=Location_Services
+http-response ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.js, requires-body=true, tag=Location_Services, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true
 
 [MITM]
 hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com
