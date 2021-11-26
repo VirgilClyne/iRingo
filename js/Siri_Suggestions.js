@@ -4,7 +4,7 @@ README:https://github.com/VirgilClyne/iRingo
 
 var url = $request.url;
 const locale = processQuery(url, 'locale'); //Region Setting
-//const esl = processQuery(url, 'esl'); //Environment System Language? :Display Language Setting
+const esl = processQuery(url, 'esl'); //Environment System Language? :Display Language Setting
 const card_locale = locale //Infomation Card Locale, Redirect to Region Setting
 //const siri_locale = processQuery(url, 'siri_locale'); //Siri Locale Setting
 const storefront = processQuery(url, 'storefront') //StoreFront Setting, from App Store Region
@@ -22,21 +22,22 @@ if (url.indexOf(path0) != -1) url.replace(/smoot\.apple\.cn/g, 'smoot.apple.com'
 
 // PATH
 if (url.indexOf(path1) != -1) {
-    if (cc == 'CN') url = processQuery(url, 'cc', 'TW')
-    else url = processQuery(url, 'cc', cc);
+    url = (cc == 'CN') ? processQuery(url, 'cc', 'TW') : processQuery(url, 'cc', cc);
     $done({ url });
 }
 else if (url.indexOf(path2) != -1) {
-    if (cc == 'CN') url = processQuery(url, 'cc', 'TW')
-    else url = processQuery(url, 'cc', cc);
+    url = (cc == 'CN') ? processQuery(url, 'cc', 'TW') : processQuery(url, 'cc', cc);
+    if (processQuery(url, 'qtype') == 'zkw') {
+        if ([US, CA, UK, AU].some(_ => _ != cc)) processQuery(url, 'local', `${esl}_US`)
+    } else {
     url = processQuery(url, 'card_locale', card_locale);
     //url = processQuery(url, 'storefront', '143464-19%2C29'); //SG
     //url = processQuery(url, 'storefront', '143441-19%2C29'); //US
+    };
     $done({ url });
 }
 else if (url.indexOf(path3) != -1) {
-    if (cc == 'CN') url = processQuery(url, 'cc', 'TW')
-    else url = processQuery(url, 'cc', cc);
+    url = (cc == 'CN') ? processQuery(url, 'cc', 'TW') : processQuery(url, 'cc', cc);
     url = processQuery(url, 'card_locale', card_locale);
     //url = processQuery(url, 'storefront', '143464-19%2C29'); //SG
     //url = processQuery(url, 'storefront', '143441-19%2C29'); //US
