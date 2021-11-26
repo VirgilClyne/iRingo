@@ -58,7 +58,7 @@ if (url.indexOf(path0) != -1) {
         var PedestrianAREnabled = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>PedestrianAREnabled<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
 
         //body = config.replace(variable, parameter);
-        body = body.replace(EnableAlberta, '$1false$3');
+        //body = body.replace(EnableAlberta, '$1false$3');
         body = body.replace(GEOAddressCorrectionEnabled, '$1true$3');
         body = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
         body = body.replace(PedestrianAREnabled, '$1true$3');
