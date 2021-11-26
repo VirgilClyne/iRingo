@@ -66,7 +66,7 @@ if (url.indexOf(path0) != -1) {
             body = body.replace(GEOGeocoderIsEncrypted, '$1true$3');
             body = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
             body = body.replace(PedestrianAREnabled, '$1true$3');
-            body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n				$2$3');
+            body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n				<key>GEOShouldSpeakWrittenAddresses</key>\n				<true/>\n				<key>GEOShouldSpeakWrittenPlaceNames</key>\n				<true/>\n				$2$3');
         };
 
         done({ body });
