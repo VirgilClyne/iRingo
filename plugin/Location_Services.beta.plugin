@@ -1,10 +1,10 @@
-#!name= Response Location Services to 🇺🇸US
+#!name= Modify Location Services to 🇺🇳I18N
 #!desc=(BETA) 修改定位服务(Location Services)配置文件(Configs)和GCC(Geo Country Code)检测结果。
 
 [Script]
-# Response Location Services to US
-http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services..beta.js, tag=Location_Services
-# Redirect Location Services Configuration Functions
+# Response Location Services Geo Country Code Check Result to US
+http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js, tag=Location_Services
+# Rewrite Location Services Configuration Functions Internationalization
 http-request ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js, requires-body=true, tag=Location_Services
 http-response ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js, requires-body=true, tag=Location_Services, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true
 

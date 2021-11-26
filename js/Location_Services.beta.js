@@ -40,6 +40,7 @@ const url = $request.url;
 const path0 = "/config/defaults";
 const path1 = "/pep/gcc";
 
+//
 if (url.indexOf(path0) != -1) {
     console.log(path0);
     if (isRequest && !isResponse) {
@@ -49,7 +50,8 @@ if (url.indexOf(path0) != -1) {
     } else if (isResponse) {
         var body = $response.body;
         if (isQuanX) {
-            body = PlistParser.parse(body);
+            var x2js = new X2JS();
+            body = x2js.xml2js(body);
             //body = PlistParser.toPlist(config);
         } else if (isSurge || isLoon) {
             //var comappleGEO = /(<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s{0,}))(.*)((?:\n\s{0,})<\/dict>(?:\n\s{0,})<\/plist>)/m;
@@ -69,7 +71,6 @@ if (url.indexOf(path0) != -1) {
             body = body.replace(PedestrianAREnabled, '$1true$3');
             body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n				<key>GEOShouldSpeakWrittenAddresses</key>\n				<true/>\n				<key>GEOShouldSpeakWrittenPlaceNames</key>\n				<true/>\n				$2$3');
         };
-
         done({ body });
     }
 };
@@ -98,286 +99,762 @@ if (url.indexOf(path1) != -1) {
 
 /***************** fast-xml-parser *****************/
 // prettier-ignore
-// https://github.com/pugetive/plist_parser/blob/master/plist_parser.js
-/**
- PlistParser: a JavaScript utility to process Plist XML into JSON
- @author Todd Gehman (toddgehman@gmail.com)
- Copyright (c) 2010 Todd Gehman
+// https://github.com/x2js/x2js/blob/development/x2js.js
+/*
+    Copyright 2015 Axinom
+    Copyright 2011-2013 Abdulla Abdurakhmanov
+    Original sources are available at https://code.google.com/p/x2js/
 
- --- 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
- Usage:
-   var jsonString = PlistParser.parse(xmlString);
+    http://www.apache.org/licenses/LICENSE-2.0
 
- ---
- 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
-var PlistParser = {};
+/*
+    Supported export methods:
+    * AMD
+    * <script> (window.X2JS)
+    * Node.js
 
-PlistParser.parse = function(plist_xml){
-  // Special case XML munging if we're running in Appcelerator Titanium
-  try{
-    if (typeof Titanium.XML != 'undefined'){
-      plist_xml = Titanium.XML.parseString(plist_xml);
-    }
-  } catch(e){
-    var parser = new DOMParser();
-		  plist_xml = parser.parseFromString(plist_xml, 'text/xml');
-  }
-    
-  var result = this._xml_to_json(plist_xml.getElementsByTagName('plist').item(0));
-  return result;
-};
+    Limitations:
+    * Attribute namespace prefixes are not parsed as such.
+    * Overall the serialization/deserializaton code is "best effort" and not foolproof.
+*/
 
-PlistParser._xml_to_json = function(xml_node) {
-  var parser = this;
-  var parent_node = xml_node;
-  var parent_node_name = parent_node.nodeName;
+// Module definition pattern used is returnExports from https://github.com/umdjs/umd
+class X2JS {
+    constructor(config) {
+        var VERSION = "3.4.0";
 
-  // console.log("Working on parent node: ");
-  // console.log(parent_node);
+        config = config || {};
 
-  var child_nodes = [];
-  for(var i = 0; i < parent_node.childNodes.length; ++i){
-    var child = parent_node.childNodes.item(i);
-    if (child.nodeName != '#text'){
-      child_nodes.push(child);
-    };
-  };
-  
-  switch(parent_node_name){
+        function initConfigDefaults() {
+            // If set to "property" then <element>_asArray will be created
+            // to allow you to access any element as an array (even if there is only one of it).
+            config.arrayAccessForm = config.arrayAccessForm || "none";
 
-    case 'plist':
-      if (child_nodes.length > 1){
-        // I'm not actually sure if it is legal to have multiple
-        // top-level nodes just below <plist>. But I originally 
-        // wrote it to handle an array of nodes at that level,
-        // so I'm leaving this handling in for now.
-        var plist_array = [];
-        for(var i = 0; i < child_nodes.length; ++i){
-           plist_array.push(parser._xml_to_json(child_nodes[i]));
-        };
-        // var plist_hash = {};
-        // plist_hash['plist'] = plist_array;
-        // return plist_hash;
-        return plist_array;
-      } else {
-        // THIS is the standard case. The top-most node under
-        // <plist> is either a <dict> or an <array>.
-        return parser._xml_to_json(child_nodes[0]);
-      }
-      break;
+            // If "text" then <empty></empty> will be transformed to "".
+            // If "object" then <empty></empty> will be transformed to {}.
+            config.emptyNodeForm = config.emptyNodeForm || "text";
 
-    case 'dict':
+            // Function that will be called for each elements, if the function returns true, the element will be skipped
+            // function(name, value) { return true; };
+            config.jsAttributeFilter = config.jsAttributeFilter;
 
-      var dictionary = {};
-      var key_name;
-      var key_value;
-      for(var i = 0; i < child_nodes.length; ++i){
-        var child = child_nodes[i];
-        if (child.nodeName == '#text'){
-          // ignore empty text children
-        } else if (child.nodeName == 'key'){
-          key_name = PlistParser._textValue(child.firstChild);
-        } else {
-          key_value = parser._xml_to_json(child);
-          dictionary[key_name] = key_value;
+            // Function that will be called for each elements, the element value will be replaced by the returned value
+            // function(name, value) { return parseFloat(value); };
+            config.jsAttributeConverter = config.jsAttributeConverter;
+
+            // Allows attribute values to be converted on the fly during parsing to objects.
+            // 	"test": function(name, value) { return true; }
+            //	"convert": function(name, value) { return parseFloat(value); };
+            // convert() will be called for every attribute where test() returns true
+            // and the return value from convert() will replace the original value of the attribute.
+            config.attributeConverters = config.attributeConverters || [];
+
+            // Any elements that match the paths here will have their text parsed
+            // as an XML datetime value (2011-11-12T13:00:00-07:00 style).
+            // The path can be a plain string (parent.child1.child2),
+            // a regex (/.*\.child2/) or function(elementPath).
+            config.datetimeAccessFormPaths = config.datetimeAccessFormPaths || [];
+
+            // Any elements that match the paths listed here will be stored in JavaScript objects
+            // as arrays even if there is only one of them. The path can be a plain string
+            // (parent.child1.child2), a regex (/.*\.child2/) or function(elementName, elementPath).
+            config.arrayAccessFormPaths = config.arrayAccessFormPaths || [];
+
+            // xmldom constructor arguments
+            // @see https://github.com/jindw/xmldom#api-reference
+            config.xmldomOptions = config.xmldomOptions || {};
+
+            // If true, a toString function is generated to print nodes containing text or cdata.
+            // Useful if you want to accept both plain text and CData as equivalent inputs.
+            if (config.enableToStringFunc === undefined) {
+                config.enableToStringFunc = true;
+            }
+
+            // If true, empty text tags are ignored for elements with child nodes.
+            if (config.skipEmptyTextNodesForObj === undefined) {
+                config.skipEmptyTextNodesForObj = true;
+            }
+
+            // If true, whitespace is trimmed from text nodes.
+            if (config.stripWhitespaces === undefined) {
+                config.stripWhitespaces = true;
+            }
+
+            // If true, double quotes are used in generated XML.
+            if (config.useDoubleQuotes === undefined) {
+                config.useDoubleQuotes = true;
+            }
+
+            // If true, the root element of the XML document is ignored when converting to objects.
+            // The result will directly have the root element's children as its own properties.
+            if (config.ignoreRoot === undefined) {
+                config.ignoreRoot = false;
+            }
+
+            // Whether XML characters in text are escaped when reading/writing XML.
+            if (config.escapeMode === undefined) {
+                config.escapeMode = true;
+            }
+
+            // Prefix to use for properties that are created to represent XML attributes.
+            if (config.attributePrefix === undefined) {
+                config.attributePrefix = "_";
+            }
+
+            // If true, empty elements will created as self closing elements (<element />)
+            // If false, empty elements will be created with start and end tags (<element></element>)
+            if (config.selfClosingElements === undefined) {
+                config.selfClosingElements = true;
+            }
+
+            // If this property defined as false and an XML element has CData node ONLY, it will be converted to text without additional property "__cdata"
+            if (config.keepCData === undefined) {
+                config.keepCData = false;
+            }
+
+            // If this property defined as true, use { __text: 'abc' } over 'abc'
+            if (config.keepText === undefined) {
+                config.keepText = false;
+            }
+
+            // If true, will output dates in UTC
+            if (config.jsDateUTC === undefined) {
+                config.jsDateUTC = false;
+            }
         }
-      }
 
-      return dictionary;
+        function initRequiredPolyfills() {
+            function pad(number) {
+                var r = String(number);
+                if (r.length === 1) {
+                    r = '0' + r;
+                }
+                return r;
+            }
+            // Hello IE8-
+            if (typeof String.prototype.trim !== 'function') {
+                String.prototype.trim = function trim() {
+                    return this.replace(/^\s+|^\n+|(\s|\n)+$/g, '');
+                };
+            }
+            if (typeof Date.prototype.toISOString !== 'function') {
+                // Implementation from http://stackoverflow.com/questions/2573521/how-do-i-output-an-iso-8601-formatted-string-in-javascript
+                Date.prototype.toISOString = function toISOString() {
+                    var MS_IN_S = 1000;
 
-    case 'array':
+                    return this.getUTCFullYear()
+                        + '-' + pad(this.getUTCMonth() + 1)
+                        + '-' + pad(this.getUTCDate())
+                        + 'T' + pad(this.getUTCHours())
+                        + ':' + pad(this.getUTCMinutes())
+                        + ':' + pad(this.getUTCSeconds())
+                        + '.' + String((this.getUTCMilliseconds() / MS_IN_S).toFixed(3)).slice(2, 5)
+                        + 'Z';
+                };
+            }
+        }
 
-      var standard_array = [];
-      for(var i = 0; i < child_nodes.length; ++i){
-        var child = child_nodes[i];
-        standard_array.push(parser._xml_to_json(child));
-      }
-      return standard_array;
+        initConfigDefaults();
+        initRequiredPolyfills();
 
-    case 'string':
-
-      return PlistParser._textValue(parent_node);
-
-    case 'date':
-
-      var date = PlistParser._parseDate(PlistParser._textValue(parent_node));
-      return date.toString();
-
-    case 'integer':
-    
-      // Second argument (radix parameter) forces string to be interpreted in base 10.
-      return parseInt(PlistParser._textValue(parent_node), 10);
-
-    case 'real':
-    
-      return parseFloat(PlistParser._textValue(parent_node));
-
-    case 'data':
-
-      return PlistParser._textValue(parent_node);
-
-    case 'true':
-
-      return true;
-
-    case 'false':
-    
-      return false;
-      
-    
-    case '#text':
-
-      break;
-  };
-};
-
-
-PlistParser._textValue = function(node) {
-  if (node.text){
-    return node.text;
-  } else {
-    return node.textContent;
-  };
-};
-
-// Handle date parsing in non-FF browsers
-// Thanks to http://www.west-wind.com/weblog/posts/729630.aspx
-PlistParser._parseDate = function(date_string){
-  var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
-  var matched_date = reISO.exec(date_string);
-  if (matched_date){ 
-    return new Date(Date.UTC(+matched_date[1], +matched_date[2] - 1, +matched_date[3], +matched_date[4], +matched_date[5], +matched_date[6]));
-  };
-};
-
-
-// Lifted (then modified) from: 
-// http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/
-PlistParser.serialize = function(_obj) {
-  // Let Gecko browsers do this the easy way
-  try{
-    if (typeof _obj.toSource !== 'undefined' && typeof _obj.callee === 'undefined') {
-      return _obj.toSource();
-    }
-  } catch(e) {
-    // Keep on truckin'.
-  }
-
-  // Other browsers must do it the hard way
-  switch (typeof _obj)
-  {
-    // numbers, booleans, and functions are trivial:
-    // just return the object itself since its default .toString()
-    // gives us exactly what we want
-    case 'number':
-    case 'boolean':
-    case 'function':
-      return _obj;
-
-    // for JSON format, strings need to be wrapped in quotes
-    case 'string':
-      return '\'' + _obj + '\'';
-
-    case 'object':
-      var str;
-      if (_obj.constructor === Array || typeof _obj.callee !== 'undefined')
-      {
-        str = '[';
-        var i, len = _obj.length;
-        for (i = 0; i < len-1; i++) { str += PlistParser.serialize(_obj[i]) + ','; }
-        str += PlistParser.serialize(_obj[i]) + ']';
-      }
-      else
-      {
-        str = '{';
-        var key;
-        for (key in _obj) { 
-          // "The body of a for in should be wrapped in an if statement to filter unwanted properties from the prototype."
-          if (_obj.hasOwnProperty(key)) {
-            str += key + ':' + PlistParser.serialize(_obj[key]) + ','; 
-          };
+        var DOMNodeTypes = {
+            "ELEMENT_NODE": 1,
+            "TEXT_NODE": 3,
+            "CDATA_SECTION_NODE": 4,
+            "COMMENT_NODE": 8,
+            "DOCUMENT_NODE": 9
         };
-        str = str.replace(/\,$/, '') + '}';
-      }
-      return str;
 
-    default:
-      return 'UNKNOWN';
-  };
-};
+        function getDomNodeLocalName(domNode) {
+            var localName = domNode.localName;
+            if (localName == null) {
+                // Yeah, this is IE!!
+                localName = domNode.baseName;
+            }
+            if (localName == null || localName === "") {
+                // ==="" is IE too
+                localName = domNode.nodeName;
+            }
+            return localName;
+        }
 
-PlistParser.toPlist = function(obj){
-  var xml = '<?xml version="1.0" encoding="UTF-8"?>';
-  xml += '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">';
+        function getDomNodeNamespacePrefix(node) {
+            return node.prefix;
+        }
 
-  var container = document.createElement('xml');
-  var plist = document.createElement('plist');
-  plist.setAttribute('version','1.0');
-  container.appendChild(plist);
-  
-  var root = document.createElement('dict');
-  plist.appendChild(root);
+        function escapeXmlChars(str) {
+            if (typeof str === "string")
+                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;');
 
-  var getISOString = function(date){
-    function pad(n) { return n < 10 ? '0' + n : n }
-    return date.getUTCFullYear() + '-'
-      + pad(date.getUTCMonth() + 1) + '-'
-      + pad(date.getUTCDate()) + 'T'
-      + pad(date.getUTCHours()) + ':'
-      + pad(date.getUTCMinutes()) + ':'
-      + pad(date.getUTCSeconds()) + 'Z';
-  }
+            else
+                return str;
+        }
 
-  var walkObj = function(target, obj, callback){
-    for(var i in obj){
-      callback(target, i, obj[i]);
+        function unescapeXmlChars(str) {
+            return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&amp;/g, '&');
+        }
+
+        function ensureProperArrayAccessForm(element, childName, elementPath) {
+            switch (config.arrayAccessForm) {
+                case "property":
+                    if (!(element[childName] instanceof Array))
+                        element[childName + "_asArray"] = [element[childName]];
+
+                    else
+                        element[childName + "_asArray"] = element[childName];
+                    break;
+            }
+
+            if (!(element[childName] instanceof Array) && config.arrayAccessFormPaths.length > 0) {
+                var match = false;
+
+                for (var i = 0; i < config.arrayAccessFormPaths.length; i++) {
+                    var arrayPath = config.arrayAccessFormPaths[i];
+                    if (typeof arrayPath === "string") {
+                        if (arrayPath === elementPath) {
+                            match = true;
+                            break;
+                        }
+                    } else if (arrayPath instanceof RegExp) {
+                        if (arrayPath.test(elementPath)) {
+                            match = true;
+                            break;
+                        }
+                    } else if (typeof arrayPath === "function") {
+                        if (arrayPath(childName, elementPath)) {
+                            match = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (match)
+                    element[childName] = [element[childName]];
+            }
+        }
+
+        function xmlDateTimeToDate(prop) {
+            // Implementation based up on http://stackoverflow.com/questions/8178598/xml-datetime-to-javascript-date-object
+            // Improved to support full spec and optional parts
+            var MINUTES_PER_HOUR = 60;
+
+            var bits = prop.split(/[-T:+Z]/g);
+
+            var d = new Date(bits[0], bits[1] - 1, bits[2]);
+            var secondBits = bits[5].split("\.");
+            d.setHours(bits[3], bits[4], secondBits[0]);
+            if (secondBits.length > 1)
+                d.setMilliseconds(secondBits[1]);
+
+            // Get supplied time zone offset in minutes
+            if (bits[6] && bits[7]) {
+                var offsetMinutes = bits[6] * MINUTES_PER_HOUR + Number(bits[7]);
+                var sign = /\d\d-\d\d:\d\d$/.test(prop) ? '-' : '+';
+
+                // Apply the sign
+                offsetMinutes = 0 + (sign === '-' ? -1 * offsetMinutes : offsetMinutes);
+
+                // Apply offset and local timezone
+                d.setMinutes(d.getMinutes() - offsetMinutes - d.getTimezoneOffset());
+            } else if (prop.indexOf("Z", prop.length - 1) !== -1) {
+                d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
+            }
+
+            // d is now a local time equivalent to the supplied time
+            return d;
+        }
+
+        function convertToDateIfRequired(value, childName, fullPath) {
+            if (config.datetimeAccessFormPaths.length > 0) {
+                var pathWithoutTextNode = fullPath.split("\.#")[0];
+
+                for (var i = 0; i < config.datetimeAccessFormPaths.length; i++) {
+                    var candidatePath = config.datetimeAccessFormPaths[i];
+                    if (typeof candidatePath === "string") {
+                        if (candidatePath === pathWithoutTextNode)
+                            return xmlDateTimeToDate(value);
+                    } else if (candidatePath instanceof RegExp) {
+                        if (candidatePath.test(pathWithoutTextNode))
+                            return xmlDateTimeToDate(value);
+                    } else if (typeof candidatePath === "function") {
+                        if (candidatePath(pathWithoutTextNode))
+                            return xmlDateTimeToDate(value);
+                    }
+                }
+            }
+
+            return value;
+        }
+
+        function deserializeRootElementChildren(rootElement) {
+            var result = {};
+            var children = rootElement.childNodes;
+
+            // Alternative for firstElementChild which is not supported in some environments
+            for (var i = 0; i < children.length; i++) {
+                var child = children.item(i);
+                if (child.nodeType === DOMNodeTypes.ELEMENT_NODE) {
+                    var childName = getDomNodeLocalName(child);
+
+                    if (config.ignoreRoot)
+                        result = deserializeDomChildren(child, childName);
+
+                    else
+                        result[childName] = deserializeDomChildren(child, childName);
+                }
+            }
+
+            return result;
+        }
+
+        function deserializeElementChildren(element, elementPath) {
+            var result = {};
+            result.__cnt = 0;
+
+            var nodeChildren = element.childNodes;
+
+            // Child nodes.
+            for (var iChild = 0; iChild < nodeChildren.length; iChild++) {
+                var child = nodeChildren.item(iChild);
+                var childName = getDomNodeLocalName(child);
+
+                if (child.nodeType === DOMNodeTypes.COMMENT_NODE)
+                    continue;
+
+                result.__cnt++;
+
+                // We deliberately do not accept everything falsey here because
+                // elements that resolve to empty string should still be preserved.
+                if (result[childName] == null) {
+                    result[childName] = deserializeDomChildren(child, elementPath + "." + childName);
+                    ensureProperArrayAccessForm(result, childName, elementPath + "." + childName);
+                } else {
+                    if (!(result[childName] instanceof Array)) {
+                        result[childName] = [result[childName]];
+                        ensureProperArrayAccessForm(result, childName, elementPath + "." + childName);
+                    }
+
+                    result[childName][result[childName].length] = deserializeDomChildren(child, elementPath + "." + childName);
+                }
+            }
+
+            // Attributes
+            for (var iAttribute = 0; iAttribute < element.attributes.length; iAttribute++) {
+                var attribute = element.attributes.item(iAttribute);
+                result.__cnt++;
+
+                var adjustedValue = attribute.value;
+                for (var iConverter = 0; iConverter < config.attributeConverters.length; iConverter++) {
+                    var converter = config.attributeConverters[iConverter];
+                    if (converter.test.call(null, attribute.name, attribute.value))
+                        adjustedValue = converter.convert.call(null, attribute.name, attribute.value);
+                }
+
+                result[config.attributePrefix + attribute.name] = adjustedValue;
+            }
+
+            // Node namespace prefix
+            var namespacePrefix = getDomNodeNamespacePrefix(element);
+            if (namespacePrefix) {
+                result.__cnt++;
+                result.__prefix = namespacePrefix;
+            }
+
+            if (result["#text"]) {
+                result.__text = result["#text"];
+
+                if (result.__text instanceof Array) {
+                    result.__text = result.__text.join("\n");
+                }
+
+                if (config.escapeMode)
+                    result.__text = unescapeXmlChars(result.__text);
+
+                if (config.stripWhitespaces)
+                    result.__text = result.__text.trim();
+
+                delete result["#text"];
+
+                if (config.arrayAccessForm === "property")
+                    delete result["#text_asArray"];
+
+                result.__text = convertToDateIfRequired(result.__text, "#text", elementPath + ".#text");
+            }
+
+            if (result.hasOwnProperty('#cdata-section')) {
+                result.__cdata = result["#cdata-section"];
+                delete result["#cdata-section"];
+
+                if (config.arrayAccessForm === "property")
+                    delete result["#cdata-section_asArray"];
+            }
+
+            if (result.__cnt === 1 && result.__text && !config.keepText) {
+                result = result.__text;
+            } else if (result.__cnt === 0 && config.emptyNodeForm === "text") {
+                result = '';
+            } else if (result.__cnt > 1 && result.__text !== undefined && config.skipEmptyTextNodesForObj) {
+                if (config.stripWhitespaces && result.__text === "" || result.__text.trim() === "") {
+                    delete result.__text;
+                }
+            }
+            delete result.__cnt;
+
+            /**
+             * We are checking if we are creating a __cdata property or if we just add the content of cdata inside result.
+             * But, if we have a property inside xml tag (<tag PROPERTY="1"></tag>), and a cdata inside, we can't ignore it.
+             * In this case we are keeping __cdata property.
+             */
+            if (!config.keepCData && (!result.hasOwnProperty('__text') && result.hasOwnProperty('__cdata') && Object.keys(result).length === 1)) {
+                return (result.__cdata ? result.__cdata : '');
+            }
+
+            if (config.enableToStringFunc && (result.__text || result.__cdata)) {
+                result.toString = function toString() {
+                    return (this.__text ? this.__text : '') + (this.__cdata ? this.__cdata : '');
+                };
+            }
+
+            return result;
+        }
+
+        function deserializeDomChildren(node, parentPath) {
+            if (node.nodeType === DOMNodeTypes.DOCUMENT_NODE) {
+                return deserializeRootElementChildren(node);
+            } else if (node.nodeType === DOMNodeTypes.ELEMENT_NODE) {
+                return deserializeElementChildren(node, parentPath);
+            } else if (node.nodeType === DOMNodeTypes.TEXT_NODE || node.nodeType === DOMNodeTypes.CDATA_SECTION_NODE) {
+                return node.nodeValue;
+            } else {
+                return null;
+            }
+        }
+
+        function serializeStartTag(jsObject, elementName, attributeNames, selfClosing) {
+            var resultStr = "<" + ((jsObject && jsObject.__prefix) ? (jsObject.__prefix + ":") : "") + elementName;
+
+            if (attributeNames) {
+                for (var i = 0; i < attributeNames.length; i++) {
+                    var attributeName = attributeNames[i];
+                    var attributeValue = jsObject[attributeName];
+
+                    if (config.escapeMode)
+                        attributeValue = escapeXmlChars(attributeValue);
+
+                    resultStr += " " + attributeName.substr(config.attributePrefix.length) + "=";
+
+                    if (config.useDoubleQuotes)
+                        resultStr += '"' + attributeValue + '"';
+
+                    else
+                        resultStr += "'" + attributeValue + "'";
+                }
+            }
+
+            if (!selfClosing)
+                resultStr += ">";
+
+            else
+                resultStr += " />";
+
+            return resultStr;
+        }
+
+        function serializeEndTag(jsObject, elementName) {
+            return "</" + ((jsObject && jsObject.__prefix) ? (jsObject.__prefix + ":") : "") + elementName + ">";
+        }
+
+        function endsWith(str, suffix) {
+            return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
+
+        function isSpecialProperty(jsonObj, propertyName) {
+            if ((config.arrayAccessForm === "property" && endsWith(propertyName.toString(), ("_asArray")))
+                || propertyName.toString().indexOf(config.attributePrefix) === 0
+                || propertyName.toString().indexOf("__") === 0
+                || (jsonObj[propertyName] instanceof Function))
+                return true;
+
+            else
+                return false;
+        }
+
+        function getDataElementCount(jsObject) {
+            var count = 0;
+
+            if (jsObject instanceof Object) {
+                for (var propertyName in jsObject) {
+                    if (isSpecialProperty(jsObject, propertyName))
+                        continue;
+
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        function getDataAttributeNames(jsObject) {
+            var names = [];
+
+            if (jsObject instanceof Object) {
+                for (var attributeName in jsObject) {
+                    if (attributeName.toString().indexOf("__") === -1
+                        && attributeName.toString().indexOf(config.attributePrefix) === 0) {
+                        names.push(attributeName);
+                    }
+                }
+            }
+
+            return names;
+        }
+
+        function serializeComplexTextNodeContents(textNode) {
+            var result = "";
+
+            if (textNode.__cdata) {
+                result += "<![CDATA[" + textNode.__cdata + "]]>";
+            }
+
+            if (textNode.__text || typeof (textNode.__text) === 'number' || typeof (textNode.__text) === 'boolean') {
+                if (config.escapeMode)
+                    result += escapeXmlChars(textNode.__text);
+
+                else
+                    result += textNode.__text;
+            }
+
+            return result;
+        }
+
+        function serializeTextNodeContents(textNode) {
+            var result = "";
+
+            if (textNode instanceof Object) {
+                result += serializeComplexTextNodeContents(textNode);
+            } else if (textNode !== null) {
+                if (config.escapeMode)
+                    result += escapeXmlChars(textNode);
+
+                else
+                    result += textNode;
+            }
+
+            return result;
+        }
+
+        function serializeArray(elementArray, elementName, attributes) {
+            var result = "";
+
+            if (elementArray.length === 0) {
+                result += serializeStartTag(elementArray, elementName, attributes, true);
+            } else {
+                for (var i = 0; i < elementArray.length; i++) {
+                    result += serializeJavaScriptObject(elementArray[i], elementName, getDataAttributeNames(elementArray[i]));
+                }
+            }
+
+            return result;
+        }
+
+        function serializeJavaScriptObject(element, elementName, attributes) {
+            var result = "";
+
+            // Filter out elements
+            if (config.jsAttributeFilter && config.jsAttributeFilter.call(null, elementName, element)) {
+                return result;
+            }
+            // Convert element
+            if (config.jsAttributeConverter) {
+                element = config.jsAttributeConverter.call(null, elementName, element);
+            }
+            if ((element === undefined || element === null || element === '') && config.selfClosingElements) {
+                result += serializeStartTag(element, elementName, attributes, true);
+            } else if (typeof element === 'object') {
+                if (Object.prototype.toString.call(element) === '[object Array]') {
+                    result += serializeArray(element, elementName, attributes);
+                } else if (element instanceof Date) {
+                    result += serializeStartTag(element, elementName, attributes, false);
+                    // Serialize date
+                    result += config.jsDateUTC ? element.toUTCString() : element.toISOString();
+                    result += serializeEndTag(element, elementName);
+                } else {
+                    var childElementCount = getDataElementCount(element);
+                    if (childElementCount > 0 || typeof (element.__text) === 'number' || typeof (element.__text) === 'boolean' || element.__text || element.__cdata) {
+                        result += serializeStartTag(element, elementName, attributes, false);
+                        result += serializeJavaScriptObjectChildren(element);
+                        result += serializeEndTag(element, elementName);
+                    } else if (config.selfClosingElements) {
+                        result += serializeStartTag(element, elementName, attributes, true);
+                    } else {
+                        result += serializeStartTag(element, elementName, attributes, false);
+                        result += serializeEndTag(element, elementName);
+                    }
+                }
+            } else {
+                result += serializeStartTag(element, elementName, attributes, false);
+                result += serializeTextNodeContents(element);
+                result += serializeEndTag(element, elementName);
+            }
+
+            return result;
+        }
+
+        function serializeJavaScriptObjectChildren(jsObject) {
+            var result = "";
+
+            var elementCount = getDataElementCount(jsObject);
+
+            if (elementCount > 0) {
+                for (var elementName in jsObject) {
+                    if (isSpecialProperty(jsObject, elementName))
+                        continue;
+
+                    var element = jsObject[elementName];
+                    var attributes = getDataAttributeNames(element);
+
+                    result += serializeJavaScriptObject(element, elementName, attributes);
+                }
+            }
+
+            result += serializeTextNodeContents(jsObject);
+
+            return result;
+        }
+
+        function parseXml(xml) {
+            if (xml === undefined) {
+                return null;
+            }
+
+            if (typeof xml !== "string") {
+                return null;
+            }
+
+            var parser = null;
+            var domNode = null;
+
+            if (CustomDOMParser) {
+                // This branch is used for node.js, with the xmldom parser.
+                parser = new CustomDOMParser(config.xmldomOptions);
+
+                domNode = parser.parseFromString(xml, "text/xml");
+            } else if (window && window.DOMParser) {
+                parser = new window.DOMParser();
+                var parsererrorNS = null;
+
+                var isIEParser = window.ActiveXObject || "ActiveXObject" in window;
+
+                // IE9+ now is here
+                if (!isIEParser && document.all && !document.addEventListener) {
+                    try {
+                        parsererrorNS = parser.parseFromString("INVALID", "text/xml").childNodes[0].namespaceURI;
+                    } catch (err) {
+                        parsererrorNS = null;
+                    }
+                }
+
+                try {
+                    domNode = parser.parseFromString(xml, "text/xml");
+                    if (parsererrorNS !== null && domNode.getElementsByTagNameNS(parsererrorNS, "parsererror").length > 0) {
+                        domNode = null;
+                    }
+                } catch (err) {
+                    domNode = null;
+                }
+            } else {
+                // IE :(
+                if (xml.indexOf("<?") === 0) {
+                    xml = xml.substr(xml.indexOf("?>") + 2);
+                }
+
+                /* global ActiveXObject */
+                domNode = new ActiveXObject("Microsoft.XMLDOM");
+                domNode.async = "false";
+                domNode.loadXML(xml);
+            }
+
+            return domNode;
+        }
+
+        this.asArray = function asArray(prop) {
+            if (prop === undefined || prop === null) {
+                return [];
+            } else if (prop instanceof Array) {
+                return prop;
+            } else {
+                return [prop];
+            }
+        };
+
+        this.toXmlDateTime = function toXmlDateTime(dt) {
+            if (dt instanceof Date) {
+                return dt.toISOString();
+            } else if (typeof (dt) === 'number') {
+                return new Date(dt).toISOString();
+            } else {
+                return null;
+            }
+        };
+
+        this.asDateTime = function asDateTime(prop) {
+            if (typeof (prop) === "string") {
+                return xmlDateTimeToDate(prop);
+            } else {
+                return prop;
+            }
+        };
+
+        /*
+            Internally the logic works in a cycle:
+            DOM->JS - implemented by custom logic (deserialization).
+            JS->XML - implemented by custom logic (serialization).
+            XML->DOM - implemented by browser.
+        */
+        // Transformns an XML string into DOM-tree
+        this.xml2dom = function xml2dom(xml) {
+            return parseXml(xml);
+        };
+
+        // Transforms a DOM tree to JavaScript objects.
+        this.dom2js = function dom2js(domNode) {
+            return deserializeDomChildren(domNode, null);
+        };
+
+        // Transforms JavaScript objects to a DOM tree.
+        this.js2dom = function js2dom(jsObject) {
+            var xml = this.js2xml(jsObject);
+            return parseXml(xml);
+        };
+
+        // Transformns an XML string into JavaScript objects.
+        this.xml2js = function xml2js(xml) {
+            var domNode = parseXml(xml);
+            if (domNode != null)
+                return this.dom2js(domNode);
+
+            else
+                return null;
+        };
+
+        // Transforms JavaScript objects into an XML string.
+        this.js2xml = function js2xml(jsObject) {
+            return serializeJavaScriptObjectChildren(jsObject);
+        };
+
+        this.getVersion = function getVersion() {
+            return VERSION;
+        };
     }
-  }
-
-  var processObject = function(target, name, value){
-    var key = document.createElement('key');
-    key.innerHTML = name;
-    target.appendChild(key);
-    if(typeof value == 'object'){
-      if(value instanceof Date){
-        var date = document.createElement('date');
-        date.innerHTML = getISOString(value);
-        target.appendChild(date);
-      }else{
-        var dict = document.createElement('dict');
-        walkObj(dict, value, processObject)
-        target.appendChild(dict);
-      }
-    }else if(typeof value == 'boolean'){
-      var bool = document.createElement(value.toString());
-      target.appendChild(bool);
-    }else{
-      var string = document.createElement('string');
-      string.innerHTML = value;
-      target.appendChild(string);
-    }
-  };
-  walkObj(root, obj, processObject);
-
-  return xml+container.innerHTML;
 };
