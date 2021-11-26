@@ -11,4 +11,4 @@ http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) script-path
 http-request ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js, timeout=3, tag=Siri_Suggestions
 
 [MITM]
-hostname = *.smoot.apple.com, *.smoot.apple.cn, -cdn*.smoot.apple.com, -fbs.smoot.apple.com
+hostname = -cdn*.smoot.apple.com, -fbs.smoot.apple.com, *.smoot.apple.com, *.smoot.apple.cn
