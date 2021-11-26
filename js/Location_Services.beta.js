@@ -49,8 +49,14 @@ if (url.indexOf(path0) != -1) {
     }
     if (isResponse) {
         var body = $response.body;
-        var config = plist.parse(body);
+        // Create a new instance of the parser with your input
+        plist = new this.PlistParser(body);
 
+        // Validate the input
+		if(plist.validate()){
+			// Parse the input, returning a JS object
+			config = plist.parse();
+        }
         //config = body.replace(variable, parameter);
 
         done({ config });
@@ -79,11 +85,6 @@ if (url.indexOf(path1) != -1) {
         done({ response });
     }
 } else done();
-
-function xmlReplace(body, variable, parameter) {
-    xml = body.replace(variable, parameter);
-    return xml;
-};
 
 /***************** PlistParser *****************/
 // prettier-ignore
@@ -7479,4 +7480,3 @@ function xmlReplace(body, variable, parameter) {
     
     },{}]},{},[1])(1)
     });
-    
