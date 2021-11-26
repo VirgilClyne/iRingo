@@ -56,23 +56,22 @@ if (url.indexOf(path0) != -1) {
             var CN = /(<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s{0,}))(.*)((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>)/m;
             var EnableAlberta = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>EnableAlberta<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
             var GEOAddressCorrectionEnabled = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>GEOAddressCorrectionEnabled<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
+            var GEOGeocoderIsEncrypted = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>GEOGeocoderIsEncrypted<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
             var LocalitiesAndLandmarksSupported = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>LocalitiesAndLandmarksSupported<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
             var PedestrianAREnabled = /((?:<plist version="1\.0">(?:\n\s{0,})<dict>(?:\n\s{0,})<key>com\.apple\.GEO<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CountryProviders<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*<key>CN<\/key>(?:\n\s{0,})<dict>(?:\n\s.*)*)<key>PedestrianAREnabled<\/key>(?:\n\s{0,})<)(true|false)(\/>((?:\n\s.*)*<\/dict>(?:\n\s{0,})<key>CO<\/key>))/m;
 
             //body = config.replace(variable, parameter);
             //body = body.replace(EnableAlberta, '$1false$3');
-            config = body.replace(GEOAddressCorrectionEnabled, '$1true$3');
-            config = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
-            config = body.replace(PedestrianAREnabled, '$1true$3');
-            config = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n$2$3');
-            
-            body = config;
+            body = body.replace(GEOAddressCorrectionEnabled, '$1true$3');
+            body = body.replace(GEOGeocoderIsEncrypted, '$1true$3');
+            body = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
+            body = body.replace(PedestrianAREnabled, '$1true$3');
+            body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n				$2$3');
         };
 
         done({ body });
     }
 };
-
 
 if (url.indexOf(path1) != -1) {
     console.log(path1);
