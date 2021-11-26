@@ -62,7 +62,7 @@ if (url.indexOf(path0) != -1) {
         body = body.replace(GEOAddressCorrectionEnabled, '$1true$3');
         body = body.replace(LocalitiesAndLandmarksSupported, '$1true$3');
         body = body.replace(PedestrianAREnabled, '$1true$3');
-        body = body.replace(CN, '$1$2/n                    <key>ShouldEnableLagunaBeach</key>/n                     <true/>$3');
+        body = body.replace(CN, '$1<key>ShouldEnableLagunaBeach</key>\n				<true/>\n$2$3');
 
 
         done({ body });
