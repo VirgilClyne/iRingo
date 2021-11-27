@@ -13,7 +13,7 @@ if (url.indexOf(path1) != -1) {
     console.log(path1);
     let configs = JSON.parse(body);
     configs.deviceInfo.preferredLanguages = ["zh-CN", "zh-Hans", "en-US"];
-    configs.deviceInfo.countryCode = "US";
+    if (['US', 'CA', 'UK', 'AU'].some(_ => _ != configs.deviceInfo.countryCode)) configs.deviceInfo.countryCode = "US";
     body = JSON.stringify(configs);
     $done({ body });
 } else if (url.indexOf(path2) != -1) {
