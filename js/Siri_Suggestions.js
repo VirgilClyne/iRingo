@@ -27,12 +27,24 @@ if (url.indexOf(path1) != -1) {
 }
 else if (url.indexOf(path2) != -1) {
     url = (cc == 'CN') ? processQuery(url, 'cc', 'TW') : processQuery(url, 'cc', cc);
-    if (processQuery(url, 'qtype') == 'zkw') {
-        if ([US, CA, UK, AU].some(_ => _ != cc)) processQuery(url, 'local', `${esl}_US`)
+    if (processQuery(url, 'qtype') == 'zkw') { // 处理'新闻'小组件
+        console.log(processQuery(url, 'qtype'), ``);
+        if (['HK', 'MO', 'TW'].some(_ => _ == cc)) processQuery(url, 'local', `${esl}_SG`)
+        else if (['US', 'CA', 'UK', 'AU'].some(_ => _ != cc)) processQuery(url, 'local', `${esl}_US`)
     } else {
-    url = processQuery(url, 'card_locale', card_locale);
-    //url = processQuery(url, 'storefront', '143464-19%2C29'); //SG
-    //url = processQuery(url, 'storefront', '143441-19%2C29'); //US
+        let q = processQuery(url, 'q')
+        if (q.match(/^%E5%A4%A9%E6%B0%94%20/)) { // 处理'天气'搜索，搜索词'天气 '开头
+            console.log('Type A', ``);
+            q = q.replace(/%E5%A4%A9%E6%B0%94/, 'weather') // '天气'替换为'weather'
+            if (q.match(/^weather%20.*%E5%B8%82$/) == null) q = q.replace(/$/, '%E5%B8%82')
+        } else if (q.match(/%20%E5%A4%A9%E6%B0%94$/)) {// 处理'天气'搜索，搜索词' 天气'结尾
+            console.log('Type B', ``);
+            q = q.replace(/%E5%A4%A9%E6%B0%94/, 'weather') // '天气'替换为'weather'
+            if (q.match(/.*%E5%B8%82%20weather$/) == null) q = q.replace(/%20weather$/, '%E5%B8%82%20weather')
+        } url = processQuery(url, 'q', q)
+        url = processQuery(url, 'card_locale', card_locale); // 其他搜索
+        //url = processQuery(url, 'storefront', '143464-19%2C29'); //SG
+        //url = processQuery(url, 'storefront', '143441-19%2C29'); //US
     };
     $done({ url });
 }
