@@ -29,7 +29,8 @@ else if (url.indexOf(path2) != -1) {
     url = (cc == 'CN') ? processQuery(url, 'cc', 'TW') : processQuery(url, 'cc', cc);
     if (processQuery(url, 'qtype') == 'zkw') { // 处理'新闻'小组件
         console.log(processQuery(url, 'qtype'), ``);
-        if ([US, CA, UK, AU].some(_ => _ != cc)) processQuery(url, 'local', `${esl}_US`)
+        if ([HK, MO, TW].some(_ => _ == cc)) processQuery(url, 'local', `${esl}_SG`)
+        else if ([US, CA, UK, AU].some(_ => _ != cc)) processQuery(url, 'local', `${esl}_US`)
     } else {
         let q = processQuery(url, 'q')
         if (q.match(/^%E5%A4%A9%E6%B0%94%20/)) { // 处理'天气'搜索，搜索词'天气 '开头
