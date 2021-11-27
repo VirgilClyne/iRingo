@@ -2,7 +2,6 @@
 HOST-SUFFIX,gateway.icloud.com,Apple News
 
 # > Apple News
-HOST-SUFFIX,news-client.apple.com,Apple News
 HOST-SUFFIX,news-edge.apple.com,Apple News
 HOST-SUFFIX,news-events.apple.com,Apple News
 HOST-SUFFIX,apple.comscoreresearch.com,Apple News
