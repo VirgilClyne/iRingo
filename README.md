@@ -21,6 +21,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [简介](#简介-1)
   - [激活方式](#激活方式)
   - [作用与副作用](#作用与副作用)
+  - [关于定位服务配置文件](#关于定位服务配置文件)
   - [安装链接](#安装链接-1)
 - [🔍Siri与搜索🆕](#siri与搜索)
   - [简介](#简介-2)
@@ -42,6 +43,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [简介](#简介-5)
   - [激活方式](#激活方式-4)
   - [解锁状态说明](#解锁状态说明)
+  - [关于新闻小组件](#关于新闻小组件)
   - [安装链接](#安装链接-5)
 
 ---
@@ -175,7 +177,15 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [ ] `Apple Music`的版权问题
   - [ ] `Apple Maps`的地区版本
   - [ ] `Apple News`的可用性判断(可通过其他模块单独修改) 
-  - [ ] 待发现  
+  - [ ] 待发现
+
+## 关于定位服务配置文件
+  * 定位服务配置文件`https://configuration.ls.apple.com/config/defaults`中包含大量相关设置参数
+  * `🧪测试版`插件已知启用的功能有
+    * `地图`-`路线`-`步行`-`现实世界中的路线`
+    * `地图`-`路线`-`步行`-`导航准确性`
+    * `地图`-`为“地图”提供助力`-`评分与照片`
+    * `地图`-`为“地图”提供助力`-`显示评分和照片建议`
 
 ## 安装链接 
   * Loon:
@@ -448,6 +458,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 |<p> Apple News isn't supported in your current region. </p>|<p> **Feed Unavailable**  <br> There may be a problem with the sever or network. Plase try again later. </p>|<p> **Feed Unavailable** <br> Apple News isn't supported in your current region. </p>|
 |![🔒锁定状态截图](./ScreenShots/Apple%20News%20-%20Locked%20-%20iOS.jpeg?raw=true "Apple News - Locked - iOS")|![🔓解锁成功截图](./ScreenShots/Apple%20News%20-%20Unlock%20Success%20-%20iOS.jpeg?raw=true "Apple News - Unlock Success - iOS")|![🔒解锁失效截图](./ScreenShots/Apple%20News%20-%20Unlock%20Invalid%20-%20iOS.jpeg?raw=true "Apple News - Unlock Invalid - iOS")|
 
+## 关于新闻小组件
+  * 新闻小组件`parsecd/1.0 ({Device}; {Version} {Build}) News/1`没有地区限制，可以任意区域环境下使用
+  * 新闻小组件内容由`Siri建议`服务`api*.smoot.apple.com`提供，而不是`新闻`服务`news-*.apple.com`，已在`🆕新版Siri_Suggestions.*`中修复
 
 ## 安装链接
   * Loon:
