@@ -12,7 +12,7 @@ const path3 = "/v1/search?";
 if (url.indexOf(path1) != -1) {
     console.log(path1);
     let configs = JSON.parse(body);
-    configs.deviceInfo.preferredLanguages = ["zh-CN", "zh-HK", "zh-US", "en-US"];
+    configs.deviceInfo.preferredLanguages = ["zh-CN", "zh-Hans", "en-US"];
     configs.deviceInfo.countryCode = "US";
     body = JSON.stringify(configs);
     $done({ body });
