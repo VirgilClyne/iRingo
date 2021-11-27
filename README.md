@@ -268,7 +268,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
     - [x] Siri建议(Siri Suggestions)
   * 已知可用的信息卡片:
-    - [ ] 天气 (输入地名不显示天气信息，旧版有此功能，有知道解决方法或成因的请联系我)
+    - [x] 天气 (已修复，搜索关键词`城市名 天气`或`天气 城市名`，例如`天气 上海`，不是所有城市都有天气搜索结果)
     - [x] Siri资料(Siri Knowledge)  截图:[macOS](./ScreenShots/Siri%20Knowledge%20-%20Spotlight%20-%20macOS.png?raw=true "Siri Knowledge - Spotlight - macOS")   
     - [x] Siri建议的网站(Siri Suggested Websites)  
     - [x] 维基百科 (macOS端需要Surge启用“增强模式”)  
