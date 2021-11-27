@@ -3,7 +3,7 @@
 
 [Rule]
 # > Apple News
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Apple_News.list,🇺🇸美国
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/RuleSet/Apple_News.list,🇺🇸美国
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Apple_News.js, requires-body=true, tag=Apple_News
