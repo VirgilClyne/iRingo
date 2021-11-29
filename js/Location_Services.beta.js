@@ -101,11 +101,11 @@ if (url.indexOf(path1) != -1) {
 if (url.indexOf(path2) != -1) {
     console.log(path2);
     if (isRequest) {
-        var body = $request.body;
+        var body = $request.rawBody;
         //var compass = /com\.apple\.compass/
         const isCompass = typeof body.includes("com.apple.compass");
         if (isCompass) body = body.replace(/CN/g, 'US');
-        done({ body });
+        done({ rawBody });
     }
 };
 
