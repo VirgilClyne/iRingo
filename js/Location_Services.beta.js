@@ -39,6 +39,7 @@ const url = $request.url;
 
 const path0 = "/config/defaults";
 const path1 = "/pep/gcc";
+const path2 = "/dispatcher";
 
 //
 if (url.indexOf(path0) != -1) {
@@ -96,6 +97,17 @@ if (url.indexOf(path1) != -1) {
         done({ response });
     }
 } else done();
+
+if (url.indexOf(path2) != -1) {
+    console.log(path2);
+    if (isRequest) {
+        var body = $request.body;
+        //var compass = /com\.apple\.compass/
+        const isCompass = typeof body.includes("com.apple.compass");
+        if (isCompass) body = body.replace(/CN/g, 'US');
+        done({ body });
+    }
+};
 
 /***************** fast-xml-parser *****************/
 // prettier-ignore
