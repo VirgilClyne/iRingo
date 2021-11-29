@@ -1,0 +1,9 @@
+#!name= Unlock Apple News 🇺🇸US
+#!desc=解锁🇺🇸US地区的News，注：需配合域名集使用，使用过程中gateway.icloud.com需走代理线路。
+
+[Script]
+http-request ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, tag=Apple_News
+http-request ^https?:\/\/news-(client-search)\.apple\.com\/(v1\/search\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, tag=Apple_News
+
+[MITM]
+hostname = %APPEND% news-client.apple.com, news-client-search.apple.com, news-edge.apple.com, news-events.apple.com
