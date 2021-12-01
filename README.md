@@ -53,6 +53,9 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [解锁状态说明](#解锁状态说明)
   - [关于新闻小组件](#关于新闻小组件)
   - [安装链接](#安装链接-5)
+- [🌐iCloud 专用代理(🚧测试中，有问题请反馈)](#icloud-专用代理测试中有问题请反馈)
+  - [简介](#简介-6)
+  - [安装链接](#安装链接-6)
 
 ---
 
@@ -503,4 +506,32 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
       * 针对策略组为🍎 Apple的模块:[Apple_News_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_News_for_Apple_blank_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 针对策略组为Apple News的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为🇺🇸美国的模块:[Apple_News_for_US_icon.sgmodule](./sgmodule/Apple_News_for_US_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为🇺🇸美国的模块:[Apple_News_for_US_icon.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_US_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+
+---
+
+# 🌐iCloud 专用代理(🚧测试中，有问题请反馈)
+## 简介
+  * 保持模块/规则启用,即可让终端正常使用「iCloud 专用代理」。
+  
+  * 注:
+    * 启用模块/规则的设备自身无法解锁/使用「iCloud 专用代理」（待验证）。
+    * 只在Surge for Mac`网关模式`测试过，未在Surge for iOS`Wi-Fi访问`测试过。
+    * 「可用性验证」环节依旧需要走代理（域名列表待优化），「专用代理」自身流量为直链访问，落地服务器取决于「可用性验证」环节指向的代理服务器。
+    * 一旦「专用代理」启用工作，几个iCloud地区检测域名将不再暴露于「专用代理」代理之外，可不用保持相关检测地址走代理。
+    * 「专用代理」访问采用QUIC(UDP,443)技术，相关服务器由Akamai、Fastly 和Cloudflare提供，请保证自身直连访问这些服务良好，居住地及运营商网络质量堪忧请自己想办法解决。
+    * 相关介绍请见:https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
+    * 出口IP列表:https://mask-api.icloud.com/egress-ip-ranges.csv
+
+## 安装链接
+  * Surge:
+  * 不含规则集的模块:[Apple_iCloud_Private_Relay.sgmodule](./sgmodule/Apple_iCloud_Private_Relay.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 域名集:[iCloud_Private_Relay.list](./RuleSet/iCloud_Private_Relay.list?raw=true "iCloud Private Relay")
+  * 预置策略组的模块:
+    * 针对策略组为PROXY的模块:[Apple_iCloud_Private_Relay_for_Uppercase_PROXY.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Uppercase_PROXY.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为Proxy的模块:[Apple_iCloud_Private_Relay_for_Proxy.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Proxy.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Apple_iCloud_Private_Relay_for_DivineEngine.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_DivineEngine.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为Apple的模块:[Apple_iCloud_Private_Relay_for_Apple.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Apple.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为🍎Apple的模块:[Apple_iCloud_Private_Relay_for_Apple_icon.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Apple_icon.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为🍎 Apple的模块:[Apple_iCloud_Private_Relay_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Apple_blank_icon.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_iCloud_Private_Relay_for_ACL4SSR.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_ACL4SSR.sgmodule?raw=true " Enable iCloud Private Relay")
