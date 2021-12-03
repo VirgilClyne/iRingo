@@ -4,6 +4,9 @@
 [General]
 # ---(通用)---
 # 通用设置
+# 隐藏状态栏上的 VPN 图标
+hide-vpn-icon=true
+
 # > TLS 引擎
 tls-provider = network-framework
 # ------
@@ -18,29 +21,43 @@ network-framework = true
 
 # > 兼容性
 # 兼容模式
+# Proxy with Loopback Address
+# compatibility-mode = 1
+# Proxy
+# compatibility-mode = 2
 # TUN Only
-compatibility-mode = 3
+# compatibility-mode = 3
 
 # > 路由
 # 包含所有的网络请求
-include-all-networks = true
+# include-all-networks = true
 
 # Always Real IP Hosts
 # 当 Surge VIF 处理 DNS 问题时，此选项要求 Surge 返回一个真正的 IP 地址，而不是一个假 IP 地址。
 # DNS 数据包将被转发到上游 DNS 服务器。
-# always-real-ip = %APPEND% mask.icloud.com, mask-h2.icloud.com
+always-real-ip = %APPEND% mask.icloud.com, mask.apple-dns.net, mask-h2.icloud.com, mask-t.apple-dns.net
 
 # VIF Excluded Routes
 # Surge VIF 只能处理 TCP 和 UDP 协议。使用此选项可以绕过特定的 IP 范围，允许所有流量通过。
-# tun-excluded-routes = %APPEND% 127.0.0.0/8
+# tun-excluded-routes = %APPEND% 127.0.0.1, 127.0.0.0/8
+
+# VIF Included Routes
+# 默认情况下，Surge VIF 接口会声明自己是默认路由。但是，由于 Wi-Fi 接口的路由较小，有些流量可能不会通过 Surge VIF 接口。使用此选项可以添加一条较小的路由。
+# tun-included-routes = %APPEND% 127.0.0.1, 127.0.0.0/8
 # ------
+
+[Proxy]
+# 🌐iCloud+ 专用代理
+🌐iCloud+ Private Relay = DIRECT, interface=en0, allow-other-interface=true
+#🌑Surge TUN
+🌑Surge Loopback = DIRECT, interface=lo0, allow-other-interface=true
 
 [Rule]
 # > Client
 # Safari
-# PROCESS-NAME,com.apple.WebKit.Networking,DIRECT
+# PROCESS-NAME,com.apple.WebKit.Networking,🌐iCloud+ Private Relay
 # PROCESS-NAME,/System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Networking.xpc/Contents/MacOS/com.apple.WebKit.Networking,DIRECT
-USER-AGENT,AppleWebKit*,DIRECT
+USER-AGENT,AppleWebKit*,🌐iCloud+ Private Relay
 
 # > REJECT AutoNavi Location Services Dispatcher
 # DOMAIN,dispatcher.is.autonavi.com,REJECT
@@ -52,7 +69,7 @@ OR,((DOMAIN,gsp64-ssl.ls.apple.com),(IP-CIDR,17.142.169.199/32,no-resolve)),🌑
 # DOMAIN,gsp64-ssl.ls.apple.com,🌑Proxy
 
 # Apple
-AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)),DIRECT
+AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)),🌐iCloud+ Private Relay
 # AND,((PROTOCOL,TCP)(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443),),🌑Proxy
 
 # > iCloud 
@@ -81,11 +98,11 @@ DOMAIN,lcdn-locator.apple.com,🌑Proxy
 # https://mask-api.icloud.com/egress-ip-ranges.csv
 
 # Optimize for Private Relay connections
-AND,((PROTOCOL,UDP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)),DIRECT
-AND,((PROTOCOL,UDP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)),DIRECT
-AND,((PROTOCOL,UDP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)),DIRECT
-AND,((PROTOCOL,UDP),(DOMAIN,mask-h2.icloud.com)),(DEST-PORT,443),DIRECT
-AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)),DIRECT
+AND,((PROTOCOL,UDP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)),🌐iCloud+ Private Relay
+AND,((PROTOCOL,UDP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)),🌐iCloud+ Private Relay
+AND,((PROTOCOL,UDP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)),🌐iCloud+ Private Relay
+AND,((PROTOCOL,UDP),(DOMAIN,mask-h2.icloud.com)),(DEST-PORT,443),🌐iCloud+ Private Relay
+AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)),🌐iCloud+ Private Relay
 
 # Allow for network traffic audits
 AND,((PROTOCOL,TCP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)),🌑Proxy
