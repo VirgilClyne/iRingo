@@ -47,4 +47,4 @@ AND,((PROTOCOL,TCP),(DOMAIN,mask-h2.icloud.com),(DEST-PORT,443)), 🌑Proxy
 AND,((PROTOCOL,TCP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
 
 [MITM]
-hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, mask-h2.icloud.com, mask-t.apple-dns.net
+hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net

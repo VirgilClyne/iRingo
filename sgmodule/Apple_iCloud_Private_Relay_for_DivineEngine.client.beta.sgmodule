@@ -5,7 +5,7 @@
 # ---(通用)---
 # 通用设置
 # 隐藏状态栏上的 VPN 图标
-hide-vpn-icon=true
+hide-vpn-icon = true
 
 # > TLS 引擎
 tls-provider = network-framework
@@ -20,7 +20,7 @@ tls-provider = network-framework
 # > 跳过代理
 # 跳过某个域名或者 IP 段，这些目标主机将不会由 Surge Proxy 处理。
 # (macOS 版本中，如果启用了 Set as System Proxy, 这些值会被写入到系统网络代理设置.)
-skip-proxy = %APPEND% netcts.cdn-apple.com
+# skip-proxy = %APPEND% netcts.cdn-apple.com
 
 # ---(实验性功能)---
 # > 使用Network framwork
@@ -100,4 +100,4 @@ AND,((PROTOCOL,TCP),(DOMAIN,mask-h2.icloud.com),(DEST-PORT,443)), 🌑Proxy
 AND,((PROTOCOL,TCP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
 
 [MITM]
-hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, mask-h2.icloud.com, mask-t.apple-dns.net
+hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net
