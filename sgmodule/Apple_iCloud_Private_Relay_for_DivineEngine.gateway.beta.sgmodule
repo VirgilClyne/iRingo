@@ -1,63 +1,8 @@
 #!name= Unlock iCloud Private Relay for macOS Gateway
-#!desc=(BETA) 为终端设备启用iCloud专用代理，需要Surge for macOS作为网关使用
-
-[General]
-# ---(通用)---
-# 通用设置
-# 隐藏状态栏上的 VPN 图标
-hide-vpn-icon=true
-
-# > TLS 引擎
-tls-provider = network-framework
-# ------
-
-# ---(兼容性)---
-# > 兼容模式 (仅 iOS)
-# Proxy with Loopback Address: 1
-# Proxy: 2
-# TUN Only: 3
-compatibility-mode = 0
-
-# ---(实验性功能)---
-# > 使用Network framwork
-network-framework = true
-# ------
-
-# ---(高级)---
-# 高级设置
-
-# > 路由
-# 包含所有的网络请求
-include-all-networks = true
-
-# Always Real IP Hosts
-# 当 Surge VIF 处理 DNS 问题时，此选项要求 Surge 返回一个真正的 IP 地址，而不是一个假 IP 地址。
-# DNS 数据包将被转发到上游 DNS 服务器。
-# always-real-ip = %APPEND% mask.icloud.com, mask.apple-dns.net, mask-h2.icloud.com, mask-t.apple-dns.net
-
-# VIF Excluded Routes
-# Surge VIF 只能处理 TCP 和 UDP 协议。使用此选项可以绕过特定的 IP 范围，允许所有流量通过。
-# tun-excluded-routes = %APPEND% 127.0.0.1
-
-# VIF Included Routes
-# 默认情况下，Surge VIF 接口会声明自己是默认路由。但是，由于 Wi-Fi 接口的路由较小，有些流量可能不会通过 Surge VIF 接口。使用此选项可以添加一条较小的路由。
-# tun-included-routes = %APPEND% 127.0.0.1
-# ------
+#!desc=(BETA) 为终端设备启用iCloud专用代理，需要Surge for macOS启用增强模式并作为网关使用
+#!system=mac
 
 [Rule]
-# > Client
-# Mail
-# PROCESS-NAME,Mail, DIRECT, interface=lo0, allow-other-interface=true
-# Safari
-# PROCESS-NAME,com.apple.WebKit.Networking, DIRECT, interface=lo0, allow-other-interface=true
-# USER-AGENT,AppleWebKit*, DIRECT, interface=lo0, allow-other-interface=true
-
-# > Apple
-# Location Services
-OR,((DOMAIN,gsp64-ssl.ls.apple.com),(IP-CIDR,17.142.169.199/32,no-resolve)), 🌑Proxy
-# IP-CIDR,17.142.169.199/32, 🌑Proxy, no-resolve
-# DOMAIN,gsp64-ssl.ls.apple.com, 🌑Proxy
-
 # > iCloud 
 # DOMAIN,gateway.icloud.com, 🌑Proxy
 # DOMAIN,metrics.icloud.com, 🌑Proxy
@@ -83,6 +28,7 @@ DOMAIN,lcdn-locator.apple.com, 🌑Proxy
 # https://mask-api.icloud.com/egress-ip-ranges.csv
 
 # Optimize for Private Relay connections
+AND,((PROTOCOL,UDP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 AND,((PROTOCOL,UDP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 AND,((PROTOCOL,UDP),(DOMAIN,mask-api.fe.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 AND,((PROTOCOL,UDP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
@@ -92,9 +38,13 @@ AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)) , DIRECT, int
 AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)) , DIRECT, interface=en0, allow-other-interface=true
 
 # Allow for network traffic audits
+AND,((PROTOCOL,TCP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443)), 🌑Proxy
 AND,((PROTOCOL,TCP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)), 🌑Proxy
 AND,((PROTOCOL,TCP),(DOMAIN,mask-api.fe.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
 AND,((PROTOCOL,TCP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,UDP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
+AND,((PROTOCOL,TCP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
 AND,((PROTOCOL,TCP),(DOMAIN,mask-h2.icloud.com),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
+AND,((PROTOCOL,TCP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
+
+[MITM]
+hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, mask-h2.icloud.com, mask-t.apple-dns.net
