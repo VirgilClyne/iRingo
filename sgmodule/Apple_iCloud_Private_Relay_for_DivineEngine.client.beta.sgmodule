@@ -16,11 +16,11 @@ tls-provider = network-framework
 # Proxy with Loopback Address: 1
 # Proxy: 2
 # TUN Only: 3
-# compatibility-mode = 2
+compatibility-mode = 3
 # > 跳过代理
 # 跳过某个域名或者 IP 段，这些目标主机将不会由 Surge Proxy 处理。
 # (macOS 版本中，如果启用了 Set as System Proxy, 这些值会被写入到系统网络代理设置.)
-# skip-proxy = %APPEND% netcts.cdn-apple.com
+# skip-proxy = %APPEND% 198.18.0.0/16
 
 # ---(实验性功能)---
 # > 使用Network framwork
@@ -32,7 +32,7 @@ tls-provider = network-framework
 
 # > 路由
 # 包含所有的网络请求
-include-all-networks = true
+# include-all-networks = true
 
 # Always Real IP Hosts
 # 当 Surge VIF 处理 DNS 问题时，此选项要求 Surge 返回一个真正的 IP 地址，而不是一个假 IP 地址。
@@ -41,11 +41,11 @@ include-all-networks = true
 
 # VIF Excluded Routes
 # Surge VIF 只能处理 TCP 和 UDP 协议。使用此选项可以绕过特定的 IP 范围，允许所有流量通过。
-# tun-excluded-routes = %APPEND% 127.0.0.1
+tun-excluded-routes = %APPEND% 198.18.16.0/20
 
 # VIF Included Routes
 # 默认情况下，Surge VIF 接口会声明自己是默认路由。但是，由于 Wi-Fi 接口的路由较小，有些流量可能不会通过 Surge VIF 接口。使用此选项可以添加一条较小的路由。
-# tun-included-routes = %APPEND% 127.0.0.1
+# tun-included-routes = %APPEND% 198.18.1.0/20
 # ------
 
 [Rule]
