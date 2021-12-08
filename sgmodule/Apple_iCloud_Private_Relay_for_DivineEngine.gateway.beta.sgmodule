@@ -32,10 +32,10 @@ AND,((PROTOCOL,UDP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20sy
 AND,((PROTOCOL,UDP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 AND,((PROTOCOL,UDP),(DOMAIN,mask-api.fe.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 AND,((PROTOCOL,UDP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)) , DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask-h2.icloud.com)),(DEST-PORT,443) , DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)) , DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)) , DIRECT, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DOMAIN,mask-h2.icloud.com)),(DEST-PORT,443), DIRECT, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 
 # Allow for network traffic audits
 AND,((PROTOCOL,TCP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443)), 🌑Proxy
