@@ -60,6 +60,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [功能列表](#功能列表-3)
   - [安装链接](#安装链接-6)
     - [启用`网关模式`的`Surge for macOS`](#启用网关模式的surge-for-macos)
+    - [`Clash`](#clash)
 
 ---
 
@@ -266,7 +267,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   9. 正常使用
 
 ## 辅助激活与切换「Siri建议」服务器地区的方式
-* 不同地区的服务器提供的功能、搜索结果、建议有所不同，可通过下列手段刷新服务器
+* 不同地区的服务器提供的功能、搜索结果、建议有所不同，可通过下列手段刷新服务器（仅针对`旧版，用重写(Rewrite)功能修改为固定地区`的`Siri_Suggestions`）
   * macOS上关闭再开启`系统偏好设置`-`聚焦`-`Siri建议`
   * iOS上关闭再开启`设置`-`Siri与搜索`-`来自APPLE的内容`和`来自APPLE的建议`
   * 更改`设置`-`通用`-`语言与地区`-`地区`  
@@ -274,7 +275,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * 激活过程中采用不同的`Geo_Services_*.sgmodule`模块模拟不同地区的`基于网络的地区检测`结果
 
 ## 功能列表
-  * 在以下位置及功能中可用: 
+  * 在以下位置及功能中可用:
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
     - [x] Safari浏览器(Safari)
@@ -283,27 +284,27 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [ ] 询问Siri(Ask Siri)
       - [x] 无SIM卡设备可被[定位服务](#定位服务)模块修改切换至海外版(维基百科)
       - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版（百度百科)
-  * 启用的功能:  
+  * 启用的功能:
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
     - [x] Siri建议(Siri Suggestions)
   * 已知可用的信息卡片:
     - [x] 天气 (已在`🆕新版Siri_Suggestions.*`中修复，搜索关键词`城市名 天气`或`天气 城市名`，例如`天气 上海`，不是所有城市都有天气搜索结果)
-    - [x] Siri资料(Siri Knowledge)  截图:[macOS](./ScreenShots/Siri%20Knowledge%20-%20Spotlight%20-%20macOS.png?raw=true "Siri Knowledge - Spotlight - macOS")   
-    - [x] Siri建议的网站(Siri Suggested Websites)  
-    - [x] 维基百科 (macOS端需要Surge启用“增强模式”)  
+    - [x] Siri资料(Siri Knowledge)  截图:[macOS](./ScreenShots/Siri%20Knowledge%20-%20Spotlight%20-%20macOS.png?raw=true "Siri Knowledge - Spotlight - macOS")
+    - [x] Siri建议的网站(Siri Suggested Websites)
+    - [x] 维基百科 (macOS端需要Surge启用“增强模式”)
     - [ ] 地图 (当地图为中国区时不显示内容，有知道解决方法或成因的请联系我)
-    - [x] 体育  截图:[macOS](./ScreenShots/Sports%20-%20Spotlight%20-%20macOS.png?raw=true "Sports - Spotlight - macOS") / [iOS](./ScreenShots/Sports%20-%20Spotlight%20-%20iOS.jpeg?raw=true "Sports - Spotlight - iOS")   
-    - [x] 股票  截图:[macOS](./ScreenShots/Stock%20-%20Spotlight%20-%20macOS.png?raw=true "Stock - Spotlight - macOS")   
-    - [x] 航班  截图:[macOS](./ScreenShots/Flights%20-%20Spotlight%20-%20macOS.png?raw=true "Flights - Spotlight - macOS")   
-    - [x] App Store\Mac App Store  截图:[macOS](./ScreenShots/Mac%20App%20Store%20-%20Spotlight%20-%20macOS.png?raw=true "Mac App Store - Spotlight - macOS") / [iOS](./ScreenShots/App%20Store%20-%20Spotlight%20-%20iOS.jpeg?raw=true "App Store - Spotlight - iOS")    
-    - [x] 电影 & 电视节目   
-      - [x] tv  截图:[macOS](./ScreenShots/tv%20-%20Spotlight%20-%20macOS.png?raw=true "tv - Spotlight - macOS")   
-      - [x] iTunes  
-    - [x] 音乐  
-      - [x] Apple Music  截图:[macOS](./ScreenShots/Apple%20Music%20-%20Spotlight%20-%20macOS.png?raw=true "Apple Music - Spotlight - macOS") / [iOS](./ScreenShots/Apple%20Music%20-%20Spotlight%20-%20iOS.jpeg?raw=true "Apple Music - Spotlight - iOS")   
-      - [x] iTunes  
-    - [x] 新闻 
+    - [x] 体育  截图:[macOS](./ScreenShots/Sports%20-%20Spotlight%20-%20macOS.png?raw=true "Sports - Spotlight - macOS") / [iOS](./ScreenShots/Sports%20-%20Spotlight%20-%20iOS.jpeg?raw=true "Sports - Spotlight - iOS")
+    - [x] 股票  截图:[macOS](./ScreenShots/Stock%20-%20Spotlight%20-%20macOS.png?raw=true "Stock - Spotlight - macOS")
+    - [x] 航班  截图:[macOS](./ScreenShots/Flights%20-%20Spotlight%20-%20macOS.png?raw=true "Flights - Spotlight - macOS")
+    - [x] App Store\Mac App Store  截图:[macOS](./ScreenShots/Mac%20App%20Store%20-%20Spotlight%20-%20macOS.png?raw=true "Mac App Store - Spotlight - macOS") / [iOS](./ScreenShots/App%20Store%20-%20Spotlight%20-%20iOS.jpeg?raw=true "App Store - Spotlight - iOS")
+    - [x] 电影 & 电视节目
+      - [x] tv  截图:[macOS](./ScreenShots/tv%20-%20Spotlight%20-%20macOS.png?raw=true "tv - Spotlight - macOS")
+      - [x] iTunes
+    - [x] 音乐
+      - [x] Apple Music  截图:[macOS](./ScreenShots/Apple%20Music%20-%20Spotlight%20-%20macOS.png?raw=true "Apple Music - Spotlight - macOS") / [iOS](./ScreenShots/Apple%20Music%20-%20Spotlight%20-%20iOS.jpeg?raw=true "Apple Music - Spotlight - iOS")
+      - [x] iTunes
+    - [x] 新闻
     - [ ] Twitter集成 (官方功能列表中有此功能，有知道解决方法或成因的请联系我)
 
 ## 已知「Siri建议」服务器列表
@@ -349,7 +350,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
       * 🆕针对策略组为`🍎 Apple`的模块(如:Surgio):[Siri_Suggestions_for_Surgio.sgmodule](./sgmodule/Siri_Suggestions_for_Surgio.sgmodule?raw=true " Enable Siri Suggestions")
       * 🆕针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")  
 ### 旧版
-  * 旧版，用重写(Rewrite)功能修改地区
+  * 旧版，用重写(Rewrite)功能修改为固定地区
     * Loon:
       * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.plugin](./plugin/Siri_Suggestions_TW.plugin?raw=true " Enable Siri Suggestions 🇹🇼TW")
       * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.plugin](./plugin/Siri_Suggestions_JP.plugin?raw=true " Enable Siri Suggestions 🇯🇵JP")
@@ -534,14 +535,14 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * 未装有SIM卡或设置了SIM卡PIN的iOS/iPadOS/macOS设备，可省略`✈️飞行模式`相关步骤
   1. 在充当网关的`Surge for macOS`上启用`Apple_iCloud_Private_Relay.getaway.sgmodule`模块
   2. 在`Surge for macOS`中指定相关代理线路为🇺🇸美国或其他可用地区,或者`全局模式`
-  3. 打开`✈️飞行模式`后`关机`
-  4. 重新`开机`,解锁屏幕但不关闭`✈️飞行模式`、不输入SIM卡PIN，等待设备连接`Wi-Fi`或`有线网络`通过`专用代理可用性`验证
+  3. 打开终端设备的`✈️飞行模式`后`关机`
+  4. 重新将终端设备`开机`,解锁屏幕但不关闭`✈️飞行模式`或不输入SIM卡PIN，等待设备连接`Wi-Fi`或`有线网络`通过`专用代理可用性`验证
   5. 此时应在`Surge for macOS`的`请求查看器`中观察到:
-     1. 检测iCloud中是否包含`专用代理订阅(networking.privacy.subscriber)`的`p*-acsegateway.icloud.com`链接，且请求头`X-MMe-Country`是`TW`
-     2. 检测可用性`专用代理验证Token`的`https://mask-api.icloud.com/v*/fetchAuthTokens`链接
-     3. 获取当前`专用代理配置`的`https://mask-api.icloud.com/v*_*/fetchConfigFile`链接(非必需、首次启用或周期性更新)
-  6. 关闭`✈️飞行模式`或输入SIM卡PIN
-  7. 打开`设置`-`Apple ID`-`iCloud`-`专用代理（Beta版）`，此时应是[解锁状态说明](#解锁状态说明-1)中的`解锁成功`状态
+     1. 检测iCloud中是否包含`专用代理订阅(networking.privacy.subscriber)`的链接`p*-acsegateway.icloud.com`，且请求头`X-MMe-Country`是`TW`
+     2. 包含可用性检测的`获取专用代理验证令牌`链接：`https://mask-api.icloud.com/v*/fetchAuthTokens`
+     3. 包含代理服务器分配的`获取专用代理配置文件`链接：`https://mask-api.icloud.com/v*_*/fetchConfigFile`(非必需、首次启用`专用代理`或周期性更新)
+  6. 关闭终端设备`✈️飞行模式`或输入SIM卡PIN
+  7. 打开终端设备`设置`-`Apple ID`-`iCloud`-`专用代理（Beta版）`，此时应是[解锁状态说明](#解锁状态说明-1)中的`解锁成功`状态
   8. 正常使用
 
 ## 解锁状态说明
@@ -576,3 +577,6 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     * 针对策略组为`🍎Apple`的模块:[iCloud_Private_Relay_Gateway_for_Apple_icon.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Apple_icon.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
     * 针对策略组为`🍎 Apple`的模块(如:Surgio):[iCloud_Private_Relay_Gateway_for_Surgio.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Surgio.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
     * 针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[iCloud_Private_Relay_Gateway_for_ACL4SSR.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_ACL4SSR.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+
+### `Clash`
+  * todo
