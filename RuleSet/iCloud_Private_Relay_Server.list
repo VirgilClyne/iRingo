@@ -1,9 +1,0 @@
-# > iCloud Private Relay
-# https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
-# https://mask-api.icloud.com/egress-ip-ranges.csv
-
-# Optimize for Private Relay connections
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-api.icloud.com)),DIRECT
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),DIRECT
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),DIRECT
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(IP-CIDR,17.0.0.0/8,no-resolve)),DIRECT

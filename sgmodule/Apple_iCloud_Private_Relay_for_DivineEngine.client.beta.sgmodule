@@ -57,16 +57,16 @@ PROCESS-NAME,com.apple.WebKit.Networking, DIRECT, interface=lo0, allow-other-int
 USER-AGENT,AppleWebKit*, DIRECT, interface=lo0, allow-other-interface=true
 
 # > iCloud 
-# DOMAIN,gateway.icloud.com, 🌑Proxy
-# DOMAIN,metrics.icloud.com, 🌑Proxy
+DOMAIN,gateway.icloud.com, 🌑Proxy
+DOMAIN,metrics.icloud.com, 🌑Proxy
 # iCloud services in China
 DOMAIN-SUFFIX,apzones.com, DIRECT
 DOMAIN-SUFFIX,icloud.com.cn, DIRECT
 # iCloud services
-DOMAIN-SUFFIX,icloud-content.com, 🌑Proxy
-DOMAIN-SUFFIX,icloud-content.com.akadns.net, 🌑Proxy
-DOMAIN-KEYWORD,content.icloud.com, 🌑Proxy
-DOMAIN-KEYWORD,content.icloud.com.akadns.net, 🌑Proxy
+#DOMAIN-SUFFIX,icloud-content.com, 🌑Proxy
+#DOMAIN-SUFFIX,icloud-content.com.akadns.net, 🌑Proxy
+#DOMAIN-KEYWORD,content.icloud.com, 🌑Proxy
+#DOMAIN-KEYWORD,content.icloud.com.akadns.net, 🌑Proxy
 
 # > Apple Content caching
 # https://support.apple.com/en-us/HT210060
