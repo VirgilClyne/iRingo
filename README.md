@@ -55,7 +55,11 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [安装链接](#安装链接-5)
 - [🌐iCloud 专用代理(🚧测试中，有问题请反馈)](#icloud-专用代理测试中有问题请反馈)
   - [简介](#简介-6)
+  - [激活方式](#激活方式-5)
+  - [解锁状态说明](#解锁状态说明-1)
+  - [功能列表](#功能列表-3)
   - [安装链接](#安装链接-6)
+    - [启用`网关模式`的`Surge for macOS`](#启用网关模式的surge-for-macos)
 
 ---
 
@@ -337,13 +341,13 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
         * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
         * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，运行于M1处理器的Mac设备上的Loon与Quantumult X可能有效。
       * macOS/iOS通用模块:
-      * 🆕针对策略组为PROXY的模块:[Siri_Suggestions_for_Uppercase_PROXY.sgmodule](./sgmodule/Siri_Suggestions_for_Uppercase_PROXY.sgmodule?raw=true " Enable Siri Suggestions")
-      * 🆕针对策略组为Proxy的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 🆕针对策略组为🌑Proxy的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 🆕针对策略组为Apple的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 🆕针对策略组为🍎Apple的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
-      * 🆕针对策略组为🍎 Apple的模块:[Siri_Suggestions_for_Apple_blank_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_blank_icon.sgmodule?raw=true " Enable Siri Suggestions")
-      * 🆕针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")  
+      * 🆕针对策略组为`PROXY`的模块:[Siri_Suggestions_for_Uppercase_PROXY.sgmodule](./sgmodule/Siri_Suggestions_for_Uppercase_PROXY.sgmodule?raw=true " Enable Siri Suggestions")
+      * 🆕针对策略组为`Proxy`的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 🆕针对策略组为`🌑Proxy`的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 🆕针对策略组为`Apple`的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
+      * 🆕针对策略组为`🍎Apple`的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
+      * 🆕针对策略组为`🍎 Apple`的模块(如:Surgio):[Siri_Suggestions_for_Surgio.sgmodule](./sgmodule/Siri_Suggestions_for_Surgio.sgmodule?raw=true " Enable Siri Suggestions")
+      * 🆕针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions")  
 ### 旧版
   * 旧版，用重写(Rewrite)功能修改地区
     * Loon:
@@ -478,7 +482,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ## 解锁状态说明
 |  锁定状态  | 解锁成功 | 解锁失效 | 
-|   :-:   |   :-:   |   :-:   |
+| :---: | :---: | :---: |
 | 未通过地区检测  | 已成功通过地区检测 | 通过检测后，再次触发检测时未通过检测  |
 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  | `gateway.icloud.com`需走代理才能完整加载内容 | 请在`✈️飞行模式`下通过`Wi-Fi`或`有线网络`再次执行解锁步骤  |
 |<p> Apple News isn't supported in your current region. </p>|<p> **Feed Unavailable**  <br> There may be a problem with the sever or network. Plase try again later. </p>|<p> **Feed Unavailable** <br> Apple News isn't supported in your current region. </p>|
@@ -498,40 +502,77 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     * 不含规则集的模块:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
     * 预置策略组的模块:
-      * 针对策略组为PROXY的模块:[Apple_News_for_Uppercase_PROXY.sgmodule](./sgmodule/Apple_News_for_Uppercase_PROXY.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为Proxy的模块:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为Apple的模块:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为🍎Apple的模块:[Apple_News_for_Apple_icon.sgmodule](./sgmodule/Apple_News_for_Apple_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为🍎 Apple的模块:[Apple_News_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_News_for_Apple_blank_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为Apple News的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
-      * 针对策略组为🇺🇸美国的模块:[Apple_News_for_US_icon.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_US_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`PROXY`的模块:[Apple_News_for_Uppercase_PROXY.sgmodule](./sgmodule/Apple_News_for_Uppercase_PROXY.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`Proxy`的模块:[Apple_News_for_Proxy.sgmodule](./sgmodule/Apple_News_for_Proxy.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`🌑Proxy`的模块(如:DivineEngine):[Apple_News_for_DivineEngine.sgmodule](./sgmodule/Apple_News_for_DivineEngine.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`Apple`的模块:[Apple_News_for_Apple.sgmodule](./sgmodule/Apple_News_for_Apple.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`🍎Apple`的模块:[Apple_News_for_Apple_icon.sgmodule](./sgmodule/Apple_News_for_Apple_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`🍎 Apple`的模块(如:Surgio):[Apple_News_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_News_for_Apple_blank_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`📡 Apple 地区限制`的模块(如:Surgio):[iCloud_Private_Relay_Gateway_for_Surgio.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Surgio.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+      * 针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Apple_News_for_ACL4SSR.sgmodule](./sgmodule/Apple_News_for_ACL4SSR.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`Apple News`的模块:[Apple_News_for_Apple_News.sgmodule](./sgmodule/Apple_News_for_Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
+      * 针对策略组为`🇺🇸美国`的模块:[Apple_News_for_US_icon.sgmodule](./sgmodule/Apple_News_for_US_icon.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
 
 ---
 
 # 🌐iCloud 专用代理(🚧测试中，有问题请反馈)
 ## 简介
-  * 保持模块/规则启用,即可让终端正常使用「iCloud 专用代理」。
+  * 保持模块/规则启用,即可让此网关下属终端设备正常直连使用「iCloud 专用代理」。
   
   * 注:
+    * iCloud 专用代理本质为TUN模式透明代理，所以与本机TUN模式VPN冲突，解决方法待验证。
     * 启用模块/规则的设备自身无法解锁/使用「iCloud 专用代理」（待验证）。
-    * 只在Surge for Mac`网关模式`测试过，未在Surge for iOS`Wi-Fi访问`测试过。
+    * 仅在`Surge for Mac`的`网关模式`下通过测试，未在`Surge for iOS`的`Wi-Fi访问`测试过。
     * 「可用性验证」环节依旧需要走代理（域名列表待优化），「专用代理」自身流量为直链访问，落地服务器取决于「可用性验证」环节指向的代理服务器。
     * 一旦「专用代理」启用工作，几个iCloud地区检测域名将不再暴露于「专用代理」代理之外，可不用保持相关检测地址走代理。
     * 「专用代理」访问采用QUIC(UDP,443)技术，相关服务器由Akamai、Fastly 和Cloudflare提供，请保证自身直连访问这些服务良好，居住地及运营商网络质量堪忧请自己想办法解决。
     * 相关介绍请见:https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
     * 出口IP列表:https://mask-api.icloud.com/egress-ip-ranges.csv
 
+## 激活方式
+  * 因为目前没有稳定触发`专用代理`当前地区可用性检测的方法，所以建议重新开机来手动触发检测
+  * 未装有SIM卡或设置了SIM卡PIN的iOS/iPadOS/macOS设备，可省略`✈️飞行模式`相关步骤
+  1. 在充当网关的`Surge for macOS`上启用`Apple_iCloud_Private_Relay.getaway.sgmodule`模块
+  2. 在`Surge for macOS`中指定相关代理线路为🇺🇸美国或其他可用地区,或者`全局模式`
+  3. 打开`✈️飞行模式`后`关机`
+  4. 重新`开机`,解锁屏幕但不关闭`✈️飞行模式`、不输入SIM卡PIN，等待设备连接`Wi-Fi`或`有线网络`通过`专用代理可用性`验证
+  5. 此时应在`Surge for macOS`的`请求查看器`中观察到:
+     1. 检测iCloud中是否包含`专用代理订阅(networking.privacy.subscriber)`的`p*-acsegateway.icloud.com`链接，且请求头`X-MMe-Country`是`TW`
+     2. 检测可用性`专用代理验证Token`的`https://mask-api.icloud.com/v*/fetchAuthTokens`链接
+     3. 获取当前`专用代理配置`的`https://mask-api.icloud.com/v*_*/fetchConfigFile`链接(非必需、首次启用或周期性更新)
+  6. 关闭`✈️飞行模式`或输入SIM卡PIN
+  7. 打开`设置`-`Apple ID`-`iCloud`-`专用代理（Beta版）`，此时应是[解锁状态说明](#解锁状态说明-1)中的`解锁成功`状态
+  8. 正常使用
+
+## 解锁状态说明
+|  不支持  |  可用  |  暂不可用  |  流量审核  |  关闭  |
+| :---: | :---: | :---: | :---: | :---: |
+| 未通过地区检测 | 已成功通过地区检测 | 与iCloud的QUIC连接被阻止 | 与iCloud专用代理的连接被阻止 | 此网络的专用代理已关闭 |
+| 请重新启动设备，在`✈️飞行模式`或SIM卡锁定下，通过`Wi-Fi`或`有线网络`再次执行解锁步骤 | 可以正常使用 | 请检查当前网络对QUIC(UDP,443)流量的Block、QoS或Drop情况 | 请检查至`mask.icloud.com`与`mask-h2.icloud.com`的连接情况 | 请在此`Wi-Fi`或`有线网络`的设置中打开`iCloud专用代理` |
+|<p> **此国家或地区尚不支持专用代理。** <br> {国家或地区}尚不支持专用代理。当您在支持的国家或地区联网时，可将其打开。</p>|<p> 无说明 </p>|<p> **由于技术问题，专用代理暂时不可用。** <br> 问题解决时将自动恢复工作。 </p>|<p> **专用代理已对“{当前网络}”关闭** <br> 专用代理不受此网络支持或已在Wi-Fi设置中关闭。专用代理关闭时，此网络可监控您的互联网活动，且您的IP地址将不会对已知跟踪器或网站隐藏。</p>|<p> **专用代理已对“{当前网络}”关闭** <br> 使用“{当前网络}”时，网站和跟踪器可获取您的互联网地址。</p>|
+|![🔒不支持截图](./ScreenShots/iCloud%20Private%20Relay%20-%20Not%20Supported%20-%20iOS.jpeg?raw=true "iCloud Private Relay - Not Supported - iOS")|![🔓可用截图](./ScreenShots/iCloud%20Private%20Relay%20-%20Avaliable%20-%20iOS.jpeg?raw=true "iCloud Private Relay - Avaliable - iOS")|![🔒暂不可用截图](./ScreenShots/iCloud%20Private%20Relay%20-%20Temporarily%20Unavaliable%20-%20iOS.jpeg?raw=true "iCloud Private Relay - Temporarily Unavaliable - iOS")|![🔒流量审核截图](./ScreenShots/iCloud%20Private%20Relay%20-%20Network%20Traffic%20Audits%20-%20iOS.jpeg?raw=true "iCloud Private Relay - Network Traffic Audits - iOS")|![🔒关闭截图](./ScreenShots/iCloud%20Private%20Relay%20-%20Turned%20Off%20-%20iOS.jpeg?raw=true "iCloud Private Relay - Turned Off - iOS")|
+
+## 功能列表
+  * 在以下位置及功能中可用: 
+    - [x] 邮件(Mail)
+    - [x] Safari浏览器(Safari)
+      - [x] WebKit(WebKit Networking)
+    - [x] DNS查询(DNS resolution queries)
+      - [x] 使用https://doh.dns.apple.com/dns-query
+    - [x] 不安全的 http app 流量(insecure http app traffic)
+
 ## 安装链接
+### 启用`网关模式`的`Surge for macOS`
   * Surge:
-  * 不含规则集的模块:[Apple_iCloud_Private_Relay.sgmodule](./sgmodule/Apple_iCloud_Private_Relay.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 域名集:[iCloud_Private_Relay.list](./RuleSet/iCloud_Private_Relay.list?raw=true "iCloud Private Relay")
+  * 不含规则集的模块:[iCloud_Private_Relay_Gateway.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 域名集:
+      * QUIC代理流量:[iCloud_Private_Relay_QUIC.list](./RuleSet/iCloud_Private_Relay_QUIC.list?raw=true "iCloud Private Relay QUIC")
+      * 检测与配置流量:[iCloud_Private_Relay_Configs.list](./RuleSet/iCloud_Private_Relay_Configs.list?raw=true "iCloud Private Relay Configs")
   * 预置策略组的模块:
-    * 针对策略组为PROXY的模块:[Apple_iCloud_Private_Relay_for_Uppercase_PROXY.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Uppercase_PROXY.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 针对策略组为Proxy的模块:[Apple_iCloud_Private_Relay_for_Proxy.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Proxy.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 针对策略组为🌑Proxy的模块(如:DivineEngine):[Apple_iCloud_Private_Relay_for_DivineEngine.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_DivineEngine.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 针对策略组为Apple的模块:[Apple_iCloud_Private_Relay_for_Apple.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Apple.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 针对策略组为🍎Apple的模块:[Apple_iCloud_Private_Relay_for_Apple_icon.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Apple_icon.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 针对策略组为🍎 Apple的模块:[Apple_iCloud_Private_Relay_for_Apple_blank_icon.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_Apple_blank_icon.sgmodule?raw=true " Enable iCloud Private Relay")
-    * 针对策略组为🍎 苹果服务的模块(如:ACL4SSR):[Apple_iCloud_Private_Relay_for_ACL4SSR.sgmodule](./sgmodule/Apple_iCloud_Private_Relay_for_ACL4SSR.sgmodule?raw=true " Enable iCloud Private Relay")
+    * 针对策略组为`PROXY`的模块:[iCloud_Private_Relay_Gateway_for_Uppercase_PROXY.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Uppercase_PROXY.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 针对策略组为`Proxy`的模块:[iCloud_Private_Relay_Gateway_for_Proxy.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Proxy.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 针对策略组为`🌑Proxy`的模块(如:DivineEngine):[iCloud_Private_Relay_Gateway_for_DivineEngine.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_DivineEngine.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 针对策略组为`Apple`的模块:[iCloud_Private_Relay_Gateway_for_Apple.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Apple.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 针对策略组为`🍎Apple`的模块:[iCloud_Private_Relay_Gateway_for_Apple_icon.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Apple_icon.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 针对策略组为`🍎 Apple`的模块(如:Surgio):[iCloud_Private_Relay_Gateway_for_Surgio.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_Surgio.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
+    * 针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[iCloud_Private_Relay_Gateway_for_ACL4SSR.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway_for_ACL4SSR.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
