@@ -314,7 +314,7 @@ function outputData(api, stations, obs) {
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
 function switchPollutantsType(pollutant) {
     switch (pollutant) {
-        case 'co': return 'CO2';
+        case 'co': return 'CO';
         case 'no': return 'NO';
         case 'no2': return 'NO2';
         case 'so2': return 'SO2';
