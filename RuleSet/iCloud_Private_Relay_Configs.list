@@ -4,8 +4,8 @@
 
 # Allow for network traffic audits
 AND,((PROTOCOL,TCP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443))
-AND,((PROTOCOL,TCP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443))
-AND,((PROTOCOL,TCP),(DOMAIN,mask-api.fe.apple-dns.net),(DEST-PORT,443))
+DOMAIN,mask-api.icloud.com
+DOMAIN,mask-api.fe.apple-dns.net
 AND,((PROTOCOL,TCP),(DOMAIN,mask.icloud.com),(DEST-PORT,443))
 AND,((PROTOCOL,TCP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443))
 AND,((PROTOCOL,TCP),(DOMAIN,mask-h2.icloud.com),(DEST-PORT,443))
