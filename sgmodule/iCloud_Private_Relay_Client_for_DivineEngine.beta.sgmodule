@@ -1,5 +1,5 @@
-#!name= Unlock iCloud Private Relay for iOS/macOS Clinets
-#!desc=(BETA) 为终端设备启用iCloud专用代理，需要Surge for macOS作为网关使用
+#!name= Enable iCloud Private Relay for iOS/macOS Clinets
+#!desc=(BETA) 为终端设备启用iCloud专用代理
 
 [General]
 # ---(通用)---
