@@ -3,13 +3,13 @@ README:https://github.com/VirgilClyne/iRingo
 */
 
 //你的KEY，参见https://dev.qweather.com/docs/resource/get-key/
-const key = 123456789
+const key = '123456789ABC'
 
 const $ = new Env('Apple_Weather');
 !(async () => {
     await getOrigin($request.url)
     await getNextHourStatus($response.body)
-    await getGridWeatherMinutely($.lat, $.lng, key)
+    await getGridWeatherMinutely($.lat, $.lng, key, switchLanguage($.language))
     await outputData($.lat, $.lng, $.GridWeather)
 })()
     .catch((e) => $.logErr(e))
@@ -61,14 +61,13 @@ function getNextHourStatus(body) {
 // Step 3
 // Get Nearest forecast Next Hour Station AQI Data
 // https://dev.qweather.com/docs/api/grid-weather/minutely/
-// https://api.qweather.com/v7/minutely/5m?[请求参数]
-function getGridWeatherMinutely(lat, lng, key, timeout = 0) {
+// https://api.qweather.com/v7/minutely/5m?location=${lng},${lat}&key=${key}&lang=${lang}
+function getGridWeatherMinutely(lat, lng, key, lang, timeout = 0) {
     return new Promise((resove) => {
         if ($.countryCode = 'CN') {
-            lang = switchLanguage($.language)
             setTimeout( ()=>{
                 const url = {
-                    url: `https://api.qweather.com/v7/minutely/5m?location=${lat},${lng}&key=${key}&lang=${lang}`,
+                    url: `https://api.qweather.com/v7/minutely/5m?location=${lng},${lat}&key=${key}&lang=${lang}`,
                 }
                 $.get(url, (error, response, data) => {
                     try {
@@ -137,7 +136,7 @@ function outputData(lat, lng, obs) {
             weather.forecastNextHour.metadata.providerLogo = "";
             weather.forecastNextHour.metadata.providerName = obs.refer.sources[0];
             weather.forecastNextHour.metadata.expireTime = convertTime(new Date(obs.updateTime), 'add-1h-floor');
-            if (!weather.forecastNextHour.metadata.language) weather.forecastNextHour.metadata.language = weather.currentWeather.metadata.language;
+            weather.forecastNextHour.metadata.language ? weather.forecastNextHour.metadata.language : weather.currentWeather.metadata.language;
             //weather.forecastNextHour.metadata.language = $.language;
             weather.forecastNextHour.metadata.latitude = lat;
             weather.forecastNextHour.metadata.reportedTime = convertTime(new Date(obs.updateTime), 'remain');
@@ -145,12 +144,22 @@ function outputData(lat, lng, obs) {
             //weather.forecastNextHour.metadata.units = "m";
         }
         if (obs.minutely) { // From Observation Station
+            /*
             var maps= new Map([['fxTime','startTime'],['precip','precipIntensity']]);
             obs.minutely = obs.minutely.map(element =>{
                 element.placeCode = maps.get(element.placeCode);
                 return element;
             });
             weather.forecastNextHour.minutes = obs.minutely
+            */
+            obs.minutely = obs.minutely.map(element =>{
+                return {
+                    startTime: convertTime(new Date(element.fxTime), 'remain'), //五分钟
+                    precipChance: element.precipChance, //没有概率
+                    precipIntensityPerceived: element.precipIntensityPerceived, //没有体感
+                    precipIntensity: element.precip, //只有降水量
+                }
+            })
         }
     };
     body = JSON.stringify(weather);
