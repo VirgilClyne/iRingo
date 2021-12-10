@@ -31,9 +31,9 @@ if (url.indexOf(path1) != -1) { //Bag
 else if (url.indexOf(path2) != -1) { //Search
     url = (cc == 'CN') ? processQuery(url, 'cc', 'TW') : processQuery(url, 'cc', cc);
     if (qtype == 'zkw') { // 处理'新闻'小组件
-        if (['CN', 'HK', 'MO', 'TW', 'SG'].includes(cc) = true) url = processQuery(url, 'locale', `${esl}_SG`)
-        else if (['US', 'CA', 'UK', 'AU'].includes(cc) = false) url = processQuery(url, 'locale', `${esl}_US`)
-        else processQuery(url, 'locale');
+        ['CN', 'HK', 'MO', 'TW', 'SG'].includes(`${cc}`) ? url = processQuery(url, 'locale', `${esl}_SG`)
+            : ['US', 'CA', 'UK', 'AU'].includes(`${cc}`) ? url = processQuery(url, 'locale')
+                : url = processQuery(url, 'locale', `${esl}_US`);
     } else { // 其他搜索
         let q = processQuery(url, 'q')
         if (q.match(/^%E5%A4%A9%E6%B0%94%20/)) { // 处理'天气'搜索，搜索词'天气 '开头
