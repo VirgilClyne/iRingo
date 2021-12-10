@@ -59,7 +59,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [解锁状态说明](#解锁状态说明-1)
   - [功能列表](#功能列表-3)
   - [安装链接](#安装链接-6)
-    - [启用`网关模式`的`Surge for macOS`](#启用网关模式的surge-for-macos)
+    - [`Surge for macOS`with`网关模式`](#surge-for-macoswith网关模式)
     - [`Clash`](#clash)
 
 ---
@@ -559,11 +559,14 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [x] Safari浏览器(Safari)
       - [x] WebKit(WebKit Networking)
     - [x] DNS查询(DNS resolution queries)
-      - [x] 使用https://doh.dns.apple.com/dns-query
+      - [x] https://doh.dns.apple.com/dns-query
+      - [x] https://mask.icloud.com/dns-query
+      - [x] https://oblivious.r15.doh.dns.akasecure.net/dns-query
+      - [x] https://odoh.cloudflare-dns.com/dns-query
     - [x] 不安全的 http app 流量(insecure http app traffic)
 
 ## 安装链接
-### 启用`网关模式`的`Surge for macOS`
+### `Surge for macOS`with`网关模式`
   * Surge:
   * 不含规则集的模块:[iCloud_Private_Relay_Gateway.sgmodule](./sgmodule/iCloud_Private_Relay_Gateway.sgmodule?raw=true " Enable iCloud Private Relay on gateway")
     * 域名集:
