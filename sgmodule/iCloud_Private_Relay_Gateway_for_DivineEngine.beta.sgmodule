@@ -18,6 +18,10 @@ AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), DIRECT, inte
 AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
 
 # Allow for network traffic audits
+AND,((DOMAIN,mask.icloud.com),(PROCESS-NAME,mDNSResponder)), 🌑Proxy
+AND,((DOMAIN,mask-api.fe.apple-dns.net),(PROCESS-NAME,mDNSResponder)), 🌑Proxy
+PROCESS-NAME,mDNSResponder, 🌑Proxy
+PROCESS-NAME,/usr/sbin/mDNSResponder, 🌑Proxy
 AND,((PROTOCOL,TCP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443)), 🌑Proxy
 DOMAIN,mask-api.icloud.com, 🌑Proxy
 DOMAIN,mask-api.fe.apple-dns.net, 🌑Proxy
