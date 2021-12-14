@@ -292,7 +292,14 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
     - [x] 新闻(Apple News)
     - [ ] 询问Siri(Ask Siri)
       - [x] 无SIM卡设备可被[定位服务](#定位服务)模块修改切换至海外版(维基百科)
-      - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版（百度百科)
+      - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版(百度百科)
+    - [x] 电话
+    - [x] 家庭
+    - [x] 日历
+    - [x] 提醒事项
+    - [x] 通讯录
+    - [x] 信息
+    - [x] 邮件
   * 启用的功能:
     - [x] 来自APPLE的内容(CONTENT FROM APPLE)
     - [x] 来自APPLE的建议(SUGGESTIONS FROM APPLE)
