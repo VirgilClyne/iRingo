@@ -540,11 +540,12 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   * 保持模块/规则启用,即可让此网关下属终端设备正常直连使用「iCloud 专用代理」。
   
   * 注:
+    * 🆕iOS 15.2起，Wi-Fi设置中的`iCloud专用代理`选项变更为`限制IP地址追踪`,启用并生效后不再有Wi-Fi设置中的DNS进行域名解析，猜测由下列DOH解析
     * iCloud 专用代理本质为TUN模式透明代理，所以与本机TUN模式VPN冲突，解决方法待验证。
     * 启用模块/规则的设备自身无法解锁/使用「iCloud 专用代理」（待验证）。
     * 仅在`Surge for Mac`的`网关模式`下通过测试，未在`Surge for iOS`的`Wi-Fi访问`测试过。
     * 「可用性验证」环节依旧需要走代理（域名列表待优化），「专用代理」自身流量为直链访问，落地服务器取决于「可用性验证」环节指向的代理服务器。
-    * 一旦「专用代理」启用工作，几个iCloud地区检测域名将不再暴露于「专用代理」代理之外，可不用保持相关检测地址走代理。
+    * 一旦「专用代理」启用工作，除iCloud专用代理相关检测域名外，其余`邮件`和`Safari浏览器`流量将不再暴露于「专用代理」之外。
     * 「专用代理」访问采用QUIC(UDP,443)技术，相关服务器由Akamai、Fastly 和Cloudflare提供，请保证自身直连访问这些服务良好，居住地及运营商网络质量堪忧请自己想办法解决。
     * 相关介绍请见:https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
     * 出口IP列表:https://mask-api.icloud.com/egress-ip-ranges.csv
