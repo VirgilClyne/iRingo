@@ -17,16 +17,23 @@ const done = (value = {}) => {
 README:https://github.com/VirgilClyne/iRingo
 */
 
-let params = getParams($argument);
-console.log(JSON.stringify(params));
-
 // Default GeoCountryCode: US
-let GeoCountryCode = params.GeoCountryCode ? params.GeoCountryCode : "US";
+let GeoCountryCode = "US";
 // Default Location Services Configs (test)
-let EnableAlberta = params.EnableAlberta ? params.EnableAlberta : true;
-let GEOAddressCorrectionEnabled = params.GEOAddressCorrectionEnabled ? params.GEOAddressCorrectionEnabled : true;
-let ShouldEnableLagunaBeach = params.ShouldEnableLagunaBeach ? params.ShouldEnableLagunaBeach : true;
-let PedestrianAREnabled = params.PedestrianAREnabled ? params.PedestrianAREnabled : true;
+//let GEOAddressCorrectionEnabled = true;
+//let ShouldEnableLagunaBeach = true;
+//let PedestrianAREnabled = true;
+
+// Argument Function Supported
+if (typeof $argument != "undefined") {
+    let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+    console.log(JSON.stringify(arg));
+    //GeoCountryCode = arg.GeoCountryCode;
+    //EnableAlberta = arg.EnableAlberta;
+    //GEOAddressCorrectionEnabled = arg.GEOAddressCorrectionEnabled;
+    //ShouldEnableLagunaBeach = arg.ShouldEnableLagunaBeach;
+    //PedestrianAREnabled = arg.PedestrianAREnabled;
+};
 
 const url = $request.url;
 
@@ -87,14 +94,3 @@ function xmlReplace(body, variable, parameter) {
     xml = body.replace(variable, parameter);
     return xml;
 };
-
-// Argument Function Supported
-function getParams(param) {
-    if (typeof $argument != "undefined")
-    return Object.fromEntries(
-      $argument
-        .split("&")
-        .map((item) => item.split("="))
-        .map(([k, v]) => [k, decodeURIComponent(v)])
-    );
-  }

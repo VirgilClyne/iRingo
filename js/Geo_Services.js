@@ -17,11 +17,15 @@ const done = (value = {}) => {
 README:https://github.com/VirgilClyne/iRingo
 */
 
-let params = getParams($argument);
-console.log(JSON.stringify(params));
-
 // Default GeoCountryCode: US
-GeoCountryCode = params.GeoCountryCode ? params.GeoCountryCode : "US";
+let GeoCountryCode = "US";
+
+// Argument Function Supported
+if (typeof $argument != "undefined") {
+    let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+    console.log(JSON.stringify(arg));
+    GeoCountryCode = arg.GeoCountryCode;
+};
 
 const url = $request.url;
 
@@ -48,14 +52,3 @@ if (url.indexOf(path1) != -1) {
         done({ response });
     }
 } else done();
-
-// Argument Function Supported
-function getParams(param) {
-    if (typeof $argument != "undefined")
-    return Object.fromEntries(
-      $argument
-        .split("&")
-        .map((item) => item.split("="))
-        .map(([k, v]) => [k, decodeURIComponent(v)])
-    );
-  }

@@ -84,24 +84,37 @@ location = {
     "dma": 555
   },
 */
-let params = getParams($argument);
-console.log(JSON.stringify(params));
 
-// Default Location
-let location = {};
-location.region_name = params.region_name ? params.region_name : "";
-location.type = params.type ? params.type : "COUNTRY_CODE";
-location.asn = params.asn ? params.asn : 41378;
-location.zip_code = params.zip_code ? params.zip_code : "";
-location.state_name = params.state_name ? params.state_name : "";
-location.country_code = params.country_code ? params.country_code : "SG";
-location.carrier = params.carrier ? params.carrier : "kirino llc";
-location.city_name = params.city_name? params.city_name : "";
-location.connection_type = params.connection_type ? params.connection_type : "";
-location.dma = params.dma ? params.dma : 0;
-// Default Home Location
-let home_location = {};
-home_location.country_code = params.country_code ? params.country_code : "SG";
+// Default location
+let location = {
+  "region_name": "",
+  "type": "COUNTRY_CODE",
+  "asn": 41378,
+  "zip_code": "",
+  "state_name": "",
+  "country_code": "SG",
+  "carrier": "kirino llc",
+  "city_name": "",
+  "connection_type": "",
+  "dma": 0
+};
+let home_location = { "country_code": "SG" };
+
+// Argument Function Supported
+if (typeof $argument != "undefined") {
+    let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+    console.log(JSON.stringify(arg));
+    location.region_name = arg.region_name ? arg.region_name : "";
+    location.type = arg.type ? arg.type : "COUNTRY_CODE";
+    location.zip_code = arg.zip_code ? arg.zip_code : "";
+    location.asn = arg.asn ? arg.asn : 41378;
+    location.country_code = arg.country_code ? arg.country_code : "SG";
+    location.carrier = arg.carrier ? arg.carrier : "kirino llc";
+    location.city_name = arg.city_name? arg.city_name : "";
+    location.connection_type = arg.connection_type ? arg.connection_type : "";
+    location.dma = arg.dma ? arg.dma : 0;
+    home_location.country_code = arg.country_code ? arg.country_code : "SG";
+};
 
 const url = $request.url;
 
@@ -172,14 +185,3 @@ if (url.search(path4) != -1) {
   body = JSON.stringify(content);
   done({ body });
 };
-
-// Argument Function Supported
-function getParams(param) {
-  if (typeof $argument != "undefined")
-  return Object.fromEntries(
-    $argument
-      .split("&")
-      .map((item) => item.split("="))
-      .map(([k, v]) => [k, decodeURIComponent(v)])
-  );
-}
