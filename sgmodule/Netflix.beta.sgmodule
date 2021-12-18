@@ -1,8 +1,0 @@
-#!name=Unlock Netflix Hidden Feature
-#!desc=(BETA) 解锁Netflix隐藏功能
-
-[Script]
-Netflix = type=http-response,pattern=^https?:\/\/ios\.prod\.ftl\.netflix\.com\/(iosui\/user\/), requires-body=1, binary-body-mode=0, max-size=0 ,script-update-interval=0, argument=, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Netflix.js
-
-[MITM]
-hostname = %APPEND% ios.prod.ftl.netflix.com
