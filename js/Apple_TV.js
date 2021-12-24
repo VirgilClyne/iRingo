@@ -109,9 +109,10 @@ function outputData(api, caller, platform, locale, region) {
     else if (api == "v3") {
         //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
         //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-        configurations.data.applicationProps.tabs = createTabsGroup(caller, platform, locale, region);
+        configurations.data.applicationProps.tabs = createTabsGroup(Tabs, caller, platform, locale, region);
+        configurations.data.applicationProps.tabsSplitScreen = createTabsGroup(TabsGroup, caller, platform, locale, region);
         configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-        configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }];
+        configurations.data.applicationProps.enabledClientFeatures = [{ "name": "expanse", "domain": "tvapp" }, { "name": "syndication", "domain": "tvapp" }, { "name": "snwpcr", "domain": "tvapp" }, { "name": "store_tab", "domain": "tvapp" }];
         configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "en_US", "en_GB"];
         //configurations.data.applicationProps.storefront.storefrontId = 143470;
         configurations.data.applicationProps.featureEnablers = {
@@ -134,7 +135,7 @@ function outputData(api, caller, platform, locale, region) {
 
 // Funtion 3
 // Create Tabs Group
-function createTabsGroup(caller, platform, locale, region) {
+function createTabsGroup(type, caller, platform, locale, region) {
     //构建Tab内容
     let WatchNow = {
         "universalLinks": [
@@ -219,6 +220,42 @@ function createTabsGroup(caller, platform, locale, region) {
         },
         "type": "Kids"
     };
+    let Store = {
+        "destinationType":"SubTabs",
+        "subTabs":[
+            {
+                "destinationType":"Target",
+                "target":{
+                    "id":"tahoma_movies",
+                    "type":"Root",
+                    "url":"https://tv.apple.com/movies"
+                },
+                "title":"电影",
+                "type":"Movies",
+                "universalLinks":[
+                    "https://tv.apple.com/movies"
+                ]
+            },
+            {
+                "destinationType":"Target",
+                "target":{
+                    "id":"tahoma_tvshows",
+                    "type":"Root",
+                    "url":"https://tv.apple.com/tv-shows"
+                },
+                "title":"电视节目",
+                "type":"TV",
+                "universalLinks":[
+                    "https://tv.apple.com/tv-shows"
+                ]
+            }
+        ],
+        "title":"商店",
+        "type":"Store",
+        "universalLinks":[
+            "https://tv.apple.com/store"
+        ]
+    };
     let Library = {
         "title": "Library",
         "type": "Library",
@@ -239,22 +276,37 @@ function createTabsGroup(caller, platform, locale, region) {
     };
 
     // 设备与平台区别
-    if (caller == "com.apple.iTunes" && platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
-    else if (caller == "wta" && platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Kids, Library, Search];
-    else if (platform == "desktop") Tabs = [WatchNow, Originals, Movies, TV, Sports, Library, Search];
-    else if (platform == "iphone") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "ipad") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "appletv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "atv") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else if (platform == "web") Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-    else Tabs = [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-
+    if (caller == "com.apple.iTunes" && platform == "desktop") {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+    } else if (caller == "wta" && platform == "desktop") {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+    } else if (platform == "desktop") {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+    } else if (platform == "iphone") {
+        Tabs = [WatchNow, Originals, Movies, TV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else if (platform == "ipad") {
+        Tabs = [WatchNow, Originals, Movies, TV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else if (platform == "appletv") {
+        Tabs = [WatchNow, Originals, Movies, TV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else if (platform == "atv") {
+        Tabs = [WatchNow, Originals, Movies, TV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else if (platform == "web") {
+        Tabs = [WatchNow, Originals, Movies, TV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else {
+        Tabs = [WatchNow, Originals, Movies, TV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    }
 
     //简体中文改Tabs语言
     if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
     if (esl == "zh_Hans" || region == "CN") {
-        if (platform == "iphone" || platform == "ipad") var maps = new Map([['Watch Now', '立即观看'], ['Originals', '原创内容'], ['Movies', '电影'], ['TV', '电视节目'], ['Sports', '体育节目'], ['Kids', '儿童'], ['Library', '资料库'], ['Search', '搜索']])
-        else var maps = new Map([['Watch Now', '立即观看'], ['Apple TV+', 'Apple TV+'], ['Movies', '电影'], ['TV', '电视节目'], ['Sports', '体育节目'], ['Kids', '儿童'], ['Library', '资料库'], ['Search', '搜索']]);
+        if (platform == "iphone" || platform == "ipad") var maps = new Map([['Watch Now', '立即观看'], ['Originals', '原创内容'], ['Movies', '电影'], ['TV', '电视节目'], ['Sports', '体育节目'], ['Kids', '儿童'], ['Store', '商店'], ['Library', '资料库'], ['Search', '搜索']])
+        else var maps = new Map([['Watch Now', '立即观看'], ['Apple TV+', 'Apple TV+'], ['Movies', '电影'], ['TV', '电视节目'], ['Sports', '体育节目'], ['Kids', '儿童'], ['Store', '商店'], ['Library', '资料库'], ['Search', '搜索']]);
         Tabs = Tabs.map(element => { element.title = maps.get(element.title); return element; });
     };
     /*
@@ -268,7 +320,8 @@ function createTabsGroup(caller, platform, locale, region) {
     else 
     */
 
-    return Tabs;
+    if (type == "Tabs") return Tabs;
+    else if (type == "TabsGroup") return TabsGroup;
 };
 
 // Function 4
