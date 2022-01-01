@@ -78,26 +78,23 @@ DOMAIN,lcdn-locator.apple.com, 🌑Proxy
 
 # > iCloud Private Relay
 # https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
-# https://mask-api.icloud.com/egress-ip-ranges.csv
-
+DOMAIN,mask-api.icloud.com,🌑Proxy
+DOMAIN,mask-api.fe.apple-dns.net,🌑Proxy
 # Optimize for Private Relay connections
-AND,((PROTOCOL,UDP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask-api.fe.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask-h2.icloud.com)),(DEST-PORT,443), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(IP-CIDR,17.0.0.0/8,no-resolve),(DEST-PORT,443)), DIRECT, interface=en0, allow-other-interface=true
-
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(IP-CIDR,17.0.0.0/8,no-resolve)),🌐Direct, interface=en0, allow-other-interface=true
 # Allow for network traffic audits
-AND,((PROTOCOL,TCP),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,TCP),(DOMAIN,mask-api.icloud.com),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,TCP),(DOMAIN,mask-api.fe.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,TCP),(DOMAIN,mask.icloud.com),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,TCP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,TCP),(DOMAIN,mask-h2.icloud.com),(DEST-PORT,443)), 🌑Proxy
-AND,((PROTOCOL,TCP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443)), 🌑Proxy
+AND,((DOMAIN,mask.icloud.com),(PROCESS-NAME,mDNSResponder)),🌑Proxy
+AND,((DOMAIN,mask-api.fe.apple-dns.net),(PROCESS-NAME,mDNSResponder)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌑Proxy
 
 [MITM]
 hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net
