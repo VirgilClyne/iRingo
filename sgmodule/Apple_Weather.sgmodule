@@ -4,5 +4,8 @@
 [Script]
 http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js, requires-body=true, tag=Apple_Weather
 
+[Rule]
+DOMAIN,api.waqi.info,DIRECT
+
 [MITM]
 hostname = %APPEND% weather-data.apple.com
