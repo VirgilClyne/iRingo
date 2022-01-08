@@ -2,12 +2,13 @@
 解锁完整的Apple功能和集成服务   
 macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过  
 需要启用`重写`、`脚本`、`MitM`功能  
-如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用  
-有问题请至Issue页面反馈或移步Telegram讨论组:[NobyDa Script](https://t.me/joinchat/JtzRlVY-WyJPDavvhKjrbw)  
+如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用
+有问题请至Issue页面反馈
+Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 ---
 
-> 目录  
+> 目录
 - [iRingo](#iringo)
 - [通用配置](#通用配置)
   - [效果说明举例](#效果说明举例)
@@ -43,7 +44,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
   - [安装链接](#安装链接-3)
-- [📺Apple TV](#apple-tv)
+- [📺Apple TV（🚧未适配带商店页面的新版）](#apple-tv未适配带商店页面的新版)
   - [简介](#简介-4)
   - [激活方式](#激活方式-3)
   - [功能列表](#功能列表-2)
@@ -422,7 +423,7 @@ macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过
 
 ---
 
-# 📺Apple TV
+# 📺Apple TV（🚧未适配带商店页面的新版）
 ## 简介
   * 保持模块启用,即可在全设备平台解锁TV app全部已知功能，并优先使用简体中文(zh-Hans)。
 
