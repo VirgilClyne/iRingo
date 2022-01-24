@@ -11,13 +11,46 @@ $.VAL_headers =  {
     'Referer': `https://waqi.info/`,
 }
 
+// BoxJs Function Supported
+if (typeof $.getdata("iRingo") != "undefined") {
+	// load user prefs from BoxJs
+	$.Apple = JSON.parse($.getdata("iRingo")).Apple
+	//$.log(JSON.stringify($.Apple.Weather))
+	if ($.Apple.Weather.Verify.Mode == "Key") {
+		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"))
+		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
+	};
+	// Argument Function Supported
+} else if (typeof $argument != "undefined") {
+	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+	$.log(JSON.stringify(arg));
+    $.Apple.Weather.Verify.Mode = arg.Mode;
+	$.Apple.Weather.Verify.Content = arg.Token;
+	$.Apple.Weather.Verify.Content = arg.ServiceKey;
+	$.Apple.Weather.Verify.Content[0] = arg.Key;
+	$.Apple.Weather.Verify.Content[1] = arg.Email;
+} else {
+	$.Apple.Weather = {
+		"Verify":{
+			"Mode":"Token",
+			"Content":null
+		}
+    }
+};
+console.log($.Apple.Weather)
+
 !(async () => {
-    await getOrigin($request.url)
-    await getAQIstatus($.apiVer, $response.body)
-    await getNearest($.apiVer, $.lat, $.lng)
-    var token = await getToken($.idx)
-    var obs = await getStation(token, $.idx)
-    await outputData($.apiVer, $.stations, obs)
+    var [url, dataServer, apiVer, language, lat, lng, countryCode] = await getOrigin($request.url)
+    let status = await getAQIstatus(apiVer, $response.body)
+    if (status == true) {
+        var stations = await getNearest(apiVer, lat, lng)
+        var token = await getToken(stations.idx)
+        var obs = await getStation(token, stations.idx)
+        await outputData(apiVer, stations, obs, $response.body)
+    } else {
+        $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, '');
+        $.done()
+    }
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
@@ -25,16 +58,18 @@ $.VAL_headers =  {
 // Step 1
 // Get Origin Parameter
 function getOrigin(url) {
-    return new Promise((resove) => {
+    return new Promise((resolve) => {
         const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
         try {
-            [$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
-            $.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.language}, ${$.lat}, ${$.lng}, ${$.countryCode}`, '')
+            //$.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.language}, ${$.lat}, ${$.lng}, ${$.countryCode}`, '');
+            //[$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
+            $.log(`🎉 ${$.name}, getOrigin, Finish`, url.match(Regular), '');
+            resolve(url.match(Regular));
         } catch (e) {
-            $.log(`❗️ ${$.name}, getAQIstatus, Failure`, ` error = ${e}`, '')
+            $.log(`❗️ ${$.name}, getAQIstatus, Failure`, ` error = ${e}`, '');
         } finally {
-            $.log(`🎉 ${$.name}, getOrigin, Finish`, '')
-            resove()
+            $.log(`🎉 ${$.name}, getOrigin, Finish`, '');
+            resolve();
         }
     })
 };
@@ -42,38 +77,38 @@ function getOrigin(url) {
 // Step 2
 // Get AQI Source Status
 function getAQIstatus(api, body) {
-    return new Promise((resove) => {
+    return new Promise((resolve) => {
         const weather = JSON.parse(body);
         const provider = ['和风天气', 'QWeather']
         try {
             if (api == 'v1' && weather.air_quality) {
                 $.log(`⚠️ ${$.name}, getAQIstatus, AQ data ${api}`, '');
                 if (provider.includes(weather.air_quality.metadata.provider_name)) {
-                    $.log(`🎉 ${$.name}, getAQIstatus, Continue`, `${weather.air_quality.metadata.provider_name}`, '')
-                    resove()
+                    $.log(`🎉 ${$.name}, getAQIstatus`, `${weather.air_quality.metadata.provider_name}`, '')
+                    resolve(true)
                 } else {
-                    $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, `${weather.air_quality.metadata.provider_name}`, '');
-                    $.done()
+                    $.log(`⚠️ ${$.name}, getAQIstatus`, `${weather.air_quality.metadata.provider_name}`, '');
+                    resolve(false)
                 }
             } else if (api == 'v2' && weather.airQuality) {
                 $.log(`⚠️ ${$.name}, getAQIstatus, AQ data ${api}`, '');
                 if (provider.includes(weather.airQuality.metadata.providerName)) {
-                    $.log(`🎉 ${$.name}, getAQIstatus, Continue`, `${weather.airQuality.metadata.providerName}`, '')
-                    resove()
+                    $.log(`🎉 ${$.name}, getAQIstatus`, `${weather.airQuality.metadata.providerName}`, '')
+                    resolve(true)
                 } else {
-                    $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, `${weather.airQuality.metadata.providerName}`, '');
-                    $.done()
+                    $.log(`⚠️ ${$.name}, getAQIstatus`, `${weather.airQuality.metadata.providerName}`, '');
+                    resolve(false)
                 }
             } else {
-                $.log(`🎉 ${$.name}, getAQIstatus, non-existent AQI data, Continue`, '')
-                resove()
+                $.log(`🎉 ${$.name}, getAQIstatus, non-existent AQI data`, '')
+                resolve(true)
             }
         } catch (e) {
             $.log(`❗️ ${$.name}, getAQIstatus, Failure`, ` error = ${e}`, '')
-            } finally {
-                $.log(`🎉 ${$.name}, getAQIstatus, Finish`, '')
-                resove()
-            }
+        } finally {
+            $.log(`🎉 ${$.name}, getAQIstatus, Finish`, '')
+            resolve(false)
+        }
     })
 };
 
@@ -104,16 +139,15 @@ async function getToken(idx) {
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
 async function getStation(token = "na", idx) {
     $.log('获取站点信息');
-    const url = { method: 'post', url: `https://api.waqi.info/api/feed/@${idx}/aqi.json`, body: `token=${token}&id=${idx}`, headers: $.VAL_headers };
+    const url = { method: 'post', url: `${$.baseURL}/api/feed/@${idx}/aqi.json`, body: `token=${token}&id=${idx}`, headers: $.VAL_headers };
     return await fatchWAQIjson(url);
 }
 
 // Step 6
 // Output Data
-function outputData(api, stations, obs) {
+function outputData(api, stations, obs, body) {
     return new Promise((resove) => {
         // Input Data
-        let body = $response.body
         let weather = JSON.parse(body);
         try {
             if (api == "v1") {
@@ -252,14 +286,14 @@ function getWAQIjson(url) {
                     // https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
                     if (url.url.search("/nearest?") != -1) {
                         if (url.url.search("/mapq/") != -1 && _data.d[0]) {
-                            $.stations = _data.d[0];
-                            $.idx = $.stations.x;
-                            $.country = $.stations.cca2
+                            //$.stations = _data.d[0];
+                            //$.idx = $.stations.x;
+                            $.country = _data.d[0].cca2
                             resolve(_data.d[0])
                         } else if (url.url.search("/mapq2/") != -1 && _data.status == "ok") {
-                            $.stations = _data.data.stations[0];
-                            $.idx = $.stations.idx;
-                            $.country = $.stations.country
+                            //$.stations = _data.data.stations[0];
+                            //$.idx = $.stations.idx;
+                            $.country = _data.data.stations[0].country
                             resolve(_data.data.stations[0])
                         } else {
                             $.log(`❗️ ${$.name}, getNearest, Error, api: ${api}`, `station: ${_data.d[0]}`, `data = ${data}`, '')
