@@ -38,13 +38,13 @@ else if (typeof $argument != "undefined") {
 $.log(JSON.stringify($.Apple.Weather));
 
 !(async () => {
-	const [url, dataServer, apiVer, language, lat, lng, countryCode] = await getOrigin($request.url)
-	let status = await getAQIstatus(apiVer, $response.body)
+	const Parameter = await getOrigin($request.url)
+	let status = await getAQIstatus(Parameter.apiVer, $response.body)
 	if (status == true) {
-		let [stations, idx] = await getNearest(apiVer, lat, lng)
+		let [stations, idx] = await getNearest(Parameter.apiVer, Parameter.lat, Parameter.lng)
 		let token = await getToken(idx)
 		let obs = await getStation(token, idx)
-		let body = await outputData(apiVer, stations, obs, $response.body)
+		let body = await outputData(Parameter.apiVer, stations, obs, $response.body)
 		await $.done({ body });
 	} else $.log(`⚠️ ${$.name}, Abort`, '');
 })()
@@ -55,17 +55,18 @@ $.log(JSON.stringify($.Apple.Weather));
 // Get Origin Parameter
 function getOrigin(url) {
 	return new Promise((resolve) => {
-		const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
+		//const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/i;
+		const Regular = /^https?:\/\/(?<dataServer>weather-data|weather-data-origin)\.apple\.com\/(?<apiVer>v1|v2)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
 		try {
 			//$.log(`🎉 ${$.name}, getOrigin, Finish`, $.url, `${$.dataServer}, ${$.apiVer}, ${$.language}, ${$.lat}, ${$.lng}, ${$.countryCode}`, '');
 			//[$.url, $.dataServer, $.apiVer, $.language, $.lat, $.lng, $.countryCode] = url.match(Regular);
-			$.log(`🚧 ${$.name}, ${getOrigin.name}`, url.match(Regular), '');
-			resolve(url.match(Regular));
+			//$.log(`🚧 ${$.name}, ${getOrigin.name}`, url.match(Regular), '');
+			var Parameter = url.match(Regular).groups;
 		} catch (e) {
 			$.log(`❗️${$.name}, ${getOrigin.name}执行失败`, `error = ${e}`, '');
 		} finally {
-			$.log(`🎉 ${$.name}, ${getOrigin.name}完成`, '');
-			resolve();
+			$.log(`🎉 ${$.name}, ${getOrigin.name}完成`, JSON.stringify(Parameter), '');
+			resolve(Parameter);
 		}
 	})
 };
