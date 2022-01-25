@@ -277,14 +277,16 @@ function getWAQIjson(url) {
 							//$.stations = _data.d[0];
 							//$.idx = $.stations.x;
 							//$.country = _data.d[0].cca2
+							$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx = ${_data.d[0].x}`, `观测站: ${JSON.stringify(_data.d[0])}`, '')
 							resolve([_data.d[0], _data.d[0].x])
 						} else if (url.url.search("/mapq2/") != -1 && _data.status == "ok") {
 							//$.stations = _data.data.stations[0];
 							//$.idx = $.stations.idx;
 							//$.country = _data.data.stations[0].country
-							resolve([_data.data.stations[0], _data.data.stations[0].idx])
+							$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx = ${_data.data.stations[0].idx}`, `观测站: ${JSON.stringify(_data.data.stations[0])}`, '')	
+							resolve([_data.data.stations[0], _data.data.stations[0].idx])	
 						} else {
-							$.log(`❗️ ${$.name}, ${getNearest.name}执行失败`, `api: ${api}`, `station: ${_data.d[0]}`, `data = ${data}`, '')
+							$.log(`❗️ ${$.name}, ${getNearest.name}执行失败`, `api: ${api}`, `观测站: ${_data.d[0] ?? _data.data.stations[0]}`, `data = ${data}`, '')
 							$.done()
 						}
 					}
@@ -293,13 +295,12 @@ function getWAQIjson(url) {
 					// https://api.waqi.info/api/token/station.uid
 					else if (url.url.search("/api/token/") != -1) {
 						if (_data.rxs.status == "ok") {
-							//$.token = _data.rxs.obs[0].msg.token;
-							resolve(_data.rxs.obs[0].msg.token)
+							var token = _data.rxs.obs[0].msg.token;
+							$.log(`🎉 ${$.name}, ${getToken.name}完成`, `token = ${token}`, '')
 						} else {
+							var token = "na";
 							$.log(`⚠️ ${$.name}, ${getToken.name}执行失败`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
-							$.token = "na";
-							resolve("na")
-						}
+						} resolve(token)
 					}
 				} else throw new Error(response);
 			} catch (e) {
