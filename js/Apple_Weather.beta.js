@@ -43,9 +43,9 @@ console.log($.Apple.Weather)
     var [url, dataServer, apiVer, language, lat, lng, countryCode] = await getOrigin($request.url)
     let status = await getAQIstatus(apiVer, $response.body)
     if (status == true) {
-        var stations = await getNearest(apiVer, lat, lng)
-        var token = await getToken(stations.idx)
-        var obs = await getStation(token, stations.idx)
+        var [stations, idx] = await getNearest(apiVer, lat, lng)
+        var token = await getToken(idx)
+        var obs = await getStation(token, idx)
         await outputData(apiVer, stations, obs, $response.body)
     } else {
         $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, '');
@@ -166,7 +166,7 @@ function outputData(api, stations, obs, body) {
                 };
                 if (obs?.aqi) { // From Observation Station
                     weather.air_quality.source = obs.city.name;
-                    weather.air_quality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
+                    weather.air_quality.learnMoreURL = obs.city.url + `/${stations.cca2}/m`.toLowerCase();
                     weather.air_quality.airQualityIndex = obs.aqi;
                     weather.air_quality.airQualityScale = "EPA_NowCast.2115";
                     weather.air_quality.primaryPollutant = switchPollutantsType(obs.dominentpol);
@@ -221,7 +221,7 @@ function outputData(api, stations, obs, body) {
                 };
                 if (obs?.aqi) { // From Observation Station
                     weather.airQuality.source = obs.city.name;
-                    weather.airQuality.learnMoreURL = obs.city.url + `/${$.country}/m`.toLowerCase();
+                    weather.airQuality.learnMoreURL = obs.city.url + `/${stations.country}/m`.toLowerCase();
                     weather.airQuality.index = obs.aqi;
                     weather.airQuality.scale = "EPA_NowCast.2115";
                     weather.airQuality.primaryPollutant = switchPollutantsType(obs.dominentpol);
@@ -288,13 +288,13 @@ function getWAQIjson(url) {
                         if (url.url.search("/mapq/") != -1 && _data.d[0]) {
                             //$.stations = _data.d[0];
                             //$.idx = $.stations.x;
-                            $.country = _data.d[0].cca2
-                            resolve(_data.d[0])
+                            //$.country = _data.d[0].cca2
+                            resolve([_data.d[0], _data.d[0].x])
                         } else if (url.url.search("/mapq2/") != -1 && _data.status == "ok") {
                             //$.stations = _data.data.stations[0];
                             //$.idx = $.stations.idx;
-                            $.country = _data.data.stations[0].country
-                            resolve(_data.data.stations[0])
+                            //$.country = _data.data.stations[0].country
+                            resolve([_data.data.stations[0], _data.data.stations[0].idx])
                         } else {
                             $.log(`❗️ ${$.name}, getNearest, Error, api: ${api}`, `station: ${_data.d[0]}`, `data = ${data}`, '')
                             $.done()
