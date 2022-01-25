@@ -273,6 +273,14 @@ function getWAQIjson(url) {
 					// https://api.waqi.info/mapq/nearest/?n=1&geo=1/lat/lng
 					// https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
 					if (url.url.search("/nearest?") != -1) {
+						var station = _data.d[0] ?? _data.data.stations[0];
+						var idx = station.x ?? station.idx;
+						var name = station.nna ?? station.name;
+						var distance = station.d ?? station.distance;
+						//var country = station.cca2 ?? station.country;
+						$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx = ${idx}`, `观测站: ${name}`, `距离: ${distance}`, '')		
+						resolve([station, idx])
+						/*
 						if (url.url.search("/mapq/") != -1 && _data.d[0]) {
 							//$.stations = _data.d[0];
 							//$.idx = $.stations.x;
@@ -289,11 +297,16 @@ function getWAQIjson(url) {
 							$.log(`❗️ ${$.name}, ${getNearest.name}执行失败`, `api: ${api}`, `观测站: ${_data.d[0] ?? _data.data.stations[0]}`, `data = ${data}`, '')
 							$.done()
 						}
+						*/
 					}
 					// Step 4
 					// Get Nearest Observation Station Token
 					// https://api.waqi.info/api/token/station.uid
 					else if (url.url.search("/api/token/") != -1) {
+						var token = _data.rxs?.obs[0]?.msg?.token ?? "na"
+						$.log(`🎉 ${$.name}, ${getToken.name}完成`, `token = ${token}`, '')
+						resolve(token)
+						/*
 						if (_data.rxs.status == "ok") {
 							var token = _data.rxs.obs[0].msg.token;
 							$.log(`🎉 ${$.name}, ${getToken.name}完成`, `token = ${token}`, '')
@@ -301,6 +314,7 @@ function getWAQIjson(url) {
 							var token = "na";
 							$.log(`⚠️ ${$.name}, ${getToken.name}执行失败`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
 						} resolve(token)
+						*/
 					}
 				} else throw new Error(response);
 			} catch (e) {
