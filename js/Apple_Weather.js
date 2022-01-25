@@ -14,13 +14,13 @@ $.VAL = {
 };
 
 !(async () => {
-	const [url, dataServer, apiVer, language, lat, lng, countryCode] = await getOrigin($request.url)
-	let status = await getAQIstatus(apiVer, $response.body)
+	const Parameter = await getOrigin($request.url)
+	let status = await getAQIstatus(Parameter.apiVer, $response.body)
 	if (status == true) {
-		let [stations, idx] = await getNearest(apiVer, lat, lng)
+		let [stations, idx] = await getNearest(Parameter.apiVer, Parameter.lat, Parameter.lng)
 		let token = await getToken(idx)
 		let obs = await getStation(token, idx)
-		let body = await outputData(apiVer, stations, obs, $response.body)
+		let body = await outputData(Parameter.apiVer, stations, obs, $response.body)
 		await $.done({ body });
 	} else $.log(`⚠️ ${$.name}, Abort`, '');
 })()
@@ -31,15 +31,14 @@ $.VAL = {
 // Get Origin Parameter
 function getOrigin(url) {
 	return new Promise((resolve) => {
-		const Regular = /^https?:\/\/(weather-data|weather-data-origin)\.apple\.com\/(v1|v2)\/weather\/([\w-_]+)\/(-?\d+\.\d+)\/(-?\d+\.\d+).*(country=[A-Z]{2})?.*/;
+		const Regular = /^https?:\/\/(?<dataServer>weather-data|weather-data-origin)\.apple\.com\/(?<apiVer>v1|v2)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
 		try {
-			$.log(`🚧 ${$.name}, ${getOrigin.name}`, url.match(Regular), '');
-			resolve(url.match(Regular));
+			var Parameter = url.match(Regular).groups;
 		} catch (e) {
 			$.log(`❗️${$.name}, ${getOrigin.name}执行失败`, `error = ${e}`, '');
 		} finally {
-			$.log(`🎉 ${$.name}, ${getOrigin.name}完成`, '');
-			resolve();
+			$.log(`🎉 ${$.name}, ${getOrigin.name}完成`, JSON.stringify(Parameter), '');
+			resolve(Parameter);
 		}
 	})
 };
@@ -51,9 +50,9 @@ function getAQIstatus(api, body) {
 		const weather = JSON.parse(body);
 		const provider = ['和风天气', 'QWeather']
 		try {
-			var result = (api == "v1" && weather.air_quality) ? provider.includes(weather.air_quality.metadata.provider_name)
-			: (api == "v2" && weather.airQuality) ? provider.includes(weather.airQuality.metadata.providerName)
-				: true
+			var result = (api == "v1" && weather.air_quality) ? provider.includes(weather.air_quality?.metadata?.provider_name)
+			: (api == "v2" && weather.airQuality) ? provider.includes(weather.airQuality?.metadata?.providerName)
+			: true
 		} catch (e) {
 			$.log(`❗️${$.name}, ${getAQIstatus.name}执行失败`, `error = ${e}`, '');
 		} finally {
@@ -230,23 +229,17 @@ function getWAQIjson(url) {
 				else if (data) {
 					const _data = JSON.parse(data)
 					if (url.url.search("/nearest?") != -1) {
-						if (url.url.search("/mapq/") != -1 && _data.d[0]) {
-							resolve([_data.d[0], _data.d[0].x])
-						} else if (url.url.search("/mapq2/") != -1 && _data.status == "ok") {
-							resolve([_data.data.stations[0], _data.data.stations[0].idx])
-						} else {
-							$.log(`❗️ ${$.name}, ${getNearest.name}执行失败`, `api: ${api}`, `station: ${_data.d[0]}`, `data = ${data}`, '')
-							$.done()
-						}
+						var station = _data?.d?.[0] ?? _data?.data?.stations?.[0] ?? null;
+						var idx = station?.x ?? station?.idx ?? null;
+						var name = station?.nna ?? station?.name ?? null;
+						var distance = station?.d ?? station?.distance ?? null;
+						$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx: ${idx}`, `观测站: ${name}`, `距离: ${distance}`, '')		
+						resolve([station, idx])
 					}
 					else if (url.url.search("/api/token/") != -1) {
-						if (_data.rxs.status == "ok") {
-							resolve(_data.rxs.obs[0].msg.token)
-						} else {
-							$.log(`⚠️ ${$.name}, ${getToken.name}执行失败`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
-							$.token = "na";
-							resolve("na")
-						}
+						var token = _data.rxs?.obs[0]?.msg?.token ?? "na"
+						$.log(`🎉 ${$.name}, ${getToken.name}完成`, `token = ${token}`, '')
+						resolve(token)
 					}
 				} else throw new Error(response);
 			} catch (e) {
@@ -274,7 +267,7 @@ function fatchWAQIjson(url) {
 								let i = _data.rxs.obs.findIndex(o => o.status == 'ok')
 								let m = _data.rxs.obs.findIndex(o => o.msg)
 								if (i >= 0 && m >= 0) {
-									$.log(`🎉 ${$.name}, ${getStation.name},  i = ${i}, m = ${m}`, '')
+									$.log(`🎉 ${$.name}, ${getStation.name}`, `i = ${i}, m = ${m}`, '')
 									resolve(_data.rxs.obs[i].msg)
 								} else if (i < 0 || m < 0) {
 									$.log(`❗️ ${$.name}, ${getStation.name}`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
