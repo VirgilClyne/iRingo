@@ -49,7 +49,8 @@ console.log($.Apple.Weather)
 		let [stations, idx] = await getNearest(apiVer, lat, lng)
 		let token = await getToken(idx)
 		let obs = await getStation(token, idx)
-		await outputData(apiVer, stations, obs, $response.body)
+		let body = await outputData(apiVer, stations, obs, $response.body)
+		await $.done({ body });
 	} else {
 		$.log(`⚠️ ${$.name}, getAQIstatus, Abort`, '');
 		$.done()
@@ -149,7 +150,7 @@ async function getStation(token = "na", idx) {
 // Step 6
 // Output Data
 function outputData(api, stations, obs, body) {
-	return new Promise((resove) => {
+	return new Promise((resolve) => {
 		// Input Data
 		let weather = JSON.parse(body);
 		try {
@@ -260,15 +261,13 @@ function outputData(api, stations, obs, body) {
 					weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain', api);
 					weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 				};
-			} else $.done()
+			} else $.done();
 		} catch (e) {
 			$.log(`❗️ ${$.name}, outputData执行失败!`, `浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 看看是不是空数据`, `原因：网络不畅或者获取太频繁导致被封`, `error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
 		} finally {
-			// Output Data
 			body = JSON.stringify(weather);
-			$done({ body });
-			$.log(`🎉 ${$.name}, outputData, Finish`, '')
-			resove()
+			$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
+			resolve(body)
 		}
 	})
 }
