@@ -78,8 +78,8 @@ function getAQIstatus(api, body) {
 		const weather = JSON.parse(body);
 		const provider = ['和风天气', 'QWeather']
 		try {
-			var result = (api == "v1" && weather.air_quality) ? provider.includes(weather.air_quality.metadata.provider_name)
-				: (api == "v2" && weather.airQuality) ? provider.includes(weather.airQuality.metadata.providerName)
+			var result = (api == "v1" && weather.air_quality) ? provider.includes(weather.air_quality?.metadata?.provider_name)
+				: (api == "v2" && weather.airQuality) ? provider.includes(weather.airQuality?.metadata?.providerName)
 					: true
 			/*
 			if (api == 'v1' && weather.air_quality) {
