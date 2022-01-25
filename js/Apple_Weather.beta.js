@@ -79,6 +79,10 @@ function getAQIstatus(api, body) {
 		const weather = JSON.parse(body);
 		const provider = ['和风天气', 'QWeather']
 		try {
+			var result = (api == 'v1' && weather.air_quality) ? provider.includes(weather.air_quality.metadata.provider_name)
+				: (api == 'v2' && weather.airQuality) ? provider.includes(weather.airQuality.metadata.providerName)
+					: true
+			/*
 			if (api == 'v1' && weather.air_quality) {
 				$.log(`⚠️ ${$.name}, ${getAQIstatus.name}检测`, `AQ data ${api}, ${weather.air_quality?.metadata?.provider_name}`, '');
 				var result = provider.includes(weather.air_quality.metadata.provider_name);
@@ -88,12 +92,13 @@ function getAQIstatus(api, body) {
 			} else {
 				$.log(`🎉 ${$.name}, ${getAQIstatus.name}检测`, "不存在 AQI data", '');
 				var result = true;
-			} resolve(result || false)
+			}
+			*/
 		} catch (e) {
 			$.log(`❗️${$.name}, ${getAQIstatus.name}执行失败`, `error = ${e}`, '');
 		} finally {
-			$.log(`🎉 ${$.name}, ${getAQIstatus.name}完成`, '');
-			resolve(false)
+			$.log(`🎉 ${$.name}, ${getAQIstatus.name}完成`, `AQ data ${api ?? "None"}, ${weather.air_quality?.metadata?.provider_name ?? weather.airQuality?.metadata?.providerName}`, '');
+			resolve(result || false)
 		}
 	})
 };
