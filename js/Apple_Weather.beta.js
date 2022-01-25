@@ -11,41 +11,13 @@ $.VAL_headers =  {
     'Referer': `https://waqi.info/`,
 }
 
-// BoxJs Function Supported
-if (typeof $.getdata("iRingo") != "undefined") {
-	// load user prefs from BoxJs
-	$.Apple = JSON.parse($.getdata("iRingo")).Apple
-	//$.log(JSON.stringify($.Apple.Weather))
-	if ($.Apple.Weather.Verify.Mode == "Key") {
-		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"))
-		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
-	};
-	// Argument Function Supported
-} else if (typeof $argument != "undefined") {
-	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-	$.log(JSON.stringify(arg));
-    $.Apple.Weather.Verify.Mode = arg.Mode;
-	$.Apple.Weather.Verify.Content = arg.Token;
-	$.Apple.Weather.Verify.Content = arg.ServiceKey;
-	$.Apple.Weather.Verify.Content[0] = arg.Key;
-	$.Apple.Weather.Verify.Content[1] = arg.Email;
-} else {
-	$.Apple.Weather = {
-		"Verify":{
-			"Mode":"Token",
-			"Content":null
-		}
-    }
-};
-console.log($.Apple.Weather)
-
 !(async () => {
-    var [url, dataServer, apiVer, language, lat, lng, countryCode] = await getOrigin($request.url)
+    const [url, dataServer, apiVer, language, lat, lng, countryCode] = await getOrigin($request.url)
     let status = await getAQIstatus(apiVer, $response.body)
     if (status == true) {
-        var [stations, idx] = await getNearest(apiVer, lat, lng)
-        var token = await getToken(idx)
-        var obs = await getStation(token, idx)
+        let [stations, idx] = await getNearest(apiVer, lat, lng)
+        let token = await getToken(idx)
+        let obs = await getStation(token, idx)
         await outputData(apiVer, stations, obs, $response.body)
     } else {
         $.log(`⚠️ ${$.name}, getAQIstatus, Abort`, '');
