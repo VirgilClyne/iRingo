@@ -273,31 +273,32 @@ function getWAQIjson(url) {
 					// https://api.waqi.info/mapq/nearest/?n=1&geo=1/lat/lng
 					// https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
 					if (url.url.search("/nearest?") != -1) {
-						var station = _data.d[0] ?? _data.data.stations[0];
-						var idx = station.x ?? station.idx;
-						var name = station.nna ?? station.name;
-						var distance = station.d ?? station.distance;
-						//var country = station.cca2 ?? station.country;
-						$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx = ${idx}`, `观测站: ${name}`, `距离: ${distance}`, '')		
-						resolve([station, idx])
+						// 空值合并运算符
+						var station = _data?.d?.[0] ?? _data?.data?.stations?.[0] ?? null;
+						var idx = station?.x ?? station?.idx ?? null;
+						var name = station?.nna ?? station?.name ?? null;
+						var distance = station?.d ?? station?.distance ?? null;
+						//var country = station?.cca2 ?? station?.country ?? null;
 						/*
 						if (url.url.search("/mapq/") != -1 && _data.d[0]) {
-							//$.stations = _data.d[0];
-							//$.idx = $.stations.x;
-							//$.country = _data.d[0].cca2
-							$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx = ${_data.d[0].x}`, `观测站: ${JSON.stringify(_data.d[0])}`, '')
-							resolve([_data.d[0], _data.d[0].x])
+							var station = _data.d[0];
+							var idx = station.x;
+							var name = station.nna;
+							var distance = station.d;
+							//var country = station.cca2;
 						} else if (url.url.search("/mapq2/") != -1 && _data.status == "ok") {
-							//$.stations = _data.data.stations[0];
-							//$.idx = $.stations.idx;
-							//$.country = _data.data.stations[0].country
-							$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx = ${_data.data.stations[0].idx}`, `观测站: ${JSON.stringify(_data.data.stations[0])}`, '')	
-							resolve([_data.data.stations[0], _data.data.stations[0].idx])	
+							var station = _data.data.stations[0];
+							var idx = station.idx;
+							var name = station.name;
+							var distance = station.distance;
+							//var country = station.country;
 						} else {
-							$.log(`❗️ ${$.name}, ${getNearest.name}执行失败`, `api: ${api}`, `观测站: ${_data.d[0] ?? _data.data.stations[0]}`, `data = ${data}`, '')
-							$.done()
+							$.log(`❗️ ${$.name}, ${getNearest.name}执行失败`, `api: ${api}`, `data = ${data}`, '');
+							$.done();
 						}
 						*/
+						$.log(`🎉 ${$.name}, ${getNearest.name}完成`, `idx: ${idx}`, `观测站: ${name}`, `距离: ${distance}`, '')		
+						resolve([station, idx])
 					}
 					// Step 4
 					// Get Nearest Observation Station Token
