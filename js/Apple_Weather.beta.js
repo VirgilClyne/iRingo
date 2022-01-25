@@ -46,9 +46,7 @@ $.log(JSON.stringify($.Apple.Weather));
 		let obs = await getStation(token, idx)
 		let body = await outputData(apiVer, stations, obs, $response.body)
 		await $.done({ body });
-	} else {
-		$.log(`⚠️ ${$.name}, Abort`, '');
-	}
+	} else $.log(`⚠️ ${$.name}, Abort`, '');
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done())
@@ -79,8 +77,8 @@ function getAQIstatus(api, body) {
 		const weather = JSON.parse(body);
 		const provider = ['和风天气', 'QWeather']
 		try {
-			var result = (api == 'v1' && weather.air_quality) ? provider.includes(weather.air_quality.metadata.provider_name)
-				: (api == 'v2' && weather.airQuality) ? provider.includes(weather.airQuality.metadata.providerName)
+			var result = (api == "v1" && weather.air_quality) ? provider.includes(weather.air_quality.metadata.provider_name)
+				: (api == "v2" && weather.airQuality) ? provider.includes(weather.airQuality.metadata.providerName)
 					: true
 			/*
 			if (api == 'v1' && weather.air_quality) {
@@ -130,7 +128,7 @@ async function getToken(idx) {
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
 async function getStation(token = "na", idx) {
 	$.log('获取站点信息');
-	const url = { method: 'post', url: `${$.VAL.url}/api/feed/@${idx}/aqi.json`, body: `token=${token}&id=${idx}`, headers: $.VAL.headers };
+	const url = { method: 'post', url: `${$.VAL.url}/api/feed/@${idx}/aqi.json`, headers: $.VAL.headers, body: `token=${token}&id=${idx}` };
 	return await fatchWAQIjson(url);
 }
 
@@ -333,7 +331,7 @@ function fatchWAQIjson(url) {
 								let m = _data.rxs.obs.findIndex(o => o.msg)
 								//$.obs = _data.rxs.obs[i].msg;
 								if (i >= 0 && m >= 0) {
-									$.log(`🎉 ${$.name}, ${getStation.name},  i = ${i}, m = ${m}`, '')
+									$.log(`🎉 ${$.name}, ${getStation.name}`, `i = ${i}, m = ${m}`, '')
 									resolve(_data.rxs.obs[i].msg)
 								} else if (i < 0 || m < 0) {
 									$.log(`❗️ ${$.name}, ${getStation.name}`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
