@@ -14,13 +14,13 @@ $.VAL = {
 };
 
 // Default Settings
-$.Apple = { "Weather": { "Verify": { "Mode": "Token", "Content": null } } };
-// BoxJs Function Supported
+$.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null } } };
+// BoxJs Function Supported"
 if ($.getdata("iRingo") !== null) {
 	// load user prefs from BoxJs
-	$.Apple = JSON.parse($.getdata("iRingo")).Apple
+	$.Apple = JSON.parse($.getdata("iRingo"))?.Apple
 	//$.log(JSON.stringify($.Apple.Weather))
-	if ($.Apple.Weather.Verify.Mode == "Key") {
+	if ($.Apple?.Weather?.Verify?.Mode == "Key") {
 		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"))
 		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
 	};
@@ -29,24 +29,50 @@ if ($.getdata("iRingo") !== null) {
 else if (typeof $argument != "undefined") {
 	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
 	$.log(JSON.stringify(arg));
-	$.Apple.Weather.Verify.Mode = arg.Mode;
+	$.Apple.Weather.Mode = arg.Mode;
+	$.Apple.Weather.Location = arg.Location;
+	$.Apple.Weather.Verify.Mode = arg.VerifyMode;
 	$.Apple.Weather.Verify.Content = arg.Token;
-	$.Apple.Weather.Verify.Content = arg.ServiceKey;
-	$.Apple.Weather.Verify.Content[0] = arg.Key;
-	$.Apple.Weather.Verify.Content[1] = arg.Email;
 }
 $.log(JSON.stringify($.Apple.Weather));
 
 !(async () => {
+	const Mode = $.Apple.Weather.Mode
+	const Location = $.Apple.Weather.Location
 	const Parameter = await getOrigin($request.url)
-	let status = await getAQIstatus(Parameter.apiVer, $response.body)
-	if (status == true) {
-		let [stations, idx] = await getNearest(Parameter.apiVer, Parameter.lat, Parameter.lng)
-		let token = await getToken(idx)
-		let obs = await getStation(token, idx)
-		let body = await outputData(Parameter.apiVer, stations, obs, $response.body)
+	const Status = await getAQIstatus(Parameter.apiVer, $response.body)
+	if (Status == true) {
+		if (Mode == "WAQI Public") {
+			$.log("工作模式: waqi.info 公共API")
+			var [now, idx] = await getNearest(Parameter.apiVer, Parameter.lat, Parameter.lng)
+			let token = await getToken(idx)
+			//var now = await getStationNOW(token, idx)
+			var obs = await getStationAQI(token, idx)
+		} else if (Mode == "WAQI Private") {
+			$.log("工作模式: waqi.info 私有API")
+			let token = $.Apple.Weather.Verify.Content
+			if (Location == "Station") {
+				$.log("定位精度: 观测站")
+				var [now, idx] = await getNearest(Parameter.apiVer, Parameter.lat, Parameter.lng)
+				var obs = await getStationFeed(token, idx)
+			} else if (Location == "City") {
+				$.log("定位精度: 城市")
+				var obs = await getCityFeed(token, Parameter.lat, Parameter.lng)
+			}
+		}
+		/*
+		let [now, idx] = await getNearest(Parameter.apiVer, Parameter.lat, Parameter.lng)
+		let token = (Mode == "WAQI Public API") ? await getToken(idx)
+			: (Mode == "WAQI Private API") ? $.Apple.Weather.Verify.Content
+				: $.log(`⚠️ ${$.name}, 无可用令牌`, `令牌: ${Mode}`, '');
+		let obs = (Mode == "WAQI Public API") ? await getStation(token, idx)
+			: (Mode == "WAQI Private API" && Location == "Station") ? getStationFeed(token, idx)
+				: (Mode == "WAQI Private API" && Location == "City") ? getCityFeed(token, lat, lng)
+					: $.log(`⚠️ ${$.name}, 无可用获取模式`, `获取模式: ${Mode}`, '');
+		*/
+		let body = await outputData(Parameter.apiVer, now, obs, $response.body);
 		await $.done({ body });
-	} else $.log(`⚠️ ${$.name}, Abort`, '');
+	} else $.log(`⚠️ ${$.name}, 无须替换, 跳过`, '');
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done())
@@ -123,19 +149,47 @@ async function getToken(idx) {
 	return await getWAQIjson(url);
 }
 
-// Step 5
-// Get Nearest Observation Station AQI Data
+// Step 5A
+// Get Observation Station NOW JSON
 // https://api.waqi.info/api/feed/@station.uid/now.json
+async function getStationNOW(token = "na", idx) {
+	$.log('获取站点信息');
+	const url = { method: 'post', url: `${$.VAL.url}/api/feed/@${idx}/now.json`, headers: $.VAL.headers, body: `token=${token}&id=${idx}` };
+	return await fatchWAQIjson(url);
+}
+
+// Step 5B
+// Get Observation Station AQI JSON
 // https://api.waqi.info/api/feed/@station.uid/aqi.json
-async function getStation(token = "na", idx) {
+async function getStationAQI(token = "na", idx) {
 	$.log('获取站点信息');
 	const url = { method: 'post', url: `${$.VAL.url}/api/feed/@${idx}/aqi.json`, headers: $.VAL.headers, body: `token=${token}&id=${idx}` };
 	return await fatchWAQIjson(url);
 }
 
+
+// Step 5C
+// Get Geolocalized Feed
+// https://aqicn.org/json-api/doc/#api-Geolocalized_Feed-GetGeolocFeed
+// https://api.waqi.info/feed/geo::lat;:lng/?token=:token
+async function getCityFeed(token, lat, lng) {
+	$.log('获取最近源信息');
+	const url = { url: `${$.VAL.url}/feed/geo:${lat};${lng}/?token=${token}`, headers: $.VAL.headers };
+	return await getWAQIjson(url);
+}
+
+// Step 5D
+// Get Observation Station Feed
+// https://api.waqi.info/feed/@station.uid/?token=:token
+async function getStationFeed(token, idx) {
+	$.log('获取最近源信息');
+	const url = { url: `${$.VAL.url}/feed/@${idx}/?token=${token}`, headers: $.VAL.headers };
+	return await getWAQIjson(url);
+}
+
 // Step 6
 // Output Data
-function outputData(api, stations, obs, body) {
+function outputData(api, now, obs, body) {
 	return new Promise((resolve) => {
 		// Input Data
 		let weather = JSON.parse(body);
@@ -156,7 +210,7 @@ function outputData(api, stations, obs, body) {
 				};
 				if (obs?.aqi) { // From Observation Station
 					weather.air_quality.source = obs.city.name;
-					weather.air_quality.learnMoreURL = obs.city.url + `/${stations.cca2}/m`.toLowerCase();
+					weather.air_quality.learnMoreURL = obs.city.url + `/${now.cca2}/m`.toLowerCase();
 					weather.air_quality.airQualityIndex = obs.aqi;
 					weather.air_quality.airQualityScale = "EPA_NowCast.2115";
 					weather.air_quality.primaryPollutant = switchPollutantsType(obs.dominentpol);
@@ -180,17 +234,17 @@ function outputData(api, stations, obs, body) {
 					weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
 					//weather.air_quality.metadata.language = $.language;
 					//weather.air_quality.metadata.data_source = 0;
-				} else if (stations) { // From Nearest List
-					weather.air_quality.source = stations.nna;
-					weather.air_quality.airQualityIndex = stations.v;
+				} else if (now) { // From Nearest List
+					weather.air_quality.source = now.nna;
+					weather.air_quality.airQualityIndex = now.v;
 					weather.air_quality.airQualityScale = "EPA_NowCast.2115";
-					weather.air_quality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
-					weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(stations.v);
-					weather.air_quality.metadata.reported_time = convertTime(new Date(stations.t), 'remain', api);
-					weather.air_quality.metadata.expire_time = convertTime(new Date(stations.t), 'add-1h-floor', api);
+					weather.air_quality.primaryPollutant = switchPollutantsType(now.pol); //mapq1
+					weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(now.v);
+					weather.air_quality.metadata.reported_time = convertTime(new Date(now.t), 'remain', api);
+					weather.air_quality.metadata.expire_time = convertTime(new Date(now.t), 'add-1h-floor', api);
 					weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
-					weather.air_quality.metadata.longitude = stations.geo[0];
-					weather.air_quality.metadata.latitude = stations.geo[1];
+					weather.air_quality.metadata.longitude = now.geo[0];
+					weather.air_quality.metadata.latitude = now.geo[1];
 					weather.air_quality.metadata.language ? weather.air_quality.metadata.language : weather.current_observations.metadata.language
 				}
 			} else if (api == "v2") {
@@ -210,7 +264,7 @@ function outputData(api, stations, obs, body) {
 				};
 				if (obs?.aqi) { // From Observation Station
 					weather.airQuality.source = obs.city.name;
-					weather.airQuality.learnMoreURL = obs.city.url + `/${stations.country}/m`.toLowerCase();
+					weather.airQuality.learnMoreURL = obs.city.url + `/${now.country}/m`.toLowerCase();
 					weather.airQuality.index = obs.aqi;
 					weather.airQuality.scale = "EPA_NowCast.2115";
 					weather.airQuality.primaryPollutant = switchPollutantsType(obs.dominentpol);
@@ -233,17 +287,17 @@ function outputData(api, stations, obs, body) {
 					weather.airQuality.metadata.reportedTime = convertTime(new Date(obs.time.iso), 'remain', api);
 					weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 					//weather.airQuality.metadata.units = "m";
-				} else if (stations) { // From Nearest List
-					weather.airQuality.source = stations.name;
-					weather.airQuality.index = stations.aqi;
+				} else if (now) { // From Nearest List
+					weather.airQuality.source = now.name;
+					weather.airQuality.index = now.aqi;
 					weather.airQuality.scale = "EPA_NowCast.2115";
-					//weather.airQuality.primaryPollutant = switchPollutantsType(stations.pol); //mapq1
-					weather.airQuality.categoryIndex = classifyAirQualityLevel(stations.aqi);
-					weather.airQuality.metadata.longitude = stations.geo[0];
-					weather.airQuality.metadata.latitude = stations.geo[1];
+					//weather.airQuality.primaryPollutant = switchPollutantsType(now.pol); //mapq1
+					weather.airQuality.categoryIndex = classifyAirQualityLevel(now.aqi);
+					weather.airQuality.metadata.longitude = now.geo[0];
+					weather.airQuality.metadata.latitude = now.geo[1];
 					weather.airQuality.metadata.language ? weather.airQuality.metadata.language : weather.currentWeather.metadata.language;
-					weather.airQuality.metadata.expireTime = convertTime(new Date(stations.utime), 'add-1h-floor', api);
-					weather.airQuality.metadata.reportedTime = convertTime(new Date(stations.utime), 'remain', api);
+					weather.airQuality.metadata.expireTime = convertTime(new Date(now.utime), 'add-1h-floor', api);
+					weather.airQuality.metadata.reportedTime = convertTime(new Date(now.utime), 'remain', api);
 					weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 				};
 			}
@@ -272,7 +326,7 @@ function getWAQIjson(url) {
 					// Search Nearest Observation Station
 					// https://api.waqi.info/mapq/nearest/?n=1&geo=1/lat/lng
 					// https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
-					if (url.url.search("/nearest?") != -1) {
+					if (url.url.search("/nearest") != -1) {
 						// 空值合并运算符
 						var station = _data?.d?.[0] ?? _data?.data?.stations?.[0] ?? null;
 						var idx = station?.x ?? station?.idx ?? null;
@@ -317,6 +371,23 @@ function getWAQIjson(url) {
 						} resolve(token)
 						*/
 					}
+					// Step 5B
+					// Geolocalized Feed
+					// https://aqicn.org/json-api/doc/#api-Geolocalized_Feed-GetGeolocFeed
+					// https://api.waqi.info/feed/geo::lat;:lng/?token=:token
+					else if (url.url.search("/feed/geo:") != -1) {
+						var city = (_data.status == 'ok') ? _data?.data : null;
+						$.log(`🎉 ${$.name}, ${getCityFeed.name}完成`, `idx: ${station?.idx}`, `观测站: ${station?.name}`, `AQI: ${station?.aqi}`, '')
+						resolve(city)
+					}
+					// Step 5C
+					// Station Feed
+					// https://api.waqi.info/feed/@station.uid/?token=:token
+					else if (url.url.search("/feed/@") != -1) {
+						var station = (_data.status == 'ok') ? _data?.data : null;
+						$.log(`🎉 ${$.name}, ${getStationFeed.name}完成`, `idx: ${station?.idx}`, `观测站: ${station?.name}`, `AQI: ${station?.aqi}`, '')
+						resolve(station)
+					}
 				} else throw new Error(response);
 			} catch (e) {
 				$.logErr(`❗️${$.name}, ${getWAQIjson.name}执行失败`, ` url = ${JSON.stringify(url)}`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
@@ -337,7 +408,7 @@ function fatchWAQIjson(url) {
 				if (error) throw new Error(error)
 				else if (data) {
 					const _data = JSON.parse(data)
-					// Step 5
+					// Step 5A
 					// Get Nearest Observation Station AQI Data
 					// https://api.waqi.info/api/feed/@station.uid/now.json
 					// https://api.waqi.info/api/feed/@station.uid/aqi.json
@@ -348,20 +419,14 @@ function fatchWAQIjson(url) {
 								let m = _data.rxs.obs.findIndex(o => o.msg)
 								//$.obs = _data.rxs.obs[i].msg;
 								if (i >= 0 && m >= 0) {
-									$.log(`🎉 ${$.name}, ${getStation.name}`, `i = ${i}, m = ${m}`, '')
+									$.log(`🎉 ${$.name}, ${getStationAQI.name}`, `i = ${i}, m = ${m}`, '')
 									resolve(_data.rxs.obs[i].msg)
 								} else if (i < 0 || m < 0) {
-									$.log(`❗️ ${$.name}, ${getStation.name}`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
+									$.log(`❗️ ${$.name}, ${getStationAQI.name}`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
 									resolve(_data.rxs.obs[i].msg)
 								}
-							} else {
-								$.log(`❗️ ${$.name}, ${getStation.name}`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
-								resolve()
-							}
-						} else {
-							$.log(`❗️ ${$.name}, ${getStation.name}`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
-							resolve()
-						}
+							} else $.log(`❗️ ${$.name}, ${getStationAQI.name}`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
+						} else $.log(`❗️ ${$.name}, ${getStationAQI.name}`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
 					}
 				} else throw new Error(response);
 			} catch (e) {
