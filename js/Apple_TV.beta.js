@@ -30,35 +30,37 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
         const Parameter = await getOrigin($request.url)
         if (Parameter.caller == 'wta') $.done() // 丢弃caller=wta的configurations数据
         else {
-            body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $response.body);
+            let body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $response.body);
             $.done({ body });
         }
-    } else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'appletv');
+    } 
+    /*
+    else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
+        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'appletv');
         $.done({ url });
     } else if (url.search(UpNext) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(ATV) != -1) {
         $.done({ url });
     } else if (url.search(brands) != -1) {
-        url = processQuery(url, 'sf', '143441');
+        url = await processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(Movies) != -1 || url.search(movies) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(TV) != -1 || url.search(shows) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(Sports) != -1 || url.search(sports) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
         url = await processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(Kids) != -1) {
         url = await processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(watchlist) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(playables) != -1) {
         url = await processQuery(url, 'sf', '143441');
@@ -72,13 +74,14 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
         $.log(`🎉 ${$.name}, redirectFavorites, Finish`, `data = ${body}`, '')
         $.done({ body });
     } else if (url.search(sportingevents) != -1) {
-        if (processQuery(url, 'pfm') == 'desktop') {
+        if (await processQuery(url, 'pfm') == 'desktop') {
             url = await processQuery(url, 'pfm', 'ipad');
             url = await processQuery(url, 'sf', '143441');
         }
         else url = await processQuery(url, 'sf', '143441');
         $.done({ url });
     }
+    */
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
@@ -125,8 +128,8 @@ function outputData(api, caller, platform, locale, region, body) {
                 //条件运算符 & 可选链操作符 
                 //configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
                 //configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-                configurations.data.applicationProps.tabs = createTabsGroup(Tabs, caller, platform, locale, region);
-                configurations.data.applicationProps.tabsSplitScreen = createTabsGroup(TabsGroup, caller, platform, locale, region);
+                configurations.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
+                configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
                 configurations.data.applicationProps.tvAppEnabledInStorefront = true;
                 configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
                 configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
@@ -160,7 +163,7 @@ function outputData(api, caller, platform, locale, region, body) {
 // process Query URL
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
-async function processQuery(url, variable, parameter) {
+function processQuery(url, variable, parameter) {
     //console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
     if (url.indexOf("?") != -1) {
         if (parameter == undefined) {
@@ -191,7 +194,7 @@ async function processQuery(url, variable, parameter) {
 
 // Function 1
 // Create Tabs Group
-async function createTabsGroup(type, caller, platform, locale, region) {
+function createTabsGroup(type, caller, platform, locale, region) {
     //构建Tab内容
     let WatchNow = {
         "destinationType": "Target",
@@ -285,6 +288,7 @@ async function createTabsGroup(type, caller, platform, locale, region) {
     const Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
     const TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
 
+    /*
     //简体中文改Tabs语言
     if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
     if (esl != "zh_Hans" || region != "CN") {
@@ -292,6 +296,7 @@ async function createTabsGroup(type, caller, platform, locale, region) {
         else var maps = new Map([['立即观看', 'Watch Now'], ['Apple TV+', 'Apple TV+'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']]);
         Tabs = Tabs.map(element => { element.title = maps.get(element.title); return element; });
     };
+    */
 
     if (type == "Tabs") return Tabs;
     else if (type == "TabsGroup") return TabsGroup;
