@@ -1,0 +1,88 @@
+{
+    "id": "iRingo.app.sub",
+    "name": "iRingo",
+    "author": "@VirgilClyne",
+    "description": "解锁完整的 Apple功能和集成服务",
+    "icon": "https://avatars.githubusercontent.com/u/2111377?s=100&v=4",
+    "repo": "https://github.com/VirgilClyne/iRingo",
+    "apps": [
+        {
+            "id": "@iRingo.Apple.Weather",
+            "name": "Apple Weather",
+            "descs_html": [
+                "请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
+                "填写完成后别忘点击此页面底端右下角的\"保存\"。",
+                "查询速度:\"私有API+城市\" > \"私有API+观测站\" > \"公共API+观测站\"",
+                "定位精度:\"观测站\" > \"城市\""
+            ],
+            "keys": [
+                "@iRingo.Apple.Weather"
+            ],
+            "settings": [
+                {
+                    "id": "@iRingo.Apple.Weather.Mode",
+                    "name": "工作模式",
+                    "val": "WAQI Public",
+                    "type": "radios",
+                    "items": [
+                        {
+                            "key": "WAQI Public",
+                            "label": "waqi.info 公共API"
+                        },
+                        {
+                            "key": "WAQI Private",
+                            "label": "waqi.info 私有API"
+                        }
+                    ],
+                    "desc": "没有申请自己Token的只能使用\"公共API\""
+                },
+                {
+                    "id": "@iRingo.Apple.Weather.Location",
+                    "name": "定位精度",
+                    "val": "Station",
+                    "type": "radios",
+                    "items": [
+                        {
+                            "key": "City",
+                            "label": "城市"
+                        },
+                        {
+                            "key": "Station",
+                            "label": "观测站"
+                        }
+                    ],
+                    "desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
+                },
+                {
+                    "id": "@iRingo.Apple.Weather.Verify.Mode",
+                    "name": "验证方式",
+                    "val": "Token",
+                    "type": "radios",
+                    "items": [
+                        {
+                            "key": "Token",
+                            "label": "令牌"
+                        }
+                    ],
+                    "desc": "验证方式"
+                },
+                {
+                    "id": "@iRingo.Apple.Weather.Verify.Content",
+                    "name": "验证内容",
+                    "val": "",
+                    "type": "textarea",
+                    "placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb,\nexample@example.com",
+                    "autoGrow": false,
+                    "rows": 2,
+                    "desc": "‘令牌’与‘用户服务密钥’验证方式的值写一行即可, ‘密钥’验证方式的key与email以换行分隔写两行"
+                }
+            ],
+            "author": "@VirgilClyne",
+            "repo": "https://github.com/VirgilClyne/iRingo/blob/main/js/Apple_Weather.js",
+            "icons": [
+                "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple.png",
+                "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
+            ]
+        }
+    ]
+}
