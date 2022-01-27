@@ -33,40 +33,38 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
             let body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $response.body);
             $.done({ body });
         }
-    } 
-    /*
-    else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'appletv');
+    } else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
+        if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'appletv');
         $.done({ url });
     } else if (url.search(UpNext) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(ATV) != -1) {
         $.done({ url });
     } else if (url.search(brands) != -1) {
-        url = await processQuery(url, 'sf', '143441');
+        url = processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(Movies) != -1 || url.search(movies) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(TV) != -1 || url.search(shows) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(Sports) != -1 || url.search(sports) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
-        url = await processQuery(url, 'sf', '143441');
+        if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
+        url = processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(Kids) != -1) {
-        url = await processQuery(url, 'sf', '143441');
+        url = processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(watchlist) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') url = await processQuery(url, 'pfm', 'ipad');
+        if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
         $.done({ url });
     } else if (url.search(playables) != -1) {
-        url = await processQuery(url, 'sf', '143441');
+        url = processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(Favorites) != -1) {
-        url = await processQuery(url, 'sf', '143441');
+        url = processQuery(url, 'sf', '143441');
         $.done({ url });
     } else if (url.search(favorites) != -1) {
         let body = $request.body;
@@ -74,14 +72,13 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
         $.log(`🎉 ${$.name}, redirectFavorites, Finish`, `data = ${body}`, '')
         $.done({ body });
     } else if (url.search(sportingevents) != -1) {
-        if (await processQuery(url, 'pfm') == 'desktop') {
-            url = await processQuery(url, 'pfm', 'ipad');
-            url = await processQuery(url, 'sf', '143441');
+        if (processQuery(url, 'pfm') == 'desktop') {
+            url = processQuery(url, 'pfm', 'ipad');
+            url = processQuery(url, 'sf', '143441');
         }
-        else url = await processQuery(url, 'sf', '143441');
+        else url = processQuery(url, 'sf', '143441');
         $.done({ url });
     }
-    */
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
