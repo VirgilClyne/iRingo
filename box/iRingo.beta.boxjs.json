@@ -10,8 +10,10 @@
             "id": "@iRingo.Apple.Weather",
             "name": "Apple Weather β",
             "descs_html": [
-                "使用说明请见<a href=\"https://github.com/VirgilClyne/iRingo#天气\">使用说明</a>进行配置",
-                "填写完成后别忘点击此页面底端右下角的\"保存\"。"
+                "请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
+                "填写完成后别忘点击此页面底端右下角的\"保存\"。",
+                "查询速度:\"私有API+城市\" > \"私有API+观测站\" > \"公共API+观测站\"",
+                "定位精度:\"观测站\" > \"城市\""
             ],
             "keys": [
                 "@iRingo.Apple.Weather"
@@ -32,7 +34,7 @@
                             "label": "waqi.info 私有API"
                         }
                     ],
-                    "desc": "没有申请自己Token的只能使用公共API"
+                    "desc": "没有申请自己Token的只能使用\"公共API\""
                 },
                 {
                     "id": "@iRingo.Apple.Weather.Location",
@@ -49,7 +51,7 @@
                             "label": "观测站"
                         }
                     ],
-                    "desc": "获取天气数据的精确度，`观测站`会获取距离你最近的观测站数据"
+                    "desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
                 },
                 {
                     "id": "@iRingo.Apple.Weather.Verify.Mode",
@@ -77,7 +79,6 @@
             ],
             "author": "@VirgilClyne",
             "repo": "https://github.com/VirgilClyne/iRingo/blob/beta/js/Apple_Weather.beta.js",
-            "script": "https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Apple_Weather.beta.js",
             "icons": [
                 "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple.png",
                 "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
