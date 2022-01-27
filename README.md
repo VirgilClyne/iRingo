@@ -162,6 +162,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * 采用`waqi.info 私有API`
       * 当选择`定位精度: 城市`时，直接获取`城市`AQI数据，共一步。
       * 当选择`定位精度: 观测站`时，先查询距离最近的`观测站`，然后获取此`观测站`AQI详细数据，共两步。
+  * 注: 申请`waqi.info 私有API`令牌请见: [Air Quality Open Data Platform API Token Request Form](https://aqicn.org/data-platform/token/cn/#/)
 
 ## 安装链接
   * BoxJs:
