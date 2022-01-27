@@ -15,7 +15,7 @@ $.VAL = {
 
 // Default Settings
 $.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null } } };
-// BoxJs Function Supported"
+// BoxJs Function Supported
 if ($.getdata("iRingo") !== null) {
 	// load user prefs from BoxJs
 	$.Apple = JSON.parse($.getdata("iRingo"))?.Apple
