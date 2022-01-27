@@ -465,7 +465,7 @@ function getWAQIjson(url) {
 			}
 		})
 	})
-}
+};
 
 // Function 0B
 // Fatch WAQI JSON
@@ -505,12 +505,27 @@ function fatchWAQIjson(url) {
 			}
 		})
 	})
-}
+};
 
 // Function 1
 // Switch Pollutants Type
 // https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
 function switchPollutantsType(pollutant) {
+	// Way 3
+	// Array Dictionary
+	const pollutant_map = { "co": "CO", "no": "NO", "no2": "NO2", "so2": "SO2", "o3": "OZONE", "nox": "NOX", "pm25": "PM2.5", "pm10": "PM10" };
+	return pollutant_map?.[pollutant] ?? "OTHER";
+	/*
+	// Way 2
+	// Array Map
+	const pollutant_map = {'co':'CO','no':'NO','no2':'NO2','so2':'SO2','o3':'OZONE','nox':'NOX','pm25':'PM2.5','pm10':'PM10'}
+	const pollutant_group = [pollutant]
+	var [pollutant] = pollutant_group.map(x => pollutant_map[x]);
+	return pollutant;
+	*/
+	/*
+	// Way 1
+	// Switch Case
 	switch (pollutant) {
 		case 'co': return 'CO';
 		case 'no': return 'NO';
@@ -522,6 +537,7 @@ function switchPollutantsType(pollutant) {
 		case 'pm10': return 'PM10';
 		default: return "OTHER";
 	}
+	*/
 };
 
 // Function 2
