@@ -397,7 +397,7 @@ function getWAQIjson(url) {
 						// 空值合并运算符
 						var station = _data?.data?.stations?.[0] ?? _data?.d?.[0] ?? null;
 						var idx = station?.idx ?? station?.x ?? null;
-						var name = station?.name ?? station?.u ?? station?.nna ?? station?.nlo ??  null;
+						var name = station?.name ?? station?.u ?? station?.nna ?? station?.nlo ?? null;
 						var aqi = station?.aqi ?? station?.v ?? null;
 						var distance = station?.distance ?? station?.d ?? null;
 						//var country = station?.cca2 ?? station?.country ?? null;
@@ -445,7 +445,7 @@ function getWAQIjson(url) {
 					// https://api.waqi.info/feed/geo::lat;:lng/?token=:token
 					else if (url.url.search("/feed/geo:") != -1) {
 						var city = (_data.status == 'ok') ? _data?.data : null;
-						$.log(`🎉 ${$.name}, ${getCityFeed.name}完成`, `idx: ${station?.idx}`, `观测站: ${station?.city?.name}`, `AQI: ${station?.aqi}`, '')
+						$.log(`🎉 ${$.name}, ${getCityFeed.name}完成`, `idx: ${city?.idx}`, `观测站: ${city?.city?.name}`, `AQI: ${city?.aqi}`, '')
 						resolve(city)
 					}
 					// Step 5C
