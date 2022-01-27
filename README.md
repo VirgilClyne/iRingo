@@ -21,6 +21,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [简介](#简介)
   - [功能列表](#功能列表)
   - [关于天气API](#关于天气api)
+  - [使用说明](#使用说明)
   - [安装链接](#安装链接)
 - [📍定位服务](#定位服务)
   - [简介](#简介-1)
@@ -154,7 +155,17 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * `v1`:Watch、地图、iOS15以下的天气APP、macOS12以下的天气小组件
     * `v2`:iOS15以上的天气APP、macOS12以上的天气小组件
 
-## 安装链接 
+## 使用说明
+  * 安装模块或插件后不进行配置即可直接使用
+    * 采用`waqi.info 公共API`，先查询距离最近的`观测站`，再获取此观测站专用`令牌`，最后获取此`观测站`AQI详细数据，共三步。
+  * 安装BoxJs并配置私有令牌，配合模块或插件使用
+    * 采用`waqi.info 私有API`
+      * 当选择`定位精度: 城市`时，直接获取`城市`AQI数据，共一步。
+      * 当选择`定位精度: 观测站`时，先查询距离最近的`观测站`，然后获取此`观测站`AQI详细数据，共两步。
+
+## 安装链接
+  * BoxJs:
+    * 应用订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true)
   * Loon:
     * 空气质量数据:[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info")
   * Quantumult X:
