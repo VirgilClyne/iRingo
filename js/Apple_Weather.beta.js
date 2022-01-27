@@ -223,7 +223,7 @@ function outputData(api, now, obs, body) {
 			};
 			// 注入数据
 			//条件运算符 & 可选链操作符 
-			weather[`${AQIname}`].source = obs?.city?.name ?? now?.name ?? now?.nna;
+			weather[`${AQIname}`].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo;
 			weather[`${AQIname}`].learnMoreURL = obs?.city?.url + `/${now?.country ?? now?.cca2}/m`.toLowerCase();
 			weather[`${AQIname}`].primaryPollutant = switchPollutantsType(obs?.dominentpol ?? now?.pol);
 			weather[`${AQIname}`].pollutants.CO = { "name": "CO", "amount": obs.iaqi.co?.v || -1, "unit": unit };
@@ -242,7 +242,8 @@ function outputData(api, now, obs, body) {
 				weather.air_quality.airQualityScale = "EPA_NowCast.2115";
 				weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 				weather.air_quality.metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', api);
-				weather.air_quality.metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
+				//weather.air_quality.metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
+				weather.air_quality.metadata.provider_name = obs?.attributions?.[0]?.name;
 				weather.air_quality.metadata.expire_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'add-1h-floor', api);
 				weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
 				weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
@@ -251,7 +252,8 @@ function outputData(api, now, obs, body) {
 				weather.airQuality.scale = "EPA_NowCast.2115";
 				weather.airQuality.categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 				weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
-				weather.airQuality.metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
+				//weather.airQuality.metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
+				weather.airQuality.metadata.providerName = obs?.attributions?.[0]?.name;
 				weather.airQuality.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);				
 				weather.airQuality.metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', api);
 				weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
@@ -393,10 +395,11 @@ function getWAQIjson(url) {
 					// https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
 					if (url.url.search("/nearest") != -1) {
 						// 空值合并运算符
-						var station = _data?.d?.[0] ?? _data?.data?.stations?.[0] ?? null;
-						var idx = station?.x ?? station?.idx ?? null;
-						var name = station?.nna ?? station?.name ?? null;
-						var distance = station?.d ?? station?.distance ?? null;
+						var station = _data?.data?.stations?.[0] ?? _data?.d?.[0] ?? null;
+						var idx = station?.idx ?? station?.x ?? null;
+						var name = station?.name ?? station?.u ?? station?.nna ?? station?.nlo ??  null;
+						var aqi = station?.aqi ?? station?.v ?? null;
+						var distance = station?.distance ?? station?.d ?? null;
 						//var country = station?.cca2 ?? station?.country ?? null;
 						/*
 						if (url.url.search("/mapq/") != -1 && _data.d[0]) {
@@ -416,7 +419,7 @@ function getWAQIjson(url) {
 							$.done();
 						}
 						*/
-						$.log(`🎉 ${$.name}, ${getNearestNOW.name}完成`, `idx: ${idx}`, `观测站: ${name}`, `距离: ${distance}`, '')		
+						$.log(`🎉 ${$.name}, ${getNearestNOW.name}完成`, `idx: ${idx}`, `观测站: ${name}`, `AQI: ${aqi}`, `距离: ${distance}`, '')		
 						resolve([station, idx])
 					}
 					// Step 4
