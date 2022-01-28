@@ -2,64 +2,64 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 const $ = new Env('Apple TV');
-var url = $request.url;
+$.VAL = {
+	"url": $request.url,
+	"body": $request?.body ?? (typeof $response != "undefined") ? $response?.body : null
+};
 
 !(async () => {
-	if (url.indexOf("/uts/v3/configurations?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/configurations?
-		const Parameter = await getOrigin($request.url)
-		if (Parameter.caller == 'wta') $.done() // 丢弃caller=wta的configurations数据
+	if ($.VAL.url.indexOf("/uts/v3/configurations?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/configurations?
+		const Parameter = await getOrigin($.VAL.url)
+		if (Parameter.caller == "wta") $.done() // 丢弃caller=wta的configurations数据
 		else {
 			let [Tabs, TabsGroup] = await createTabsGroup();
-			let body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $response.body, Tabs, TabsGroup);
-			$.done({ body });
+			$.VAL.body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $.VAL.body, Tabs, TabsGroup);
+			$.done({ "body": $.VAL.body });
 		}
-	} else if (url.indexOf("/uts/v3/canvases/Roots/watchNow?") != -1 || url.indexOf("/uts/v3/canvases/roots/tahoma_watchnow?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/watchNow? https://uts-api.itunes.apple.com/uts/v3/canvases/roots/tahoma_watchnow?
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'appletv');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/shelves/uts.col.UpNext?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/shelves/uts.col.UpNext?
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/canvases/Channels/tvs.sbd.4000?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Channels/tvs.sbd.4000?
-		$.done({ url });
-	} else if (url.indexOf("/uts/v2/brands?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/brands?
-		url = processQuery(url, 'sf', '143441');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/canvases/Roots/Movies?") != -1 || url.indexOf("/uts/v3/movies/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Movies? https://uts-api.itunes.apple.com/uts/v3/movies/
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/canvases/Roots/TV?") != -1 || url.indexOf("/uts/v3/shows/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/TV? https://uts-api.itunes.apple.com/uts/v3/shows/
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/canvases/Roots/Sports?") != -1 || url.indexOf("/uts/v2/sports/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Sports? https://uts-api.itunes.apple.com/uts/v2/sports/
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
-		url = processQuery(url, 'sf', '143441');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/canvases/Roots/Kids?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Kids?
-		url = processQuery(url, 'sf', '143441');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/watchlist") != -1) { // https://uts-api.itunes.apple.com/uts/v3/watchlist
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/playables/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/playables/
-		url = processQuery(url, 'sf', '143441');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v2/favorites?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites?
-		url = processQuery(url, 'sf', '143441');
-		$.done({ url });
-	} else if (url.indexOf("/v2/favorites/") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites/
-		let body = $request.body;
-		body = body.replace(sf = /[\d]{6}/g, sf = 143441);
-		$.log(`🎉 ${$.name}, redirectFavorites, Finish`, `data = ${body}`, '')
-		$.done({ body });
-	} else if (url.indexOf("/uts/v3/sporting-events/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/sporting-events/
-		if (processQuery(url, 'pfm') == 'desktop') {
-			url = processQuery(url, 'pfm', 'ipad');
-			url = processQuery(url, 'sf', '143441');
-		} else url = processQuery(url, 'sf', '143441');
-		$.done({ url });
-	} else if (url.indexOf("/uts/v3/canvases/Persons/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Persons/
-		if (processQuery(url, 'pfm') == 'desktop') url = processQuery(url, 'pfm', 'ipad');
-		$.done({ url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/watchNow?") != -1 || $.VAL.url.indexOf("/uts/v3/canvases/roots/tahoma_watchnow?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/watchNow? https://uts-api.itunes.apple.com/uts/v3/canvases/roots/tahoma_watchnow?
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'appletv');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/shelves/uts.col.UpNext?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/shelves/uts.col.UpNext?
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Channels/tvs.sbd.4000?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Channels/tvs.sbd.4000?
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v2/brands?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/brands?
+		$.VAL.body = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/movies?") != -1 || $.VAL.url.indexOf("/uts/v3/movies/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Movies? https://uts-api.itunes.apple.com/uts/v3/movies/
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/tv?") != -1 || $.VAL.url.indexOf("/uts/v3/shows/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/TV? https://uts-api.itunes.apple.com/uts/v3/shows/
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/sports?") != -1 || $.VAL.url.indexOf("/uts/v2/sports/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Sports? https://uts-api.itunes.apple.com/uts/v2/sports/
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/Kids?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Kids?
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/watchlist") != -1) { // https://uts-api.itunes.apple.com/uts/v3/watchlist
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/playables/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/playables/
+		$.VAL.body = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v2/favorites?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites?
+		$.VAL.body = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v2/favorites/") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites/
+		$.VAL.body = $.VAL.body.replace(sf = /[\d]{6}/g, sf = 143441);
+		$.log(`🎉 ${$.name}, redirectFavorites, Finish`, `$.VAL.body = ${$.VAL.body}`, '')
+		$.done({ "body": $.VAL.body });
+	} else if ($.VAL.url.indexOf("/uts/v3/sporting-events/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/sporting-events/
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = processQuery(url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Persons/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Persons/
+		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.done({ "url": $.VAL.url });
 	}
 })()
 	.catch((e) => $.logErr(e))
