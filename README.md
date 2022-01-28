@@ -2,9 +2,9 @@
 解锁完整的Apple功能和集成服务   
 macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过  
 需要启用`重写`、`脚本`、`MitM`功能  
-如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用
-有问题请至Issue页面反馈
-Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
+如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用  
+有问题请至Issue页面反馈  
+Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)  
 
 ---
 
@@ -45,7 +45,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
   - [安装链接](#安装链接-3)
-- [📺Apple TV（🚧未适配带商店页面的新版）](#apple-tv未适配带商店页面的新版)
+- [📺Apple TV](#apple-tv)
   - [简介](#简介-4)
   - [激活方式](#激活方式-3)
   - [功能列表](#功能列表-2)
@@ -435,7 +435,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 ---
 
-# 📺Apple TV（🚧未适配带商店页面的新版）
+# 📺Apple TV
 ## 简介
   * 保持模块启用,即可在全设备平台解锁TV app全部已知功能，并优先使用简体中文(zh-Hans)。
 
@@ -455,10 +455,11 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     4. 重新输入`Apple ID`与`密码`登入（🇨🇳CN地区账号无效）
     5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
       1. `Apple TV`的`https://uts-api.itunes.apple.com/uts/v3/configitions`链接
-    6. 查看`Apple TV`app的`立即观看`页面是否有`电影`、`电视节目`、`体育节目`、`儿童`四个二级入口(iOS/iPadOS)
-    7. 查看`Apple TV`app的顶部是否有`立即观看`、`tv+`、`电影`、`电视节目`、`体育节目`、`资料库`五个标签页按钮(macOS/tvOS)
-    8. 如没有请重开一次app
-    9. 正常使用
+    6. 查看`Apple TV`app的`立即观看`页面是否有`儿童`一个二级入口(iOS/iPadOS)
+    7. 查看`Apple TV`app的标签栏是否有`立即观看`、`原创内容`、`商店`、`体育节目`、`资料库`五个标签页按钮(iOS/iPadOS)
+    8. 查看`Apple TV`app的标签栏是否有`立即观看`、`tv+`、`商店`、`体育节目`、`儿童`、`资料库`六个标签页按钮(macOS/tvOS)
+    9. 如没有请重开一次app
+    10. 正常使用
 
 ## 功能列表
   * 硬件及平台
@@ -471,10 +472,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 分类页面
     - [x] 立即观看
     - [x] TV+
-    - [x] 电影
-    - [x] 电视节目
+    - [x] 商店 (电影、电视节目为`商店`二级菜单)
     - [x] 体育节目 (macOS无关注「喜爱的球队」功能和显示比分功能)
-    - [x] 儿童 (macOS限制最多6个标签页，故macOS版隐藏「儿童」标签页)
+    - [x] 儿童 (iOS/iPadOS为`立即观看`二级菜单)
     - [x] 资料库
     - [x] 搜索
 
