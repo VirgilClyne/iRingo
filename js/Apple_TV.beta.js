@@ -131,7 +131,7 @@ async function createTabsGroup() {
 
 	// 创建分组
 	const Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	const TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+	const TabsGroup = [WatchNow, Originals, Store, Sports, Library, Search];
 	/*
 	 // 简体中文改Tabs语言
 	 if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
