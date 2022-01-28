@@ -30,7 +30,8 @@ const Persons = /\/uts\/(v1|v2|v3)\/canvases\/Persons\//i; // https://uts-api.it
 		const Parameter = await getOrigin($request.url)
 		if (Parameter.caller == 'wta') $.done() // 丢弃caller=wta的configurations数据
 		else {
-			let body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $response.body);
+			let [Tabs, TabsGroup] = await createTabsGroup();
+			let body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $response.body, Tabs, TabsGroup);
 			$.done({ body });
 		}
 	} else if (url.search(watchNow) != -1 || url.search(tahoma_watchnow) != -1) {
@@ -109,89 +110,10 @@ function getOrigin(url) {
 	})
 };
 
+
 // Step 2
-// Output Tabs Data
-function outputData(api, caller, platform, locale, region, body) {
-	return new Promise((resolve) => {
-		// Input Data
-		let configurations = JSON.parse(body);
-		try {
-			//检测版本
-			$.log(`⚠️ ${$.name}, ${outputData.name}检测`, `API: ${api}`, '');
-			if (api == "v1") $.done()
-			else if (api == "v2") $.done()
-			else if (api == "v3") {
-				// 注入数据
-				//条件运算符 & 可选链操作符 
-				//configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
-				//configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-				configurations.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
-				configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
-				configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-				configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
-				configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
-				//configurations.data.applicationProps.storefront.storefrontId = 143470;
-				configurations.data.applicationProps.featureEnablers = {
-					"topShelf": true,
-					"unw": true,
-					"imageBasedSubtitles": true,
-					"ageVerification": false,
-					"seasonTitles": false
-				};
-				configurations.data.userProps.activeUser = true;
-				//configurations.data.userProps.utsc = "1:18943";
-				//configurations.data.userProps.country = country;
-				configurations.data.userProps.gac = true;
-			} else $.done();
-		} catch (e) {
-			$.log(`❗️${$.name}, ${outputData.name}执行失败`, `error = ${error || e}`, '')
-		} finally {
-			// Output Data
-			body = JSON.stringify(configurations);
-			$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
-			resolve(body)
-		}
-	})
-};
-
-/***************** Fuctions *****************/
-
-// Function 0
-// process Query URL
-// 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
-// https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
-function processQuery(url, variable, parameter) {
-	//console.log(`🚧 ${processQuery.name}调试信息, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
-	if (url.indexOf("?") != -1) {
-		if (parameter == undefined) {
-			//console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, INPUT: variable: ${variable}`, ``);
-			var query = url.split("?")[1];
-			var vars = query.split("&");
-			for (var i = 0; i < vars.length; i++) {
-				var pair = vars[i].split("=");
-				if (pair[0] == variable) {
-					console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, OUTPUT: ${variable}=${pair[1]}`, ``);
-					return pair[1];
-				}
-			}
-			console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
-			return false;
-		} else {
-			//console.log(`🚧 ${processQuery.name}调试信息, replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
-			var re = new RegExp('(' + variable + '=)([^&]*)', 'gi')
-			var newUrl = url.replace(re, variable + '=' + parameter)
-			console.log(`🚧 ${processQuery.name}调试信息, replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
-			return newUrl
-		};
-	} else {
-		console.log(`🚧 ${processQuery.name}调试信息, ERROR: No such URL ,Skip`, url, ``);
-		return url;
-	}
-};
-
-// Function 1
 // Create Tabs Group
-function createTabsGroup(type, caller, platform, locale, region) {
+async function createTabsGroup() {
 	//构建Tab内容
 	let WatchNow = {
 		"destinationType": "Target",
@@ -285,46 +207,6 @@ function createTabsGroup(type, caller, platform, locale, region) {
 	// 创建分组
 	const Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
 	const TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	// 设备与平台区别
-	/*
-	if (platform == "iphone" || platform == "ipad") {
-		Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, Originals, Store, Library, Search];
-	} else {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	}
-	*/
-	/*
-	if (caller == "com.apple.iTunes" && platform == "desktop") {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	} else if (caller == "wta" && platform == "desktop") {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	} else if (platform == "desktop") {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	} else if (platform == "iphone") {
-		Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, Originals, Store, Library, Search];
-	} else if (platform == "ipad") {
-		Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	} else if (platform == "appletv") {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	} else if (platform == "atv") {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	} else if (platform == "web") {
-		Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
-	} else {
-		Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-		TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	}
-	*/
 	/*
 	 // 简体中文改Tabs语言
 	 if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
@@ -335,8 +217,89 @@ function createTabsGroup(type, caller, platform, locale, region) {
 	 };
 	 */
 	// 输出
-	if (type == "Tabs") return Tabs;
-	else if (type == "TabsGroup") return TabsGroup;
+	return [Tabs, TabsGroup];
+};
+
+// Step 3
+// Output Tabs Data
+function outputData(api, caller, platform, locale, region, body, Tabs, TabsGroup) {
+	return new Promise((resolve) => {
+		// Input Data
+		let configurations = JSON.parse(body);
+		try {
+			//检测版本
+			$.log(`⚠️ ${$.name}, ${outputData.name}检测`, `API: ${api}`, '');
+			if (api == "v1") $.done()
+			else if (api == "v2") $.done()
+			else if (api == "v3") {
+				// 注入数据
+				//条件运算符 & 可选链操作符 
+				//configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
+				//configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
+				configurations.data.applicationProps.tabs = Tabs;
+				//configurations.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
+				configurations.data.applicationProps.tabsSplitScreen = TabsGroup;
+				//configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
+				configurations.data.applicationProps.tvAppEnabledInStorefront = true;
+				configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
+				configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
+				//configurations.data.applicationProps.storefront.storefrontId = 143470;
+				configurations.data.applicationProps.featureEnablers = {
+					"topShelf": true,
+					"unw": true,
+					"imageBasedSubtitles": true,
+					"ageVerification": false,
+					"seasonTitles": false
+				};
+				configurations.data.userProps.activeUser = true;
+				//configurations.data.userProps.utsc = "1:18943";
+				//configurations.data.userProps.country = country;
+				configurations.data.userProps.gac = true;
+			} else $.done();
+		} catch (e) {
+			$.log(`❗️${$.name}, ${outputData.name}执行失败`, `error = ${error || e}`, '')
+		} finally {
+			// Output Data
+			body = JSON.stringify(configurations);
+			$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
+			resolve(body)
+		}
+	})
+};
+
+/***************** Fuctions *****************/
+
+// Function 0
+// process Query URL
+// 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
+// https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
+function processQuery(url, variable, parameter) {
+	//console.log(`🚧 ${processQuery.name}调试信息, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
+	if (url.indexOf("?") != -1) {
+		if (parameter == undefined) {
+			//console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, INPUT: variable: ${variable}`, ``);
+			var query = url.split("?")[1];
+			var vars = query.split("&");
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+					console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, OUTPUT: ${variable}=${pair[1]}`, ``);
+					return pair[1];
+				}
+			}
+			console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
+			return false;
+		} else {
+			//console.log(`🚧 ${processQuery.name}调试信息, replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
+			var re = new RegExp('(' + variable + '=)([^&]*)', 'gi')
+			var newUrl = url.replace(re, variable + '=' + parameter)
+			console.log(`🚧 ${processQuery.name}调试信息, replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
+			return newUrl
+		};
+	} else {
+		console.log(`🚧 ${processQuery.name}调试信息, ERROR: No such URL ,Skip`, url, ``);
+		return url;
+	}
 };
 
 /***************** Env *****************/
