@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env('Apple_TV');
+const $ = new Env('Apple TV');
 var url = $request.url;
 
 //URL List
@@ -161,30 +161,30 @@ function outputData(api, caller, platform, locale, region, body) {
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)
 // https://github.com/VirgilClyne/iRingo/blob/main/js/QueryURL.js
 function processQuery(url, variable, parameter) {
-    //console.log(`processQuery, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
+    //console.log(`🚧 ${processQuery.name}调试信息, INPUT: variable: ${variable}, parameter: ${parameter}`, ``);
     if (url.indexOf("?") != -1) {
         if (parameter == undefined) {
-            //console.log(`getQueryVariable, INPUT: variable: ${variable}`, ``);
+            //console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, INPUT: variable: ${variable}`, ``);
             var query = url.split("?")[1];
             var vars = query.split("&");
             for (var i = 0; i < vars.length; i++) {
                 var pair = vars[i].split("=");
                 if (pair[0] == variable) {
-                    console.log(`getQueryVariable, OUTPUT: ${variable}=${pair[1]}`, ``);
+                    console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, OUTPUT: ${variable}=${pair[1]}`, ``);
                     return pair[1];
                 }
             }
-            console.log(`getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
+            console.log(`🚧 ${processQuery.name}调试信息, getQueryVariable, ERROR: No such variable: ${variable}, Skip`, ``);
             return false;
         } else {
-            //console.log(`replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
+            //console.log(`🚧 ${processQuery.name}调试信息, replaceQueryParamter, INPUT: ${variable}=${parameter}, Start`, ``);
             var re = new RegExp('(' + variable + '=)([^&]*)', 'gi')
             var newUrl = url.replace(re, variable + '=' + parameter)
-            console.log(`replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
+            console.log(`🚧 ${processQuery.name}调试信息, replaceQueryParamter, OUTPUT: ${variable}=${parameter}`, newUrl, ``);
             return newUrl
         };
     } else {
-        console.log(`processQuery, ERROR: No such URL ,Skip`, url, ``);
+        console.log(`🚧 ${processQuery.name}调试信息, ERROR: No such URL ,Skip`, url, ``);
         return url;
     }
 };
@@ -211,7 +211,7 @@ function createTabsGroup(type, caller, platform, locale, region) {
             "type": "Brand",
             "url": "https://tv.apple.com/us/channel/tvs.sbd.4000"
         },
-        "title": "Apple TV+",
+        "title": "原创内容",
         "type": "Originals",
         "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"]
     };
@@ -282,19 +282,59 @@ function createTabsGroup(type, caller, platform, locale, region) {
         "universalLinks": ["https://tv.apple.com/search"]
     };
 
+    // 创建分组
     const Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
     const TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-
+    // 设备与平台区别
     /*
-    //简体中文改Tabs语言
+    if (platform == "iphone" || platform == "ipad") {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    }
+    */
+    /*
+    if (caller == "com.apple.iTunes" && platform == "desktop") {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    } else if (caller == "wta" && platform == "desktop") {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    } else if (platform == "desktop") {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    } else if (platform == "iphone") {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Library, Search];
+    } else if (platform == "ipad") {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+    } else if (platform == "appletv") {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    } else if (platform == "atv") {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    } else if (platform == "web") {
+        Tabs = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, AppleTV, Store, Sports, Kids, Library, Search];
+    } else {
+        Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+        TabsGroup = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+    }
+    */
+   
+    // 简体中文改Tabs语言
     if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
     if (esl != "zh_Hans" || region != "CN") {
         if (platform == "iphone" || platform == "ipad") var maps = new Map([['立即观看', 'Watch Now'], ['原创内容', 'Originals'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']])
         else var maps = new Map([['立即观看', 'Watch Now'], ['Apple TV+', 'Apple TV+'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']]);
         Tabs = Tabs.map(element => { element.title = maps.get(element.title); return element; });
     };
-    */
 
+    // 输出
     if (type == "Tabs") return Tabs;
     else if (type == "TabsGroup") return TabsGroup;
 };
