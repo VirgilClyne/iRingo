@@ -16,17 +16,21 @@ $.VAL = {
 // Default Settings
 $.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null } } };
 // BoxJs Function Supported
-if ($.getdata("iRingo") !== null) {
+if ($.getdata("iRingo")) {
+	$.log(`🎉 ${$.name}, BoxJs`);
 	// load user prefs from BoxJs
-	$.Apple = JSON.parse($.getdata("iRingo"))?.Apple
+	const iRingo = $.getdata("iRingo")
+	$.log(`🚧 ${$.name}, BoxJs调试信息, iRingo类型: ${typeof iRingo}`, `iRingo内容: ${iRingo}`, "");
+	$.Apple = JSON.parse(iRingo)?.Apple;
 	//$.log(JSON.stringify($.Apple.Weather))
 	if ($.Apple?.Weather?.Verify?.Mode == "Key") {
-		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"))
+		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"));
 		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
 	};
 }
 // Argument Function Supported
 else if (typeof $argument != "undefined") {
+	$.log(`🎉 ${$.name}, $Argument`);
 	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
 	$.log(JSON.stringify(arg));
 	$.Apple.Weather.Mode = arg.Mode;
@@ -34,7 +38,7 @@ else if (typeof $argument != "undefined") {
 	$.Apple.Weather.Verify.Mode = arg.VerifyMode;
 	$.Apple.Weather.Verify.Content = arg.Token;
 }
-$.log(JSON.stringify($.Apple.Weather));
+//$.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Weather}`, `$.Apple.Weather内容: ${JSON.stringify($.Apple.Weather)}`, "");
 
 !(async () => {
 	const Mode = $.Apple.Weather.Mode
