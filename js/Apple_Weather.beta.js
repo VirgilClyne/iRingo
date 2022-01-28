@@ -15,18 +15,22 @@ $.VAL = {
 
 // Default Settings
 $.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null } } };
-// BoxJs Function Supported"
-if ($.getdata("iRingo") !== null) {
+// BoxJs Function Supported
+if ($.getdata("iRingo")) {
+	$.log(`🎉 ${$.name}, BoxJs`);
 	// load user prefs from BoxJs
-	$.Apple = JSON.parse($.getdata("iRingo"))?.Apple
+	const iRingo = $.getdata("iRingo")
+	$.log(`🚧 ${$.name}, BoxJs调试信息, iRingo类型: ${typeof iRingo}`, `iRingo内容: ${iRingo}`, "");
+	$.Apple = JSON.parse(iRingo)?.Apple;
 	//$.log(JSON.stringify($.Apple.Weather))
 	if ($.Apple?.Weather?.Verify?.Mode == "Key") {
-		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"))
+		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"));
 		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
 	};
 }
 // Argument Function Supported
 else if (typeof $argument != "undefined") {
+	$.log(`🎉 ${$.name}, $Argument`);
 	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
 	$.log(JSON.stringify(arg));
 	$.Apple.Weather.Mode = arg.Mode;
@@ -34,7 +38,7 @@ else if (typeof $argument != "undefined") {
 	$.Apple.Weather.Verify.Mode = arg.VerifyMode;
 	$.Apple.Weather.Verify.Content = arg.Token;
 }
-$.log(JSON.stringify($.Apple.Weather));
+$.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Weather}`, `$.Apple.Weather内容: ${JSON.stringify($.Apple.Weather)}`, "");
 
 !(async () => {
 	const Mode = $.Apple.Weather.Mode
@@ -369,7 +373,7 @@ function outputData(api, now, obs, body) {
 			}
 			*/
 		} catch (e) {
-			$.log(`❗️${$.name}, ${outputData.name}执行失败`, `浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 看看是不是空数据`, `原因：网络不畅或者获取太频繁导致被封`, `error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+			$.log(`❗️${$.name}, ${outputData.name}执行失败`, `浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 看看是不是空数据`, `原因：网络不畅或者获取太频繁导致被封`, `error = ${error || e}`, '')
 		} finally {
 			// Output Data
 			body = JSON.stringify(weather);
@@ -379,7 +383,7 @@ function outputData(api, now, obs, body) {
 	})
 }
 
-/***************** function *****************/
+/***************** Fuctions *****************/
 // Function 0A
 // Get WAQI JSON
 function getWAQIjson(url) {
