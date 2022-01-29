@@ -14,8 +14,8 @@ $.VAL = {
 		const Parameter = await getOrigin($.VAL.url)
 		if (Parameter.caller == "wta") $.done() // 不修改caller=wta的configurations数据
 		else {
-			let [tabs, tabsSplitScreen] = await createTabsGroup();
-			$.VAL.body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $.VAL.body, tabs, tabsSplitScreen);
+			let TabsGroup = await createTabsGroup(Parameter);
+			$.VAL.body = await outputData(Parameter, $.VAL.body, TabsGroup);
 			$.done({ "body": $.VAL.body });
 		}
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/watchNow?") != -1 || $.VAL.url.indexOf("/uts/v3/canvases/roots/tahoma_watchnow?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/watchNow? https://uts-api.itunes.apple.com/uts/v3/canvases/roots/tahoma_watchnow?
@@ -72,10 +72,11 @@ $.VAL = {
 // Get Origin Parameter
 function getOrigin(url) {
 	return new Promise((resolve) => {
-		const Regular = /^https?:\/\/(?<dataServer>uts-api|uts-api-siri)\.itunes\.apple\.com\/uts\/(?<Version>v1|v2|v3)\/configurations\?.*/;
+		const Regular = /^https?:\/\/(?<dataServer>uts-api|uts-api-siri)\.itunes\.apple\.com\/uts\/(?<Version>v1|v2|v3)\/configurations\?.*v=(?<ConfVer>\d{2,}).*/i;
 		try {
 			//[$.url, $.dataServer, $.apiVer] = url.match(Regular);
 			var Parameter = url.match(Regular).groups;
+			Parameter.ConfVer = Number(Parameter.ConfVer);
 			Parameter.caller = processQuery(url, 'caller');
 			Parameter.platform = processQuery(url, 'pfm');
 			if (Parameter.caller == 'wlk' || Parameter.caller == "js") {
@@ -97,10 +98,12 @@ function getOrigin(url) {
 
 // Step 2
 // Create Tabs Group
-async function createTabsGroup() {
+async function createTabsGroup(Parameter) {
 	//构建Tab内容
 	let WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
 	let Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
+	let Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": "电影", "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
+	let TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": "电视节目", "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
 	let Store = {
 		"destinationType": "SubTabs",
 		"subTabs": [{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] }, { "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }],
@@ -114,8 +117,9 @@ async function createTabsGroup() {
 	let Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
 
 	// 创建分组
-	const tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	const tabsSplitScreen = [WatchNow, Originals, Store, Library, Search];
+	var tabs = (Parameter.ConfVer > 53) ? [WatchNow, Originals, Store, Sports, Kids, Library, Search]
+		: [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
+	var tabsSplitScreen =  [WatchNow, Originals, Store, Library, Search];
 	
 	/*
 	// 简体中文改Tabs语言
@@ -133,27 +137,27 @@ async function createTabsGroup() {
 
 // Step 3
 // Output Tabs Data
-function outputData(api, caller, platform, locale, region, body, tabs, tabsSplitScreen) {
+function outputData(Parameter, body, [tabs, tabsSplitScreen]) {
 	return new Promise((resolve) => {
 		// Input Data
 		let configurations = JSON.parse(body);
 		try {
 			//检测版本
-			$.log(`⚠️ ${$.name}, ${outputData.name}检测`, `API: ${api}`, '');
-			if (api == "v1") $.done()
-			else if (api == "v2") $.done()
-			else if (api == "v3") {
+			$.log(`⚠️ ${$.name}, ${outputData.name}检测`, `API: ${Parameter.Version}`, '');
+			if (Parameter.Version == "v1") $.done()
+			else if (Parameter.Version == "v2") $.done()
+			else if (Parameter.Version == "v3") {
 				// 注入数据
 				//条件运算符 & 可选链操作符 
 				//configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
 				//configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
 				configurations.data.applicationProps.tabs = tabs;
 				//configurations.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
-				configurations.data.applicationProps.tabsSplitScreen = tabsSplitScreen;
+				if (Parameter.ConfVer > 53) configurations.data.applicationProps.tabsSplitScreen = tabsSplitScreen;
 				//configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
 				configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-				configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
-				//configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
+				configurations.data.applicationProps.enabledClientFeatures = (Parameter.ConfVer > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
+					: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
 				configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 				//configurations.data.applicationProps.storefront.storefrontId = 143470;
 				configurations.data.applicationProps.featureEnablers = {
