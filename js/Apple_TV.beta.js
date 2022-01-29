@@ -7,6 +7,8 @@ $.VAL = {
 	"body": $request?.body ?? (typeof $response != "undefined") ? $response?.body : null
 };
 
+/***************** Async *****************/
+
 !(async () => {
 	if ($.VAL.url.indexOf("/uts/v3/configurations?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/configurations?
 		const Parameter = await getOrigin($.VAL.url)
@@ -65,6 +67,7 @@ $.VAL = {
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done())
 
+/***************** Async Function *****************/
 // Step 1
 // Get Origin Parameter
 function getOrigin(url) {
@@ -177,7 +180,6 @@ function outputData(api, caller, platform, locale, region, body, tabs, tabsSplit
 };
 
 /***************** Fuctions *****************/
-
 // Function 0
 // process Query URL
 // 查询并替换自身,url为链接,variable为参数,parameter为新值(如果有就替换)

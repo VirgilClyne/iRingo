@@ -40,6 +40,8 @@ else if (typeof $argument != "undefined") {
 }
 $.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Weather}`, `$.Apple.Weather内容: ${JSON.stringify($.Apple.Weather)}`, "");
 
+/***************** Async *****************/
+
 !(async () => {
 	const Mode = $.Apple.Weather.Mode
 	const Location = $.Apple.Weather.Location
@@ -81,6 +83,7 @@ $.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Wea
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done())
 
+/***************** Async Function *****************/
 // Step 1
 // Get Origin Parameter
 function getOrigin(url) {
