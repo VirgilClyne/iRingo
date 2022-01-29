@@ -10,10 +10,10 @@ $.VAL = {
 !(async () => {
 	if ($.VAL.url.indexOf("/uts/v3/configurations?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/configurations?
 		const Parameter = await getOrigin($.VAL.url)
-		if (Parameter.caller == "wta") $.done() // 丢弃caller=wta的configurations数据
+		if (Parameter.caller == "wta") $.done() // 不修改caller=wta的configurations数据
 		else {
-			let [Tabs, TabsGroup] = await createTabsGroup();
-			$.VAL.body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $.VAL.body, Tabs, TabsGroup);
+			let [tabs, tabsSplitScreen] = await createTabsGroup();
+			$.VAL.body = await outputData(Parameter.Version, Parameter.caller, Parameter.platform, Parameter.locale, Parameter.region, $.VAL.body, tabs, tabsSplitScreen);
 			$.done({ "body": $.VAL.body });
 		}
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/watchNow?") != -1 || $.VAL.url.indexOf("/uts/v3/canvases/roots/tahoma_watchnow?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/watchNow? https://uts-api.itunes.apple.com/uts/v3/canvases/roots/tahoma_watchnow?
@@ -105,30 +105,32 @@ async function createTabsGroup() {
 		"type": "Store",
 		"universalLinks": ["https://tv.apple.com/store"]
 	};
-	let Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": "体育节目", "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
+	let Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": "体育节目", "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
 	let Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": "儿童", "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
 	let Library = { "destinationType": "Client", "title": "资料库", "type": "Library" };
 	let Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
 
 	// 创建分组
-	const Tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	const TabsGroup = [WatchNow, Originals, Store, Sports, Library, Search];
+	const tabs = [WatchNow, Originals, Store, Sports, Kids, Library, Search];
+	const tabsSplitScreen = [WatchNow, Originals, Store, Library, Search];
+	
 	/*
-	 // 简体中文改Tabs语言
-	 if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
-	 if (esl != "zh_Hans" || region != "CN") {
-		 if (platform == "iphone" || platform == "ipad") var maps = new Map([['立即观看', 'Watch Now'], ['原创内容', 'Originals'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']])
-		 else var maps = new Map([['立即观看', 'Watch Now'], ['Apple TV+', 'Apple TV+'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']]);
-		 Tabs = Tabs.map(element => { element.title = maps.get(element.title); return element; });
-	 };
-	 */
+	// 简体中文改Tabs语言
+	if (locale) var esl = locale.match(/[a-z]{2}_[A-Za-z]{2,3}/g)
+	if (esl != "zh_Hans" || esl != "zh_Hant" || esl != "yue-Hant" || region != "CN") {
+		if (platform == "iphone" || platform == "ipad") var maps = new Map([['立即观看', 'Watch Now'], ['原创内容', 'Originals'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']])
+		else var maps = new Map([['立即观看', 'Watch Now'], ['Apple TV+', 'Apple TV+'], ['电影', 'Movies'], ['电视节目', 'TV'], ['体育节目', 'Sports'], ['儿童', 'Kids'], ['商店', 'Store'], ['资料库', 'Library'], ['搜索', 'Search']]);
+		tabs = tabs.map(element => { element.title = maps.get(element.title); return element; });
+	};
+	*/
+	
 	// 输出
-	return [Tabs, TabsGroup];
+	return [tabs, tabsSplitScreen];
 };
 
 // Step 3
 // Output Tabs Data
-function outputData(api, caller, platform, locale, region, body, Tabs, TabsGroup) {
+function outputData(api, caller, platform, locale, region, body, tabs, tabsSplitScreen) {
 	return new Promise((resolve) => {
 		// Input Data
 		let configurations = JSON.parse(body);
@@ -142,12 +144,13 @@ function outputData(api, caller, platform, locale, region, body, Tabs, TabsGroup
 				//条件运算符 & 可选链操作符 
 				//configurations.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
 				//configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-				configurations.data.applicationProps.tabs = Tabs;
+				configurations.data.applicationProps.tabs = tabs;
 				//configurations.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
-				configurations.data.applicationProps.tabsSplitScreen = TabsGroup;
+				configurations.data.applicationProps.tabsSplitScreen = tabsSplitScreen;
 				//configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
 				configurations.data.applicationProps.tvAppEnabledInStorefront = true;
 				configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
+				//configurations.data.applicationProps.enabledClientFeatures = [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }];
 				configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 				//configurations.data.applicationProps.storefront.storefrontId = 143470;
 				configurations.data.applicationProps.featureEnablers = {
