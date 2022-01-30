@@ -19,50 +19,94 @@ $.VAL = {
 			$.done({ "body": $.VAL.body });
 		}
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/watchNow?") != -1 || $.VAL.url.indexOf("/uts/v3/canvases/roots/tahoma_watchnow?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/watchNow? https://uts-api.itunes.apple.com/uts/v3/canvases/roots/tahoma_watchnow?
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'appletv');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'appletv') : $.VAL.url;
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/shelves/uts.col.UpNext?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/shelves/uts.col.UpNext?
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Channels/tvs.sbd.4000?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Channels/tvs.sbd.4000?
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v2/brands?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/brands?
-		$.VAL.body = processQuery($.VAL.url, 'sf', '143441');
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/movies?") != -1 || $.VAL.url.indexOf("/uts/v3/movies/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Movies? https://uts-api.itunes.apple.com/uts/v3/movies/
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/tv?") != -1 || $.VAL.url.indexOf("/uts/v3/shows/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/TV? https://uts-api.itunes.apple.com/uts/v3/shows/
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/sports?") != -1 || $.VAL.url.indexOf("/uts/v2/sports/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Sports? https://uts-api.itunes.apple.com/uts/v2/sports/
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
 		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/Kids?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Kids?
 		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/watchlist") != -1) { // https://uts-api.itunes.apple.com/uts/v3/watchlist
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/playables/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/playables/
-		$.VAL.body = processQuery($.VAL.url, 'sf', '143441');
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v2/favorites") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.VAL.body = $.VAL?.body?.replace(sf = /[\d]{6}/g, sf = 143441);
+		$.done({ "url": $.VAL.url, "body": $.VAL.body });
+	} else if ($.VAL.url.indexOf("/uts/v3/sporting-events/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/sporting-events/
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Persons/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Persons/
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.done({ "url": $.VAL.url });
+	}
+	/*
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/watchNow?") != -1 || $.VAL.url.indexOf("/uts/v3/canvases/roots/tahoma_watchnow?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/watchNow? https://uts-api.itunes.apple.com/uts/v3/canvases/roots/tahoma_watchnow?
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'appletv') : $.VAL.url;
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/shelves/uts.col.UpNext?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/shelves/uts.col.UpNext?
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Channels/tvs.sbd.4000?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Channels/tvs.sbd.4000?
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v2/brands?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/brands?
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/movies?") != -1 || $.VAL.url.indexOf("/uts/v3/movies/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Movies? https://uts-api.itunes.apple.com/uts/v3/movies/
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/tv?") != -1 || $.VAL.url.indexOf("/uts/v3/shows/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/TV? https://uts-api.itunes.apple.com/uts/v3/shows/
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/sports?") != -1 || $.VAL.url.indexOf("/uts/v2/sports/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Sports? https://uts-api.itunes.apple.com/uts/v2/sports/
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Roots/Kids?") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Roots/Kids?
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/watchlist") != -1) { // https://uts-api.itunes.apple.com/uts/v3/watchlist
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.done({ "url": $.VAL.url });
+	} else if ($.VAL.url.indexOf("/uts/v3/playables/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/playables/
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v2/favorites?") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites?
-		$.VAL.body = processQuery($.VAL.url, 'sf', '143441');
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v2/favorites/") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites/
 		$.VAL.body = $.VAL.body.replace(sf = /[\d]{6}/g, sf = 143441);
-		$.log(`🎉 ${$.name}, redirectFavorites, Finish`, `$.VAL.body = ${$.VAL.body}`, '')
+		//$.log(`🎉 ${$.name}, redirectFavorites, Finish`, `$.VAL.body = ${$.VAL.body}`, '')
 		$.done({ "body": $.VAL.body });
 	} else if ($.VAL.url.indexOf("/uts/v3/sporting-events/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/sporting-events/
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
-		$.VAL.url = processQuery(url, 'sf', '143441');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
+		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v3/canvases/Persons/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/canvases/Persons/
-		if (processQuery($.VAL.url, 'pfm') == 'desktop') $.VAL.url = processQuery($.VAL.url, 'pfm', 'ipad');
+		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
 		$.done({ "url": $.VAL.url });
 	}
+	*/
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done())
