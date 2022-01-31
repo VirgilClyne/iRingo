@@ -4,8 +4,9 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env('Apple TV');
 $.VAL = {
 	"url": $request.url,
-	"body": $request?.body ?? (typeof $response != "undefined") ? $response?.body : null
+	"body": ($request.body) ? $request.body : (typeof $response != "undefined") ? $response.body : null
 };
+console.log($.VAL)
 
 /***************** Async *****************/
 
@@ -50,7 +51,7 @@ $.VAL = {
 		$.done({ "url": $.VAL.url });
 	} else if ($.VAL.url.indexOf("/uts/v2/favorites") != -1) { // https://uts-api.itunes.apple.com/uts/v2/favorites
 		$.VAL.url = processQuery($.VAL.url, 'sf', '143441');
-		$.VAL.body = $.VAL?.body?.replace(sf = /[\d]{6}/g, sf = 143441);
+		$.VAL.body = ($.VAL?.body) ? $.VAL.body.replace(sf = /[\d]{6}/g, sf = 143441) : null;
 		$.done({ "url": $.VAL.url, "body": $.VAL.body });
 	} else if ($.VAL.url.indexOf("/uts/v3/sporting-events/") != -1) { // https://uts-api.itunes.apple.com/uts/v3/sporting-events/
 		$.VAL.url = (processQuery($.VAL.url, 'pfm') == 'desktop') ? processQuery($.VAL.url, 'pfm', 'ipad') : $.VAL.url;
