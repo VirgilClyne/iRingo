@@ -1,0 +1,17 @@
+name:  Replace Apple Weather with 🇺🇸US @waqi.info
+desc: 切换空气质量数据源为waqi.info，并更改标准为AQI(US)
+
+http:
+  mitm:
+    - "weather-data.apple.com"
+  script:
+    - match: ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.*
+      name: Apple_Weather
+      type: response
+      require-body: true
+      timeout: 10
+
+script-providers:
+  Apple_Weather:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_Weather.js
+    interval: 3600
