@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather");
+const $ = new Env("Apple Weather v2.1.0-beta");
 $.VAL = {
 	"url": "https://api.waqi.info",
 	"headers": {
@@ -13,36 +13,9 @@ $.VAL = {
 	}
 };
 
-// Default Settings
-$.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null }, "Scale": "EPA_NowCast.2201" } };
-// BoxJs Function Supported
-if ($.getdata("iRingo")) {
-	$.log(`🎉 ${$.name}, BoxJs`);
-	// load user prefs from BoxJs
-	const iRingo = $.getdata("iRingo")
-	$.log(`🚧 ${$.name}, BoxJs调试信息, iRingo类型: ${typeof iRingo}`, `iRingo内容: ${iRingo}`, "");
-	$.Apple = JSON.parse(iRingo)?.Apple;
-	//$.log(JSON.stringify($.Apple.Weather))
-	if ($.Apple?.Weather?.Verify?.Mode == "Key") {
-		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"));
-		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
-	};
-}
-// Argument Function Supported
-else if (typeof $argument != "undefined") {
-	$.log(`🎉 ${$.name}, $Argument`);
-	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-	$.log(JSON.stringify(arg));
-	$.Apple.Weather.Mode = arg.Mode;
-	$.Apple.Weather.Location = arg.Location;
-	$.Apple.Weather.Verify.Mode = arg.VerifyMode;
-	$.Apple.Weather.Verify.Content = arg.Token;
-}
-$.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Weather}`, `$.Apple.Weather内容: ${JSON.stringify($.Apple.Weather)}`, "");
-
 /***************** Async *****************/
-
 !(async () => {
+	$.Apple = await setENV("iRingo")
 	const Mode = $.Apple.Weather.Mode
 	const Location = $.Apple.Weather.Location
 	const Parameter = await getOrigin($request.url)
@@ -84,6 +57,35 @@ $.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Wea
 	.finally(() => $.done())
 
 /***************** Async Function *****************/
+// Function 0
+// Set Environment Variables
+async function setENV(name) {
+	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
+	// 包装为局部变量，用完释放内存
+	// BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
+	/***************** Settings *****************/
+	// Default Settings
+	const database = { "Apple": { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null }, "Scale": "EPA_NowCast.2201" } } };
+	// BoxJs
+	let iRingo = $.getjson(name, database)
+	/***************** $.Apple *****************/
+	let Apple = iRingo?.Apple || database.Apple;
+	if (typeof Apple == "string") Apple = JSON.parse(Apple)
+	$.log(`🎉 ${$.name}, Set Environment Variables`, `Apple: ${typeof Apple}`, `Apple内容: ${JSON.stringify(Apple)}`, "");
+	// Argument Function Supported
+	if (typeof $argument != "undefined") {
+		$.log(`🎉 ${$.name}, $Argument`);
+		let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+		$.log(JSON.stringify(arg));
+		Apple.Weather.Mode = arg.Mode;
+		Apple.Weather.Location = arg.Location;
+		Apple.Weather.Verify.Mode = arg.VerifyMode;
+		Apple.Weather.Verify.Content = arg.Token;
+	}
+	//$.log(`🚧 ${$.name}, 调试信息, Apple.Weather类型: ${typeof Apple.Weather}`, `Apple.Weather内容: ${JSON.stringify(Apple.Weather)}`, "");
+	return Apple;
+};
+
 // Step 1
 // Get Origin Parameter
 function getOrigin(url) {
