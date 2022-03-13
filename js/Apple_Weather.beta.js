@@ -14,7 +14,7 @@ $.VAL = {
 };
 
 // Default Settings
-$.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null } } };
+$.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null }, "Scale": "EPA_NowCast.2201" } };
 // BoxJs Function Supported
 if ($.getdata("iRingo")) {
 	$.log(`🎉 ${$.name}, BoxJs`);
@@ -246,7 +246,7 @@ function outputData(api, now, obs, body) {
 			weather[`${AQIname}`].metadata.language = weather?.[`${AQIname}`]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
 			if (api == "v1") {				
 				weather.air_quality.airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
-				weather.air_quality.airQualityScale = "EPA_NowCast.2115";
+				weather.air_quality.airQualityScale = $.Apple.Weather.Scale ?? "EPA_NowCast.2201";
 				weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 				weather.air_quality.metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', api);
 				//weather.air_quality.metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
@@ -256,7 +256,7 @@ function outputData(api, now, obs, body) {
 				weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
 			} else if (api == "v2") {
 				weather.airQuality.index = obs?.aqi ?? now?.aqi ?? now?.v;
-				weather.airQuality.scale = "EPA_NowCast.2115";
+				weather.airQuality.scale = $.Apple.Weather.Scale ?? "EPA_NowCast.2201";
 				weather.airQuality.categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 				weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
 				//weather.airQuality.metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;

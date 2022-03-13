@@ -7,7 +7,7 @@
     "repo": "https://github.com/VirgilClyne/iRingo",
     "apps": [
         {
-            "id": "@iRingo.Apple.Weather",
+            "id": "@iRingo.Apple.Weather.beta",
             "name": "Apple Weather β",
             "descs_html": [
                 "请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
@@ -73,6 +73,14 @@
                     "type": "text",
                     "placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb",
                     "desc": "‘令牌’验证方式的值写一行"
+                },
+                {
+                    "id": "@iRingo.Apple.Weather.Scale",
+                    "name": "测量标准代码",
+                    "val": "EPA_NowCast.2201",
+                    "type": "text",
+                    "placeholder": "EPA_NowCast.2201",
+                    "desc": "空气质量标准代码，会随系统更新而更新"
                 }
             ],
             "author": "@VirgilClyne",
