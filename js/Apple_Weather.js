@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather");
+const $ = new Env("Apple Weather v2.1.0");
 $.VAL = {
 	"url": "https://api.waqi.info",
 	"headers": {
@@ -13,36 +13,9 @@ $.VAL = {
 	}
 };
 
-// Default Settings
-$.Apple = { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null } } };
-// BoxJs Function Supported
-if ($.getdata("iRingo")) {
-	$.log(`🎉 ${$.name}, BoxJs`);
-	// load user prefs from BoxJs
-	const iRingo = $.getdata("iRingo")
-	$.log(`🚧 ${$.name}, BoxJs调试信息, iRingo类型: ${typeof iRingo}`, `iRingo内容: ${iRingo}`, "");
-	$.Apple = JSON.parse(iRingo)?.Apple;
-	//$.log(JSON.stringify($.Apple.Weather))
-	if ($.Apple?.Weather?.Verify?.Mode == "Key") {
-		$.Apple.Weather.Verify.Content = Array.from($.Apple.Weather.Verify.Content.split("\n"));
-		//$.log(JSON.stringify($.Apple.Weather.Verify.Content))
-	};
-}
-// Argument Function Supported
-else if (typeof $argument != "undefined") {
-	$.log(`🎉 ${$.name}, $Argument`);
-	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-	$.log(JSON.stringify(arg));
-	$.Apple.Weather.Mode = arg.Mode;
-	$.Apple.Weather.Location = arg.Location;
-	$.Apple.Weather.Verify.Mode = arg.VerifyMode;
-	$.Apple.Weather.Verify.Content = arg.Token;
-}
-//$.log(`🚧 ${$.name}, 调试信息, $.Apple.Weather类型: ${typeof $.Apple.Weather}`, `$.Apple.Weather内容: ${JSON.stringify($.Apple.Weather)}`, "");
-
 /***************** Async *****************/
-
 !(async () => {
+	$.Apple = await setENV("iRingo")
 	const Mode = $.Apple.Weather.Mode
 	const Location = $.Apple.Weather.Location
 	const Parameter = await getOrigin($request.url)
@@ -74,6 +47,33 @@ else if (typeof $argument != "undefined") {
 	.finally(() => $.done())
 
 /***************** Async Function *****************/
+// Function 0
+// Set Environment Variables
+async function setENV(name) {
+	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
+	/***************** Settings *****************/
+	// Default Settings
+	const database = { "Apple": { "Weather": { "Mode": "WAQI Public", "Location": "Station", "Verify": { "Mode": "Token", "Content": null }, "Scale": "EPA_NowCast.2201" } } };
+	// BoxJs
+	let iRingo = $.getjson(name, database)
+	/***************** $.Apple *****************/
+	let Apple = iRingo?.Apple || database.Apple;
+	if (typeof Apple == "string") Apple = JSON.parse(Apple)
+	$.log(`🎉 ${$.name}, Set Environment Variables`, `Apple: ${typeof Apple}`, `Apple内容: ${JSON.stringify(Apple)}`, "");
+	// Argument Function Supported
+	if (typeof $argument != "undefined") {
+		$.log(`🎉 ${$.name}, $Argument`);
+		let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
+		$.log(JSON.stringify(arg));
+		Apple.Weather.Mode = arg.Mode;
+		Apple.Weather.Location = arg.Location;
+		Apple.Weather.Verify.Mode = arg.VerifyMode;
+		Apple.Weather.Verify.Content = arg.Token;
+	}
+	//$.log(`🚧 ${$.name}, 调试信息, Apple.Weather类型: ${typeof Apple.Weather}`, `Apple.Weather内容: ${JSON.stringify(Apple.Weather)}`, "");
+	return Apple;
+};
+
 // Step 1
 // Get Origin Parameter
 function getOrigin(url) {
@@ -220,7 +220,7 @@ function outputData(api, now, obs, body) {
 			weather[`${AQIname}`].metadata.language = weather?.[`${AQIname}`]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
 			if (api == "v1") {				
 				weather.air_quality.airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
-				weather.air_quality.airQualityScale = "EPA_NowCast.2115";
+				weather.air_quality.airQualityScale = $.Apple.Weather.Scale ?? "EPA_NowCast.2201";
 				weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 				weather.air_quality.metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', api);
 				weather.air_quality.metadata.provider_name = obs?.attributions?.[0]?.name;
@@ -229,7 +229,7 @@ function outputData(api, now, obs, body) {
 				weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
 			} else if (api == "v2") {
 				weather.airQuality.index = obs?.aqi ?? now?.aqi ?? now?.v;
-				weather.airQuality.scale = "EPA_NowCast.2115";
+				weather.airQuality.scale = $.Apple.Weather.Scale ?? "EPA_NowCast.2201";
 				weather.airQuality.categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 				weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
 				weather.airQuality.metadata.providerName = obs?.attributions?.[0]?.name;
