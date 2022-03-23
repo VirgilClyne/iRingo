@@ -165,13 +165,26 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * `v2`:iOS15以上的天气APP、macOS12以上的天气小组件
 
 ## 使用说明
-  * 安装模块或插件后不进行配置即可直接使用
+  * 直接使用
     * 采用`waqi.info 公共API`，先查询距离最近的`观测站`，再获取此观测站专用`令牌`，最后获取此`观测站`AQI详细数据，共三步。
-  * 安装BoxJs并配置私有令牌，配合模块或插件使用
+  * 配合`BoxJs`及订阅使用
+    * 安装`BoxJs`插件:
+      * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
+      * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
+      * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+    * 导入本项目订阅: [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
+  * 填写私有令牌并保存，配合模块或插件使用
     * 采用`waqi.info 私有API`
       * 当选择`定位精度: 城市`时，直接获取`城市`AQI数据，共一步。
       * 当选择`定位精度: 观测站`时，先查询距离最近的`观测站`，然后获取此`观测站`AQI详细数据，共两步。
-  * 注: 申请`waqi.info 私有API`令牌请见: [Air Quality Open Data Platform API Token Request Form](https://aqicn.org/data-platform/token/cn/#/)
+    * 注: 申请`waqi.info 私有API`令牌请见: [Air Quality Open Data Platform API Token Request Form](https://aqicn.org/data-platform/token/cn/#/)
+  * 配合Surge模块的`argument`字段使用:
+    * 此方法可以将相关脚本及配置固化到Surge的配置文件中
+    * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
+    * 格式如下:
+      ```
+      argument=Mode=WAQI Private&Location=City&VerifyMode=Token&Token=你的私钥
+      ```
 
 ## 安装链接
   * BoxJs:
