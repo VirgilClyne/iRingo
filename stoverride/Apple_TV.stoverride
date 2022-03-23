@@ -3,7 +3,7 @@ desc: 解锁TV app全功能：使用🇺🇸US「体育节目」和「儿童�
 
 http:
   mitm:
-    - uts-api.itunes.apple.com
+    - "uts-api.itunes.apple.com"
   script:
     - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*
       name: Apple_TV

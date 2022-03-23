@@ -3,10 +3,10 @@ desc: 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Sugge
 
 http:
   mitm:
-    - -cdn*.smoot.apple.com
-    - -fbs.smoot.apple.com
-    - *.smoot.apple.com
-    - *.smoot.apple.cn
+    - "-cdn*.smoot.apple.com"
+    - "-fbs.smoot.apple.com"
+    - "*.smoot.apple.com"
+    - "*.smoot.apple.cn"
   script:
     - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*)
       name: Siri_Suggestions
