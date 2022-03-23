@@ -124,11 +124,11 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ### Stash
   * stoverride安装于`首页`-`覆写`-`安装覆写`
     * 下面的链接需点击跳转后再复制安装，不可直接复制下面的链接安装。
-    1. [🌤天气](#天气)：[Apple_Weather.qxrewrite](./stoverride/Apple_Weather.stoverride?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
-    2. [📍定位服务](#定位服务)：[Geo_Services.qxrewrite](./stoverride/Geo_Services.stoverride?raw=true " Response Geo Services to 🇺🇸US")
-    3. [🔍Siri与搜索](#siri与搜索)：[Siri_Suggestions.qxrewrite](./stoverride/Siri_Suggestions.stoverride?raw=true " Enable Siri Suggestions")
-    4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.qxrewrite](./stoverride/Apple_Maps_CN.stoverride?raw=true " Redirect Apple Maps to 🇨🇳CN")
-    5. [📺Apple TV](#apple-tv)：[Apple_TV.qxrewrite](./stoverride/Apple_TV.stoverride?raw=true " Enable Apple TV app")
+    1. [🌤天气](#天气)：[Apple_Weather.stoverride](./stoverride/Apple_Weather.stoverride?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
+    2. [📍定位服务](#定位服务)：[Geo_Services.stoverride](./stoverride/Geo_Services.stoverride?raw=true " Response Geo Services to 🇺🇸US")
+    3. [🔍Siri与搜索](#siri与搜索)：[Siri_Suggestions.stoverride](./stoverride/Siri_Suggestions.stoverride?raw=true " Enable Siri Suggestions")
+    4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.stoverride](./stoverride/Apple_Maps_CN.stoverride?raw=true " Redirect Apple Maps to 🇨🇳CN")
+    5. [📺Apple TV](#apple-tv)：[Apple_TV.stoverride](./stoverride/Apple_TV.stoverride?raw=true " Enable Apple TV app")
 ### Clash
   * yaml需手动添加至配置文件的[Provider]:
     1. [🔍Siri与搜索](#siri与搜索)：
