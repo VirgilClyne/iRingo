@@ -1,6 +1,6 @@
 # iRingo
 解锁完整的Apple功能和集成服务   
-macOS 12.0.1, iOS 15.1, iOS 14.8 测试通过  
+macOS 12.3, iOS 15.4, iOS 14.8 测试通过  
 需要启用`重写`、`脚本`、`MitM`功能  
 如无特别声明，以下功能及模块，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用  
 有问题请至Issue页面反馈  
@@ -15,7 +15,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [建议配置](#建议配置)
     - [Loon](#loon)
     - [Quantumult X](#quantumult-x)
-    - [Surge](#surge)
+    - [Surge (Shadowrocket)](#surge-shadowrocket)
     - [Clash](#clash)
 - [🌤天气](#天气)
   - [简介](#简介)
@@ -105,7 +105,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     5. [📺Apple TV](#apple-tv)：[Apple_TV.qxrewrite](./qxrewrite/Apple_TV.qxrewrite?raw=true " Enable Apple TV app")
     6. [📰Apple News](#apple-news)：[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
       * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`设置`-`分流`-`引用`并设置`策略偏好`)
-### Surge
+### Surge (Shadowrocket)
   * sgmodule安装于`模块`-`安装新模块…`
     1. [🌤天气](#天气)：[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
     2. [📍定位服务](#定位服务)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
@@ -232,7 +232,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * [Location_Services.beta.plugin](./plugin/Location_Services.beta.plugin?raw=true " Modify Location Services to 🇺🇳I18N")
     * Quantumult X:
       * [Location_Services.beta.qxrewrite](./qxrewrite/Location_Services.beta.qxrewrite?raw=true " Modify Location Services to 🇺🇳I18N")
-    * Surge:
+    * Surge (Shadowrocket):
       * [Location_Services.beta.sgmodule](./sgmodule/Location_Services.beta.sgmodule?raw=true " Modify Location Services to 🇺🇳I18N")
 ### 🆕新版
   * 🆕新版,“直接返回构造的`本地请求`”的新实现方式
@@ -240,7 +240,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
     * Quantumult X:
       * 修改地区检测为🇺🇸US:[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
-    * Surge:
+    * Surge (Shadowrocket):
       * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
       * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Response Geo Services to 🇨🇳CN")
       * 修改地区检测为🇬🇧UK:[Geo_Services_UK.sgmodule](./sgmodule/Geo_Services_UK.sgmodule?raw=true " Response Geo Services to 🇬🇧UK")
@@ -258,7 +258,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 修改地区检测为🇨🇳CN:[Geo_Services_CN.qxrewrite](./qxrewrite/Geo_Services_CN.qxrewrite?raw=true " Redirect Geo Services to 🇨🇳CN")
       * 修改地区检测为🇺🇸US:[Geo_Services_US.qxrewrite](./qxrewrite/Geo_Services_US.qxrewrite?raw=true " Redirect Geo Services to 🇺🇸US")
       * 修改地区检测为🇯🇵JP:[Geo_Services_JP.qxrewrite](./qxrewrite/Geo_Services_JP.qxrewrite?raw=true " Redirect Geo Services to 🇯🇵JP")
-    * Surge:
+    * Surge (Shadowrocket):
       * 修改地区检测为🇺🇸US:[Geo_Services_US.sgmodule](./sgmodule/Geo_Services_US.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
 
 ---
@@ -365,7 +365,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 🆕:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions")
     * Quantumult X:
       * 🆕:[Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions")
-    * Surge:
+    * Surge (Shadowrocket):
       * 适用于iOS/iPadOS,不含macOS规则集的模块:
       * 🆕:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
         * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
@@ -391,7 +391,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions 🇹🇼TW") (Author:@edgexyz)
       * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.qxrewrite](./qxrewrite/Siri_Suggestions_JP.qxrewrite?raw=true " Enable Siri Suggestions 🇯🇵JP")
       * 旧版，用重写修改地区为🇺🇸US:[Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions 🇺🇸US") (Author:@edgexyz)
-    * Surge:
+    * Surge (Shadowrocket):
       * 适用于iOS/iPadOS,不含macOS规则集的模块:
       * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.sgmodule](./sgmodule/Siri_Suggestions_TW.sgmodule?raw=true " Enable Siri Suggestions 🇹🇼TW")
       * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.sgmodule](./sgmodule/Siri_Suggestions_JP.sgmodule?raw=true " Enable Siri Suggestions 🇯🇵JP")
@@ -429,7 +429,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * Quantumult X:
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.qxrewrite](./qxrewrite/Apple_Maps.qxrewrite?raw=true " Redirect Apple Maps to 🇺🇸US")
     * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")
-  * Surge:    
+  * Surge (Shadowrocket):
     * 修改Apple Maps为🇺🇸US:[Apple_Maps.sgmodule](./sgmodule/Apple_Maps.sgmodule?raw=true " Redirect Apple Maps to 🇺🇸US")
     * 修改Apple Maps为🇨🇳CN:[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
 
@@ -483,7 +483,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * 🆕[Apple_TV.plugin](./plugin/Apple_TV.plugin?raw=true " Enable Apple TV app") 
   * Quantumult X:
     * 🆕[Apple_TV.qxrewrite](./qxrewrite/Apple_TV.qxrewrite?raw=true " Enable Apple TV app")
-  * Surge: 
+  * Surge (Shadowrocket):
     * 🆕[Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
 
 ---
@@ -531,7 +531,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * Quantumult X:
     * 不含规则集的模块:[Apple_News.qxrewrite](./qxrewrite/Apple_News.qxrewrite?raw=true " Unlock Apple News 🇺🇸US")
       * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`设置`-`分流`-`引用`并设置`策略偏好`)
-  * Surge: 
+  * Surge (Shadowrocket):
     * 不含规则集的模块:[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
       * 域名集:[Apple_News.list](./RuleSet/Apple_News.list?raw=true "Apple_News")
     * 预置策略组的模块:
