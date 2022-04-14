@@ -1,0 +1,13 @@
+{
+    "Settings": {
+        "Weather": {
+            "Mode": "WAQI Public",
+            "Location": "Station",
+            "Verify": {
+                "Mode": "Token",
+                "Content": null
+            },
+            "Scale": "EPA_NowCast.2201"
+        }
+    }
+}
