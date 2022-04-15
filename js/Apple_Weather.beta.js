@@ -12,31 +12,38 @@ let { body } = $response;
 /***************** Processing *****************/
 !(async () => {
 	const { Settings } = await setENV("iRingo", url, DataBase);
-	const Parameter = await getParameter(url);
 	let data = JSON.parse(body);
-	const Status = await getStatus(data);
-	if (Status == true) {
-		if (Settings.Mode == "WAQI Public") {
-			$.log("工作模式: waqi.info 公共API")
-			var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
-			const Token = await WAQI("Token", { idx: idx });
-			//var NOW = await WAQI("NOW", { token:Token, idx: idx });
-			var AQI = await WAQI("AQI", { token:Token, idx: idx });
-		} else if (Settings.Mode == "WAQI Private") {
-			$.log("工作模式: waqi.info 私有API")
-			const Token = Settings?.Verify?.Content;
-			if (Settings.Location == "Station") {
-				$.log("定位精度: 观测站")
+	if (/\/(v1|v2)\/weather\//.test(url)) {
+		const Status = await getStatus(data);
+		if (Status == true) {
+			$.log(`🎉 ${$.name}, 需要替换AQI`, "");
+			const Parameter = await getParameter(url);
+			if (Settings.Mode == "WAQI Public") {
+				$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
 				var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
-				var AQI = await WAQI("StationFeed", { token:Token, idx: idx });
-			} else if (Settings.Location == "City") {
-				$.log("定位精度: 城市")
-				var AQI = await WAQI("CityFeed", { token:Token, lat: Parameter.lat, lng: Parameter.lng });
-			}
-		};
-		data = await outputData(Parameter.ver, Station, AQI, data, Settings);
-		body = JSON.stringify(data);
-	} else $.log(`⚠️ ${$.name}, 无须替换, 跳过`, '');
+				const Token = await WAQI("Token", { idx: idx });
+				//var NOW = await WAQI("NOW", { token:Token, idx: idx });
+				var AQI = await WAQI("AQI", { token: Token, idx: idx });
+			} else if (Settings.Mode == "WAQI Private") {
+				$.log(`🚧 ${$.name}, 工作模式: waqi.info 私有API`, "")
+				const Token = Settings?.Verify?.Content;
+				if (Settings.Location == "Station") {
+					$.log(`🚧 ${$.name}, 定位精度: 观测站`, "")
+					var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
+					var AQI = await WAQI("StationFeed", { token: Token, idx: idx });
+				} else if (Settings.Location == "City") {
+					$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
+					var AQI = await WAQI("CityFeed", { token: Token, lat: Parameter.lat, lng: Parameter.lng });
+				}
+			};
+			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
+		} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
+	} else if (/\/(v1|v2)\/availability\//.test(url)) {
+		$.log(`🎉 ${$.name}, 可用性检查`, "");
+		const availability = ["currentWeather", "forecastDaily", "forecastHourly", "history", "weatherChange", "forecastNextHour", "severeWeather", "airQuality"];
+		data = Array.from(new Set([...data, ...availability]));
+	};
+	body = JSON.stringify(data);
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done({ body }))
