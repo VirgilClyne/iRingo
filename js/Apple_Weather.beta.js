@@ -42,6 +42,7 @@ let { body } = $response;
 		$.log(`🎉 ${$.name}, 可用性检查`, "");
 		const availability = ["currentWeather", "forecastDaily", "forecastHourly", "history", "weatherChange", "forecastNextHour", "severeWeather", "airQuality"];
 		data = Array.from(new Set([...data, ...availability]));
+		$.log(`🎉 ${$.name}, 功能列表`, JSON.stringify(data), "");
 	};
 	body = JSON.stringify(data);
 })()
@@ -106,7 +107,7 @@ async function getParameter(url) {
  */
 async function getStatus(data) {
 	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
-	$.log(`🚧 ${$.name}`, `${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
+	$.log(`🚧 ${$.name}, ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
 	return (result || false)
 };
 
@@ -127,7 +128,7 @@ async function WAQI(type = "", input = {}) {
 	return output
 	/***************** Fuctions *****************/
 	async function GetRequest(type = "", input = { api: "v2", lat: 0, lng: 0, idx: 0, token: "na" }) {
-		$.log(`⚠ ${$.name}, Get WAQI Request`, "");
+		$.log(`⚠ ${$.name}, Get WAQI Request, type: ${type}`, "");
 		let request = {
 			"url": "https://api.waqi.info",
 			"headers": {
@@ -165,7 +166,7 @@ async function WAQI(type = "", input = {}) {
 	};
 
 	function GetData(type, request) {
-		$.log(`⚠ ${$.name}, Get WAQI Data`, "");
+		$.log(`⚠ ${$.name}, Get WAQI Data, type: ${type}`, "");
 		return new Promise(resolve => {
 			if (type == "NOW" || type == "AQI") {
 				$.post(request, (error, response, data) => {
@@ -183,20 +184,20 @@ async function WAQI(type = "", input = {}) {
 										let m = _data.rxs.obs.findIndex(o => o.msg)
 										//$.obs = _data.rxs.obs[i].msg;
 										if (i >= 0 && m >= 0) {
-											$.log(`🎉 ${$.name}, ${GetData.name}`, `i = ${i}, m = ${m}`, '')
+											$.log(`🎉 ${$.name}, GetData:${type}完成`, `i = ${i}, m = ${m}`, '')
 											resolve(_data.rxs.obs[i].msg)
 										} else if (i < 0 || m < 0) {
-											$.log(`❗️ ${$.name}, ${GetData.name}`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
+											$.log(`❗️ ${$.name}, GetData:${type}失败`, `OBS Get Error`, `i = ${i}, m = ${m}`, `空数据，浏览器访问 https://api.waqi.info/api/feed/@${idx}/aqi.json 查看获取结果`, '')
 											resolve(_data.rxs.obs[i].msg)
 										}
-									} else $.log(`❗️ ${$.name}, ${GetData.name}`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
-								} else $.log(`❗️ ${$.name}, ${GetData.name}`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
+									} else $.log(`❗️ ${$.name}, GetData:${type}失败`, `OBS Status Error`, `obs.status: ${_data.rxs.obs[0].status}`, `data = ${data}`, '')
+								} else $.log(`❗️ ${$.name}, GetData:${type}失败`, `RXS Status Error`, `status: ${_data.rxs.status}`, `data = ${data}`, '')
 							}
 						} else throw new Error(response);
 					} catch (e) {
-						$.logErr(`❗️${$.name}, ${GetData.name}执行失败`, ` url = ${JSON.stringify(url)}`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+						$.logErr(`❗️${$.name}, GetData:${type}执行失败`, ` request = ${JSON.stringify(request)}`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
 					} finally {
-						//$.log(`🚧 ${$.name}, ${GetData.name}调试信息`, ` url = ${JSON.stringify(url)}`, `data = ${data}`, '')
+						//$.log(`🚧 ${$.name}, GetData:${type}调试信息`, ` request = ${JSON.stringify(request)}`, `data = ${data}`, '')
 						resolve()
 					}
 				})
@@ -217,14 +218,14 @@ async function WAQI(type = "", input = {}) {
 								var aqi = station?.aqi ?? station?.v ?? null;
 								var distance = station?.distance ?? station?.d ?? null;
 								//var country = station?.cca2 ?? station?.country ?? null;
-								$.log(`🎉 ${$.name}, ${GetData.name}完成`, `idx: ${idx}`, `观测站: ${name}`, `AQI: ${aqi}`, `距离: ${distance}`, '')
+								$.log(`🎉 ${$.name}, GetData:${type}完成`, `idx: ${idx}`, `观测站: ${name}`, `AQI: ${aqi}`, `距离: ${distance}`, '')
 								resolve({ station, idx })
 							}
 							// Get Nearest Observation Station Token
 							// https://api.waqi.info/api/token/station.uid
 							else if (type == "Token") {
 								var token = _data.rxs?.obs[0]?.msg?.token ?? "na"
-								$.log(`🎉 ${$.name}, ${GetData.name}完成`, `token = ${token}`, '')
+								$.log(`🎉 ${$.name}, GetData:${type}完成`, `token = ${token}`, '')
 								resolve(token)
 							}
 							// Geolocalized Feed
@@ -232,21 +233,21 @@ async function WAQI(type = "", input = {}) {
 							// https://api.waqi.info/feed/geo::lat;:lng/?token=:token
 							else if (type == "CityFeed") {
 								var city = (_data.status == 'ok') ? _data?.data : null;
-								$.log(`🎉 ${$.name}, ${GetData.name}完成`, `idx: ${city?.idx}`, `观测站: ${city?.city?.name}`, `AQI: ${city?.aqi}`, '')
+								$.log(`🎉 ${$.name}, GetData:${type}完成`, `idx: ${city?.idx}`, `观测站: ${city?.city?.name}`, `AQI: ${city?.aqi}`, '')
 								resolve(city)
 							}
 							// Station Feed
 							// https://api.waqi.info/feed/@station.uid/?token=:token
 							else if (type == "StationFeed") {
 								var station = (_data.status == 'ok') ? _data?.data : null;
-								$.log(`🎉 ${$.name}, ${GetData.name}完成`, `idx: ${station?.idx}`, `观测站: ${station?.city?.name}`, `AQI: ${station?.aqi}`, '')
+								$.log(`🎉 ${$.name}, GetData:${type}完成`, `idx: ${station?.idx}`, `观测站: ${station?.city?.name}`, `AQI: ${station?.aqi}`, '')
 								resolve(station)
 							}
 						} else throw new Error(response);
 					} catch (e) {
-						$.logErr(`❗️${$.name}, ${GetData.name}执行失败`, ` url = ${JSON.stringify(url)}`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+						$.logErr(`❗️${$.name}, GetData:${type}执行失败`, ` request = ${JSON.stringify(request)}`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
 					} finally {
-						//$.log(`🚧 ${$.name}, ${GetData.name}调试信息`, ` url = ${JSON.stringify(url)}`, `data = ${data}`, '')
+						//$.log(`🚧 ${$.name}, GetData:${type}调试信息`, ` request = ${JSON.stringify(request)}`, `data = ${data}`, '')
 						resolve()
 					}
 				})
