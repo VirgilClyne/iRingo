@@ -70,11 +70,10 @@ async function setENV(name, url, database) {
 	// 包装为局部变量，用完释放内存
 	// BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
 	let BoxJs = $.getjson(name, database)
-	//$.log(`🚧 ${$.name}, Set Environment Variables`, `$.BoxJs类型: ${typeof $.BoxJs}`, `$.BoxJs内容: ${JSON.stringify($.BoxJs)}`, "");
+	$.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
 	/***************** Settings *****************/
-	let Settings = BoxJs?.Apple?.[Platform] || database.Settings[Platform];
-	//if (typeof Apple == "string") Apple = JSON.parse(Apple)
-	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+	let Settings = BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database.Settings[Platform];
+	//$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Argument *****************/
 	if (typeof $argument != "undefined") {
 		$.log(`🎉 ${$.name}, $Argument`);
@@ -82,7 +81,7 @@ async function setENV(name, url, database) {
 		$.log(JSON.stringify(arg));
 		Object.assign(Settings, arg);
 	}
-	//$.log(`🚧 ${$.name}, 调试信息, Settings.Weather类型: ${typeof Settings.Weather}`, `Settings.Weather内容: ${JSON.stringify(Settings.Weather)}`, "");
+	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
 };
 
@@ -256,7 +255,6 @@ async function WAQI(type = "", input = {}) {
 	};
 };
 
-// Step 6
 // Output Data
 async function outputData(api, now, obs, data, Settings) {
 	// Input Data
