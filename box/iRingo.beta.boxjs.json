@@ -1,95 +1,200 @@
 {
-    "id": "iRingo.beta.app.sub",
-    "name": "iRingo β",
-    "author": "@VirgilClyne",
-    "description": "解锁完整的 Apple功能和集成服务",
-    "icon": "https://avatars.githubusercontent.com/u/2111377?s=100&v=4",
-    "repo": "https://github.com/VirgilClyne/iRingo",
-    "apps": [
-        {
-            "id": "iRingo.Apple_Weather.beta",
-            "name": "iRingo: Apple Weather β",
-            "descs_html": [
-                "请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
-                "填写完成后别忘点击此页面底端右下角的\"保存\"。",
-                "查询速度:\"私有API+城市\" > \"私有API+观测站\" > \"公共API+观测站\"",
-                "定位精度:\"观测站\" > \"城市\""
-            ],
-            "keys": [
-                "@iRingo.Settings.Weather",
-                "@iRingo.Apple.Weather"
-            ],
-            "settings": [
-                {
-                    "id": "@iRingo.Settings.Weather.Mode",
-                    "name": "工作模式",
-                    "val": "WAQI Public",
-                    "type": "radios",
-                    "items": [
-                        {
-                            "key": "WAQI Public",
-                            "label": "waqi.info 公共API"
-                        },
-                        {
-                            "key": "WAQI Private",
-                            "label": "waqi.info 私有API"
-                        }
-                    ],
-                    "desc": "没有申请自己Token的只能使用\"公共API\""
-                },
-                {
-                    "id": "@iRingo.Settings.Weather.Location",
-                    "name": "定位精度",
-                    "val": "Station",
-                    "type": "radios",
-                    "items": [
-                        {
-                            "key": "City",
-                            "label": "城市"
-                        },
-                        {
-                            "key": "Station",
-                            "label": "观测站"
-                        }
-                    ],
-                    "desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
-                },
-                {
-                    "id": "@iRingo.Settings.Weather.Verify.Mode",
-                    "name": "验证方式",
-                    "val": "Token",
-                    "type": "radios",
-                    "items": [
-                        {
-                            "key": "Token",
-                            "label": "令牌"
-                        }
-                    ],
-                    "desc": "验证方式"
-                },
-                {
-                    "id": "@iRingo.Settings.Weather.Verify.Content",
-                    "name": "验证内容",
-                    "val": "",
-                    "type": "text",
-                    "placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb",
-                    "desc": "‘令牌’验证方式的值写一行"
-                },
-                {
-                    "id": "@iRingo.Settings.Weather.Scale",
-                    "name": "测量标准代码",
-                    "val": "EPA_NowCast.2201",
-                    "type": "text",
-                    "placeholder": "EPA_NowCast.2201",
-                    "desc": "空气质量标准代码，会随系统更新而更新"
-                }
-            ],
-            "author": "@VirgilClyne",
-            "repo": "https://github.com/VirgilClyne/iRingo/blob/beta/js/Apple_Weather.beta.js",
-            "icons": [
-                "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple.png",
-                "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
-            ]
-        }
-    ]
+	"id": "iRingo.beta.app.sub",
+	"name": "iRingo β",
+	"author": "@VirgilClyne",
+	"description": "解锁完整的 Apple功能和集成服务",
+	"icon": "https://avatars.githubusercontent.com/u/2111377?s=100&v=4",
+	"repo": "https://github.com/VirgilClyne/iRingo",
+	"apps": [
+		{
+			"id": "iRingo.Apple_Weather.beta",
+			"name": "iRingo: Apple Weather β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
+				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
+				"查询速度:\"私有API+城市\" > \"私有API+观测站\" > \"公共API+观测站\"",
+				"定位精度:\"观测站\" > \"城市\""
+			],
+			"keys": [
+				"@iRingo.Settings.Weather",
+				"@iRingo.Apple.Weather"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.Settings.Weather.Mode",
+					"name": "工作模式",
+					"val": "WAQI Public",
+					"type": "radios",
+					"items": [
+						{
+							"key": "WAQI Public",
+							"label": "waqi.info 公共API"
+						},
+						{
+							"key": "WAQI Private",
+							"label": "waqi.info 私有API"
+						}
+					],
+					"desc": "没有申请自己Token的只能使用\"公共API\""
+				},
+				{
+					"id": "@iRingo.Settings.Weather.Location",
+					"name": "定位精度",
+					"val": "Station",
+					"type": "radios",
+					"items": [
+						{
+							"key": "City",
+							"label": "城市"
+						},
+						{
+							"key": "Station",
+							"label": "观测站"
+						}
+					],
+					"desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
+				},
+				{
+					"id": "@iRingo.Settings.Weather.Verify.Mode",
+					"name": "验证方式",
+					"val": "Token",
+					"type": "radios",
+					"items": [
+						{
+							"key": "Token",
+							"label": "令牌"
+						}
+					],
+					"desc": "验证方式"
+				},
+				{
+					"id": "@iRingo.Settings.Weather.Verify.Content",
+					"name": "验证内容",
+					"val": "",
+					"type": "text",
+					"placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb",
+					"desc": "‘令牌’验证方式的值写一行"
+				},
+				{
+					"id": "@iRingo.Settings.Weather.Scale",
+					"name": "测量标准代码",
+					"val": "EPA_NowCast.2201",
+					"type": "text",
+					"placeholder": "EPA_NowCast.2201",
+					"desc": "空气质量标准代码，会随系统更新而更新"
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/blob/beta/js/Apple_Weather.beta.js",
+			"icons": [
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple.png",
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
+			]
+		},
+		{
+			"id": "iRingo.Siri.beta",
+			"name": "iRingo: Siri与搜索 β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#siri与搜索\">iRingo#siri与搜索</a>的使用说明进行配置"
+			],
+			"keys": [
+				"@iRingo.Settings.Siri"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.Siri.Switch",
+					"name": "Siri功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "Siri相关功能的总开关，包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等功能"
+				},
+				{
+					"id": "@iRingo.Siri.Domains",
+					"name": "启用领域",
+					"val": [
+						"web",
+						"itunes",
+						"app_store",
+						"movies",
+						"restaurants",
+						"maps"
+					],
+					"type": "checkboxes",
+					"desc": "启用搜索的领域",
+					"items": [
+						{
+							"key": "web",
+							"label": "网页"
+						},
+						{
+							"key": "itunes",
+							"label": "iTunes"
+						},
+						{
+							"key": "app_store",
+							"label": "APP Store"
+						},
+						{
+							"key": "movies",
+							"label": "电影"
+						},
+						{
+							"key": "restaurants",
+							"label": "餐厅"
+						},
+						{
+							"key": "maps",
+							"label": "地图"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Siri.Functions",
+					"name": "启用功能",
+					"val": [
+						"mail",
+						"messages",
+						"news",
+						"safari",
+						"spotlight",
+						"visualintelligence"
+					],
+					"type": "checkboxes",
+					"desc": "启用Siri建议的APP",
+					"items": [
+						{
+							"key": "mail",
+							"label": "邮件"
+						},
+						{
+							"key": "messages",
+							"label": "信息"
+						},
+						{
+							"key": "news",
+							"label": "新闻"
+						},
+						{
+							"key": "safari",
+							"label": "Safari浏览器"
+						},
+						{
+							"key": "spotlight",
+							"label": "聚焦搜索"
+						},
+						{
+							"key": "visualintelligence",
+							"label": "视觉智能"
+						}
+					]
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/blob/beta/js/Siri.beta.js",
+			"icons": [
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Siri.png",
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png"
+			]
+		}
+	]
 }
