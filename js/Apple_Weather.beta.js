@@ -12,14 +12,9 @@ let { body } = $response;
 /***************** Processing *****************/
 !(async () => {
 	const { Settings } = await setENV("iRingo", url, DataBase);
-	/***************** Parameter *****************/
-	const Regular = /^https?:\/\/(?<dataServer>weather-data|weather-data-origin)\.apple\.com\/(?<ver>v1|v2)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
-	const Parameter = url.match(Regular).groups;
-	$.log(`🚧 ${$.name}`, `Parameter: ${JSON.stringify(Parameter)}`, "");
+	const Parameter = await getParameter(url);
 	let data = JSON.parse(body);
-	/***************** Status *****************/
-	const Status = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
-	$.log(`🚧 ${$.name}`, `${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
+	const Status = await getStatus(data);
 	if (Status == true) {
 		if (Settings.Mode == "WAQI Public") {
 			$.log("工作模式: waqi.info 公共API")
@@ -83,17 +78,28 @@ async function setENV(name, url, database) {
 	return { Platform, Settings };
 };
 
-// Step 2
-// Get AQI Source Status
-async function getAQIstatus(api, data) {
-	/*
-	const provider = ['和风天气', 'QWeather']
-	var result = (api == "v1" && weather.air_quality) ? provider.includes(data.air_quality?.metadata?.provider_name)
-		: (api == "v2" && weather.airQuality) ? provider.includes(data.airQuality?.metadata?.providerName)
-			: true
-			*/
-	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather")
-	$.log(`🎉 ${$.name}, ${getAQIstatus.name}完成`, `AQ data ${api ?? "None"}, ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
+/**
+ * Get Origin Parameter
+ * @author VirgilClyne
+ * @param {String} url - Request URL
+ * @return {Promise<*>}
+ */
+async function getParameter(url) {
+	const Regular = /^https?:\/\/(?<dataServer>weather-data|weather-data-origin)\.apple\.com\/(?<ver>v1|v2)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
+	const Parameter = url.match(Regular).groups;
+	$.log(`🚧 ${$.name}`, `Parameter: ${JSON.stringify(Parameter)}`, "");
+	return Parameter
+};
+
+/**
+ * Get AQI Source Status
+ * @author VirgilClyne
+ * @param {Object} data - Parsed response body JSON
+ * @return {Promise<*>}
+ */
+async function getStatus(data) {
+	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
+	$.log(`🚧 ${$.name}`, `${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
 	return (result || false)
 };
 
