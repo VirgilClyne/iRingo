@@ -7,8 +7,8 @@
     "repo": "https://github.com/VirgilClyne/iRingo",
     "apps": [
         {
-            "id": "@iRingo.Apple.Weather",
-            "name": "Apple Weather",
+            "id": "iRingo.Apple_Weather",
+            "name": "iRingo: Apple Weather",
             "descs_html": [
                 "请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
                 "填写完成后别忘点击此页面底端右下角的\"保存\"。",
@@ -16,11 +16,12 @@
                 "定位精度:\"观测站\" > \"城市\""
             ],
             "keys": [
+                "@iRingo.Settings.Weather",
                 "@iRingo.Apple.Weather"
             ],
             "settings": [
                 {
-                    "id": "@iRingo.Apple.Weather.Mode",
+                    "id": "@iRingo.Settings.Weather.Mode",
                     "name": "工作模式",
                     "val": "WAQI Public",
                     "type": "radios",
@@ -37,7 +38,7 @@
                     "desc": "没有申请自己Token的只能使用\"公共API\""
                 },
                 {
-                    "id": "@iRingo.Apple.Weather.Location",
+                    "id": "@iRingo.Settings.Weather.Location",
                     "name": "定位精度",
                     "val": "Station",
                     "type": "radios",
@@ -54,7 +55,7 @@
                     "desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
                 },
                 {
-                    "id": "@iRingo.Apple.Weather.Verify.Mode",
+                    "id": "@iRingo.Settings.Weather.Verify.Mode",
                     "name": "验证方式",
                     "val": "Token",
                     "type": "radios",
@@ -67,7 +68,7 @@
                     "desc": "验证方式"
                 },
                 {
-                    "id": "@iRingo.Apple.Weather.Verify.Content",
+                    "id": "@iRingo.Settings.Weather.Verify.Content",
                     "name": "验证内容",
                     "val": "",
                     "type": "text",
@@ -75,7 +76,7 @@
                     "desc": "‘令牌’验证方式的值写一行"
                 },
                 {
-                    "id": "@iRingo.Apple.Weather.Scale",
+                    "id": "@iRingo.Settings.Weather.Scale",
                     "name": "测量标准代码",
                     "val": "EPA_NowCast.2201",
                     "type": "text",
