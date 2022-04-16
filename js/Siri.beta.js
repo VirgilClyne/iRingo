@@ -4,7 +4,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Siri v2.0.0-beta");
 const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
-	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["lookup","mail","messages","news","safari","spotlight","flightutilities","visualintelligence"]}
+	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"]}
 };
 var { url } = $request;
 var { body } = $response;
@@ -38,35 +38,25 @@ var { body } = $response;
 			};
 			let Lookup = Functions?.lookup;
 			if (Lookup) {
-				//Lookup.enabled = true;
 				Lookup.min_query_len = 2;
 			};
-			//Functions.mail.enabled = true;
-			//Functions.mail.feedback_enabled = true;
-			//Functions.messages.enabled = true;
-			//Functions.news.enabled = true;
+			let Mail = Functions?.mail;
+			let Messages = Functions?.messages;
+			let News = Functions?.news;
 			let Safari = Functions?.safari;
 			if (Safari) {
-				//Safari.enabled = true;
 				Safari.experiments_custom_feedback_enabled = true;
 			};
 			let Spotlight = Functions?.spotlight;
 			if (Spotlight) {
-				//Spotlight.enabled = true;
 				Spotlight.use_twolayer_ranking = true;
 				Spotlight.experiments_custom_feedback_enabled = true;
 				Spotlight.min_query_len = 2;
 				Spotlight.collect_scores = true;
 				Spotlight.collect_anonymous_metadata = true;
 			};
-			let FlightUtilities = Functions?.flightutilities;
-			if (FlightUtilities) {
-				//FlightUtilities.enabled = true;
-			};
 			let VisualIntelligence = Functions?.visualintelligence;
 			if (VisualIntelligence) {
-				//VisualIntelligence.enabled = true;
-				//VisualIntelligence.feedback_enabled = true;
 				//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
 				//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
 			};

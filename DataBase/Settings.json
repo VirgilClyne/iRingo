@@ -20,13 +20,14 @@
 			"maps"
 		],
 		"Functions": [
+			"flightutilities",
 			"lookup",
 			"mail",
 			"messages",
 			"news",
 			"safari",
+			"siri",
 			"spotlight",
-			"flightutilities",
 			"visualintelligence"
 		]
 	}
