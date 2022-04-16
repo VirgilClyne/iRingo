@@ -26,8 +26,10 @@ var { body } = $response;
 		if (Functions) {
 			Settings.Functions.forEach(app => {
 				let APP = Functions?.[`${app}`];
-				if (APP) APP.enabled = true;
-				else APP = { enabled: true };
+				if (APP) {
+					APP.enabled = true;
+					APP.feedback_enabled = true;
+				} else APP = { enabled: true, feedback_enabled: true };
 			});
 			let FlightUtilities = Functions?.flightutilities;
 			if (FlightUtilities) {
@@ -64,7 +66,7 @@ var { body } = $response;
 			let VisualIntelligence = Functions?.visualintelligence;
 			if (VisualIntelligence) {
 				//VisualIntelligence.enabled = true;
-				VisualIntelligence.feedback_enabled = true;
+				//VisualIntelligence.feedback_enabled = true;
 				//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
 				//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
 			};
