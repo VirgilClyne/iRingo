@@ -10,7 +10,7 @@ async function setENV(name, url, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	/***************** Platform *****************/
 	const Platform = /weather-(.*)\.apple\.com/i.test(url) ? "Weather"
-		: /smoot\.apple\.com/i.test(url) ? "Siri"
+		: /smoot\.apple\.(com|cn)/i.test(url) ? "Siri"
 			: /\.apple\.com/i.test(url) ? "Apple"
 				: "Apple"
 	$.log(`🚧 ${$.name}, Set Environment Variables`, `Platform: ${Platform}`, "");
@@ -20,7 +20,7 @@ async function setENV(name, url, database) {
 	let BoxJs = $.getjson(name, database)
     $.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
 	/***************** Settings *****************/
-	let Settings = BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database.Settings[Platform];
+	let Settings = BoxJs?.[Platform] || BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database[Platform];
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Argument *****************/
 	if (typeof $argument != "undefined") {
@@ -28,7 +28,11 @@ async function setENV(name, url, database) {
 		let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
 		$.log(JSON.stringify(arg));
 		Object.assign(Settings, arg);
-	}
+	};
+	/***************** Prase *****************/
+	Settings.Switch = JSON.parse(Settings.Switch) //  BoxJs字符串转Boolean
+	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
+	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
 };
