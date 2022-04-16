@@ -118,6 +118,55 @@
 					"desc": "是否启用此平台修改功能"
 				},
 				{
+					"id": "@iRingo.Siri.CountryCode",
+					"name": "国家或地区代码",
+					"val": "TW",
+					"type": "selects",
+					"desc": "不同国家或地区提供的内容或有差别",
+					"items": [
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "UK",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.Siri.Domains",
 					"name": "启用领域",
 					"val": [

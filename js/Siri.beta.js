@@ -4,7 +4,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Siri v2.0.0-beta");
 const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
-	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"]}
+	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"]}
 };
 var { url } = $request;
 var { body } = $response;

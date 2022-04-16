@@ -11,6 +11,7 @@
 	},
 	"Siri": {
 		"Switch": true,
+		"CountryCode": "TW",
 		"Domains": [
 			"web",
 			"itunes",
