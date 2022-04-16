@@ -161,16 +161,22 @@
 					"id": "@iRingo.Siri.Functions",
 					"name": "启用功能",
 					"val": [
+						"lookup",
 						"mail",
 						"messages",
 						"news",
 						"safari",
 						"spotlight",
+						"flightutilities",
 						"visualintelligence"
 					],
 					"type": "checkboxes",
 					"desc": "启用Siri建议的APP",
 					"items": [
+						{
+							"key": "lookup",
+							"label": "查询"
+						},
 						{
 							"key": "mail",
 							"label": "邮件"

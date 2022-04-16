@@ -20,6 +20,7 @@
 			"maps"
 		],
 		"Functions": [
+			"lookup",
 			"mail",
 			"messages",
 			"news",
