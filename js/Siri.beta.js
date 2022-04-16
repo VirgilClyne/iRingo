@@ -3,7 +3,8 @@ README:https://github.com/VirgilClyne/iRingo
 */
 const $ = new Env("Apple Siri v2.0.0-beta");
 const DataBase = {
-	Settings: {"Weather":{"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"}}
+	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
+	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["mail","messages","news","safari","spotlight","visualintelligence"]}
 };
 var { url } = $request;
 var { body } = $response;
@@ -18,11 +19,13 @@ var { body } = $response;
 		//data.enabled_domains = ["web", "itunes", "app_store", "movies", "restaurants", "maps"];
 		let Functions = data?.overrides;
 		if (Functions) {
-			Functions.mail.feedback_enabled = true;
+			Functions.mail.enabled = true;
+			//Functions.mail.feedback_enabled = true;
 			Functions.messages.enabled = true;
 			Functions.news.enabled = true;
 			let Safari = Functions?.safari;
 			if (Safari) {
+				Safari.enabled = true;
 				Safari.experiments_custom_feedback_enabled = true;
 			}
 			let Spotlight = Functions?.spotlight;
@@ -39,9 +42,16 @@ var { body } = $response;
 				//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];	
 			}
 		}
-		data.safari_smart_history_enabled = true;
-		data.smart_history_feature_feedback_enabled = true;
-		data.mescal_enabled = true;
+		if (data?.safari_smart_history_enabled) {
+			data.safari_smart_history_enabled = true;
+			data.smart_history_feature_feedback_enabled = true;
+		}
+		if (data?.mescal_enabled) {
+			data.mescal_enabled = true;
+			data.mescal_version = 200;
+			data.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
+			data.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
+		}
 		let smart_search_v2 = data?.smart_search_v2_parameters;
 		if (smart_search_v2) {
 			smart_search_v2.smart_history_score_v2_enabled = true;
