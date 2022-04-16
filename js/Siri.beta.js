@@ -15,10 +15,9 @@ var { body } = $response;
 	let data = JSON.parse(body);
 	if (/\/bag\?/.test(url)) {
 		data.enabled = true;
-		//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
 		data.feedback_enabled = true;
+		//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
 		//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
-		//data.enabled_domains = ["web", "itunes", "app_store", "movies", "restaurants", "maps"];
 		data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
 		data.min_query_len = 3;
 		$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
@@ -29,6 +28,10 @@ var { body } = $response;
 				if (APP) {
 					APP.enabled = true;
 					APP.feedback_enabled = true;
+					//APP.min_query_len = 2;
+					//APP.search_render_timeout = 200;
+					//APP.first_use_description = "";
+					//APP.first_use_learn_more = "";
 				} else APP = { enabled: true, feedback_enabled: true };
 			});
 			let FlightUtilities = Functions?.flightutilities;
