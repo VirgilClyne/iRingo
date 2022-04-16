@@ -192,6 +192,10 @@
 							"label": "聚焦搜索"
 						},
 						{
+							"key": "flightutilities",
+							"label": "航班工具"
+						},
+						{
 							"key": "visualintelligence",
 							"label": "视觉智能"
 						}

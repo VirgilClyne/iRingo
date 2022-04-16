@@ -4,7 +4,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Siri v2.0.0-beta");
 const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
-	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["mail","messages","news","safari","spotlight","visualintelligence"]}
+	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["mail","messages","news","safari","spotlight","flightutilities","visualintelligence"]}
 };
 var { url } = $request;
 var { body } = $response;
@@ -15,7 +15,9 @@ var { body } = $response;
 	let data = JSON.parse(body);
 	if (/\/bag\?/.test(url)) {
 		data.enabled = true;
+		//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
 		data.feedback_enabled = true;
+		//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
 		//data.enabled_domains = ["web", "itunes", "app_store", "movies", "restaurants", "maps"];
 		data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
 		data.min_query_len = 3;
@@ -27,11 +29,16 @@ var { body } = $response;
 				if (APP) APP.enabled = true;
 				else APP = { enabled: true };
 			});
+			let FlightUtilities = Functions?.flightutilities;
+			if (FlightUtilities) {
+				//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
+				//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
+			};
 			let Lookup = Functions?.lookup;
 			if (Lookup) {
 				//Lookup.enabled = true;
 				Lookup.min_query_len = 2;
-			}
+			};
 			//Functions.mail.enabled = true;
 			//Functions.mail.feedback_enabled = true;
 			//Functions.messages.enabled = true;
@@ -40,7 +47,7 @@ var { body } = $response;
 			if (Safari) {
 				//Safari.enabled = true;
 				Safari.experiments_custom_feedback_enabled = true;
-			}
+			};
 			let Spotlight = Functions?.spotlight;
 			if (Spotlight) {
 				//Spotlight.enabled = true;
@@ -50,13 +57,17 @@ var { body } = $response;
 				Spotlight.collect_scores = true;
 				Spotlight.collect_anonymous_metadata = true;
 			};
+			let FlightUtilities = Functions?.flightutilities;
+			if (FlightUtilities) {
+				//FlightUtilities.enabled = true;
+			};
 			let VisualIntelligence = Functions?.visualintelligence;
 			if (VisualIntelligence) {
 				//VisualIntelligence.enabled = true;
 				VisualIntelligence.feedback_enabled = true;
 				//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
 				//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
-			}
+			};
 		}
 		if (data?.safari_smart_history_enabled) {
 			data.safari_smart_history_enabled = true;
