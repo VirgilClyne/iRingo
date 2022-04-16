@@ -2,97 +2,106 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 const $ = new Env("Apple Siri v2.0.0-beta");
+const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"]}
 };
 var { url } = $request;
-var { body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings } = await setENV("iRingo", url, DataBase);
-	let data = JSON.parse(body);
-	if (/\/bag\?/.test(url)) {
-		data.enabled = true;
-		data.feedback_enabled = true;
-		//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
-		//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
-		data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
-		data.min_query_len = 3;
-		$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
-		let Functions = data?.overrides;
-		if (Functions) {
-			Settings.Functions.forEach(app => {
-				let APP = Functions?.[`${app}`];
-				if (APP) {
-					APP.enabled = true;
-					APP.feedback_enabled = true;
-					//APP.min_query_len = 2;
-					//APP.search_render_timeout = 200;
-					//APP.first_use_description = "";
-					//APP.first_use_learn_more = "";
-				} else APP = { enabled: true, feedback_enabled: true };
-			});
-			let FlightUtilities = Functions?.flightutilities;
-			if (FlightUtilities) {
-				//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
-				//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
+	url = URL.parse(url);
+	if (typeof $response == "undefined") { // 是请求
+		if (url?.params?.cc) url.params.cc = Settings.CountryCode;
+	} else { // 是回复
+		var { body } = $response;
+		let data = JSON.parse(body);
+		if (url.path == "bag") {
+			data.enabled = true;
+			data.feedback_enabled = true;
+			//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
+			//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
+			data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
+			data.min_query_len = 3;
+			$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
+			let Functions = data?.overrides;
+			if (Functions) {
+				Settings.Functions.forEach(app => {
+					let APP = Functions?.[`${app}`];
+					if (APP) {
+						APP.enabled = true;
+						APP.feedback_enabled = true;
+						//APP.min_query_len = 2;
+						//APP.search_render_timeout = 200;
+						//APP.first_use_description = "";
+						//APP.first_use_learn_more = "";
+					} else APP = { enabled: true, feedback_enabled: true };
+				});
+				let FlightUtilities = Functions?.flightutilities;
+				if (FlightUtilities) {
+					//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
+					//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
+				};
+				let Lookup = Functions?.lookup;
+				if (Lookup) {
+					Lookup.min_query_len = 2;
+				};
+				let Mail = Functions?.mail;
+				let Messages = Functions?.messages;
+				let News = Functions?.news;
+				let Safari = Functions?.safari;
+				if (Safari) {
+					Safari.experiments_custom_feedback_enabled = true;
+				};
+				let Spotlight = Functions?.spotlight;
+				if (Spotlight) {
+					Spotlight.use_twolayer_ranking = true;
+					Spotlight.experiments_custom_feedback_enabled = true;
+					Spotlight.min_query_len = 2;
+					Spotlight.collect_scores = true;
+					Spotlight.collect_anonymous_metadata = true;
+				};
+				let VisualIntelligence = Functions?.visualintelligence;
+				if (VisualIntelligence) {
+					//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
+					//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
+				};
+			}
+			if (data?.safari_smart_history_enabled) {
+				data.safari_smart_history_enabled = true;
+				data.smart_history_feature_feedback_enabled = true;
+			}
+			/*
+			if (data?.mescal_enabled) {
+				data.mescal_enabled = true;
+				data.mescal_version = 200;
+				data.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
+				data.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
+			}
+			let smart_search_v2 = data?.smart_search_v2_parameters;
+			if (smart_search_v2) {
+				smart_search_v2.smart_history_score_v2_enabled = true;
+				smart_search_v2.smart_history_score_v2_enable_count = true;
 			};
-			let Lookup = Functions?.lookup;
-			if (Lookup) {
-				Lookup.min_query_len = 2;
-			};
-			let Mail = Functions?.mail;
-			let Messages = Functions?.messages;
-			let News = Functions?.news;
-			let Safari = Functions?.safari;
-			if (Safari) {
-				Safari.experiments_custom_feedback_enabled = true;
-			};
-			let Spotlight = Functions?.spotlight;
-			if (Spotlight) {
-				Spotlight.use_twolayer_ranking = true;
-				Spotlight.experiments_custom_feedback_enabled = true;
-				Spotlight.min_query_len = 2;
-				Spotlight.collect_scores = true;
-				Spotlight.collect_anonymous_metadata = true;
-			};
-			let VisualIntelligence = Functions?.visualintelligence;
-			if (VisualIntelligence) {
-				//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
-				//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
-			};
+			data.session_experiment_metadata_enabled = true;
+			//data.sample_features = true;
+			//data.use_ledbelly = true;
+			*/
+		} else if (url.path == "search") {
+		} else if (url.path == "card") {
 		}
-		if (data?.safari_smart_history_enabled) {
-			data.safari_smart_history_enabled = true;
-			data.smart_history_feature_feedback_enabled = true;
-		}
-		/*
-		if (data?.mescal_enabled) {
-			data.mescal_enabled = true;
-			data.mescal_version = 200;
-			data.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
-			data.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
-		}
-		let smart_search_v2 = data?.smart_search_v2_parameters;
-		if (smart_search_v2) {
-			smart_search_v2.smart_history_score_v2_enabled = true;
-			smart_search_v2.smart_history_score_v2_enable_count = true;
-		};
-		data.session_experiment_metadata_enabled = true;
-		//data.sample_features = true;
-		//data.use_ledbelly = true;
-		*/
-	} else if (/\/search\?/.test(url)) {
-	} else if (/\/card\?/.test(url)) {
+		body = JSON.stringify(data);
+		$.done({ body })
 	}
-	body = JSON.stringify(data);
+	url = URL.stringify(url);
+	$.done({ url })
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ body }))
+	.finally(() => $.done())
 
-/***************** Async Function *****************/
+/***************** Function *****************/
 /**
  * Set Environment Variables
  * @author VirgilClyne
@@ -130,6 +139,33 @@ async function setENV(name, url, database) {
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
+};
+
+function URLSearch(opts) {
+	return new (class {
+		constructor(opts = []) {
+			this.name = "urlParams v1.0.0";
+			this.opts = opts;
+			this.json = { url: { scheme: "", host: "", path: "" }, params: {} };
+		};
+
+		parse(url) {
+			const URLRegex = /(?<scheme>.+):\/\/(?<host>[^/]+)\/?(?<path>[^?]+)?\??(?<params>.*)?/;
+			let json = url.match(URLRegex)?.groups ?? null;
+			$.log(`🚧 ${$.name}, URLSearch`, `url.match(URLRegex)?.groups: ${JSON.stringify(json)}`, "");
+			if (json?.params) json.params = Object.fromEntries(json.params.split("&").map((param) => param.split("=")));
+			$.log(`🚧 ${$.name}, URLSearch`, `Object.fromEntries(json.params.split("&").map((item) => item.split("="))): ${JSON.stringify(json?.params)}`, "");
+			$.log(`🚧 ${$.name}, URLSearch`, `json: ${JSON.stringify(json)}`, "");
+			return json
+		};
+
+		stringify(json = this.json) {
+			const url = (json?.params) ? json.scheme + "://" + json.host + "/" + json.path + "?" + Object.entries(json.params).map(param => param.join("=")).join("&")
+				: json.scheme + "://" + json.host + "/" + json.path;
+			$.log(`🚧 ${$.name}, URLSearch`, `url: ${url}`, "");
+			return url
+		};
+	})(opts)
 };
 
 /***************** Env *****************/
