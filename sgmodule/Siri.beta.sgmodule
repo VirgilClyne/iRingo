@@ -2,13 +2,13 @@
 #!desc= (BETA) 全面自定义「Siri与搜索」的功能。
 
 [Script]
-# Siri Suggestions Service 
 # Bag (iOS/macOS)
+Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js
 Siri Suggestions Service = type=http-response, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*), requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.beta.js
 # Spotlight & Look Up Search (iOS/macOS)
-Spotlight & Look Up Search = type=http-response, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*), requires-body=0, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.beta.js
+Spotlight & Look Up Search = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js
 # Siri Infomation Card (macOS)
-Siri Infomation Card = type=http-response, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*), requires-body=0, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.beta.js
+Siri Infomation Card = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri_Suggestions.js
 
 [MITM]
 hostname = %APPEND% -cdn*.smoot.apple.com, -fbs.smoot.apple.com, *.smoot.apple.com, *.smoot.apple.cn
