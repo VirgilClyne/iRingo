@@ -22,6 +22,13 @@
 			],
 			"settings": [
 				{
+					"id": "@iRingo.Weather.Switch",
+					"name": "功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此平台修改功能"
+				},
+				{
 					"id": "@iRingo.Weather.Mode",
 					"name": "工作模式",
 					"val": "WAQI Public",
@@ -96,7 +103,8 @@
 			"id": "iRingo.Siri.beta",
 			"name": "iRingo: Siri与搜索 β",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#siri与搜索\">iRingo#siri与搜索</a>的使用说明进行配置"
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#siri与搜索\">iRingo#siri与搜索</a>的使用说明进行配置",
+				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
 			],
 			"keys": [
 				"@iRingo.Settings.Siri"
@@ -104,10 +112,10 @@
 			"settings": [
 				{
 					"id": "@iRingo.Siri.Switch",
-					"name": "Siri功能开关",
+					"name": "功能开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "Siri相关功能的总开关，包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等功能"
+					"desc": "是否启用此平台修改功能"
 				},
 				{
 					"id": "@iRingo.Siri.Domains",
