@@ -21,24 +21,11 @@ function URLSearch(opts) {
 		};
 
 		parse(url) {
-			//[url, params] = url.split(/\?(.*)/, 2);
-			//$.log(`🚧 ${$.name}, URLSearch`, `URL.split(/\?(.*)/,2)`, `url: ${url}`, `params: ${params}`, "");
 			const URLRegex = /(?<scheme>.+):\/\/(?<host>[^/]+)\/?(?<path>[^?]+)?\??(?<params>.*)?/;
 			let json = url.match(URLRegex)?.groups ?? null;
 			$.log(`🚧 ${$.name}, URLSearch`, `url.match(URLRegex)?.groups: ${JSON.stringify(json)}`, "");
-			//$.log(`🚧 ${$.name}, URLSearch`, `url.split(/\/+(.+)/,3)`, `scheme: ${url.scheme}`, `host: ${url.host}`, `path: ${url.path}`, `params: ${url.params}`, "");
-			//let params = url.split("?")[1];
-			//$.log(`🚧 ${$.name}, URLSearch`, `url.split("?")[1]: ${JSON.stringify(params)}`, "");
-			//params = params.split("&");
-			//$.log(`🚧 ${$.name}, URLSearch`, `params.split("&"): ${JSON.stringify(params)}`, "");
-			//params = params.map((param) => param.split("="));
-			//$.log(`🚧 ${$.name}, URLSearch`, `params.map((param) => param.split("=")): ${JSON.stringify(params)}`, "");
-			//params = Object.fromEntries(params);
-			//$.log(`🚧 ${$.name}, URLSearch`, `Object.fromEntries(params): ${JSON.stringify(params)}`, "");
 			if (json?.params) json.params = Object.fromEntries(json.params.split("&").map((param) => param.split("=")));
 			$.log(`🚧 ${$.name}, URLSearch`, `Object.fromEntries(json.params.split("&").map((item) => item.split("="))): ${JSON.stringify(json?.params)}`, "");
-			//const json = { url, params };
-			//$.log(`🚧 ${$.name}, URLSearch`, `params.map((param) => param.split("=")): ${JSON.stringify(json)}`, "");
 			$.log(`🚧 ${$.name}, URLSearch`, `json: ${JSON.stringify(json)}`, "");
 			return json
 		};

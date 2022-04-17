@@ -3,32 +3,24 @@ function URLSearch(opts) {
 		constructor(opts = []) {
 			this.name = "urlParams v1.0.0";
 			this.opts = opts;
-			this.json = { url: { scheme, host, path }, params };
+			this.json = { url: { scheme: "", host: "", path: "" }, params: {} };
 		};
 
-		parse(string) {
-			//const Params = Object.fromEntries(url.split("?")[1].split("&").map((item) => item.split("=")));
-			let [url, params] = string.split(/\?(.*)/, 2);
-			$.log(`🚧 ${$.name}, URLSearch`, `URL.split(/\?(.*)/,2): ${[url, params]}`, "");
-			let [scheme, host, path] = url.split(/\/+(.+)/, 3);
-			$.log(`🚧 ${$.name}, URLSearch`, `url.split(/\/+(.+)/,3): ${[scheme, host, path]}`, "");
-			//let params = url.split("?")[1];
-			//$.log(`🚧 ${$.name}, URLSearch`, `url.split("?")[1]: ${JSON.stringify(params)}`, "");
-			params = params.split("&");
-			$.log(`🚧 ${$.name}, URLSearch`, `params.split("&"): ${JSON.stringify(params)}`, "");
-			params = params.map((param) => param.split("="));
-			$.log(`🚧 ${$.name}, URLSearch`, `params.map((param) => param.split("=")): ${JSON.stringify(params)}`, "");
-			params = Object.fromEntries(params);
-			$.log(`🚧 ${$.name}, URLSearch`, `Object.fromEntries(params): ${JSON.stringify(params)}`, "");
-			const json = { url: { scheme, host, path }, params };
-			$.log(`🚧 ${$.name}, URLSearch`, `params.map((param) => param.split("=")): ${JSON.stringify(json)}`, "");
+		parse(url) {
+			const URLRegex = /(?<scheme>.+):\/\/(?<host>[^/]+)\/?(?<path>[^?]+)?\??(?<params>.*)?/;
+			let json = url.match(URLRegex)?.groups ?? null;
+			//$.log(`🚧 ${$.name}, URLSearch`, `url.match(URLRegex)?.groups: ${JSON.stringify(json)}`, "");
+			if (json?.params) json.params = Object.fromEntries(json.params.split("&").map((param) => param.split("=")));
+			//$.log(`🚧 ${$.name}, URLSearch`, `Object.fromEntries(json.params.split("&").map((item) => item.split("="))): ${JSON.stringify(json?.params)}`, "");
+			//$.log(`🚧 ${$.name}, URLSearch`, `json: ${JSON.stringify(json)}`, "");
 			return json
 		};
 
 		stringify(json = this.json) {
-			const string = json.scheme + "//" + json.host + "/" + json.path + "?" + json.params.map((param) => Object.Entries(param).join("=")).join("&");
-			$.log(`🚧 ${$.name}, URLSearch`, `url: ${url}`, "");
-			return string
+			const url = (json?.params) ? json.scheme + "://" + json.host + "/" + json.path + "?" + Object.entries(json.params).map(param => param.join("=")).join("&")
+				: json.scheme + "://" + json.host + "/" + json.path;
+			//$.log(`🚧 ${$.name}, URLSearch`, `url: ${url}`, "");
+			return url
 		};
 	})(opts)
 }
