@@ -107,7 +107,7 @@
 				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
 			],
 			"keys": [
-				"@iRingo.Settings.Siri"
+				"@iRingo.Siri"
 			],
 			"settings": [
 				{
@@ -122,8 +122,12 @@
 					"name": "国家或地区代码",
 					"val": "TW",
 					"type": "selects",
-					"desc": "不同国家或地区提供的内容或有差别",
+					"desc": "不同国家或地区提供的内容或有差别，此选项同时会影响分配给您不同地区的Siri服务器",
 					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（跟随系统地区设置）"
+						},
 						{
 							"key": "CN",
 							"label": "中国大陆"
@@ -208,7 +212,7 @@
 				},
 				{
 					"id": "@iRingo.Siri.Functions",
-					"name": "启用功能",
+					"name": "强制启用的功能",
 					"val": [
 						"flightutilities",
 						"lookup",
@@ -221,7 +225,7 @@
 						"visualintelligence"
 					],
 					"type": "checkboxes",
-					"desc": "启用Siri建议的APP",
+					"desc": "强制启用Siri建议的APP，被选项的功能会被强制开启，但是未选不代表关闭对应的功能，仅代表还原到该地区默认设置状态",
 					"items": [
 						{
 							"key": "flightutilities",
