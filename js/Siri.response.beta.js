@@ -8,7 +8,9 @@ const DataBase = {
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
-var { body } = $response;
+$.log(`🚧 ${$.name}, url: ${url}`, "");
+var { body } = ($.isQuanX) ? $.get($request) : $response;
+$.log(`🚧 ${$.name}, url: ${body}`, "");
 
 /***************** Processing *****************/
 !(async () => {
@@ -89,7 +91,6 @@ var { body } = $response;
 		} else if (url?.path == "search") {
 		} else if (url?.path == "card") {
 		}
-		url = URL.stringify(url);
 		body = JSON.stringify(data);
 	}
 })()

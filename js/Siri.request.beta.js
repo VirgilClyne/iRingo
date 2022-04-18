@@ -8,6 +8,7 @@ const DataBase = {
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
+$.log(`🚧 ${$.name}, url: ${url}`, "");
 
 /***************** Processing *****************/
 !(async () => {
@@ -45,6 +46,7 @@ var { url } = $request;
 			};
 		};
 		url = URL.stringify(url);
+		$.log(`🚧 ${$.name}, url: ${url}`, "");
 	}
 })()
 	.catch((e) => $.logErr(e))
