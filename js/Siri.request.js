@@ -36,7 +36,7 @@ var { url } = $request;
 				}
 			};
 		} else if (url.path == "card") {
-			const sf = url?.params?.storefront?.(/[\d]{6}/g); //StoreFront ID, from App Store Region
+			const sf = url?.params?.storefront?.match(/[\d]{6}/g); //StoreFront ID, from App Store Region
 			if (url?.params?.card_locale) url.params.card_locale = locale;
 			if (url?.params?.include == "movies" || url?.params?.include == "tv") {
 				if (sf == "143463") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK")
