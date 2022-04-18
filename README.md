@@ -386,7 +386,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 ## 使用说明
   * 直接使用
-    * 默认开启所有功能
+    * 默认开启所有功能，地区设置为🇹🇼TW台湾，语言自动跟随系统语言。
   * 配合`BoxJs`及订阅使用
     * 安装`BoxJs`插件:
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
