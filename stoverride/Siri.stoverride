@@ -1,0 +1,46 @@
+name:  iRingo for Siri & Search
+desc: (2.0.0) 全面自定义「Siri与搜索」的功能。
+
+http:
+  mitm:
+    - "api*.smoot.apple.com"
+    - "api*.smoot.apple.cn"
+  script:
+    - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*)
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+    - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*)
+      name: Siri.response
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*)
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+    - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*)
+      name: Siri.response
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*)
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+    - match: ^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*)
+      name: Siri.response
+      type: request
+      require-body: true
+      timeout: 10
+
+script-providers:
+  Siri.request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+    interval: 86400
+  Siri.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+    interval: 86400
