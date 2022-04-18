@@ -1,5 +1,5 @@
-#!name= Enable Siri Suggestions
-#!desc=(BETA) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
+#!name=  Enable Siri Suggestions
+#!desc= (BETA) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
 
 [Script]
 # Redirect Siri Suggestions Service 
@@ -11,4 +11,4 @@ Spotlight & Look Up Search = type=http-request, pattern=^https?:\/\/api.*\.smoot
 Siri Infomation Card = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri_Suggestions.js
 
 [MITM]
-hostname = %APPEND% -cdn*.smoot.apple.com, -fbs.smoot.apple.com, *.smoot.apple.com, *.smoot.apple.cn
+hostname = %APPEND% api*.smoot.apple.com, api*.smoot.apple.cn
