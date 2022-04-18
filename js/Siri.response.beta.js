@@ -5,7 +5,7 @@ const $ = new Env("Apple Siri v2.0.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"]}
+	"Siri":{"Switch":true,"Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
 var { body } = $response;
@@ -67,10 +67,9 @@ var { body } = $response;
 					//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
 				};
 			}
-			if (data?.safari_smart_history_enabled) {
-				data.safari_smart_history_enabled = true;
-				data.smart_history_feature_feedback_enabled = true;
-			}
+			// Safari Smart History
+			data.safari_smart_history_enabled = (Settings.Safari_Smart_History) ? true : false;
+			data.smart_history_feature_feedback_enabled = (Settings.Safari_Smart_History) ? true : false;
 			/*
 			if (data?.mescal_enabled) {
 				data.mescal_enabled = true;
@@ -130,9 +129,10 @@ async function setENV(name, url, database) {
 		Object.assign(Settings, arg);
 	};
 	/***************** Prase *****************/
-	Settings.Switch = JSON.parse(Settings.Switch) //  BoxJs字符串转Boolean
+	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
+	Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
 };

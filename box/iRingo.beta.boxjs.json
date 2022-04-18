@@ -182,7 +182,7 @@
 						"maps"
 					],
 					"type": "checkboxes",
-					"desc": "启用搜索的领域",
+					"desc": "启用搜索的领域，未选项领域将被关闭，启用领域数据由国家和地区决定，此选项仅代表功能上的开启，不代表对应地区一定有数据和服务",
 					"items": [
 						{
 							"key": "web",
@@ -264,6 +264,13 @@
 							"label": "视觉智能"
 						}
 					]
+				},
+				{
+					"id": "@iRingo.Siri.Safari_Smart_History",
+					"name": "Safari智能历史记录",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否在Safari浏览器中启用基于历史记录的Siri建议功能，启用后将在Safari浏览器起始页推荐基于时间地点跨设备等的相关浏览记录"
 				}
 			],
 			"author": "@VirgilClyne",

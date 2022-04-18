@@ -30,6 +30,7 @@
 			"siri",
 			"spotlight",
 			"visualintelligence"
-		]
+		],
+		"Safari_Smart_History": true
 	}
 }
