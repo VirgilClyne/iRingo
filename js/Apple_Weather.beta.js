@@ -72,7 +72,7 @@ async function setENV(name, url, database) {
 	let BoxJs = $.getjson(name, database)
 	$.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
 	/***************** Settings *****************/
-	let Settings = BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database.Settings[Platform];
+	let Settings = BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || BoxJs?.[Platform] || database.Settings[Platform];
 	//$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Argument *****************/
 	if (typeof $argument != "undefined") {
