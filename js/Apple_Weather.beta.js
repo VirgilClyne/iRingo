@@ -2,9 +2,10 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v2.3.0-beta");
+const $ = new Env("Apple Weather v2.3.1-beta");
 const DataBase = {
-	Settings: {"Weather":{"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"}}
+	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
+	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 const { url } = $request;
 let { body } = $response;
@@ -58,11 +59,19 @@ let { body } = $response;
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(name, url, database) {
+/**
+ * Set Environment Variables
+ * @author VirgilClyne
+ * @param {String} name - Persistent Store Key
+ * @param {String} url - Request URL
+ * @param {Object} database - Default DataBase
+ * @return {Promise<*>}
+ */
+ async function setENV(name, url, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	/***************** Platform *****************/
 	const Platform = /weather-(.*)\.apple\.com/i.test(url) ? "Weather"
-		: /smoot\.apple\.com/i.test(url) ? "Siri"
+		: /smoot\.apple\.(com|cn)/i.test(url) ? "Siri"
 			: /\.apple\.com/i.test(url) ? "Apple"
 				: "Apple"
 	$.log(`🚧 ${$.name}, Set Environment Variables`, `Platform: ${Platform}`, "");
@@ -72,15 +81,20 @@ async function setENV(name, url, database) {
 	let BoxJs = $.getjson(name, database)
 	$.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
 	/***************** Settings *****************/
-	let Settings = BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || BoxJs?.[Platform] || database.Settings[Platform];
-	//$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+	let Settings = BoxJs?.[Platform] || BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database[Platform];
+	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Argument *****************/
 	if (typeof $argument != "undefined") {
 		$.log(`🎉 ${$.name}, $Argument`);
 		let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
 		$.log(JSON.stringify(arg));
 		Object.assign(Settings, arg);
-	}
+	};
+	/***************** Prase *****************/
+	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
+	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
+	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
+	Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
 };
