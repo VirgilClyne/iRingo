@@ -59,15 +59,7 @@ let { body } = $response;
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
-/**
- * Set Environment Variables
- * @author VirgilClyne
- * @param {String} name - Persistent Store Key
- * @param {String} url - Request URL
- * @param {Object} database - Default DataBase
- * @return {Promise<*>}
- */
- async function setENV(name, url, database) {
+async function setENV(name, url, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	/***************** Platform *****************/
 	const Platform = /weather-(.*)\.apple\.com/i.test(url) ? "Weather"
@@ -92,9 +84,9 @@ let { body } = $response;
 	};
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
-	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
-	Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
+	Settings.Domains = Settings?.Domains?.split(",") || Settings?.Domains;// BoxJs字符串转数组
+	Settings.Functions = Settings?.Functions?.split(",") || Settings?.Functions // BoxJs字符串转数组
+	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
 };

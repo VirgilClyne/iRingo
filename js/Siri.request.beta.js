@@ -73,7 +73,7 @@ async function setENV(name, url, database) {
 	// 包装为局部变量，用完释放内存
 	// BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
 	let BoxJs = $.getjson(name, database)
-    $.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
+	$.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
 	/***************** Settings *****************/
 	let Settings = BoxJs?.[Platform] || BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database[Platform];
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
@@ -85,9 +85,10 @@ async function setENV(name, url, database) {
 		Object.assign(Settings, arg);
 	};
 	/***************** Prase *****************/
-	Settings.Switch = JSON.parse(Settings.Switch) //  BoxJs字符串转Boolean
-	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
-	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
+	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
+	Settings.Domains = Settings?.Domains?.split(",") || Settings?.Domains;// BoxJs字符串转数组
+	Settings.Functions = Settings?.Functions?.split(",") || Settings?.Functions // BoxJs字符串转数组
+	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Platform, Settings };
 };
