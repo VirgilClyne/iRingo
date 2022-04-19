@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.0-beta");
+const $ = new Env("Apple Siri v2.0.2-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
@@ -9,7 +9,7 @@ const DataBase = {
 };
 var { url } = $request;
 $.log(`🚧 ${$.name}, url: ${url}`, "");
-var { body } = ($.isQuanX) ? $.get($request) : $response;
+var { body } = $response;
 $.log(`🚧 ${$.name}, url: ${body}`, "");
 
 /***************** Processing *****************/
