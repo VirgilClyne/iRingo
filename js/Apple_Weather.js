@@ -58,7 +58,7 @@ let { body } = $response;
  * @param {Object} s - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(t,e,s){const i=/weather-(.*)\.apple\.com/i.test(e)?"Weather":/smoot\.apple\.com/i.test(e)?"Siri":(/\.apple\.com/i.test(e),"Apple");let n=$.getjson(t,s),p=n?.Settings?.[i]||n?.Apple?.[i]||s.Settings[i];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(p,t)}return{Platform:i,Settings:p}}
+async function setENV(t,e,s){const i=/weather-(.*)\.apple\.com/i.test(e)?"Weather":/smoot\.apple\.com/i.test(e)?"Siri":(/\.apple\.com/i.test(e),"Apple");let n=$.getjson(t,s),p=n?.Settings?.[i]||n?.Apple?.[i]||n?.[i]||s.Settings[i];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(p,t)}return{Platform:i,Settings:p}}
 
 /**
  * Get Origin Parameter
