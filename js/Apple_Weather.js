@@ -59,7 +59,7 @@ let { body } = $response;
  * @param {Object} e - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(t,i,e){const s=/weather-(.*)\.apple\.com/i.test(i)?"Weather":/smoot\.apple\.(com|cn)/i.test(i)?"Siri":(/\.apple\.com/i.test(i),"Apple");let a=$.getjson(t,e),n=a?.[s]||a?.Settings?.[s]||a?.Apple?.[s]||e[s];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(n,t)}return n.Switch=JSON.parse(n.Switch),n.Domains=n?.Domains?.split(",")||n?.Domains,n.Functions=n?.Functions?.split(",")||n?.Functions,n?.Safari_Smart_History&&(n.Safari_Smart_History=JSON.parse(n.Safari_Smart_History)),{Platform:s,Settings:n}}
+async function setENV(t,i,e){const s=/weather-(.*)\.apple\.com/i.test(i)?"Weather":/smoot\.apple\.(com|cn)/i.test(i)?"Siri":(/\.apple\.com/i.test(i),"Apple");let n=$.getjson(t,e),a=n?.[s]||n?.Settings?.[s]||n?.Apple?.[s]||e[s];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(a,t)}return a.Switch=JSON.parse(a.Switch),"string"==typeof a?.Domains&&(a.Domains=a.Domains.split(",")),"string"==typeof a?.Functions&&(a.Functions=a.Functions.split(",")),a?.Safari_Smart_History&&(a.Safari_Smart_History=JSON.parse(a.Safari_Smart_History)),{Platform:s,Settings:a}}
 
 /**
  * Get Origin Parameter
