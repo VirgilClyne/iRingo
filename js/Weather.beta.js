@@ -295,7 +295,10 @@ function getGridWeatherMinutely(lat, lng) {
 					resolve(_data);
 				}
 			} catch (e) {
-				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败! `, `error = ${error || e}, `, `response = ${JSON.stringify(response)}, `, `data = ${data}`, '');
+				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败! `,
+					`error = ${JSON.stringify(error || e)}, `,
+					`response = ${JSON.stringify(response)}, `,
+					`data = ${JSON.stringify(data)}`, '');
 			} finally {
 					//$.log(`⚠️ ${$.name}, getGridWeatherMinutely, `, `data = ${data}`, '');
 					$.log(`🎉 ${$.name}, getGridWeatherMinutely执行完成！`, '');
