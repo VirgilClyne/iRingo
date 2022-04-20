@@ -395,9 +395,112 @@ async function outputAQI(api, now, obs, weather, Settings) {
  */
 async function outputNextHour(api, minutelyData, weather, Settings) {
 	const minutely = minutelyData?.result?.minutely;
+	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
+
+	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
+	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
+	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
+
+	const getWeatherType = hourly => {
+		const type = hourly?.skycon[0].value;
+		
+		// https://docs.caiyunapp.com/docs/tables/skycon/
+		if (type.includes('RAIN')) {
+			return "rain";
+		} else if (type.includes('SNOW')) {
+			// TODO: check if it is `snow`
+			return "snow";
+		} else {
+			return "clear";
+		}
+	}
+
+	const PRECIPITATION_DECIMALS_LENGTH = 10000;
+	const PRECIPITATION_LEVEL = {
+		"NO_RAIN_OR_SNOW": 0,
+		"LIGHT_RAIN_OR_SNOW": 1,
+		"MODERATE_RAIN_OR_SNOW": 2,
+		"HEAVY_RAIN_OR_SNOW": 3,
+		"STORM_RAIN_OR_SNOW": 4,
+	};
+	const RADAR_PRECIPITATION_RANGE = {
+		noRainOrSnow: { lower: 0, upper: 0.031 },
+		lightRainOrSnow: { lower: 0.031, upper: 0.25 },
+		moderateRainOrSnow: { lower: 0.25, upper: 0.35 },
+		heavyRainOrSnow: { lower: 0.35, upper: 0.48 },
+		stormRainOrSnow: { lower: 0.48, upper: Number.MAX_VALUE },
+	};
+	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
+		beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
+	};
+
+	const radarToPrecipitationLevel = value => {
+		const {
+			noRainOrSnow,
+			lightRainOrSnow,
+			moderateRainOrSnow,
+			heavyRainOrSnow,
+			_stormRainOrSnow,
+		} = RADAR_PRECIPITATION_RANGE;
+
+		if (value < noRainOrSnow.upper) {
+			if (value < noRainOrSnow.lower) {
+				$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`, '');
+			}
+
+			return PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW;
+		} else if (value < lightRainOrSnow.upper) {
+			return PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW;
+		} else if (value < moderateRainOrSnow.upper) {
+			return PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW;
+		} else if (value < heavyRainOrSnow.upper) {
+			return PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW;
+		} else {
+			return PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW;
+		}
+	};
+
+	const radarToApplePrecipitation = value => {
+		const {
+			noRainOrSnow,
+			lightRainOrSnow,
+			moderateRainOrSnow,
+			heavyRainOrSnow,
+			_stormRainOrSnow
+		} = RADAR_PRECIPITATION_RANGE;
+
+		switch (radarToPrecipitationLevel(value)) {
+			case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
+			case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
+			return (
+				// multiple 10000 for precision of calculation
+				// base of previous levels + percentage of the value in its level
+				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
+				(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+					((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				);
+			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
+				return (
+					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
+					(((value - lightRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+					((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				);
+			case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
+				return (
+					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
+					(((value - moderateRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+					((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				);
+			case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
+			// impossible
+			default:
+				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
+		}
+	};
 
 	if (minutelyData?.status !== "ok" || minutely?.status !== "ok") {
-		$.log(`❗️ ${$.name}, 分钟级降水信息获取失败`, `minutely = ${JSON.stringify(minutelyData)}`, '');
+		$.log(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
 		return weather;
 	}
 
@@ -429,98 +532,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	weather.forecastNextHour.metadata.units = "radar";
 	weather.forecastNextHour.metadata.version = 2;
 
-	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
-
-	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
-	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
-	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
-
-	const conditions = {
-		"startTime": startTimeIos,
-		// TODO: type of weather
-		"token": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain.constant",
-		"longTemplate": minutelyData?.result?.forecast_keypoint ?? minutely?.description,
-		// use forecast_keypoint from ColorfulClouds?
-		"shortTemplate": minutely?.description,
-		// TODO
-		"parameters": {},
-	};
-	weather.forecastNextHour.condition.push(conditions);
-
-	const summaries = {
-		"startTime": startTimeIos,
-	};
-
-	const radarToApplePrecipitation = value => {
-		const DECIMALS_LENGTH = 10000;
-		const PRECIPITATION_RANGE = {
-			noRainOrSnow: { lower: 0, upper: 0.031 },
-			lightRainOrSnow: { lower: 0.031, upper: 0.25 },
-			moderateRainOrSnow: { lower: 0.25, upper: 0.35 },
-			heavyRainOrSnow: { lower: 0.35, upper: 0.48 },
-			stormRainOrSnow: { lower: 0.48, upper: Number.MAX_VALUE },
-		};
-		const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
-			beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
-		};
-		const {
-			noRainOrSnow,
-			lightRainOrSnow,
-			moderateRainOrSnow,
-			heavyRainOrSnow,
-			stormRainOrSnow
-		} = PRECIPITATION_RANGE;
-
-		if (value < noRainOrSnow.upper) {
-			if (value < noRainOrSnow.lower) {
-				$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`,'');
-			}
-
-			return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
-		} else if (value < lightRainOrSnow.upper) {
-			return (
-				// multiple 10000 for precision of calculation
-				// base of previous levels + percentage of the value in its level
-				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
-				(((value - noRainOrSnow.upper) * DECIMALS_LENGTH) /
-				((lightRainOrSnow.upper - lightRainOrSnow.lower) * DECIMALS_LENGTH))
-			);
-		} else if (value < moderateRainOrSnow.upper) {
-			return (
-				PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
-				(((value - lightRainOrSnow.upper) * DECIMALS_LENGTH) /
-				((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * DECIMALS_LENGTH))
-			);
-		} else if (value < heavyRainOrSnow.upper) {
-			return (
-				PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
-				(((value - moderateRainOrSnow.upper) * DECIMALS_LENGTH) /
-				((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * DECIMALS_LENGTH))
-			);
-		} else {
-			return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
-		}
-	};
-
-	// Weather could only display one hour data
-	// drop useless data to avoid display empty graph
-	const DISPLAYABLE_MINUTES = 60;
-	const droppedIntensity = minutely.precipitation_2h.slice(0, DISPLAYABLE_MINUTES);
-	const DISPLAYABLE_CHANCES = 2;
-	const droppedChance = minutely.probability.slice(0, DISPLAYABLE_CHANCES);
-
-	// TODO: type of weather
-	summaries.condition = droppedIntensity.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain";
-
-	if (Math.max(...minutely.probability) > 0) {
-		// convert to percentage
-		summaries.precipChance = parseInt(Math.max(...droppedChance) * 100);
-		// it looks like Apple doesn't care precipIntensity
-		summaries.precipIntensity = Math.max(...droppedIntensity);
-	}
-
-	weather.forecastNextHour.summary.push(summaries);
-
 	weather.forecastNextHour.startTime = startTimeIos;
 
 	const startTimeDate = new Date(startTimeIos);
@@ -539,7 +550,85 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		});
 	});
 
-	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, "");
+	const setSummary = minutes => {
+		// initalize data
+		const weatherType = getWeatherType(minutelyData?.result?.hourly);
+		// little trick for origin data
+		let lastIndex = 0;
+		let isRain = minutes[0].precipIntensity > 0;
+		let summary = {
+			startTime: minutes[0].startTime,
+			token: isRain ? weatherType : "clear",
+		};
+
+		for (let i = 0; i < minutes.length; i++) {
+			// Apple weather could only display one hour data
+			// drop useless data to avoid display empty graph
+			if (i > minutes.length && lastIndex === 0) {
+				break;
+			}
+
+			if (isRain) {
+				if (
+					radarToPrecipitationLevel(minute) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					i + 1 === minutes.length
+				) {
+						const range = minutes.slice(lastIndex, i + 1);
+
+						summary.endTime = minutes[i].startTime;
+						// convert to percentage
+						summary.precipChance =
+							parseInt(Math.max(...range.map(value => value.precipChance)) * 100);
+						// it looks like Apple doesn't care precipIntensity
+						summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
+
+						$.log(
+							`🚧 ${$.name}, `,
+							`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
+						);
+						weather.forecastNextHour.summary.push(summary);
+
+						lastIndex = i;
+						summary = {
+							startTime: minutes[i].startTime,
+							token: "clear",
+						};
+				} else {
+					if (radarToPrecipitationLevel(minute) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+						summary.endTime = minutes[i].startTime;
+
+						$.log(
+							`🚧 ${$.name}, `,
+							`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
+						);
+						weather.forecastNextHour.summary.push(summary);
+
+						lastIndex = i;
+						summary = {
+							startTime: minutes[i].startTime,
+							token: weatherType,
+						};
+					}
+				}
+			}
+		}
+	};
+
+	setSummary(weather.forecastNextHour.minutes);
+
+	const conditions = {
+		"startTime": startTimeIos,
+		// TODO: type of weather
+		"token": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain.constant",
+		"longTemplate": minutelyData?.result?.forecast_keypoint ?? minutely?.description,
+		// use forecast_keypoint from ColorfulClouds?
+		"shortTemplate": minutely?.description,
+		// TODO
+		"parameters": {},
+	};
+	weather.forecastNextHour.condition.push(conditions);
+
+	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 };
