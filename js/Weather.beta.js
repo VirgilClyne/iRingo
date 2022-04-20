@@ -560,7 +560,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		let isRain = minutes[0].precipIntensity > 0;
 		let summary = {
 			startTime: minutes[0].startTime,
-			token: isRain ? weatherType : "clear",
+			condition: isRain ? weatherType : "clear",
 		};
 
 		for (let i = 0; i < minutes.length; i++) {
@@ -593,7 +593,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
-						token: "clear",
+						condition: "clear",
 					};
 				}
 			} else {
@@ -609,7 +609,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
-						token: weatherType,
+						condition: weatherType,
 					};
 				}
 			}
