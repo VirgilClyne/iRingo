@@ -46,6 +46,7 @@ var { body } = $response;
 		}
 		// NextHour
 		if (url.params?.dataSets?.includes("forecastNextHour")) {
+			$.log(`🚧 ${$.name}, countryCode = ${Params.countryCode}, `, `${Params.countryCode === "CN" ? "需要替换下一小时降水强度" : "无需替换，跳过"}`, "");
 			if (Params.countryCode === "CN") {
 				$.log(`🚧 ${$.name}, 获取分钟级降水信息`, "");
 				const minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
