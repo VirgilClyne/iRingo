@@ -46,10 +46,12 @@ var { body } = $response;
 		}
 		// NextHour
 		if (url.params?.dataSets?.includes("forecastNextHour")) {
-			$.log(`🚧 ${$.name}, 获取分钟级降水信息`, "");
-			const minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+			if (Params.countryCode === "CN") {
+				$.log(`🚧 ${$.name}, 获取分钟级降水信息`, "");
+				const minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
 
-			data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+				data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+			}
 		}
 		body = JSON.stringify(data);
 	}
