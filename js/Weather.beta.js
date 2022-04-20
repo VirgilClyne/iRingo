@@ -269,6 +269,13 @@ async function WAQI(type = "", input = {}) {
 	};
 };
 
+/**
+ * get Grid Weather Minutely
+ * @author WordlessEcho
+ * @param {Number} lat - latitude
+ * @param {Number} lng - longitude
+ * @return {Promise<*>}
+ */
 function getGridWeatherMinutely(lat, lng) {
 	const request = {
 		"url": `https://www.weatherol.cn/api/minute/getPrecipitation?type=forecast&ll=${lng},${lat}`
@@ -294,7 +301,7 @@ function getGridWeatherMinutely(lat, lng) {
 			}
 		});
 	});
-}
+};
 
 // 
 /**
@@ -526,7 +533,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, "");
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
-}
+};
 
 /***************** Fuctions *****************/
 // Function 1
