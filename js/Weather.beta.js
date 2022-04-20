@@ -51,7 +51,7 @@ var { body } = $response;
 				const minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
 
 				data = await outputNextHour(Params.ver, minutelyData, data, Settings);
-			}
+			} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
 		}
 		body = JSON.stringify(data);
 	}
