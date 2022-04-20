@@ -648,6 +648,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					condition.parameters = {};
 					
 					conditions.push(condition);
+					$.log(`🚧 ${$.name}, condition = ${condition}`, '');
+					$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
 					condition = {};
 					break;
 				case "snow":
@@ -666,11 +668,14 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					condition.parameters = {};
 
 					conditions.push(condition);
+					$.log(`🚧 ${$.name}, condition = ${condition}`, '');
+					$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
 					condition = {};
 					break;
 			}
 		});
 
+		$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
 		return conditions;
 	};
 	weather.forecastNextHour.condition.concat(
