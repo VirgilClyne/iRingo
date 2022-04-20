@@ -41,7 +41,7 @@ var { body } = $response;
 						var AQI = await WAQI("CityFeed", { token: Token, lat: Params.lat, lng: Params.lng });
 					}
 				};
-				data = await outputData(Params.ver, Station, AQI, data, Settings);
+				data = await outputAQI(Params.ver, Station, AQI, data, Settings);
 			} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
 		}
 		// NextHour
@@ -296,11 +296,19 @@ function getGridWeatherMinutely(lat, lng) {
 	});
 }
 
-// Output Data
-async function outputData(api, now, obs, data, Settings) {
-	// Input Data
-	let weather = data;
-	$.log(`⚠️ ${$.name}, ${outputData.name}检测`, `AQ data ${api}`, '');
+// 
+/**
+ * Output Air Quality Data
+ * @author VirgilClyne
+ * @param {String} api - API Version
+ * @param {Object} now - minutelyData
+ * @param {Object} obs - weather
+ * @param {Object} weather - weather
+ * @param {Object} Settings - Settings
+ * @return {Promise<*>}
+ */
+async function outputAQI(api, now, obs, weather, Settings) {
+	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQ data ${api}`, '');
 	const AQIname = (api == "v1") ? "air_quality"
 		: (api == "v2") ? "airQuality"
 			: "airQuality";
@@ -363,10 +371,19 @@ async function outputData(api, now, obs, data, Settings) {
 		weather.airQuality.metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', api);
 		weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 	}
-	$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
+	$.log(`🎉 ${$.name}, ${outputAQI.name}完成`, '');
 	return weather
 };
 
+/**
+ * output forecast NextHour Data
+ * @author WordlessEcho
+ * @param {String} api - API Version
+ * @param {Object} minutelyData - minutelyData
+ * @param {Object} weather - weather
+ * @param {Object} Settings - Settings
+ * @return {Promise<*>}
+ */
 async function outputNextHour(api, minutelyData, weather, Settings) {
 	const minutely = minutelyData?.result?.minutely;
 
