@@ -675,7 +675,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			}
 		});
 
-		$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
+		$.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
 	};
 	weather.forecastNextHour.condition.concat(
