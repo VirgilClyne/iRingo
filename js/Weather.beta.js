@@ -648,8 +648,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					condition.parameters = {};
 					
 					conditions.push(condition);
-					$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
-					$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 					condition = {};
 					break;
 				case "snow":
@@ -668,19 +666,17 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					condition.parameters = {};
 
 					conditions.push(condition);
-					$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
-					$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 					condition = {};
 					break;
 			}
 		});
 
-		$.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
+		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
 	};
-	weather.forecastNextHour.condition.concat(
-		getConditions(minutelyData, weather.forecastNextHour.summary)
-	);
+
+	const conditions = getConditions(minutelyData, weather.forecastNextHour.summary);
+	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
 
 	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
