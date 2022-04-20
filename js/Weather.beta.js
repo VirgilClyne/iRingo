@@ -619,7 +619,10 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	setSummary(weather.forecastNextHour.minutes);
 
 	const conditions = {
-		"startTime": startTimeIos,
+		// TODO: rewrite condition setter
+		"startTime":
+			(weather.forecastNextHour.summary.find(value => value.token !== "clear")?.startTime ??
+			startTimeIos),
 		// TODO: type of weather
 		"token": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain.constant",
 		"longTemplate": minutelyData?.result?.forecast_keypoint ?? minutely?.description,
