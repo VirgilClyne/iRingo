@@ -553,12 +553,13 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	});
 
 	// TODO: return array of data instead of setting it
-	const setSummary = minutes => {
-		$.log(`🚧 ${$.name}, 开始设置summary`, '');
+	const getSummary = minutes => {
+		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
 
 		const DISPLAYABLE_MINUTES = 60;
 		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
+		const summaries = [];
 		// little trick for origin data
 		let lastIndex = 0;
 		let isRain = minutes[0].precipIntensity > 0;
@@ -571,7 +572,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
 			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRain) {
-				weather.forecastNextHour.summary.push(summary);
+				summaries.push(summary);
 				break;
 			}
 
@@ -588,11 +589,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					// it looks like Apple doesn't care precipIntensity
 					summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 
-					$.log(
-						`🚧 ${$.name}, `,
-						`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
-					);
-					weather.forecastNextHour.summary.push(summary);
+					summaries.push(summary);
 
 					lastIndex = i;
 					summary = {
@@ -604,11 +601,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
 					summary.endTime = startTime;
 
-					$.log(
-						`🚧 ${$.name}, `,
-						`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
-					);
-					weather.forecastNextHour.summary.push(summary);
+					summaries.push(summary);
 
 					lastIndex = i;
 					summary = {
@@ -618,13 +611,17 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				}
 			}
 		}
+
+		// $.log(`🚧 ${$.name}, result: summaries = ${JSON.stringify(summaries)}`, '');
+		return summaries;
 	};
 
-	setSummary(weather.forecastNextHour.minutes);
+	const summaries = getSummary(weather.forecastNextHour.minutes);
+	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
 	// TODO
 	const getConditions = (minutelyData, summary) => {
-		$.log(`🚧 ${$.name}, 开始设置summary`, '');
+		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
 		const conditions = [];
 		let condition = {};
 
