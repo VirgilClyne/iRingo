@@ -447,8 +447,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 	const summaries = {
 		"startTime": startTimeIos,
-		// TODO: type of weather
-		"condition": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain",
 	};
 
 	const radarToApplePrecipitation = value => {
@@ -502,12 +500,15 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		}
 	};
 
-	if (Math.max(...minutely.probability) > 0) {
-		// Weather could only display one hour data
-		// drop useless data to avoid display empty graph
-		const DISPLAYABLE_MINUTES = 60;
-		const droppedIntensity = minutely.precipitation_2h.slice(0, DISPLAYABLE_MINUTES);
+	// Weather could only display one hour data
+	// drop useless data to avoid display empty graph
+	const DISPLAYABLE_MINUTES = 60;
+	const droppedIntensity = minutely.precipitation_2h.slice(0, DISPLAYABLE_MINUTES);
 
+	// TODO: type of weather
+	summaries.condition = droppedIntensity.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain";
+
+	if (Math.max(...minutely.probability) > 0) {
 		// convert to percentage
 		summaries.precipChance = parseInt(Math.max(...minutely.probability) * 100);
 		// TODO: find the limit of precipIntensity
