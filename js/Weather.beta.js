@@ -504,13 +504,15 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	// drop useless data to avoid display empty graph
 	const DISPLAYABLE_MINUTES = 60;
 	const droppedIntensity = minutely.precipitation_2h.slice(0, DISPLAYABLE_MINUTES);
+	const DISPLAYABLE_CHANCES = 2;
+	const droppedChance = minutely.probability.slice(0, DISPLAYABLE_CHANCES);
 
 	// TODO: type of weather
 	summaries.condition = droppedIntensity.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain";
 
 	if (Math.max(...minutely.probability) > 0) {
 		// convert to percentage
-		summaries.precipChance = parseInt(Math.max(...minutely.probability) * 100);
+		summaries.precipChance = parseInt(Math.max(...droppedChance) * 100);
 		// TODO: find the limit of precipIntensity
 		summaries.precipIntensity = Math.max(...droppedIntensity) * 0.1;
 	}
