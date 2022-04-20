@@ -566,7 +566,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		for (let i = 0; i < minutes.length; i++) {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (i > DISPLAYABLE_MINUTES && lastIndex === 0) {
+			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRain) {
+				weather.forecastNextHour.summary.push(summary);
 				break;
 			}
 
