@@ -16,13 +16,13 @@ var { body } = $response;
 	const { Settings } = await setENV("iRingo", url, DataBase);
 	if (Settings.Switch) {
 		url = URL.parse(url);
+		const Params = await getParams(url.path);
 		let data = JSON.parse(body);
 		// AQI
 		if (url.params?.include?.includes("air_quality") || url.params?.dataSets?.includes("airQuality")) {
 			const Status = await getStatus(data);
 			if (Status == true) {
 				$.log(`🎉 ${$.name}, 需要替换AQI`, "");
-				const Params = await getParams(url.path);
 				if (Settings.Mode == "WAQI Public") {
 					$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
 					var { Station, idx } = await WAQI("Nearest", { api: Params.ver, lat: Params.lat, lng: Params.lng });
@@ -46,7 +46,6 @@ var { body } = $response;
 		}
 		// NextHour
 		if (url.params?.dataSets?.includes("forecastNextHour")) {
-			const Params = await getParams(url.path);
 			$.log(`🚧 ${$.name}, 获取分钟级降水信息`, "");
 			const minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
 
