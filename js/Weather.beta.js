@@ -573,26 +573,26 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					i + 1 === minutes.length
 				) {
-						const range = minutes.slice(lastIndex, i + 1);
+					const range = minutes.slice(lastIndex, i + 1);
 
-						summary.endTime = startTime;
-						// convert to percentage
-						summary.precipChance =
-							parseInt(Math.max(...range.map(value => value.precipChance)) * 100);
-						// it looks like Apple doesn't care precipIntensity
-						summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
+					summary.endTime = startTime;
+					// convert to percentage
+					summary.precipChance =
+						parseInt(Math.max(...range.map(value => value.precipChance)) * 100);
+					// it looks like Apple doesn't care precipIntensity
+					summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 
-						$.log(
-							`🚧 ${$.name}, `,
-							`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
-						);
-						weather.forecastNextHour.summary.push(summary);
+					$.log(
+						`🚧 ${$.name}, `,
+						`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
+					);
+					weather.forecastNextHour.summary.push(summary);
 
-						lastIndex = i;
-						summary = {
-							startTime: startTime,
-							token: "clear",
-						};
+					lastIndex = i;
+					summary = {
+						startTime: startTime,
+						token: "clear",
+					};
 				}
 			} else {
 				if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
