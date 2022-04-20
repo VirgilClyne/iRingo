@@ -593,22 +593,22 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							startTime: startTime,
 							token: "clear",
 						};
-				} else {
-					if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
-						summary.endTime = startTime;
+				}
+			} else {
+				if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+					summary.endTime = startTime;
 
-						$.log(
-							`🚧 ${$.name}, `,
-							`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
-						);
-						weather.forecastNextHour.summary.push(summary);
+					$.log(
+						`🚧 ${$.name}, `,
+						`summary${weather.forecastNextHour.summary.length} = ${JSON.stringify(summary)}`, ''
+					);
+					weather.forecastNextHour.summary.push(summary);
 
-						lastIndex = i;
-						summary = {
-							startTime: startTime,
-							token: weatherType,
-						};
-					}
+					lastIndex = i;
+					summary = {
+						startTime: startTime,
+						token: weatherType,
+					};
 				}
 			}
 		}
