@@ -648,8 +648,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					condition.parameters = {};
 					
 					conditions.push(condition);
-					$.log(`🚧 ${$.name}, condition = ${condition}`, '');
-					$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
+					$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
+					$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 					condition = {};
 					break;
 				case "snow":
@@ -668,8 +668,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					condition.parameters = {};
 
 					conditions.push(condition);
-					$.log(`🚧 ${$.name}, condition = ${condition}`, '');
-					$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
+					$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
+					$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 					condition = {};
 					break;
 			}
