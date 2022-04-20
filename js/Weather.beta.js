@@ -512,8 +512,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	if (Math.max(...minutely.probability) > 0) {
 		// convert to percentage
 		summaries.precipChance = parseInt(Math.max(...droppedChance) * 100);
-		// TODO: find the limit of precipIntensity
-		summaries.precipIntensity = Math.max(...droppedIntensity) * 0.1;
+		// it looks like Apple doesn't care precipIntensity
+		summaries.precipIntensity = Math.max(...droppedIntensity);
 	}
 
 	weather.forecastNextHour.summary.push(summaries);
@@ -530,9 +530,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			// `index / 30` => use one probability for 30 minutes
 			// `* 100` => convert to percentages
 			"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
-			// it looks like Apple doesn't care this data
-			// TODO: find the limit of precipIntensity
-			"precipIntensity": value * 0.1,
+			// it looks like Apple doesn't care precipIntensity
+			"precipIntensity": value,
 			"precipIntensityPerceived": radarToApplePrecipitation(value),
 		});
 	});
