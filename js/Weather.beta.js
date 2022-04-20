@@ -620,12 +620,13 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	setSummary(weather.forecastNextHour.minutes);
 
 	// TODO
-	const getConditions = minutelyData => {
-		const minutely = minutelyData?.result?.minutely;
+	const getConditions = (minutelyData, summary) => {
+		$.log(`🚧 ${$.name}, 开始设置summary`, '');
 		const conditions = [];
 		let condition = {};
 
-		weather.forecastNextHour.summary.forEach(value => {
+		summary.forEach(value => {
+			$.log(`🚧 ${$.name}, summary.condition = ${value.condition}`, '');
 			switch (value.condition) {
 				case "clear":
 					break;
@@ -636,8 +637,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					}
 					// TODO: heavy rain
 					condition.token = `${getWeatherType(minutelyData?.result?.hourly)}.constant`;
-					condition.longTemplate = minutelyData?.result?.forecast_keypoint ?? minutely?.description;
-					condition.shortTemplate = minutely?.description;
+					condition.longTemplate =
+						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
+					condition.shortTemplate = minutelyData?.result?.minutely?.description;
 					// `parameters` is for formatted string
 					// we don't need this since API offer template for us
 					condition.parameters = {};
@@ -653,8 +655,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					}
 					// TODO: we know less about the token
 					condition.token = `${getWeatherType(minutelyData?.result?.hourly)}.constant`;
-					condition.longTemplate = minutelyData?.result?.forecast_keypoint ?? minutely?.description;
-					condition.shortTemplate = minutely?.description;
+					condition.longTemplate =
+						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
+					condition.shortTemplate = minutelyData?.result?.minutely?.description;
 					// `parameters` is for formatted string
 					// we don't need this since API offer template for us
 					condition.parameters = {};
@@ -667,7 +670,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 		return conditions;
 	};
-	weather.forecastNextHour.condition.concat(getConditions(minutelyData));
+	weather.forecastNextHour.condition.concat(
+		getConditions(minutelyData, weather.forecastNextHour.summary)
+	);
 
 	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
