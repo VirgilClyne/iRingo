@@ -550,6 +550,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	});
 
 	const setSummary = minutes => {
+		$.log(`🚧 ${$.name}, 开始设置summary`, '');
+
+		const DISPLAYABLE_MINUTES = 60;
 		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		// little trick for origin data
@@ -563,7 +566,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		for (let i = 0; i < minutes.length; i++) {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (i > minutes.length && lastIndex === 0) {
+			if (i > DISPLAYABLE_MINUTES && lastIndex === 0) {
 				break;
 			}
 
