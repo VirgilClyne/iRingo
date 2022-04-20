@@ -629,7 +629,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		let condition = {};
 
 		summary.forEach(value => {
-			$.log(`🚧 ${$.name}, summary.condition = ${value.condition}`, '');
+			// $.log(`🚧 ${$.name}, summary.condition = ${value.condition}`, '');
 			switch (value.condition) {
 				case "clear":
 					break;
