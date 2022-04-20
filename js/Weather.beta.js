@@ -413,9 +413,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		"startTime": startTimeIos,
 		// TODO: type of weather
 		"token": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain.constant",
-		"longTemplate": result?.forecast_keypoint ?? result?.description,
+		"longTemplate": minutelyData?.result?.forecast_keypoint ?? minutely?.description,
 		// use forecast_keypoint from ColorfulClouds?
-		"shortTemplate": result?.description,
+		"shortTemplate": minutely?.description,
 		// TODO
 		"parameters": {},
 	};
