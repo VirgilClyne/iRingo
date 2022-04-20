@@ -567,14 +567,15 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				break;
 			}
 
+			const { startTime, precipIntensity } = minutes[i];
 			if (isRain) {
 				if (
-					radarToPrecipitationLevel(minute) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					i + 1 === minutes.length
 				) {
 						const range = minutes.slice(lastIndex, i + 1);
 
-						summary.endTime = minutes[i].startTime;
+						summary.endTime = startTime;
 						// convert to percentage
 						summary.precipChance =
 							parseInt(Math.max(...range.map(value => value.precipChance)) * 100);
@@ -589,12 +590,12 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 						lastIndex = i;
 						summary = {
-							startTime: minutes[i].startTime,
+							startTime: startTime,
 							token: "clear",
 						};
 				} else {
-					if (radarToPrecipitationLevel(minute) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
-						summary.endTime = minutes[i].startTime;
+					if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+						summary.endTime = startTime;
 
 						$.log(
 							`🚧 ${$.name}, `,
@@ -604,7 +605,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 						lastIndex = i;
 						summary = {
-							startTime: minutes[i].startTime,
+							startTime: startTime,
 							token: weatherType,
 						};
 					}
