@@ -1,5 +1,5 @@
-#!name=  iRingo for Apple Weather (BETA)
-#!desc= 1.解锁全部类型天气数据可用性 2.切换空气质量数据源为waqi.info，并更改标准为AQI(US) 3.添加下一小时降水功能
+name:  iRingo for Apple Weather (BETA)
+desc: 1.解锁全部类型天气数据可用性 2.切换空气质量数据源为waqi.info，并更改标准为AQI(US) 3.添加下一小时降水功能
 
 http:
   mitm:
