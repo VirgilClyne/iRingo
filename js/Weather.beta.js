@@ -417,8 +417,8 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	// this API doesn't support language switch
 	// replace `zh_CN` to `zh-CN`
 	weather.forecastNextHour.metadata.language = minutelyData?.lang.replace('_', '-');
-	weather.forecastNextHour.metadata.longitude = minutelyData?.location[0];
-	weather.forecastNextHour.metadata.latitude = minutelyData?.location[1];
+	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
+	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
 	weather.forecastNextHour.metadata.providerName = "气象在线";
 	weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
 	// actually we use radar data directly
