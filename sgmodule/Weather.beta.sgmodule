@@ -6,4 +6,4 @@ Apple Weather Availability = type=http-response, pattern=^https?:\/\/weather-dat
 Apple Weather = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
 
 [MITM]
-hostname = %APPEND% weather-data.apple.com, api.waqi.info, api.caiyunapp.com
+hostname = %APPEND% weather-data.apple.com, api.waqi.info, www.weatherol.cn, api.caiyunapp.com

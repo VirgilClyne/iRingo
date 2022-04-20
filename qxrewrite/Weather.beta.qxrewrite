@@ -6,4 +6,4 @@
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
 
-hostname = weather-data.apple.com, api.waqi.info, api.caiyunapp.com
+hostname = weather-data.apple.com, api.waqi.info, www.weatherol.cn, api.caiyunapp.com
