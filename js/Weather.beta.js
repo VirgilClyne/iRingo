@@ -668,6 +668,20 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			}
 		});
 
+		if (conditions.length === 0) {
+			// means that clear next hour
+			// user may never see those data
+			conditions.push({
+				"startTime": summary[0].startTime,
+				"token": "clear",
+				"longTemplate":
+					minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description,
+				"shortTemplate":
+					minutelyData?.result?.minutely?.description,
+				"parameters": {},
+			});
+		}
+
 		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
 	};
