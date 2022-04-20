@@ -579,9 +579,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					const range = minutes.slice(lastIndex, i + 1);
 
 					summary.endTime = startTime;
-					// convert to percentage
-					summary.precipChance =
-						parseInt(Math.max(...range.map(value => value.precipChance)) * 100);
+					summary.precipChance = Math.max(...range.map(value => value.precipChance));
 					// it looks like Apple doesn't care precipIntensity
 					summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 
