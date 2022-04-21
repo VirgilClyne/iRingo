@@ -639,7 +639,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.endTime = value.endTime;
 					}
 					// TODO: heavy rain
-					condition.token = `${getWeatherType(minutelyData?.result?.hourly)}.constant`;
+					condition.token = `${value.condition}.constant`;
 					condition.longTemplate =
 						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
 					condition.shortTemplate = minutelyData?.result?.minutely?.description;
@@ -657,7 +657,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.endTime = value.endTime;
 					}
 					// TODO: we know less about the token
-					condition.token = `${getWeatherType(minutelyData?.result?.hourly)}.constant`;
+					condition.token = `${value.condition}.constant`;
 					condition.longTemplate =
 						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
 					condition.shortTemplate = minutelyData?.result?.minutely?.description;
