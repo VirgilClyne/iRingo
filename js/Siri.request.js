@@ -1,17 +1,17 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.2");
+const $ = new Env("Apple Siri v2.1.0");
 const URL = new URLSearch();
 const DataBase = {
-	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
+	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings } = await setENV("iRingo", url, DataBase);
+	const Settings = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		const locale = url.params.locale;
@@ -54,12 +54,23 @@ var { url } = $request;
 /**
  * Set Environment Variables
  * @author VirgilClyne
- * @param {String} t - Persistent Store Key
- * @param {String} i - Request URL
- * @param {Object} e - Default DataBase
+ * @param {String} name - Persistent Store Key
+ * @param {String} platform - Platform Name
+ * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(t,i,e){const s=/weather-(.*)\.apple\.com/i.test(i)?"Weather":/smoot\.apple\.(com|cn)/i.test(i)?"Siri":(/\.apple\.com/i.test(i),"Apple");let n=$.getjson(t,e),a=n?.[s]||n?.Settings?.[s]||n?.Apple?.[s]||e[s];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(a,t)}return a.Switch=JSON.parse(a.Switch),"string"==typeof a?.Domains&&(a.Domains=a.Domains.split(",")),"string"==typeof a?.Functions&&(a.Functions=a.Functions.split(",")),a?.Safari_Smart_History&&(a.Safari_Smart_History=JSON.parse(a.Safari_Smart_History)),{Platform:s,Settings:a}}
+ async function setENV(name, platform, database) {
+	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
+	let Settings = await getENV(name, platform, database);
+	/***************** Prase *****************/
+	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
+	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
+	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
+	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
+	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+	return Settings
+	async function getENV(t, e, n) { let i = $.getjson(t, n), s = i?.[e] || i?.Settings?.[e] || n[e]; if ("undefined" != typeof $argument) { let t = Object.fromEntries($argument.split("&").map((t => t.split("=")))); Object.assign(s, t) } return s }
+};
 
 /***************** Env *****************/
 // prettier-ignore

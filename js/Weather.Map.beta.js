@@ -1,101 +1,33 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.0");
+
+const $ = new Env("Apple Weather Map v1.0.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
-var { url } = $request;
-var { body } = $response;
+var { url, headers } = $request;
 
 /***************** Processing *****************/
 !(async () => {
-	const Settings = await setENV("iRingo", "Siri", DataBase);
+	const Settings = await setENV("iRingo", "Weather", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
-		let data = JSON.parse(body);
-		if (url?.path == "bag") {
-			data.enabled = true;
-			data.feedback_enabled = true;
-			//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
-			//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
-			data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
-			data.min_query_len = 3;
-			$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
-			let Functions = data?.overrides;
-			if (Functions) {
-				Settings.Functions.forEach(app => {
-					let APP = Functions?.[`${app}`];
-					if (APP) {
-						APP.enabled = true;
-						APP.feedback_enabled = true;
-						//APP.min_query_len = 2;
-						//APP.search_render_timeout = 200;
-						//APP.first_use_description = "";
-						//APP.first_use_learn_more = "";
-					} else APP = { enabled: true, feedback_enabled: true };
-				});
-				let FlightUtilities = Functions?.flightutilities;
-				if (FlightUtilities) {
-					//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
-					//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
-				};
-				let Lookup = Functions?.lookup;
-				if (Lookup) {
-					Lookup.min_query_len = 2;
-				};
-				let Mail = Functions?.mail;
-				let Messages = Functions?.messages;
-				let News = Functions?.news;
-				let Safari = Functions?.safari;
-				if (Safari) {
-					Safari.experiments_custom_feedback_enabled = true;
-				};
-				let Spotlight = Functions?.spotlight;
-				if (Spotlight) {
-					Spotlight.use_twolayer_ranking = true;
-					Spotlight.experiments_custom_feedback_enabled = true;
-					Spotlight.min_query_len = 2;
-					Spotlight.collect_scores = true;
-					Spotlight.collect_anonymous_metadata = true;
-				};
-				let VisualIntelligence = Functions?.visualintelligence;
-				if (VisualIntelligence) {
-					//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
-					//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
-				};
-			}
-			// Safari Smart History
-			data.safari_smart_history_enabled = (Settings.Safari_Smart_History) ? true : false;
-			data.smart_history_feature_feedback_enabled = (Settings.Safari_Smart_History) ? true : false;
-			/*
-			if (data?.mescal_enabled) {
-				data.mescal_enabled = true;
-				data.mescal_version = 200;
-				data.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
-				data.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
-			}
-			let smart_search_v2 = data?.smart_search_v2_parameters;
-			if (smart_search_v2) {
-				smart_search_v2.smart_history_score_v2_enabled = true;
-				smart_search_v2.smart_history_score_v2_enable_count = true;
-			};
-			data.session_experiment_metadata_enabled = true;
-			//data.sample_features = true;
-			//data.use_ledbelly = true;
-			*/
-		} else if (url?.path == "search") {
-		} else if (url?.path == "card") {
+		if (Settings.Map.AQI) {
+			url = URL.parse(url);
+			if (url.path?.includes("airQuality") || url?.params?.country == "CN") {
+				let request = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
+				url = request.url;
+				headers = request.headers;
+			} else url = URL.stringify(url);
 		}
-		body = JSON.stringify(data);
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ body }))
+	.finally(() => $.done({ url, headers }))
 
-/***************** Function *****************/
+/***************** Async Function *****************/
 /**
  * Set Environment Variables
  * @author VirgilClyne
@@ -104,17 +36,78 @@ var { body } = $response;
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
- async function setENV(name, platform, database) {
+async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let Settings = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
-	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
-	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
+	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
+	Settings.AQI.Switch = JSON.parse(Settings.AQI.Switch) // BoxJs字符串转Boolean
+	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return Settings
-	async function getENV(t, e, n) { let i = $.getjson(t, n), s = i?.[e] || i?.Settings?.[e] || n[e]; if ("undefined" != typeof $argument) { let t = Object.fromEntries($argument.split("&").map((t => t.split("=")))); Object.assign(s, t) } return s }
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(s,t)}return s}
+};
+
+/**
+ * Get WAQI Air Quality Map Tiles
+ * https://tiles.waqi.info/tiles/{aqi}/{z}/{x}/{y}.png
+ * https://tiles.aqicn.org/tiles/{aqi}/{z}/{x}/{y}.png
+ * @author VirgilClyne
+ * @param {String} name - Persistent Store Key
+ * @param {String} url - Request URL
+ * @param {Object} database - Default DataBase
+ * @return {Promise<*>}
+ */
+async function WAQI(type = "", input = {}) {
+	$.log(`⚠ ${$.name}, WAQI`, `input: ${JSON.stringify(input)}`, "");
+	// 构造请求
+	let request = await GetRequest(type, input);
+	$.log(`🚧 ${$.name}, WAQI`, `request: ${JSON.stringify(request)}`, "");
+	return request
+	// 发送请求
+	//let output = await GetData(type, request);
+	// TODO: add debug switch (geo)
+	//$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
+	//return output
+	/***************** Fuctions *****************/
+	async function GetRequest(type = "", input = { aqi: "usepa-aqi", lat: 0, lng: 0, alt: 0 }) {
+		$.log(`⚠ ${$.name}, Get WAQI Request, type: ${type}`, "");
+		let request = {
+			"url": "https://tiles.waqi.info",
+			"headers": {
+				"Host": "tiles.waqi.info",
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Origin": "https://waqi.info",
+				"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
+				"Referer": "https://waqi.info/"
+			}
+		};
+		if (type == "tiles") {
+			$.log('tiles');
+			request.url = `${request.url}/tiles/${input.aqi}/${input.alt}/${input.lat}/${input.lng}.png`;
+		}
+		//$.log(`🎉 ${$.name}, Get WAQI Request`, `request: ${JSON.stringify(request)}`, "");
+		return request
+	};
+
+	function GetData(type, request) {
+		$.log(`⚠ ${$.name}, Get WAQI Data, type: ${type}`, "");
+		return new Promise(resolve => {
+			$.get(request, (error, response, data) => {
+				try {
+					if (error) throw new Error(error)
+					else if (data) resolve(response)
+					else throw new Error(response);
+				} catch (e) {
+					$.log(`❗️ ${$.name}, getTiles`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+				} finally {
+					$.log(`🎉 ${$.name}, getTiles`, `Finish`, '')
+					resolve()
+				}
+			});
+		})
+	};
 };
 
 /***************** Env *****************/
