@@ -646,52 +646,92 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	const summaries = getSummary(weather.forecastNextHour.minutes);
 	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
+	// THIS FUNCTION WILL BE REWRITE SOON!
 	const getConditions = (minutelyData, summary) => {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
-		// TODO: CONDITIONS_TOKEN_TYPES
+		// TODO
+		const POSSIBILITY = { POSSIBLE: "possible" };
+		const CONDITION_LEVEL = { HEAVY: "heavy" };
+		const WEATHER_STATUS = {
+			CLEAR: "clear",
+			// precipIntensityPerceived < 1
+			DRIZZLE: "drizzle",
+			RAIN: "rain",
+			// precipIntensityPerceived > 2
+			HEAVY: "heavy-rain-to-rain",
+			// TODO: check if it is `snow`
+			SNOW: "snow",
+		};
+		const TIME_STATUS = {
+			CONSTANT: "constant",
+			START: "start",
+			STOP: "stop"
+		};
+		const forecast_keypoint = minutelyData?.result?.forecast_keypoint;
+		const description = minutelyData?.result?.minutely?.description;
 		const conditions = [];
-		let condition = {};
 
-		summary.forEach(value => {
+		const toToken = (weatherAndPossiblity, timeStatus) => {
+			const tokenLeft = weatherAndPossiblity.join('-');
+			const tokenRight = timeStatus.join('-');
+
+			return `${tokenLeft}.${tokenRight}`;
+		}
+
+		summary.forEach((value, index) => {
 			// $.log(`🚧 ${$.name}, summary.condition = ${value.condition}`, '');
-			switch (value.condition) {
+			const { startTime, endTime, condition, precipChance, precipIntensity } = value;
+			const weatherType = getWeatherType(minutelyData?.result?.hourly);
+
+			switch (condition) {
 				case SUMMARY_CONDITION_TYPES.CLEAR:
 					break;
 				case SUMMARY_CONDITION_TYPES.RAIN:
-					condition.startTime = value.startTime;
-					if (value.endTime) {
-						condition.endTime = value.endTime;
-					}
-					// TODO: heavy rain
-					// TODO: we know less about the token
-					condition.token = `${value.condition}.constant`;
-					condition.longTemplate =
-						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
-					condition.shortTemplate = minutelyData?.result?.minutely?.description;
-					// `parameters` is for formatted string
-					// we don't need this since API offer template for us
-					condition.parameters = {};
-					
-					conditions.push(condition);
-					condition = {};
-					break;
 				case SUMMARY_CONDITION_TYPES.SNOW:
 				default:
-					condition.startTime = value.startTime;
-					if (value.endTime) {
-						condition.endTime = value.endTime;
-					}
-					// TODO: we know less about the token
-					condition.token = `${value.condition}.constant`;
-					condition.longTemplate =
-						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
-					condition.shortTemplate = minutelyData?.result?.minutely?.description;
-					// `parameters` is for formatted string
-					// we don't need this since API offer template for us
-					condition.parameters = {};
+					const lastSummary = summary[index - 1];
+					const weatherAndPossiblity = [];
+					const timeStatus = [];
+					const conditionToAdd = {};
 
-					conditions.push(condition);
-					condition = {};
+					conditionToAdd.startTime = startTime;
+					if (endTime) {
+						conditionToAdd.endTime = endTime;
+
+						// TODO: rain in an hour?
+						if (lastSummary) {
+							timeStatus.push(TIME_STATUS.START);
+						}
+
+						timeStatus.push(TIME_STATUS.STOP);
+					} else {
+						timeStatus.push(TIME_STATUS.CONSTANT);
+					}
+
+					// TODO: heavy rain
+					// TODO: we know less about the token
+					weatherAndPossiblity.push(condition);
+					conditionToAdd.token = toToken(weatherAndPossiblity, timeStatus);
+					conditionToAdd.longTemplate = forecast_keypoint ?? description;
+					conditionToAdd.shortTemplate = description;
+					// TODO: fill parameters
+					conditionToAdd.parameters = {};
+
+					if (index !== 0 && lastSummary.condition === SUMMARY_CONDITION_TYPES.CLEAR) {
+						const lastCondition = {};
+
+						lastCondition.startTime = lastSummary.startTime;
+						lastCondition.endTime = lastSummary.endTime;
+
+						// TODO: drizzle has different token
+						lastCondition.token = toToken(weatherAndPossiblity, [TIME_STATUS.START]);
+						conditionToAdd.longTemplate = forecast_keypoint ?? description;
+						conditionToAdd.shortTemplate = description;
+						// TODO: fill parameters
+						conditionToAdd.parameters = {};
+					}
+					
+					conditions.push(conditionToAdd);
 					break;
 			}
 		});
