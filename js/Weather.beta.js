@@ -140,6 +140,7 @@ async function WAQI(type = "", input = {}) {
 	let request = await GetRequest(type, input);
 	// 发送请求
 	let output = await GetData(type, request);
+	// TODO: add debug switch (geo)
 	$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
 	return output
 	/***************** Fuctions *****************/
@@ -233,7 +234,8 @@ async function WAQI(type = "", input = {}) {
 								var name = station?.name ?? station?.u ?? station?.nna ?? station?.nlo ?? null;
 								var aqi = station?.aqi ?? station?.v ?? null;
 								var distance = station?.distance ?? station?.d ?? null;
-								//var country = station?.cca2 ?? station?.country ?? null;
+								// var country = station?.cca2 ?? station?.country ?? null;
+								// TODO: add debug switch (distance)
 								$.log(`🎉 ${$.name}, GetData:${type}完成`, `idx: ${idx}`, `观测站: ${name}`, `AQI: ${aqi}`, `距离: ${distance}`, '')
 								resolve({ station, idx })
 							}
@@ -321,7 +323,7 @@ function getGridWeatherMinutely(lat, lng) {
  * @return {Promise<*>}
  */
 async function outputAQI(api, now, obs, weather, Settings) {
-	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQ data ${api}`, '');
+	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQI data ${api}`, '');
 	const AQIname = (api == "v1") ? "air_quality"
 		: (api == "v2") ? "airQuality"
 			: "airQuality";
