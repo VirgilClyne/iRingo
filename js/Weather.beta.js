@@ -565,6 +565,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		let isRain = minutes[0].precipIntensity > 0;
 		let summary = {
 			startTime: minutes[0].startTime,
+			// I guess data from weatherType is not always reliable
 			condition: isRain ? weatherType : "clear",
 		};
 
@@ -573,7 +574,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			// drop useless data to avoid display empty graph
 			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRain) {
 				summaries.push(summary);
-				break;
+				return summaries;
 			}
 
 			const { startTime, precipIntensity } = minutes[i];
@@ -591,6 +592,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
+					isRain = !isRain;
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
@@ -603,6 +605,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
+					isRain = !isRain;
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
