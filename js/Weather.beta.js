@@ -438,20 +438,18 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		// enough for us, add more in future?
 		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
 
-		let type;
-		
-		hourly?.skycon?.forEach(hourlySkycon => {
-			value = hourlySkycon.value;
-
-			if (value.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)) {
-				type = SUMMARY_CONDITION_TYPES.RAIN;
-			} else if (value.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)) {
-				type = SUMMARY_CONDITION_TYPES.SNOW;
-			}
-		});
-
-		// although getWeatherType() is designed for find out rain or snow
-		return (type ? type : SUMMARY_CONDITION_TYPES.CLEAR);
+		if (hourly?.skycon?.find(
+			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)
+		)) {
+			return SUMMARY_CONDITION_TYPES.RAIN;
+		} else if (hourly?.skycon?.find(
+			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
+		)) {
+			return SUMMARY_CONDITION_TYPES.SNOW;
+		} else {
+			// although getWeatherType() is designed for find out rain or snow
+			return SUMMARY_CONDITION_TYPES.CLEAR;
+		}
 	}
 
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
