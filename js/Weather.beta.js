@@ -753,7 +753,7 @@ function classifyAirQualityLevel(aqiIndex) {
 	else if (aqiIndex >= 301 && aqiIndex <= 500) return 6;
 	else {
 		$.log(`⚠️ ${$.name}, classifyAirQualityLevel, Error`, `aqiIndex: ${aqiIndex}`, '');
-		return 0;
+		return 6;
 	}
 };
 
