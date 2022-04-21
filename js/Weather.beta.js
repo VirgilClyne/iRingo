@@ -430,7 +430,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
 	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
-	// TODO: check if it is `snow`
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 
 	// https://docs.caiyunapp.com/docs/tables/skycon/
@@ -587,7 +586,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		});
 	});
 
-	// TODO: return array of data instead of setting it
 	const getSummary = minutes => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
 		const DISPLAYABLE_MINUTES = 60;
