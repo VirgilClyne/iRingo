@@ -435,18 +435,21 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 	// https://docs.caiyunapp.com/docs/tables/skycon/
 	const getWeatherType = hourly => {
+		// enough for us, add more in future?
+		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
+		
 		hourly?.skycon?.forEach(hourlySkycon => {
 			value = hourlySkycon.value;
 
-			if (value.include("RAIN")) {
+			if (value.include(CAIYUN_SKYCON_KEYWORDS.RAIN)) {
 				return SUMMARY_CONDITION_TYPES.RAIN;
-			} else if (value.includes("SNOW")) {
+			} else if (value.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)) {
 				return SUMMARY_CONDITION_TYPES.SNOW;
 			}
 		});
 
 		// although getWeatherType() is designed for find out rain or snow
-		return "clear";
+		return SUMMARY_CONDITION_TYPES.CLEAR;
 	}
 
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
