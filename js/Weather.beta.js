@@ -599,7 +599,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		let summary = {
 			startTime: minutes[0].startTime,
 			// I guess data from weatherType is not always reliable
-			condition: isRain ? weatherType : "clear",
+			condition: isRain ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
 		};
 
 		for (let i = 0; i < minutes.length; i++) {
@@ -634,7 +634,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
-						condition: "clear",
+						condition: SUMMARY_CONDITION_TYPES.CLEAR,
 					};
 				}
 			} else {
