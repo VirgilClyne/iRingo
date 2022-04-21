@@ -498,11 +498,11 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 # 📺Apple TV
 ## 简介
-  * 保持模块启用,即可在全设备平台解锁TV app全部已知功能，并优先使用简体中文(zh-Hans)。
+  * 保持模块启用,即可在全设备平台解锁TV app全部已知功能，Apple_TV模块优先使用简体中文(zh-Hans)，Apple_TV_EN模块使用英语(EN)。
 
   * 注:
     * 🇨🇳CN区账号无效
-    * 如账号所在地区不提供简体中文(zh-Hans)元数据，将按照账号所在区提供的语言回退
+    * 使用Apple_TV模块时如账号所在地区不提供简体中文(zh-Hans)元数据，将按照账号所在区提供的语言回退
     * 「体育节目」及「儿童」直接调用US地区页面及功能
     * macOS版Apple TV app不支持第三方流媒体平台关联及媒体库调用及播放记录同步，故调用iPad版，关联操作请在iOS/iPadOS/tvOS设备上完成。
     * macOS版Apple TV app不支持「体育节目」相关功能，故调用iPad版。
@@ -545,7 +545,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * Quantumult X:
     * 🆕[Apple_TV.qxrewrite](./qxrewrite/Apple_TV.qxrewrite?raw=true " Enable Apple TV app")
   * Surge (Shadowrocket):
-    * 🆕[Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
+    * 语言为简体中文(zh-Hans):🆕[Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
+    * 语言为英语(EN):🆕[Apple_TV_EN.sgmodule](./sgmodule/Apple_TV_EN.sgmodule?raw=true " Enable Apple TV app")
 
 ---
 
