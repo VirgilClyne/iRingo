@@ -1,0 +1,10 @@
+#!name=  iRingo for Apple Weather
+#!desc= (v3.0.0) 1.解锁全部天气数据类型 2.替换空气质量数据:WAQI 3.添加下一小时降水:气象在线 4.替换空气质量地图数据:WAQI
+
+[Script]
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.js, requires-body=1, tag=Apple Weather Availability
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.js, requires-body=1, tag=Apple Weather
+type=http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.js, requires-body=0, tag=Apple Weather Map
+
+[MITM]
+hostname = weather-data.apple.com, weather-map.apple.com

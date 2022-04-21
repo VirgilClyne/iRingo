@@ -7,4 +7,4 @@ Apple Weather = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com
 Apple Weather Map = type=http-request, pattern=^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*), requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.js
 
 [MITM]
-hostname = %APPEND% weather-data.apple.com, weather-map.apple.com, api.waqi.info, tiles.waqi.info, www.weatherol.cn, api.caiyunapp.com
+hostname = %APPEND% weather-data.apple.com, weather-map.apple.com
