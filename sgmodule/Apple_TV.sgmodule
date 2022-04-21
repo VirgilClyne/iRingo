@@ -1,5 +1,5 @@
 #!name= Enable Apple TV app
-#!desc=解锁TV app全功能：使用🇺🇸US「体育节目」和「儿童」页面，优先简体中文(zh-Hans)
+#!desc=解锁TV app全功能：使用🇺🇸US「体育节目」和「儿童」页面，语言：优先简体中文(zh-Hans)
 
 [Script]
 # Enable All TV app Tabs
