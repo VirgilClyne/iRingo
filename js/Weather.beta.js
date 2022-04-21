@@ -559,13 +559,13 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	// TODO: return array of data instead of setting it
 	const getSummary = minutes => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
-
 		const DISPLAYABLE_MINUTES = 60;
+
 		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		const summaries = [];
-		// little trick for origin data
 		let lastIndex = 0;
+		// little trick for origin data
 		let isRain = minutes[0].precipIntensity > 0;
 		let summary = {
 			startTime: minutes[0].startTime,
@@ -584,12 +584,14 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			const { startTime, precipIntensity } = minutes[i];
 			if (isRain) {
 				if (
+					// end of rain
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					// we always need precipChance and precipIntensity data
 					i + 1 === minutes.length
 				) {
 					const range = minutes.slice(lastIndex, i + 1);
 
-					// `rain.constant`
+					// we reach the data end but cannot find the end of rain
 					if (radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
 						summary.endTime = startTime;
 					}
@@ -646,6 +648,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.endTime = value.endTime;
 					}
 					// TODO: heavy rain
+					// TODO: we know less about the token
 					condition.token = `${value.condition}.constant`;
 					condition.longTemplate =
 						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
