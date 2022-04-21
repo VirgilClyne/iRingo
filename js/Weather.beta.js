@@ -441,7 +441,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		hourly?.skycon?.forEach(hourlySkycon => {
 			value = hourlySkycon.value;
 
-			if (value.include(CAIYUN_SKYCON_KEYWORDS.RAIN)) {
+			if (value.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)) {
 				return SUMMARY_CONDITION_TYPES.RAIN;
 			} else if (value.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)) {
 				return SUMMARY_CONDITION_TYPES.SNOW;
