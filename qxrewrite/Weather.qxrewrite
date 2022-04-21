@@ -7,6 +7,6 @@
 
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.js
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.js
-^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) url script-requesl-headers https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.js
+^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.js
 
 hostname = weather-data.apple.com, weather-map.apple.com

@@ -7,8 +7,8 @@
 	"repo": "https://github.com/VirgilClyne/iRingo",
 	"apps": [
 		{
-			"id": "iRingo.Apple_Weather",
-			"name": "iRingo: Apple Weather",
+			"id": "iRingo.Weather",
+			"name": "iRingo: Weather",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
@@ -80,7 +80,7 @@
 					"val": "",
 					"type": "text",
 					"placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb",
-					"desc": "‘令牌’验证方式的值写一行"
+					"desc": "私有API令牌"
 				},
 				{
 					"id": "@iRingo.Weather.AQI.Scale",
