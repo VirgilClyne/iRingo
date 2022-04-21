@@ -4,7 +4,7 @@
 [Script]
 Apple Weather Availability = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js
 Apple Weather = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
-Apple Weather Map = type=http-response, pattern=^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*), requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.beta.js
+Apple Weather Map = type=http-request, pattern=^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*), requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.beta.js
 
 [MITM]
 hostname = %APPEND% weather-data.apple.com, weather-map.apple.com, api.waqi.info, tiles.waqi.info, www.weatherol.cn, api.caiyunapp.com

@@ -8,7 +8,7 @@ const DataBase = {
 	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
-var { url } = $request;
+var { url, headers } = $request;
 
 /***************** Processing *****************/
 !(async () => {
@@ -16,18 +16,15 @@ var { url } = $request;
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		if (url.path?.includes("airQuality") || url?.params?.country == "CN") {
-			let response = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
-			$response.headers = response.headers;
-			$response.body = response.body;
-			delete url?.params?.colorFormat;
-		}
-		url = URL.stringify(url);
+			let request = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
+			url = request.url;
+			headers = request.headers;
+		} else url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		const { headers, body } = $response
-		$.done({ url, headers, body })
+		$.done({ url, headers })
 	})
 
 
@@ -86,17 +83,20 @@ async function WAQI(type = "", input = {}) {
 	$.log(`⚠ ${$.name}, WAQI`, `input: ${JSON.stringify(input)}`, "");
 	// 构造请求
 	let request = await GetRequest(type, input);
+	$.log(`🚧 ${$.name}, WAQI`, `request: ${JSON.stringify(request)}`, "");
+	return request
 	// 发送请求
-	let output = await GetData(type, request);
+	//let output = await GetData(type, request);
 	// TODO: add debug switch (geo)
 	//$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
-	return output
+	//return output
 	/***************** Fuctions *****************/
 	async function GetRequest(type = "", input = { aqi: "usepa-aqi", lat: 0, lng: 0, alt: 0 }) {
 		$.log(`⚠ ${$.name}, Get WAQI Request, type: ${type}`, "");
 		let request = {
 			"url": "https://tiles.waqi.info",
 			"headers": {
+				"Host": "tiles.waqi.info",
 				"Content-Type": "application/x-www-form-urlencoded",
 				"Origin": "https://waqi.info",
 				"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
