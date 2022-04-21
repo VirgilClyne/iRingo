@@ -451,11 +451,11 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
 	const PRECIPITATION_LEVEL = {
-		"NO_RAIN_OR_SNOW": 0,
-		"LIGHT_RAIN_OR_SNOW": 1,
-		"MODERATE_RAIN_OR_SNOW": 2,
-		"HEAVY_RAIN_OR_SNOW": 3,
-		"STORM_RAIN_OR_SNOW": 4,
+		NO_RAIN_OR_SNOW: 0,
+		LIGHT_RAIN_OR_SNOW: 1,
+		MODERATE_RAIN_OR_SNOW: 2,
+		HEAVY_RAIN_OR_SNOW: 3,
+		STORM_RAIN_OR_SNOW: 4,
 	};
 	const RADAR_PRECIPITATION_RANGE = {
 		noRainOrSnow: { lower: 0, upper: 0.031 },
