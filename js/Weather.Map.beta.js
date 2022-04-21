@@ -9,20 +9,27 @@ const DataBase = {
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
-var { body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings } = await setENV("iRingo", url, DataBase);
-    if (Settings.Switch) {
-    url = URL.parse(url);
-        if (url.path?.includes("airQuality")) {
-            body = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
-        }
+	if (Settings.Switch) {
+		url = URL.parse(url);
+		if (url.path?.includes("airQuality") || url?.params?.country == "CN") {
+			let response = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
+			$response.headers = response.headers;
+			$response.body = response.body;
+			delete url?.params?.colorFormat;
+		}
+		url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ body }))
+	.finally(() => {
+		const { headers, body } = $response
+		$.done({ url, headers, body })
+	})
+
 
 /***************** Async Function *****************/
 /**
@@ -77,14 +84,14 @@ async function setENV(name, url, database) {
  */
 async function WAQI(type = "", input = {}) {
 	$.log(`⚠ ${$.name}, WAQI`, `input: ${JSON.stringify(input)}`, "");
-    // 构造请求
+	// 构造请求
 	let request = await GetRequest(type, input);
 	// 发送请求
 	let output = await GetData(type, request);
 	// TODO: add debug switch (geo)
-    //$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
-    return output
-    /***************** Fuctions *****************/
+	//$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
+	return output
+	/***************** Fuctions *****************/
 	async function GetRequest(type = "", input = { aqi: "usepa-aqi", lat: 0, lng: 0, alt: 0 }) {
 		$.log(`⚠ ${$.name}, Get WAQI Request, type: ${type}`, "");
 		let request = {
@@ -97,30 +104,30 @@ async function WAQI(type = "", input = {}) {
 			}
 		};
 		if (type == "tiles") {
-            $.log('tiles');
+			$.log('tiles');
 			request.url = `${request.url}/tiles/${input.aqi}/${input.alt}/${input.lat}/${input.lng}.png`;
 		}
 		//$.log(`🎉 ${$.name}, Get WAQI Request`, `request: ${JSON.stringify(request)}`, "");
 		return request
-    };
+	};
 
-    function GetData(type, request) {
-        $.log(`⚠ ${$.name}, Get WAQI Data, type: ${type}`, "");
-        return new Promise(resolve => {
-            $.get(request, (error, response, data) => {
-                try {
-                    if (error) throw new Error(error)
-                    else if (data) resolve(data)
-                    else throw new Error(response);
-                } catch (e) {
-                    $.log(`❗️ ${$.name}, getTiles`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
-                } finally {
-                    $.log(`🎉 ${$.name}, getTiles`, `Finish`, '')
-                    resolve()
-                }
-            });
-        })
-    };
+	function GetData(type, request) {
+		$.log(`⚠ ${$.name}, Get WAQI Data, type: ${type}`, "");
+		return new Promise(resolve => {
+			$.get(request, (error, response, data) => {
+				try {
+					if (error) throw new Error(error)
+					else if (data) resolve(response)
+					else throw new Error(response);
+				} catch (e) {
+					$.log(`❗️ ${$.name}, getTiles`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
+				} finally {
+					$.log(`🎉 ${$.name}, getTiles`, `Finish`, '')
+					resolve()
+				}
+			});
+		})
+	};
 };
 
 /***************** Env *****************/
