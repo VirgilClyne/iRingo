@@ -17,8 +17,7 @@ var { body } = $response;
     if (Settings.Switch) {
     url = URL.parse(url);
         if (url.path?.includes("airQuality")) {
-            let tile = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
-            body = tile;
+            body = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
         }
 	}
 })()
