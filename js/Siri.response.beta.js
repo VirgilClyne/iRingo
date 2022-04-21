@@ -1,10 +1,10 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.2-beta");
+const $ = new Env("Apple Siri v2.1.0-beta");
 const URL = new URLSearch();
 const DataBase = {
-	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
+	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
@@ -14,7 +14,7 @@ $.log(`🚧 ${$.name}, url: ${body}`, "");
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings } = await setENV("iRingo", url, DataBase);
+	const Settings = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		let data = JSON.parse(body);
@@ -102,40 +102,21 @@ $.log(`🚧 ${$.name}, url: ${body}`, "");
  * Set Environment Variables
  * @author VirgilClyne
  * @param {String} name - Persistent Store Key
- * @param {String} url - Request URL
+ * @param {String} platform - Platform Name
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(name, url, database) {
+async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	/***************** Platform *****************/
-	const Platform = /weather-(.*)\.apple\.com/i.test(url) ? "Weather"
-		: /smoot\.apple\.(com|cn)/i.test(url) ? "Siri"
-			: /\.apple\.com/i.test(url) ? "Apple"
-				: "Apple"
-	$.log(`🚧 ${$.name}, Set Environment Variables`, `Platform: ${Platform}`, "");
-	/***************** BoxJs *****************/
-	// 包装为局部变量，用完释放内存
-	// BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
-	let BoxJs = $.getjson(name, database)
-	$.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
-	/***************** Settings *****************/
-	let Settings = BoxJs?.[Platform] || BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database[Platform];
-	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	/***************** Argument *****************/
-	if (typeof $argument != "undefined") {
-		$.log(`🎉 ${$.name}, $Argument`);
-		let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-		$.log(JSON.stringify(arg));
-		Object.assign(Settings, arg);
-	};
+	let Settings = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return { Platform, Settings };
+	return Settings
+	async function getENV(t, e, n) { let i = $.getjson(t, n), s = i?.[e] || i?.Settings?.[e] || n[e]; if ("undefined" != typeof $argument) { let t = Object.fromEntries($argument.split("&").map((t => t.split("=")))); Object.assign(s, t) } return s }
 };
 
 /***************** Env *****************/

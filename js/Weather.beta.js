@@ -5,7 +5,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Weather AQI v3.0.0-beta");
 const URL = new URLSearch();
 const DataBase = {
-	"Weather":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"},
+	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
@@ -13,55 +13,59 @@ var { body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings } = await setENV("iRingo", url, DataBase);
+	const Settings = await setENV("iRingo", "Weather", DataBase);
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		const Params = await getParams(url.path);
 		let data = JSON.parse(body);
 		const Status = await getStatus(data);
 		// AQI
-		if (url.params?.include?.includes("air_quality") || url.params?.dataSets?.includes("airQuality")) {
-			if (Status == true) {
-				$.log(`🎉 ${$.name}, 需要替换AQI`, "");
-				if (Settings.Mode == "WAQI Public") {
-					$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
-					var { Station, idx } = await WAQI("Nearest", { api: Params.ver, lat: Params.lat, lng: Params.lng });
-					const Token = await WAQI("Token", { idx: idx });
-					//var NOW = await WAQI("NOW", { token:Token, idx: idx });
-					var AQI = await WAQI("AQI", { token: Token, idx: idx });
-				} else if (Settings.Mode == "WAQI Private") {
-					$.log(`🚧 ${$.name}, 工作模式: waqi.info 私有API`, "")
-					const Token = Settings?.Verify?.Content;
-					if (Settings.Location == "Station") {
-						$.log(`🚧 ${$.name}, 定位精度: 观测站`, "")
+		if (Settings.AQI.Switch) {
+			if (url.params?.include?.includes("air_quality") || url.params?.dataSets?.includes("airQuality")) {
+				if (Status == true) {
+					$.log(`🎉 ${$.name}, 需要替换AQI`, "");
+					if (Settings.AQI.Mode == "WAQI Public") {
+						$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
 						var { Station, idx } = await WAQI("Nearest", { api: Params.ver, lat: Params.lat, lng: Params.lng });
-						var AQI = await WAQI("StationFeed", { token: Token, idx: idx });
-					} else if (Settings.Location == "City") {
-						$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
-						var AQI = await WAQI("CityFeed", { token: Token, lat: Params.lat, lng: Params.lng });
-					}
-				};
-				data = await outputAQI(Params.ver, Station, AQI, data, Settings);
-			} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
-		}
+						const Token = await WAQI("Token", { idx: idx });
+						//var NOW = await WAQI("NOW", { token:Token, idx: idx });
+						var AQI = await WAQI("AQI", { token: Token, idx: idx });
+					} else if (Settings.AQI.Mode == "WAQI Private") {
+						$.log(`🚧 ${$.name}, 工作模式: waqi.info 私有API`, "")
+						const Token = Settings.AQI.Auth;
+						if (Settings.AQI.Location == "Station") {
+							$.log(`🚧 ${$.name}, 定位精度: 观测站`, "")
+							var { Station, idx } = await WAQI("Nearest", { api: Params.ver, lat: Params.lat, lng: Params.lng });
+							var AQI = await WAQI("StationFeed", { token: Token, idx: idx });
+						} else if (Settings.AQI.Location == "City") {
+							$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
+							var AQI = await WAQI("CityFeed", { token: Token, lat: Params.lat, lng: Params.lng });
+						}
+					};
+					data = await outputAQI(Params.ver, Station, AQI, data, Settings);
+				} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
+			}
+		};
 		// NextHour
-		if (url.params?.dataSets?.includes("forecastNextHour")) {
-			if (!data?.forecastNextHour?.metadata?.providerName) {
-				$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
-							`providerName = ${data?.forecastNextHour?.providerName}`, "");
+		if (Settings.NextHour.Switch) {
+			if (url.params?.dataSets?.includes("forecastNextHour")) {
+				if (!data?.forecastNextHour?.metadata?.providerName) {
+					$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
+						`providerName = ${data?.forecastNextHour?.providerName}`, "");
 
-				let minutelyData;
-				if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
-					minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
-				}
+					let minutelyData;
+					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
+						minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+					}
 
-				if (minutelyData) {
-					data = await outputNextHour(Params.ver, minutelyData, data, Settings);
-				} else {
-					$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
-				}
-			} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
-		}
+					if (minutelyData) {
+						data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+					} else {
+						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
+					}
+				} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+			}
+		};
 		body = JSON.stringify(data);
 	}
 })()
@@ -73,40 +77,21 @@ var { body } = $response;
  * Set Environment Variables
  * @author VirgilClyne
  * @param {String} name - Persistent Store Key
- * @param {String} url - Request URL
+ * @param {String} platform - Platform Name
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(name, url, database) {
+ async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	/***************** Platform *****************/
-	const Platform = /weather-(.*)\.apple\.com/i.test(url) ? "Weather"
-		: /smoot\.apple\.(com|cn)/i.test(url) ? "Siri"
-			: /\.apple\.com/i.test(url) ? "Apple"
-				: "Apple"
-	$.log(`🚧 ${$.name}, Set Environment Variables`, `Platform: ${Platform}`, "");
-	/***************** BoxJs *****************/
-	// 包装为局部变量，用完释放内存
-	// BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
-	let BoxJs = $.getjson(name, database)
-	$.log(`🚧 ${$.name}, Set Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
-	/***************** Settings *****************/
-	let Settings = BoxJs?.[Platform] || BoxJs?.Settings?.[Platform] || BoxJs?.Apple?.[Platform] || database[Platform];
-	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	/***************** Argument *****************/
-	if (typeof $argument != "undefined") {
-		$.log(`🎉 ${$.name}, $Argument`);
-		let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
-		$.log(JSON.stringify(arg));
-		Object.assign(Settings, arg);
-	};
+	let Settings = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
-	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
-	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
+	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
+	Settings.AQI.Switch = JSON.parse(Settings.AQI.Switch) // BoxJs字符串转Boolean
+	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return { Platform, Settings };
+	return Settings
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(s,t)}return s}
 };
 
 /**
@@ -390,7 +375,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	weather[`${AQIname}`].metadata.language = weather?.[`${AQIname}`]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
 	if (api == "v1") {
 		weather.air_quality.airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
-		weather.air_quality.airQualityScale = Settings?.Scale || "EPA_NowCast.2201";
+		weather.air_quality.airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
 		weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 		weather.air_quality.metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', api);
 		//weather.air_quality.metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
@@ -400,7 +385,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
 	} else if (api == "v2") {
 		weather.airQuality.index = obs?.aqi ?? now?.aqi ?? now?.v;
-		weather.airQuality.scale = Settings?.Scale || "EPA_NowCast.2201";
+		weather.airQuality.scale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
 		weather.airQuality.categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 		weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
 		//weather.airQuality.metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
