@@ -46,7 +46,7 @@ var { body } = $response;
 		}
 		// NextHour
 		if (url.params?.dataSets?.includes("forecastNextHour")) {
-			if (!data?.forecastNextHour?.providerName) {
+			if (!data?.forecastNextHour?.metadata?.providerName) {
 				$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
 							`providerName = ${data?.forecastNextHour?.providerName}`, "");
 
