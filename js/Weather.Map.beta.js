@@ -116,7 +116,7 @@ async function WAQI(type = "", input = {}) {
                     $.log(`❗️ ${$.name}, getTiles`, `Failure`, ` error = ${error || e}`, `response = ${JSON.stringify(response)}`, `data = ${data}`, '')
                 } finally {
                     $.log(`🎉 ${$.name}, getTiles`, `Finish`, '')
-                    resove()
+                    resolve()
                 }
             });
         })
