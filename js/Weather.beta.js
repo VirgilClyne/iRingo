@@ -660,18 +660,18 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	const summaries = getSummary(weather.forecastNextHour.minutes);
 	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
-	// TODO
 	const getConditions = (minutelyData, summary) => {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
+		// TODO: CONDITIONS_TOKEN_TYPES
 		const conditions = [];
 		let condition = {};
 
 		summary.forEach(value => {
 			// $.log(`🚧 ${$.name}, summary.condition = ${value.condition}`, '');
 			switch (value.condition) {
-				case "clear":
+				case SUMMARY_CONDITION_TYPES.CLEAR:
 					break;
-				case "rain":
+				case SUMMARY_CONDITION_TYPES.RAIN:
 					condition.startTime = value.startTime;
 					if (value.endTime) {
 						condition.endTime = value.endTime;
@@ -689,7 +689,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					conditions.push(condition);
 					condition = {};
 					break;
-				case "snow":
+				case SUMMARY_CONDITION_TYPES.SNOW:
 				default:
 					condition.startTime = value.startTime;
 					if (value.endTime) {
