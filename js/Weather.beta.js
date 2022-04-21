@@ -109,6 +109,7 @@ async function setENV(name, url, database) {
 async function getParams(path) {
 	const Regular = /^(?<ver>v1|v2)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
 	const Params = path.match(Regular).groups;
+	// TODO: add debug switch (lat, lng)
 	$.log(`🚧 ${$.name}`, `Params: ${JSON.stringify(Params)}`, "");
 	return Params
 };
@@ -121,7 +122,7 @@ async function getParams(path) {
  */
 async function getStatus(data) {
 	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
-	$.log(`🚧 ${$.name}, ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
+	$.log(`🚧 ${$.name}, providerName = ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
 	return (result || false)
 };
 
@@ -133,6 +134,7 @@ async function getStatus(data) {
  * @return {Promise<*>}
  */
 async function WAQI(type = "", input = {}) {
+	// TODO: add debug switch (lat, lng)
 	$.log(`⚠ ${$.name}, WAQI`, `input: ${JSON.stringify(input)}`, "");
 	// 构造请求
 	let request = await GetRequest(type, input);
