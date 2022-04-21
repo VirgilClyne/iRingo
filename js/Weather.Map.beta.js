@@ -17,7 +17,7 @@ var { body } = $response;
     if (Settings.Switch) {
     url = URL.parse(url);
         if (url.path?.includes("airQuality")) {
-            let tile = await WAQI("AQI", { lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
+            let tile = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
             body = tile;
         }
 	}
@@ -83,9 +83,10 @@ async function WAQI(type = "", input = {}) {
 	// 发送请求
 	let output = await GetData(type, request);
 	// TODO: add debug switch (geo)
-    $.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
+    //$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
+    return output
     /***************** Fuctions *****************/
-	async function GetRequest(type = "", input = { lat: 0, lng: 0, alt: 0 }) {
+	async function GetRequest(type = "", input = { aqi: "usepa-aqi", lat: 0, lng: 0, alt: 0 }) {
 		$.log(`⚠ ${$.name}, Get WAQI Request, type: ${type}`, "");
 		let request = {
 			"url": "https://tiles.waqi.info",
@@ -96,10 +97,9 @@ async function WAQI(type = "", input = {}) {
 				"Referer": "https://waqi.info/"
 			}
 		};
-		if (type == "AQI") {
-            $.log('AQI');
-            let aqi = "usepa-aqi";
-			request.url = `${request.url}/tiles/${aqi}/${input.alt}/${input.lat}/${input.lng}.png`;
+		if (type == "tiles") {
+            $.log('tiles');
+			request.url = `${request.url}/tiles/${input.aqi}/${input.alt}/${input.lat}/${input.lng}.png`;
 		}
 		//$.log(`🎉 ${$.name}, Get WAQI Request`, `request: ${JSON.stringify(request)}`, "");
 		return request
