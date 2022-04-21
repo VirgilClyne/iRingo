@@ -430,18 +430,23 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
 	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
+	// TODO: check if it is `snow`
+	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
+
+	// https://docs.caiyunapp.com/docs/tables/skycon/
 	const getWeatherType = hourly => {
-		const type = hourly?.skycon[0].value;
-		
-		// https://docs.caiyunapp.com/docs/tables/skycon/
-		if (type.includes('RAIN')) {
-			return "rain";
-		} else if (type.includes('SNOW')) {
-			// TODO: check if it is `snow`
-			return "snow";
-		} else {
-			return "clear";
-		}
+		hourly?.skycon?.forEach(hourlySkycon => {
+			value = hourlySkycon.value;
+
+			if (value.include("RAIN")) {
+				return SUMMARY_CONDITION_TYPES.RAIN;
+			} else if (value.includes("SNOW")) {
+				return SUMMARY_CONDITION_TYPES.SNOW;
+			}
+		});
+
+		// although getWeatherType() is designed for find out rain or snow
+		return "clear";
 	}
 
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
@@ -586,6 +591,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
+		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
 		const summaries = [];
 		let lastIndex = 0;
 		// little trick for origin data
