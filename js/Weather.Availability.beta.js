@@ -8,16 +8,19 @@ const DataBase = {
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 const { url } = $request;
-let { body } = $response;
+let { status, statusCode, body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings } = await setENV("iRingo", url, DataBase);
 	if (Settings.Switch) {
-		let data = JSON.parse(body);
 		$.log(`🎉 ${$.name}, 可用性检查`, "");
 		const availability = ["currentWeather", "forecastDaily", "forecastHourly", "history", "weatherChange", "forecastNextHour", "severeWeather", "airQuality"];
-		data = Array.from(new Set([...data, ...availability]));
+		let data = "";
+		if (statusCode == 200 || status == 200) {
+			data = JSON.parse(body);
+			data = Array.from(new Set([...data, ...availability]));
+		} else data = availability
 		$.log(`🎉 ${$.name}, 功能列表`, JSON.stringify(data), "");
 		body = JSON.stringify(data);
 	}
