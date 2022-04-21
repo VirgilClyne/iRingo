@@ -16,21 +16,33 @@
 				"定位精度:\"观测站\" > \"城市\""
 			],
 			"keys": [
-				"@iRingo.Weather",
-				"@iRingo.Settings.Weather",
-				"@iRingo.Apple.Weather"
+				"@iRingo.Weather"
 			],
 			"settings": [
 				{
 					"id": "@iRingo.Weather.Switch",
-					"name": "功能开关",
+					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用此平台修改功能"
+					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Weather.Mode",
-					"name": "工作模式",
+					"id": "@iRingo.Weather.NextHour.Switch",
+					"name": "[下一小时降水]修改开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此功能修改，数据来源：气象在线"
+				},
+				{
+					"id": "@iRingo.Weather.AQI.Switch",
+					"name": "[空气质量]修改开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此功能修改，数据来源：WAQI"
+				},
+				{
+					"id": "@iRingo.Weather.AQI.Mode",
+					"name": "[空气质量]工作模式",
 					"val": "WAQI Public",
 					"type": "radios",
 					"items": [
@@ -46,8 +58,8 @@
 					"desc": "没有申请自己Token的只能使用\"公共API\""
 				},
 				{
-					"id": "@iRingo.Weather.Location",
-					"name": "定位精度",
+					"id": "@iRingo.Weather.AQI.Location",
+					"name": "[空气质量]定位精度",
 					"val": "Station",
 					"type": "radios",
 					"items": [
@@ -63,40 +75,34 @@
 					"desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
 				},
 				{
-					"id": "@iRingo.Weather.Verify.Mode",
-					"name": "验证方式",
-					"val": "Token",
-					"type": "radios",
-					"items": [
-						{
-							"key": "Token",
-							"label": "令牌"
-						}
-					],
-					"desc": "验证方式"
-				},
-				{
-					"id": "@iRingo.Weather.Verify.Content",
-					"name": "验证内容",
+					"id": "@iRingo.Weather.AQI.Auth",
+					"name": "[空气质量]WAQI令牌",
 					"val": "",
 					"type": "text",
 					"placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb",
 					"desc": "‘令牌’验证方式的值写一行"
 				},
 				{
-					"id": "@iRingo.Weather.Scale",
-					"name": "测量标准代码",
+					"id": "@iRingo.Weather.AQI.Scale",
+					"name": "[空气质量]测量标准代码",
 					"val": "EPA_NowCast.2201",
 					"type": "text",
 					"placeholder": "EPA_NowCast.2201",
 					"desc": "空气质量标准代码，会随系统更新而更新"
+				},
+				{
+					"id": "@iRingo.Weather.Map.AQI",
+					"name": "[空气质量地图]修改开关",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否启用此功能修改，数据来源：WAQI"
 				}
 			],
 			"author": "@VirgilClyne",
-			"repo": "https://github.com/VirgilClyne/iRingo/blob/main/js/Apple_Weather.js",
+			"repo": "https://github.com/VirgilClyne/iRingo/blob/main/js/Weather.js",
 			"icons": [
 				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple.png",
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
+				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp"
 			]
 		},
 		{
@@ -112,10 +118,10 @@
 			"settings": [
 				{
 					"id": "@iRingo.Siri.Switch",
-					"name": "功能开关",
+					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用此平台修改功能"
+					"desc": "是否启用此APP修改"
 				},
 				{
 					"id": "@iRingo.Siri.CountryCode",
@@ -194,7 +200,7 @@
 						},
 						{
 							"key": "app_store",
-							"label": "APP Store"
+							"label": "App Store"
 						},
 						{
 							"key": "movies",

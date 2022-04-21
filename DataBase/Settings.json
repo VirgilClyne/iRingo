@@ -1,13 +1,19 @@
 {
 	"Weather": {
 		"Switch": true,
-		"Mode": "WAQI Public",
-		"Location": "Station",
-		"Verify": {
-			"Mode": "Token",
-			"Content": null
+		"NextHour": {
+			"Switch": true
 		},
-		"Scale": "EPA_NowCast.2201"
+		"AQI": {
+			"Switch": true,
+			"Mode": "WAQI Public",
+			"Location": "Station",
+			"Auth": null,
+			"Scale": "EPA_NowCast.2201"
+		},
+		"Map": {
+			"AQI": true
+		}
 	},
 	"Siri": {
 		"Switch": true,
