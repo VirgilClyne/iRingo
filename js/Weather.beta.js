@@ -46,11 +46,20 @@ var { body } = $response;
 		}
 		// NextHour
 		if (url.params?.dataSets?.includes("forecastNextHour")) {
-			if (Status === true) {
-				$.log(`🚧 ${$.name}, 获取分钟级降水信息`, "");
-				const minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+			if (!data?.forecastNextHour?.providerName) {
+				$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
+							`providerName = ${data?.forecastNextHour?.providerName}`, "");
 
-				data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+				let minutelyData;
+				if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
+					minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+				}
+
+				if (minutelyData) {
+					data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+				} else {
+					$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
+				}
 			} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
 		}
 		body = JSON.stringify(data);
@@ -124,6 +133,20 @@ async function getStatus(data) {
 	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
 	$.log(`🚧 ${$.name}, providerName = ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
 	return (result || false)
+};
+
+/**
+ * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
+ * 判断是否在国内
+ * @param lng
+ * @param lat
+ * @returns {boolean}
+ */
+function out_of_china(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  // 纬度 3.86~53.55, 经度 73.66~135.05 
+  return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
 };
 
 /**
