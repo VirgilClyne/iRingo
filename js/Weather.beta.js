@@ -725,10 +725,12 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 						// TODO: drizzle has different token
 						lastCondition.token = toToken(weatherAndPossiblity, [TIME_STATUS.START]);
-						conditionToAdd.longTemplate = forecast_keypoint ?? description;
-						conditionToAdd.shortTemplate = description;
+						lastCondition.longTemplate = forecast_keypoint ?? description;
+						lastCondition.shortTemplate = description;
 						// TODO: fill parameters
-						conditionToAdd.parameters = {};
+						lastCondition.parameters = {};
+
+						conditions.push(lastCondition);
 					}
 					
 					conditions.push(conditionToAdd);
