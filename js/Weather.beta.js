@@ -581,23 +581,23 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		const summaries = [];
 		let lastIndex = 0;
 		// little trick for origin data
-		let isRain = minutes[0].precipIntensity > 0;
+		let isRainOrSnow = minutes[0].precipIntensity > 0;
 		let summary = {
 			startTime: minutes[0].startTime,
 			// I guess data from weatherType is not always reliable
-			condition: isRain ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
+			condition: isRainOrSnow ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
 		};
 
 		for (let i = 0; i < minutes.length; i++) {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRain) {
+			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
 				summaries.push(summary);
 				return summaries;
 			}
 
 			const { startTime, precipIntensity } = minutes[i];
-			if (isRain) {
+			if (isRainOrSnow) {
 				if (
 					// end of rain
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
@@ -616,7 +616,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
-					isRain = !isRain;
+					isRainOrSnow = !isRainOrSnow;
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
@@ -629,7 +629,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
-					isRain = !isRain;
+					isRainOrSnow = !isRainOrSnow;
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
