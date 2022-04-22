@@ -24,6 +24,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [关于天气API](#关于天气api)
   - [使用说明](#使用说明)
   - [安装链接](#安装链接)
+    - [🆕V3版](#v3版)
+    - [V2版](#v2版)
 - [📍定位服务](#定位服务)
   - [简介](#简介-1)
   - [激活方式](#激活方式)
@@ -41,9 +43,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [已知「Siri建议」服务器列表](#已知siri建议服务器列表)
   - [使用说明](#使用说明-1)
   - [安装链接](#安装链接-2)
-    - [🆕2.0版](#20版)
-    - [1.5版](#15版)
-    - [1.0版](#10版)
+    - [🆕V2版](#v2版-1)
+    - [V1.5版](#v15版)
+    - [V1版](#v1版)
 - [🗺️Apple Maps](#️apple-maps)
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
@@ -93,7 +95,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 建议配置
 ### Loon
   * plugin安装于`仪表`-`插件`-`+`
-    1. [🌤天气](#天气)：[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " iRingo for Apple Weather AQI data with waqi.info") 
+    1. [🌤天气](#天气)：[Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather") 
     2. [📍定位服务](#定位服务)：[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.plugin](./plugin/Siri.plugin?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")
@@ -101,7 +103,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     6. [📰Apple News](#apple-news)：[Apple_News.plugin](./plugin/Apple_News.plugin?raw=true " Unlock Apple News 🇺🇸US") (Author:@Tartarus2014) (该插件需要匹配代理策略组)
 ### Quantumult X
   * qxrewrite安装于`设置`-`重写`-`引用`
-    1. [🌤天气](#天气)：[Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " iRingo for Apple Weather AQI data with waqi.info")
+    1. [🌤天气](#天气)：[Weather.qxrewrite](./qxrewrite/Weather.qxrewrite?raw=true " iRingo for Apple Weather")
     2. [📍定位服务](#定位服务)：[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.qxrewrite](./qxrewrite/Siri.qxrewrite?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")
@@ -110,7 +112,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 规则集:[Apple_News_for_Quantumult_X.list](./RuleSet/Apple_News_for_Quantumult_X.list?raw=true "Apple_News") (需要自行添加至`设置`-`分流`-`引用`并设置`策略偏好`)
 ### Surge (Shadowrocket)
   * sgmodule安装于`模块`-`安装新模块…`
-    1. [🌤天气](#天气)：[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " iRingo for Apple Weather AQI data with waqi.info")
+    1. [🌤天气](#天气)：[Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
     2. [📍定位服务](#定位服务)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.sgmodule](./sgmodule/Siri.sgmodule?raw=true " iRingo for Siri & Search")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
@@ -126,7 +128,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ### Stash
   * stoverride安装于`首页`-`覆写`-`安装覆写`
     * 下面的链接需点击跳转后再复制安装，不可直接复制下面的链接安装。
-    1. [🌤天气](#天气)：[Apple_Weather.stoverride](./stoverride/Apple_Weather.stoverride?raw=true " iRingo for Apple Weather AQI data with waqi.info")
+    1. [🌤天气](#天气)：[Weather.stoverride](./stoverride/Weather.stoverride?raw=true " iRingo for Apple Weather")
     2. [📍定位服务](#定位服务)：[Geo_Services.stoverride](./stoverride/Geo_Services.stoverride?raw=true " Response Geo Services to 🇺🇸US")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.stoverride](./stoverride/Siri.stoverride?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.stoverride](./stoverride/Apple_Maps_CN.stoverride?raw=true " Redirect Apple Maps to 🇨🇳CN")
@@ -168,13 +170,20 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 ## 使用说明
   * 直接使用
-    * 采用`waqi.info 公共API`，先查询距离最近的`观测站`，再获取此观测站专用`令牌`，最后获取此`观测站`AQI详细数据，共三步。
+    * 采用默认配置
+      * 新增`下一小时降水`信息，数据源：`气象在线`
+      * 替换AQI数据，数据源：`waqi.info`
+        * 使用`waqi.info 公共API`，先查询距离最近的`观测站`，再获取此观测站专用`令牌`，最后获取此`观测站`AQI详细数据，共三步。
+      * 不替换空气质量地图，数据源：`waqi.info`
   * 配合`BoxJs`及订阅使用
-    * 安装`BoxJs`插件:
+    1. 安装`BoxJs`插件并更新引用资源或脚本:
+      * [BoxJs官方说明文档](https://chavyleung.gitbook.io/boxjs/)
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
       * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
       * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
-    * 导入本项目订阅: [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
+      * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
+    2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
+       * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
   * 填写私有令牌并保存，配合模块或插件使用
     * 采用`waqi.info 私有API`
       * 当选择`定位精度: 城市`时，直接获取`城市`AQI数据，共一步。
@@ -189,8 +198,15 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       ```
 
 ## 安装链接
-  * BoxJs:
-    * 应用订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true)
+### 🆕V3版
+  * BoxJs订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true " iRingo")
+  * Loon:[Weather.plugin](./plugin/AWeather.plugin?raw=true " iRingo for Apple Weather")
+  * Quantumult X:[Weather.qxrewrite](./qxrewrite/Weather.qxrewrite?raw=true " iRingo for Apple Weather")
+  * Surge(Shadowrocket):[Apple_Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
+  * Stash:[Weather.stoverride](./stoverride/Weather.stoverride?raw=true " iRingo for Apple Weather")
+
+### V2版
+  * 已归档，不再更新，因BoxJs面板升级，也不再支持自定义数据填写，原有用户可以继续使用
   * Loon:
     * 空气质量数据:[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info")
   * Quantumult X:
@@ -388,15 +404,18 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 直接使用
     * 默认开启所有功能，地区设置为🇹🇼TW台湾，语言自动跟随系统语言。
   * 配合`BoxJs`及订阅使用
-    * 安装`BoxJs`插件:
+    1. 安装`BoxJs`插件并更新引用资源或脚本:
+      * [BoxJs官方说明文档](https://chavyleung.gitbook.io/boxjs/)
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
       * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
       * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
-    * 导入本项目订阅: [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
+      * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
+    2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
+       * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
 
 ## 安装链接
-### 🆕2.0版
-  * 2.0版，支持通过BoxJs面板控制具体功能，并且开启更多地区限制性功能
+### 🆕V2版
+  * V2版，支持通过BoxJs面板控制具体功能，并且开启更多地区限制性功能
     * BoxJs:
       * 🆕应用订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true)
     * Loon:
@@ -418,8 +437,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 🆕针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Siri_for_ACL4SSR.sgmodule](./sgmodule/Siri_for_ACL4SSR.sgmodule?raw=true " iRingo for Siri & Search") 
     * Stash:
       * 🆕:[Siri.stoverride](./stoverride/Siri.stoverride?raw=true " iRingo for Siri & Search")
-### 1.5版
-  * 1.5版，用脚本(Script)功能自动改为与系统`语言与地区`相同的设置
+### V1.5版
+  * V1.5版，用脚本(Script)功能自动改为与系统`语言与地区`相同的设置
     * Loon:
       * 1.5版:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions")
     * Quantumult X:
@@ -442,8 +461,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * Clash:
       * 规则组:[Wikipedia_for_Look_Up.yaml](./RuleSet/Wikipedia_for_Look_Up.yaml?raw=true "Wikipedia for Look Up")
       * 此规则组只作用于启用macOS的`词典`和维基百科搜索集成(此功能独立于Siri建议，所以可由Clash激活)。
-### 1.0版
-  * 1.0版，用重写(Rewrite)功能修改为固定地区
+### V1版
+  * V1版，用重写(Rewrite)功能修改为固定地区
     * Loon:
       * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.plugin](./plugin/Siri_Suggestions_TW.plugin?raw=true " Enable Siri Suggestions 🇹🇼TW")
       * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.plugin](./plugin/Siri_Suggestions_JP.plugin?raw=true " Enable Siri Suggestions 🇯🇵JP")
