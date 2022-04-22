@@ -46,7 +46,7 @@ async function setENV(name, platform, database) {
 	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return Settings
-	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(s,t)}return s}
+	async function getENV(t,e,n){let i=$.getjson(t,n),r=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){$argument=Object.fromEntries($argument.split("&").map((t=>t.split("="))));let t={};for(var s in $argument)g(t,s,t[s]);function g(t,e,n){e.split(".").reduce(((t,i,r)=>t[i]=e.split(".").length===++r?n:t[i]||{}),t)}Object.assign(r,t)}return r}
 };
 
 /**
