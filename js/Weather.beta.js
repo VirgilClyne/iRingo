@@ -562,7 +562,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 	weather.forecastNextHour.metadata.expireTime = convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', api);
 	// this API doesn't support language switch
 	// replace `zh_CN` to `zh-CN`
-	weather.forecastNextHour.metadata.language = minutelyData?.lang.replace('_', '-');
+	weather.forecastNextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
 	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
 	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
 	weather.forecastNextHour.metadata.providerName = providerName;
