@@ -54,12 +54,14 @@ var { body } = $response;
 						`providerName = ${data?.forecastNextHour?.providerName}`, "");
 
 					let minutelyData;
+					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
 						minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+						providerName = "气象在线";
 					}
 
 					if (minutelyData) {
-						data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+						data = await outputNextHour(Params.ver, providerName, minutelyData, data, Settings);
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
@@ -410,7 +412,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
  * @param {Object} Settings - Settings
  * @return {Promise<*>}
  */
-async function outputNextHour(api, minutelyData, weather, Settings) {
+async function outputNextHour(api, providerName, minutelyData, weather, Settings) {
 	const DISPLAYABLE_MINUTES = 60;
 
 	const minutely = minutelyData?.result?.minutely;
@@ -550,7 +552,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	weather.forecastNextHour.metadata.language = minutelyData?.lang.replace('_', '-');
 	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
 	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
-	weather.forecastNextHour.metadata.providerName = "气象在线";
+	weather.forecastNextHour.metadata.providerName = providerName;
 	weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
 	// actually we use radar data directly
 	// it looks like Apple doesn't care this data
