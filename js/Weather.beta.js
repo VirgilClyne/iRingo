@@ -733,7 +733,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				condition.shortTemplate = description;
 				condition.parameters = {};
 
-				$.log(`🚧 ${$.name}, condition = ${condition}`, '');
+				$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
 				conditions.push(condition);
 				return conditions;
 			}
@@ -750,7 +750,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.shortTemplate = description;
 						condition.parameters = {};
 
-						$.log(`🚧 ${$.name}, condition = ${condition}`, '');
+						$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
@@ -788,7 +788,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							"firstAt": startTime,
 						};
 	
-						$.log(`🚧 ${$.name}, condition = ${condition}`, '');
+						$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
@@ -857,7 +857,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							"firstAt": startTime,
 						};
 
-						$.log(`🚧 ${$.name}, condition = ${condition}`, '');
+						$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
@@ -870,12 +870,11 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			}
 		}
 
-		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
+		$.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
 	};
 
 	const conditions = getConditions(minutelyData, weather.forecastNextHour.summary);
-	$.log(`🚧 ${$.name}, conditions = ${conditions}`, '');
 	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
 
 	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
