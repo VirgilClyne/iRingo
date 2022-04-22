@@ -2,8 +2,8 @@
 #!desc= (2.3.0) 解锁全部类型天气数据可用性，切换空气质量数据源为waqi.info，并更改标准为AQI(US)
 
 [Script]
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/achieve/Apple_Weather.js, requires-body=1, timeout=10, tag=Apple Weather
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/achieve/Apple_Weather.js, requires-body=1, timeout=10, tag=Apple Weather Availability
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Apple_Weather.js, requires-body=1, timeout=10, tag=Apple Weather
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Apple_Weather.js, requires-body=1, timeout=10, tag=Apple Weather Availability
 
 [MITM]
 hostname = weather-data.apple.com

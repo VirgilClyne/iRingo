@@ -3,8 +3,8 @@
 
 [Script]
 # Convert Apple Weather Air Quality Map
-http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?.*(country=CN)?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/achieve/Apple_Weather_Map.js, tag=Apple_Weather_Map
-# http-response ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?.*(country=CN)?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/achieve/Apple_Weather_Map.js, requires-body=true, tag=Apple_Weather_Map
+http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?.*(country=CN)?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/archive/Apple_Weather_Map.js, tag=Apple_Weather_Map
+# http-response ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?.*(country=CN)?.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/archive/Apple_Weather_Map.js, requires-body=true, tag=Apple_Weather_Map
 
 [MITM]
 hostname = %APPEND% weather-map.apple.com, tiles.waqi.info
