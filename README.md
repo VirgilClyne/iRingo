@@ -149,7 +149,6 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 替换空气质量数据，数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
   * 添加下一小时降水，数据源为[气象在线](https://www.weatherol.cn/pop.html)
   * 替换空气质量地图数据，数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
-
   * 注:
     * 天气信息来源为`weather-data.apple.com`的Watch可使用本模块改写天气信息，需要在Watch上安装与代理设备相同的`CA证书`以进行MitM。
 
@@ -207,9 +206,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 安装链接
 ### 🆕V3版
   * BoxJs订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true " iRingo")
-  * Loon:[Weather.plugin](./plugin/AWeather.plugin?raw=true " iRingo for Apple Weather")
+  * Loon:[Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather")
   * Quantumult X:[Weather.qxrewrite](./qxrewrite/Weather.qxrewrite?raw=true " iRingo for Apple Weather")
-  * Surge(Shadowrocket):[Apple_Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
+  * Surge(Shadowrocket):[Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
   * Stash:[Weather.stoverride](./stoverride/Weather.stoverride?raw=true " iRingo for Apple Weather")
 
 ### V2版
