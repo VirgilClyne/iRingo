@@ -322,7 +322,18 @@ function getGridWeatherMinutely(lat, lng) {
 		});
 	});
 };
-
+async function ColorfulClouds(
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
+                                    "AppleWebKit/605.1.15 (KHTML, like Gecko) " +
+                                    "Version/15.1 Mobile/15E148 Safari/604.1",
+    },
+    // Colorful Clouds example token
+    input = { lat: 0, lng: 0, token: "TAkhjf8d1nlSlspN" },
+    paramLang = Parameter.language,
+    timestamp = null,
+)
 // 
 /**
  * Output Air Quality Data
