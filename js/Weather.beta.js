@@ -288,13 +288,14 @@ async function WAQI(type = "", input = {}) {
 };
 
 /**
- * get Grid Weather Minutely
+ * Get minutely data from "气象在线"
  * @author WordlessEcho
  * @param {Number} lat - latitude
  * @param {Number} lng - longitude
- * @return {Promise<*>}
+ * @return {Promise<*>} minutely data
  */
 function getGridWeatherMinutely(lat, lng) {
+	// this API could be considered as unconfigurable ColorfulClouds API
 	const request = {
 		"url": `https://www.weatherol.cn/api/minute/getPrecipitation?type=forecast&ll=${lng},${lat}`
 	};
@@ -312,13 +313,12 @@ function getGridWeatherMinutely(lat, lng) {
 					resolve(_data);
 				}
 			} catch (e) {
-				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败! `,
+				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败！`,
 					`error = ${JSON.stringify(error || e)}, `,
 					`response = ${JSON.stringify(response)}, `,
 					`data = ${JSON.stringify(data)}`, '');
 			} finally {
-					//$.log(`⚠️ ${$.name}, getGridWeatherMinutely, `, `data = ${data}`, '');
-					$.log(`🎉 ${$.name}, getGridWeatherMinutely执行完成！`, '');
+					$.log(`🎉 ${$.name}, getGridWeatherMinutely执行完成`, '');
 			}
 		});
 	});
@@ -406,13 +406,14 @@ async function outputAQI(api, now, obs, weather, Settings) {
 /**
  * output forecast NextHour Data
  * @author WordlessEcho
- * @param {String} api - API Version
- * @param {Object} minutelyData - minutelyData
- * @param {Object} weather - weather
- * @param {Object} Settings - Settings
+ * @param {String} api - Apple API Version
+ * @param {Object} minutelyData - minutely data from API
+ * @param {Object} weather - weather data from Apple
+ * @param {Object} Settings - Settings config in Box.js
  * @return {Promise<*>}
  */
 async function outputNextHour(api, providerName, minutelyData, weather, Settings) {
+	// iOS weather can only display data in an hour
 	const DISPLAYABLE_MINUTES = 60;
 
 	const minutely = minutelyData?.result?.minutely;
@@ -420,6 +421,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
+	// use next minute and clean seconds as next hour forecast as start time
 	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
@@ -443,6 +445,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		}
 	}
 
+	// 4 decimals in API
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
 	const PRECIPITATION_LEVEL = {
 		NO_RAIN_OR_SNOW: 0,
@@ -451,6 +454,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		HEAVY_RAIN_OR_SNOW: 3,
 		STORM_RAIN_OR_SNOW: 4,
 	};
+	// https://docs.caiyunapp.com/docs/tables/precip
 	const RADAR_PRECIPITATION_RANGE = {
 		noRainOrSnow: { lower: 0, upper: 0.031 },
 		lightRainOrSnow: { lower: 0.031, upper: 0.25 },
@@ -458,6 +462,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		heavyRainOrSnow: { lower: 0.35, upper: 0.48 },
 		stormRainOrSnow: { lower: 0.48, upper: Number.MAX_VALUE },
 	};
+	// the graph of Apple weather is divided into three parts
 	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
 		beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
 	};
@@ -488,6 +493,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		}
 	};
 
+	// mapping the standard preciptation level to 3 level standard of Apple
 	const radarToApplePrecipitation = value => {
 		const {
 			noRainOrSnow,
@@ -505,8 +511,13 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 				// multiple 10000 for precision of calculation
 				// base of previous levels + percentage of the value in its level
 				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
+				// from the lower of range to value
 				(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+				// sum of range
 					((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				// then divided them and multiple Apple level range
+				// because Apple divided graph into 3 parts, value limitation is 3
+				// we omit the "multiple one"
 				);
 			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
 				return (
@@ -590,7 +601,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			RAIN: "rain",
 			// precipIntensityPerceived > 2
 			HEAVY_RAIN: "heavy-rain-to-rain",
-			// TODO: check if it is `snow`
+			// TODO: untested, check if it is `snow`
 			SNOW: "snow",
 			HEAVY_SNOW: "heavy-snow-to-snow",
 		};
@@ -644,7 +655,8 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		const forecast_keypoint = minutelyData?.result?.forecast_keypoint;
 		const description = minutelyData?.result?.minutely?.description;
 		const conditions = [];
-		// little trick for origin data
+
+		// initialize data
 		const weatherAndPossiblity = {
 			possibility: needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null,
 			// little trick for origin data
@@ -670,6 +682,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 				return conditions;
 			}
 
+			// this loop will handle previous condition and create the condition for next condition
 			const { startTime, precipIntensity } = minutes[i];
 			if (weatherAndPossiblity.weatherStatus !== toWeatherStatus(precipIntensity, weatherType)) {
 				switch (toWeatherStatus(precipIntensity, weatherType)) {
@@ -682,8 +695,10 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 						condition.shortTemplate = description;
 						condition.parameters = {};
 
+						// done for the previous condition
 						conditions.push(condition);
 
+						// reset the condition
 						weatherAndPossiblity.possibility =
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
 						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
@@ -695,8 +710,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 						if (
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.RAIN ||
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.SNOW ||
-							// heavy rain to heavy snow or heavy snow to heavy rain?
-							// untested
+							// TODO: untested, heavy rain to heavy snow OR heavy snow to heavy rain?
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_SNOW
 						) {
@@ -768,8 +782,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 						} else if (
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_SNOW ||
-							// rain to snow or snow to rain?
-							// untested
+							// TODO: untested rain to snow OR snow to rain?
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.RAIN ||
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.SNOW
 						) {
@@ -808,10 +821,12 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 
 	const getSummary = minutes => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
-		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
+
 		const summaries = [];
+
+		// initialize data
 		let lastIndex = 0;
 		// little trick for origin data
 		let isRainOrSnow = minutes[0].precipIntensity > 0;
@@ -822,6 +837,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		};
 
 		for (let i = 0; i < minutes.length; i++) {
+			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
 			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
@@ -829,14 +845,17 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 				return summaries;
 			}
 
+			// this loop will handle previous condition and create the condition for next condition
 			const { startTime, precipIntensity } = minutes[i];
 			if (isRainOrSnow) {
 				if (
 					// end of rain
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					// constant of rain
 					// we always need precipChance and precipIntensity data
 					i + 1 === minutes.length
 				) {
+					// for find the max value of precipChance and precipIntensity
 					const range = minutes.slice(lastIndex, i + 1);
 
 					// we reach the data end but cannot find the end of rain
@@ -849,6 +868,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 
 					summaries.push(summary);
 
+					// reset summary
 					isRainOrSnow = !isRainOrSnow;
 					lastIndex = i;
 					summary = {
