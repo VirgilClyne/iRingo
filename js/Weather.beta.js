@@ -591,7 +591,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		for (let i = 0; i < minutes.length; i++) {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (i + 1 > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
+			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
 				summaries.push(summary);
 				return summaries;
 			}
@@ -723,7 +723,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		for (let i = 0; i < minutes.length; i++) {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph or rain nearly stop after one hour
-			if (i + 1 > DISPLAYABLE_MINUTES) {
+			if (i + 1 >= DISPLAYABLE_MINUTES) {
 				if (weatherAndPossiblity.weatherStatus !== WEATHER_STATUS.CLEAR) {
 					timeStatus = [TIME_STATUS.CONSTANT];
 				}
