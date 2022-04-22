@@ -21,6 +21,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 - [🌤天气](#天气)
   - [简介](#简介)
   - [功能列表](#功能列表)
+  - [工作逻辑](#工作逻辑)
   - [关于天气API](#关于天气api)
   - [使用说明](#使用说明)
   - [安装链接](#安装链接)
@@ -144,7 +145,10 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 # 🌤天气
 ## 简介
-  * 保持模块启用,即可切换「天气」`空气质量`数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
+  * 解锁全部天气数据类型
+  * 替换空气质量数据，数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
+  * 添加下一小时降水，数据源为[气象在线](https://www.weatherol.cn/pop.html)
+  * 替换空气质量地图数据，数据源为[World Air Quality Index Project](https://waqi.info/)，采用[美国AQI标准](https://zh.wikipedia.org/wiki/空气质量指标)的数据。
 
   * 注:
     * 天气信息来源为`weather-data.apple.com`的Watch可使用本模块改写天气信息，需要在Watch上安装与代理设备相同的`CA证书`以进行MitM。
@@ -152,12 +156,15 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 功能列表
   * 在以下位置及功能中可用: 
     - [x] 天气(`WeatherKit_Weather_iOS_Version XX.X`)
-    - [ ] 天气的`下一小时降水强度`(`WeatherKit_weatherd_iOS_Version`)
+    - [x] 天气的`下一小时降水强度`(`WeatherKit_weatherd_iOS_Version`)
     - [x] 地图(`Maps_WeatherFoundation`)
-    - [ ] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
-  * 切换逻辑
-    * 切换所有`和风天气`的`空气质量`信息为[World Air Quality Index Project](https://waqi.info/)
-    * 填补全球没有`空气质量`信息的为[World Air Quality Index Project](https://waqi.info/)  
+    - [x] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
+
+## 工作逻辑
+  * 填补全国没有`下一小时降水`信息的为[气象在线](https://www.weatherol.cn/pop.html)
+  * 切换所有`和风天气`的`空气质量`信息为[World Air Quality Index Project](https://waqi.info/)
+  * 填补全球没有`空气质量`信息的为[World Air Quality Index Project](https://waqi.info/)
+  * 切换全国的`空气质量地图`为[World Air Quality Index Project](https://waqi.info/)
 
 ## 关于天气API
   * 三种来源:
@@ -180,7 +187,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * [BoxJs官方说明文档](https://chavyleung.gitbook.io/boxjs/)
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
       * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
-      * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+      * Surge (Shadowrocket): [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
     2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
        * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
@@ -408,7 +415,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * [BoxJs官方说明文档](https://chavyleung.gitbook.io/boxjs/)
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
       * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
-      * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+      * Surge (Shadowrocket): [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
     2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
        * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
