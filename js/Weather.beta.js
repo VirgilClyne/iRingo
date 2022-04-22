@@ -311,6 +311,8 @@ function getGridWeatherMinutely(lat, lng) {
 
 				if (_data.status == "ok") {
 					resolve(_data);
+				} else {
+					throw new Error(`API returned the status: ${_data?.status}`);
 				}
 			} catch (e) {
 				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败！`,
