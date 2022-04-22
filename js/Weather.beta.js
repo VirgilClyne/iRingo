@@ -309,7 +309,7 @@ function getGridWeatherMinutely(lat, lng) {
 					throw new Error(error);
 				}
 
-				if (_data.status == "ok") {
+				if (_data.status === "ok") {
 					resolve(_data);
 				} else {
 					throw new Error(`API returned the status: ${_data?.status}`);
