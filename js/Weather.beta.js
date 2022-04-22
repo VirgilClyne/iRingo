@@ -646,7 +646,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	const summaries = getSummary(weather.forecastNextHour.minutes);
 	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
-	// THIS FUNCTION WILL BE REWRITE SOON!
 	const getConditions = (minutelyData, minutes) => {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
 		// TODO: when to add possible
@@ -876,7 +875,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		return conditions;
 	};
 
-	const conditions = getConditions(minutelyData, weather.forecastNextHour.summary);
+	const conditions = getConditions(minutelyData, weather.forecastNextHour.minutes);
 	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
 
 	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
