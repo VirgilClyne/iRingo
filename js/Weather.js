@@ -322,6 +322,14 @@ function getGridWeatherMinutely(lat, lng) {
 		});
 	});
 };
+/**
+ * ColorfulClouds
+ * @author WordlessEcho
+ * @param {object} headers - HTTP headers
+ * @param {Object} input - location & token: { lat, lng, token }
+ * @param {Number} timestamp - get old data
+ * @return {Promise<*>}
+ */
 async function ColorfulClouds(
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -333,7 +341,70 @@ async function ColorfulClouds(
     input = { lat: 0, lng: 0, token: "TAkhjf8d1nlSlspN" },
     paramLang = Parameter.language,
     timestamp = null,
-)
+) {
+    // $.log(`🚧 ${$.name}, input = ${JSON.stringify(input)}`, "");
+    // Build request
+    const toColorfulCloudsLang = paramLang => {
+        if (paramLang.toLowerCase().includes("hant")) {
+            return "zh_TW";
+        } else if (paramLang.toLowerCase().includes("us")) {
+            return "en_US";
+        } else if (paramLang.toLowerCase().includes("gb")) {
+            return "en_GB";
+        } else if (paramLang.toLowerCase().includes("ja")) {
+            return "ja";
+        } else {
+            return "zh_CN";
+        }
+    };
+    
+    const request = {
+        "url": `https://api.caiyunapp.com/v2.5/` +
+                     `${ input.token !== null ? input.token : "TAkhjf8d1nlSlspN" }/` +
+                     `${input.lng},${input.lat}/` +
+                     // https://docs.caiyunapp.com/docs/tables/unit/
+                     `weather?alert=true&dailysteps=1&hourlysteps=24&unit=metric:v2` +
+                     `&lang=` + toColorfulCloudsLang(paramLang) +
+                     `${ timestamp !== null ? `&begin=${timestamp}` : '' }`,
+                    // TODO: detect language
+                    //  `&lang=${ navigator.language }`,
+        "headers": headers,
+    };
+
+    // $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
+
+    // API Document
+    // https://docs.caiyunapp.com/docs/introreturn
+    return new Promise(resolve => {
+        $.get(request, (error, response, data) => {
+            try {
+                const _data = JSON.parse(data);
+
+                if (error) {
+                    throw new Error(error);
+                } else if (data) {
+                    $.log(`🎉 ${$.name}, ColorfulClouds: 获取完成`,
+                                `timestamp = ${timestamp}`,
+                                `realtime = ${JSON.stringify(_data?.result?.realtime)}`, '');
+                    resolve(_data);
+                }
+            } catch (e) {
+                $.logErr(`❗️${$.name}, ColorfulClouds: 无法获取数据 `,
+                                 `request = ${JSON.stringify(request)}`,
+                                 `error = ${error || e} `,
+                                 `response = ${JSON.stringify(response)} `,
+                                 `data = ${data}`, '');
+            } finally {
+                $.log(`🚧 ${$.name}, ColorfulClouds: ${type}调试信息 `,
+                            ` request = ${JSON.stringify(request)} `,
+                            `data = ${data}`, '');
+                resolve();
+            }
+        });
+    });
+}
+
+// Output Data
 // 
 /**
  * Output Air Quality Data
