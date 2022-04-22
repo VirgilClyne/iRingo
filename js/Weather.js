@@ -54,12 +54,14 @@ var { body } = $response;
 						`providerName = ${data?.forecastNextHour?.providerName}`, "");
 
 					let minutelyData;
+					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
 						minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+						providerName = "气象在线";
 					}
 
 					if (minutelyData) {
-						data = await outputNextHour(Params.ver, minutelyData, data, Settings);
+						data = await outputNextHour(Params.ver, providerName, minutelyData, data, Settings);
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
@@ -283,13 +285,14 @@ async function WAQI(type = "", input = {}) {
 };
 
 /**
- * get Grid Weather Minutely
+ * Get minutely data from "气象在线"
  * @author WordlessEcho
  * @param {Number} lat - latitude
  * @param {Number} lng - longitude
- * @return {Promise<*>}
+ * @return {Promise<*>} minutely data
  */
 function getGridWeatherMinutely(lat, lng) {
+	// this API could be considered as unconfigurable ColorfulClouds API
 	const request = {
 		"url": `https://www.weatherol.cn/api/minute/getPrecipitation?type=forecast&ll=${lng},${lat}`
 	};
@@ -303,17 +306,18 @@ function getGridWeatherMinutely(lat, lng) {
 					throw new Error(error);
 				}
 
-				if (_data.status == "ok") {
+				if (_data.status === "ok") {
 					resolve(_data);
+				} else {
+					throw new Error(`API returned the status: ${_data?.status}`);
 				}
 			} catch (e) {
-				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败! `,
+				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败！`,
 					`error = ${JSON.stringify(error || e)}, `,
 					`response = ${JSON.stringify(response)}, `,
 					`data = ${JSON.stringify(data)}`, '');
 			} finally {
-					//$.log(`⚠️ ${$.name}, getGridWeatherMinutely, `, `data = ${data}`, '');
-					$.log(`🎉 ${$.name}, getGridWeatherMinutely执行完成！`, '');
+				$.log(`🎉 ${$.name}, getGridWeatherMinutely执行完成`, '');
 			}
 		});
 	});
@@ -401,18 +405,22 @@ async function outputAQI(api, now, obs, weather, Settings) {
 /**
  * output forecast NextHour Data
  * @author WordlessEcho
- * @param {String} api - API Version
- * @param {Object} minutelyData - minutelyData
- * @param {Object} weather - weather
- * @param {Object} Settings - Settings
+ * @param {String} api - Apple API Version
+ * @param {Object} minutelyData - minutely data from API
+ * @param {Object} weather - weather data from Apple
+ * @param {Object} Settings - Settings config in Box.js
  * @return {Promise<*>}
  */
-async function outputNextHour(api, minutelyData, weather, Settings) {
+ async function outputNextHour(api, providerName, minutelyData, weather, Settings) {
+	// iOS weather can only display data in an hour
+	const DISPLAYABLE_MINUTES = 60;
+
 	const minutely = minutelyData?.result?.minutely;
 	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
 
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
+	// use next minute and clean seconds as next hour forecast as start time
 	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
@@ -436,6 +444,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		}
 	}
 
+	// 4 decimals in API
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
 	const PRECIPITATION_LEVEL = {
 		NO_RAIN_OR_SNOW: 0,
@@ -444,6 +453,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		HEAVY_RAIN_OR_SNOW: 3,
 		STORM_RAIN_OR_SNOW: 4,
 	};
+	// https://docs.caiyunapp.com/docs/tables/precip
 	const RADAR_PRECIPITATION_RANGE = {
 		noRainOrSnow: { lower: 0, upper: 0.031 },
 		lightRainOrSnow: { lower: 0.031, upper: 0.25 },
@@ -451,6 +461,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		heavyRainOrSnow: { lower: 0.35, upper: 0.48 },
 		stormRainOrSnow: { lower: 0.48, upper: Number.MAX_VALUE },
 	};
+	// the graph of Apple weather is divided into three parts
 	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
 		beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
 	};
@@ -481,6 +492,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		}
 	};
 
+	// mapping the standard preciptation level to 3 level standard of Apple
 	const radarToApplePrecipitation = value => {
 		const {
 			noRainOrSnow,
@@ -498,8 +510,13 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				// multiple 10000 for precision of calculation
 				// base of previous levels + percentage of the value in its level
 				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
+				// from the lower of range to value
 				(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+				// sum of range
 					((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				// then divided them and multiple Apple level range
+				// because Apple divided graph into 3 parts, value limitation is 3
+				// we omit the "multiple one"
 				);
 			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
 				return (
@@ -525,9 +542,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		return weather;
 	}
 
-	$.log(`⚠️ ${$.name}, Detect`, `forecastNextHour data ${api}`, '');
+	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${api}`, '');
   if (!weather.forecastNextHour) {
-    $.log(`⚠️ ${$.name}, non-existent forecastNextHour data`, `creating`, '');
+    $.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
     weather.forecastNextHour = {
       "name": "NextHourForecast",
       "metadata": {},
@@ -542,10 +559,10 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	weather.forecastNextHour.metadata.expireTime = convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', api);
 	// this API doesn't support language switch
 	// replace `zh_CN` to `zh-CN`
-	weather.forecastNextHour.metadata.language = minutelyData?.lang.replace('_', '-');
+	weather.forecastNextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
 	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
 	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
-	weather.forecastNextHour.metadata.providerName = "气象在线";
+	weather.forecastNextHour.metadata.providerName = providerName;
 	weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
 	// actually we use radar data directly
 	// it looks like Apple doesn't care this data
@@ -571,14 +588,244 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		});
 	});
 
+	const getConditions = (minutelyData, minutes) => {
+		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
+		// TODO: when to add possible
+		const ADD_POSSIBLE_UPPER = 0;
+		const POSSIBILITY = { POSSIBLE: "possible" };
+		const WEATHER_STATUS = {
+			CLEAR: "clear",
+			// precipIntensityPerceived < 1
+			DRIZZLE: "drizzle",
+			RAIN: "rain",
+			// precipIntensityPerceived > 2
+			HEAVY_RAIN: "heavy-rain-to-rain",
+			// TODO: untested, check if it is `snow`
+			SNOW: "snow",
+			HEAVY_SNOW: "heavy-snow-to-snow",
+		};
+		const TIME_STATUS = {
+			CONSTANT: "constant",
+			START: "start",
+			STOP: "stop"
+		};
+
+		const toToken = (weatherAndPossiblity, timeStatus) => {
+			const { possibility, weatherStatus } = weatherAndPossiblity;
+
+			const tokenLeft = possibility ? `${possibility}-${weatherStatus}` : `${weatherStatus}`;
+			const tokenRight = timeStatus.join('-');
+
+			return timeStatus.length > 0 ? `${tokenLeft}.${tokenRight}` : `${tokenLeft}`;
+		}
+
+		const toWeatherStatus = (precipitation, weatherType) => {
+			// although weatherType is not reliable
+			// if (weatherType === SUMMARY_CONDITION_TYPES.CLEAR) {
+			// 	return WEATHER_STATUS.CLEAR;
+			// }
+
+			const level = radarToPrecipitationLevel(precipitation);
+
+			switch (level) {
+				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
+					// is there a `drizzle snow`?
+					// https://en.wikipedia.org/wiki/Snow_flurry
+					return WEATHER_STATUS.DRIZZLE;
+				case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
+					// fallback to rain if weatherType is rain
+					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+						WEATHER_STATUS.SNOW :
+						WEATHER_STATUS.RAIN;
+				case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
+				case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
+					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+						WEATHER_STATUS.HEAVY_SNOW :
+						WEATHER_STATUS.HEAVY_RAIN;
+				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+				default:
+					return WEATHER_STATUS.CLEAR;
+			}
+		};
+
+		const needPossible = precipChance => precipChance < ADD_POSSIBLE_UPPER;
+
+		const weatherType = getWeatherType(minutelyData?.result?.hourly);
+		const forecast_keypoint = minutelyData?.result?.forecast_keypoint;
+		const description = minutelyData?.result?.minutely?.description;
+		const conditions = [];
+
+		// initialize data
+		const weatherAndPossiblity = {
+			possibility: needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null,
+			// little trick for origin data
+			weatherStatus: toWeatherStatus(minutes[0].precipIntensity, weatherType),
+		};
+		let timeStatus = [];
+		let condition = { startTime: minutes[0].startTime };
+
+		for (let i = 0; i < minutes.length; i++) {
+			// Apple weather could only display one hour data
+			// drop useless data to avoid display empty graph or rain nearly stop after one hour
+			if (i + 1 >= DISPLAYABLE_MINUTES) {
+				if (weatherAndPossiblity.weatherStatus !== WEATHER_STATUS.CLEAR) {
+					timeStatus = [TIME_STATUS.CONSTANT];
+				}
+
+				condition.token = toToken(weatherAndPossiblity, timeStatus);
+				condition.longTemplate = forecast_keypoint ?? description;
+				condition.shortTemplate = description;
+				condition.parameters = {};
+
+				conditions.push(condition);
+				return conditions;
+			}
+
+			// this loop will handle previous condition and create the condition for next condition
+			const { startTime, precipIntensity } = minutes[i];
+			if (weatherAndPossiblity.weatherStatus !== toWeatherStatus(precipIntensity, weatherType)) {
+				switch (toWeatherStatus(precipIntensity, weatherType)) {
+					case WEATHER_STATUS.CLEAR:
+						condition.endTime = startTime;
+
+						timeStatus.push(TIME_STATUS.STOP);
+						condition.token = toToken(weatherAndPossiblity, timeStatus);
+						condition.longTemplate = forecast_keypoint ?? description;
+						condition.shortTemplate = description;
+						condition.parameters = {};
+
+						// done for the previous condition
+						conditions.push(condition);
+
+						// reset the condition
+						weatherAndPossiblity.possibility =
+							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
+						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						timeStatus = [];
+						condition = { startTime };
+						break;
+					case WEATHER_STATUS.HEAVY_RAIN:
+					case WEATHER_STATUS.HEAVY_SNOW:
+						if (
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.RAIN ||
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.SNOW ||
+							// TODO: untested, heavy rain to heavy snow OR heavy snow to heavy rain?
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_SNOW
+						) {
+							timeStatus = [TIME_STATUS.CONSTANT];
+						} else if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
+							// but how...?
+							// change clear to heavy-rain-to-rain.start or heavy-snow-to-snow.start
+							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+							timeStatus.push(TIME_STATUS.START);
+						} else {
+							// for drizzle or something else?
+							timeStatus.push(TIME_STATUS.STOP);
+						}
+	
+						condition.token = toToken(weatherAndPossiblity, timeStatus);
+						condition.longTemplate = forecast_keypoint ?? description;
+						condition.shortTemplate = description;
+						condition.parameters = {
+							// maybe useless
+							"firstAt": startTime,
+						};
+	
+						conditions.push(condition);
+
+						weatherAndPossiblity.possibility =
+							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
+						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						timeStatus = [TIME_STATUS.START];
+						condition = { startTime };
+						break;
+					case WEATHER_STATUS.DRIZZLE:
+						// unfortunately we cannot distinguish the drizzle without helping of API
+						// should we consider light rain as drizzle?
+
+						// begin of an rain
+						// if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
+						// 	condition.endTime = startTime;
+
+						// 	// change clear to drizzle.start-stop
+						// 	weatherAndPossiblity.weatherStatus = WEATHER_STATUS.DRIZZLE;
+						// 	timeStatus.push(TIME_STATUS.START);
+						// 	timeStatus.push(TIME_STATUS.STOP);
+
+						// 	condition.token = toToken(weatherAndPossiblity, timeStatus);
+						// 	condition.longTemplate = forecast_keypoint ?? description;
+						// 	condition.shortTemplate = description;
+						// 	condition.parameters = {
+						// 		// maybe useless
+						// 		"firstAt": startTime,
+						// 	};
+	
+						// 	conditions.push(condition);
+						// }
+
+						// weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						// timeStatus = [TIME_STATUS.START];
+						// condition = { startTime };
+						// break;
+					case WEATHER_STATUS.RAIN:
+					case WEATHER_STATUS.SNOW:
+					default:
+						// if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.DRIZZLE) {}
+						condition.endTime = startTime;
+
+						if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
+							// change clear to rain.start or snow.start
+							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+							timeStatus.push(TIME_STATUS.START);
+						} else if (
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_SNOW ||
+							// TODO: untested rain to snow OR snow to rain?
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.RAIN ||
+							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.SNOW
+						) {
+							timeStatus = [TIME_STATUS.CONSTANT];
+						} else {
+							// for drizzle or something else?
+							timeStatus.push(TIME_STATUS.STOP);
+						}
+
+						condition.token = toToken(weatherAndPossiblity, timeStatus);
+						condition.longTemplate = forecast_keypoint ?? description;
+						condition.shortTemplate = description;
+						condition.parameters = {
+							// maybe useless
+							"firstAt": startTime,
+						};
+
+						conditions.push(condition);
+
+						weatherAndPossiblity.possibility =
+							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
+						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						timeStatus = [TIME_STATUS.START];
+						condition = { startTime };
+						break;
+				}
+			}
+		}
+
+		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
+		return conditions;
+	};
+
+	const conditions = getConditions(minutelyData, weather.forecastNextHour.minutes);
+	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
+
 	const getSummary = minutes => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
-		const DISPLAYABLE_MINUTES = 60;
-
-		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
+
 		const summaries = [];
+
+		// initialize data
 		let lastIndex = 0;
 		// little trick for origin data
 		let isRainOrSnow = minutes[0].precipIntensity > 0;
@@ -589,21 +836,25 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		};
 
 		for (let i = 0; i < minutes.length; i++) {
+			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
+			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
 				summaries.push(summary);
 				return summaries;
 			}
 
+			// this loop will handle previous condition and create the condition for next condition
 			const { startTime, precipIntensity } = minutes[i];
 			if (isRainOrSnow) {
 				if (
 					// end of rain
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					// constant of rain
 					// we always need precipChance and precipIntensity data
 					i + 1 === minutes.length
 				) {
+					// for find the max value of precipChance and precipIntensity
 					const range = minutes.slice(lastIndex, i + 1);
 
 					// we reach the data end but cannot find the end of rain
@@ -616,6 +867,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
+					// reset summary
 					isRainOrSnow = !isRainOrSnow;
 					lastIndex = i;
 					summary = {
@@ -646,120 +898,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 	const summaries = getSummary(weather.forecastNextHour.minutes);
 	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
-	// THIS FUNCTION WILL BE REWRITE SOON!
-	const getConditions = (minutelyData, summary) => {
-		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
-		// TODO
-		const POSSIBILITY = { POSSIBLE: "possible" };
-		const CONDITION_LEVEL = { HEAVY: "heavy" };
-		const WEATHER_STATUS = {
-			CLEAR: "clear",
-			// precipIntensityPerceived < 1
-			DRIZZLE: "drizzle",
-			RAIN: "rain",
-			// precipIntensityPerceived > 2
-			HEAVY: "heavy-rain-to-rain",
-			// TODO: check if it is `snow`
-			SNOW: "snow",
-		};
-		const TIME_STATUS = {
-			CONSTANT: "constant",
-			START: "start",
-			STOP: "stop"
-		};
-		const forecast_keypoint = minutelyData?.result?.forecast_keypoint;
-		const description = minutelyData?.result?.minutely?.description;
-		const conditions = [];
-
-		const toToken = (weatherAndPossiblity, timeStatus) => {
-			const tokenLeft = weatherAndPossiblity.join('-');
-			const tokenRight = timeStatus.join('-');
-
-			return `${tokenLeft}.${tokenRight}`;
-		}
-
-		summary.forEach((value, index) => {
-			// $.log(`🚧 ${$.name}, summary.condition = ${value.condition}`, '');
-			const { startTime, endTime, condition, precipChance, precipIntensity } = value;
-			const weatherType = getWeatherType(minutelyData?.result?.hourly);
-
-			switch (condition) {
-				case SUMMARY_CONDITION_TYPES.CLEAR:
-					break;
-				case SUMMARY_CONDITION_TYPES.RAIN:
-				case SUMMARY_CONDITION_TYPES.SNOW:
-				default:
-					const lastSummary = summary[index - 1];
-					const weatherAndPossiblity = [];
-					const timeStatus = [];
-					const conditionToAdd = {};
-
-					conditionToAdd.startTime = startTime;
-					if (endTime) {
-						conditionToAdd.endTime = endTime;
-
-						// TODO: rain in an hour?
-						if (lastSummary) {
-							timeStatus.push(TIME_STATUS.START);
-						}
-
-						timeStatus.push(TIME_STATUS.STOP);
-					} else {
-						timeStatus.push(TIME_STATUS.CONSTANT);
-					}
-
-					// TODO: heavy rain
-					// TODO: we know less about the token
-					weatherAndPossiblity.push(condition);
-					conditionToAdd.token = toToken(weatherAndPossiblity, timeStatus);
-					conditionToAdd.longTemplate = forecast_keypoint ?? description;
-					conditionToAdd.shortTemplate = description;
-					// TODO: fill parameters
-					conditionToAdd.parameters = {};
-
-					if (index !== 0 && lastSummary.condition === SUMMARY_CONDITION_TYPES.CLEAR) {
-						const lastCondition = {};
-
-						lastCondition.startTime = lastSummary.startTime;
-						lastCondition.endTime = lastSummary.endTime;
-
-						// TODO: drizzle has different token
-						lastCondition.token = toToken(weatherAndPossiblity, [TIME_STATUS.START]);
-						lastCondition.longTemplate = forecast_keypoint ?? description;
-						lastCondition.shortTemplate = description;
-						// TODO: fill parameters
-						lastCondition.parameters = {};
-
-						conditions.push(lastCondition);
-					}
-					
-					conditions.push(conditionToAdd);
-					break;
-			}
-		});
-
-		if (conditions.length === 0) {
-			// means that clear next hour
-			// user may never see those data
-			conditions.push({
-				"startTime": summary[0].startTime,
-				"token": "clear",
-				"longTemplate":
-					minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description,
-				"shortTemplate":
-					minutelyData?.result?.minutely?.description,
-				"parameters": {},
-			});
-		}
-
-		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
-		return conditions;
-	};
-
-	const conditions = getConditions(minutelyData, weather.forecastNextHour.summary);
-	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
-
-	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
+	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 };
