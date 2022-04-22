@@ -687,8 +687,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			const level = radarToPrecipitationLevel(precipitation);
 
 			switch (level) {
-				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
-					return WEATHER_STATUS.CLEAR;
 				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
 					// is there a `drizzle snow`?
 					// https://en.wikipedia.org/wiki/Snow_flurry
@@ -703,11 +701,15 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
 						WEATHER_STATUS.HEAVY_SNOW :
 						WEATHER_STATUS.HEAVY_RAIN;
+				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+				default:
+					return WEATHER_STATUS.CLEAR;
 			}
 		};
 
 		const needPossible = precipChance => precipChance < ADD_POSSIBLE_UPPER;
 
+		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		const forecast_keypoint = minutelyData?.result?.forecast_keypoint;
 		const description = minutelyData?.result?.minutely?.description;
 		const conditions = [];
@@ -715,7 +717,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		const weatherAndPossiblity = {
 			possibility: needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null,
 			// little trick for origin data
-			weatherStatus: toWeatherStatus(minutes[0].precipIntensity),
+			weatherStatus: toWeatherStatus(minutes[0].precipIntensity, weatherType),
 		};
 		let timeStatus = [];
 		let condition = { startTime: minutes[0].startTime };
@@ -733,14 +735,14 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				condition.shortTemplate = description;
 				condition.parameters = {};
 
-				$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
+				$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 				conditions.push(condition);
 				return conditions;
 			}
 
 			const { startTime, precipIntensity } = minutes[i];
-			if (weatherAndPossiblity.weatherStatus !== toWeatherStatus(precipIntensity)) {
-				switch (toWeatherStatus(precipIntensity)) {
+			if (weatherAndPossiblity.weatherStatus !== toWeatherStatus(precipIntensity, weatherType)) {
+				switch (toWeatherStatus(precipIntensity, weatherType)) {
 					case WEATHER_STATUS.CLEAR:
 						condition.endTime = startTime;
 
@@ -750,12 +752,12 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.shortTemplate = description;
 						condition.parameters = {};
 
-						$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
+						$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
-						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity);
+						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						timeStatus = [];
 						condition = { startTime };
 						break;
@@ -773,7 +775,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						} else if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
 							// but how...?
 							// change clear to heavy-rain-to-rain.start or heavy-snow-to-snow.start
-							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity);
+							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 							timeStatus.push(TIME_STATUS.START);
 						} else {
 							// for drizzle or something else?
@@ -788,12 +790,12 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							"firstAt": startTime,
 						};
 	
-						$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
+						$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
-						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity);
+						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						timeStatus = [TIME_STATUS.START];
 						condition = { startTime };
 						break;
@@ -821,7 +823,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						// 	conditions.push(condition);
 						// }
 
-						// weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity);
+						// weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						// timeStatus = [TIME_STATUS.START];
 						// condition = { startTime };
 						// break;
@@ -833,7 +835,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 						if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
 							// change clear to rain.start or snow.start
-							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity);
+							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 							timeStatus.push(TIME_STATUS.START);
 						} else if (
 							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
@@ -857,12 +859,12 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							"firstAt": startTime,
 						};
 
-						$.log(`🚧 ${$.name}, condition = ${JSON.stringify(condition)}`, '');
+						$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
-						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity);
+						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						timeStatus = [TIME_STATUS.START];
 						condition = { startTime };
 						break;
