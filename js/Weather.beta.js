@@ -578,79 +578,6 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		});
 	});
 
-	const getSummary = minutes => {
-		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
-		// initalize data
-		const weatherType = getWeatherType(minutelyData?.result?.hourly);
-		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
-		const summaries = [];
-		let lastIndex = 0;
-		// little trick for origin data
-		let isRainOrSnow = minutes[0].precipIntensity > 0;
-		let summary = {
-			startTime: minutes[0].startTime,
-			// I guess data from weatherType is not always reliable
-			condition: isRainOrSnow ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
-		};
-
-		for (let i = 0; i < minutes.length; i++) {
-			// Apple weather could only display one hour data
-			// drop useless data to avoid display empty graph
-			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
-				summaries.push(summary);
-				return summaries;
-			}
-
-			const { startTime, precipIntensity } = minutes[i];
-			if (isRainOrSnow) {
-				if (
-					// end of rain
-					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
-					// we always need precipChance and precipIntensity data
-					i + 1 === minutes.length
-				) {
-					const range = minutes.slice(lastIndex, i + 1);
-
-					// we reach the data end but cannot find the end of rain
-					if (radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
-						summary.endTime = startTime;
-					}
-					summary.precipChance = Math.max(...range.map(value => value.precipChance));
-					// it looks like Apple doesn't care precipIntensity
-					summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
-
-					summaries.push(summary);
-
-					isRainOrSnow = !isRainOrSnow;
-					lastIndex = i;
-					summary = {
-						startTime: startTime,
-						condition: SUMMARY_CONDITION_TYPES.CLEAR,
-					};
-				}
-			} else {
-				if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
-					summary.endTime = startTime;
-
-					summaries.push(summary);
-
-					isRainOrSnow = !isRainOrSnow;
-					lastIndex = i;
-					summary = {
-						startTime: startTime,
-						condition: weatherType,
-					};
-				}
-			}
-		}
-
-		// $.log(`🚧 ${$.name}, result: summaries = ${JSON.stringify(summaries)}`, '');
-		return summaries;
-	};
-
-	const summaries = getSummary(weather.forecastNextHour.minutes);
-	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
-
 	const getConditions = (minutelyData, minutes) => {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
 		// TODO: when to add possible
@@ -878,6 +805,79 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 
 	const conditions = getConditions(minutelyData, weather.forecastNextHour.minutes);
 	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
+
+	const getSummary = minutes => {
+		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
+		// initalize data
+		const weatherType = getWeatherType(minutelyData?.result?.hourly);
+		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
+		const summaries = [];
+		let lastIndex = 0;
+		// little trick for origin data
+		let isRainOrSnow = minutes[0].precipIntensity > 0;
+		let summary = {
+			startTime: minutes[0].startTime,
+			// I guess data from weatherType is not always reliable
+			condition: isRainOrSnow ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
+		};
+
+		for (let i = 0; i < minutes.length; i++) {
+			// Apple weather could only display one hour data
+			// drop useless data to avoid display empty graph
+			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
+				summaries.push(summary);
+				return summaries;
+			}
+
+			const { startTime, precipIntensity } = minutes[i];
+			if (isRainOrSnow) {
+				if (
+					// end of rain
+					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					// we always need precipChance and precipIntensity data
+					i + 1 === minutes.length
+				) {
+					const range = minutes.slice(lastIndex, i + 1);
+
+					// we reach the data end but cannot find the end of rain
+					if (radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+						summary.endTime = startTime;
+					}
+					summary.precipChance = Math.max(...range.map(value => value.precipChance));
+					// it looks like Apple doesn't care precipIntensity
+					summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
+
+					summaries.push(summary);
+
+					isRainOrSnow = !isRainOrSnow;
+					lastIndex = i;
+					summary = {
+						startTime: startTime,
+						condition: SUMMARY_CONDITION_TYPES.CLEAR,
+					};
+				}
+			} else {
+				if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+					summary.endTime = startTime;
+
+					summaries.push(summary);
+
+					isRainOrSnow = !isRainOrSnow;
+					lastIndex = i;
+					summary = {
+						startTime: startTime,
+						condition: weatherType,
+					};
+				}
+			}
+		}
+
+		// $.log(`🚧 ${$.name}, result: summaries = ${JSON.stringify(summaries)}`, '');
+		return summaries;
+	};
+
+	const summaries = getSummary(weather.forecastNextHour.minutes);
+	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
 	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
