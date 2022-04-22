@@ -814,7 +814,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			}
 		}
 
-		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
+		$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
 	};
 
@@ -894,7 +894,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			}
 		}
 
-		// $.log(`🚧 ${$.name}, result: summaries = ${JSON.stringify(summaries)}`, '');
+		$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
 		return summaries;
 	};
 
