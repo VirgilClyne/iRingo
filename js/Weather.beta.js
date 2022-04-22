@@ -63,7 +63,10 @@ var { body } = $response;
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
-				} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+				} else {
+					$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(data?.forecastNextHour)}`, "");
+					$.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+				}
 			}
 		};
 		body = JSON.stringify(data);
@@ -527,9 +530,9 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		return weather;
 	}
 
-	$.log(`⚠️ ${$.name}, Detect`, `forecastNextHour data ${api}`, '');
+	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${api}`, '');
   if (!weather.forecastNextHour) {
-    $.log(`⚠️ ${$.name}, non-existent forecastNextHour data`, `creating`, '');
+    $.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
     weather.forecastNextHour = {
       "name": "NextHourForecast",
       "metadata": {},
@@ -734,7 +737,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 				condition.shortTemplate = description;
 				condition.parameters = {};
 
-				$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 				conditions.push(condition);
 				return conditions;
 			}
@@ -751,7 +753,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.shortTemplate = description;
 						condition.parameters = {};
 
-						$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
@@ -789,7 +790,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							"firstAt": startTime,
 						};
 	
-						$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
@@ -858,7 +858,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 							"firstAt": startTime,
 						};
 
-						$.log(`🚧 ${$.name}, i = ${i}, condition = ${JSON.stringify(condition)}`, '');
 						conditions.push(condition);
 
 						weatherAndPossiblity.possibility =
@@ -871,14 +870,14 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			}
 		}
 
-		$.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
+		// $.log(`🚧 ${$.name}, result: conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
 	};
 
 	const conditions = getConditions(minutelyData, weather.forecastNextHour.minutes);
 	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
 
-	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
+	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 };
