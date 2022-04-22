@@ -408,6 +408,8 @@ async function outputAQI(api, now, obs, weather, Settings) {
  * @return {Promise<*>}
  */
 async function outputNextHour(api, minutelyData, weather, Settings) {
+	const DISPLAYABLE_MINUTES = 60;
+
 	const minutely = minutelyData?.result?.minutely;
 	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
 
@@ -573,8 +575,6 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 	const getSummary = minutes => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
-		const DISPLAYABLE_MINUTES = 60;
-
 		// initalize data
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
