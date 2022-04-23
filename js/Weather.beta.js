@@ -517,7 +517,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 
-	const initializeForecastNextHour = apiVersion => {
+	const initializeNextHour = apiVersion => {
 		switch (apiVersion) {
 			case "v1":
 				return {
@@ -664,7 +664,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		case "v1":
 			if (!weather.next_hour) {
 				$.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
-				nextHour = initializeForecastNextHour(apiVersion);
+				nextHour = initializeNextHour(apiVersion);
 			} else {
 				nextHour = weather.next_hour;
 			}
@@ -672,7 +672,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		case "v2":
 			if (!weather.forecastNextHour) {
 				$.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
-				nextHour = initializeForecastNextHour(apiVersion);
+				nextHour = initializeNextHour(apiVersion);
 			} else {
 				nextHour = weather.forecastNextHour;
 			}
