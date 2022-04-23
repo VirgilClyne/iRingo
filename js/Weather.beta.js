@@ -736,34 +736,41 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	// FOR DEBUG
 	const debugChance = parseInt(Settings?.NextHour?.Debug?.Chance) ?? 100;
 	const debugDelay = parseInt(Settings?.NextHour?.Debug?.Delay) ?? 0;
-	const debugLower = parseFloat(Settings?.NextHour?.Debug?.Lower) ?? 0;
-	const debugUpper = parseFloat(Settings?.NextHour?.Debug?.Upper) ?? 4;
+	const debugPrecipLower = parseFloat(Settings?.NextHour?.Debug?.PrecipLower) ?? 0.031;
+	const debugPrecipUpper = parseFloat(Settings?.NextHour?.Debug?.PrecipUpper) ?? 0.48;
+	const debugIntensityLower = parseFloat(Settings?.NextHour?.Debug?.IntensityLower) ?? 0;
+	const debugIntensityUpper = parseFloat(Settings?.NextHour?.Debug?.IntensityUpper) ?? 4;
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
 	function getRandomInt(min, max) {
 		min = Math.ceil(min);
 		max = Math.floor(max);
 		return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
 	}
-	const getRandom = () => getRandomInt(debugLower * 1000, debugUpper * 1000) / 1000;
+	const getRandomPrecip = () => getRandomInt(debugPrecipLower * 10000, debugPrecipUpper * 10000) / 10000;
+	const getRandomIntensity = () => getRandomInt(debugIntensityLower * 1000, debugIntensityUpper * 1000) / 1000;
 
 	if (Settings?.NextHour?.Debug?.Switch) {
 		$.log(`⚠️ ${$.name}, debug模式已开启`, '');
 		$.log(`⚠️ ${$.name}, debug: WeatherType = ${Settings.NextHour.Debug?.WeatherType}, ` +
 					`Chance = ${Settings.NextHour.Debug?.Chance}, ` +
 					`Delay = ${Settings.NextHour.Debug?.Delay}, ` +
-					`Lower = ${Settings.NextHour.Debug?.Lower}, ` +
-					`Upper = ${Settings.NextHour.Debug?.Upper}, ` +
+					`PrecipLower = ${Settings.NextHour.Debug?.PrecipLower}, ` +
+					`PrecipUpper = ${Settings.NextHour.Debug?.PrecipUpper}, ` +
+					`IntensityLower = ${Settings.NextHour.Debug?.IntensityLower}, ` +
+					`IntensityUpper = ${Settings.NextHour.Debug?.IntensityUpper}, ` +
 					`parsed Chance = ${debugChance}, ` +
 					`parsed Delay = ${debugDelay}, ` +
-					`parsed Lower = ${debugLower}, ` +
-					`parsed Upper = ${debugUpper}`, "");
+					`parsed PrecipLower = ${debugIntensityLower}, ` +
+					`parsed PrecipUpper = ${debugIntensityUpper}, ` +
+					`parsed IntensityLower = ${debugIntensityLower}, ` +
+					`parsed IntensityUpper = ${debugIntensityUpper}`, "");
 	}
 
 	minutely.precipitation_2h.forEach((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
 		const minute = {
 			// it looks like Apple doesn't care precipIntensity
-			"precipIntensity": value,
+			"precipIntensity": !Settings?.NextHour?.Debug?.Switch ? value : getRandomPrecip(),
 		};
 
 		// FOR DEBUG
@@ -782,7 +789,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 					if (index < debugDelay) {
 						minute.perceivedIntensity = 0;
 					} else {
-						minute.perceivedIntensity = getRandom();
+						minute.perceivedIntensity = getRandomIntensity();
 					}
 				} else {
 					minute.perceivedIntensity = radarToApplePrecipitation(value);
@@ -796,7 +803,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 					if (index < debugDelay) {
 						minute.precipIntensityPerceived = 0;
 					} else {
-						minute.precipIntensityPerceived = getRandom();
+						minute.precipIntensityPerceived = getRandomIntensity();
 					}
 				} else {
 					minute.precipIntensityPerceived = radarToApplePrecipitation(value);

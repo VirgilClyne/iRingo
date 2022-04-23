@@ -65,7 +65,23 @@
 					"desc": "一段时间后开始降雨或降雪"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.Lower",
+					"id": "@iRingo.Weather.NextHour.Debug.PrecipLower",
+					"name": "[下一小时降水]随机生成的降水数据的下限（雷达）",
+					"val": "0.031",
+					"type": "text",
+					"placeholder": "0.031",
+					"desc": "随机生成的precipIntensity的下限，四位小数"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.PrecipUpper",
+					"name": "[下一小时降水]随机生成的降水数据的上限（雷达）",
+					"val": "0.48",
+					"type": "text",
+					"placeholder": "0.48",
+					"desc": "随机生成的precipIntensity的上限，四位小数"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.IntensityLower",
 					"name": "[下一小时降水]随机生成UI显示数据的下限",
 					"val": "0",
 					"type": "text",
@@ -73,7 +89,7 @@
 					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的下限，三位小数"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.Upper",
+					"id": "@iRingo.Weather.NextHour.Debug.IntensityUpper",
 					"name": "[下一小时降水]随机生成UI显示数据的上限",
 					"val": "4",
 					"type": "text",
