@@ -855,7 +855,9 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					// constant of rain
 					// we always need precipChance and precipIntensity data
-					i + 1 === minutes.length
+					// limit end time in an hour
+					// to avoid displaying "raining nearly stop" even if longer than an hour
+					i + 1 >= DISPLAYABLE_MINUTES
 				) {
 					// for find the max value of precipChance and precipIntensity
 					const range = minutes.slice(lastIndex, i + 1);
