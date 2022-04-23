@@ -650,17 +650,22 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	};
 
 	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${apiVersion}`, '');
+	let nextHour;
 	switch (apiVersion) {
 		case "v1":
 			if (!weather.next_hour) {
 				$.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
-				weather.next_hour = initializeForecastNextHour(apiVersion);
+				nextHour = initializeForecastNextHour(apiVersion);
+			} else {
+				nextHour = weather.next_hour;
 			}
 			break;
 		case "v2":
 			if (!weather.forecastNextHour) {
 				$.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
-				weather.forecastNextHour = initializeForecastNextHour(apiVersion);
+				nextHour = initializeForecastNextHour(apiVersion);
+			} else {
+				nextHour = weather.forecastNextHour;
 			}
 			break;
 		default:
@@ -680,31 +685,31 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	// TODO: split API logic from this function
 	// this API doesn't support language switch
 	// replace `zh_CN` to `zh-CN`
-	weather.forecastNextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
-	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
-	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
-	weather.forecastNextHour.metadata.version = apiVersion;
+	nextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
+	nextHour.metadata.longitude = minutelyData?.location[1];
+	nextHour.metadata.latitude = minutelyData?.location[0];
+	nextHour.metadata.version = apiVersion;
 
-	weather.forecastNextHour.startTime = startTimeIos;
+	nextHour.startTime = startTimeIos;
 
 	switch (apiVersion) {
 		case "v1":
-			weather.forecastNextHour.metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
-			weather.forecastNextHour.metadata.expire_time = convertTime(new Date(), 'add-1h-floor', apiVersion);
-			weather.forecastNextHour.metadata.provider_name = providerName;
+			nextHour.metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
+			nextHour.metadata.expire_time = convertTime(new Date(), 'add-1h-floor', apiVersion);
+			nextHour.metadata.provider_name = providerName;
 			// untested: I guess is the same as AQI data_source
-			weather.forecastNextHour.metadata.data_source = 0;
+			nextHour.metadata.data_source = 0;
 			break;
 		case "v2":
 		default:
-			weather.forecastNextHour.metadata.expireTime =
+			nextHour.metadata.expireTime =
 				convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', apiVersion);
-			weather.forecastNextHour.metadata.providerName = providerName;
-			weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
+			nextHour.metadata.providerName = providerName;
+			nextHour.metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
 			// actually we use radar data directly
 			// it looks like Apple doesn't care this data
-			// weather.forecastNextHour.metadata.units = "m";
-			weather.forecastNextHour.metadata.units = "radar";
+			// nextHour.metadata.units = "m";
+			nextHour.metadata.units = "radar";
 			break;
 	}
 
@@ -733,7 +738,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 				break;
 		}
 
-		weather.forecastNextHour.minutes.push(minute);
+		nextHour.minutes.push(minute);
 	});
 
 	const getConditions = (apiVersion, minutelyData, minutes) => {
@@ -1014,8 +1019,8 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		return conditions;
 	};
 
-	const conditions = getConditions(apiVersion, minutelyData, weather.forecastNextHour.minutes);
-	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
+	const conditions = getConditions(apiVersion, minutelyData, nextHour.minutes);
+	nextHour.condition = nextHour.condition.concat(conditions);
 
 	const getSummary = (apiVersion, minutes) => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
@@ -1139,14 +1144,24 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		return summaries;
 	};
 
-	const summaries = getSummary(apiVersion, weather.forecastNextHour.minutes);
-	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
+	const summaries = getSummary(apiVersion, nextHour.minutes);
+	nextHour.summary = nextHour.summary.concat(summaries);
 
-	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
+	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(nextHour)}`, '');
 
 	if (apiVersion === "v1") {
 		$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段，将输出修改后的内容。`, "");
 		$.log(`🚧 ${$.name}, (edited) next_hour = ${JSON.stringify(data?.next_hour)}`, "");
+	}
+
+	switch (apiVersion) {
+		case "v1":
+			weather.next_hour = nextHour;
+			break;
+		case "v2":
+		default:
+			weather.forecastNextHour = nextHour;
+			break;
 	}
 
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
