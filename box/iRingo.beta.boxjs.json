@@ -34,6 +34,53 @@
 					"desc": "是否启用此功能修改，数据来源：气象在线"
 				},
 				{
+					"id": "@iRingo.Weather.NextHour.Debug.Switch",
+					"name": "[下一小时降水]Debug开关",
+					"val": false,
+					"type": "boolean",
+					"desc": "如果您不知道这个开关是用来做什么的，请保持关闭"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.WeatherType",
+					"name": "[下一小时降水]雨雪类型",
+					"val": "RAIN",
+					"type": "text",
+					"placeholder": "RAIN",
+					"desc": "值应为claer、rain或snow"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.Chance",
+					"name": "[下一小时降水]降水或降雪概率",
+					"val": "100",
+					"type": "text",
+					"placeholder": "100",
+					"desc": "precipChance的值，范围在0到100"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.Delay",
+					"name": "[下一小时降水]雨雪发生时间（分钟后）",
+					"val": "0",
+					"type": "text",
+					"placeholder": "0",
+					"desc": "一段时间后开始降雨或降雪"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.Lower",
+					"name": "[下一小时降水]随机生成UI显示数据的下限",
+					"val": "0",
+					"type": "text",
+					"placeholder": "0",
+					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的下限，三位小数"
+				},
+				{
+					"id": "@iRingo.Weather.NextHour.Debug.Upper",
+					"name": "[下一小时降水]随机生成UI显示数据的上限",
+					"val": "4",
+					"type": "text",
+					"placeholder": "4",
+					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的上限，APIv2的上限为4，三位小数"
+				},
+				{
 					"id": "@iRingo.Weather.AQI.Switch",
 					"name": "[空气质量]修改开关",
 					"val": true,

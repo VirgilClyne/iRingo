@@ -551,6 +551,13 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		// enough for us, add more in future?
 		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
 
+		// FOR DEBUG
+		if (Settings?.NextHour?.Debug?.Switch) {
+			$.log(`⚠️ ${$.name}, debug: WeatherType = ${Settings.NextHour.Debug?.WeatherType}`, '');
+
+			return Settings.NextHour.Debug?.WeatherType ?? "rain";
+		}
+
 		if (hourly?.skycon?.find(
 			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)
 		)) {
@@ -728,24 +735,71 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	// handle minutes
 	//
 	const startTimeDate = new Date(startTimeIos);
+	// FOR DEBUG
+	const debugChance = parseInt(Settings?.NextHour?.Debug?.Chance) ?? 100;
+	const debugDelay = parseInt(Settings?.NextHour?.Debug?.Delay) ?? 0;
+	const debugLower = parseFloat(Settings?.NextHour?.Debug?.Lower) ?? 0;
+	const debugUpper = parseFloat(Settings?.NextHour?.Debug?.Upper) ?? 4;
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+	function getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+	}
+	const getRandom = () => getRandomInt(debugLower * 1000, debugUpper * 1000) / 1000;
+
 	minutely.precipitation_2h.forEach((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
 		const minute = {
-			"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
 			// it looks like Apple doesn't care precipIntensity
 			"precipIntensity": value,
 		};
+
+		// FOR DEBUG
+		if (Settings?.NextHour?.Debug?.Switch) {
+			$.log(`⚠️ ${$.name}, debug模式已开启`, '');
+			$.log(`⚠️ ${$.name}, debug: Chance = ${Settings.NextHour.Debug?.Chance}, ` +
+						`Delay = ${Settings.NextHour.Debug?.Delay}, ` +
+						`Lower = ${Settings.NextHour.Debug?.Lower}, ` +
+						`Upper = ${Settings.NextHour.Debug?.Upper}, ` +
+						`parsed Chance = ${debugChance}, ` +
+						`parsed Delay = ${debugDelay}, ` +
+						`parsed Lower = ${debugLower}, ` +
+						`parsed Upper = ${debugUpper}`, "");
+
+			minute.precipChance = debugChance ?? 100;
+		} else {
+			minute.precipChance = value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
+		}
 
 		switch (apiVersion) {
 			case "v1":
 				minute.startAt = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
 				// TODO: find out the limit of perceivedIntensity
-				minute.perceivedIntensity = radarToApplePrecipitation(value);
+				// FOR DEBUG
+				if (Settings?.NextHour?.Debug?.Switch) {
+					if (index < debugDelay) {
+						minute.perceivedIntensity = 0;
+					} else {
+						minute.perceivedIntensity = getRandom();
+					}
+				} else {
+					minute.perceivedIntensity = radarToApplePrecipitation(value);
+				}
 				break;
 			case "v2":
 			default:
 				minute.startTime = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
-				minute.precipIntensityPerceived = radarToApplePrecipitation(value);
+				// FOR DEBUG
+				if (Settings?.NextHour?.Debug?.Switch) {
+					if (index < debugDelay) {
+						minute.precipIntensityPerceived = 0;
+					} else {
+						minute.precipIntensityPerceived = getRandom();
+					}
+				} else {
+					minute.precipIntensityPerceived = radarToApplePrecipitation(value);
+				}
 				break;
 		}
 
