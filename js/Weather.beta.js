@@ -497,7 +497,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 /**
  * output forecast NextHour Data
  * @author WordlessEcho
- * @param {String} api - Apple API Version
+ * @param {String} apiVersion - Apple API Version
  * @param {Object} minutelyData - minutely data from API
  * @param {Object} weather - weather data from Apple
  * @param {Object} Settings - Settings config in Box.js
@@ -513,7 +513,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
 	// use next minute and clean seconds as next hour forecast as start time
-	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
+	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', apiVersion);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 
