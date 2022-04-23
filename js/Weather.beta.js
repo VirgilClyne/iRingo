@@ -1232,7 +1232,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	}
 
 	if (Settings?.NextHour?.Debug?.Switch) {
-		$.log(`⚠️ ${$.name}, debug: nextHour = ${nextHour}`, '');
+		$.log(`⚠️ ${$.name}, debug: nextHour = ${JSON.stringify(nextHour)}`, '');
 	}
 
 	switch (apiVersion) {
