@@ -493,7 +493,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
  * @param {Object} Settings - Settings config in Box.js
  * @return {Promise<*>}
  */
- async function outputNextHour(api, providerName, minutelyData, weather, Settings) {
+ async function outputNextHour(apiVersion, providerName, minutelyData, weather, Settings) {
 	// iOS weather can only display data in an hour
 	const DISPLAYABLE_MINUTES = 60;
 
@@ -506,6 +506,26 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
+
+	const initializeForecastNextHour = apiVersion => {
+		switch (apiVersion) {
+			case "v1":
+				return {};
+			case "v2":
+				return {
+					"name": "NextHourForecast",
+      		"metadata": {
+						"temporarilyUnavailable": true,
+					},
+      		"condition": [],
+      		"summary": [],
+      		"startTime": "",
+      		"minutes": [],
+				};
+			default:
+				throw new Error(`unsupport api version ${apiVersion}`);
+		}
+	};
 
 	// https://docs.caiyunapp.com/docs/tables/skycon/
 	const getWeatherType = hourly => {
@@ -619,58 +639,92 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		}
 	};
 
+	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${apiVersion}`, '');
+	switch (apiVersion) {
+		case "v1":
+			if (!weather.next_hour) {
+				$.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
+				weather.next_hour = initializeForecastNextHour(apiVersion);
+			}
+			break;
+		case "v2":
+			if (!weather.forecastNextHour) {
+				$.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
+				weather.forecastNextHour = initializeForecastNextHour(apiVersion);
+			}
+			break;
+		default:
+			$.logErr(`❗️ ${$.name}, 不支持此版本的Apple天气，请尝试升级脚本。` +
+							 `apiVersion = ${apiVersion}`, '');
+			return weather;
+	}
+
 	if (minutelyData?.status !== "ok" || minutely?.status !== "ok") {
-		$.log(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
+		$.logErr(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
 		return weather;
 	}
 
-	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${api}`, '');
-  if (!weather.forecastNextHour) {
-    $.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
-    weather.forecastNextHour = {
-      "name": "NextHourForecast",
-      "metadata": {},
-      "condition": [],
-      "summary": [],
-      "startTime": "",
-      "minutes": [],
-    }
-  }
-
+	//
+	// handle metadata
+	//
 	// TODO: split API logic from this function
-	weather.forecastNextHour.metadata.expireTime = convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', api);
 	// this API doesn't support language switch
 	// replace `zh_CN` to `zh-CN`
 	weather.forecastNextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
 	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
 	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
-	weather.forecastNextHour.metadata.providerName = providerName;
-	weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
-	// actually we use radar data directly
-	// it looks like Apple doesn't care this data
-	// weather.forecastNextHour.metadata.units = "m";
-	weather.forecastNextHour.metadata.units = "radar";
-	weather.forecastNextHour.metadata.version = 2;
+	weather.forecastNextHour.metadata.version = apiVersion;
 
 	weather.forecastNextHour.startTime = startTimeIos;
 
+	switch (apiVersion) {
+		case "v1":
+			weather.forecastNextHour.metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
+			weather.forecastNextHour.metadata.expire_time = convertTime(new Date(), 'add-1h-floor', apiVersion);
+			weather.forecastNextHour.metadata.provider_name = providerName;
+			// untested: I guess is the same as AQI data_source
+			weather.forecastNextHour.metadata.data_source = 0;
+			break;
+		case "v2":
+		default:
+			weather.forecastNextHour.metadata.expireTime =
+				convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', apiVersion);
+			weather.forecastNextHour.metadata.providerName = providerName;
+			weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
+			// actually we use radar data directly
+			// it looks like Apple doesn't care this data
+			// weather.forecastNextHour.metadata.units = "m";
+			weather.forecastNextHour.metadata.units = "radar";
+			break;
+	}
+
+	//
+	// handle minutes
+	//
 	const startTimeDate = new Date(startTimeIos);
 	minutely.precipitation_2h.forEach((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
-
-		weather.forecastNextHour.minutes.push({
-			"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
-			// we only have per half hour probability data
-			// `index / 30` => use one probability for 30 minutes
-			// `* 100` => convert to percentages
+		const minute = {
 			"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
 			// it looks like Apple doesn't care precipIntensity
 			"precipIntensity": value,
 			"precipIntensityPerceived": radarToApplePrecipitation(value),
-		});
+		};
+
+		switch (apiVersion) {
+			case "v1":
+				minute.startAt = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
+				break;
+			case "v2":
+			default:
+				minute.startTime = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
+				break;
+		}
+
+		weather.forecastNextHour.minutes.push(minute);
 	});
 
-	const getConditions = (minutelyData, minutes) => {
+	const getConditions = (apiVersion, minutelyData, minutes) => {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
 		// TODO: when to add possible
 		const ADD_POSSIBLE_UPPER = 0;
@@ -744,7 +798,16 @@ async function outputAQI(api, now, obs, weather, Settings) {
 			weatherStatus: toWeatherStatus(minutes[0].precipIntensity, weatherType),
 		};
 		let timeStatus = [];
-		let condition = { startTime: minutes[0].startTime };
+		let condition = {};
+
+		switch (apiVersion) {
+			case "v1":
+				break;
+			case "v2":
+			default:
+				condition.startTime = minutes[0].startTime;
+				break;
+		}
 
 		for (let i = 0; i < minutes.length; i++) {
 			// Apple weather could only display one hour data
@@ -764,11 +827,21 @@ async function outputAQI(api, now, obs, weather, Settings) {
 			}
 
 			// this loop will handle previous condition and create the condition for next condition
-			const { startTime, precipIntensity } = minutes[i];
+			// `startAt` for APIv1, `startTime` for APIv2
+			// is this too dirty?
+			const { startAt, startTime, precipIntensity } = minutes[i];
 			if (weatherAndPossiblity.weatherStatus !== toWeatherStatus(precipIntensity, weatherType)) {
 				switch (toWeatherStatus(precipIntensity, weatherType)) {
 					case WEATHER_STATUS.CLEAR:
-						condition.endTime = startTime;
+						switch (apiVersion) {
+							case "v1":
+								condition.validUntil = startAt;
+								break;
+							case "v2":
+							default:
+								condition.endTime = startTime;
+								break;
+						}
 
 						timeStatus.push(TIME_STATUS.STOP);
 						condition.token = toToken(weatherAndPossiblity, timeStatus);
@@ -784,7 +857,15 @@ async function outputAQI(api, now, obs, weather, Settings) {
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
 						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						timeStatus = [];
-						condition = { startTime };
+						switch (apiVersion) {
+							case "v1":
+								condition = {};
+								break;
+							case "v2":
+							default:
+								condition = { startTime };
+								break;
+						}
 						break;
 					case WEATHER_STATUS.HEAVY_RAIN:
 					case WEATHER_STATUS.HEAVY_SNOW:
@@ -820,7 +901,15 @@ async function outputAQI(api, now, obs, weather, Settings) {
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
 						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						timeStatus = [TIME_STATUS.START];
-						condition = { startTime };
+						switch (apiVersion) {
+							case "v1":
+								condition = {};
+								break;
+							case "v2":
+							default:
+								condition = { startTime };
+								break;
+						}
 						break;
 					case WEATHER_STATUS.DRIZZLE:
 						// unfortunately we cannot distinguish the drizzle without helping of API
@@ -854,7 +943,15 @@ async function outputAQI(api, now, obs, weather, Settings) {
 					case WEATHER_STATUS.SNOW:
 					default:
 						// if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.DRIZZLE) {}
-						condition.endTime = startTime;
+						switch (apiVersion) {
+							case "v1":
+								condition.validUntil = startAt;
+								break;
+							case "v2":
+							default:
+								condition.endTime = startTime;
+								break;
+						}
 
 						if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
 							// change clear to rain.start or snow.start
@@ -887,7 +984,15 @@ async function outputAQI(api, now, obs, weather, Settings) {
 							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
 						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
 						timeStatus = [TIME_STATUS.START];
-						condition = { startTime };
+						switch (apiVersion) {
+							case "v1":
+								condition = {};
+								break;
+							case "v2":
+							default:
+								condition = { startTime };
+								break;
+						}
 						break;
 				}
 			}
@@ -897,10 +1002,10 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		return conditions;
 	};
 
-	const conditions = getConditions(minutelyData, weather.forecastNextHour.minutes);
+	const conditions = getConditions(apiVersion, minutelyData, weather.forecastNextHour.minutes);
 	weather.forecastNextHour.condition = weather.forecastNextHour.condition.concat(conditions);
 
-	const getSummary = minutes => {
+	const getSummary = (apiVersion, minutes) => {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
@@ -912,10 +1017,18 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		// little trick for origin data
 		let isRainOrSnow = minutes[0].precipIntensity > 0;
 		let summary = {
-			startTime: minutes[0].startTime,
 			// I guess data from weatherType is not always reliable
 			condition: isRainOrSnow ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
 		};
+
+		switch (apiVersion) {
+			case "v1":
+				break;
+			case "v2":
+			default:
+				summary.startTime = minutes[0].startTime;
+				break;
+		}
 
 		for (let i = 0; i < minutes.length; i++) {
 			// clear in an hour
@@ -927,7 +1040,9 @@ async function outputAQI(api, now, obs, weather, Settings) {
 			}
 
 			// this loop will handle previous condition and create the condition for next condition
-			const { startTime, precipIntensity } = minutes[i];
+			// `startAt` for APIv1, `startTime` for APIv2
+			// is this too dirty?
+			const { startAt, startTime, precipIntensity } = minutes[i];
 			if (isRainOrSnow) {
 				if (
 					// end of rain
@@ -941,7 +1056,15 @@ async function outputAQI(api, now, obs, weather, Settings) {
 
 					// we reach the data end but cannot find the end of rain
 					if (radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
-						summary.endTime = startTime;
+						switch (apiVersion) {
+							case "v1":
+								summary.validUntil = startAt;
+								break;
+							case "v2":
+							default:
+								summary.endTime = startTime;
+								break;
+						}
 					}
 					summary.precipChance = Math.max(...range.map(value => value.precipChance));
 					// it looks like Apple doesn't care precipIntensity
@@ -952,23 +1075,47 @@ async function outputAQI(api, now, obs, weather, Settings) {
 					// reset summary
 					isRainOrSnow = !isRainOrSnow;
 					lastIndex = i;
-					summary = {
-						startTime: startTime,
-						condition: SUMMARY_CONDITION_TYPES.CLEAR,
-					};
+					switch (apiVersion) {
+						case "v1":
+							summary = { condition: SUMMARY_CONDITION_TYPES.CLEAR };
+							break;
+						case "v2":
+						default:
+							summary = {
+								startTime: startTime,
+								condition: SUMMARY_CONDITION_TYPES.CLEAR,
+							};
+							break;
+					}
 				}
 			} else {
 				if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
-					summary.endTime = startTime;
+					switch (apiVersion) {
+						case "v1":
+							summary.validUntil = startAt;
+							break;
+						case "v2":
+						default:
+							summary.endTime = startTime;
+							break;
+					}
 
 					summaries.push(summary);
 
 					isRainOrSnow = !isRainOrSnow;
 					lastIndex = i;
-					summary = {
-						startTime: startTime,
-						condition: weatherType,
-					};
+					switch (apiVersion) {
+						case "v1":
+							summary = { condition: weatherType };
+							break;
+						case "v2":
+						default:
+							summary = {
+								startTime: startTime,
+								condition: weatherType,
+							};
+							break;
+					}
 				}
 			}
 		}
@@ -977,7 +1124,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		return summaries;
 	};
 
-	const summaries = getSummary(weather.forecastNextHour.minutes);
+	const summaries = getSummary(apiVersion, weather.forecastNextHour.minutes);
 	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
 	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
