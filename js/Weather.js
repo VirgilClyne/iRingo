@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather AQI v3.1.0");
+const $ = new Env("Apple Weather AQI v3.2.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
