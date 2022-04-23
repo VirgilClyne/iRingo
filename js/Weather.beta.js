@@ -906,6 +906,8 @@ async function outputAQI(api, now, obs, weather, Settings) {
 				condition.parameters = {};
 
 				conditions.push(condition);
+
+				$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 				return conditions;
 			}
 
@@ -1119,6 +1121,8 @@ async function outputAQI(api, now, obs, weather, Settings) {
 			// drop useless data to avoid display empty graph
 			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
 				summaries.push(summary);
+
+				$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
 				return summaries;
 			}
 
