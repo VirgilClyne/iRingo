@@ -718,16 +718,18 @@ async function outputAQI(api, now, obs, weather, Settings) {
 			"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
 			// it looks like Apple doesn't care precipIntensity
 			"precipIntensity": value,
-			"precipIntensityPerceived": radarToApplePrecipitation(value),
 		};
 
 		switch (apiVersion) {
 			case "v1":
 				minute.startAt = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
+				// TODO: find out the limit of perceivedIntensity
+				minute.perceivedIntensity = radarToApplePrecipitation(value);
 				break;
 			case "v2":
 			default:
 				minute.startTime = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
+				minute.precipIntensityPerceived = radarToApplePrecipitation(value);
 				break;
 		}
 
@@ -1069,16 +1071,19 @@ async function outputAQI(api, now, obs, weather, Settings) {
 						switch (apiVersion) {
 							case "v1":
 								summary.validUntil = startAt;
+								summary.probability = Math.max(...range.map(value => value.precipChance));
+								summary.maxIntensity = Math.max(...range.map(value => value.precipIntensity));
+								summary.minIntensity = Math.min(...range.map(value => value.precipIntensity));
 								break;
 							case "v2":
 							default:
 								summary.endTime = startTime;
+								summary.precipChance = Math.max(...range.map(value => value.precipChance));
+								// it looks like Apple doesn't care precipIntensity
+								summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 								break;
 						}
 					}
-					summary.precipChance = Math.max(...range.map(value => value.precipChance));
-					// it looks like Apple doesn't care precipIntensity
-					summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 
 					summaries.push(summary);
 
