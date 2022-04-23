@@ -1229,9 +1229,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	if (apiVersion === "v1") {
 		$.log(`🚧 ${$.name}, 检测到API版本为${apiVersion}，适配尚处于测试阶段，将输出修改后的内容。`, "");
 		$.log(`🚧 ${$.name}, (edited) nextHour = ${JSON.stringify(nextHour)}`, "");
-	}
-
-	if (Settings?.NextHour?.Debug?.Switch) {
+	} else if (Settings?.NextHour?.Debug?.Switch) {
 		$.log(`⚠️ ${$.name}, debug: nextHour = ${JSON.stringify(nextHour)}`, '');
 	}
 
