@@ -48,11 +48,11 @@ var { body } = $response;
 		};
 		// NextHour
 		if (Settings.NextHour.Switch) {
+			$.log(`🚧 ${$.name}, `,
+				`forecastNextHour.providerName = ${data?.forecastNextHour?.providerName}`, "");
+
 			if (url.params?.dataSets?.includes("forecastNextHour")) {
 				if (!data?.forecastNextHour?.metadata?.providerName) {
-					$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
-						`providerName = ${data?.forecastNextHour?.providerName}`, "");
-
 					let minutelyData;
 					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
