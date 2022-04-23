@@ -71,10 +71,10 @@ var { body } = $response;
 					if (minutelyData) {
 						data = await outputNextHour(Params.ver, providerName, minutelyData, data, Settings);
 					} else {
-						$.log(`🚧 ${$.name}, data = ${JSON.stringify(data?.forecastNextHour ?? data?.next_hour)}`, "");
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
 				} else {
+					$.log(`🚧 ${$.name}, data = ${JSON.stringify(data?.forecastNextHour ?? data?.next_hour)}`, "");
 					$.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
 				}
 			}
