@@ -48,11 +48,12 @@ var { body } = $response;
 		};
 		// NextHour
 		if (Settings.NextHour.Switch) {
+			$.log(`🚧 ${$.name}, `,
+				`forecastNextHour.providerName = ${data?.forecastNextHour?.providerName}`, "");
+			$.log(`🚧 ${$.name}, data = ${data}`, "");
+
 			if (url.params?.dataSets?.includes("forecastNextHour")) {
 				if (!data?.forecastNextHour?.metadata?.providerName) {
-					$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
-						`providerName = ${data?.forecastNextHour?.providerName}`, "");
-
 					let minutelyData;
 					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
@@ -65,10 +66,7 @@ var { body } = $response;
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
-				} else {
-					$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(data?.forecastNextHour)}`, "");
-					$.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
-				}
+				} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
 			}
 		};
 		body = JSON.stringify(data);
