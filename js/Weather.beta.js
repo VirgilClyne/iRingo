@@ -553,8 +553,6 @@ async function outputAQI(api, now, obs, weather, Settings) {
 
 		// FOR DEBUG
 		if (Settings?.NextHour?.Debug?.Switch) {
-			$.log(`⚠️ ${$.name}, debug: WeatherType = ${Settings.NextHour.Debug?.WeatherType}`, '');
-
 			return Settings.NextHour.Debug?.WeatherType ?? "rain";
 		}
 
@@ -748,6 +746,19 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	}
 	const getRandom = () => getRandomInt(debugLower * 1000, debugUpper * 1000) / 1000;
 
+	if (Settings?.NextHour?.Debug?.Switch) {
+		$.log(`⚠️ ${$.name}, debug模式已开启`, '');
+		$.log(`⚠️ ${$.name}, debug: WeatherType = ${Settings.NextHour.Debug?.WeatherType}` +
+					`Chance = ${Settings.NextHour.Debug?.Chance}, ` +
+					`Delay = ${Settings.NextHour.Debug?.Delay}, ` +
+					`Lower = ${Settings.NextHour.Debug?.Lower}, ` +
+					`Upper = ${Settings.NextHour.Debug?.Upper}, ` +
+					`parsed Chance = ${debugChance}, ` +
+					`parsed Delay = ${debugDelay}, ` +
+					`parsed Lower = ${debugLower}, ` +
+					`parsed Upper = ${debugUpper}`, "");
+	}
+
 	minutely.precipitation_2h.forEach((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
 		const minute = {
@@ -757,16 +768,6 @@ async function outputAQI(api, now, obs, weather, Settings) {
 
 		// FOR DEBUG
 		if (Settings?.NextHour?.Debug?.Switch) {
-			$.log(`⚠️ ${$.name}, debug模式已开启`, '');
-			$.log(`⚠️ ${$.name}, debug: Chance = ${Settings.NextHour.Debug?.Chance}, ` +
-						`Delay = ${Settings.NextHour.Debug?.Delay}, ` +
-						`Lower = ${Settings.NextHour.Debug?.Lower}, ` +
-						`Upper = ${Settings.NextHour.Debug?.Upper}, ` +
-						`parsed Chance = ${debugChance}, ` +
-						`parsed Delay = ${debugDelay}, ` +
-						`parsed Lower = ${debugLower}, ` +
-						`parsed Upper = ${debugUpper}`, "");
-
 			minute.precipChance = debugChance ?? 100;
 		} else {
 			minute.precipChance = value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
