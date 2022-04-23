@@ -748,7 +748,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 
 	if (Settings?.NextHour?.Debug?.Switch) {
 		$.log(`⚠️ ${$.name}, debug模式已开启`, '');
-		$.log(`⚠️ ${$.name}, debug: WeatherType = ${Settings.NextHour.Debug?.WeatherType}` +
+		$.log(`⚠️ ${$.name}, debug: WeatherType = ${Settings.NextHour.Debug?.WeatherType}, ` +
 					`Chance = ${Settings.NextHour.Debug?.Chance}, ` +
 					`Delay = ${Settings.NextHour.Debug?.Delay}, ` +
 					`Lower = ${Settings.NextHour.Debug?.Lower}, ` +
