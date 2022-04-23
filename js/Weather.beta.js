@@ -1224,6 +1224,10 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		$.log(`🚧 ${$.name}, (edited) nextHour = ${JSON.stringify(nextHour)}`, "");
 	}
 
+	if (Settings?.NextHour?.Debug?.Switch) {
+		$.log(`⚠️ ${$.name}, debug: nextHour = ${nextHour}`, '');
+	}
+
 	switch (apiVersion) {
 		case "v1":
 			weather.next_hour = nextHour;
