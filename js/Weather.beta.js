@@ -1153,18 +1153,27 @@ async function outputAQI(api, now, obs, weather, Settings) {
 						switch (apiVersion) {
 							case "v1":
 								summary.validUntil = startAt;
-								summary.probability = Math.max(...range.map(value => value.precipChance));
-								summary.maxIntensity = Math.max(...range.map(value => value.precipIntensity));
-								summary.minIntensity = Math.min(...range.map(value => value.precipIntensity));
 								break;
 							case "v2":
 							default:
 								summary.endTime = startTime;
-								summary.precipChance = Math.max(...range.map(value => value.precipChance));
-								// it looks like Apple doesn't care precipIntensity
-								summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 								break;
 						}
+					}
+
+					switch (apiVersion) {
+						case "v1":
+							summary.probability = Math.max(...range.map(value => value.precipChance));
+							// it looks like Apple doesn't care precipIntensity
+							summary.maxIntensity = Math.max(...range.map(value => value.precipIntensity));
+							summary.minIntensity = Math.min(...range.map(value => value.precipIntensity));
+							break;
+						case "v2":
+						default:
+							summary.precipChance = Math.max(...range.map(value => value.precipChance));
+							// it looks like Apple doesn't care precipIntensity
+							summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
+							break;
 					}
 
 					summaries.push(summary);
