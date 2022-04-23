@@ -1138,6 +1138,12 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	weather.forecastNextHour.summary = weather.forecastNextHour.summary.concat(summaries);
 
 	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, '');
+
+	if (apiVersion === "v1") {
+		$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段，将输出修改后的内容。`, "");
+		$.log(`🚧 ${$.name}, (edited) next_hour = ${data?.next_hour}`, "");
+	}
+
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 };
