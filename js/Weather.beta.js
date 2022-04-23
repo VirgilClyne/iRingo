@@ -520,7 +520,16 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	const initializeForecastNextHour = apiVersion => {
 		switch (apiVersion) {
 			case "v1":
-				return {};
+				return {
+					"name": "NextHourForecast",
+					"metadata": {
+						"temporarilyUnavailable": true,
+					},
+					"condition": [],
+      		"summary": [],
+      		"startTime": "",
+      		"minutes": [],
+				};
 			case "v2":
 				return {
 					"name": "NextHourForecast",
@@ -678,6 +687,8 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		$.logErr(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
 		return weather;
 	}
+
+	delete nextHour.metadata.temporarilyUnavailable;
 
 	//
 	// handle metadata
