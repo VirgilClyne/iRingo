@@ -704,7 +704,6 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	nextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
 	nextHour.metadata.longitude = minutelyData?.location[1];
 	nextHour.metadata.latitude = minutelyData?.location[0];
-	nextHour.metadata.version = apiVersion;
 
 	nextHour.startTime = startTimeIos;
 
@@ -712,6 +711,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 		case "v1":
 			nextHour.metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
 			nextHour.metadata.expire_time = convertTime(new Date(), 'add-1h-floor', apiVersion);
+			nextHour.metadata.version = 1;
 			nextHour.metadata.provider_name = providerName;
 			// untested: I guess is the same as AQI data_source
 			nextHour.metadata.data_source = 0;
@@ -726,6 +726,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 			// it looks like Apple doesn't care this data
 			// nextHour.metadata.units = "m";
 			nextHour.metadata.units = "radar";
+			nextHour.metadata.version = 2;
 			break;
 	}
 
