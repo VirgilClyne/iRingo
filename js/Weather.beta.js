@@ -53,7 +53,7 @@ var { body } = $response;
 
 			if (Params.ver === "v1") {
 				$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段，将输出所有下一小时降水强度信息。`, "");
-				$.log(`🚧 ${$.name}, next_hour = ${data?.next_hour}`, "");
+				$.log(`🚧 ${$.name}, next_hour = ${JSON.stringify(data?.next_hour)}`, "");
 			}
 
 			if (
@@ -1141,7 +1141,7 @@ async function outputAQI(api, now, obs, weather, Settings) {
 
 	if (apiVersion === "v1") {
 		$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段，将输出修改后的内容。`, "");
-		$.log(`🚧 ${$.name}, (edited) next_hour = ${data?.next_hour}`, "");
+		$.log(`🚧 ${$.name}, (edited) next_hour = ${JSON.stringify(data?.next_hour)}`, "");
 	}
 
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
