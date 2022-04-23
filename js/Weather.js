@@ -48,11 +48,19 @@ var { body } = $response;
 		};
 		// NextHour
 		if (Settings.NextHour.Switch) {
-			if (url.params?.dataSets?.includes("forecastNextHour")) {
-				if (!data?.forecastNextHour?.metadata?.providerName) {
-					$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
-						`providerName = ${data?.forecastNextHour?.providerName}`, "");
+			$.log(`🚧 ${$.name}, 下小时降水强度 ` +
+						`providerName = ${data?.forecastNextHour?.providerName ?? data?.next_hour?.provider_name}`, "");
 
+			if (Params.ver === "v1") {
+				$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段，将输出所有下一小时降水强度信息。`, "");
+				$.log(`🚧 ${$.name}, next_hour = ${data?.next_hour}`, "");
+			}
+
+			if (
+				url.params?.dataSets?.includes("forecastNextHour") ||
+				url.params?.include?.includes("next_hour_forecast")
+			) {
+				if (!(data?.forecastNextHour?.metadata?.providerName || data?.next_hour?.provider_name)) {
 					let minutelyData;
 					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
@@ -65,7 +73,9 @@ var { body } = $response;
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
-				} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+				} else {
+					$.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+				}
 			}
 		};
 		body = JSON.stringify(data);
