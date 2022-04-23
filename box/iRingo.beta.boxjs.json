@@ -43,9 +43,9 @@
 				{
 					"id": "@iRingo.Weather.NextHour.Debug.WeatherType",
 					"name": "[下一小时降水]雨雪类型",
-					"val": "RAIN",
+					"val": "rain",
 					"type": "text",
-					"placeholder": "RAIN",
+					"placeholder": "rain",
 					"desc": "值应为claer、rain或snow"
 				},
 				{
