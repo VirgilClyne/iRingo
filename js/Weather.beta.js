@@ -50,7 +50,7 @@ var { body } = $response;
 		if (Settings.NextHour.Switch) {
 			$.log(`🚧 ${$.name}, `,
 				`forecastNextHour.providerName = ${data?.forecastNextHour?.providerName}`, "");
-			$.log(`🚧 ${$.name}, data = ${data}`, "");
+			$.log(`🚧 ${$.name}, data = ${JSON.stringify(data)}`, "");
 
 			if (url.params?.dataSets?.includes("forecastNextHour")) {
 				if (!data?.forecastNextHour?.metadata?.providerName) {
