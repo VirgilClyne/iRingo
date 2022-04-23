@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather AQI v3.1.0-beta");
+const $ = new Env("Apple Weather AQI v3.0.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
@@ -48,11 +48,11 @@ var { body } = $response;
 		};
 		// NextHour
 		if (Settings.NextHour.Switch) {
-			$.log(`🚧 ${$.name}, `,
-				`forecastNextHour.providerName = ${data?.forecastNextHour?.providerName}`, "");
-
 			if (url.params?.dataSets?.includes("forecastNextHour")) {
 				if (!data?.forecastNextHour?.metadata?.providerName) {
+					$.log(`🚧 ${$.name}, 没有下一小时降水强度信息, `,
+						`providerName = ${data?.forecastNextHour?.providerName}`, "");
+
 					let minutelyData;
 					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
@@ -65,10 +65,11 @@ var { body } = $response;
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
-				} else $.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+				} else {
+					$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(data?.forecastNextHour)}`, "");
+					$.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
+				}
 			}
-
-			$.log(`🚧 ${$.name}, NextHour: data = ${data}`, "");
 		};
 		body = JSON.stringify(data);
 	}
