@@ -5,7 +5,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Weather AQI v3.2.0-beta");
 const URL = new URLSearch();
 const DataBase = {
-	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
+	"Weather":{"Switch":true,"NextHour":{"Switch":true,Debug:{"Switch":true,"TokenLeft":"rain","Delay":"0","Chance":"100","Lower":"0","Upper":"4","Intensity":"0.21"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":true}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
 var { url } = $request;
@@ -507,7 +507,32 @@ async function outputAQI(api, now, obs, weather, Settings) {
 	// iOS weather can only display data in an hour
 	const DISPLAYABLE_MINUTES = 60;
 
-	const minutely = minutelyData?.result?.minutely;
+	const minutely = !Settings.NextHour?.Debug?.Switch ? minutelyData?.result?.minutely
+		: () => {
+			$.log(`⚠️ ${$.name}, debug模式已开启`, '');
+
+			const { WeatherType, Chance, Delay, Upper, Lower } = Settings.NextHour.Debug;
+			$.log(`⚠️ ${$.name}, WeatherType = ${WeatherType} ` +
+						`Chance = ${Chance} ` +
+						`Delay = ${Delay} ` +
+						`Upper = ${Upper} ` +
+						`Lower = ${Lower}`, '');
+
+			const rawMinutely = minutelyData?.result?.minutely;
+
+			minutelyData?.result?.hourly?.skycon?.forEach(eachSkycon => eachSkycon.value = WeatherType);
+
+			rawMinutely?.probability?.forEach(value => value = Chance);
+
+			rawMinutely?.precipitation_2h?.forEach(
+				(value, index) => index < parseInt(Delay) ?
+					value = 0 :
+					// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+					value = Math.floor(Math.random() * (Math.floor(Upper) - Math.ceil(Lower))) + Math.ceil(Lower)
+			);
+
+			return rawMinutely;
+		};
 	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
 
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
