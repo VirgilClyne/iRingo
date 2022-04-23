@@ -10,14 +10,21 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 > 目录
 - [iRingo](#iringo)
+- [入门教程](#入门教程)
+  - [Loon](#loon)
+  - [Quantumult X](#quantumult-x)
+  - [Surge](#surge)
+  - [Shadowrocket](#shadowrocket)
+  - [Stash](#stash)
+  - [Clash](#clash)
 - [通用配置](#通用配置)
   - [效果说明举例](#效果说明举例)
   - [建议配置](#建议配置)
-    - [Loon](#loon)
-    - [Quantumult X](#quantumult-x)
+    - [Loon](#loon-1)
+    - [Quantumult X](#quantumult-x-1)
     - [Surge (Shadowrocket)](#surge-shadowrocket)
-    - [Stash](#stash)
-    - [Clash](#clash)
+    - [Stash](#stash-1)
+    - [Clash](#clash-1)
 - [🌤天气](#天气)
   - [简介](#简介)
   - [功能列表](#功能列表)
@@ -70,6 +77,40 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [安装链接](#安装链接-6)
     - [`Surge for macOS`with`网关模式`](#surge-for-macoswith网关模式)
     - [`Clash`](#clash-1)
+
+---
+
+# 入门教程
+
+## Loon
+待补充……
+
+如果您有意编写教程，请在[#78](https://github.com/VirgilClyne/iRingo/issues/78)下回复。
+
+## Quantumult X
+待补充……
+
+如果您有意编写教程，请在[#78](https://github.com/VirgilClyne/iRingo/issues/78)下回复。
+
+## Surge
+待补充……
+
+如果您有意编写教程，请在[#78](https://github.com/VirgilClyne/iRingo/issues/78)下回复。
+
+## Shadowrocket
+待补充……
+
+如果您有意编写教程，请在[#78](https://github.com/VirgilClyne/iRingo/issues/78)下回复。
+
+## Stash
+待补充……
+
+如果您有意编写教程，请在[#78](https://github.com/VirgilClyne/iRingo/issues/78)下回复。
+
+## Clash
+待补充……
+
+如果您有意编写教程，请在[#78](https://github.com/VirgilClyne/iRingo/issues/78)下回复。
 
 ---
 
