@@ -94,7 +94,7 @@
 					"val": "4",
 					"type": "text",
 					"placeholder": "4",
-					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的上限，APIv2的上限为4，三位小数"
+					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的上限，最大为3，三位小数"
 				},
 				{
 					"id": "@iRingo.Weather.AQI.Switch",
