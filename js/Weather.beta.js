@@ -971,7 +971,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 							case WEATHER_STATUS.CLEAR:
 								// but how...?
 								// change clear to heavy-rain.start or heavy-snow.start
-								lastWeather = toWeatherStatus(precipIntensity, weatherType);
+								weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 								timeStatus.push(TIME_STATUS.START);
 								break;
 							case WEATHER_STATUS.RAIN:
@@ -1102,7 +1102,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						switch (lastWeather) {
 							case WEATHER_STATUS.CLEAR:
 								// change clear to rain.start or snow.start
-								lastWeather = toWeatherStatus(precipIntensity, weatherType);
+								weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 								timeStatus.push(TIME_STATUS.START);
 								break;
 							case WEATHER_STATUS.HEAVY_RAIN:
