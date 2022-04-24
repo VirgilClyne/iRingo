@@ -326,81 +326,84 @@ function getGridWeatherMinutely(lat, lng) {
 	});
 };
 
-// 
 /**
  * Output Air Quality Data
  * @author VirgilClyne
- * @param {String} api - API Version
- * @param {Object} now - minutelyData
- * @param {Object} obs - weather
- * @param {Object} weather - weather
- * @param {Object} Settings - Settings
+ * @param {String} apiVersion - Apple API Version
+ * @param {Object} now - now weather data from Third-Party
+ * @param {Object} obs - observation station data from Third-Party
+ * @param {Object} weather - weather data from Apple
+ * @param {Object} Settings - Settings config in Box.js
  * @return {Promise<*>}
  */
-async function outputAQI(api, now, obs, weather, Settings) {
-	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQI data ${api}`, '');
-	const AQIname = (api == "v1") ? "air_quality"
-		: (api == "v2") ? "airQuality"
+async function outputAQI(apiVersion, now, obs, weather, Settings) {
+	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQI data ${apiVersion}`, '');
+	const AQIname = (apiVersion == "v1") ? "air_quality"
+		: (apiVersion == "v2") ? "airQuality"
 			: "airQuality";
-	const unit = (api == "v1") ? "μg\/m3"
-		: (api == "v2") ? "microgramsPerM3"
+	const unit = (apiVersion == "v1") ? "μg\/m3"
+		: (apiVersion == "v2") ? "microgramsPerM3"
 			: "microgramsPerM3";
 	//创建对象
-	if (!weather[`${AQIname}`]) {
+	if (!weather[AQIname]) {
 		$.log(`⚠️ ${$.name}, 没有空气质量数据, 创建`, '');
-		weather[`${AQIname}`] = {
+		weather[AQIname] = {
+			"name": "AirQuality",
 			"isSignificant": true, // 重要/置顶
 			"pollutants": {},
+			"previousDayComparison": "unknown", // 昨日同期对比
 			"metadata": {},
-			"name": "AirQuality",
 		};
-		if (api == "v1") {
-			weather[`${AQIname}`].metadata.version = 1;
-			weather[`${AQIname}`].metadata.data_source = 0; //来自XX读数 0:监测站 1:模型
-		}
-		else if (api == "v2") {
-			weather[`${AQIname}`].metadata.units = "m";
-			weather[`${AQIname}`].metadata.version = 2;
-			weather[`${AQIname}`].sourceType = "station"; //station:监测站 modeled:模型
-		}
 	};
-	// 注入数据
-	//条件运算符 & 可选链操作符
-	weather[`${AQIname}`].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo;
-	weather[`${AQIname}`].learnMoreURL = obs?.city?.url + `/${now?.country ?? now?.cca2}/m`.toLowerCase();
-	weather[`${AQIname}`].primaryPollutant = switchPollutantsType(obs?.dominentpol ?? now?.pol);
-	weather[`${AQIname}`].pollutants.CO = { "name": "CO", "amount": obs?.iaqi?.co?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants.NO = { "name": "NO", "amount": obs?.iaqi?.no?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants.NO2 = { "name": "NO2", "amount": obs?.iaqi?.no2?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants.SO2 = { "name": "SO2", "amount": obs?.iaqi?.so2?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants.OZONE = { "name": "OZONE", "amount": obs?.iaqi?.o3?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants.NOX = { "name": "NOX", "amount": obs?.iaqi?.nox?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants["PM2.5"] = { "name": "PM2.5", "amount": obs?.iaqi?.pm25?.v || -1, "unit": unit };
-	weather[`${AQIname}`].pollutants.PM10 = { "name": "PM10", "amount": obs?.iaqi?.pm10?.v || -1, "unit": unit };
-	weather[`${AQIname}`].metadata.longitude = obs?.city?.geo?.[0] ?? now?.geo?.[0];
-	weather[`${AQIname}`].metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1];
-	weather[`${AQIname}`].metadata.language = weather?.[`${AQIname}`]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
-	if (api == "v1") {
-		weather.air_quality.airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
-		weather.air_quality.airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
-		weather.air_quality.airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
-		weather.air_quality.metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', api);
-		//weather.air_quality.metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
-		weather.air_quality.metadata.provider_name = obs?.attributions?.[0]?.name;
-		weather.air_quality.metadata.expire_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'add-1h-floor', api);
-		weather.air_quality.metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
-		weather.air_quality.metadata.read_time = convertTime(new Date(), 'remain', api);
-	} else if (api == "v2") {
-		weather.airQuality.index = obs?.aqi ?? now?.aqi ?? now?.v;
-		weather.airQuality.scale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
-		weather.airQuality.categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
-		weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
-		//weather.airQuality.metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
-		weather.airQuality.metadata.providerName = obs?.attributions?.[0]?.name;
-		weather.airQuality.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);
-		weather.airQuality.metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', api);
-		weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
+	// 固定数据
+	weather[AQIname].primaryPollutant = switchPollutantsType(obs?.dominentpol ?? now?.pol ?? "unknown");
+	weather[AQIname].metadata.longitude = obs?.city?.geo?.[0] ?? now?.geo?.[0] ?? weather?.currentWeather?.metadata?.longitude ?? weather?.current_observations?.metadata?.longitude;
+	weather[AQIname].metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1] ?? weather?.currentWeather?.metadata?.latitude ?? weather?.current_observations?.metadata?.latitude;
+	weather[AQIname].metadata.language = weather?.[AQIname]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
+	weather[AQIname].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo ?? "WAQI";
+	weather[AQIname].learnMoreURL = obs?.city?.url ? `${obs?.city?.url}/${now?.country ?? now?.cca2 ?? weather[AQIname].metadata.language}/m`.toLowerCase() : "https://aqicn.org/";
+	if (apiVersion == "v1") {
+		weather[AQIname].airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
+		weather[AQIname].metadata.version = 1;
+		weather[AQIname].metadata.data_source = 0; //来自XX读数 0:监测站 1:模型
+		weather[AQIname].metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
 	}
+	else if (apiVersion == "v2") {
+		weather[AQIname].scale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
+		weather[AQIname].metadata.units = "m";
+		weather[AQIname].metadata.version = 2;
+		weather[AQIname].sourceType = "station"; //station:监测站 modeled:模型
+		weather[AQIname].metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
+	}
+	// 注入数据
+	if (now || obs) {
+		//条件运算符 & 可选链操作符
+		if (apiVersion == "v1") {
+			weather[AQIname].airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
+			weather[AQIname].airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
+			weather[AQIname].metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', apiVersion);
+			//weather[AQIname].metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
+			weather[AQIname].metadata.provider_name = obs?.attributions?.[0]?.name;
+			weather[AQIname].metadata.expire_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'add-1h-floor', apiVersion);
+			weather[AQIname].metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
+		} else if (apiVersion == "v2") {
+			weather[AQIname].index = obs?.aqi ?? now?.aqi ?? now?.v;
+			weather[AQIname].categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
+			//weather[AQIname].metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
+			weather[AQIname].metadata.providerName = obs?.attributions?.[0]?.name;
+			weather[AQIname].metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', apiVersion);
+			weather[AQIname].metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', apiVersion);
+			weather[AQIname].metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
+		}
+		//weather[AQIname].pollutants.CO = { "name": "CO", "amount": obs?.iaqi?.co?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants.NO = { "name": "NO", "amount": obs?.iaqi?.no?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants.NO2 = { "name": "NO2", "amount": obs?.iaqi?.no2?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants.SO2 = { "name": "SO2", "amount": obs?.iaqi?.so2?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants.OZONE = { "name": "OZONE", "amount": obs?.iaqi?.o3?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants.NOX = { "name": "NOX", "amount": obs?.iaqi?.nox?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants["PM2.5"] = { "name": "PM2.5", "amount": obs?.iaqi?.pm25?.v || -1, "unit": unit };
+		//weather[AQIname].pollutants.PM10 = { "name": "PM10", "amount": obs?.iaqi?.pm10?.v || -1, "unit": unit };
+	} else weather[AQIname].metadata.temporarilyUnavailable = true;
 	$.log(`🎉 ${$.name}, ${outputAQI.name}完成`, '');
 	return weather
 };
@@ -909,18 +912,40 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 };
 
 /***************** Fuctions *****************/
-// Function 1
-// Switch Pollutants Type
-// https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+/**
+ * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
+ * 判断是否在国内
+ * @param {Number} lat - latitude
+ * @param {Number} lng - longitude
+ * @returns {boolean}
+ */
+function out_of_china(lng, lat) {
+	var lat = +lat;
+	var lng = +lng;
+	// 纬度 3.86~53.55, 经度 73.66~135.05 
+	return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
+};
+
+/**
+ * Switch Pollutants Type
+ * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @param {String} pollutant - pollutant
+ * @returns {String}
+ */
 function switchPollutantsType(pollutant) {
 	const pollutant_map = { "co": "CO", "no": "NO", "no2": "NO2", "so2": "SO2", "o3": "OZONE", "nox": "NOX", "pm25": "PM2.5", "pm10": "PM10" };
 	return pollutant_map?.[pollutant] ?? "OTHER";
 };
 
-// Function 2
-// Convert Time Format
-// https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
-function convertTime(time, action, api) {
+/**
+ * Convert Time Format
+ * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @param {Time} time - time
+ * @param {String} action - action
+ * @param {String} apiVersion - apiVersion - Apple Weather API Version
+ * @returns {String}
+ */
+function convertTime(time, action, apiVersion) {
 	switch (action) {
 		case 'remain':
 			time.setMilliseconds(0);
@@ -942,11 +967,15 @@ function convertTime(time, action, api) {
 	}
 };
 
-// Function 3
-// Calculate Air Quality Level
-// https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+/**
+ * Calculate Air Quality Level
+ * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @param {Number} aqiIndex - aqiIndex
+ * @returns {Number}
+ */
 function classifyAirQualityLevel(aqiIndex) {
-	if (aqiIndex >= 0 && aqiIndex <= 50) return 1;
+	if (!aqiIndex) return -1;
+	else if (aqiIndex >= 0 && aqiIndex <= 50) return 1;
 	else if (aqiIndex >= 51 && aqiIndex <= 100) return 2;
 	else if (aqiIndex >= 101 && aqiIndex <= 150) return 3;
 	else if (aqiIndex >= 151 && aqiIndex <= 200) return 4;
