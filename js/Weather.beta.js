@@ -947,11 +947,11 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						timeStatus = [];
 						switch (apiVersion) {
 							case "v1":
-								condition = {};
+								condition = { parameters: {} };
 								break;
 							case "v2":
 							default:
-								condition = { startTime };
+								condition = { parameters: {}, startTime };
 								break;
 						}
 						break;
@@ -1002,11 +1002,11 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						timeStatus = [TIME_STATUS.START];
 						switch (apiVersion) {
 							case "v1":
-								condition = {};
+								condition = { parameters: {} };
 								break;
 							case "v2":
 							default:
-								condition = { startTime };
+								condition = { parameters: {}, startTime };
 								break;
 						}
 						break;
@@ -1134,11 +1134,11 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						timeStatus = [TIME_STATUS.START];
 						switch (apiVersion) {
 							case "v1":
-								condition = {};
+								condition = { parameters: {} };
 								break;
 							case "v2":
 							default:
-								condition = { startTime };
+								condition = { parameters: {}, startTime };
 								break;
 						}
 						break;
