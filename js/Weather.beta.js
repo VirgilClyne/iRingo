@@ -586,14 +586,19 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		const ADD_POSSIBLE_UPPER = 0;
 		const POSSIBILITY = { POSSIBLE: "possible" };
 		const WEATHER_STATUS = {
+			// precipIntensityPerceived <= 0
 			CLEAR: "clear",
 			// precipIntensityPerceived < 1
 			DRIZZLE: "drizzle",
+			FLURRIES: "flurries",
+			// unsupport in ColorfulClouds
+			SLEET: "sleet",
+			// between
 			RAIN: "rain",
+			SNOW: "snow",
 			// precipIntensityPerceived > 2
 			HEAVY_RAIN: "heavy-rain",
-			// TODO: untested, check if it is `snow`
-			SNOW: "snow",
+			// TODO: untested, check if it is `heavy-snow`
 			HEAVY_SNOW: "heavy-snow",
 		};
 		const TIME_STATUS = {
@@ -735,6 +740,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 						condition = { startTime };
 						break;
 					case WEATHER_STATUS.DRIZZLE:
+					case WEATHER_STATUS.FLURRIES:
 						// unfortunately we cannot distinguish the drizzle without helping of API
 						// should we consider light rain as drizzle?
 
@@ -779,6 +785,20 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 							// heavy-rain -> heavy-rain-to-rain
 							weatherStatus.push(toWeatherStatus(precipIntensity, weatherType));
 							timeStatus = [TIME_STATUS.CONSTANT];
+						} else if (
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.DRIZZLE ||
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.FLURRIES
+						) {
+							if (
+								toWeatherStatus(precipIntensity, weatherType) !== WEATHER_STATUS.FLURRIES &&
+								toWeatherStatus(precipIntensity, weatherType) !== WEATHER_STATUS.DRIZZLE
+							) {
+								// TODO
+								// we don't want begin or end of the rain split into drizzle or flurries
+								weatherStatus[weatherStatus.length - 1] = toWeatherStatus(precipIntensity, weatherType);
+							} else {
+								timeStatus.push(TIME_STATUS.STOP);
+							}
 						} else if (
 							// TODO: untested rain to snow OR snow to rain?
 							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.RAIN ||
