@@ -1099,26 +1099,24 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 								break;
 						}
 
-						if (weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.CLEAR) {
-							// change clear to rain.start or snow.start
-							weatherStatus[weatherStatus.length - 1] = toWeatherStatus(precipIntensity, weatherType);
-							timeStatus.push(TIME_STATUS.START);
-						} else if (
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_RAIN ||
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_SNOW
-						) {
-							// heavy-rain -> heavy-rain-to-rain
-							weatherStatus.push(toWeatherStatus(precipIntensity, weatherType));
-							timeStatus = [TIME_STATUS.CONSTANT];
-						} else if (
+						switch (lastWeather) {
+							case WEATHER_STATUS.CLEAR:
+								// change clear to rain.start or snow.start
+								lastWeather = toWeatherStatus(precipIntensity, weatherType);
+								timeStatus.push(TIME_STATUS.START);
+								break;
+							case WEATHER_STATUS.HEAVY_RAIN:
+							case WEATHER_STATUS.HEAVY_SNOW:
+								// heavy-rain -> heavy-rain-to-rain
+								weatherStatus.push(toWeatherStatus(precipIntensity, weatherType));
+								timeStatus = [TIME_STATUS.CONSTANT];
+								break;
 							// TODO: untested rain to snow OR snow to rain?
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.RAIN ||
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.SNOW
-						) {
-							timeStatus = [TIME_STATUS.CONSTANT];
-						} else {
+							case WEATHER_STATUS.RAIN:
+							case WEATHER_STATUS.SNOW:
 							// for drizzle or something else?
-							timeStatus = [TIME_STATUS.CONSTANT];
+							default:
+								timeStatus = [TIME_STATUS.CONSTANT];
 						}
 
 						condition.token = toToken(isPossible, weatherStatus, timeStatus);
