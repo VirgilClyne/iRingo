@@ -12,7 +12,7 @@
 			"Scale": "EPA_NowCast.2201"
 		},
 		"Map": {
-			"AQI": true
+			"AQI": false
 		}
 	},
 	"Siri": {
