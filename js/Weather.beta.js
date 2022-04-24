@@ -882,7 +882,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		// little trick for origin data
 		let weatherStatus = [toWeatherStatus(minutes[0].precipIntensity, weatherType)];
 		let timeStatus = [];
-		let condition = {};
+		let condition = { parameters: {} };
 
 		switch (apiVersion) {
 			case "v1":
@@ -894,12 +894,14 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		}
 
 		//for (let i = 0; i < minutes.length; i++) {
-		minutes.forEach((item, i) => {
+		minutes.slice(0, DISPLAYABLE_MINUTES).forEach((minute, index, array) => {
+			const lastWeather = weatherStatus[weatherStatus.length - 1];
+
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph or rain nearly stop after one hour
-			if (i + 1 >= DISPLAYABLE_MINUTES) {
+			if (index + 1 >= array.length) {
 				// compare with last weather status
-				if (weatherStatus[weatherStatus.length - 1] !== WEATHER_STATUS.CLEAR) {
+				if (lastWeather !== WEATHER_STATUS.CLEAR) {
 					timeStatus = [TIME_STATUS.CONSTANT];
 				}
 
@@ -911,14 +913,13 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				conditions.push(condition);
 
 				$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
-				return conditions;
 			}
 
 			// this loop will handle previous condition and create the condition for next condition
 			// `startAt` for APIv1, `startTime` for APIv2
 			// is this too dirty?
-			const { startAt, startTime, precipIntensity } = minutes[i];
-			if (weatherStatus[weatherStatus.length - 1] !== toWeatherStatus(precipIntensity, weatherType)) {
+			const { startAt, startTime, precipIntensity, precipChance } = minute;
+			if (lastWeather !== toWeatherStatus(precipIntensity, weatherType)) {
 				switch (toWeatherStatus(precipIntensity, weatherType)) {
 					case WEATHER_STATUS.CLEAR:
 						switch (apiVersion) {
@@ -941,7 +942,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						conditions.push(condition);
 
 						// reset the condition
-						isPossible = needPossible(minutes[i].precipChance);
+						isPossible = needPossible(precipChance);
 						weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 						timeStatus = [];
 						switch (apiVersion) {
@@ -956,38 +957,47 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						break;
 					case WEATHER_STATUS.HEAVY_RAIN:
 					case WEATHER_STATUS.HEAVY_SNOW:
-						if (
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.RAIN ||
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.SNOW
-						) {
-							timeStatus = [TIME_STATUS.CONSTANT];
-						} else if (
+						switch (apiVersion) {
+							case "v1":
+								condition.validUntil = startAt;
+								break;
+							case "v2":
+							default:
+								condition.endTime = startTime;
+								break;
+						}
+
+						switch (lastWeather) {
+							case WEATHER_STATUS.CLEAR:
+								// but how...?
+								// change clear to heavy-rain.start or heavy-snow.start
+								lastWeather = toWeatherStatus(precipIntensity, weatherType);
+								timeStatus.push(TIME_STATUS.START);
+								break;
+							case WEATHER_STATUS.RAIN:
+							case WEATHER_STATUS.SNOW:
 							// TODO: untested, heavy rain to heavy snow OR heavy snow to heavy rain?
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_RAIN ||
-							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_SNOW
-						) {
-							timeStatus = [TIME_STATUS.CONSTANT];
-						} else if (weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.CLEAR) {
-							// but how...?
-							// change clear to heavy-rain.start or heavy-snow.start
-							weatherStatus[weatherStatus.length - 1] = toWeatherStatus(precipIntensity, weatherType);
-							timeStatus.push(TIME_STATUS.START);
-						} else {
+							case WEATHER_STATUS.HEAVY_RAIN:
+							case WEATHER_STATUS.HEAVY_SNOW:
 							// for drizzle or something else?
-							timeStatus.push(TIME_STATUS.STOP);
+							default:
+								timeStatus = [TIME_STATUS.CONSTANT];
+
+								// const startStopIndex = array.slice(0, index).map(value =>
+								// 	value.token.includes('start-stop')
+								// ).lastIndexOf(true);
+								break;
 						}
 	
 						condition.token = toToken(isPossible, weatherStatus, timeStatus);
 						condition.longTemplate = forecast_keypoint ?? description;
 						condition.shortTemplate = description;
-						condition.parameters = {
-							// maybe useless
-							"firstAt": startTime,
-						};
+						// maybe useless
+						condition.parameters.firstAt = startTime;
 	
 						conditions.push(condition);
 
-						isPossible = needPossible(minutes[0].precipChance);
+						isPossible = needPossible(precipChance);
 						weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 						timeStatus = [TIME_STATUS.START];
 						switch (apiVersion) {
@@ -1003,32 +1013,77 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 					case WEATHER_STATUS.DRIZZLE:
 					case WEATHER_STATUS.FLURRIES:
 					case WEATHER_STATUS.SLEET:
-						// unfortunately we cannot distinguish the drizzle without helping of API
-						// should we consider light rain as drizzle?
+						// // unfortunately we cannot distinguish the drizzle without helping of API
+						// // should we consider light rain as drizzle?
 
-						// begin of an rain
-						// if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
-						// 	condition.endTime = startTime;
+						// // begin of an rain
+						// switch (lastWeather) {
+						// 	case WEATHER_STATUS.CLEAR:
+						// 		switch (apiVersion) {
+						// 			case "v1":
+						// 				condition.validUntil = startAt;
+						// 				break;
+						// 			case "v2":
+						// 			default:
+						// 				condition.endTime = startTime;
+						// 				break;
+						// 		}
 
-						// 	// change clear to drizzle.start-stop
-						// 	weatherAndPossiblity.weatherStatus = WEATHER_STATUS.DRIZZLE;
-						// 	timeStatus.push(TIME_STATUS.START);
-						// 	timeStatus.push(TIME_STATUS.STOP);
+						// 		// change clear to drizzle.start-stop
+						// 		weatherStatus = [WEATHER_STATUS.DRIZZLE];
+						// 		timeStatus.push(TIME_STATUS.START);
+						// 		timeStatus.push(TIME_STATUS.STOP);
 
-						// 	condition.token = toToken(weatherAndPossiblity, timeStatus);
-						// 	condition.longTemplate = forecast_keypoint ?? description;
-						// 	condition.shortTemplate = description;
-						// 	condition.parameters = {
+						// 		condition.token = toToken(isPossible, weatherStatus, timeStatus);
+						// 		condition.longTemplate = forecast_keypoint ?? description;
+						// 		condition.shortTemplate = description;
 						// 		// maybe useless
-						// 		"firstAt": startTime,
-						// 	};
+						// 		condition.parameters.firstAt = startTime;
 	
-						// 	conditions.push(condition);
-						// }
+						// 		conditions.push(condition);
 
-						// weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
-						// timeStatus = [TIME_STATUS.START];
-						// condition = { startTime };
+						// 		isPossible = needPossible(precipChance);
+						// 		weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
+						// 		timeStatus = [TIME_STATUS.START];
+						// 		switch (apiVersion) {
+						// 			case "v1":
+						// 				condition = {};
+						// 				break;
+						// 			case "v2":
+						// 			default:
+						// 				condition = { startTime };
+						// 				break;
+						// 		}
+						// 		break;
+						// 	case WEATHER_STATUS.DRIZZLE:
+						// 	case WEATHER_STATUS.FLURRIES:
+						// 	case WEATHER_STATUS.SLEET:
+						// 		timeStatus = [TIME_STATUS.CONSTANT];
+
+						// 		condition.token = toToken(isPossible, weatherStatus, timeStatus);
+						// 		condition.longTemplate = forecast_keypoint ?? description;
+						// 		condition.shortTemplate = description;
+						// 		// maybe useless
+						// 		condition.parameters.secondAt = startTime;
+	
+						// 		conditions.push(condition);
+
+						// 		isPossible = needPossible(precipChance);
+						// 		weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
+						// 		timeStatus = [TIME_STATUS.START];
+						// 		switch (apiVersion) {
+						// 			case "v1":
+						// 				condition = {};
+						// 				break;
+						// 			case "v2":
+						// 			default:
+						// 				condition = { startTime };
+						// 				break;
+						// 		}
+						// 	// end of a rain or snow, do nothing
+						// 	default:
+						// 		break;
+						// }
 						// break;
 					case WEATHER_STATUS.RAIN:
 					case WEATHER_STATUS.SNOW:
@@ -1063,7 +1118,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 							timeStatus = [TIME_STATUS.CONSTANT];
 						} else {
 							// for drizzle or something else?
-							timeStatus.push(TIME_STATUS.STOP);
+							timeStatus = [TIME_STATUS.CONSTANT];
 						}
 
 						condition.token = toToken(isPossible, weatherStatus, timeStatus);
@@ -1076,7 +1131,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 						conditions.push(condition);
 
-						isPossible = needPossible(minutes[0].precipChance);
+						isPossible = needPossible(precipChance);
 						weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 						timeStatus = [TIME_STATUS.START];
 						switch (apiVersion) {
