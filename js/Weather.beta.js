@@ -805,7 +805,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		nextHour.minutes.push(minute);
 	});
 
-	const getConditions = (apiVersion, minutelyData, minutes) => {
+	function getConditions(apiVersion, minutelyData, minutes) {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
 		// TODO: when to add possible
 		const ADD_POSSIBLE_UPPER = 0;
@@ -893,7 +893,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				break;
 		}
 
-		for (let i = 0; i < minutes.length; i++) {
+		//for (let i = 0; i < minutes.length; i++) {
+		minutes.forEach((item, i) => {
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph or rain nearly stop after one hour
 			if (i + 1 >= DISPLAYABLE_MINUTES) {
@@ -1103,7 +1104,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						break;
 				}
 			}
-		}
+		})
 
 		$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
@@ -1111,8 +1112,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 	const conditions = getConditions(apiVersion, minutelyData, nextHour.minutes);
 	nextHour.condition = nextHour.condition.concat(conditions);
-
-	const getSummary = (apiVersion, minutes) => {
+	
+	function getSummary(apiVersion, minutes) {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
@@ -1137,7 +1138,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				break;
 		}
 
-		for (let i = 0; i < minutes.length; i++) {
+		//for (let i = 0; i < minutes.length; i++) {
+			minutes.forEach((item, i) => {
 			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
@@ -1239,7 +1241,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 					}
 				}
 			}
-		}
+		})
 
 		$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
 		return summaries;
