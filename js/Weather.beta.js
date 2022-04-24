@@ -1144,7 +1144,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						break;
 				}
 			}
-		})
+		});
 
 		$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
@@ -1280,7 +1280,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 					}
 				}
 			}
-		})
+		});
 
 		$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
 		return summaries;
