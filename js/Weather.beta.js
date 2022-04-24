@@ -811,14 +811,19 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		const ADD_POSSIBLE_UPPER = 0;
 		const POSSIBILITY = { POSSIBLE: "possible" };
 		const WEATHER_STATUS = {
+			// precipIntensityPerceived <= 0
 			CLEAR: "clear",
 			// precipIntensityPerceived < 1
 			DRIZZLE: "drizzle",
+			FLURRIES: "flurries",
+			// unsupport in ColorfulClouds
+			SLEET: "sleet",
+			// between
 			RAIN: "rain",
+			SNOW: "snow",
 			// precipIntensityPerceived > 2
 			HEAVY_RAIN: "heavy-rain",
-			// TODO: untested, check if it is `snow`
-			SNOW: "snow",
+			// TODO: untested, check if it is `heavy-snow`
 			HEAVY_SNOW: "heavy-snow",
 		};
 		const TIME_STATUS = {
@@ -996,6 +1001,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 						}
 						break;
 					case WEATHER_STATUS.DRIZZLE:
+					case WEATHER_STATUS.FLURRIES:
+					case WEATHER_STATUS.SLEET:
 						// unfortunately we cannot distinguish the drizzle without helping of API
 						// should we consider light rain as drizzle?
 
