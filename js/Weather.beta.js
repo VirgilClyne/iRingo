@@ -369,14 +369,14 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 			weather[AQIname].airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 			weather[AQIname].metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', apiVersion);
 			//weather[AQIname].metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
-			weather[AQIname].metadata.provider_name = obs?.attributions?.[0]?.name;
+			weather[AQIname].metadata.provider_name = obs?.attributions?.[0]?.name ?? "WAQI.info";
 			weather[AQIname].metadata.expire_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'add-1h-floor', apiVersion);
 			weather[AQIname].metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
 		} else if (apiVersion == "v2") {
 			weather[AQIname].index = obs?.aqi ?? now?.aqi ?? now?.v;
 			weather[AQIname].categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 			//weather[AQIname].metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
-			weather[AQIname].metadata.providerName = obs?.attributions?.[0]?.name;
+			weather[AQIname].metadata.providerName = obs?.attributions?.[0]?.name ?? "WAQI.info";
 			weather[AQIname].metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', apiVersion);
 			weather[AQIname].metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', apiVersion);
 			weather[AQIname].metadata.readTime = convertTime(new Date(), 'remain', apiVersion);

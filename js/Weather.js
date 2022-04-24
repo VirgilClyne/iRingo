@@ -343,7 +343,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	weather[AQIname].metadata.longitude = obs?.city?.geo?.[0] ?? now?.geo?.[0] ?? weather?.currentWeather?.metadata?.longitude ?? weather?.current_observations?.metadata?.longitude;
 	weather[AQIname].metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1] ?? weather?.currentWeather?.metadata?.latitude ?? weather?.current_observations?.metadata?.latitude;
 	weather[AQIname].metadata.language = weather?.[AQIname]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
-	weather[AQIname].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo ?? "WAQI";
+	weather[AQIname].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo ?? "WAQI.info";
 	weather[AQIname].learnMoreURL = obs?.city?.url ? `${obs?.city?.url}/${now?.country ?? now?.cca2 ?? weather[AQIname].metadata.language}/m`.toLowerCase() : "https://aqicn.org/";
 	if (apiVersion == "v1") {
 		weather[AQIname].airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
@@ -366,14 +366,14 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 			weather[AQIname].airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 			weather[AQIname].metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', apiVersion);
 			//weather[AQIname].metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
-			weather[AQIname].metadata.provider_name = obs?.attributions?.[0]?.name;
+			weather[AQIname].metadata.provider_name = obs?.attributions?.[0]?.name ?? "WAQI.info";
 			weather[AQIname].metadata.expire_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'add-1h-floor', apiVersion);
 			weather[AQIname].metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
 		} else if (apiVersion == "v2") {
 			weather[AQIname].index = obs?.aqi ?? now?.aqi ?? now?.v;
 			weather[AQIname].categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
 			//weather[AQIname].metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
-			weather[AQIname].metadata.providerName = obs?.attributions?.[0]?.name;
+			weather[AQIname].metadata.providerName = obs?.attributions?.[0]?.name ?? "WAQI.info";
 			weather[AQIname].metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', apiVersion);
 			weather[AQIname].metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', apiVersion);
 			weather[AQIname].metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
