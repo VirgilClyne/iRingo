@@ -146,7 +146,7 @@ async function WAQI(type = "", input = {}) {
 	// 发送请求
 	let output = await GetData(type, request);
 	// TODO: add debug switch (geo)
-	$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
+	//$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
 	return output
 	/***************** Fuctions *****************/
 	async function GetRequest(type = "", input = { api: "v2", lat: 0, lng: 0, idx: 0, token: "na" }) {
