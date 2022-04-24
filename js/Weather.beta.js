@@ -1179,11 +1179,11 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		}
 
 		//for (let i = 0; i < minutes.length; i++) {
-		minutes.slice(0, DISPLAYABLE_MINUTES).forEach((minute, index) => {
+		minutes.slice(0, DISPLAYABLE_MINUTES).forEach((minute, index, array) => {
 			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (index + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
+			if (index + 1 >= array.length && lastIndex === 0 && !isRainOrSnow) {
 				summaries.push(summary);
 
 				$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
@@ -1199,7 +1199,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					// constant of rain
 					// we always need precipChance and precipIntensity data
-					index + 1 === minutes.length
+					index + 1 === array.length
 				) {
 					// for find the max value of precipChance and precipIntensity
 					const range = minutes.slice(lastIndex, index + 1);
