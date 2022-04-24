@@ -1,9 +1,12 @@
-#!name=  iRingo for Apple Weather (BETA)
-#!desc= 1.解锁全部类型天气数据可用性
-#!desc= 2.切换空气质量数据源为waqi.info，并更改标准为AQI(US)
-#!desc= 3.添加下一小时降水功能
+#!name=  iRingo for Apple Weather
+#!desc= BETA
+#!desc= 1.解锁全部天气数据类型
+#!desc= 2.替换空气质量数据:WAQI
+#!desc= 3.添加下一小时降水:气象在线
+#!desc= 4.替换空气质量地图数据:WAQI
 
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
+^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.beta.js
 
 hostname = weather-data.apple.com, api.waqi.info, www.weatherol.cn, api.caiyunapp.com

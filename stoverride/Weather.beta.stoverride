@@ -1,5 +1,8 @@
 name:  iRingo for Apple Weather
-desc: (V3) 1.解锁全部天气数据类型 2.替换空气质量数据:WAQI 3.添加下一小时降水:气象在线 4.替换空气质量地图数据:WAQI
+desc: (BETA) 1.解锁全部天气数据类型 2.替换空气质量数据:WAQI 3.添加下一小时降水:气象在线 4.替换空气质量地图数据:WAQI
+
+rules:
+  - DOMAIN,api.waqi.info,DIRECT
 
 http:
   mitm:
@@ -24,11 +27,11 @@ http:
 
 script-providers:
   Apple_Weather_Availability:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.js
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js
     interval: 86400
   Apple_Weather:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.js
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
     interval: 86400
   Apple_Weather_Map:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.js
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.beta.js
     interval: 86400
