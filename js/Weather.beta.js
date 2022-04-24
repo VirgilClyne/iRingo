@@ -134,20 +134,6 @@ async function getStatus(data) {
 };
 
 /**
- * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
- * 判断是否在国内
- * @param lng
- * @param lat
- * @returns {boolean}
- */
-function out_of_china(lng, lat) {
-  var lat = +lat;
-  var lng = +lng;
-  // 纬度 3.86~53.55, 经度 73.66~135.05 
-  return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
-};
-
-/**
  * WAQI
  * @author VirgilClyne
  * @param {String} type - type
@@ -418,7 +404,7 @@ async function ColorfulClouds(
 /**
  * Output Air Quality Data
  * @author VirgilClyne
- * @param {String} apiVersion - Apple API Version
+ * @param {String} apiVersion - Apple Weather API Version
  * @param {Object} now - now weather data from Third-Party
  * @param {Object} obs - observation station data from Third-Party
  * @param {Object} weather - weather data from Apple
@@ -500,7 +486,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 /**
  * output forecast NextHour Data
  * @author WordlessEcho
- * @param {String} apiVersion - Apple API Version
+ * @param {String} apiVersion - Apple Weather API Version
  * @param {Object} minutelyData - minutely data from API
  * @param {Object} weather - weather data from Apple
  * @param {Object} Settings - Settings config in Box.js
@@ -1306,11 +1292,11 @@ function convertTime(time, action, apiVersion) {
 		default:
 			$.log(`⚠️ ${$.name}, Time Converter, Error`, `time: ${time}`, '');
 	}
-	if (api == "v1") {
+	if (apiVersion == "v1") {
 		let timeString = time.getTime() / 1000;
 		return timeString;
 	}
-	if (api == "v2") {
+	if (apiVersion == "v2") {
 		let timeString = time.toISOString().split('.')[0] + 'Z';
 		return timeString;
 	}
@@ -1330,10 +1316,7 @@ function classifyAirQualityLevel(aqiIndex) {
 	else if (aqiIndex >= 151 && aqiIndex <= 200) return 4;
 	else if (aqiIndex >= 201 && aqiIndex <= 300) return 5;
 	else if (aqiIndex >= 301 && aqiIndex <= 500) return 6;
-	else {
-		$.log(`⚠️ ${$.name}, classifyAirQualityLevel, Error`, `aqiIndex: ${aqiIndex}`, '');
-		return 6;
-	}
+	else return 6;
 };
 
 /***************** Env *****************/
