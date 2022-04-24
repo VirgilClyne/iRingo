@@ -807,7 +807,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 							timeStatus = [TIME_STATUS.CONSTANT];
 						} else {
 							// for drizzle or something else?
-							timeStatus.push(TIME_STATUS.STOP);
+							timeStatus = [TIME_STATUS.CONSTANT];
 						}
 
 						condition.token = toToken(isPossible, weatherStatus, timeStatus);
