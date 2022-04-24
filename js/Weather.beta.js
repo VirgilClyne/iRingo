@@ -591,10 +591,10 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			DRIZZLE: "drizzle",
 			RAIN: "rain",
 			// precipIntensityPerceived > 2
-			HEAVY_RAIN: "heavy-rain-to-rain",
+			HEAVY_RAIN: "heavy-rain",
 			// TODO: untested, check if it is `snow`
 			SNOW: "snow",
-			HEAVY_SNOW: "heavy-snow-to-snow",
+			HEAVY_SNOW: "heavy-snow",
 		};
 		const TIME_STATUS = {
 			CONSTANT: "constant",
@@ -602,13 +602,13 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			STOP: "stop"
 		};
 
-		const toToken = (weatherAndPossiblity, timeStatus) => {
-			const { possibility, weatherStatus } = weatherAndPossiblity;
-
-			const tokenLeft = possibility ? `${possibility}-${weatherStatus}` : `${weatherStatus}`;
-			const tokenRight = timeStatus.join('-');
-
-			return timeStatus.length > 0 ? `${tokenLeft}.${tokenRight}` : `${tokenLeft}`;
+		const toToken = (isPossible, weatherStatus, timeStatus) => {
+			const tokenLeft = `${isPossible ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
+			if (timeStatus.length > 0) {
+				return `${tokenLeft}.${timeStatus.join('-')}`;
+			} else {
+				return tokenLeft;
+			}
 		}
 
 		const toWeatherStatus = (precipitation, weatherType) => {
@@ -648,11 +648,9 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		const conditions = [];
 
 		// initialize data
-		const weatherAndPossiblity = {
-			possibility: needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null,
-			// little trick for origin data
-			weatherStatus: toWeatherStatus(minutes[0].precipIntensity, weatherType),
-		};
+		let isPossible = needPossible(minutes[0].precipChance);
+		// little trick for origin data
+		let weatherStatus = [toWeatherStatus(minutes[0].precipIntensity, weatherType)];
 		let timeStatus = [];
 		let condition = { startTime: minutes[0].startTime };
 
@@ -660,11 +658,12 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph or rain nearly stop after one hour
 			if (i + 1 >= DISPLAYABLE_MINUTES) {
-				if (weatherAndPossiblity.weatherStatus !== WEATHER_STATUS.CLEAR) {
+				// compare with last weather status
+				if (weatherStatus[weatherStatus.length - 1] !== WEATHER_STATUS.CLEAR) {
 					timeStatus = [TIME_STATUS.CONSTANT];
 				}
 
-				condition.token = toToken(weatherAndPossiblity, timeStatus);
+				condition.token = toToken(isPossible, weatherStatus, timeStatus);
 				condition.longTemplate = forecast_keypoint ?? description;
 				condition.shortTemplate = description;
 				condition.parameters = {};
@@ -674,14 +673,16 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 			}
 
 			// this loop will handle previous condition and create the condition for next condition
-			const { startTime, precipIntensity } = minutes[i];
-			if (weatherAndPossiblity.weatherStatus !== toWeatherStatus(precipIntensity, weatherType)) {
+			// `startAt` for APIv1, `startTime` for APIv2
+			// is this too dirty?
+			const { startAt, startTime, precipIntensity } = minutes[i];
+			if (weatherStatus[weatherStatus.length - 1] !== toWeatherStatus(precipIntensity, weatherType)) {
 				switch (toWeatherStatus(precipIntensity, weatherType)) {
 					case WEATHER_STATUS.CLEAR:
 						condition.endTime = startTime;
 
 						timeStatus.push(TIME_STATUS.STOP);
-						condition.token = toToken(weatherAndPossiblity, timeStatus);
+						condition.token = toToken(isPossible, weatherStatus, timeStatus);
 						condition.longTemplate = forecast_keypoint ?? description;
 						condition.shortTemplate = description;
 						condition.parameters = {};
@@ -690,33 +691,35 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 						conditions.push(condition);
 
 						// reset the condition
-						weatherAndPossiblity.possibility =
-							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
-						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						isPossible = needPossible(minutes[i].precipChance);
+						weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 						timeStatus = [];
 						condition = { startTime };
 						break;
 					case WEATHER_STATUS.HEAVY_RAIN:
 					case WEATHER_STATUS.HEAVY_SNOW:
 						if (
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.RAIN ||
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.SNOW ||
-							// TODO: untested, heavy rain to heavy snow OR heavy snow to heavy rain?
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_SNOW
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.RAIN ||
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.SNOW
 						) {
 							timeStatus = [TIME_STATUS.CONSTANT];
-						} else if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
+						} else if (
+							// TODO: untested, heavy rain to heavy snow OR heavy snow to heavy rain?
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_RAIN ||
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_SNOW
+						) {
+							timeStatus = [TIME_STATUS.CONSTANT];
+						} else if (weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.CLEAR) {
 							// but how...?
-							// change clear to heavy-rain-to-rain.start or heavy-snow-to-snow.start
-							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+							// change clear to heavy-rain.start or heavy-snow.start
+							weatherStatus[weatherStatus.length - 1] = toWeatherStatus(precipIntensity, weatherType);
 							timeStatus.push(TIME_STATUS.START);
 						} else {
 							// for drizzle or something else?
 							timeStatus.push(TIME_STATUS.STOP);
 						}
 	
-						condition.token = toToken(weatherAndPossiblity, timeStatus);
+						condition.token = toToken(isPossible, weatherStatus, timeStatus);
 						condition.longTemplate = forecast_keypoint ?? description;
 						condition.shortTemplate = description;
 						condition.parameters = {
@@ -726,9 +729,8 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 	
 						conditions.push(condition);
 
-						weatherAndPossiblity.possibility =
-							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
-						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						isPossible = needPossible(minutes[0].precipChance);
+						weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 						timeStatus = [TIME_STATUS.START];
 						condition = { startTime };
 						break;
@@ -766,16 +768,21 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 						// if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.DRIZZLE) {}
 						condition.endTime = startTime;
 
-						if (weatherAndPossiblity.weatherStatus === WEATHER_STATUS.CLEAR) {
+						if (weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.CLEAR) {
 							// change clear to rain.start or snow.start
-							weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+							weatherStatus[weatherStatus.length - 1] = toWeatherStatus(precipIntensity, weatherType);
 							timeStatus.push(TIME_STATUS.START);
 						} else if (
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_RAIN ||
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.HEAVY_SNOW ||
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_RAIN ||
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.HEAVY_SNOW
+						) {
+							// heavy-rain -> heavy-rain-to-rain
+							weatherStatus.push(toWeatherStatus(precipIntensity, weatherType));
+							timeStatus = [TIME_STATUS.CONSTANT];
+						} else if (
 							// TODO: untested rain to snow OR snow to rain?
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.RAIN ||
-							weatherAndPossiblity.weatherStatus === WEATHER_STATUS.SNOW
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.RAIN ||
+							weatherStatus[weatherStatus.length - 1] === WEATHER_STATUS.SNOW
 						) {
 							timeStatus = [TIME_STATUS.CONSTANT];
 						} else {
@@ -783,7 +790,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 							timeStatus.push(TIME_STATUS.STOP);
 						}
 
-						condition.token = toToken(weatherAndPossiblity, timeStatus);
+						condition.token = toToken(isPossible, weatherStatus, timeStatus);
 						condition.longTemplate = forecast_keypoint ?? description;
 						condition.shortTemplate = description;
 						condition.parameters = {
@@ -793,9 +800,8 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 
 						conditions.push(condition);
 
-						weatherAndPossiblity.possibility =
-							needPossible(minutes[0].precipChance) ? POSSIBILITY.POSSIBLE : null;
-						weatherAndPossiblity.weatherStatus = toWeatherStatus(precipIntensity, weatherType);
+						isPossible = needPossible(minutes[0].precipChance);
+						weatherStatus = [toWeatherStatus(precipIntensity, weatherType)];
 						timeStatus = [TIME_STATUS.START];
 						condition = { startTime };
 						break;
