@@ -1153,7 +1153,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	const conditions = getConditions(apiVersion, minutelyData, nextHour.minutes);
 	nextHour.condition = nextHour.condition.concat(conditions);
 	
-	function getSummary(apiVersion, minutes) {
+	function getSummaries(apiVersion, minutes) {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
@@ -1179,31 +1179,30 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		}
 
 		//for (let i = 0; i < minutes.length; i++) {
-			minutes.forEach((item, i) => {
+		minutes.slice(0, DISPLAYABLE_MINUTES).forEach((minute, index) => {
 			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (i + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
+			if (index + 1 >= DISPLAYABLE_MINUTES && lastIndex === 0 && !isRainOrSnow) {
 				summaries.push(summary);
 
 				$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
-				return summaries;
 			}
 
 			// this loop will handle previous condition and create the condition for next condition
 			// `startAt` for APIv1, `startTime` for APIv2
 			// is this too dirty?
-			const { startAt, startTime, precipIntensity } = minutes[i];
+			const { startAt, startTime, precipIntensity } = minute;
 			if (isRainOrSnow) {
 				if (
 					// end of rain
 					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					// constant of rain
 					// we always need precipChance and precipIntensity data
-					i + 1 === minutes.length
+					index + 1 === minutes.length
 				) {
 					// for find the max value of precipChance and precipIntensity
-					const range = minutes.slice(lastIndex, i + 1);
+					const range = minutes.slice(lastIndex, index + 1);
 
 					// we reach the data end but cannot find the end of rain
 					if (radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
@@ -1237,7 +1236,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 					// reset summary
 					isRainOrSnow = !isRainOrSnow;
-					lastIndex = i;
+					lastIndex = index;
 					switch (apiVersion) {
 						case "v1":
 							summary = { condition: SUMMARY_CONDITION_TYPES.CLEAR };
@@ -1266,7 +1265,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 					summaries.push(summary);
 
 					isRainOrSnow = !isRainOrSnow;
-					lastIndex = i;
+					lastIndex = index;
 					switch (apiVersion) {
 						case "v1":
 							summary = { condition: weatherType };
@@ -1287,7 +1286,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		return summaries;
 	};
 
-	const summaries = getSummary(apiVersion, nextHour.minutes);
+	const summaries = getSummaries(apiVersion, nextHour.minutes);
 	nextHour.summary = nextHour.summary.concat(summaries);
 
 	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(nextHour)}`, '');
