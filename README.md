@@ -210,6 +210,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
     * 格式如下:
       ```
+      🆕V3版:
+      argument=Switch=true&NextHour.Switch=true&AQI.Switch=true&AQI.Mode=WAQI Public&AQI.Location=Station&AQI.Auth=null&AQI.Scale=EPA_NowCast.2201&Map.AQI=true
+      V2版:
       argument=Mode=WAQI Private&Location=City&VerifyMode=Token&Token=你的私钥
       ```
 
@@ -438,6 +441,14 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
     2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
        * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
+  * 配合Surge模块的`argument`字段使用:
+    * 此方法可以将相关脚本及配置固化到Surge的配置文件中
+    * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
+    * 格式如下:
+      ```
+      🆕V3版:
+      argument=Switch=true&CountryCode=TW&Domains=web,itunes,app_store,movies,restaurants,maps&Functions=flightutilities,lookup,mail,messages,news,safari,siri,spotlight,visualintelligence&Safari_Smart_History=true
+      ```
 
 ## 安装链接
 ### 🆕V2版
