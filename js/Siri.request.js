@@ -49,10 +49,7 @@ var { url, headers } = $request;
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => {
-		if ($.isQuanX) $.done({ url, method })
-		else $.done($request)
-	})
+	.finally(() => $.done({ url, method }))
 
 /***************** Function *****************/
 /**
