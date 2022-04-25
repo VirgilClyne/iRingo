@@ -51,7 +51,7 @@ $.log(`🚧 ${$.name}, url: ${url}`, "");
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url, method }))
+	.finally(() => $.done({ url, headers }))
 
 /***************** Function *****************/
 /**

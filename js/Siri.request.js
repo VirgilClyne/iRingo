@@ -49,7 +49,7 @@ var { url, headers } = $request;
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url, method }))
+	.finally(() => $.done({ url, headers }))
 
 /***************** Function *****************/
 /**
