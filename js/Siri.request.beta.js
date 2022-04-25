@@ -1,13 +1,13 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.0-beta");
+const $ = new Env("Apple Siri v2.1.1-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
-var { url } = $request;
+var { url, headers } = $request;
 $.log(`🚧 ${$.name}, url: ${url}`, "");
 
 /***************** Processing *****************/
@@ -47,10 +47,14 @@ $.log(`🚧 ${$.name}, url: ${url}`, "");
 		};
 		url = URL.stringify(url);
 		$.log(`🚧 ${$.name}, url: ${url}`, "");
+		if ($.isQuanX) headers["Accept-Encoding"] = "gzip";
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url }))
+	.finally(() => {
+		if ($.isQuanX) $.done({ url, method })
+		else $.done($request)
+	})
 
 /***************** Function *****************/
 /**
