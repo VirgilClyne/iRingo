@@ -1,5 +1,5 @@
 #!name=  iRingo for Siri & Search
-#!desc= (2.0.0) 全面自定义「Siri与搜索」的功能。
+#!desc= (V2) 全面自定义「Siri与搜索」的功能。
 
 [Rule]
 # > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
