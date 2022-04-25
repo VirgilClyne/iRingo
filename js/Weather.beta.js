@@ -1183,7 +1183,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
-			if (index + 1 >= array.length && lastIndex === 0 && !isRainOrSnow) {
+			if (index + 1 >= array.length && !isRainOrSnow) {
 				summaries.push(summary);
 
 				$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
