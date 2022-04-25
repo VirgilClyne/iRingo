@@ -5,6 +5,10 @@ http:
   mitm:
     - "weather-data.apple.com"
     - "weather-map.apple.com"
+    - "api.waqi.info"
+    - "tiles.waqi.info"
+    - "www.weatherol.cn"
+    - "api.caiyunapp.com"
   script:
     - match: ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.*
       name: Apple_Weather_Availability
