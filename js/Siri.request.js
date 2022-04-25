@@ -1,13 +1,13 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.0");
+const $ = new Env("Apple Siri v2.1.1");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
-var { url } = $request;
+var { url, headers } = $request;
 
 /***************** Processing *****************/
 !(async () => {
@@ -45,10 +45,14 @@ var { url } = $request;
 			};
 		};
 		url = URL.stringify(url);
+		if ($.isQuanX) headers["Accept-Encoding"] = "gzip";
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url }))
+	.finally(() => {
+		if ($.isQuanX) $.done({ url, method })
+		else $.done($request)
+	})
 
 /***************** Function *****************/
 /**
@@ -59,7 +63,7 @@ var { url } = $request;
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
- async function setENV(name, platform, database) {
+async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let Settings = await getENV(name, platform, database);
 	/***************** Prase *****************/
