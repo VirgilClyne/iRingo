@@ -13,6 +13,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 - [通用配置](#通用配置)
   - [效果说明举例](#效果说明举例)
   - [建议配置](#建议配置)
+    - [Shadowrocket](#shadowrocket)
     - [Loon](#loon)
     - [Quantumult X](#quantumult-x)
     - [Surge (Shadowrocket)](#surge-shadowrocket)
@@ -78,22 +79,31 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 效果说明举例
   * 同时启用以下一个模块:
     * `Siri与搜索`
-    * 效果: `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用   
-  * 同时启用以下两个模块: 
+    * 效果: `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用
+  * 同时启用以下两个模块:
     * `地区检测为🇨🇳CN` + `修改Apple Maps为🇺🇸US`
-    * 效果: `基于网络的地区检测`为`CN` + `Apple Maps`为`TOMTOM` + `指南针`经纬度与海拔功能正常 
-  * 同时启用以下三个模块:   
-    * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`  
+    * 效果: `基于网络的地区检测`为`CN` + `Apple Maps`为`TOMTOM` + `指南针`经纬度与海拔功能正常
+  * 同时启用以下三个模块:
+    * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US`
     * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`无经纬度与海拔(iOS 15.1) + `Apple News`可用 
-  * 同时启用以下四个模块:   
+  * 同时启用以下四个模块:
     * `地区检测为🇺🇸US` + `修改Apple Maps为🇨🇳CN` + `修改Apple News为🇺🇸US` + `Siri与搜索`
     * 效果: `基于网络的地区检测`为`US` + `Apple Maps`为`高德地图` + `指南针`无经纬度与海拔(iOS 15.1) + `Apple News`可用 + `来自APPLE的内容\来自APPLE的建议\Siri建议`功能可用
 
-  * 注:  
-    * 有SIM卡的设备，如iPhone，第一次打开`Apple News`前，需要开启`✈️飞行模式`跳过SIM卡检测，进入APP后可关闭`✈️飞行模式`正常使用  
+  * 注:
+    * 有SIM卡的设备，如iPhone，第一次打开`Apple News`前，需要开启`✈️飞行模式`跳过SIM卡检测，进入APP后可关闭`✈️飞行模式`正常使用
     * 有SIM卡的设备，如iPhone，只要检测到SIM卡，且SIM卡不属于可用地区，`Apple News`会回到[解锁状态说明](#解锁状态说明)中的`解锁失效`状态。
 
 ## 建议配置
+### Shadowrocket
+  * 兼容性版本，将在Shadowrocket发布下个版本时移除
+  * sgmodule安装于`配置`-配置文件`-`模块`-`从给定的URL下载配置…`
+    1. [🌤天气](#天气)：[Weather.sgmodule](./shadowrocket/Weather.sgmodule?raw=true " iRingo for Apple Weather")
+    2. [📍定位服务](#定位服务)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
+    3. [🔍Siri与搜索](#siri与搜索)：[Siri.sgmodule](./shadowrocket/Siri.sgmodule?raw=true " iRingo for Siri & Search")
+    4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
+    5. [📺Apple TV](#apple-tv)：[Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
+    6. [📰Apple News](#apple-news)：[Apple_News.sgmodule](./sgmodule/Apple_News.sgmodule?raw=true " Unlock Apple News 🇺🇸US")
 ### Loon
   * plugin安装于`仪表`-`插件`-`+`
     1. [🌤天气](#天气)：[Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather") 
@@ -206,10 +216,17 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 安装链接
 ### 🆕V3版
   * BoxJs订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true " iRingo")
-  * Loon:[Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather")
-  * Quantumult X:[Weather.qxrewrite](./qxrewrite/Weather.qxrewrite?raw=true " iRingo for Apple Weather")
-  * Surge(Shadowrocket):[Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
-  * Stash:[Weather.stoverride](./stoverride/Weather.stoverride?raw=true " iRingo for Apple Weather")
+  * Shadowrocket:
+    * 兼容性版本，将在Shadowrocket发布下个版本时移除
+    * [Weather.sgmodule](./shadowrocket/Weather.sgmodule?raw=true " iRingo for Apple Weather")
+  * Loon:
+    * [Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather")
+  * Quantumult X:
+    * [Weather.qxrewrite](./qxrewrite/Weather.qxrewrite?raw=true " iRingo for Apple Weather")
+  * Surge(Shadowrocket):
+    * [Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
+  * Stash:
+    * [Weather.stoverride](./stoverride/Weather.stoverride?raw=true " iRingo for Apple Weather")
 
 ### V2版
   * 已归档，不再更新，因BoxJs面板升级，也不再支持自定义数据填写，原有用户可以继续使用
@@ -346,14 +363,17 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 在以下位置及功能中可用:
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
+    - [x] 视觉搜索(Visual Look Up)
+      - [x] 照片
+      - [x] Safari浏览器(Safari)
     - [x] Safari浏览器(Safari)
+      - [x] 智能历史记录
     - [x] 地图(Apple Maps)
     - [x] 新闻(Apple News)
     - [ ] 询问Siri(Ask Siri)
       - [x] 无SIM卡设备可被[定位服务](#定位服务)模块修改切换至海外版(维基百科)
       - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版(百度百科)
     - [x] 照片
-      - [x] 2.0版可以强制启用“视觉搜索”功能
     - [x] 电话
     - [x] 家庭
     - [x] 日历
@@ -424,9 +444,14 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * V2版，支持通过BoxJs面板控制具体功能，并且开启更多地区限制性功能
     * BoxJs:
       * 🆕应用订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true)
+    * Shadowrocket:
+      * 兼容性版本，将在Shadowrocket发布下个版本时移除
+      * 🆕:[Siri.sgmodule](./shadowrocket/Siri.sgmodule?raw=true " iRingo for Siri & Search")
     * Loon:
+      * 需要2.1.18(377)及以上版本
       * 🆕:[Siri.plugin](./plugin/Siri.plugin?raw=true " iRingo for Siri & Search")
     * Quantumult X:
+      * 需要1.0.29(656)及以上版本
       * 🆕:[Siri.qxrewrite](./qxrewrite/Siri.qxrewrite?raw=true " iRingo for Siri & Search")
     * Surge (Shadowrocket):
       * 适用于iOS/iPadOS,不含macOS规则集的模块:
@@ -442,6 +467,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 🆕针对策略组为`🍎 Apple`的模块(如:Surgio):[Siri_for_Surgio.sgmodule](./sgmodule/Siri_for_Surgio.sgmodule?raw=true " iRingo for Siri & Search")
       * 🆕针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Siri_for_ACL4SSR.sgmodule](./sgmodule/Siri_for_ACL4SSR.sgmodule?raw=true " iRingo for Siri & Search") 
     * Stash:
+      * 暂不支持改写同一链接的请求和回复，请等待更新
       * 🆕:[Siri.stoverride](./stoverride/Siri.stoverride?raw=true " iRingo for Siri & Search")
 ### V1.5版
   * V1.5版，用脚本(Script)功能自动改为与系统`语言与地区`相同的设置
