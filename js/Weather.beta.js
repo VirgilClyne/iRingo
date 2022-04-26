@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather AQI v3.2.4-beta");
+const $ = new Env("Apple Weather AQI v3.2.5-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -348,7 +348,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		"Language": weather?.[NAME]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language,
 		"Name": obs?.attributions?.[0]?.name ?? "WAQI.info",
 		//"Name": obs?.attributions?.[obs.attributions.length - 1]?.name,
-		"Logo": "https:\/\/waqi.info\/images\/logo.png",
+		"Logo": "https://waqi.info/images/logo.png",
 		"Unit": "m",
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
@@ -551,7 +551,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		// replace `zh_CN` to `zh-CN`
 		"Language": minutelyData?.lang?.replace('_', '-') ?? "en-US",
 		"Name": providerName,
-		"Logo": "https:\/\/www.weatherol.cn\/images\/logo.png",
+		"Logo": "https://www.weatherol.cn/images/logo.png",
 		// actually we use radar data directly
 		// it looks like Apple doesn't care this data
 		"Unit": "radar",
@@ -559,7 +559,7 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
 	nextHour.metadata = Metadata(metadata);
-
+	nextHour.startTime = startTimeIos;
 	//
 	// handle minutes
 	//
@@ -971,7 +971,7 @@ function calculateAQI(AQI) {
  * @param {Object} input - input
  * @returns {Object}
  */
-function Metadata(input = { Version: new Number, Time: new Date, Expire: new Number, Latitude: new Number, Longitude: new Number, Language: "", Name: "", Logo: "", Unit: "", Source: new Number }) {
+function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": new Number, "Report": true, "Latitude": new Number, "Longitude": new Number, "Language": "", "Name": "", "Logo": "", "Unit": "", "Source": new Number }) {
 	let metadata = {
 		"version": input.Version,
 		"language": input.Language,
@@ -981,16 +981,16 @@ function Metadata(input = { Version: new Number, Time: new Date, Expire: new Num
 	if (input.Version == 1) {
 		metadata.read_time = convertTime("v"+input.Version, new Date(), 0);
 		metadata.expire_time = convertTime("v"+input.Version, new Date(input.Time), input.Expire);
-		metadata.reported_time = convertTime("v"+input.Version, new Date(input.Time), 0);
+		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input.Time), 0);
 		metadata.provider_name = input.Name;
-		metadata.provider_logo = input.Logo;
+		if (input.Logo) metadata.provider_logo = input.Logo;
 		metadata.data_source = input.Source;
 	} else {
 		metadata.readTime = convertTime("v"+input.Version, new Date(), 0);
 		metadata.expireTime = convertTime("v"+input.Version, new Date(input.Time), input.Expire);
-		metadata.reportedTime = convertTime("v"+input.Version, new Date(input.Time), 0);
+		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input.Time), 0);
 		metadata.providerName = input.Name;
-		metadata.providerLogo = input.Logo;
+		if (input.Logo) metadata.providerLogo = input.Logo;
 		metadata.units = input.Unit;
 	}
 	return metadata
