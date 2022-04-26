@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather AQI v3.2.5");
+const $ = new Env("Apple Weather v3.2.5");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -383,13 +383,13 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 /**
  * output forecast NextHour Data
  * @author WordlessEcho
- * @param {String} api - Apple API Version
+ * @param {String} apiVersion - Apple Weather API Version
  * @param {Object} minutelyData - minutely data from API
  * @param {Object} weather - weather data from Apple
  * @param {Object} Settings - Settings config in Box.js
  * @return {Promise<*>}
  */
- async function outputNextHour(api, providerName, minutelyData, weather, Settings) {
+ async function outputNextHour(apiVersion, providerName, minutelyData, weather, Settings) {
 	// iOS weather can only display data in an hour
 	const DISPLAYABLE_MINUTES = 60;
 
@@ -520,7 +520,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		return weather;
 	}
 
-	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${api}`, '');
+	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${apiVersion}`, '');
   if (!weather.forecastNextHour) {
     $.log(`⚠️ ${$.name}, 没有下一小时降水强度数据，正在创建`, '');
     weather.forecastNextHour = {
@@ -551,8 +551,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		// untested: I guess is the same as AQI data_source
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
-	nextHour.metadata = Metadata(metadata);
-	nextHour.startTime = startTimeIos;
+	weather.forecastNextHour.metadata = Metadata(metadata);
+	weather.forecastNextHour.startTime = startTimeIos;
 	//
 	// handle minutes
 	//
@@ -561,7 +561,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
 
 		weather.forecastNextHour.minutes.push({
-			"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
+			"startTime": convertTime(apiVersion, new Date(nextMinuteTime), 0),
 			// we only have per half hour probability data
 			// `index / 30` => use one probability for 30 minutes
 			// `* 100` => convert to percentages
