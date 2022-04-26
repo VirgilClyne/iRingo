@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather AQI v3.2.0-beta");
+const $ = new Env("Apple Weather AQI v3.2.4-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -1318,18 +1318,6 @@ function out_of_china(lng, lat) {
 };
 
 /**
- * Switch Pollutants Type
- * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
- * @author Hackl0us
- * @param {String} pollutant - pollutant
- * @returns {String}
- */
-function switchPollutantsType(pollutant) {
-	const pollutant_map = { "co": "CO", "no": "NO", "no2": "NO2", "so2": "SO2", "o3": "OZONE", "nox": "NOX", "pm25": "PM2.5", "pm10": "PM10" };
-	return pollutant_map?.[pollutant] ?? "OTHER";
-};
-
-/**
  * Convert Time Format
  * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
  * @author Hackl0us
@@ -1369,28 +1357,10 @@ function convertTime(time, action, apiVersion) {
  * @param {Number} AQI - Air Quality index
  * @returns {Number}
  */
- function calculateAQI(AQI) {
-	 if (!AQI) return -1
-	 else if (AQI <= 200) return Math.ceil(AQI / 50);
-	 else if (AQI <= 300) return 5;
-	 else return 6;
-};
-
-/**
- * Calculate Air Quality Level
- * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
- * @author Hackl0us
- * @param {Number} aqiIndex - aqiIndex
- * @returns {Number}
- */
-function classifyAirQualityLevel(aqiIndex) {
-	if (!aqiIndex) return -1;
-	else if (aqiIndex >= 0 && aqiIndex <= 50) return 1;
-	else if (aqiIndex >= 51 && aqiIndex <= 100) return 2;
-	else if (aqiIndex >= 101 && aqiIndex <= 150) return 3;
-	else if (aqiIndex >= 151 && aqiIndex <= 200) return 4;
-	else if (aqiIndex >= 201 && aqiIndex <= 300) return 5;
-	else if (aqiIndex >= 301 && aqiIndex <= 500) return 6;
+function calculateAQI(AQI) {
+	if (!AQI) return -1
+	else if (AQI <= 200) return Math.ceil(AQI / 50);
+	else if (AQI <= 300) return 5;
 	else return 6;
 };
 
