@@ -492,7 +492,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
 	// use next minute and clean seconds as next hour forecast as start time
-	const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', apiVersion);
+	const startTimeIos = convertTime(apiVersion, new Date(nextMinuteWithoutSecond), 0);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 
@@ -688,8 +688,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 	switch (apiVersion) {
 		case "v1":
-			nextHour.metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
-			nextHour.metadata.expire_time = convertTime(new Date(), 'add-1h-floor', apiVersion);
+			nextHour.metadata.read_time = convertTime(apiVersion, new Date(), 0);
+			nextHour.metadata.expire_time = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 15);
 			nextHour.metadata.version = 1;
 			nextHour.metadata.provider_name = providerName;
 			// untested: I guess is the same as AQI data_source
@@ -698,9 +698,9 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		case "v2":
 		default:
 			nextHour.metadata.expireTime =
-				convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', apiVersion);
+				convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 15);
 			nextHour.metadata.providerName = providerName;
-			nextHour.metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
+			nextHour.metadata.readTime = convertTime(apiVersion, new Date(), 0);
 			// actually we use radar data directly
 			// it looks like Apple doesn't care this data
 			// nextHour.metadata.units = "m";
@@ -762,7 +762,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 		switch (apiVersion) {
 			case "v1":
-				minute.startAt = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
+				minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
 				// TODO: find out the limit of perceivedIntensity
 				// FOR DEBUG
 				if (Settings?.NextHour?.Debug?.Switch) {
@@ -777,7 +777,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				break;
 			case "v2":
 			default:
-				minute.startTime = convertTime(new Date(nextMinuteTime), 'remain', apiVersion);
+				minute.startTime = convertTime( apiVersion, new Date(nextMinuteTime), 0);
 				// FOR DEBUG
 				if (Settings?.NextHour?.Debug?.Switch) {
 					if (index < debugDelay) {
@@ -1318,37 +1318,17 @@ function out_of_china(lng, lat) {
 };
 
 /**
- * Convert Time Format
- * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
- * @author Hackl0us
- * @param {Time} time - time
- * @param {String} action - action
- * @param {String} apiVersion - apiVersion - Apple Weather API Version
+ * Convert Time
+ * @author VirgilClyne
+ * @param {String} apiVersion - Apple Weather API Version
+ * @param {Time} time - Time
+ * @param {Number} addMinutes - add Minutes Number
  * @returns {String}
  */
-function convertTime(time, action, apiVersion) {
-	switch (action) {
-		case 'remain':
-			time.setMilliseconds(0);
-			break;
-		case 'add-30m-floor':
-			time.setMinutes(time.getMinutes() + 30, 0, 0);
-			break;
-		case 'add-1h-floor':
-			time.setHours(time.getHours() + 1);
-			time.setMinutes(0, 0, 0);
-			break;
-		default:
-			$.log(`⚠️ ${$.name}, Time Converter, Error`, `time: ${time}`, '');
-	}
-	if (apiVersion == "v1") {
-		let timeString = time.getTime() / 1000;
-		return timeString;
-	}
-	if (apiVersion == "v2") {
-		let timeString = time.toISOString().split('.')[0] + 'Z';
-		return timeString;
-	}
+function convertTime(apiVersion, time, addMinutes) {
+	time.setMinutes(time.getMinutes() + addMinutes, time.getSeconds(), 0);
+	let timeString = (apiVersion == "v1") ? time.getTime() / 1000 : time.toISOString().split(".")[0] + "Z"
+	return timeString;
 };
 
 /**
@@ -1378,35 +1358,21 @@ function Metadata(input = { Version: new Number, Time: new Date, Expire: new Num
 		"latitude": input.Latitude,
 	}
 	if (input.Version == 1) {
-		metadata.read_time = convertTime(input.Version, new Date(), 0);
-		metadata.expire_time = convertTime(input.Version, new Date(input.Time), input.Expire);
-		metadata.reported_time = convertTime(input.Version, new Date(input.Time), 0);
+		metadata.read_time = convertTime("v"+input.Version, new Date(), 0);
+		metadata.expire_time = convertTime("v"+input.Version, new Date(input.Time), input.Expire);
+		metadata.reported_time = convertTime("v"+input.Version, new Date(input.Time), 0);
 		metadata.provider_name = input.Name;
 		metadata.provider_logo = input.Logo;
 		metadata.data_source = input.Source;
 	} else {
-		metadata.readTime = convertTime(input.Version, new Date(), 0);
-		metadata.expireTime = convertTime(input.Version, new Date(input.Time), input.Expire);
-		metadata.reportedTime = convertTime(input.Version, new Date(input.Time), 0);
+		metadata.readTime = convertTime("v"+input.Version, new Date(), 0);
+		metadata.expireTime = convertTime("v"+input.Version, new Date(input.Time), input.Expire);
+		metadata.reportedTime = convertTime("v"+input.Version, new Date(input.Time), 0);
 		metadata.providerName = input.Name;
 		metadata.providerLogo = input.Logo;
 		metadata.units = input.Unit;
 	}
 	return metadata
-
-	/**
-	 * Convert Time
-	 * @author VirgilClyne
-	 * @param {String} version - Metadata Version
-	 * @param {Time} time - Time
-	 * @param {Number} addMinutes - add Minutes Number
-	 * @returns {String}
-	 */
-	function convertTime(version, time, addMinutes) {
-		time.setMinutes(time.getMinutes() + addMinutes, 0, 0);
-		let timeString = (version == 1) ? time.getTime() / 1000 : time.toISOString().split(".")[0] + "Z"
-		return timeString;
-	};
 };
 
 /***************** Env *****************/
