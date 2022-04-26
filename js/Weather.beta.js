@@ -674,40 +674,29 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 	delete nextHour.metadata.temporarilyUnavailable;
 
+	// 创建metadata
 	//
 	// handle metadata
 	//
 	// TODO: split API logic from this function
-	// this API doesn't support language switch
-	// replace `zh_CN` to `zh-CN`
-	nextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
-	nextHour.metadata.longitude = minutelyData?.location[1];
-	nextHour.metadata.latitude = minutelyData?.location[0];
-
-	nextHour.startTime = startTimeIos;
-
-	switch (apiVersion) {
-		case "v1":
-			nextHour.metadata.read_time = convertTime(apiVersion, new Date(), 0);
-			nextHour.metadata.expire_time = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 15);
-			nextHour.metadata.version = 1;
-			nextHour.metadata.provider_name = providerName;
-			// untested: I guess is the same as AQI data_source
-			nextHour.metadata.data_source = 0;
-			break;
-		case "v2":
-		default:
-			nextHour.metadata.expireTime =
-				convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 15);
-			nextHour.metadata.providerName = providerName;
-			nextHour.metadata.readTime = convertTime(apiVersion, new Date(), 0);
-			// actually we use radar data directly
-			// it looks like Apple doesn't care this data
-			// nextHour.metadata.units = "m";
-			nextHour.metadata.units = "radar";
-			nextHour.metadata.version = 2;
-			break;
-	}
+	let metadata = {
+		"Version": (apiVersion == "v1") ? 1 : 2,
+		"Time": minutelyData?.server_time * 1000,
+		"Expire": 15,
+		"Longitude": minutelyData?.location[1],
+		"Latitude": minutelyData?.location[0],
+		// this API doesn't support language switch
+		// replace `zh_CN` to `zh-CN`
+		"Language": minutelyData?.lang?.replace('_', '-') ?? "en-US",
+		"Name": providerName,
+		"Logo": "https:\/\/www.weatherol.cn\/images\/logo.png",
+		// actually we use radar data directly
+		// it looks like Apple doesn't care this data
+		"Unit": "radar",
+		// untested: I guess is the same as AQI data_source
+		"Source": 0, //来自XX读数 0:监测站 1:模型
+	};
+	nextHour.metadata = Metadata(metadata);
 
 	//
 	// handle minutes
