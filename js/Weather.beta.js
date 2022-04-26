@@ -431,6 +431,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	let metadata = {
 		"Version": (apiVersion == "v1") ? 1 : 2,
 		"Time": (apiVersion == "v1") ? obs?.time?.v ?? now?.t : obs?.time?.iso ?? now?.utime,
+		"Expire": 60,
 		"Longitude": obs?.city?.geo?.[0] ?? now?.geo?.[0] ?? weather?.currentWeather?.metadata?.longitude ?? weather?.current_observations?.metadata?.longitude,
 		"Latitude": obs?.city?.geo?.[1] ?? now?.geo?.[1] ?? weather?.currentWeather?.metadata?.latitude ?? weather?.current_observations?.metadata?.latitude,
 		"Language": weather?.[NAME]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language,
@@ -1301,8 +1302,9 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 /***************** Fuctions *****************/
 /**
- * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
  * 判断是否在国内
+ * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
+ * @author wandergis
  * @param {Number} lat - latitude
  * @param {Number} lng - longitude
  * @returns {boolean}
@@ -1317,6 +1319,7 @@ function out_of_china(lng, lat) {
 /**
  * Switch Pollutants Type
  * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @author Hackl0us
  * @param {String} pollutant - pollutant
  * @returns {String}
  */
@@ -1328,6 +1331,7 @@ function switchPollutantsType(pollutant) {
 /**
  * Convert Time Format
  * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @author Hackl0us
  * @param {Time} time - time
  * @param {String} action - action
  * @param {String} apiVersion - apiVersion - Apple Weather API Version
@@ -1337,6 +1341,9 @@ function convertTime(time, action, apiVersion) {
 	switch (action) {
 		case 'remain':
 			time.setMilliseconds(0);
+			break;
+		case 'add-30m-floor':
+			time.setMinutes(time.getMinutes() + 30, 0, 0);
 			break;
 		case 'add-1h-floor':
 			time.setHours(time.getHours() + 1);
@@ -1358,6 +1365,7 @@ function convertTime(time, action, apiVersion) {
 /**
  * Calculate Air Quality Level
  * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @author Hackl0us
  * @param {Number} aqiIndex - aqiIndex
  * @returns {Number}
  */
@@ -1374,11 +1382,11 @@ function classifyAirQualityLevel(aqiIndex) {
 
 /**
  * create Metadata
- * @param {Number} apiVersion - Apple Weather API Version
+ * @author VirgilClyne
  * @param {Object} input - input
  * @returns {Object}
  */
-function Metadata(input = { Version: new Number, Time: new Date, Latitude: new Number, Longitude: new Number, Language: "", Name: "", Logo: "", Unit: "", Source: new Number }) {
+function Metadata(input = { Version: new Number, Time: new Date, Expire: new Number, Latitude: new Number, Longitude: new Number, Language: "", Name: "", Logo: "", Unit: "", Source: new Number }) {
 	let metadata = {
 		"version": input.Version,
 		"language": input.Language,
@@ -1386,21 +1394,35 @@ function Metadata(input = { Version: new Number, Time: new Date, Latitude: new N
 		"latitude": input.Latitude,
 	}
 	if (input.Version == 1) {
-		metadata.read_time = convertTime(new Date(), 'remain', input.Version);
-		metadata.expire_time = convertTime(new Date(input.Time), 'add-1h-floor', input.Version);
-		metadata.reported_time = convertTime(new Date(input.Time), 'remain', input.Version);
+		metadata.read_time = convertTime(input.Version, new Date(), 0);
+		metadata.expire_time = convertTime(input.Version, new Date(input.Time), input.Expire);
+		metadata.reported_time = convertTime(input.Version, new Date(input.Time), 0);
 		metadata.provider_name = input.Name;
 		metadata.provider_logo = input.Logo;
 		metadata.data_source = input.Source;
 	} else {
-		metadata.readTime = convertTime(new Date(), 'remain', input.Version);
-		metadata.expireTime = convertTime(new Date(input.Time), 'add-1h-floor', input.Version);
-		metadata.reportedTime = convertTime(new Date(input.Time), 'remain', input.Version);
+		metadata.readTime = convertTime(input.Version, new Date(), 0);
+		metadata.expireTime = convertTime(input.Version, new Date(input.Time), input.Expire);
+		metadata.reportedTime = convertTime(input.Version, new Date(input.Time), 0);
 		metadata.providerName = input.Name;
 		metadata.providerLogo = input.Logo;
 		metadata.units = input.Unit;
 	}
 	return metadata
+
+	/**
+	 * Convert Time
+	 * @author VirgilClyne
+	 * @param {String} version - Metadata Version
+	 * @param {Time} time - Time
+	 * @param {Number} addMinutes - add Minutes Number
+	 * @returns {String}
+	 */
+	function convertTime(version, time, addMinutes) {
+		time.setMinutes(time.getMinutes() + addMinutes, 0, 0);
+		let timeString = (version == 1) ? time.getTime() / 1000 : time.toISOString().split(".")[0] + "Z"
+		return timeString;
+	};
 };
 
 /***************** Env *****************/
