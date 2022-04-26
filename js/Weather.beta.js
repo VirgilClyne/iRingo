@@ -452,11 +452,11 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		if (apiVersion == "v1") {
 			weather[NAME].airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
 			weather[NAME].airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
-			weather[NAME].airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
+			weather[NAME].airQualityCategoryIndex = calculateAQI(obs?.aqi ?? now?.aqi ?? now?.v);
 		} else if (apiVersion == "v2") {
 			weather[NAME].index = obs?.aqi ?? now?.aqi ?? now?.v;
 			weather[NAME].scale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
-			weather[NAME].categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
+			weather[NAME].categoryIndex = calculateAQI(obs?.aqi ?? now?.aqi ?? now?.v);
 			weather[NAME].sourceType = "station"; //station:监测站 modeled:模型
 		}
 		//weather[NAME].pollutants.CO = { "name": "CO", "amount": obs?.iaqi?.co?.v || -1, "unit": UNIT };
@@ -1360,6 +1360,19 @@ function convertTime(time, action, apiVersion) {
 		let timeString = time.toISOString().split('.')[0] + 'Z';
 		return timeString;
 	}
+};
+
+/**
+ * Calculate Air Quality Level
+ * @author VirgilClyne
+ * @param {Number} AQI - Air Quality index
+ * @returns {Number}
+ */
+ function calculateAQI(AQI) {
+	 if (!AQI) return -1
+	 else if (AQI <= 200) return Math.ceil(AQI / 50);
+	 else if (AQI <= 300) return 5;
+	 else return 6;
 };
 
 /**
