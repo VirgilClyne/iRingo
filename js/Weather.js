@@ -2,11 +2,12 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather AQI v3.2.0");
+const $ = new Env("Apple Weather AQI v3.2.4");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
+	"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
 };
 var { url } = $request;
 var { body } = $response;
@@ -411,16 +412,12 @@ async function ColorfulClouds(
  */
 async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQI data ${apiVersion}`, '');
-	const AQIname = (apiVersion == "v1") ? "air_quality"
-		: (apiVersion == "v2") ? "airQuality"
-			: "airQuality";
-	const unit = (apiVersion == "v1") ? "μg\/m3"
-		: (apiVersion == "v2") ? "microgramsPerM3"
-			: "microgramsPerM3";
-	//创建对象
-	if (!weather[AQIname]) {
+	const NAME = (apiVersion == "v1") ? "air_quality" : "airQuality";
+	const UNIT = (apiVersion == "v1") ? "μg\/m3" : "microgramsPerM3";
+	// 创建对象
+	if (!weather[NAME]) {
 		$.log(`⚠️ ${$.name}, 没有空气质量数据, 创建`, '');
-		weather[AQIname] = {
+		weather[NAME] = {
 			"name": "AirQuality",
 			"isSignificant": true, // 重要/置顶
 			"pollutants": {},
@@ -428,55 +425,47 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 			"metadata": {},
 		};
 	};
+	// 创建metadata
+	let metadata = {
+		"Version": (apiVersion == "v1") ? 1 : 2,
+		"Time": (apiVersion == "v1") ? obs?.time?.v ?? now?.t : obs?.time?.iso ?? now?.utime,
+		"Expire": 60,
+		"Longitude": obs?.city?.geo?.[0] ?? now?.geo?.[0] ?? weather?.currentWeather?.metadata?.longitude ?? weather?.current_observations?.metadata?.longitude,
+		"Latitude": obs?.city?.geo?.[1] ?? now?.geo?.[1] ?? weather?.currentWeather?.metadata?.latitude ?? weather?.current_observations?.metadata?.latitude,
+		"Language": weather?.[NAME]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language,
+		"Name": obs?.attributions?.[0]?.name ?? "WAQI.info",
+		//"Name": obs?.attributions?.[obs.attributions.length - 1]?.name,
+		"Logo": "https:\/\/waqi.info\/images\/logo.png",
+		"Unit": "m",
+		"Source": 0, //来自XX读数 0:监测站 1:模型
+	};
+	weather[NAME].metadata = Metadata(metadata);
 	// 固定数据
-	weather[AQIname].primaryPollutant = switchPollutantsType(obs?.dominentpol ?? now?.pol ?? "unknown");
-	weather[AQIname].metadata.longitude = obs?.city?.geo?.[0] ?? now?.geo?.[0] ?? weather?.currentWeather?.metadata?.longitude ?? weather?.current_observations?.metadata?.longitude;
-	weather[AQIname].metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1] ?? weather?.currentWeather?.metadata?.latitude ?? weather?.current_observations?.metadata?.latitude;
-	weather[AQIname].metadata.language = weather?.[AQIname]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language;
-	weather[AQIname].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo ?? "WAQI.info";
-	weather[AQIname].learnMoreURL = obs?.city?.url ? `${obs?.city?.url}/${now?.country ?? now?.cca2 ?? weather[AQIname].metadata.language}/m`.toLowerCase() : "https://aqicn.org/";
-	if (apiVersion == "v1") {
-		weather[AQIname].airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
-		weather[AQIname].metadata.version = 1;
-		weather[AQIname].metadata.data_source = 0; //来自XX读数 0:监测站 1:模型
-		weather[AQIname].metadata.provider_logo = "https:\/\/waqi.info\/images\/logo.png";
-	}
-	else if (apiVersion == "v2") {
-		weather[AQIname].scale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
-		weather[AQIname].metadata.units = "m";
-		weather[AQIname].metadata.version = 2;
-		weather[AQIname].sourceType = "station"; //station:监测站 modeled:模型
-		weather[AQIname].metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
-	}
+	weather[NAME].primaryPollutant = DataBase.Pollutants[obs?.dominentpol ?? now?.pol ?? "other"];
+	weather[NAME].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo ?? "WAQI";
+	weather[NAME].learnMoreURL = obs?.city?.url ? `${obs?.city?.url}/${now?.country ?? now?.cca2 ?? weather[NAME].metadata.language}/m`.toLowerCase() : "https://aqicn.org/";
 	// 注入数据
 	if (now || obs) {
 		//条件运算符 & 可选链操作符
 		if (apiVersion == "v1") {
-			weather[AQIname].airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
-			weather[AQIname].airQualityCategoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
-			weather[AQIname].metadata.reported_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'remain', apiVersion);
-			//weather[AQIname].metadata.provider_name = obs?.attributions?.[obs.attributions.length - 1]?.name;
-			weather[AQIname].metadata.provider_name = obs?.attributions?.[0]?.name ?? "WAQI.info";
-			weather[AQIname].metadata.expire_time = convertTime(new Date(obs?.time?.v ?? now?.t), 'add-1h-floor', apiVersion);
-			weather[AQIname].metadata.read_time = convertTime(new Date(), 'remain', apiVersion);
+			weather[NAME].airQualityIndex = obs?.aqi ?? now?.aqi ?? now?.v;
+			weather[NAME].airQualityScale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
+			weather[NAME].airQualityCategoryIndex = calculateAQI(obs?.aqi ?? now?.aqi ?? now?.v);
 		} else if (apiVersion == "v2") {
-			weather[AQIname].index = obs?.aqi ?? now?.aqi ?? now?.v;
-			weather[AQIname].categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
-			//weather[AQIname].metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
-			weather[AQIname].metadata.providerName = obs?.attributions?.[0]?.name ?? "WAQI.info";
-			weather[AQIname].metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', apiVersion);
-			weather[AQIname].metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', apiVersion);
-			weather[AQIname].metadata.readTime = convertTime(new Date(), 'remain', apiVersion);
+			weather[NAME].index = obs?.aqi ?? now?.aqi ?? now?.v;
+			weather[NAME].scale = Settings?.AQI?.Scale || "EPA_NowCast.2201";
+			weather[NAME].categoryIndex = calculateAQI(obs?.aqi ?? now?.aqi ?? now?.v);
+			weather[NAME].sourceType = "station"; //station:监测站 modeled:模型
 		}
-		//weather[AQIname].pollutants.CO = { "name": "CO", "amount": obs?.iaqi?.co?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants.NO = { "name": "NO", "amount": obs?.iaqi?.no?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants.NO2 = { "name": "NO2", "amount": obs?.iaqi?.no2?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants.SO2 = { "name": "SO2", "amount": obs?.iaqi?.so2?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants.OZONE = { "name": "OZONE", "amount": obs?.iaqi?.o3?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants.NOX = { "name": "NOX", "amount": obs?.iaqi?.nox?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants["PM2.5"] = { "name": "PM2.5", "amount": obs?.iaqi?.pm25?.v || -1, "unit": unit };
-		//weather[AQIname].pollutants.PM10 = { "name": "PM10", "amount": obs?.iaqi?.pm10?.v || -1, "unit": unit };
-	} else weather[AQIname].metadata.temporarilyUnavailable = true;
+		//weather[NAME].pollutants.CO = { "name": "CO", "amount": obs?.iaqi?.co?.v || -1, "unit": UNIT };
+		//weather[NAME].pollutants.NO = { "name": "NO", "amount": obs?.iaqi?.no?.v || -1, "unit": UNIT };
+		//weather[NAME].pollutants.NO2 = { "name": "NO2", "amount": obs?.iaqi?.no2?.v || -1, "unit": UNIT };
+		//weather[NAME].pollutants.SO2 = { "name": "SO2", "amount": obs?.iaqi?.so2?.v || -1, "unit": UNIT };
+		//weather[NAME].pollutants.OZONE = { "name": "OZONE", "amount": obs?.iaqi?.o3?.v || -1, "unit": UNIT };
+		//weather[NAME].pollutants.NOX = { "name": "NOX", "amount": obs?.iaqi?.nox?.v || -1, "unit": UNIT };
+		//weather[NAME].pollutants["PM2.5"] = { "name": "PM2.5", "amount": obs?.iaqi?.pm25?.v || -1, "UNIT": UNIT };
+		//weather[NAME].pollutants.PM10 = { "name": "PM10", "amount": obs?.iaqi?.pm10?.v || -1, "unit": UNIT };
+	} else weather[NAME].metadata.temporarilyUnavailable = true;
 	$.log(`🎉 ${$.name}, ${outputAQI.name}完成`, '');
 	return weather
 };
@@ -1137,8 +1126,9 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 /***************** Fuctions *****************/
 /**
- * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
  * 判断是否在国内
+ * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
+ * @author wandergis
  * @param {Number} lat - latitude
  * @param {Number} lng - longitude
  * @returns {boolean}
@@ -1151,19 +1141,9 @@ function out_of_china(lng, lat) {
 };
 
 /**
- * Switch Pollutants Type
- * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
- * @param {String} pollutant - pollutant
- * @returns {String}
- */
-function switchPollutantsType(pollutant) {
-	const pollutant_map = { "co": "CO", "no": "NO", "no2": "NO2", "so2": "SO2", "o3": "OZONE", "nox": "NOX", "pm25": "PM2.5", "pm10": "PM10" };
-	return pollutant_map?.[pollutant] ?? "OTHER";
-};
-
-/**
  * Convert Time Format
  * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
+ * @author Hackl0us
  * @param {Time} time - time
  * @param {String} action - action
  * @param {String} apiVersion - apiVersion - Apple Weather API Version
@@ -1173,6 +1153,9 @@ function convertTime(time, action, apiVersion) {
 	switch (action) {
 		case 'remain':
 			time.setMilliseconds(0);
+			break;
+		case 'add-30m-floor':
+			time.setMinutes(time.getMinutes() + 30, 0, 0);
 			break;
 		case 'add-1h-floor':
 			time.setHours(time.getHours() + 1);
@@ -1193,19 +1176,60 @@ function convertTime(time, action, apiVersion) {
 
 /**
  * Calculate Air Quality Level
- * https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/Scripts/Surge/weather_aqi_us/iOS15_Weather_AQI_US.js
- * @param {Number} aqiIndex - aqiIndex
+ * @author VirgilClyne
+ * @param {Number} AQI - Air Quality index
  * @returns {Number}
  */
-function classifyAirQualityLevel(aqiIndex) {
-	if (!aqiIndex) return -1;
-	else if (aqiIndex >= 0 && aqiIndex <= 50) return 1;
-	else if (aqiIndex >= 51 && aqiIndex <= 100) return 2;
-	else if (aqiIndex >= 101 && aqiIndex <= 150) return 3;
-	else if (aqiIndex >= 151 && aqiIndex <= 200) return 4;
-	else if (aqiIndex >= 201 && aqiIndex <= 300) return 5;
-	else if (aqiIndex >= 301 && aqiIndex <= 500) return 6;
+function calculateAQI(AQI) {
+	if (!AQI) return -1
+	else if (AQI <= 200) return Math.ceil(AQI / 50);
+	else if (AQI <= 300) return 5;
 	else return 6;
+};
+
+/**
+ * create Metadata
+ * @author VirgilClyne
+ * @param {Object} input - input
+ * @returns {Object}
+ */
+function Metadata(input = { Version: new Number, Time: new Date, Expire: new Number, Latitude: new Number, Longitude: new Number, Language: "", Name: "", Logo: "", Unit: "", Source: new Number }) {
+	let metadata = {
+		"version": input.Version,
+		"language": input.Language,
+		"longitude": input.Longitude,
+		"latitude": input.Latitude,
+	}
+	if (input.Version == 1) {
+		metadata.read_time = convertTime(input.Version, new Date(), 0);
+		metadata.expire_time = convertTime(input.Version, new Date(input.Time), input.Expire);
+		metadata.reported_time = convertTime(input.Version, new Date(input.Time), 0);
+		metadata.provider_name = input.Name;
+		metadata.provider_logo = input.Logo;
+		metadata.data_source = input.Source;
+	} else {
+		metadata.readTime = convertTime(input.Version, new Date(), 0);
+		metadata.expireTime = convertTime(input.Version, new Date(input.Time), input.Expire);
+		metadata.reportedTime = convertTime(input.Version, new Date(input.Time), 0);
+		metadata.providerName = input.Name;
+		metadata.providerLogo = input.Logo;
+		metadata.units = input.Unit;
+	}
+	return metadata
+
+	/**
+	 * Convert Time
+	 * @author VirgilClyne
+	 * @param {String} version - Metadata Version
+	 * @param {Time} time - Time
+	 * @param {Number} addMinutes - add Minutes Number
+	 * @returns {String}
+	 */
+	function convertTime(version, time, addMinutes) {
+		time.setMinutes(time.getMinutes() + addMinutes, 0, 0);
+		let timeString = (version == 1) ? time.getTime() / 1000 : time.toISOString().split(".")[0] + "Z"
+		return timeString;
+	};
 };
 
 /***************** Env *****************/
