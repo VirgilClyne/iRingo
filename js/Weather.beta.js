@@ -536,23 +536,33 @@ async function outputNextHour(api, providerName, minutelyData, weather, Settings
     }
   }
 
+	// 创建metadata
+	//
+	// handle metadata
+	//
 	// TODO: split API logic from this function
-	weather.forecastNextHour.metadata.expireTime = convertTime(new Date(minutelyData?.server_time * 1000), 'add-1h-floor', api);
-	// this API doesn't support language switch
-	// replace `zh_CN` to `zh-CN`
-	weather.forecastNextHour.metadata.language = minutelyData?.lang?.replace('_', '-') ?? "en-US";
-	weather.forecastNextHour.metadata.longitude = minutelyData?.location[1];
-	weather.forecastNextHour.metadata.latitude = minutelyData?.location[0];
-	weather.forecastNextHour.metadata.providerName = providerName;
-	weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
-	// actually we use radar data directly
-	// it looks like Apple doesn't care this data
-	// weather.forecastNextHour.metadata.units = "m";
-	weather.forecastNextHour.metadata.units = "radar";
-	weather.forecastNextHour.metadata.version = 2;
+	let metadata = {
+		"Version": (apiVersion == "v1") ? 1 : 2,
+		"Time": minutelyData?.server_time * 1000,
+		"Expire": 15,
+		"Longitude": minutelyData?.location[1],
+		"Latitude": minutelyData?.location[0],
+		// this API doesn't support language switch
+		// replace `zh_CN` to `zh-CN`
+		"Language": minutelyData?.lang?.replace('_', '-') ?? "en-US",
+		"Name": providerName,
+		"Logo": "https:\/\/www.weatherol.cn\/images\/logo.png",
+		// actually we use radar data directly
+		// it looks like Apple doesn't care this data
+		"Unit": "radar",
+		// untested: I guess is the same as AQI data_source
+		"Source": 0, //来自XX读数 0:监测站 1:模型
+	};
+	nextHour.metadata = Metadata(metadata);
 
-	weather.forecastNextHour.startTime = startTimeIos;
-
+	//
+	// handle minutes
+	//
 	const startTimeDate = new Date(startTimeIos);
 	minutely.precipitation_2h.forEach((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
