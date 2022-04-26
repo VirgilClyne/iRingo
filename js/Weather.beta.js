@@ -27,7 +27,7 @@ var { body } = $response;
 					$.log(`🎉 ${$.name}, 需要替换AQI`, "");
 					if (Settings.AQI.Mode == "WAQI Public") {
 						$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
-						var { Station, idx } = await WAQI("Nearest", { api: Params.ver, lat: Params.lat, lng: Params.lng });
+						var { Station, idx } = await WAQI("Nearest", { api: "v1", lat: Params.lat, lng: Params.lng });
 						const Token = await WAQI("Token", { idx: idx });
 						//var NOW = await WAQI("NOW", { token:Token, idx: idx });
 						var AQI = await WAQI("AQI", { token: Token, idx: idx });
@@ -36,7 +36,7 @@ var { body } = $response;
 						const Token = Settings.AQI.Auth;
 						if (Settings.AQI.Location == "Station") {
 							$.log(`🚧 ${$.name}, 定位精度: 观测站`, "")
-							var { Station, idx } = await WAQI("Nearest", { api: Params.ver, lat: Params.lat, lng: Params.lng });
+							var { Station, idx } = await WAQI("Nearest", { api: "v1", lat: Params.lat, lng: Params.lng });
 							var AQI = await WAQI("StationFeed", { token: Token, idx: idx });
 						} else if (Settings.AQI.Location == "City") {
 							$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
