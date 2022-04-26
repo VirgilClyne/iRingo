@@ -483,7 +483,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
  * @return {Promise<*>}
  */
 async function outputNextHour(apiVersion, providerName, minutelyData, weather, Settings) {
-	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测`, `AQI data ${apiVersion}`, '');
+	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测`, `API: ${apiVersion}`, '');
 	const NAME = (apiVersion == "v1") ? "next_hour" : "forecastNextHour";
 	// 创建对象
 	if (!weather[NAME]) {
@@ -498,11 +498,11 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			"minutes": [],
 		};
 	};
-	
+
 	// iOS weather can only display data in an hour
 	const DISPLAYABLE_MINUTES = 60;
 	const minutely = minutelyData?.result?.minutely;
-	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
+	function addMinutes(date, minutes) { return (new Date()).setTime(date.getTime() + (1000 * 60 * minutes)) };
 
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
@@ -510,30 +510,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	const startTimeIos = convertTime(apiVersion, new Date(nextMinuteWithoutSecond), 0);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
-
-	// https://docs.caiyunapp.com/docs/tables/skycon/
-	const getWeatherType = hourly => {
-		// enough for us, add more in future?
-		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
-
-		// FOR DEBUG
-		if (Settings?.NextHour?.Debug?.Switch) {
-			return Settings.NextHour.Debug?.WeatherType ?? "rain";
-		}
-
-		if (hourly?.skycon?.find(
-			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)
-		)) {
-			return SUMMARY_CONDITION_TYPES.RAIN;
-		} else if (hourly?.skycon?.find(
-			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
-		)) {
-			return SUMMARY_CONDITION_TYPES.SNOW;
-		} else {
-			// although getWeatherType() is designed for find out rain or snow
-			return SUMMARY_CONDITION_TYPES.CLEAR;
-		}
-	}
 
 	// 4 decimals in API
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
@@ -557,84 +533,10 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
 	};
 
-	const radarToPrecipitationLevel = value => {
-		const {
-			noRainOrSnow,
-			lightRainOrSnow,
-			moderateRainOrSnow,
-			heavyRainOrSnow,
-			_stormRainOrSnow,
-		} = RADAR_PRECIPITATION_RANGE;
-
-		if (value < noRainOrSnow.upper) {
-			if (value < noRainOrSnow.lower) {
-				$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`, '');
-			}
-
-			return PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW;
-		} else if (value < lightRainOrSnow.upper) {
-			return PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW;
-		} else if (value < moderateRainOrSnow.upper) {
-			return PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW;
-		} else if (value < heavyRainOrSnow.upper) {
-			return PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW;
-		} else {
-			return PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW;
-		}
-	};
-
-	// mapping the standard preciptation level to 3 level standard of Apple
-	const radarToApplePrecipitation = value => {
-		const {
-			noRainOrSnow,
-			lightRainOrSnow,
-			moderateRainOrSnow,
-			heavyRainOrSnow,
-			_stormRainOrSnow
-		} = RADAR_PRECIPITATION_RANGE;
-
-		switch (radarToPrecipitationLevel(value)) {
-			case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
-				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
-			case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
-			return (
-				// multiple 10000 for precision of calculation
-				// base of previous levels + percentage of the value in its level
-				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
-				// from the lower of range to value
-				(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-				// sum of range
-					((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
-				// then divided them and multiple Apple level range
-				// because Apple divided graph into 3 parts, value limitation is 3
-				// we omit the "multiple one"
-				);
-			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
-				return (
-					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
-					(((value - lightRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-					((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
-				);
-			case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
-				return (
-					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
-					(((value - moderateRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-					((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
-				);
-			case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
-			// impossible
-			default:
-				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
-		}
-	};
-
-	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测, `, `forecastNextHour data ${apiVersion}`, '');
-
 	if (minutelyData?.status !== "ok" || minutely?.status !== "ok") {
 		$.logErr(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
 		return weather;
 	}
-
 
 	// 创建metadata
 	//
@@ -660,6 +562,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	};
 	weather[NAME].metadata = Metadata(metadata);
 	weather[NAME].startTime = startTimeIos;
+
 	//
 	// handle minutes
 	//
@@ -744,6 +647,113 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 
 		weather[NAME].minutes.push(minute);
 	});
+
+	const conditions = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
+	weather[NAME].condition = weather[NAME].condition.concat(conditions);
+
+	const summaries = getSummaries(apiVersion, weather[NAME].minutes);
+	weather[NAME].summary = weather[NAME].summary.concat(summaries);
+
+	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(nextHour)}`, '');
+
+	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
+	return weather;
+
+	/***************** Fuctions *****************/
+	// https://docs.caiyunapp.com/docs/tables/skycon/
+	function getWeatherType(hourly) {
+		// enough for us, add more in future?
+		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
+
+		// FOR DEBUG
+		if (Settings?.NextHour?.Debug?.Switch) {
+			return Settings.NextHour.Debug?.WeatherType ?? "rain";
+		}
+
+		if (hourly?.skycon?.find(
+			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)
+		)) {
+			return SUMMARY_CONDITION_TYPES.RAIN;
+		} else if (hourly?.skycon?.find(
+			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
+		)) {
+			return SUMMARY_CONDITION_TYPES.SNOW;
+		} else {
+			// although getWeatherType() is designed for find out rain or snow
+			return SUMMARY_CONDITION_TYPES.CLEAR;
+		}
+	};
+
+	function radarToPrecipitationLevel(value) {
+		const {
+			noRainOrSnow,
+			lightRainOrSnow,
+			moderateRainOrSnow,
+			heavyRainOrSnow,
+			_stormRainOrSnow,
+		} = RADAR_PRECIPITATION_RANGE;
+
+		if (value < noRainOrSnow.upper) {
+			if (value < noRainOrSnow.lower) {
+				$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`, '');
+			}
+
+			return PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW;
+		} else if (value < lightRainOrSnow.upper) {
+			return PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW;
+		} else if (value < moderateRainOrSnow.upper) {
+			return PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW;
+		} else if (value < heavyRainOrSnow.upper) {
+			return PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW;
+		} else {
+			return PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW;
+		}
+	};
+
+	// mapping the standard preciptation level to 3 level standard of Apple
+	function radarToApplePrecipitation (value) {
+		const {
+			noRainOrSnow,
+			lightRainOrSnow,
+			moderateRainOrSnow,
+			heavyRainOrSnow,
+			_stormRainOrSnow
+		} = RADAR_PRECIPITATION_RANGE;
+
+		switch (radarToPrecipitationLevel(value)) {
+			case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
+			case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
+			return (
+				// multiple 10000 for precision of calculation
+				// base of previous levels + percentage of the value in its level
+				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
+				// from the lower of range to value
+				(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+				// sum of range
+					((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				// then divided them and multiple Apple level range
+				// because Apple divided graph into 3 parts, value limitation is 3
+				// we omit the "multiple one"
+				);
+			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
+				return (
+					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
+					(((value - lightRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+					((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				);
+			case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
+				return (
+					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
+					(((value - moderateRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+					((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+				);
+			case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
+			// impossible
+			default:
+				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
+		}
+	};
 
 	function getConditions(apiVersion, minutelyData, minutes) {
 		// $.log(`🚧 ${$.name}, 开始设置conditions`, '');
@@ -1061,9 +1071,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		return conditions;
 	};
 
-	const conditions = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
-	weather[NAME].condition = weather[NAME].condition.concat(conditions);
-	
 	function getSummaries(apiVersion, minutes) {
 		// $.log(`🚧 ${$.name}, 开始设置summary`, '');
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
@@ -1156,18 +1163,9 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 				}
 			}
 		});
-
 		$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
 		return summaries;
 	};
-
-	const summaries = getSummaries(apiVersion, weather[NAME].minutes);
-	weather[NAME].summary = weather[NAME].summary.concat(summaries);
-
-	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(nextHour)}`, '');
-
-	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
-	return weather;
 };
 
 /***************** Fuctions *****************/
