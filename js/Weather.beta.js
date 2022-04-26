@@ -6,7 +6,8 @@ const $ = new Env("Apple Weather AQI v3.2.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
+	"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
 };
 var { url } = $request;
 var { body } = $response;
@@ -443,7 +444,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	};
 	weather[NAME].metadata = Metadata(metadata);
 	// 固定数据
-	weather[NAME].primaryPollutant = switchPollutantsType(obs?.dominentpol ?? now?.pol ?? "unknown");
+	weather[NAME].primaryPollutant = DataBase.Pollutants[obs?.dominentpol ?? now?.pol ?? "other"];
 	weather[NAME].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo ?? "WAQI";
 	weather[NAME].learnMoreURL = obs?.city?.url ? `${obs?.city?.url}/${now?.country ?? now?.cca2 ?? weather[NAME].metadata.language}/m`.toLowerCase() : "https://aqicn.org/";
 	// 注入数据
