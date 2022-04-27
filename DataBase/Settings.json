@@ -9,7 +9,7 @@
 			"Mode": "WAQI Public",
 			"Location": "Station",
 			"Auth": null,
-			"Scale": "EPA_NowCast.2201"
+			"Scale": "EPA_NowCast.2204"
 		},
 		"Map": {
 			"AQI": false

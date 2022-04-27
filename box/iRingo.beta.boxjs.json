@@ -85,9 +85,9 @@
 				{
 					"id": "@iRingo.Weather.AQI.Scale",
 					"name": "[空气质量]测量标准代码",
-					"val": "EPA_NowCast.2201",
+					"val": "EPA_NowCast.2204",
 					"type": "text",
-					"placeholder": "EPA_NowCast.2201",
+					"placeholder": "EPA_NowCast.2204",
 					"desc": "空气质量标准代码，会随系统更新而更新"
 				},
 				{
