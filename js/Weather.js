@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.5");
+const $ = new Env("Apple Weather v3.1.5");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -345,7 +345,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		"Language": weather?.[NAME]?.metadata?.language ?? weather?.currentWeather?.metadata?.language ?? weather?.current_observations?.metadata?.language,
 		"Name": obs?.attributions?.[0]?.name ?? "WAQI.info",
 		//"Name": obs?.attributions?.[obs.attributions.length - 1]?.name,
-		"Logo": "https://waqi.info/images/logo.png",
+		//"Logo": "https://waqi.info/images/logo.png",
+		"Logo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
 		"Unit": "m",
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
