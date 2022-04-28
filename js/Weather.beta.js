@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.0-beta");
+const $ = new Env("Apple Weather v3.2.1-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -1225,15 +1225,15 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
 	}
 	if (input.Version == 1) {
 		metadata.read_time = convertTime("v"+input.Version, new Date(), 0);
-		metadata.expire_time = convertTime("v"+input.Version, new Date(input.Time), input.Expire);
-		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input.Time), 0);
+		metadata.expire_time = convertTime("v"+input.Version, new Date(input?.Time ?? ""), input.Expire);
+		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input?.Time ?? ""), 0);
 		metadata.provider_name = input.Name;
 		if (input.Logo) metadata.provider_logo = input.Logo;
 		metadata.data_source = input.Source;
 	} else {
 		metadata.readTime = convertTime("v"+input.Version, new Date(), 0);
-		metadata.expireTime = convertTime("v"+input.Version, new Date(input.Time), input.Expire);
-		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input.Time), 0);
+		metadata.expireTime = convertTime("v"+input.Version, new Date(input?.Time ?? ""), input.Expire);
+		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input?.Time ?? ""), 0);
 		metadata.providerName = input.Name;
 		if (input.Logo) metadata.providerLogo = input.Logo;
 		metadata.units = input.Unit;
