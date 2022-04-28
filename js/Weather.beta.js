@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.1-beta");
+const $ = new Env("Apple Weather v3.2.2-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -632,7 +632,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 				break;
 			case "v2":
 			default:
-				minute.startTime = convertTime( apiVersion, new Date(nextMinuteTime), 0);
+				minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
 				// FOR DEBUG
 				if (Settings?.NextHour?.Debug?.Switch) {
 					if (index < debugDelay) {
@@ -711,7 +711,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	};
 
 	// mapping the standard preciptation level to 3 level standard of Apple
-	function radarToApplePrecipitation (value) {
+	function radarToApplePrecipitation(value) {
 		const {
 			noRainOrSnow,
 			lightRainOrSnow,
