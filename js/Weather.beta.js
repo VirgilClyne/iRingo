@@ -500,15 +500,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	};
 
 	const minutely = minutelyData?.result?.minutely;
-	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
-
-	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
-	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
-	// use next minute and clean seconds as next hour forecast as start time
-	const startTimeIos = convertTime(apiVersion, new Date(nextMinuteWithoutSecond), 0);
-	$.log(`⚠️ ${$.name}, startTimeIos : ${startTimeIos}`, '');
-	const startTimeIosNew = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 1);
-	$.log(`⚠️ ${$.name}, startTimeIosNew : ${startTimeIosNew}`, '');
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 
@@ -562,12 +553,8 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
 	weather[NAME].metadata = Metadata(metadata);
-	weather[NAME].startTime = startTimeIos;
-
-	//
-	// handle minutes
-	//
-	const startTimeDate = new Date(startTimeIos);
+	// use next minute and clean seconds as next hour forecast as start time
+	weather[NAME].startTime = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 1);
 	
 	// FOR DEBUG
 	const debugChance = parseInt(Settings?.NextHour?.Debug?.Chance) ?? 100;
@@ -603,18 +590,18 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	}
 
 	weather[NAME].minutes = minutely.precipitation_2h.map((value, index) => {
-		const nextMinuteTime = addMinutes(startTimeDate, index);
+		//const nextMinuteTime = addMinutes(startTimeDate, index);
 		let minute = {};
 		minute.precipIntensity = (Settings?.NextHour?.Debug?.Switch) ? getRandomPrecip() : value;
 		minute.precipChance = (Settings?.NextHour?.Debug?.Switch) ? debugChance ?? 100 : value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
 		if (apiVersion == "v1") {
-			minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			minute.startAt = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
 			// TODO: find out the limit of perceivedIntensity
 			// FOR DEBUG
 			if (Settings?.NextHour?.Debug?.Switch) minute.perceivedIntensity = (index < debugDelay) ? 0 : getRandomIntensity();
 			else minute.perceivedIntensity = radarToApplePrecipitation(value);
 		} else {
-			minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			minute.startTime = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
 			// FOR DEBUG
 			if (Settings?.NextHour?.Debug?.Switch) minute.precipIntensityPerceived = (index < debugDelay) ? 0 : getRandomIntensity();
 			else minute.precipIntensityPerceived = radarToApplePrecipitation(value);
@@ -694,29 +681,29 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
 				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
 			case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
-			return (
-				// multiple 10000 for precision of calculation
-				// base of previous levels + percentage of the value in its level
-				PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
-				// from the lower of range to value
-				(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-				// sum of range
-					((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
-				// then divided them and multiple Apple level range
-				// because Apple divided graph into 3 parts, value limitation is 3
-				// we omit the "multiple one"
+				return (
+					// multiple 10000 for precision of calculation
+					// base of previous levels + percentage of the value in its level
+					PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
+					// from the lower of range to value
+					(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+						// sum of range
+						((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+					// then divided them and multiple Apple level range
+					// because Apple divided graph into 3 parts, value limitation is 3
+					// we omit the "multiple one"
 				);
 			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
 				return (
 					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
 					(((value - lightRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-					((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+						((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
 				);
 			case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
 				return (
 					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
 					(((value - moderateRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-					((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+						((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
 				);
 			case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
 			// impossible
@@ -861,13 +848,13 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 								// ).lastIndexOf(true);
 								break;
 						}
-	
+
 						condition.token = toToken(isPossible, weatherStatus, timeStatus);
 						condition.longTemplate = forecast_keypoint ?? description;
 						condition.shortTemplate = description;
 						// maybe useless
 						condition.parameters.firstAt = startTime;
-	
+
 						conditions.push(condition);
 
 						isPossible = needPossible(precipChance);
