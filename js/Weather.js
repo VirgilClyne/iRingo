@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.2");
+const $ = new Env("Apple Weather v3.2.3");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -54,6 +54,7 @@ var { body } = $response;
 
 			if (Params.ver === "v1") {
 				$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段，将输出所有下一小时降水强度信息。`, "");
+				//$.log(`🚧 ${$.name}, next_hour = ${JSON.stringify(data?.next_hour)}`, "");
 			}
 
 			if (
@@ -74,6 +75,7 @@ var { body } = $response;
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
 				} else {
+					//$.log(`🚧 ${$.name}, data = ${JSON.stringify(data?.forecastNextHour ?? data?.next_hour)}`, "");
 					$.log(`🎉 ${$.name}, 不替换下一小时降水强度信息, 跳过`, "");
 				}
 			}
@@ -564,38 +566,25 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	// handle minutes
 	//
 	const startTimeDate = new Date(startTimeIos);
-	minutely.precipitation_2h.forEach((value, index) => {
+	weather[NAME].minutes = minutely.precipitation_2h.map((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
-		const minute = {
-			// it looks like Apple doesn't care precipIntensity
-			"precipIntensity": value,
-			
-		};
-
+		let minute = {};
+		minute.precipIntensity = value;
 		minute.precipChance = value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
-
-		switch (apiVersion) {
-			case "v1":
-				minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
-				minute.perceivedIntensity = radarToApplePrecipitation(value);
-				break;
-			case "v2":
-			default:
-				minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
-				minute.precipIntensityPerceived = radarToApplePrecipitation(value);
-				break;
+		if (apiVersion == "v1") {
+			minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			minute.perceivedIntensity = radarToApplePrecipitation(value);
+		} else {
+			minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			minute.precipIntensityPerceived = radarToApplePrecipitation(value);
 		}
-
-		weather[NAME].minutes.push(minute);
+		return minute
 	});
 
-	const conditions = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
-	weather[NAME].condition = weather[NAME].condition.concat(conditions);
+	weather[NAME].condition = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
+	weather[NAME].summary = getSummaries(apiVersion, weather[NAME].minutes);
 
-	const summaries = getSummaries(apiVersion, weather[NAME].minutes);
-	weather[NAME].summary = weather[NAME].summary.concat(summaries);
-
-	// $.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
+	//$.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 
@@ -715,44 +704,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			CONSTANT: "constant",
 			START: "start",
 			STOP: "stop"
-		};
-
-		const toToken = (isPossible, weatherStatus, timeStatus) => {
-			const tokenLeft = `${isPossible ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
-			if (timeStatus.length > 0) {
-				return `${tokenLeft}.${timeStatus.join('-')}`;
-			} else {
-				return tokenLeft;
-			}
-		}
-
-		const toWeatherStatus = (precipitation, weatherType) => {
-			// although weatherType is not reliable
-			// if (weatherType === SUMMARY_CONDITION_TYPES.CLEAR) {
-			// 	return WEATHER_STATUS.CLEAR;
-			// }
-
-			const level = radarToPrecipitationLevel(precipitation);
-
-			switch (level) {
-				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
-					// is there a `drizzle snow`?
-					// https://en.wikipedia.org/wiki/Snow_flurry
-					return WEATHER_STATUS.DRIZZLE;
-				case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
-					// fallback to rain if weatherType is rain
-					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
-						WEATHER_STATUS.SNOW :
-						WEATHER_STATUS.RAIN;
-				case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
-				case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
-					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
-						WEATHER_STATUS.HEAVY_SNOW :
-						WEATHER_STATUS.HEAVY_RAIN;
-				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
-				default:
-					return WEATHER_STATUS.CLEAR;
-			}
 		};
 
 		const needPossible = precipChance => precipChance < ADD_POSSIBLE_UPPER;
@@ -1003,6 +954,44 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 
 		$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
+
+		/***************** Fuctions *****************/
+		function toToken(isPossible, weatherStatus, timeStatus) {
+			const tokenLeft = `${isPossible ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
+			if (timeStatus.length > 0) {
+				return `${tokenLeft}.${timeStatus.join('-')}`;
+			} else {
+				return tokenLeft;
+			}
+		};
+		function toWeatherStatus(precipitation, weatherType) {
+			// although weatherType is not reliable
+			// if (weatherType === SUMMARY_CONDITION_TYPES.CLEAR) {
+			// 	return WEATHER_STATUS.CLEAR;
+			// }
+
+			const level = radarToPrecipitationLevel(precipitation);
+
+			switch (level) {
+				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
+					// is there a `drizzle snow`?
+					// https://en.wikipedia.org/wiki/Snow_flurry
+					return WEATHER_STATUS.DRIZZLE;
+				case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
+					// fallback to rain if weatherType is rain
+					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+						WEATHER_STATUS.SNOW :
+						WEATHER_STATUS.RAIN;
+				case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
+				case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
+					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+						WEATHER_STATUS.HEAVY_SNOW :
+						WEATHER_STATUS.HEAVY_RAIN;
+				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+				default:
+					return WEATHER_STATUS.CLEAR;
+			}
+		};
 	};
 
 	function getSummaries(apiVersion, minutes) {
