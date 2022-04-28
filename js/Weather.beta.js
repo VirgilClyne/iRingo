@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.1.5-beta");
+const $ = new Env("Apple Weather v3.2.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -502,7 +502,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	// iOS weather can only display data in an hour
 	const DISPLAYABLE_MINUTES = 60;
 	const minutely = minutelyData?.result?.minutely;
-	function addMinutes(date, minutes) { return (new Date()).setTime(date.getTime() + (1000 * 60 * minutes)) };
+	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
 
 	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
 	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
@@ -567,6 +567,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	// handle minutes
 	//
 	const startTimeDate = new Date(startTimeIos);
+	
 	// FOR DEBUG
 	const debugChance = parseInt(Settings?.NextHour?.Debug?.Chance) ?? 100;
 	const debugDelay = parseInt(Settings?.NextHour?.Debug?.Delay) ?? 0;
@@ -654,8 +655,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	const summaries = getSummaries(apiVersion, weather[NAME].minutes);
 	weather[NAME].summary = weather[NAME].summary.concat(summaries);
 
-	// $.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(nextHour)}`, '');
-
+	// $.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 
@@ -1062,7 +1062,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 						if (apiVersion == "v1") condition = { parameters: {} };
 						else condition = { parameters: {}, startTime };
 						break;
-
 				}
 			}
 		});
@@ -1135,7 +1134,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 					isRainOrSnow = !isRainOrSnow;
 					lastIndex = index;
 
-					if (apiVersion !== "v1") {
+					if (apiVersion == "v1") {
 						summary = { condition: SUMMARY_CONDITION_TYPES.CLEAR };
 					} else {
 						summary = {
