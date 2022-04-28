@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.2-beta");
+const $ = new Env("Apple Weather v3.2.3-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -601,61 +601,30 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 					`parsed IntensityUpper = ${debugIntensityUpper}`, "");
 	}
 
-	minutely.precipitation_2h.forEach((value, index) => {
+	weather[NAME].minutes = minutely.precipitation_2h.map((value, index) => {
 		const nextMinuteTime = addMinutes(startTimeDate, index);
-		const minute = {
-			// it looks like Apple doesn't care precipIntensity
-			"precipIntensity": !Settings?.NextHour?.Debug?.Switch ? value : getRandomPrecip(),
-		};
-
-		// FOR DEBUG
-		if (Settings?.NextHour?.Debug?.Switch) {
-			minute.precipChance = debugChance ?? 100;
+		let minute = {};
+		minute.precipIntensity = (Settings?.NextHour?.Debug?.Switch) ? getRandomPrecip() : value;
+		minute.precipChance = (Settings?.NextHour?.Debug?.Switch) ? debugChance ?? 100 : value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
+		if (apiVersion == "v1") {
+			minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			// TODO: find out the limit of perceivedIntensity
+			// FOR DEBUG
+			if (Settings?.NextHour?.Debug?.Switch) minute.perceivedIntensity = (index < debugDelay) ? 0 : getRandomIntensity();
+			else minute.perceivedIntensity = radarToApplePrecipitation(value);
 		} else {
-			minute.precipChance = value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
+			minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			// FOR DEBUG
+			if (Settings?.NextHour?.Debug?.Switch) minute.precipIntensityPerceived = (index < debugDelay) ? 0 : getRandomIntensity();
+			else minute.precipIntensityPerceived = radarToApplePrecipitation(value);
 		}
-
-		switch (apiVersion) {
-			case "v1":
-				minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
-				// TODO: find out the limit of perceivedIntensity
-				// FOR DEBUG
-				if (Settings?.NextHour?.Debug?.Switch) {
-					if (index < debugDelay) {
-						minute.perceivedIntensity = 0;
-					} else {
-						minute.perceivedIntensity = getRandomIntensity();
-					}
-				} else {
-					minute.perceivedIntensity = radarToApplePrecipitation(value);
-				}
-				break;
-			case "v2":
-			default:
-				minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
-				// FOR DEBUG
-				if (Settings?.NextHour?.Debug?.Switch) {
-					if (index < debugDelay) {
-						minute.precipIntensityPerceived = 0;
-					} else {
-						minute.precipIntensityPerceived = getRandomIntensity();
-					}
-				} else {
-					minute.precipIntensityPerceived = radarToApplePrecipitation(value);
-				}
-				break;
-		}
-
-		weather[NAME].minutes.push(minute);
+		return minute
 	});
 
-	const conditions = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
-	weather[NAME].condition = weather[NAME].condition.concat(conditions);
+	weather[NAME].condition = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
+	weather[NAME].summary = getSummaries(apiVersion, weather[NAME].minutes);
 
-	const summaries = getSummaries(apiVersion, weather[NAME].minutes);
-	weather[NAME].summary = weather[NAME].summary.concat(summaries);
-
-	// $.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
+	$.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 
@@ -780,44 +749,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			CONSTANT: "constant",
 			START: "start",
 			STOP: "stop"
-		};
-
-		const toToken = (isPossible, weatherStatus, timeStatus) => {
-			const tokenLeft = `${isPossible ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
-			if (timeStatus.length > 0) {
-				return `${tokenLeft}.${timeStatus.join('-')}`;
-			} else {
-				return tokenLeft;
-			}
-		}
-
-		const toWeatherStatus = (precipitation, weatherType) => {
-			// although weatherType is not reliable
-			// if (weatherType === SUMMARY_CONDITION_TYPES.CLEAR) {
-			// 	return WEATHER_STATUS.CLEAR;
-			// }
-
-			const level = radarToPrecipitationLevel(precipitation);
-
-			switch (level) {
-				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
-					// is there a `drizzle snow`?
-					// https://en.wikipedia.org/wiki/Snow_flurry
-					return WEATHER_STATUS.DRIZZLE;
-				case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
-					// fallback to rain if weatherType is rain
-					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
-						WEATHER_STATUS.SNOW :
-						WEATHER_STATUS.RAIN;
-				case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
-				case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
-					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
-						WEATHER_STATUS.HEAVY_SNOW :
-						WEATHER_STATUS.HEAVY_RAIN;
-				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
-				default:
-					return WEATHER_STATUS.CLEAR;
-			}
 		};
 
 		const needPossible = precipChance => precipChance < ADD_POSSIBLE_UPPER;
@@ -1068,6 +999,44 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 
 		$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
+
+		/***************** Fuctions *****************/
+		function toToken(isPossible, weatherStatus, timeStatus) {
+			const tokenLeft = `${isPossible ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
+			if (timeStatus.length > 0) {
+				return `${tokenLeft}.${timeStatus.join('-')}`;
+			} else {
+				return tokenLeft;
+			}
+		};
+		function toWeatherStatus(precipitation, weatherType) {
+			// although weatherType is not reliable
+			// if (weatherType === SUMMARY_CONDITION_TYPES.CLEAR) {
+			// 	return WEATHER_STATUS.CLEAR;
+			// }
+
+			const level = radarToPrecipitationLevel(precipitation);
+
+			switch (level) {
+				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
+					// is there a `drizzle snow`?
+					// https://en.wikipedia.org/wiki/Snow_flurry
+					return WEATHER_STATUS.DRIZZLE;
+				case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
+					// fallback to rain if weatherType is rain
+					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+						WEATHER_STATUS.SNOW :
+						WEATHER_STATUS.RAIN;
+				case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
+				case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
+					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+						WEATHER_STATUS.HEAVY_SNOW :
+						WEATHER_STATUS.HEAVY_RAIN;
+				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+				default:
+					return WEATHER_STATUS.CLEAR;
+			}
+		};
 	};
 
 	function getSummaries(apiVersion, minutes) {
