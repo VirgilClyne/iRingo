@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.0");
+const $ = new Env("Apple Siri v2.0.0-response");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -104,7 +104,7 @@ var { body } = $response;
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
- async function setENV(name, platform, database) {
+async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let Settings = await getENV(name, platform, database);
 	/***************** Prase *****************/

@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.1");
+const $ = new Env("Apple Siri v2.1.2-request");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -15,7 +15,7 @@ var { url, headers } = $request;
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		const locale = url.params.locale;
-		if (Settings.CountryCode == "AUTO") Settings.CountryCode = url?.params?.locale?.match(/[A-Z]{2}/)?.[1] ?? Settings.CountryCode;
+		if (Settings.CountryCode == "AUTO") Settings.CountryCode = locale?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode;
 		if (url?.params?.cc) url.params.cc = url.params.cc.replace(/[A-Z]{2}/, Settings.CountryCode);
 		if (url.path == "bag") {
 		} else if (url.path == "search") { //Search
