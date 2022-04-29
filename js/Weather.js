@@ -1104,8 +1104,8 @@ function calculateAQI(AQI) {
  * @param {Number} pptn - Precipitation
  * @returns {Number}
  */
- function calculatePL(pptn) {
-	if (!pptn) return -1
+function calculatePL(pptn) {
+	if (typeof pptn !== "number") return -1
 	else if (pptn <= 0.031) return 0; // no
 	else if (pptn <= 0.25) return 1; // light
 	else if (pptn <= 0.35) return 2; // moderate
