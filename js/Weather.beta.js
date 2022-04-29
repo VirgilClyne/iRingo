@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.8-beta");
+const $ = new Env("Apple Weather v3.2.7-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -1001,49 +1001,98 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	};
 
 	function getSummaries(apiVersion, minutes) {
-		$.log(`🚧 ${$.name}, 开始设置summary`, '');
+		$.log(`🚧 ${$.name}, 开始设置summary`, "");
 		const weatherType = getWeatherType(minutelyData?.result?.hourly);
 		$.log(`🚧 ${$.name}, weatherType = ${weatherType}`, '');
-		let summaries = minutes.slice(0, 60).map((minute, index, array) => {
-			const PL = calculatePL(minute.precipIntensity);
-			// initialize data
-			let summary = { condition: (minute.precipIntensity > 0) ? weatherType : "clear" };
-			if (apiVersion !== "v1") summary.startTime = minutes[0].startTime;
-			if (minute.precipIntensity > 0) {
-				// this loop will handle previous condition and create the condition for next condition
+
+		const summaries = [];
+
+		// initialize data
+		let lastIndex = 0;
+		// little trick for origin data
+		let isRainOrSnow = minutes[0].precipIntensity > 0;
+		let summary = {
+			// I guess data from weatherType is not always reliable
+			condition: isRainOrSnow ? weatherType : SUMMARY_CONDITION_TYPES.CLEAR,
+		};
+		if (apiVersion !== "v1") summary.startTime = minutes[0].startTime;
+
+		minutes.slice(0, 60).forEach((minute, index, array) => {
+			// clear in an hour
+			// Apple weather could only display one hour data
+			// drop useless data to avoid display empty graph
+			if (index + 1 >= array.length && !isRainOrSnow) {
+				summaries.push(summary);
+				$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, "");
+			}
+
+			// this loop will handle previous condition and create the condition for next condition
+			// `startAt` for APIv1, `startTime` for APIv2
+			// is this too dirty?
+			const { startAt, startTime, precipIntensity } = minute;
+			if (isRainOrSnow) {
 				if (
 					// end of rain
-					PL === 0 ||
+					calculatePL(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					// constant of rain
 					// we always need precipChance and precipIntensity data
 					index + 1 === array.length
 				) {
 					// for find the max value of precipChance and precipIntensity
-					const range = minutes.slice(index, index + 1);
+					const range = minutes.slice(lastIndex, index + 1);
+
+					// we reach the data end but cannot find the end of rain
+					if (calculatePL(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+						if (apiVersion == "v1") summary.validUntil = startAt
+						else summary.endTime = startTime;
+					}
+
 					if (apiVersion == "v1") {
-						// we reach the data end but cannot find the end of rain
-						if (PL === 0) summary.validUntil = minute.startAt;
 						summary.probability = Math.max(...range.map(value => value.precipChance));
 						// it looks like Apple doesn't care precipIntensity
 						summary.maxIntensity = Math.max(...range.map(value => value.precipIntensity));
 						summary.minIntensity = Math.min(...range.map(value => value.precipIntensity));
 					} else {
-						// we reach the data end but cannot find the end of rain
-						if (PL === 0) summary.endTime = minute.startTime;
 						summary.precipChance = Math.max(...range.map(value => value.precipChance));
 						// it looks like Apple doesn't care precipIntensity
 						summary.precipIntensity = Math.max(...range.map(value => value.precipIntensity));
 					};
+
+					summaries.push(summary);
+
+					// reset summary
+					isRainOrSnow = !isRainOrSnow;
+					lastIndex = index;
+
+					if (apiVersion == "v1") {
+						summary = { condition: SUMMARY_CONDITION_TYPES.CLEAR };
+					} else {
+						summary = {
+							startTime: startTime,
+							condition: SUMMARY_CONDITION_TYPES.CLEAR,
+						}
+					};
 				} else {
-					if (PL > 0) {
-						if (apiVersion == "v1") summary.validUntil = minute.startAt;
-						else summary.endTime = minute.startTime;
+					if (calculatePL(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+						if (apiVersion == "v1") summary.validUntil = startAt;
+						else summary.endTime = startTime;
+
+						summaries.push(summary);
+
+						// reset summary
+						isRainOrSnow = !isRainOrSnow;
+						lastIndex = index;
+
+						if (apiVersion == "v1") summary = { condition: weatherType };
+						else summary = {
+							startTime: startTime,
+							condition: weatherType,
+						};
 					}
 				}
-			};
-			return summary
+			}
 		});
-		$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, '');
+		$.log(`🚧 ${$.name}, summaries = ${JSON.stringify(summaries)}`, "");
 		return summaries;
 	};
 };
