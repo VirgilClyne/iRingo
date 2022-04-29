@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.3");
+const $ = new Env("Apple Weather v3.2.4");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -498,15 +498,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		};
 	};
 
-	// iOS weather can only display data in an hour
-	const DISPLAYABLE_MINUTES = 60;
 	const minutely = minutelyData?.result?.minutely;
-	const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
-
-	const zeroSecondTime = (new Date(minutelyData?.server_time * 1000)).setSeconds(0);
-	const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
-	// use next minute and clean seconds as next hour forecast as start time
-	const startTimeIos = convertTime(apiVersion, new Date(nextMinuteWithoutSecond), 0);
 
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 
@@ -560,22 +552,17 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
 	weather[NAME].metadata = Metadata(metadata);
-	weather[NAME].startTime = startTimeIos;
-
-	//
-	// handle minutes
-	//
-	const startTimeDate = new Date(startTimeIos);
+	// use next minute and clean seconds as next hour forecast as start time
+	weather[NAME].startTime = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 1);
 	weather[NAME].minutes = minutely.precipitation_2h.map((value, index) => {
-		const nextMinuteTime = addMinutes(startTimeDate, index);
 		let minute = {};
 		minute.precipIntensity = value;
 		minute.precipChance = value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
 		if (apiVersion == "v1") {
-			minute.startAt = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			minute.startAt = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
 			minute.perceivedIntensity = radarToApplePrecipitation(value);
 		} else {
-			minute.startTime = convertTime(apiVersion, new Date(nextMinuteTime), 0);
+			minute.startTime = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
 			minute.precipIntensityPerceived = radarToApplePrecipitation(value);
 		}
 		return minute
@@ -721,7 +708,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		let condition = { parameters: {} };
 		if (apiVersion !== "v1") condition.startTime = minutes[0].startTime;
 
-		minutes.slice(0, DISPLAYABLE_MINUTES).forEach((minute, index, array) => {
+		minutes.slice(0, 60).forEach((minute, index, array) => {
 			const lastWeather = weatherStatus[weatherStatus.length - 1];
 
 			// Apple weather could only display one hour data
@@ -1011,7 +998,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		};
 		if (apiVersion !== "v1") summary.startTime = minutes[0].startTime;
 
-		minutes.slice(0, DISPLAYABLE_MINUTES).forEach((minute, index, array) => {
+		minutes.slice(0, 60).forEach((minute, index, array) => {
 			// clear in an hour
 			// Apple weather could only display one hour data
 			// drop useless data to avoid display empty graph
@@ -1113,10 +1100,11 @@ function out_of_china(lng, lat) {
  * @param {String} apiVersion - Apple Weather API Version
  * @param {Time} time - Time
  * @param {Number} addMinutes - add Minutes Number
+ * @param {Number} addSeconds - add Seconds Number
  * @returns {String}
  */
-function convertTime(apiVersion, time, addMinutes) {
-	time.setMinutes(time.getMinutes() + addMinutes, time.getSeconds(), 0);
+function convertTime(apiVersion, time, addMinutes = 0, addSeconds = "") {
+	time.setMinutes(time.getMinutes() + addMinutes, (addSeconds) ? time.getSeconds() + addSeconds : 0, 0);
 	let timeString = (apiVersion == "v1") ? time.getTime() / 1000 : time.toISOString().split(".")[0] + "Z"
 	return timeString;
 };
@@ -1134,9 +1122,6 @@ function calculateAQI(AQI) {
 	else return 6;
 };
 
-console.log(new Date(""))
-$done()
-
 /**
  * create Metadata
  * @author VirgilClyne
@@ -1151,16 +1136,16 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
 		"latitude": input.Latitude,
 	}
 	if (input.Version == 1) {
-		metadata.read_time = convertTime("v"+input.Version, new Date(), 0);
-		metadata.expire_time = convertTime("v"+input.Version, new Date(input?.Time), input.Expire);
-		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input?.Time), 0);
+		metadata.read_time = convertTime("v"+input.Version, new Date(), 0, 0);
+		metadata.expire_time = convertTime("v"+input.Version, new Date(input?.Time), input.Expire, 0);
+		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input?.Time), 0, 0);
 		metadata.provider_name = input.Name;
 		if (input.Logo) metadata.provider_logo = input.Logo;
 		metadata.data_source = input.Source;
 	} else {
-		metadata.readTime = convertTime("v"+input.Version, new Date(), 0);
-		metadata.expireTime = convertTime("v"+input.Version, new Date(input?.Time), input.Expire);
-		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input?.Time), 0);
+		metadata.readTime = convertTime("v"+input.Version, new Date(), 0, 0);
+		metadata.expireTime = convertTime("v"+input.Version, new Date(input?.Time), input.Expire, 0);
+		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input?.Time), 0, 0);
 		metadata.providerName = input.Name;
 		if (input.Logo) metadata.providerLogo = input.Logo;
 		metadata.units = input.Unit;
