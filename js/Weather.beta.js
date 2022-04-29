@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.4-beta");
+const $ = new Env("Apple Weather v3.2.5-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherType":"rain","Chance":"100","Delay":"0","PrecipLower":"0.031","PrecipUpper":"0.48","IntensityLower":"0","IntensityUpper":"4"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -641,32 +641,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		}
 	};
 
-	function radarToPrecipitationLevel(value) {
-		const {
-			noRainOrSnow,
-			lightRainOrSnow,
-			moderateRainOrSnow,
-			heavyRainOrSnow,
-			_stormRainOrSnow,
-		} = RADAR_PRECIPITATION_RANGE;
-
-		if (value < noRainOrSnow.upper) {
-			if (value < noRainOrSnow.lower) {
-				$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`, '');
-			}
-
-			return PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW;
-		} else if (value < lightRainOrSnow.upper) {
-			return PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW;
-		} else if (value < moderateRainOrSnow.upper) {
-			return PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW;
-		} else if (value < heavyRainOrSnow.upper) {
-			return PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW;
-		} else {
-			return PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW;
-		}
-	};
-
 	// mapping the standard preciptation level to 3 level standard of Apple
 	function radarToApplePrecipitation(value) {
 		const {
@@ -677,7 +651,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			_stormRainOrSnow
 		} = RADAR_PRECIPITATION_RANGE;
 
-		switch (radarToPrecipitationLevel(value)) {
+		switch (calculatePL(value)) {
 			case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
 				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
 			case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
@@ -1003,7 +977,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			// 	return WEATHER_STATUS.CLEAR;
 			// }
 
-			const level = radarToPrecipitationLevel(precipitation);
+			const level = calculatePL(precipitation);
 
 			switch (level) {
 				case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
@@ -1060,7 +1034,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 			if (isRainOrSnow) {
 				if (
 					// end of rain
-					radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
+					calculatePL(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW ||
 					// constant of rain
 					// we always need precipChance and precipIntensity data
 					index + 1 === array.length
@@ -1069,7 +1043,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 					const range = minutes.slice(lastIndex, index + 1);
 
 					// we reach the data end but cannot find the end of rain
-					if (radarToPrecipitationLevel(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+					if (calculatePL(precipIntensity) === PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
 						if (apiVersion == "v1") summary.validUntil = startAt
 						else summary.endTime = startTime;
 					}
@@ -1100,7 +1074,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 						}
 					};
 				} else {
-					if (radarToPrecipitationLevel(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
+					if (calculatePL(precipIntensity) > PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW) {
 						if (apiVersion == "v1") summary.validUntil = startAt;
 						else summary.endTime = startTime;
 
@@ -1166,6 +1140,24 @@ function calculateAQI(AQI) {
 	else if (AQI <= 200) return Math.ceil(AQI / 50);
 	else if (AQI <= 300) return 5;
 	else return 6;
+};
+
+/**
+ * Calculate Precipitation Level
+ * https://docs.caiyunapp.com/docs/tables/precip
+ * @author VirgilClyne
+ * @author WordlessEcho
+ * @param {Number} pptn - Precipitation
+ * @returns {Number}
+ */
+ function calculatePL(pptn) {
+	if (!pptn) return -1
+	else if (pptn <= 0.031) return 0; // no
+	else if (pptn <= 0.25) return 1; // light
+	else if (pptn <= 0.35) return 2; // moderate
+	else if (pptn <= 0.48) return 3; // heavy
+	else if (pptn <= 0.25) return 4; // storm
+	else return 5;
 };
 
 /**
