@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v3.2.5");
+const $ = new Env("Apple Weather v3.2.6");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -475,6 +475,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 /**
  * output forecast NextHour Data
  * @author WordlessEcho
+ * @author VirgilClyne
  * @param {String} apiVersion - Apple Weather API Version
  * @param {Object} minutelyData - minutely data from API
  * @param {Object} weather - weather data from Apple
@@ -484,24 +485,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 async function outputNextHour(apiVersion, providerName, minutelyData, weather, Settings) {
 	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测`, `API: ${apiVersion}`, '');
 	const NAME = (apiVersion == "v1") ? "next_hour" : "forecastNextHour";
-	// 创建对象
-	if (!weather[NAME]) {
-		$.log(`⚠️ ${$.name}, 没有未来一小时降水强度, 创建`, '');
-		weather[NAME] = {
-			"name": "NextHourForecast",
-			//"isSignificant": true, // 重要/置顶
-			"metadata": {},
-			"startTime": "",
-			"summary": [],
-			"condition": [],
-			"minutes": [],
-		};
-	};
-
 	const minutely = minutelyData?.result?.minutely;
-
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
-
 	// 4 decimals in API
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
 	const PRECIPITATION_LEVEL = {
@@ -520,19 +505,23 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		stormRainOrSnow: { lower: 0.48, upper: Number.MAX_VALUE },
 	};
 	// the graph of Apple weather is divided into three parts
-	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
-		beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
+	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = { beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3, };
+
+	// 创建对象
+	if (!weather[NAME]) {
+		$.log(`⚠️ ${$.name}, 没有未来一小时降水强度, 创建`, '');
+		weather[NAME] = {
+			"name": "NextHourForecast",
+			//"isSignificant": true, // 重要/置顶
+			"metadata": {},
+			"startTime": "",
+			"summary": [],
+			"condition": [],
+			"minutes": [],
+		};
 	};
 
-	if (minutelyData?.status !== "ok" || minutely?.status !== "ok") {
-		$.logErr(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
-		return weather;
-	}
-
 	// 创建metadata
-	//
-	// handle metadata
-	//
 	// TODO: split API logic from this function
 	let metadata = {
 		"Version": (apiVersion == "v1") ? 1 : 2,
@@ -552,26 +541,35 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
 	weather[NAME].metadata = Metadata(metadata);
-	// use next minute and clean seconds as next hour forecast as start time
-	weather[NAME].startTime = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 1);
-	weather[NAME].minutes = minutely.precipitation_2h.map((value, index) => {
-		let minute = {};
-		minute.precipIntensity = value;
-		minute.precipChance = value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
-		if (apiVersion == "v1") {
-			minute.startAt = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
-			minute.perceivedIntensity = radarToApplePrecipitation(value);
-		} else {
-			minute.startTime = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
-			minute.precipIntensityPerceived = radarToApplePrecipitation(value);
-		}
-		return minute
-	});
-
-	weather[NAME].condition = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
-	weather[NAME].summary = getSummaries(apiVersion, weather[NAME].minutes);
-
-	//$.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
+	// 注入数据
+	if (minutelyData?.status == "ok" || minutely?.status == "ok") {
+		// use next minute and clean seconds as next hour forecast as start time
+		weather[NAME].startTime = convertTime(apiVersion, new Date(minutelyData?.server_time * 1000), 1);
+		weather[NAME].minutes = minutely.precipitation_2h.map((value, index) => {
+			let minute = {};
+			minute.precipIntensity = (Settings?.NextHour?.Debug?.Switch) ? getRandomPrecip() : value;
+			minute.precipChance = (Settings?.NextHour?.Debug?.Switch) ? debugChance ?? 100 : value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0;
+			if (apiVersion == "v1") {
+				minute.startAt = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
+				// TODO: find out the limit of perceivedIntensity
+				// FOR DEBUG
+				if (Settings?.NextHour?.Debug?.Switch) minute.perceivedIntensity = (index < debugDelay) ? 0 : getRandomIntensity();
+				else minute.perceivedIntensity = radarToApplePrecipitation(value);
+			} else {
+				minute.startTime = convertTime(apiVersion, new Date(weather[NAME].startTime), index);
+				// FOR DEBUG
+				if (Settings?.NextHour?.Debug?.Switch) minute.precipIntensityPerceived = (index < debugDelay) ? 0 : getRandomIntensity();
+				else minute.precipIntensityPerceived = radarToApplePrecipitation(value);
+			}
+			return minute
+		});
+		weather[NAME].condition = getConditions(apiVersion, minutelyData, weather[NAME].minutes);
+		weather[NAME].summary = getSummaries(apiVersion, weather[NAME].minutes);
+		//$.log(`🚧 ${$.name}, ${NAME} = ${JSON.stringify(weather[NAME])}`, '');
+	} else {
+		$.logErr(`❗️ ${$.name}, 分钟级降水信息获取失败, `, `minutely = ${JSON.stringify(minutelyData)}`, '');
+		weather[NAME].metadata.temporarilyUnavailable = true;
+	};
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, '');
 	return weather;
 
