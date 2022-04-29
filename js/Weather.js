@@ -1110,8 +1110,7 @@ function calculateAQI(AQI) {
 	else if (pptn <= 0.25) return 1; // light
 	else if (pptn <= 0.35) return 2; // moderate
 	else if (pptn <= 0.48) return 3; // heavy
-	else if (pptn <= 0.25) return 4; // storm
-	else return 5;
+	else return 4; // storm
 };
 
 /**
