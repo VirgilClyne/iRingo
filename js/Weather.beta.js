@@ -431,7 +431,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	// 创建metadata
 	let metadata = {
 		"Version": (apiVersion == "v1") ? 1 : 2,
-		"Time": (apiVersion == "v1") ? obs?.time?.v ?? now?.t : obs?.time?.iso ?? now?.utime,
+		"Time": (apiVersion == "v1") ? obs?.time?.v ?? now?.t : obs?.time?.iso ?? now?.utime ?? Date(),
 		"Expire": 60,
 		"Longitude": obs?.city?.geo?.[0] ?? now?.geo?.[0] ?? weather?.currentWeather?.metadata?.longitude ?? weather?.current_observations?.metadata?.longitude,
 		"Latitude": obs?.city?.geo?.[1] ?? now?.geo?.[1] ?? weather?.currentWeather?.metadata?.latitude ?? weather?.current_observations?.metadata?.latitude,
@@ -537,7 +537,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	// TODO: split API logic from this function
 	let metadata = {
 		"Version": (apiVersion == "v1") ? 1 : 2,
-		"Time": minutelyData?.server_time * 1000,
+		"Time": minutelyData?.server_time * 1000 ?? Date(),
 		"Expire": 15,
 		"Longitude": minutelyData?.location[1],
 		"Latitude": minutelyData?.location[0],
@@ -1183,15 +1183,15 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
 	}
 	if (input.Version == 1) {
 		metadata.read_time = convertTime("v"+input.Version, new Date(), 0, 0);
-		metadata.expire_time = convertTime("v"+input.Version, new Date(input?.Time ?? ""), input.Expire, 0);
-		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input?.Time ?? ""), 0, 0);
+		metadata.expire_time = convertTime("v"+input.Version, new Date(input?.Time), input.Expire, 0);
+		if (input.Report) metadata.reported_time = convertTime("v"+input.Version, new Date(input?.Time), 0, 0);
 		metadata.provider_name = input.Name;
 		if (input.Logo) metadata.provider_logo = input.Logo;
 		metadata.data_source = input.Source;
 	} else {
 		metadata.readTime = convertTime("v"+input.Version, new Date(), 0, 0);
-		metadata.expireTime = convertTime("v"+input.Version, new Date(input?.Time ?? ""), input.Expire, 0);
-		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input?.Time ?? ""), 0, 0);
+		metadata.expireTime = convertTime("v"+input.Version, new Date(input?.Time), input.Expire, 0);
+		if (input.Report) metadata.reportedTime = convertTime("v"+input.Version, new Date(input?.Time), 0, 0);
 		metadata.providerName = input.Name;
 		if (input.Logo) metadata.providerLogo = input.Logo;
 		metadata.units = input.Unit;
