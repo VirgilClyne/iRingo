@@ -4,7 +4,14 @@
 
 [Rule]
 # > Apple News
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Apple_News.list,Apple News
+# > iCloud
+DOMAIN-SUFFIX,gateway.icloud.com
+# > Apple News
+DOMAIN-SUFFIX,news-edge.apple.com
+DOMAIN-SUFFIX,news-events.apple.com
+DOMAIN-SUFFIX,apple.comscoreresearch.com
+# News+ Audio
+URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js, requires-body=true, tag=Apple_News
