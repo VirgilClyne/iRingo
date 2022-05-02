@@ -1,6 +1,9 @@
 #!name=  iRingo for Apple Weather
 #!desc= (BETA) 1.解锁全部天气数据类型 2.替换空气质量数据:WAQI 3.添加下一小时降水:气象在线 4.替换空气质量地图数据:WAQI
 
+[Rewrite]
+^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* header-del If-None-Match
+
 [Script]
 http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js, requires-body=1, tag=Apple Weather Availability
 http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js, requires-body=1, timeout=20, tag=Apple Weather
