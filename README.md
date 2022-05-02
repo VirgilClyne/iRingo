@@ -165,12 +165,18 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 功能列表
   * 在以下位置及功能中可用: 
     - [x] 天气(`WeatherKit_Weather_iOS_Version XX.X`)
-    - [x] 天气的`下一小时降水强度`(`WeatherKit_weatherd_iOS_Version`)
-    - [x] 地图(`Maps_WeatherFoundation`)
+      - [x] 未来一小时降水强度
+      - [x] 空气质量
+    - [x] 天气的`通知`(`WeatherKit_weatherd_iOS_Version`)
+      - [x] 未来一小时降水强度
+    - [x] 地图左下角的`天气`(`Maps_WeatherFoundation`)
+      - [x] 空气质量
     - [x] 小组件(`WeatherKit_WeatherWidget_iOS_Version XX.X`,`WeatherKit_WeatherWidget_macOS_`)
+      - [x] 未来一小时降水强度
 
 ## 工作逻辑
-  * 填补全国没有`下一小时降水`信息的为[气象在线](https://www.weatherol.cn/pop.html)
+  * 填补全国没有`未来一小时降水强度`信息的为[气象在线](https://www.weatherol.cn/pop.html)
+    * 注：无降水时不会显示此板块
   * 切换所有`和风天气`的`空气质量`信息为[World Air Quality Index Project](https://waqi.info/)
   * 填补全球没有`空气质量`信息的为[World Air Quality Index Project](https://waqi.info/)
   * 切换全国的`空气质量地图`为[World Air Quality Index Project](https://waqi.info/)
@@ -185,13 +191,13 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * `v2`:iOS15以上的天气APP、macOS12以上的天气小组件
 
 ## 使用说明
-  * 直接使用
+  * 方法1: 直接使用
     * 采用默认配置
       * 新增`下一小时降水`信息，数据源：`气象在线`
       * 替换AQI数据，数据源：`waqi.info`
         * 使用`waqi.info 公共API`，先查询距离最近的`观测站`，再获取此观测站专用`令牌`，最后获取此`观测站`AQI详细数据，共三步。
       * 不替换空气质量地图，数据源：`waqi.info`
-  * 配合`BoxJs`及订阅使用
+  * 方法2: 配合`BoxJs`及订阅使用
     1. 安装`BoxJs`插件并更新引用资源或脚本:
       * [BoxJs官方说明文档](https://chavyleung.gitbook.io/boxjs/)
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
@@ -200,20 +206,30 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
     2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
        * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
-  * 填写私有令牌并保存，配合模块或插件使用
+  * 方法3: 填写私有令牌并保存，配合模块或插件使用
     * 采用`waqi.info 私有API`
       * 当选择`定位精度: 城市`时，直接获取`城市`AQI数据，共一步。
       * 当选择`定位精度: 观测站`时，先查询距离最近的`观测站`，然后获取此`观测站`AQI详细数据，共两步。
     * 注: 申请`waqi.info 私有API`令牌请见: [Air Quality Open Data Platform API Token Request Form](https://aqicn.org/data-platform/token/cn/#/)
-  * 配合Surge模块的`argument`字段使用:
-    * 此方法可以将相关脚本及配置固化到Surge的配置文件中
-    * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
+  * 方法4: 配合`argument`字段使用:
+    * Surge:
+      * 此方法可以将相关脚本及配置固化到Surge的配置文件中
+      * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
     * 格式如下:
+      * 🆕V3版:
       ```
-      🆕V3版:
       argument=Switch=true&NextHour.Switch=true&AQI.Switch=true&AQI.Mode=WAQI Public&AQI.Location=Station&AQI.Auth=null&AQI.Scale=EPA_NowCast.2201&Map.AQI=true
-      V2版:
+      ```
+      * V2版:
+      ```
       argument=Mode=WAQI Private&Location=City&VerifyMode=Token&Token=你的私钥
+      ```
+    * Stash:
+      * 此方法可以将相关脚本及配置固化到Stash的配置文件中
+      * 格式如下:
+        * 🆕V3版:
+      ```
+      argument: Switch=true&NextHour.Switch=true&AQI.Switch=true&AQI.Mode=WAQI Public&AQI.Location=Station&AQI.Auth=null&AQI.Scale=EPA_NowCast.2201&Map.AQI=true
       ```
 
 ## 安装链接
@@ -334,10 +350,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 保持模块启用,即可正常使用「来自APPLE的内容\来自APPLE的建议\Siri建议」  
 
   * 注:
-    * 🆕新版用脚本功能实现，自动修改「来自APPLE的内容\来自APPLE的建议\Siri建议」的地区与语言设置为`设置`-`通用`-`语言与地区`相同设置的语言及地区（中国大陆地区无此服务，所以默认修改为台湾地区）。
     * 「询问Siri」(“Hey Siri.”)的搜索结果直接来源于`guzzoni.apple.com`,无法MitM改写请求
     * 「询问Siri」(“Hey Siri.”)的版本可被[定位服务](#定位服务)模块修改切换至海外版
-    * 经反馈，本模块不再强制`Siri卡片`框架语言为`zh-CN`，将根据用户设备`语言与地区`设置进行变更。
 
 ## 激活方式
 * 如启用本模块后未立刻生效，可按照下列步骤激活「来自APPLE的内容\来自APPLE的建议\Siri建议」:
@@ -353,6 +367,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   7. 关闭`✈️飞行模式`
   8. 关闭`Geo_Services_*.sgmodule`模块
   9. 正常使用
+  * 注:
+    * 功能开启和变更，需要等待Siri搜索下一次获取下发配置文件时生效，等待时间1-12小时不等
+    * 开关机、切换国家地区设置、飞行模式全局触发定位监测有概率手动触发Siri配置下发检测（注意开启您VPN的“开机自启”等相关功能以便截取到配置下发链接，如错过配置下发只能等待下一次自动检测）
 
 ## 辅助激活与切换「Siri建议」服务器地区的方式
 * 不同地区的服务器提供的功能、搜索结果、建议有所不同，可通过下列手段刷新服务器（仅针对`旧版，用重写(Rewrite)功能修改为固定地区`的`Siri_Suggestions`）
@@ -366,10 +383,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 在以下位置及功能中可用:
     - [x] 聚焦搜索(Spotlight)
     - [x] 查询(Look Up)
-    - [x] 视觉搜索(Visual Look Up)
-      - [x] 照片
-      - [x] Safari浏览器(Safari)
     - [x] Safari浏览器(Safari)
+      - [x] 视觉搜索(Visual Look Up)
       - [x] 智能历史记录
     - [x] 地图(Apple Maps)
     - [x] 新闻(Apple News)
@@ -377,6 +392,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       - [x] 无SIM卡设备可被[定位服务](#定位服务)模块修改切换至海外版(维基百科)
       - [ ] SIM卡设备会因「MCC / MNC」检测回退至国内版(百度百科)
     - [x] 照片
+      - [x] 视觉搜索(Visual Look Up)
     - [x] 电话
     - [x] 家庭
     - [x] 日历
@@ -430,9 +446,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 |api-chi|芝加哥|未知|
 
 ## 使用说明
-  * 直接使用
+  * 方法1: 直接使用
     * 默认开启所有功能，地区设置为🇹🇼TW台湾，语言自动跟随系统语言。
-  * 配合`BoxJs`及订阅使用
+  * 方法2: 配合`BoxJs`及订阅使用
     1. 安装`BoxJs`插件并更新引用资源或脚本:
       * [BoxJs官方说明文档](https://chavyleung.gitbook.io/boxjs/)
       * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
@@ -441,13 +457,21 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
     2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
        * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
-  * 配合Surge模块的`argument`字段使用:
-    * 此方法可以将相关脚本及配置固化到Surge的配置文件中
-    * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
-    * 格式如下:
+  * 方法3: 配合`argument`字段使用:
+    * Surge:
+      * 此方法可以将相关脚本及配置固化到Surge的配置文件中
+      * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
+      * 格式如下:
+        * 🆕V3版:
       ```
-      🆕V3版:
       argument=Switch=true&CountryCode=TW&Domains=web,itunes,app_store,movies,restaurants,maps&Functions=flightutilities,lookup,mail,messages,news,safari,siri,spotlight,visualintelligence&Safari_Smart_History=true
+      ```
+    * Stash:
+      * 此方法可以将相关脚本及配置固化到Stash的配置文件中
+      * 格式如下:
+        * 🆕V3版:
+      ```
+      argument: Switch=true&CountryCode=TW&Domains=web,itunes,app_store,movies,restaurants,maps&Functions=flightutilities,lookup,mail,messages,news,safari,siri,spotlight,visualintelligence&Safari_Smart_History=true
       ```
 
 ## 安装链接
@@ -462,7 +486,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 需要2.1.18(377)及以上版本
       * 🆕:[Siri.plugin](./plugin/Siri.plugin?raw=true " iRingo for Siri & Search")
     * Quantumult X:
-      * 需要1.0.29(656)及以上版本
+      * ~~需要1.0.29(656)及以上版本~~
+      * 增加兼容方案，Quantumult X商店版现在可以使用
       * 🆕:[Siri.qxrewrite](./qxrewrite/Siri.qxrewrite?raw=true " iRingo for Siri & Search")
     * Surge (Shadowrocket):
       * 适用于iOS/iPadOS,不含macOS规则集的模块:
@@ -478,10 +503,10 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 🆕针对策略组为`🍎 Apple`的模块(如:Surgio):[Siri_for_Surgio.sgmodule](./sgmodule/Siri_for_Surgio.sgmodule?raw=true " iRingo for Siri & Search")
       * 🆕针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Siri_for_ACL4SSR.sgmodule](./sgmodule/Siri_for_ACL4SSR.sgmodule?raw=true " iRingo for Siri & Search") 
     * Stash:
-      * 暂不支持改写同一链接的请求和回复，请等待更新
+      * 需要1.6.0(260)及以上版本
       * 🆕:[Siri.stoverride](./stoverride/Siri.stoverride?raw=true " iRingo for Siri & Search")
 ### V1.5版
-  * V1.5版，用脚本(Script)功能自动改为与系统`语言与地区`相同的设置
+  * V1.5版，用脚本(Script)功能自动自动修改「来自APPLE的内容\来自APPLE的建议\Siri建议」的地区与语言设置为`设置`-`通用`-`语言与地区`相同设置的语言及地区（中国大陆地区无此服务，所以默认修改为台湾地区）。
     * Loon:
       * 1.5版:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions")
     * Quantumult X:
