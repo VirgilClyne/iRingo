@@ -12,6 +12,7 @@ const DataBase = {
 var { url } = $request;
 var { body } = $response;
 
+const WEATHER_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 const PRECIPITATION_LEVEL = { INVALID: -1, NO: 0, LIGHT: 1, MODERATE: 2, HEAVY: 3, STORM: 4 };
 // https://docs.caiyunapp.com/docs/tables/precip
 const RADAR_PRECIPITATION_RANGE = {
@@ -463,6 +464,27 @@ async function ColorfulClouds(
 			unit = { textStyle: "radar", charStyle: "radar" };
 	}
 
+	// https://docs.caiyunapp.com/docs/tables/skycon/
+	function getWeatherType(skycon) {
+		// enough for us
+		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
+		// do we need to slice it?
+		const ccWeatherType = skycon?.map(hourly => hourly.value)?.find(value =>
+			value.includes(CAIYUN_SKYCON_KEYWORDS.RAIN) || value.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
+		);
+
+		if (!ccWeatherType) {
+			// although getWeatherType() is designed for find out rain or snow
+			return WEATHER_TYPES.CLEAR;
+		} else {
+			if (ccWeatherType.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)) {
+				return WEATHER_TYPES.SNOW;
+			} else {
+				return WEATHER_TYPES.RAIN;
+			}
+		}
+	};
+
 	return toNextHourObject(
 		serverTime ? serverTime * 1000 : (+ new Date()),
 		data.lang?.replace('_', '-') ?? "en-US",
@@ -576,7 +598,6 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 async function outputNextHour(apiVersion, providerName, minutelyData, weather, Settings) {
 	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测`, `API: ${apiVersion}`, '');
 	const NAME = (apiVersion == "v1") ? "next_hour" : "forecastNextHour";
-	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 	// 4 decimals in API
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
 	// the graph of Apple weather is divided into three parts
@@ -641,14 +662,14 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		if (hourly?.skycon?.find(
 			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.RAIN)
 		)) {
-			return SUMMARY_CONDITION_TYPES.RAIN;
+			return WEATHER_TYPES.RAIN;
 		} else if (hourly?.skycon?.find(
 			hourlySkycon => hourlySkycon?.value?.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
 		)) {
-			return SUMMARY_CONDITION_TYPES.SNOW;
+			return WEATHER_TYPES.SNOW;
 		} else {
 			// although getWeatherType() is designed for find out rain or snow
-			return SUMMARY_CONDITION_TYPES.CLEAR;
+			return WEATHER_TYPES.CLEAR;
 		}
 	};
 
@@ -986,7 +1007,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		};
 		function toWeatherStatus(precipitation, weatherType) {
 			// although weatherType is not reliable
-			// if (weatherType === SUMMARY_CONDITION_TYPES.CLEAR) {
+			// if (weatherType === WEATHER_TYPES.CLEAR) {
 			// 	return WEATHER_STATUS.CLEAR;
 			// }
 
@@ -999,12 +1020,12 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 					return WEATHER_STATUS.DRIZZLE;
 				case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
 					// fallback to rain if weatherType is rain
-					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+					return weatherType === WEATHER_TYPES.SNOW ?
 						WEATHER_STATUS.SNOW :
 						WEATHER_STATUS.RAIN;
 				case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
 				case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
-					return weatherType === SUMMARY_CONDITION_TYPES.SNOW ?
+					return weatherType === WEATHER_TYPES.SNOW ?
 						WEATHER_STATUS.HEAVY_SNOW :
 						WEATHER_STATUS.HEAVY_RAIN;
 				case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
