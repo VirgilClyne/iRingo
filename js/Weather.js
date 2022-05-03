@@ -12,6 +12,23 @@ const DataBase = {
 var { url } = $request;
 var { body } = $response;
 
+const PRECIPITATION_LEVEL = { INVALID: -1, NO: 0, LIGHT: 1, MODERATE: 2, HEAVY: 3, STORM: 4 };
+// https://docs.caiyunapp.com/docs/tables/precip
+const RADAR_PRECIPITATION_RANGE = {
+	NO: { LOWER: 0, UPPER: 0.031 },
+	LIGHT: { LOWER: 0.031, UPPER: 0.25 },
+	MODERATE: { LOWER: 0.25, UPPER: 0.35 },
+	HEAVY: { LOWER: 0.35, UPPER: 0.48 },
+	STORM: { LOWER: 0.48, UPPER: Number.MAX_VALUE },
+};
+const MMPERHR_PRECIPITATION_RANGE = {
+	NO: { LOWER: 0, UPPER: 0.08 },
+	LIGHT: { LOWER: 0.08, UPPER: 3.44 },
+	MODERATE: { LOWER: 3.44, UPPER: 11.33 },
+	HEAVY: { LOWER: 11.33, UPPER: 51.30 },
+	STORM: { LOWER: 51.30, UPPER: Number.MAX_VALUE },
+};
+
 /***************** Processing *****************/
 !(async () => {
 	const Settings = await setENV("iRingo", "Weather", DataBase);
@@ -488,21 +505,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	const SUMMARY_CONDITION_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow" };
 	// 4 decimals in API
 	const PRECIPITATION_DECIMALS_LENGTH = 10000;
-	const PRECIPITATION_LEVEL = {
-		NO_RAIN_OR_SNOW: 0,
-		LIGHT_RAIN_OR_SNOW: 1,
-		MODERATE_RAIN_OR_SNOW: 2,
-		HEAVY_RAIN_OR_SNOW: 3,
-		STORM_RAIN_OR_SNOW: 4,
-	};
-	// https://docs.caiyunapp.com/docs/tables/precip
-	const RADAR_PRECIPITATION_RANGE = {
-		noRainOrSnow: { lower: 0, upper: 0.031 },
-		lightRainOrSnow: { lower: 0.031, upper: 0.25 },
-		moderateRainOrSnow: { lower: 0.25, upper: 0.35 },
-		heavyRainOrSnow: { lower: 0.35, upper: 0.48 },
-		stormRainOrSnow: { lower: 0.48, upper: Number.MAX_VALUE },
-	};
 	// the graph of Apple weather is divided into three parts
 	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = { beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3, };
 
@@ -579,42 +581,41 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 	// mapping the standard preciptation level to 3 level standard of Apple
 	function radarToApplePrecipitation(value) {
 		const {
-			noRainOrSnow,
-			lightRainOrSnow,
-			moderateRainOrSnow,
-			heavyRainOrSnow,
-			_stormRainOrSnow
+			NO,
+			LIGHT,
+			MODERATE,
+			HEAVY,
 		} = RADAR_PRECIPITATION_RANGE;
 
-		switch (calculatePL(value)) {
-			case PRECIPITATION_LEVEL.NO_RAIN_OR_SNOW:
+		switch (calculatePL(RADAR_PRECIPITATION_RANGE, value)) {
+			case PRECIPITATION_LEVEL.NO:
 				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
-			case PRECIPITATION_LEVEL.LIGHT_RAIN_OR_SNOW:
+			case PRECIPITATION_LEVEL.LIGHT:
 				return (
 					// multiple 10000 for precision of calculation
 					// base of previous levels + percentage of the value in its level
 					PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
 					// from the lower of range to value
-					(((value - noRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
+					(((value - NO.UPPER) * PRECIPITATION_DECIMALS_LENGTH) /
 						// sum of range
-						((lightRainOrSnow.upper - lightRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+						((LIGHT.UPPER - LIGHT.LOWER) * PRECIPITATION_DECIMALS_LENGTH))
 					// then divided them and multiple Apple level range
 					// because Apple divided graph into 3 parts, value limitation is 3
 					// we omit the "multiple one"
 				);
-			case PRECIPITATION_LEVEL.MODERATE_RAIN_OR_SNOW:
+			case PRECIPITATION_LEVEL.MODERATE:
 				return (
 					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
-					(((value - lightRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-						((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+					(((value - LIGHT.UPPER) * PRECIPITATION_DECIMALS_LENGTH) /
+						((MODERATE.UPPER - MODERATE.LOWER) * PRECIPITATION_DECIMALS_LENGTH))
 				);
-			case PRECIPITATION_LEVEL.HEAVY_RAIN_OR_SNOW:
+			case PRECIPITATION_LEVEL.HEAVY:
 				return (
 					PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
-					(((value - moderateRainOrSnow.upper) * PRECIPITATION_DECIMALS_LENGTH) /
-						((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * PRECIPITATION_DECIMALS_LENGTH))
+					(((value - MODERATE.UPPER) * PRECIPITATION_DECIMALS_LENGTH) /
+						((HEAVY.UPPER - HEAVY.LOWER) * PRECIPITATION_DECIMALS_LENGTH))
 				);
-			case PRECIPITATION_LEVEL.STORM_RAIN_OR_SNOW:
+			case PRECIPITATION_LEVEL.STORM:
 			// impossible
 			default:
 				return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
@@ -1081,16 +1082,24 @@ function calculateAQI(AQI) {
  * https://docs.caiyunapp.com/docs/tables/precip
  * @author VirgilClyne
  * @author WordlessEcho
+ * @param {object} standard - *_PRECIPITATION_RANGE
  * @param {Number} pptn - Precipitation
  * @returns {Number}
  */
-function calculatePL(pptn) {
-	if (typeof pptn !== "number") return -1
-	else if (pptn <= 0.031) return 0; // no
-	else if (pptn <= 0.25) return 1; // light
-	else if (pptn <= 0.35) return 2; // moderate
-	else if (pptn <= 0.48) return 3; // heavy
-	else return 4; // storm
+function calculatePL(standard, pptn) {
+	const {
+		NO,
+		LIGHT,
+		MODERATE,
+		HEAVY,
+	} = standard;
+
+	if (typeof pptn !== "number") return PRECIPITATION_LEVEL.INVALID;
+	else if (pptn < NO.UPPER) return PRECIPITATION_LEVEL.NO;
+	else if (pptn < LIGHT.UPPER) return PRECIPITATION_LEVEL.LIGHT;
+	else if (pptn < MODERATE.UPPER) return PRECIPITATION_LEVEL.MODERATE;
+	else if (pptn < HEAVY.UPPER) return PRECIPITATION_LEVEL.HEAVY;
+	else return PRECIPITATION_LEVEL.STORM;
 };
 
 /**
