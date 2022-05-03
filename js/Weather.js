@@ -488,7 +488,10 @@ async function ColorfulClouds(
 	return toNextHourObject(
 		serverTime ? serverTime * 1000 : (+ new Date()),
 		data.lang?.replace('_', '-') ?? "en-US",
-		{ latitude: data.location?.at(0) ?? -1, longitude: data.location?.at(1) ?? -1 },
+		{
+			latitude: Array.isArray(data?.location) ? data.location[0] : -1,
+			longitude: Array.isArray(data?.location) && data.location.length > 1 ? data.location[1] : -1,
+		},
 		providerName,
 		unit,
 		// TODO
