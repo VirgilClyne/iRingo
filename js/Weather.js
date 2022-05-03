@@ -446,12 +446,12 @@ async function ColorfulClouds(
  * @return {object}
  */
  function colorfulCloudsToNextHour(providerName, data) {
-	const serverTime = data.server_time;
+	const serverTime = data?.server_time;
 	let unit;
 
 	// https://docs.caiyunapp.com/docs/tables/unit/
 	// https://www.convertunits.com/
-	switch (data.unit) {
+	switch (data?.unit) {
 		case "SI":
 			unit = { textStyle: "metersPerSecond", charStyle: "m\/s" };
 		case "imperial":
