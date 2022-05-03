@@ -420,6 +420,25 @@ async function ColorfulClouds(
 }
 
 /**
+ * Produce a object for outputNextHour()
+ * @author WordlessEcho
+ * @param {Number} timestamp - UNIX timestamp when you get data
+ * @param {string} language - ISO 3166-1 language tag
+ * @param {Object} location - { latitude, longitude }
+ * @param {string} providerName - provider name
+ * @param {string} units - { textStyle: "mmPerHour", charStyle: "mm\/hour" }
+ * @param {Array} minutes - array of { weatherType: one of WEATHER_STATUS, precipitation, chance: percentage (0 to 100) }
+ * @return {object}
+ */
+function toNextHourObject(
+	timestamp, language, location, providerName, units, minutes,
+) {
+	return {
+		timestamp, language, location, providerName, units, minutes,
+	};
+};
+
+/**
  * Output Air Quality Data
  * @author VirgilClyne
  * @param {String} apiVersion - Apple Weather API Version
