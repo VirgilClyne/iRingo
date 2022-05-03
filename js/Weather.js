@@ -29,6 +29,25 @@ const MMPERHR_PRECIPITATION_RANGE = {
 	STORM: { LOWER: 51.30, UPPER: Number.MAX_VALUE },
 };
 
+const WEATHER_STATUS = {
+	// precipIntensityPerceived <= 0
+	CLEAR: "clear",
+
+	// precipIntensityPerceived < 1
+	DRIZZLE: "drizzle",
+	FLURRIES: "flurries",
+	SLEET: "sleet",
+
+	// between
+	RAIN: "rain",
+	SNOW: "snow",
+
+	// precipIntensityPerceived > 2
+	HEAVY_RAIN: "heavy-rain",
+	// TODO: untested, check if it is `heavy-snow`
+	HEAVY_SNOW: "heavy-snow",
+};
+
 /***************** Processing *****************/
 !(async () => {
 	const Settings = await setENV("iRingo", "Weather", DataBase);
@@ -420,6 +439,42 @@ async function ColorfulClouds(
 }
 
 /**
+ * Covert data from ColorfulClouds to NextHour object
+ * @author WordlessEcho
+ * @param {object} data - data from ColorfulClouds API
+ * @return {object}
+ */
+ function colorfulCloudsToNextHour(providerName, data) {
+	const serverTime = data.server_time;
+	let unit;
+
+	// https://docs.caiyunapp.com/docs/tables/unit/
+	// https://www.convertunits.com/
+	switch (data.unit) {
+		case "SI":
+			unit = { textStyle: "metersPerSecond", charStyle: "m\/s" };
+		case "imperial":
+			unit = { textStyle: "inchesPerHour", charStyle: "in\/hr" };
+		case "metric:v2":
+			unit = { textStyle: "millimetersPerHour", charStyle: "mm\/hr" };
+		case "metric:v1":
+		case "metric":
+		default:
+			unit = { textStyle: "radar", charStyle: "radar" };
+	}
+
+	return toNextHourObject(
+		serverTime ? serverTime * 1000 : (+ new Date()),
+		data.lang?.replace('_', '-') ?? "en-US",
+		{ latitude: data.location?.at(0) ?? -1, longitude: data.location?.at(1) ?? -1 },
+		providerName,
+		unit,
+		// TODO
+		Array(60).map(value => value = { weatherStatus: WEATHER_STATUS.RAIN, precipitation: 0.3, chance: 100 }),
+	)
+}
+
+/**
  * Produce a object for outputNextHour()
  * @author WordlessEcho
  * @param {Number} timestamp - UNIX timestamp when you get data
@@ -666,22 +721,6 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		// TODO: when to add possible
 		const ADD_POSSIBLE_UPPER = 0;
 		const POSSIBILITY = { POSSIBLE: "possible" };
-		const WEATHER_STATUS = {
-			// precipIntensityPerceived <= 0
-			CLEAR: "clear",
-			// precipIntensityPerceived < 1
-			DRIZZLE: "drizzle",
-			FLURRIES: "flurries",
-			// unsupport in ColorfulClouds
-			SLEET: "sleet",
-			// between
-			RAIN: "rain",
-			SNOW: "snow",
-			// precipIntensityPerceived > 2
-			HEAVY_RAIN: "heavy-rain",
-			// TODO: untested, check if it is `heavy-snow`
-			HEAVY_SNOW: "heavy-snow",
-		};
 		const TIME_STATUS = {
 			CONSTANT: "constant",
 			START: "start",
