@@ -3,10 +3,10 @@
 
 [Script]
 # Rewrite Location Services Configuration Functions Internationalization
-# Location_Services.beta = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).*, requires-body=0, binary-body-mode=0, max-size=0 ,script-update-interval=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
-# Location_Services.beta = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).*, requires-body=1, binary-body-mode=0, max-size=0 ,script-update-interval=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
+# Location Services Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
+# Location Services Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
 # Response Location Services Geo Country Code Check Result
-Location_Services.beta = type=http-request, pattern=^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(\/pep\/gcc), requires-body=0, binary-body-mode=0, max-size=0, script-update-interval=0, argument=GeoCountryCode=US, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
+Location Services GeoCountryCode = type=http-request, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com
