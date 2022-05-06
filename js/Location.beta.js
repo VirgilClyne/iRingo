@@ -1,7 +1,6 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-
 const $ = new Env("Apple Location Services v2.0.0-beta");
 const URL = new URLs();
 const DataBase = {
@@ -11,8 +10,8 @@ const DataBase = {
 	"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
 };
 var { url } = $request;
-if (!$response) var $response = { "headers": {}, "body": {} };
-var { headers, body } = $response
+if (typeof $response !== "undefined") var { headers, body } = $response
+else var response
 
 /***************** Processing *****************/
 !(async () => {
@@ -21,25 +20,33 @@ var { headers, body } = $response
 		url = URL.parse(url);
 		console.log(url.path);
 		if (url.path == "pep/gcc") {
-			$response = {
-				"status": ($.isQuanX) ? "HTTP/1.1 200 OK" : 200,
+			response = {
+				"status": 200,
 				"headers": {
 					"Content-Type": "text/html",
 					"Date": new Date().toUTCString(),
+					"Connection": "keep-alive",
 					"Content-Encoding": "identity"
 				},
 				"body": Settings.CountryCode
 			};
+			if ($.isQuanX()) response.status = "HTTP/1.1 200 OK";
+			console.log(JSON.stringify(response));
 		} else if (url.path == "config/defaults") {
 		}
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX) {
-			const { status, headers, body } = $response
-			$.done({ status, headers, body })
-		} else $.done({ $response })
+		if ($.isQuanX()) {
+			if (typeof $response !== "undefined") {
+				const { headers, body } = $response
+				$.done({ headers, body })
+			} else $.done(response)
+		} else {
+			if (typeof $response !== "undefined") $.done($response)
+			else $.done({ response })
+		}
 	})
 
 /***************** Async Function *****************/
