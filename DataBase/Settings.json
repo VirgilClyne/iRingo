@@ -1,4 +1,8 @@
 {
+	"Location":{
+		"Switch":true,
+		"CountryCode":"US"
+	},
 	"Weather": {
 		"Switch": true,
 		"NextHour": {
