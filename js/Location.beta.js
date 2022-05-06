@@ -39,7 +39,7 @@ var { headers, body } = $response
 		if ($.isQuanX) {
 			const { status, headers, body } = $response
 			$.done({ status, headers, body })
-		} else $.done($response)
+		} else $.done({ $response })
 	})
 
 /***************** Async Function *****************/
