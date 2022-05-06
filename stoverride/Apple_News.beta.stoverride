@@ -1,5 +1,5 @@
-name: News
-desc: Lift News region restrictions.
+name:  Unlock Apple News 🇺🇸US
+desc: 解锁🇺🇸US地区的News，注：需配合域名集使用，使用过程中gateway.icloud.com需走代理线路。
 
 rules:
   - DOMAIN-SUFFIX,news-edge.apple.com,Proxy
@@ -16,17 +16,17 @@ http:
     - "newsletter-edge.apple.com"
   script:
     - match: ^https?:\/\/news-(edge|events)\.apple\.com(\/v1\/configs|\/analyticseventsv2\/async).*
-      name: News
+      name: Apple_News
       type: request
       require-body: true
       timeout: 10
     - match: ^https?:\/\/news-(client-search)\.apple\.com\/(v1\/search\?).*
-      name: News
+      name: Apple_News
       type: request
       require-body: false
       timeout: 10
 
 script-providers:
-  News:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_News.js
+  Apple_News:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Apple_News.beta.js
     interval: 86400
