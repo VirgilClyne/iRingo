@@ -7,6 +7,85 @@
 	"repo": "https://github.com/VirgilClyne/iRingo",
 	"apps": [
 		{
+			"id": "iRingo.Location.beta",
+			"name": "iRingo: 定位服务 β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#定位服务\">iRingo#定位服务</a>的使用说明进行配置",
+				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
+			],
+			"keys": [
+				"@iRingo.Location"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.Location.Switch",
+					"name": "总功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此APP修改"
+				},
+				{
+					"id": "@iRingo.Location.CountryCode",
+					"name": "国家或地区代码",
+					"val": "US",
+					"type": "selects",
+					"desc": "",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（跟随分流设置）"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "UK",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/blob/beta/js/Location.beta.js",
+			"icons": [
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple_Update.png",
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_Update.png"
+			]
+		},
+		{
 			"id": "iRingo.Weather.beta",
 			"name": "iRingo: Weather β",
 			"descs_html": [
