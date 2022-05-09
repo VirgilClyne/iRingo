@@ -204,8 +204,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
       * Surge (Shadowrocket): [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
-    2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
-       * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
+    2. 安装本项目订阅:
+       1. 安装BoxJs后一键订阅: [ iRingo](http://boxjs.com/#/sub/add/https%3A%2F%2Fgithub.com%2FVirgilClyne%2FiRingo%2Fblob%2Fmain%2Fbox%2FiRingo.boxjs.json%3Fraw%3Dtrue " iRingo")
+       2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`复制粘贴添加本项目订阅: [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true " iRingo")
   * 方法3: 填写私有令牌并保存，配合模块或插件使用
     * 采用`waqi.info 私有API`
       * 当选择`定位精度: 城市`时，直接获取`城市`AQI数据，共一步。
@@ -234,7 +235,6 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 ## 安装链接
 ### 🆕V3版
-  * BoxJs订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true " iRingo")
   * Shadowrocket:
     * 兼容性版本，将在Shadowrocket发布下个版本时移除
     * [Weather.sgmodule](./shadowrocket/Weather.sgmodule?raw=true " iRingo for Apple Weather")
@@ -455,8 +455,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
       * Surge (Shadowrocket): [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
       * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
-    2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`添加本项目订阅:
-       * [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true "iRingo")
+    2. 安装本项目订阅:
+       1. 安装BoxJs后一键订阅: [ iRingo](http://boxjs.com/#/sub/add/https%3A%2F%2Fgithub.com%2FVirgilClyne%2FiRingo%2Fblob%2Fmain%2Fbox%2FiRingo.boxjs.json%3Fraw%3Dtrue " iRingo")
+       2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`复制粘贴添加本项目订阅: [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true " iRingo")
   * 方法3: 配合`argument`字段使用:
     * Surge:
       * 此方法可以将相关脚本及配置固化到Surge的配置文件中
@@ -477,8 +478,6 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 安装链接
 ### 🆕V2版
   * V2版，支持通过BoxJs面板控制具体功能，并且开启更多地区限制性功能
-    * BoxJs:
-      * 🆕应用订阅:[iRingo.boxjs](./box/iRingo.boxjs.json?raw=true)
     * Shadowrocket:
       * 兼容性版本，将在Shadowrocket发布下个版本时移除
       * 🆕:[Siri.sgmodule](./shadowrocket/Siri.sgmodule?raw=true " iRingo for Siri & Search")
