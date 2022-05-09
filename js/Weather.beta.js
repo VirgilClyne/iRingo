@@ -1008,7 +1008,7 @@ async function outputNextHour(apiVersion, providerName, minutelyData, weather, S
 		// initialize data
 		let summaries = [];
 		let lastIndex = 0;
-		minutes = minutes.slice(0, 80);
+		//minutes = minutes.slice(0, 80);
 
 		for (let index = 0; index < minutes.length; index++) {
 			const { startAt, startTime, precipIntensity } = minutes[index];
