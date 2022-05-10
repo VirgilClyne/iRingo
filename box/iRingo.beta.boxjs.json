@@ -29,12 +29,8 @@
 					"name": "国家或地区代码",
 					"val": "US",
 					"type": "selects",
-					"desc": "",
+					"desc": "要更改为的地区或国家",
 					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（跟随分流设置）"
-						},
 						{
 							"key": "CN",
 							"label": "中国大陆"
@@ -82,7 +78,7 @@
 			"repo": "https://github.com/VirgilClyne/iRingo/blob/beta/js/Location.beta.js",
 			"icons": [
 				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple_Update.png",
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_Update.png"
+				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png"
 			]
 		},
 		{
