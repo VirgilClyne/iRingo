@@ -318,7 +318,7 @@
   * V2版，支持通过BoxJs面板控制具体功能，目前仅支持修改修改地区检测代码功能，未来会增加更多功能
     * Shadowrocket:
       * 兼容性版本，将在Shadowrocket发布下个版本时移除
-      * [Location.beta.sgmodule](./shadowrocket/Location.sgmodule?raw=true " iRingo for Location Services")
+      * [Location.sgmodule](./shadowrocket/Location.sgmodule?raw=true " iRingo for Location Services")
     * Loon:
       * [Location.plugin](./plugin/Location.beta.plugin?raw=true " iRingo for Location Services")
     * Quantumult X:
