@@ -2,7 +2,8 @@
 #!desc=(V2) 全面自定义「Siri与搜索」的功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri
 #!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne/iRingo#siri与搜索
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo#siri与搜索
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 
 [Rule]

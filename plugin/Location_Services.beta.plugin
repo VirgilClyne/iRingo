@@ -1,5 +1,10 @@
 #!name= Modify Location Services to 🇺🇳I18N
 #!desc=(BETA) 修改定位服务(Location Services)配置文件(Configs)和GCC(Geo Country Code)检测结果。
+#!openUrl=http://boxjs.com/#/app/iRingo.Location
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo#定位服务
+#!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
 [Script]
 # Response Location Services Geo Country Code Check Result to US

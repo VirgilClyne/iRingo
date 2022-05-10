@@ -1,5 +1,5 @@
 #!name= Replace Apple Weather Map with 🇺🇸US @waqi.info
-#!desc=切换空气质量地图数据源为waqi.info，并更改标准为AQI(US)
+#!desc=(V2) 切换空气质量地图数据源为waqi.info，并更改标准为AQI(US)
 
 [URL Rewrite]
 # Rewrite Apple Weather Air Quality Map

@@ -1,5 +1,7 @@
 #!name= Modify Location Services to 🇺🇳I18N
-#!desc=(BETA) 修改定位服务(Location Services)配置文件(Configs)和GCC(Geo Country Code)检测结果。
+#!version=BETA
+#!desc=1.修改定位服务(Location Services)配置文件(Configs)
+#!desc=2.修改GCC(Geo Country Code)检测结果
 
 # Response Location Services Geo Country Code Check Result to US
 ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) url script-echo-response https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location_Services.beta.js

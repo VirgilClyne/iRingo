@@ -1,5 +1,0 @@
-#!name= URLSearch
-#!desc= (TEST) 
-
-[Script]
-URLSearch = type=http-request, pattern=^https?:\/\/(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/function/URLSearch.test.js

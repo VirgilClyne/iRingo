@@ -1,5 +1,5 @@
 #!name= Response Geo Services to 🇨🇳CN
-#!desc=只作用于检测地区，不修改Apple Maps和Apple News，可以通过搭配使用其他模块达成混合效果。
+#!desc=(V1) 只作用于检测地区，不修改Apple Maps和Apple News，可以通过搭配使用其他模块达成混合效果。
 
 [Script]
 # Response Geo Services to CN

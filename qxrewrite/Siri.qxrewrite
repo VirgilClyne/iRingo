@@ -1,6 +1,6 @@
-#!name=  iRingo for Siri & Search
-#!desc= v2.1.0
-#!desc= 全面自定义「Siri与搜索」的功能。
+#!name= iRingo for Siri & Search
+#!version=V2
+#!desc=全面自定义「Siri与搜索」的功能。
 
 # Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)

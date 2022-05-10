@@ -1,5 +1,6 @@
-#!name=  Enable Siri Suggestions 🇺🇸US
-#!desc=(1.0.0) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
+#!name= Enable Siri Suggestions 🇺🇸US
+#!version=V1
+#!desc=在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能。
 
 # Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)

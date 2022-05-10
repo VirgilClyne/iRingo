@@ -2,7 +2,8 @@
 #!desc=(V1) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri
 #!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne/iRingo#siri与搜索
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo#siri与搜索
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 
 [URL Rewrite]
