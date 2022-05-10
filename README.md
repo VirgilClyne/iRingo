@@ -34,9 +34,10 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [作用与副作用](#作用与副作用)
   - [关于定位服务配置文件](#关于定位服务配置文件)
   - [安装链接](#安装链接-1)
+    - [🆕V2版](#v2版-1)
     - [🧪测试版](#测试版)
-    - [🆕新版](#新版)
-    - [旧版](#旧版)
+    - [V1.5版](#v15版)
+    - [V1版](#v1版)
 - [🔍Siri与搜索🆕](#siri与搜索)
   - [简介](#简介-2)
   - [激活方式](#激活方式-1)
@@ -45,9 +46,9 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [已知「Siri建议」服务器列表](#已知siri建议服务器列表)
   - [使用说明](#使用说明-1)
   - [安装链接](#安装链接-2)
-    - [🆕V2版](#v2版-1)
-    - [V1.5版](#v15版)
-    - [V1版](#v1版)
+    - [🆕V2版](#v2版-2)
+    - [V1.5版](#v15版-1)
+    - [V1版](#v1版-1)
 - [🗺️Apple Maps](#️apple-maps)
   - [简介](#简介-3)
   - [激活方式](#激活方式-2)
@@ -99,7 +100,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * 兼容性版本，将在Shadowrocket发布下个版本时移除
   * sgmodule安装于`配置`-配置文件`-`模块`-`从给定的URL下载配置…`
     1. [🌤天气](#天气)：[Weather.sgmodule](./shadowrocket/Weather.sgmodule?raw=true " iRingo for Apple Weather")
-    2. [📍定位服务](#定位服务)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
+    2. [📍定位服务](#定位服务)：[Location.sgmodule](./shadowrocket/Location.sgmodule?raw=true " iRingo for Location Services")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.sgmodule](./shadowrocket/Siri.sgmodule?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.sgmodule](./sgmodule/Apple_Maps_CN.sgmodule?raw=true " Redirect Apple Maps to 🇨🇳CN")
     5. [📺Apple TV](#apple-tv)：[Apple_TV.sgmodule](./sgmodule/Apple_TV.sgmodule?raw=true " Enable Apple TV app")
@@ -107,7 +108,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ### Loon
   * plugin安装于`仪表`-`插件`-`+`
     1. [🌤天气](#天气)：[Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather") 
-    2. [📍定位服务](#定位服务)：[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
+    2. [📍定位服务](#定位服务)：[Location.plugin](./plugin/Location.beta.plugin?raw=true " iRingo for Location Services")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.plugin](./plugin/Siri.plugin?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")
     5. [📺Apple TV](#apple-tv)：[Apple_TV.plugin](./plugin/Apple_TV.plugin?raw=true " Enable Apple TV app")
@@ -115,7 +116,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ### Quantumult X
   * qxrewrite安装于`设置`-`重写`-`引用`
     1. [🌤天气](#天气)：[Weather.qxrewrite](./qxrewrite/Weather.qxrewrite?raw=true " iRingo for Apple Weather")
-    2. [📍定位服务](#定位服务)：[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
+    2. [📍定位服务](#定位服务)：[Location.qxrewrite](./qxrewrite/Location.qxrewrite?raw=true " iRingo for Location Services")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.qxrewrite](./qxrewrite/Siri.qxrewrite?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.qxrewrite](./qxrewrite/Apple_Maps_CN.qxrewrite?raw=true " Redirect Apple Maps to 🇨🇳CN")
     5. [📺Apple TV](#apple-tv)：[Apple_TV.qxrewrite](./qxrewrite/Apple_TV.qxrewrite?raw=true " Enable Apple TV app")
@@ -124,7 +125,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ### Surge (Shadowrocket)
   * sgmodule安装于`模块`-`安装新模块…`
     1. [🌤天气](#天气)：[Weather.sgmodule](./sgmodule/Weather.sgmodule?raw=true " iRingo for Apple Weather")
-    2. [📍定位服务](#定位服务)：[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
+    2. [📍定位服务](#定位服务)：[Location.sgmodule](./sgmodule/Location.sgmodule?raw=true " iRingo for Location Services")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.sgmodule](./sgmodule/Siri.sgmodule?raw=true " iRingo for Siri & Search")
       * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
       * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，运行于M1处理器的Mac设备上的Loon与Quantumult X可能有效。
@@ -140,7 +141,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   * stoverride安装于`首页`-`覆写`-`安装覆写`
     * 下面的链接需点击跳转后再复制安装，不可直接复制下面的链接安装。
     1. [🌤天气](#天气)：[Weather.stoverride](./stoverride/Weather.stoverride?raw=true " iRingo for Apple Weather")
-    2. [📍定位服务](#定位服务)：[Geo_Services.stoverride](./stoverride/Geo_Services.stoverride?raw=true " Response Geo Services to 🇺🇸US")
+    2. [📍定位服务](#定位服务)：[Location.stoverride](./stoverride/Location.stoverride?raw=true " iRingo for Location Services")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.stoverride](./stoverride/Siri.stoverride?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.stoverride](./stoverride/Apple_Maps_CN.stoverride?raw=true " Redirect Apple Maps to 🇨🇳CN")
     5. [📺Apple TV](#apple-tv)：[Apple_TV.stoverride](./stoverride/Apple_TV.stoverride?raw=true " Enable Apple TV app")
@@ -213,8 +214,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 当选择`定位精度: 观测站`时，先查询距离最近的`观测站`，然后获取此`观测站`AQI详细数据，共两步。
     * 注: 申请`waqi.info 私有API`令牌请见: [Air Quality Open Data Platform API Token Request Form](https://aqicn.org/data-platform/token/cn/#/)
   * 方法4: 配合`argument`字段使用:
-    * Surge:
-      * 此方法可以将相关脚本及配置固化到Surge的配置文件中
+    * Loon、Surge:
+      * 此方法可以将相关脚本及配置固化到Loon或Surge的配置文件中
       * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
     * 格式如下:
       * 🆕V3版:
@@ -249,14 +250,15 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 ### V2版
   * 已归档，不再更新，因BoxJs面板升级，也不再支持自定义数据填写，原有用户可以继续使用
+  * 下载地址详见：https://github.com/VirgilClyne/iRingo/wiki/🌤天气#v2版
   * Loon:
-    * 空气质量数据:[Apple_Weather.plugin](./plugin/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info")
+    * 空气质量数据:[Apple_Weather.plugin](./plugin/archive/Apple_Weather.plugin?raw=true " Replace Apple Weather 🇺🇸US with @waqi.info")
   * Quantumult X:
-    * 空气质量数据:[Apple_Weather.qxrewrite](./qxrewrite/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
+    * 空气质量数据:[Apple_Weather.qxrewrite](./qxrewrite/archive/Apple_Weather.qxrewrite?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
   * Surge:
-    * 空气质量数据:[Apple_Weather.sgmodule](./sgmodule/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
-    * 空气质量地图(🆕可用，可行性验证，未修正图层和坐标):[Apple_Weather_Map.sgmodule](./sgmodule/Apple_Weather_Map.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
-    * 空气质量地图(🧪测试版，🚧施工中，不可用，修正坐标和图层):[Apple_Weather_Map.beta.sgmodule](./sgmodule/Apple_Weather_Map.beta.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
+    * 空气质量数据:[Apple_Weather.sgmodule](./sgmodule/archive/Apple_Weather.sgmodule?raw=true " Replace Apple Weather with 🇺🇸US @waqi.info")
+    * 空气质量地图(🆕可用，可行性验证，未修正图层和坐标):[Apple_Weather_Map.sgmodule](./sgmodule/archive/Apple_Weather_Map.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
+    * 空气质量地图(🧪测试版，🚧施工中，不可用，修正坐标和图层):[Apple_Weather_Map.beta.sgmodule](./sgmodule/archive/Apple_Weather_Map.beta.sgmodule?raw=true " Replace Apple Weather Map with 🇺🇸US @waqi.info")
 
 ---
 
@@ -308,40 +310,31 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
     * `地图`-`为“地图”提供助力`-`显示评分和照片建议`
 
 ## 安装链接
-### 🧪测试版
-  * 🧪测试版,比`🆕新版`新增修改定位服务配置文件的功能(🚧测试中，随时可能不可用):
-    * Loon:    
-      * [Location_Services.beta.plugin](./plugin/Location_Services.beta.plugin?raw=true " Modify Location Services to 🇺🇳I18N")
-    * Quantumult X:
-      * [Location_Services.beta.qxrewrite](./qxrewrite/Location_Services.beta.qxrewrite?raw=true " Modify Location Services to 🇺🇳I18N")
-    * Surge (Shadowrocket):
-      * [Location_Services.beta.sgmodule](./sgmodule/Location_Services.beta.sgmodule?raw=true " Modify Location Services to 🇺🇳I18N")
-### 🆕新版
-  * 🆕新版,“直接返回构造的`本地请求`”的新实现方式
-    * Loon:    
-      * 修改地区检测为🇺🇸US:[Geo_Services.plugin](./plugin/Geo_Services.plugin?raw=true " Response Geo Services to 🇺🇸US")
-    * Quantumult X:
-      * 修改地区检测为🇺🇸US:[Geo_Services.qxrewrite](./qxrewrite/Geo_Services.qxrewrite?raw=true " Response Geo Services to 🇺🇸US")
-    * Surge (Shadowrocket):
-      * 修改地区检测为🇺🇸US:[Geo_Services.sgmodule](./sgmodule/Geo_Services.sgmodule?raw=true " Response Geo Services to 🇺🇸US")
-      * 修改地区检测为🇨🇳CN:[Geo_Services_CN.sgmodule](./sgmodule/Geo_Services_CN.sgmodule?raw=true " Response Geo Services to 🇨🇳CN")
-      * 修改地区检测为🇬🇧UK:[Geo_Services_UK.sgmodule](./sgmodule/Geo_Services_UK.sgmodule?raw=true " Response Geo Services to 🇬🇧UK")
-      * 修改地区检测为🇭🇰HK:[Geo_Services_HK.sgmodule](./sgmodule/Geo_Services_HK.sgmodule?raw=true " Response Geo Services to 🇭🇰HK")
-      * 修改地区检测为🇹🇼TW:[Geo_Services_TW.sgmodule](./sgmodule/Geo_Services_TW.sgmodule?raw=true " Response Geo Services to 🇹🇼TW")
-      * 修改地区检测为🇯🇵JP:[Geo_Services_JP.sgmodule](./sgmodule/Geo_Services_JP.sgmodule?raw=true " Response Geo Services to 🇯🇵JP")
-      * 修改地区检测为🇦🇺AU:[Geo_Services_AU.sgmodule](./sgmodule/Geo_Services_AU.sgmodule?raw=true " Response Geo Services to 🇦🇺AU")
-### 旧版
-  * 旧版,“改写返回的`网络请求`”的旧实现方式
+### 🆕V2版
+  * V2版，支持通过BoxJs面板控制具体功能，目前仅支持修改修改地区检测代码功能，未来会增加更多功能
+    * Shadowrocket:
+      * 兼容性版本，将在Shadowrocket发布下个版本时移除
+      * [Location.beta.sgmodule](./shadowrocket/Location.sgmodule?raw=true " iRingo for Location Services")
     * Loon:
-      * 修改地区检测为🇨🇳CN:[Geo_Services_CN.plugin](./plugin/Geo_Services_CN.plugin?raw=true " Redirect Geo Services to 🇨🇳CN") (Author:@Tartarus2014) 
-      * 修改地区检测为🇺🇸US:[Geo_Services_US.plugin](./plugin/Geo_Services_US.plugin?raw=true " Redirect Geo Services to 🇺🇸US") (Author:@Tartarus2014) 
-      * 修改地区检测为🇯🇵JP:[Geo_Services_JP.plugin](./plugin/Geo_Services_JP.plugin?raw=true " Redirect Geo Services to 🇯🇵JP")
+      * [Location.plugin](./plugin/Location.beta.plugin?raw=true " iRingo for Location Services")
     * Quantumult X:
-      * 修改地区检测为🇨🇳CN:[Geo_Services_CN.qxrewrite](./qxrewrite/Geo_Services_CN.qxrewrite?raw=true " Redirect Geo Services to 🇨🇳CN")
-      * 修改地区检测为🇺🇸US:[Geo_Services_US.qxrewrite](./qxrewrite/Geo_Services_US.qxrewrite?raw=true " Redirect Geo Services to 🇺🇸US")
-      * 修改地区检测为🇯🇵JP:[Geo_Services_JP.qxrewrite](./qxrewrite/Geo_Services_JP.qxrewrite?raw=true " Redirect Geo Services to 🇯🇵JP")
-    * Surge (Shadowrocket):
-      * 修改地区检测为🇺🇸US:[Geo_Services_US.sgmodule](./sgmodule/Geo_Services_US.sgmodule?raw=true " Redirect Geo Services to 🇺🇸US")
+      * [Location.qxrewrite](./qxrewrite/Location.qxrewrite?raw=true " iRingo for Location Services")
+    * Surge:
+      * [Location.sgmodule](./sgmodule/Location.sgmodule?raw=true " iRingo for Location Services")
+    * Stash:
+      * [Location.stoverride](./stoverride/Location.stoverride?raw=true " iRingo for Location Services")
+### 🧪测试版
+  * 已归档，不再更新
+  * 🧪测试版,比`🆕新版`新增修改定位服务配置文件的功能(🚧测试中，随时可能不可用):
+  * 下载地址详见：https://github.com/VirgilClyne/iRingo/wiki/📍定位服务#测试版
+### V1.5版
+  * 已归档，不再更新
+  * V1.5版,“直接返回构造的`本地请求`”的新实现方式
+  * 下载地址详见：https://github.com/VirgilClyne/iRingo/wiki/📍定位服务#v15版
+### V1版
+  * 已归档，不再更新
+  * V1版,“改写返回的`网络请求`”的旧实现方式
+  * 下载地址详见：https://github.com/VirgilClyne/iRingo/wiki/📍定位服务#v1版
 
 ---
 
@@ -459,8 +452,8 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
        1. 安装BoxJs后一键订阅: [ iRingo](http://boxjs.com/#/sub/add/https%3A%2F%2Fgithub.com%2FVirgilClyne%2FiRingo%2Fblob%2Fmain%2Fbox%2FiRingo.boxjs.json%3Fraw%3Dtrue " iRingo")
        2. 浏览器访问[BoxJs.com](http://boxjs.com)，在[`订阅`](http://boxjs.com/#/sub)页面点击`+`复制粘贴添加本项目订阅: [iRingo.boxjs.json](./box/iRingo.boxjs.json?raw=true " iRingo")
   * 方法3: 配合`argument`字段使用:
-    * Surge:
-      * 此方法可以将相关脚本及配置固化到Surge的配置文件中
+    * Loon、Surge:
+      * 此方法可以将相关脚本及配置固化到Loon或Surge的配置文件中
       * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
       * 格式如下:
         * 🆕V3版:
@@ -505,46 +498,14 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       * 需要1.6.0(260)及以上版本
       * 🆕:[Siri.stoverride](./stoverride/Siri.stoverride?raw=true " iRingo for Siri & Search")
 ### V1.5版
+  * 已归档，不再更新
   * V1.5版，用脚本(Script)功能自动自动修改「来自APPLE的内容\来自APPLE的建议\Siri建议」的地区与语言设置为`设置`-`通用`-`语言与地区`相同设置的语言及地区（中国大陆地区无此服务，所以默认修改为台湾地区）。
-    * Loon:
-      * 1.5版:[Siri_Suggestions.plugin](./plugin/Siri_Suggestions.plugin?raw=true " Enable Siri Suggestions")
-    * Quantumult X:
-      * 1.5版:[Siri_Suggestions.qxrewrite](./qxrewrite/Siri_Suggestions.qxrewrite?raw=true " Enable Siri Suggestions")
-    * Surge (Shadowrocket):
-      * 适用于iOS/iPadOS,不含macOS规则集的模块:
-      * 1.5版:[Siri_Suggestions.sgmodule](./sgmodule/Siri_Suggestions.sgmodule?raw=true " Enable Siri Suggestions")
-        * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
-        * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，运行于M1处理器的Mac设备上的Loon与Quantumult X可能有效。
-      * macOS/iOS通用模块:
-      * 针对策略组为`PROXY`的模块:[Siri_Suggestions_for_Uppercase_PROXY.sgmodule](./sgmodule/Siri_Suggestions_for_Uppercase_PROXY.sgmodule?raw=true " Enable Siri Suggestions")
-      * 针对策略组为`Proxy`的模块:[Siri_Suggestions_for_Proxy.sgmodule](./sgmodule/Siri_Suggestions_for_Proxy.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 针对策略组为`🌑Proxy`的模块(如:DivineEngine):[Siri_Suggestions_for_DivineEngine.sgmodule](./sgmodule/Siri_Suggestions_for_DivineEngine.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 针对策略组为`Apple`的模块:[Siri_Suggestions_for_Apple.sgmodule](./sgmodule/Siri_Suggestions_for_Apple.sgmodule?raw=true " Enable Siri Suggestions") 
-      * 针对策略组为`🍎Apple`的模块:[Siri_Suggestions_for_Apple_icon.sgmodule](./sgmodule/Siri_Suggestions_for_Apple_icon.sgmodule?raw=true " Enable Siri Suggestions")
-      * 针对策略组为`🍎 Apple`的模块(如:Surgio):[Siri_Suggestions_for_Surgio.sgmodule](./sgmodule/Siri_Suggestions_for_Surgio.sgmodule?raw=true " Enable Siri Suggestions")
-      * 针对策略组为`🍎 苹果服务`的模块(如:ACL4SSR):[Siri_Suggestions_for_ACL4SSR.sgmodule](./sgmodule/Siri_Suggestions_for_ACL4SSR.sgmodule?raw=true " Enable Siri Suggestions") 
-    * Stash:
-      * 1.5版:[Siri_Suggestions.stoverride](./stoverride/Siri_Suggestions.stoverride?raw=true " Enable Siri Suggestions")
-    * Clash:
-      * 规则组:[Wikipedia_for_Look_Up.yaml](./RuleSet/Wikipedia_for_Look_Up.yaml?raw=true "Wikipedia for Look Up")
-      * 此规则组只作用于启用macOS的`词典`和维基百科搜索集成(此功能独立于Siri建议，所以可由Clash激活)。
+  * 下载地址详见：https://github.com/VirgilClyne/iRingo/wiki/🔍Siri与搜索#v15版
+
 ### V1版
+  * 已归档，不再更新
   * V1版，用重写(Rewrite)功能修改为固定地区
-    * Loon:
-      * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.plugin](./plugin/Siri_Suggestions_TW.plugin?raw=true " Enable Siri Suggestions 🇹🇼TW")
-      * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.plugin](./plugin/Siri_Suggestions_JP.plugin?raw=true " Enable Siri Suggestions 🇯🇵JP")
-      * 旧版，用重写修改地区为🇺🇸US:[Siri_Suggestions_US.plugin](./plugin/Siri_Suggestions_US.plugin?raw=true " Enable Siri Suggestions 🇺🇸US")
-    * Quantumult X:
-      * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.qxrewrite](./qxrewrite/Siri_Suggestions_TW.qxrewrite?raw=true " Enable Siri Suggestions 🇹🇼TW") (Author:@edgexyz)
-      * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.qxrewrite](./qxrewrite/Siri_Suggestions_JP.qxrewrite?raw=true " Enable Siri Suggestions 🇯🇵JP")
-      * 旧版，用重写修改地区为🇺🇸US:[Siri_Suggestions_US.qxrewrite](./qxrewrite/Siri_Suggestions_US.qxrewrite?raw=true " Enable Siri Suggestions 🇺🇸US") (Author:@edgexyz)
-    * Surge (Shadowrocket):
-      * 适用于iOS/iPadOS,不含macOS规则集的模块:
-      * 旧版，用重写修改地区为🇹🇼TW:[Siri_Suggestions_TW.sgmodule](./sgmodule/Siri_Suggestions_TW.sgmodule?raw=true " Enable Siri Suggestions 🇹🇼TW")
-      * 旧版，用重写修改地区为🇯🇵JP:[Siri_Suggestions_JP.sgmodule](./sgmodule/Siri_Suggestions_JP.sgmodule?raw=true " Enable Siri Suggestions 🇯🇵JP")
-      * 旧版，用重写修改地区为🇺🇸US:[Siri_Suggestions_US.sgmodule](./sgmodule/Siri_Suggestions_US.sgmodule?raw=true " Enable Siri Suggestions 🇺🇸US")
-        * macOS用域名集:[Wikipedia_for_Look_Up.list](./RuleSet/Wikipedia_for_Look_Up.list?raw=true "Wikipedia for Look Up")
-        * 此域名集只作用于macOS的`词典`和维基百科搜索集成，且需要开启Surge的`增强模式`，iOS/iPadOS不需要此域名集，运行于M1处理器的Mac设备上的Loon与Quantumult X可能有效。
+  * 下载地址详见：https://github.com/VirgilClyne/iRingo/wiki/🔍Siri与搜索#v1版
 
 -----------------
 
