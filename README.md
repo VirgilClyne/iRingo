@@ -320,7 +320,7 @@
       * 兼容性版本，将在Shadowrocket发布下个版本时移除
       * [Location.sgmodule](./shadowrocket/Location.sgmodule?raw=true " iRingo for Location Services")
     * Loon:
-      * [Location.plugin](./plugin/Location.beta.plugin?raw=true " iRingo for Location Services")
+      * [Location.plugin](./plugin/Location.plugin?raw=true " iRingo for Location Services")
     * Quantumult X:
       * [Location.qxrewrite](./qxrewrite/Location.qxrewrite?raw=true " iRingo for Location Services")
     * Surge:
