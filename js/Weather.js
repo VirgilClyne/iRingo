@@ -536,6 +536,39 @@ function colorfulCloudsToNextHour(providerName, data) {
 		return minutes;
 	};
 
+	function toDescriptions(forecastKeypoint, minutelyDescription) {
+		let longDescription = minutelyDescription ?? forecastKeypoint;
+		const times = minutelyDescription?.match(/\d+/g);
+		const parameters = {};
+
+		// https://stackoverflow.com/a/20426113
+		function stringifyNumber(n) {
+			const special = [
+				'zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth',
+				'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth',
+				'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth',
+			];
+			const deca = ['twent', 'thirt', 'fort', 'fift', 'sixt', 'sevent', 'eight', 'ninet'];
+
+			if (n < 20) return special[n];
+			if (n % 10 === 0) return deca[Math.floor(n / 10) - 2] + 'ieth';
+			return deca[Math.floor(n / 10) - 2] + 'y-' + special[n % 10];
+		};
+
+		times?.forEach((value, index) => {
+			const key = `${stringifyNumber(index + 1)}At`;
+
+			longDescription = longDescription.replace(value, '{' + key + '}');
+			parameters[key] = value;
+		});
+		
+		return [{
+			long: longDescription,
+			short: forecastKeypoint ?? minutelyDescription,
+			parameters,
+		}];
+	};
+
 	return toNextHourObject(
 		serverTime ? serverTime * 1000 : (+ new Date()),
 		data.lang?.replace('_', '-') ?? "en-US",
@@ -550,12 +583,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 			data?.result?.minutely?.precipitation_2h,
 			data?.result?.minutely?.probability,
 		),
-		[{
-			// TODO: extract times from descriptions
-			long: data?.result?.minutely?.description ?? data?.result?.forecast_keypoint,
-			short: data?.result?.forecast_keypoint ?? data?.result?.minutely?.description,
-			parameters: {},
-		}],
+		toDescriptions(data?.result?.forecast_keypoint, data?.result?.minutely?.description),
 	)
 }
 
@@ -568,7 +596,7 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @param {string} providerName - provider name
  * @param {string} units - { textStyle: "mmPerHour", charStyle: "mm\/hour" }
  * @param {Array} minutes - array of { weatherType: one of WEATHER_STATUS, precipitation, chance: percentage (0 to 100) }
- * @param {Array} description - array of { long: "Rain starting in {firstAt} min", short: "Rain for the next hour", parameters: can be empty, { "firstAt": unixTimestamp }, }
+ * @param {Array} description - array of { long: "Rain starting in {firstAt} min", short: "Rain for the next hour", parameters: can be empty, { "firstAt": minuteTime }, }
  * @return {object}
  */
 function toNextHourObject(
