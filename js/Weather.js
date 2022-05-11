@@ -320,9 +320,9 @@ async function WAQI(type = "", input = {}) {
 /**
  * Get minutely data from "气象在线"
  * @author WordlessEcho
- * @param {Number} lat - latitude
- * @param {Number} lng - longitude
- * @return {Promise<*>} minutely data
+ * @param {Number} lat latitude
+ * @param {Number} lng longitude
+ * @return {Promise<*>} data from "气象在线"
  */
 function getGridWeatherMinutely(lat, lng) {
 	// this API could be considered as unconfigurable ColorfulClouds API
@@ -359,10 +359,10 @@ function getGridWeatherMinutely(lat, lng) {
 /**
  * ColorfulClouds
  * @author WordlessEcho
- * @param {object} headers - HTTP headers
- * @param {Object} input - location & token: { lat, lng, token }
- * @param {Number} timestamp - get old data
- * @return {Promise<*>}
+ * @param {object} headers HTTP headers
+ * @param {Object} input location & token: { lat, lng, token }
+ * @param {Number} timestamp get old data
+ * @return {Promise<*>} data from ColorfulClouds
  */
 async function ColorfulClouds(
     headers = {
@@ -708,11 +708,11 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
  * output forecast NextHour Data
  * @author WordlessEcho
  * @author VirgilClyne
- * @param {String} apiVersion - Apple Weather API Version
- * @param {Object} nextHourObject - generated from toNextHourObject()
- * @param {Object} weather - weather data from Apple
- * @param {Object} Settings - Settings config in Box.js
- * @return {Promise<*>}
+ * @param {String} apiVersion Apple Weather API Version
+ * @param {Object} nextHourObject generated from toNextHourObject()
+ * @param {Object} weather weather data from Apple
+ * @param {Object} Settings settings config in Box.js
+ * @return {Promise<*>} a Promise that returned edited Apple data
  */
 async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	$.log(`⚠️ ${$.name}, ${outputNextHour.name}检测`, `API: ${apiVersion}`, '');
@@ -724,6 +724,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	// the graph of Apple weather is divided into three parts
 	const PERCEIVED_DIVIDERS = { INVALID: -1, BEGINNING: 0, BOTTOM: 1, MIDDLE: 2, TOP: 3, };
 
+	// TODO: do not edit Apple data directly
 	// 创建对象
 	if (!weather[NAME]) {
 		$.log(`⚠️ ${$.name}, 没有未来一小时降水强度, 创建`, '');
@@ -1072,9 +1073,9 @@ function calculateAQI(AQI) {
  * https://docs.caiyunapp.com/docs/tables/precip
  * @author VirgilClyne
  * @author WordlessEcho
- * @param {object} standard - *_PRECIPITATION_RANGE
- * @param {Number} pptn - Precipitation
- * @returns {Number}
+ * @param {object} standard *_PRECIPITATION_RANGE
+ * @param {Number} pptn Precipitation
+ * @returns {Number} one of PRECIPITATION_LEVEL
  */
 function calculatePL(standard, pptn) {
 	const {
@@ -1095,9 +1096,9 @@ function calculatePL(standard, pptn) {
 /**
  * Convert PRECIPITATION_LEVEL to WEATHER_TYPES
  * @author WordlessEcho
- * @param {string} weatherType - one of WEATHER_TYPES
- * @param {Number} precipitationLevel - one of PRECIPITATION_LEVEL
- * @returns {string}
+ * @param {string} weatherType one of WEATHER_TYPES
+ * @param {Number} precipitationLevel one of PRECIPITATION_LEVEL
+ * @returns {string} one of WEATHER_STATUS
  */
 function precipLevelToStatus(weatherType, precipitationLevel) {
 	const {
@@ -1131,6 +1132,12 @@ function precipLevelToStatus(weatherType, precipitationLevel) {
 	}
 };
 
+/**
+ * Convert WEATHER_STATUS to WEATHER_TYPES
+ * @author WordlessEcho
+ * @param {string} weatherStatus one of WEATHER_STATUS
+ * @returns {string} one of WEATHER_TYPES
+ */
 function weatherStatusToType(weatherStatus) {
 	const {
 		CLEAR,
