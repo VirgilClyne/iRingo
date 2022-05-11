@@ -975,7 +975,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 				if (boundIndex !== -1) {
 					lastBoundIndex += boundIndex;
-					weatherStatus = [slicedMinutes[boundIndex].weatherStatus];
+					weatherStatus = [minutesForConditions[boundIndex].weatherStatus];
 				} else {
 					lastBoundIndex = boundIndex;
 				}
