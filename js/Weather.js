@@ -885,14 +885,13 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		let lastBoundIndex = 0;
 		let weatherStatus = [slicedMinutes[lastBoundIndex].weatherStatus];
 
-		conditions.forEach((_value, _index, array) => {
+		conditions.forEach((_value, index, array) => {
 			// initialize data
 			const lastWeather = weatherStatus[weatherStatus.length - 1];
 			const boundIndex = slicedMinutes.findIndex(minute => minute.weatherStatus !== lastWeather);
 
 			let timeStatus = [TIME_STATUS.START];
-			const descriptionsIndex = array.length < descriptions.length ?
-				array.length : descriptions.length;
+			const descriptionsIndex = index < descriptions.length ? index : descriptions.length - 1;
 			const condition = {
 				longTemplate: descriptions[descriptionsIndex].long,
 				shortTemplate: descriptions[descriptionsIndex].short,
