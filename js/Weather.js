@@ -444,30 +444,30 @@ async function ColorfulClouds(
  */
 function colorfulCloudsToNextHour(providerName, data) {
 	const serverTime = data?.server_time;
-	let units;
+	let unit;
 	let precipStandard;
 
 	// https://docs.caiyunapp.com/docs/tables/unit/
 	// https://www.convertunits.com/
 	switch (data?.unit) {
 		case "SI":
-			units = { textStyle: "metersPerSecond", charStyle: "m\/s" };
+			unit = "metersPerSecond";
 			// TODO: find out standard of this unit
 			precipStandard = RADAR_PRECIPITATION_RANGE;
 			break;
 		case "imperial":
-			units = { textStyle: "inchesPerHour", charStyle: "in\/hr" };
+			unit = "inchesPerHour";
 			// TODO: find out standard of this unit
 			precipStandard = RADAR_PRECIPITATION_RANGE;
 			break;
 		case "metric:v2":
-			units = { textStyle: "millimetersPerHour", charStyle: "mm\/hr" };
+			unit = "millimetersPerHour";
 			precipStandard = MMPERHR_PRECIPITATION_RANGE;
 			break;
 		case "metric:v1":
 		case "metric":
 		default:
-			units = { textStyle: "radar", charStyle: "radar" };
+			unit = "radar";
 			precipStandard = RADAR_PRECIPITATION_RANGE;
 			break;
 	}
@@ -587,7 +587,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 			longitude: Array.isArray(data?.location) && data.location.length > 1 ? data.location[1] : -1,
 		},
 		providerName,
-		units,
+		unit,
 		precipStandard,
 		toMinutes(
 			precipStandard,
@@ -606,7 +606,7 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @param {string} language - ISO 3166-1 language tag
  * @param {Object} location - { latitude, longitude }
  * @param {string} providerName - provider name
- * @param {string} units - { textStyle: "mmPerHour", charStyle: "mm\/hour" }
+ * @param {string} unit - like "mmPerHour"
  * @param {Object} precipStandard - *_PRECIPITATION_RANGE
  * @param {Array} minutes - array of { weatherStatus: one of WEATHER_STATUS, precipitation,
  * chance: percentage (0 to 100) }
@@ -615,7 +615,7 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @return {Object} object for `outputNextHour()`
  */
 function toNextHourObject(
-	timestamp, language, location, providerName, units, precipStandard, minutes, description,
+	timestamp, language, location, providerName, unit, precipStandard, minutes, description,
 ) {
 	// it looks like Apple doesn't care unit
 
@@ -627,7 +627,7 @@ function toNextHourObject(
 		language,
 		location,
 		providerName,
-		units,
+		unit,
 		precipStandard,
 		minutes,
 		description,
@@ -749,7 +749,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		"Language": nextHourObject.language,
 		"Name": nextHourObject.providerName,
 		"Logo": "https://www.weatherol.cn/images/logo.png",
-		"Unit": nextHourObject.units.textStyle,
+		"Unit": nextHourObject.units,
 		// untested: I guess is the same as AQI data_source
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
