@@ -898,7 +898,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 			let timeStatus = [TIME_STATUS.START];
 			const descriptionsIndex = conditions.length < descriptions.length ?
-				conditions.length : descriptions.length;
+				conditions.length : descriptions.length - 1;
 			const condition = {
 				longTemplate: descriptions[descriptionsIndex].long,
 				shortTemplate: descriptions[descriptionsIndex].short,
