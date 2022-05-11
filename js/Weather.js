@@ -102,7 +102,7 @@ const WEATHER_STATUS = {
 					let minutelyData;
 					let providerName;
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
-						minutelyData = await getGridWeatherMinutely(Params.lat, Params.lng);
+						minutelyData = await weatherOl(Params.lat, Params.lng);
 						providerName = "气象在线";
 					}
 
@@ -323,13 +323,13 @@ async function WAQI(type = "", input = {}) {
 };
 
 /**
- * Get minutely data from "气象在线"
+ * Get data from "气象在线"
  * @author WordlessEcho
  * @param {Number} lat - latitude
  * @param {Number} lng - longitude
  * @return {Promise<*>} data from "气象在线"
  */
-function getGridWeatherMinutely(lat, lng) {
+function weatherOl(lat, lng) {
 	// this API could be considered as unconfigurable ColorfulClouds API
 	const request = {
 		"url": `https://www.weatherol.cn/api/minute/getPrecipitation?type=forecast&ll=${lng},${lat}`
@@ -362,14 +362,14 @@ function getGridWeatherMinutely(lat, lng) {
 };
 
 /**
- * ColorfulClouds
+ * get data from ColorfulClouds
  * @author WordlessEcho
  * @param {object} headers - HTTP headers
  * @param {Object} input - location & token: { lat, lng, token }
  * @param {Number} timestamp - get old data by timestamp
  * @return {Promise<*>} data from ColorfulClouds
  */
-async function ColorfulClouds(
+async function colorfulClouds(
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
