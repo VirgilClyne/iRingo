@@ -501,9 +501,9 @@ function colorfulCloudsToNextHour(providerName, data) {
 	function toMinutes(standard, weatherType, precipitations, probability) {
 		if (!Array.isArray(precipitations)) return [];
 
-		let precipitationLevel = calculatePL(standard, precipitations[0]);
 		const bounds = [0];
 		for (const lastBound of bounds) {
+			const precipitationLevel = calculatePL(standard, precipitations[lastBound]);
 			const relativeBound = precipitations.slice(lastBound).findIndex(value => {
 				if (precipitationLevel < PRECIPITATION_LEVEL.LIGHT) {
 					return calculatePL(standard, value) > PRECIPITATION_LEVEL.NO;
@@ -516,10 +516,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 			});
 
 			if (relativeBound !== -1) {
-				const bound = relativeBound + lastBound;
-
-				precipitationLevel = calculatePL(standard, bound);
-				bounds.push(bound);
+				bounds.push(lastBound + relativeBound);
 			}
 		}
 
@@ -891,7 +888,9 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		for (const _condition of conditions) {
 			// initialize data
 			const lastWeather = weatherStatus[weatherStatus.length - 1];
-			const boundIndex = slicedMinutes.findIndex(minute => minute.weatherStatus !== lastWeather);
+			const minutesForConditions = slicedMinutes.slice(lastBoundIndex);
+			const boundIndex = minutesForConditions
+				.findIndex(minute => minute.weatherStatus !== lastWeather);
 
 			let timeStatus = [TIME_STATUS.START];
 			const descriptionsIndex = conditions.length < descriptions.length ?
@@ -910,17 +909,16 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 			if (boundIndex === -1) {
 				const isPossible = needPossible(
-					Math.max(...slicedMinutes.slice(lastBoundIndex).map(minute => minute.chance))
+					Math.max(...minutesForConditions.map(minute => minute.chance))
 				);
 				timeStatus = [TIME_STATUS.CONSTANT];
 
 				condition.token = toToken(isPossible, weatherStatus, timeStatus);
 			} else {
 				const isPossible = needPossible(Math.max(
-					...(slicedMinutes.slice(lastBoundIndex, boundIndex)
-						.map(minute => minute.chance))
+					...slicedMinutes.slice(lastBoundIndex, boundIndex).map(minute => minute.chance)
 				));
-				const currentWeather = slicedMinutes[boundIndex].weatherStatus;
+				const currentWeather = slicedMinutes[lastBoundIndex].weatherStatus;
 				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
 
 				switch (apiVersion) {
@@ -975,10 +973,12 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			if (lastBoundIndex !== -1) {
 				conditions.push(condition);
 
-				lastBoundIndex = boundIndex;
 				if (boundIndex !== -1) {
+					lastBoundIndex += boundIndex;
 					weatherStatus = [slicedMinutes[boundIndex].weatherStatus];
-				};
+				} else {
+					lastBoundIndex = boundIndex;
+				}
 			}
 		}
 
@@ -997,7 +997,8 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 		for (const _summary of summaries) {
 			const isClear = slicedMinutes[lastBoundIndex].weatherStatus === WEATHER_STATUS.CLEAR;
-			const boundIndex = slicedMinutes.findIndex(minute =>
+			const minutesForSummary = slicedMinutes.slice(lastBoundIndex);
+			const boundIndex = minutesForSummary.findIndex(minute =>
 				isClear ? minute.weatherStatus !== WEATHER_STATUS.CLEAR
 					: minute.weatherStatus === WEATHER_STATUS.CLEAR
 			);
@@ -1010,12 +1011,12 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			}
 
 			if (!isClear) {
-				const minutesForSummary = slicedMinutes.slice(
-					lastBoundIndex,
-					boundIndex === -1 ? slicedMinutes.length - 1 : boundIndex
+				const minutesForNotClear = minutesForSummary.slice(
+					0,
+					boundIndex === -1 ? slicedMinutes.length - 1 : boundIndex,
 				);
-				const chance = Math.max(...minutesForSummary.map(minute => minute.chance));
-				const precipitations = minutesForSummary.map(minute => minute.precipitation);
+				const chance = Math.max(...minutesForNotClear.map(minute => minute.chance));
+				const precipitations = minutesForNotClear.map(minute => minute.precipitation);
 
 				switch (apiVersion) {
 					case "v1":
@@ -1044,7 +1045,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			if (lastBoundIndex !== -1) {
 				summaries.push(summary);
 
-				lastBoundIndex = boundIndex;
+				lastBoundIndex = boundIndex === -1 ? boundIndex : lastBoundIndex + boundIndex;
 			}
 		};
 
