@@ -445,7 +445,7 @@ async function ColorfulClouds(
  * @param {object} data - data from ColorfulClouds API
  * @return {object}
  */
- function colorfulCloudsToNextHour(providerName, data) {
+function colorfulCloudsToNextHour(providerName, data) {
 	const serverTime = data?.server_time;
 	let unit;
 
