@@ -448,7 +448,7 @@ async function colorfulClouds(
  * @return {Object} object for `outputNextHour()`
  */
 function colorfulCloudsToNextHour(providerName, data) {
-	const serverTime = data?.server_time;
+	const serverTime = parseInt(data?.server_time);
 	let unit;
 	let precipStandard;
 
