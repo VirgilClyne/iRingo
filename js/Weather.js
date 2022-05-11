@@ -615,7 +615,14 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @return {Object} object for `outputNextHour()`
  */
 function toNextHourObject(
-	timestamp, language, location, providerName, unit, precipStandard, minutes, description,
+	timestamp = (+ new Date()),
+	language,
+	location,
+	providerName,
+	unit,
+	precipStandard,
+	minutes,
+	description,
 ) {
 	// it looks like Apple doesn't care unit
 
