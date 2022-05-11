@@ -107,7 +107,12 @@ const WEATHER_STATUS = {
 					}
 
 					if (minutelyData) {
-						data = await outputNextHour(Params.ver, providerName, minutelyData, data, Settings);
+						data = await outputNextHour(
+							Params.ver,
+							colorfulCloudsToNextHour(providerName, minutelyData),
+							data,
+							Settings
+						);
 					} else {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
