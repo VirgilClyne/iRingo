@@ -543,7 +543,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
-		const times = minutelyDescription?.match(/\d+/g);
+		const times = longDescription?.match(/\d+/g);
 		const parameters = {};
 
 		// https://stackoverflow.com/a/20426113
