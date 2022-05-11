@@ -598,7 +598,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 		toDescriptions(
 			getWeatherType(data?.result?.hourly?.skycon),
 			data?.result?.forecast_keypoint,
-			data?.result?.minutely?.description),
+			data?.result?.minutely?.description
+		),
 	)
 };
 
