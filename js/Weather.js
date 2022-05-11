@@ -549,7 +549,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		return minutes;
 	};
 
-	function toDescriptions(forecastKeypoint, minutelyDescription) {
+	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
 		const times = minutelyDescription?.match(/\d+/g);
 		const parameters = {};
@@ -568,13 +568,16 @@ function colorfulCloudsToNextHour(providerName, data) {
 			return deca[Math.floor(n / 10) - 2] + 'y-' + special[n % 10];
 		};
 
-		times?.forEach((value, index) => {
-			const key = `${stringifyNumber(index + 1)}At`;
-
-			longDescription = longDescription.replace(value, '{' + key + '}');
-			parameters[key] = value;
-		});
+		if (weatherType !== WEATHER_TYPES.CLEAR) {
+			times?.forEach((time, index) => {
+				const key = `${stringifyNumber(index + 1)}At`;
+	
+				longDescription = longDescription.replace(time, '{' + key + '}');
+				parameters[key] = time;
+			});
+		}
 		
+		// TODO: try to split description
 		return [{
 			long: longDescription,
 			short: forecastKeypoint ?? minutelyDescription,
