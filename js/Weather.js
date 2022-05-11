@@ -921,7 +921,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				const isPossible = needPossible(Math.max(
 					...slicedMinutes.slice(lastBoundIndex, boundIndex).map(minute => minute.chance)
 				));
-				const currentWeather = slicedMinutes[lastBoundIndex].weatherStatus;
+				const currentWeather = minutesForConditions[boundIndex].weatherStatus;
 				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
 
 				switch (apiVersion) {
