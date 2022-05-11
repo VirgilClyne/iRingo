@@ -889,11 +889,14 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			const condition = {
 				longTemplate: descriptions[descriptionsIndex].long,
 				shortTemplate: descriptions[descriptionsIndex].short,
-				parameters: convertTime(apiVersion, startTime, descriptions[descriptionsIndex].parameters),
+				parameters: {},
 			};
 			if (apiVersion !== "v1") {
 				condition.startTime = convertTime(apiVersion, startTime, lastBoundIndex + 1);
 			}
+			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
+				condition.parameters[key] = convertTime(apiVersion, startTime, value);
+			};
 
 			if (boundIndex === -1) {
 				const isPossible = needPossible(
