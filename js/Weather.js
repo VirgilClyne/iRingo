@@ -350,12 +350,12 @@ function weatherOl(lat, lng) {
 					throw new Error(`API returned the status: ${_data?.status}`);
 				}
 			} catch (e) {
-				$.log(`❗️ ${$.name}, getGridWeatherMinutely执行失败！`,
+				$.log(`❗️ ${$.name}, weatherOl执行失败！`,
 					`error = ${JSON.stringify(error || e)}, `,
 					`response = ${JSON.stringify(response)}, `,
 					`data = ${JSON.stringify(data)}`, '');
 			} finally {
-				$.log(`🎉 ${$.name}, getGridWeatherMinutely执行完成`, '');
+				$.log(`🎉 ${$.name}, weatherOl执行完成`, '');
 			}
 		});
 	});
@@ -426,13 +426,13 @@ async function colorfulClouds(
                     resolve(_data);
                 }
             } catch (e) {
-                $.logErr(`❗️${$.name}, ColorfulClouds: 无法获取数据 `,
+                $.logErr(`❗️${$.name}, colorfulClouds: 无法获取数据 `,
                                  `request = ${JSON.stringify(request)}`,
                                  `error = ${error || e} `,
                                  `response = ${JSON.stringify(response)} `,
                                  `data = ${data}`, '');
             } finally {
-                $.log(`🚧 ${$.name}, ColorfulClouds: ${type}调试信息 `,
+                $.log(`🚧 ${$.name}, colorfulClouds: ${type}调试信息 `,
                             ` request = ${JSON.stringify(request)} `,
                             `data = ${data}`, '');
                 resolve();
