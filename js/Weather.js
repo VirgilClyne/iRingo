@@ -902,8 +902,8 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				.findIndex(minute => minute.weatherStatus !== lastWeather);
 
 			let timeStatus = [TIME_STATUS.START];
-			const descriptionsIndex = conditions.length < descriptions.length ?
-				conditions.length : descriptions.length - 1;
+			const descriptionsIndex = conditions.length - 1 < descriptions.length ?
+				conditions.length - 1 : descriptions.length - 1;
 			const condition = {
 				longTemplate: descriptions[descriptionsIndex].long,
 				shortTemplate: descriptions[descriptionsIndex].short,
@@ -915,7 +915,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
 				$.log(
 					`🚧 ${$.name}, `,
-					`descriptions[${descriptionsIndex}].parameters = ${value}`,
+					`descriptions[${descriptionsIndex}].parameters.${key} = ${value}`,
 					`startTimeDate = ${startTimeDate}`, ""
 				);
 				condition.parameters[key] = convertTime(apiVersion, startTimeDate, value);
