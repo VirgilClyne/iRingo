@@ -550,6 +550,12 @@ function colorfulCloudsToNextHour(providerName, data) {
 			data?.result?.minutely?.precipitation_2h,
 			data?.result?.minutely?.probability,
 		),
+		[{
+			// TODO: extract times from descriptions
+			long: data?.result?.minutely?.description ?? data?.result?.forecast_keypoint,
+			short: data?.result?.forecast_keypoint ?? data?.result?.minutely?.description,
+			parameters: {},
+		}],
 	)
 }
 
@@ -562,13 +568,17 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @param {string} providerName - provider name
  * @param {string} units - { textStyle: "mmPerHour", charStyle: "mm\/hour" }
  * @param {Array} minutes - array of { weatherType: one of WEATHER_STATUS, precipitation, chance: percentage (0 to 100) }
+ * @param {Array} description - array of { long: "Rain starting in {firstAt} min", short: "Rain for the next hour", parameters: can be empty, { "firstAt": unixTimestamp }, }
  * @return {object}
  */
 function toNextHourObject(
-	timestamp, language, location, providerName, units, minutes,
+	timestamp, language, location, providerName, units, minutes, description,
 ) {
+	// description can be more than one and relative to summary
+	// but there are too much works to collect different language of templates of Apple Weather
+	// I wish Apple could provide description from app but not API
 	return {
-		timestamp, language, location, providerName, units, minutes,
+		timestamp, language, location, providerName, units, minutes, description,
 	};
 };
 
