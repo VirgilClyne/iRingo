@@ -439,8 +439,8 @@ async function ColorfulClouds(
 /**
  * Covert data from ColorfulClouds to NextHour object
  * @author WordlessEcho
- * @param {object} data - data from ColorfulClouds API
- * @return {object}
+ * @param {Object} data data from ColorfulClouds API
+ * @return {Object} object for `outputNextHour()`
  */
 function colorfulCloudsToNextHour(providerName, data) {
 	const serverTime = data?.server_time;
@@ -493,11 +493,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 		}
 	};
 
-	function toMinutes(weatherType, precipitations, probability) {
+	function toMinutes(standard, weatherType, precipitations, probability) {
 		if (!Array.isArray(precipitations)) return [];
-
-		const standard = units.textStyle === "millimetersPerHour"
-			? MMPERHR_PRECIPITATION_RANGE : RADAR_PRECIPITATION_RANGE;
 
 		let precipitationLevel = calculatePL(standard, precipitations[0]);
 		const bounds = [0];
@@ -526,7 +523,10 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 		const minutes = [];
 		bounds.forEach((bound, index, bounds) => {
-			const sameStatusMinutes = precipitations.slice(bound, bound + 1 < bounds.length ? bounds[index + 1] : bounds.length);
+			const sameStatusMinutes = precipitations.slice(
+				bound,
+				index + 1 < bounds.length ? bounds[index + 1] : precipitations.length - 1,
+			);
 			const weatherStatus = precipLevelToStatus(
 				weatherType, calculatePL(standard, Math.max(...sameStatusMinutes))
 			);
@@ -590,6 +590,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		units,
 		precipStandard,
 		toMinutes(
+			precipStandard,
 			getWeatherType(data?.result?.hourly?.skycon),
 			data?.result?.minutely?.precipitation_2h,
 			data?.result?.minutely?.probability,
@@ -599,7 +600,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 };
 
 /**
- * Produce a object for outputNextHour()
+ * Produce a object for `outputNextHour()`
  * @author WordlessEcho
  * @param {Number} timestamp - UNIX timestamp when you get data
  * @param {string} language - ISO 3166-1 language tag
@@ -607,9 +608,11 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @param {string} providerName - provider name
  * @param {string} units - { textStyle: "mmPerHour", charStyle: "mm\/hour" }
  * @param {Object} precipStandard - *_PRECIPITATION_RANGE
- * @param {Array} minutes - array of { weatherStatus: one of WEATHER_STATUS, precipitation, chance: percentage (0 to 100) }
- * @param {Array} description - array of { long: "Rain starting in {firstAt} min", short: "Rain for the next hour", parameters: can be empty, { "firstAt": minuteTime }, }
- * @return {object}
+ * @param {Array} minutes - array of { weatherStatus: one of WEATHER_STATUS, precipitation,
+ * chance: percentage (0 to 100) }
+ * @param {Array} description - array of { long: "Rain starting in {firstAt} min",
+ * short: "Rain for the next hour", parameters: can be empty, { "firstAt": minuteTime }, }
+ * @return {Object} object for `outputNextHour()`
  */
 function toNextHourObject(
 	timestamp, language, location, providerName, units, precipStandard, minutes, description,
