@@ -914,8 +914,8 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
 				$.log(
 					`🚧 ${$.name}, `,
-					`descriptions[${descriptionsIndex}].parameters.${key} = ${value}`,
-					`startTime = ${startTime}`
+					`descriptions[${descriptionsIndex}].parameters.${key} = ${value}, `,
+					`startTime = ${startTime}, `,
 					`new Date(startTime) = ${new Date(startTime)}`, ""
 				);
 				condition.parameters[key] = convertTime(apiVersion, new Date(startTime), value);
