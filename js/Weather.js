@@ -777,7 +777,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 	// TODO: set second to zero
 	// use next minute and set second to zero as next hour forecast as start time
-	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.serverTime), 1);
+	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.timestamp), 1);
 	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
 	weather[NAME].condition = getConditions(
 		apiVersion,
