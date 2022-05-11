@@ -561,11 +561,15 @@ function colorfulCloudsToNextHour(providerName, data) {
 		};
 
 		if (weatherType !== WEATHER_TYPES.CLEAR) {
-			times?.forEach((time, index) => {
-				const key = `${stringifyNumber(index + 1)}At`;
-	
-				longDescription = longDescription.replace(time, '{' + key + '}');
-				parameters[key] = time;
+			times?.forEach((timeInString, index) => {
+				const time = parseInt(timeInString);
+
+				if (!isNaN(time)) {
+					const key = `${stringifyNumber(index + 1)}At`;
+		
+					longDescription = longDescription.replace(timeInString, '{' + key + '}');
+					parameters[key] = time;
+				}
 			});
 		}
 		
