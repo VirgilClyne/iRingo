@@ -1005,7 +1005,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			);
 
 			const summary = {
-				condition: weatherStatusToType(slicedMinutes[lastBoundIndex]),
+				condition: weatherStatusToType(slicedMinutes[lastBoundIndex].weatherStatus),
 			};
 			if (apiVersion !== "v1") {
 				summary.startTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex);
