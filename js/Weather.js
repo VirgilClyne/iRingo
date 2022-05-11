@@ -904,7 +904,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				parameters: {},
 			};
 			if (apiVersion !== "v1") {
-				condition.startTime = convertTime(apiVersion, startTime, lastBoundIndex + 1);
+				condition.startTime = convertTime(apiVersion, startTime, lastBoundIndex);
 			}
 			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
 				condition.parameters[key] = convertTime(apiVersion, startTime, value);
@@ -925,7 +925,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 						.map(minute => minute.chance))
 				));
 				const currentWeather = slicedMinutes[boundIndex].weatherStatus;
-				const endTime = convertTime(apiVersion, startTime, boundIndex + 1);
+				const endTime = convertTime(apiVersion, startTime, boundIndex);
 
 				switch (apiVersion) {
 					case "v1":
@@ -1005,7 +1005,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				condition: weatherStatusToType(slicedMinutes[lastBoundIndex]),
 			};
 			if (apiVersion !== "v1") {
-				summary.startTime = convertTime(apiVersion, startTime, lastBoundIndex + 1);
+				summary.startTime = convertTime(apiVersion, startTime, lastBoundIndex);
 			}
 
 			if (!isClear) {
@@ -1034,7 +1034,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				summaries.push(summary);
 				break;
 			} else {
-				const endTime = convertTime(apiVersion, startTime, boundIndex + 1);
+				const endTime = convertTime(apiVersion, startTime, boundIndex);
 				switch (apiVersion) {
 					case "v1":
 						summary.validUntil = endTime;
