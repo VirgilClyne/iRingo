@@ -791,7 +791,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 	/***************** Fuctions *****************/
 	// mapping the standard preciptation level to 3 level standard of Apple
-	function toApplePrecipitation(standard, value) {
+	function toApplePrecipitation(standard, precipitation) {
 		const {
 			NO,
 			LIGHT,
@@ -799,7 +799,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			HEAVY,
 		} = standard;
 
-		switch (calculatePL(standard, value)) {
+		switch (calculatePL(standard, precipitation)) {
 			case PRECIPITATION_LEVEL.INVALID:
 				return PERCEIVED_DIVIDERS.INVALID;
 			case PRECIPITATION_LEVEL.NO:
@@ -810,7 +810,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 					// base of previous levels + percentage of the value in its level
 					PERCEIVED_DIVIDERS.BEGINNING +
 					// from the lower of range to value
-					(((value - NO.UPPER) * PERCEIVED_DECIMAL_PLACES) /
+					(((precipitation - NO.UPPER) * PERCEIVED_DECIMAL_PLACES) /
 						// sum of range
 						((LIGHT.UPPER - LIGHT.LOWER) * PERCEIVED_DECIMAL_PLACES))
 					// then divided them and multiple Apple level range
@@ -820,13 +820,13 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			case PRECIPITATION_LEVEL.MODERATE:
 				return (
 					PERCEIVED_DIVIDERS.BOTTOM +
-					(((value - LIGHT.UPPER) * PERCEIVED_DECIMAL_PLACES) /
+					(((precipitation - LIGHT.UPPER) * PERCEIVED_DECIMAL_PLACES) /
 						((MODERATE.UPPER - MODERATE.LOWER) * PERCEIVED_DECIMAL_PLACES))
 				);
 			case PRECIPITATION_LEVEL.HEAVY:
 				return (
 					PERCEIVED_DIVIDERS.MIDDLE +
-					(((value - MODERATE.UPPER) * PERCEIVED_DECIMAL_PLACES) /
+					(((precipitation - MODERATE.UPPER) * PERCEIVED_DECIMAL_PLACES) /
 						((HEAVY.UPPER - HEAVY.LOWER) * PERCEIVED_DECIMAL_PLACES))
 				);
 			case PRECIPITATION_LEVEL.STORM:
@@ -845,11 +845,11 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 			if (apiVersion == "v1") {
 				minute.startAt = convertTime(apiVersion, new Date(startTime), index);
-				minute.perceivedIntensity = toApplePrecipitation(nextHourObject.precipStandard, value);
+				minute.perceivedIntensity = toApplePrecipitation(nextHourObject.precipStandard, precipitation);
 			} else {
 				minute.startTime = convertTime(apiVersion, new Date(startTime), index);
 				minute.precipIntensityPerceived = toApplePrecipitation(
-					nextHourObject.precipStandard, value,
+					nextHourObject.precipStandard, precipitation,
 				);
 			}
 
