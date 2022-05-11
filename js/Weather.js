@@ -449,10 +449,6 @@ async function colorfulClouds(
  */
 function colorfulCloudsToNextHour(providerName, data) {
 	const serverTime = parseInt(data?.server_time);
-	// TODO: detect timezone?
-	const timezoneShift = parseInt(data?.tzshift);
-	const timestamp = serverTime && timezoneShift
-		? (serverTime + timezoneShift) * 1000 : (+ new Date());
 	let unit;
 	let precipStandard;
 
@@ -582,7 +578,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 	};
 
 	return toNextHourObject(
-		timestamp,
+		serverTime ? serverTime * 1000 : (+ new Date()),
 		// this API doesn't support language switch
 		// replace `zh_CN` to `zh-CN`
 		data.lang?.replace('_', '-') ?? "en-US",
