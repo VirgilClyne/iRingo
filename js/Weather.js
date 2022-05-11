@@ -781,14 +781,14 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	// TODO: set second to zero
 	// use next minute and set second to zero as next hour forecast as start time
 	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.timestamp), 1);
-	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
+	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, nextHourObject.timestamp);
 	weather[NAME].condition = getConditions(
 		apiVersion,
 		nextHourObject.minutes,
-		weather[NAME].startTime,
+		nextHourObject.timestamp,
 		nextHourObject.descriptions,
 	);
-	weather[NAME].summary = getSummaries(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
+	weather[NAME].summary = getSummaries(apiVersion, nextHourObject.minutes, nextHourObject.timestamp);
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, "");
 	return weather;
 
@@ -887,6 +887,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		function needPossible (precipChance) { precipChance < ADD_POSSIBLE_UPPER };
 
 		const slicedMinutes = minutesData.slice(0, 59);
+		const startTimeDate = new Date(startTime);
 		const conditions = [{}];
 
 		// initialize data
@@ -909,15 +910,15 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				parameters: {},
 			};
 			if (apiVersion !== "v1") {
-				condition.startTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex);
+				condition.startTime = convertTime(apiVersion, startTimeDate, lastBoundIndex + 1);
 			}
 			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
 				$.log(
 					`🚧 ${$.name}, `,
 					`descriptions[${descriptionsIndex}].parameters = ${value}`,
-					`new Date(startTime) = ${new Date(startTime)}`, ""
+					`startTimeDate = ${startTimeDate}`, ""
 				);
-				condition.parameters[key] = convertTime(apiVersion, new Date(startTime), value);
+				condition.parameters[key] = convertTime(apiVersion, startTimeDate, value);
 			};
 
 			if (boundIndex === -1) {
@@ -935,7 +936,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 					...slicedMinutes.slice(lastBoundIndex, boundIndex).map(minute => minute.chance)
 				));
 				const currentWeather = minutesForConditions[boundIndex].weatherStatus;
-				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
+				const endTime = convertTime(apiVersion, startTimeDate, boundIndex);
 
 				switch (apiVersion) {
 					case "v1":
@@ -1002,6 +1003,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		const slicedMinutes = minutesData.slice(0, 59);
 
 		// initialize data
+		const startTimeDate = new Date(startTime);
 		let summaries = [{}];
 		let lastBoundIndex = 0;
 
@@ -1017,7 +1019,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				condition: weatherStatusToType(slicedMinutes[lastBoundIndex].weatherStatus),
 			};
 			if (apiVersion !== "v1") {
-				summary.startTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex);
+				summary.startTime = convertTime(apiVersion, startTimeDate, lastBoundIndex);
 			}
 
 			if (!isClear) {
@@ -1046,7 +1048,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				summaries.push(summary);
 				break;
 			} else {
-				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
+				const endTime = convertTime(apiVersion, startTimeDate, boundIndex);
 				switch (apiVersion) {
 					case "v1":
 						summary.validUntil = endTime;
