@@ -634,7 +634,7 @@ function toNextHourObject(
 	// description can be more than one and relative to summary
 	// but there are too much works to collect different language of templates of Apple Weather
 	// I wish Apple could provide description from app but not API
-	return {
+	const nextHourObject =  {
 		timestamp,
 		language,
 		location,
@@ -644,6 +644,13 @@ function toNextHourObject(
 		minutes,
 		description,
 	};
+
+	$.log(
+		`⚠️ ${$.name}, ${toNextHourObject.name}: `,
+		`nextHourObject = ${JSON.stringify(nextHourObject)}`, ''
+	);
+
+	return nextHourObject;
 };
 
 /**
