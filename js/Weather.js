@@ -914,6 +914,9 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				timeStatus = [TIME_STATUS.CONSTANT];
 
 				condition.token = toToken(isPossible, weatherStatus, timeStatus);
+
+				conditions.push(condition);
+				break;
 			} else {
 				const isPossible = needPossible(Math.max(
 					...slicedMinutes.slice(lastBoundIndex, boundIndex).map(minute => minute.chance)
@@ -968,17 +971,11 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 						condition.token = toToken(isPossible, weatherStatus, timeStatus);
 						break;
 				}
-			}
 
-			if (lastBoundIndex !== -1) {
 				conditions.push(condition);
 
-				if (boundIndex !== -1) {
-					lastBoundIndex += boundIndex;
-					weatherStatus = [minutesForConditions[boundIndex].weatherStatus];
-				} else {
-					lastBoundIndex = boundIndex;
-				}
+				lastBoundIndex += boundIndex;
+				weatherStatus = [minutesForConditions[boundIndex].weatherStatus];
 			}
 		}
 
@@ -1032,7 +1029,10 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				}
 			}
 
-			if (boundIndex !== -1) {
+			if (boundIndex === -1) {
+				summaries.push(summary);
+				break;
+			} else {
 				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
 				switch (apiVersion) {
 					case "v1":
@@ -1040,12 +1040,10 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 					case "v2":
 						summary.endTime = endTime;
 				}
-			}
 
-			if (lastBoundIndex !== -1) {
 				summaries.push(summary);
 
-				lastBoundIndex = boundIndex === -1 ? boundIndex : lastBoundIndex + boundIndex;
+				lastBoundIndex += boundIndex;
 			}
 		};
 
