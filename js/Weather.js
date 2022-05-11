@@ -972,7 +972,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				array.push(condition);
 
 				lastBoundIndex = boundIndex;
-				weatherStatus = [currentWeather];
+				if (boundIndex !== -1) weatherStatus = [slicedMinutes[boundIndex].weatherStatus];
 			}
 		});
 
