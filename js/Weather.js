@@ -357,6 +357,7 @@ function getGridWeatherMinutely(lat, lng) {
 		});
 	});
 };
+
 /**
  * ColorfulClouds
  * @author WordlessEcho
@@ -585,7 +586,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		),
 		toDescriptions(data?.result?.forecast_keypoint, data?.result?.minutely?.description),
 	)
-}
+};
 
 /**
  * Produce a object for outputNextHour()
@@ -1276,6 +1277,13 @@ function calculatePL(standard, pptn) {
 	else return PRECIPITATION_LEVEL.STORM;
 };
 
+/**
+ * Convert PRECIPITATION_LEVEL to WEATHER_TYPES
+ * @author WordlessEcho
+ * @param {string} weatherType - one of WEATHER_TYPES
+ * @param {Number} precipitationLevel - one of PRECIPITATION_LEVEL
+ * @returns {string}
+ */
 function precipLevelToStatus(weatherType, precipitationLevel) {
 	const {
 		INVALID,
@@ -1306,7 +1314,7 @@ function precipLevelToStatus(weatherType, precipitationLevel) {
 			$.logErr(`❗️${$.name}, unexpeted precipitation level, `, `precipitationLevel = ${precipitationLevel}`);
 			return WEATHER_STATUS.CLEAR;
 	}
-}
+};
 
 /**
  * create Metadata
