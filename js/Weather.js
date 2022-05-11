@@ -1156,13 +1156,13 @@ function weatherStatusToType(weatherStatus) {
 		case DRIZZLE:
 		case RAIN:
 		case HEAVY_RAIN:
-			return WEATHER_STATUS.RAIN;
+			return WEATHER_TYPES.RAIN;
 		case SLEET:
-			return WEATHER_STATUS.SLEET;
+			return WEATHER_TYPES.SLEET;
 		case FLURRIES:
 		case SNOW:
 		case HEAVY_SNOW:
-			return WEATHER_STATUS.SNOW;
+			return WEATHER_TYPES.SNOW;
 	}
 };
 
