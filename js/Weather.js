@@ -485,6 +485,57 @@ async function ColorfulClouds(
 		}
 	};
 
+	function toMinutes(weatherType, precipitations, probability) {
+		if (!Array.isArray(precipitations)) return [];
+
+		const standard = unit.textStyle === "millimetersPerHour"
+			? MMPERHR_PRECIPITATION_RANGE : RADAR_PRECIPITATION_RANGE;
+
+		let precipitationLevel = calculatePL(standard, precipitations[0]);
+		const bounds = [0];
+		while (true) {
+			const lastBound = bounds[bounds.length - 1];
+			const relativeBound = precipitations.slice(lastBound).findIndex(value => {
+				if (precipitationLevel < PRECIPITATION_LEVEL.LIGHT) {
+					return calculatePL(standard, value) > PRECIPITATION_LEVEL.NO;
+				} else if (precipitationLevel > PRECIPITATION_LEVEL.MODERATE) {
+					return calculatePL(standard, value) < PRECIPITATION_LEVEL.HEAVY;
+				} else {
+					return calculatePL(standard, value) < PRECIPITATION_LEVEL.LIGHT ||
+						calculatePL(standard, value) > PRECIPITATION_LEVEL.MODERATE;
+				}
+			});
+
+			if (relativeBound !== -1) {
+				const bound = relativeBound + lastBound;
+
+				precipitationLevel = calculatePL(standard, bound);
+				bounds.push(bound);
+			} else {
+				break;
+			};
+		};
+
+		const minutes = [];
+		bounds.forEach((bound, index, bounds) => {
+			const sameStatusMinutes = precipitations.slice(bound, bound + 1 < bounds.length ? bounds[index + 1] : bounds.length);
+			const weatherStatus = precipLevelToStatus(
+				weatherType, calculatePL(standard, Math.max(...sameStatusMinutes))
+			);
+
+			sameStatusMinutes.map((value, index) => minutes.push({
+				weatherStatus,
+				precipitations: value,
+				chance: weatherStatus > PRECIPITATION_LEVEL.NO
+					// calculate order, 1 as first index
+					// because we have only 4 chances per half hour from API
+					? parseInt(probability[parseInt((1 + bound + index) / 30)] * 100) : 0
+			}));
+		});
+
+		return minutes;
+	};
+
 	return toNextHourObject(
 		serverTime ? serverTime * 1000 : (+ new Date()),
 		data.lang?.replace('_', '-') ?? "en-US",
@@ -494,8 +545,11 @@ async function ColorfulClouds(
 		},
 		providerName,
 		unit,
-		// TODO
-		Array(60).map(value => value = { weatherStatus: WEATHER_STATUS.RAIN, precipitation: 0.3, chance: 100 }),
+		toMinutes(
+			getWeatherType(data?.result?.hourly?.skycon),
+			data?.result?.minutely?.precipitation_2h,
+			data?.result?.minutely?.probability,
+		),
 	)
 }
 
@@ -1183,6 +1237,38 @@ function calculatePL(standard, pptn) {
 	else if (pptn < HEAVY.UPPER) return PRECIPITATION_LEVEL.HEAVY;
 	else return PRECIPITATION_LEVEL.STORM;
 };
+
+function precipLevelToStatus(weatherType, precipitationLevel) {
+	const {
+		INVALID,
+		NO,
+		LIGHT,
+		MODERATE,
+		HEAVY,
+		STORM,
+	} = PRECIPITATION_LEVEL;
+
+	if (
+		weatherType === WEATHER_TYPES.CLEAR ||
+		precipitationLevel === INVALID ||
+		precipitationLevel === NO
+	) {
+		return WEATHER_STATUS.CLEAR;
+	}
+
+	switch (precipitationLevel) {
+		case LIGHT:
+			return weatherType === WEATHER_TYPES.RAIN ? WEATHER_STATUS.DRIZZLE : WEATHER_STATUS.FLURRIES;
+		case MODERATE:
+			return weatherType === WEATHER_TYPES.RAIN ? WEATHER_STATUS.RAIN : WEATHER_STATUS.SNOW;
+		case HEAVY:
+		case STORM:
+			return weatherType === WEATHER_TYPES.RAIN ? WEATHER_STATUS.HEAVY_RAIN : WEATHER_STATUS.HEAVY_SNOW;
+		default:
+			$.logErr(`❗️${$.name}, unexpeted precipitation level, `, `precipitationLevel = ${precipitationLevel}`);
+			return WEATHER_STATUS.CLEAR;
+	}
+}
 
 /**
  * create Metadata
