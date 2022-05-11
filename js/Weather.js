@@ -534,9 +534,9 @@ function colorfulCloudsToNextHour(providerName, data) {
 			);
 			const precipitationLevel = calculatePL(standard, Math.max(...sameStatusMinutes));
 
-			sameStatusMinutes.map((minute, index) => minutes.push({
+			sameStatusMinutes.forEach((minute, index) => minutes.push({
 				weatherStatus: precipLevelToStatus(weatherType, precipitationLevel),
-				precipitations: minute,
+				precipitation: minute,
 				chance: precipitationLevel > PRECIPITATION_LEVEL.NO
 					// calculate order, 1 as first index
 					// because we have only 4 chances per half hour from API
