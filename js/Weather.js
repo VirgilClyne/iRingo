@@ -615,7 +615,7 @@ function colorfulCloudsToNextHour(providerName, data) {
  * @param {Object} precipStandard - `*_PRECIPITATION_RANGE`
  * @param {Array} minutes - array of `{ weatherStatus: one of WEATHER_STATUS, precipitation,
  * chance: percentage (0 to 100) }`
- * @param {Array} description - array of `{ long: "Rain starting in {firstAt} min",
+ * @param {Array} descriptions - array of `{ long: "Rain starting in {firstAt} min",
  * short: "Rain for the next hour", parameters: (can be empty) { "firstAt": minutesNumber } }`
  * @return {Object} object for `outputNextHour()`
  */
@@ -627,7 +627,7 @@ function toNextHourObject(
 	unit,
 	precipStandard,
 	minutes,
-	description,
+	descriptions,
 ) {
 	// it looks like Apple doesn't care unit
 
@@ -642,7 +642,7 @@ function toNextHourObject(
 		unit,
 		precipStandard,
 		minutes,
-		description,
+		descriptions,
 	};
 
 	$.log(
@@ -739,7 +739,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	// 3 demical places in `precipIntensityPerceived`
 	const PERCEIVED_DECIMAL_PLACES = 1000;
 	// 2 demical places in `precipIntensity`
-	const INTENSITY_DECIMAL_PLACES = 100;
+	const _INTENSITY_DECIMAL_PLACES = 100;
 	// the graph of Apple weather is divided into three parts
 	const PERCEIVED_DIVIDERS = { INVALID: -1, BEGINNING: 0, BOTTOM: 1, MIDDLE: 2, TOP: 3, };
 
@@ -779,8 +779,13 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	// use next minute and set second to zero as next hour forecast as start time
 	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.serverTime), 1);
 	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
-	weather[NAME].condition = getConditions(apiVersion, nextHourObject, weather[NAME].minutes);
-	weather[NAME].summary = getSummaries(apiVersion, weather[NAME].minutes);
+	weather[NAME].condition = getConditions(
+		apiVersion,
+		nextHourObject.minutes,
+		weather[NAME].startTime,
+		nextHourObject.descriptions,
+	);
+	weather[NAME].summary = getSummaries(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, "");
 	return weather;
 
