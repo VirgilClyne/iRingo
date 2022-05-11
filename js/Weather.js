@@ -891,8 +891,8 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			const boundIndex = slicedMinutes.findIndex(minute => minute.weatherStatus !== lastWeather);
 
 			let timeStatus = [TIME_STATUS.START];
-			const descriptionsIndex = conditions.length < descriptions.length ?
-				conditions.length : descriptions.length;
+			const descriptionsIndex = array.length < descriptions.length ?
+				array.length : descriptions.length;
 			const condition = {
 				longTemplate: descriptions[descriptionsIndex].long,
 				shortTemplate: descriptions[descriptionsIndex].short,
