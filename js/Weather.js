@@ -646,10 +646,10 @@ function toNextHourObject(
 		descriptions,
 	};
 
-	$.log(
-		`⚠️ ${$.name}, ${toNextHourObject.name}: `,
-		`nextHourObject = ${JSON.stringify(nextHourObject)}`, ''
-	);
+	// $.log(
+	// 	`⚠️ ${$.name}, ${toNextHourObject.name}: `,
+	// 	`nextHourObject = ${JSON.stringify(nextHourObject)}`, ''
+	// );
 
 	return nextHourObject;
 };
