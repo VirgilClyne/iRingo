@@ -610,7 +610,7 @@ async function WAQI(type = "", input = {}) {
 	};
 
 	// extract minute times that helpful for Apple to use cache data
-	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription, language) {
+	function toDescriptions(isClear, forecastKeypoint, minutelyDescription, language) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
 		// match all numbers in descriptions to array
 		const times = longDescription?.match(/\d+/g);
@@ -692,7 +692,7 @@ async function WAQI(type = "", input = {}) {
 			return deca[Math.floor(n / 10) - 2] + 'y-' + special[n % 10];
 		};
 
-		if (weatherType !== WEATHER_TYPES.CLEAR) {
+		if (!isClear) {
 			times?.forEach((timeInString, index) => {
 				const time = parseInt(timeInString);
 
@@ -733,7 +733,7 @@ async function WAQI(type = "", input = {}) {
 			data?.result?.minutely?.probability,
 		),
 		toDescriptions(
-			getWeatherType(data?.result?.hourly?.skycon),
+			!(Math.max(...data?.result?.minutely?.precipitation ?? [0]) >= precipStandard.NO.UPPER),
 			data?.result?.forecast_keypoint,
 			data?.result?.minutely?.description,
 			data?.lang,
