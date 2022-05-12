@@ -556,26 +556,43 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 		function insertLastingToDescription(language, description) {
 			const FIRST_AT = "{firstAt}";
-			const splitedDescription = description?.split(FIRST_AT, 2)[1];
+			const splitedDescriptions = description?.split(FIRST_AT);
 
 			switch (language) {
 				case "en_GB":
-					// skip firstAt and find {*At} by `{`
+					// skip firstAt and find {*At} by `{` or `}`
 					// append `for lasting ` to description
-					return splitedDescription.replaceAll("{", `${LASTINGS.en_GB}{`);
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("{", `${LASTINGS.en_GB} {`);
+					break;
 				case "zh_CN":
-					return splitedDescription.replaceAll("{", `${LASTINGS.zh_CN}{`);
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("{", `${LASTINGS.zh_CN}{`);
+					break;
 				case "zh_TW":
-					return splitedDescription.replaceAll("{", `${LASTINGS.zh_TW}{`);
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("{", `${LASTINGS.zh_TW}{`);
+					break;
 				case "ja":
 					// Japanese support from ColorfulClouds is broken sometime
 					// https://lolic.at/notice/AJNH316TTSy1fRlOka
 					// remove space between the number and word
-					return splitedDescription.replaceAll("} 分後", `}分${LASTINGS.ja}後`);
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("} 分後", `}分${LASTINGS.ja}後`);
+					break;
 				case "en_US":
 				default:
-					return splitedDescription.replaceAll("{", `${LASTINGS.en_US}{`);
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("{", `${LASTINGS.en_US} {`);
+					break;
 			}
+
+			return splitedDescriptions.join(FIRST_AT);
 		};
 
 		// https://stackoverflow.com/a/20426113
