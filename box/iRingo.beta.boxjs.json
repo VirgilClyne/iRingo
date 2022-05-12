@@ -116,12 +116,12 @@
 					"desc": "如果您不知道这个开关是用来做什么的，请保持关闭"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.WeatherType",
-					"name": "[下一小时降水]雨雪类型",
+					"id": "@iRingo.Weather.NextHour.Debug.WeatherStatus",
+					"name": "[下一小时降水]天气类型",
 					"val": "rain",
 					"type": "text",
 					"placeholder": "rain",
-					"desc": "值应为claer、rain或snow"
+					"desc": "请参见Weather.js中的WEATHER_STATUS"
 				},
 				{
 					"id": "@iRingo.Weather.NextHour.Debug.Chance",
@@ -141,19 +141,19 @@
 				},
 				{
 					"id": "@iRingo.Weather.NextHour.Debug.PrecipLower",
-					"name": "[下一小时降水]随机生成的降水数据的下限（雷达）",
-					"val": "0.031",
+					"name": "[下一小时降水]随机生成的降水数据的下限（mm/hr）",
+					"val": "0.08",
 					"type": "text",
-					"placeholder": "0.031",
-					"desc": "随机生成的precipIntensity的下限，四位小数"
+					"placeholder": "0.08",
+					"desc": "随机生成的precipIntensity的下限，两位小数"
 				},
 				{
 					"id": "@iRingo.Weather.NextHour.Debug.PrecipUpper",
-					"name": "[下一小时降水]随机生成的降水数据的上限（雷达）",
-					"val": "0.48",
+					"name": "[下一小时降水]随机生成的降水数据的上限（mm/hr）",
+					"val": "51.30",
 					"type": "text",
-					"placeholder": "0.48",
-					"desc": "随机生成的precipIntensity的上限，四位小数"
+					"placeholder": "51.30",
+					"desc": "随机生成的precipIntensity的上限，两位小数"
 				},
 				{
 					"id": "@iRingo.Weather.NextHour.Debug.IntensityLower",
