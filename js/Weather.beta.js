@@ -1506,7 +1506,7 @@ function toColorfulCloudsLang(languageWithReigon) {
  * @author Mozilla
  * @param {Number} min - minimum of random number
  * @param {Number} max - maximum of random number
- * @returns {string} random number in this range (not include maximum)
+ * @returns {Number} random number in this range (not include maximum)
  */
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
