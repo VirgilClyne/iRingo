@@ -1,0 +1,25 @@
+#!name= Enable Siri Suggestions 🇹🇼TW
+#!desc=(V1) 在聚焦搜索(Spotlight)和查询(Look Up)中启用Siri建议(Siri Suggestions)功能 
+#!openUrl=http://boxjs.com/#/app/iRingo.Siri
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo#siri与搜索
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
+
+[URL Rewrite]
+# Redirect Siri Suggestions Service 
+# Bag (iOS/macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/bag.*)(cc=[A-Z]{2})(.*) $1com$3cc=TW$5 header
+# General Spotlight & Look Up Search (iOS/macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cc=[A-Z]{2})(.*) $1com$3cc=TW$5 header
+# General Info Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=[^kg][^tv][^movies])(.*) $1com$3$4$5cc=TW$7$8$9 header
+# Siri Knowledge(Siri资料) Card (Spotlight@macOS & Siri@iOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:kgcn|kg))(.*) $1com$3$4$5cc=TW$7$8$9 header
+# Siri Knowledge(Siri资料) Card (Spotlight@iOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/search.*)(cardDomain=kg)(.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*) $1com$3$4$5$6$7cc=TW$9 header
+# tv Movies and TV Show Card (macOS)
+(^https?:\/\/api.*\.smoot\.apple\.)(com|cn)(\/card.*)(card_locale=[a-zA-z\-]{2,7}_[A-Z]{2})(.*)(cc=[A-Z]{2})(.*)(include=(?:tv|movies))(.*)(q=(?:tv|movies)%3A)(.*)(%2F)([a-z]{2}-[A-Z]{2})(.*) $1com$3$4$5cc=TW$7$8$9$10$11$12$13$14 header
+
+[MITM]
+hostname = api*.smoot.apple.com, api*.smoot.apple.cn
