@@ -166,9 +166,9 @@
 				{
 					"id": "@iRingo.Weather.NextHour.Debug.IntensityUpper",
 					"name": "[下一小时降水]随机生成UI显示数据的上限",
-					"val": "4",
+					"val": "3",
 					"type": "text",
-					"placeholder": "4",
+					"placeholder": "3",
 					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的上限，最大为3，三位小数"
 				},
 				{
