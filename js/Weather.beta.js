@@ -99,9 +99,9 @@ const WEATHER_STATUS = {
 
 				if (!(data?.forecastNextHour?.metadata?.providerName || data?.next_hour?.provider_name)) {
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
-						if (Settings?.Weather?.NextHour?.Debug?.Switch) {
+						if (Settings.NextHour?.Debug?.Switch) {
 							$.log(`⚠️ ${$.name}, debug模式已开启`, '');
-							const debugOptions = Settings.Weather.NextHour.Debug;
+							const debugOptions = Settings.NextHour.Debug;
 
 							data = await outputNextHour(
 								Params.ver,
