@@ -448,6 +448,14 @@ async function colorfulClouds(
  * @return {Object} object for `outputNextHour()`
  */
 function colorfulCloudsToNextHour(providerName, data) {
+	const LASTINGS = {
+		"zh_CN": "持续",
+		"zh_TW": "持續",
+		"ja": "続きます",
+		"en_US": "lasting",
+		// ColorfulClouds seems not prefer to display multiple times in en_GB
+		"en_GB": "lasting",
+	};
 	const serverTime = parseInt(data?.server_time);
 	let unit;
 	let precipStandard;
@@ -541,10 +549,33 @@ function colorfulCloudsToNextHour(providerName, data) {
 		return minutes;
 	};
 
-	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription) {
+	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription, language) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
 		const times = longDescription?.match(/\d+/g);
 		const parameters = {};
+
+		function insertLastingToDescription(language, description) {
+			const FIRST_AT = "{firstAt}";
+			const splitedDescription = description?.split(FIRST_AT, 2)[1];
+
+			switch (language) {
+				case "en_GB":
+					// skip firstAt and find {*At} by `{`
+					// append `for lasting ` to description
+					return splitedDescription.replaceAll("{", `${LASTINGS.en_GB}{`);
+				case "zh_CN":
+					return splitedDescription.replaceAll("{", `${LASTINGS.zh_CN}{`);
+				case "zh_TW":
+					return splitedDescription.replaceAll("{", `${LASTINGS.zh_TW}{`);
+				case "ja":
+					// Japanese support from ColorfulClouds is broken sometime
+					// https://lolic.at/notice/AJNH316TTSy1fRlOka
+					return splitedDescription.replaceAll("後", `${LASTINGS.ja}後`);
+				case "en_US":
+				default:
+					return splitedDescription.replaceAll("{", `${LASTINGS.en_US}{`);
+			}
+		};
 
 		// https://stackoverflow.com/a/20426113
 		function stringifyNumber(n) {
@@ -566,14 +597,15 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 				if (!isNaN(time)) {
 					const key = `${stringifyNumber(index + 1)}At`;
-		
+
 					longDescription = longDescription.replace(timeInString, '{' + key + '}');
+					// times after {firstAt} is lasting time in Apple Weather
+					longDescription = insertLastingToDescription(language, longDescription);
 					parameters[key] = time;
 				}
 			});
 		}
-		
-		// TODO: try to split description
+
 		return [{
 			long: longDescription,
 			short: forecastKeypoint ?? minutelyDescription,
@@ -602,7 +634,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 		toDescriptions(
 			getWeatherType(data?.result?.hourly?.skycon),
 			data?.result?.forecast_keypoint,
-			data?.result?.minutely?.description
+			data?.result?.minutely?.description,
+			data?.lang,
 		),
 	)
 };
@@ -778,7 +811,6 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	weather[NAME].metadata = Metadata(metadata);
 	// 注入数据
 
-	// TODO: set second to zero
 	// use next minute and set second to zero as next hour forecast as start time
 	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.timestamp), 1);
 	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
