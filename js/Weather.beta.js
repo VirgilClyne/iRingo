@@ -773,7 +773,7 @@ function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
 			chance: 0,
 		};
 
-		if (index + 1 >= delay) {
+		if (index + 1 > delay) {
 			minute.precipitation = getRandomPrecipitation(precipLower, precipUpper);
 			minute.weatherStatus = weatherStatus;
 			minute.chance = chance;
