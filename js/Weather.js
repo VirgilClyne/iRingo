@@ -435,21 +435,30 @@ async function colorfulClouds(
 
 				if (error) {
 					throw new Error(error);
-				} else if (data) {
-					$.log(
-						`🎉 ${$.name}, ${colorfulClouds.name}: 获取完成, `,
-						`timestamp = ${timestamp}, `,
-						`realtime = ${JSON.stringify(_data?.result?.realtime)}`, ''
-					);
+				}
+				
+				if (_data.status === "ok") {
+					$.log(`🎉 ${$.name}, ${colorfulClouds.name}: 获取完成`, '');
 					resolve(_data);
+				} else {
+					$.logErr(
+						`❗️ ${$.name}, ${colorfulClouds.name}: API返回失败, `,
+						`status = ${_data?.status}, `, ''
+					);
+
+					throw new Error(
+						_data?.error ??
+						`API returned status: ${_data?.status}` ??
+						"Failed to request api.caiyunapp.com"
+					);
 				}
 			} catch (e) {
 				$.logErr(
 					`❗️${$.name}, ${colorfulClouds.name}: 无法获取数据 `,
 					`request = ${JSON.stringify(request)}, `,
-					`error = ${error || e}, `,
+					`error = ${JSON.stringify(error || e)}, `,
 					`response = ${JSON.stringify(response)}, `,
-					`data = ${data}`, ''
+					`data = ${JSON.stringify(data)}`, ''
 				);
 			} finally {
 				// $.log(
