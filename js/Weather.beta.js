@@ -114,6 +114,11 @@ const WEATHER_STATUS = {
 								data,
 								debugOptions,
 							);
+
+							$.log(
+								`🚧 ${$.name}, debug模式: `,
+								`nextHour = ${JSON.stringify(data?.forecastNextHour ?? data?.next_hour)}`, ""
+							);
 						} else {
 							const minutelyData = await weatherOl(Params.lat, Params.lng);
 							const providerName = "气象在线";
