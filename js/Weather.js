@@ -484,12 +484,12 @@ async function colorfulClouds(
 function colorfulCloudsToNextHour(providerName, data) {
 	// words that used to insert into description
 	const LASTINGS = {
-		"zh_CN": "持续",
-		"zh_TW": "持續",
-		"ja": "続きます",
-		"en_US": "lasting",
+		"zh_CN": "再过",
+		"zh_TW": "再過",
+		"ja": "その後",
+		"en_US": "after that",
 		// ColorfulClouds seems not prefer to display multiple times in en_GB
-		"en_GB": "lasting",
+		"en_GB": "after that",
 	};
 	// the unit of server_time is second
 	const serverTime = parseInt(data?.server_time);
@@ -605,18 +605,13 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 			switch (language) {
 				case "en_GB":
+					// take second part to skip firstAt
+					// append `after that` to description
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
 							// remove stopping & later
 							// (.*?) will match `*At`
-							.replaceAll(/stopping {(.*?)} min later/g, "{$1} min");
-
-					// take second part to skip firstAt
-					// find {*At} by `{` or `}`
-					// append `for lasting ` to description
-					splitedDescriptions[splitedDescriptions.length - 1] =
-						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("{", `${LASTINGS.en_GB} {`);
+							.replaceAll("} min later", `{$1} min later ${LASTINGS.en_US}`);
 					break;
 				case "zh_CN":
 					splitedDescriptions[splitedDescriptions.length - 1] =
@@ -639,20 +634,17 @@ function colorfulCloudsToNextHour(providerName, data) {
 				case "ja":
 					// Japanese support from ColorfulClouds is broken for sometime
 					// https://lolic.at/notice/AJNH316TTSy1fRlOka
-					// remove space between the number and word
+
+					// TODO: I am not familiar for Japanese, contributions welcome
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("} 分後", `}分${LASTINGS.ja}後`);
+							.replaceAll("{", `${LASTINGS.ja}{`);
 					break;
 				case "en_US":
 				default:
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll(/stopping {(.*?)} min later/g, "{$1} min");
-
-					splitedDescriptions[splitedDescriptions.length - 1] =
-						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("{", `${LASTINGS.en_US} {`);
+							.replaceAll("} min later", `{$1} min later ${LASTINGS.en_US}`);
 					break;
 			}
 
