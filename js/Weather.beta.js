@@ -750,13 +750,6 @@ function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
 	const precipLower = parseFloat(PrecipLower);
 	const precipUpper = parseFloat(PrecipUpper);
 
-	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
-	function getRandomInt(min, max) {
-		min = Math.ceil(min);
-		max = Math.floor(max);
-		return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
-	}
-
 	function getRandomPrecipitation(lower, upper) {
 		// 2 demical places in `precipIntensity`
 		const INTENSITY_DECIMAL_PLACES = 100;
@@ -1506,6 +1499,20 @@ function toColorfulCloudsLang(languageWithReigon) {
 		return "en_US";
 	}
 };
+
+/**
+ * get random int (not include maximum)
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+ * @author Mozilla
+ * @param {Number} min - minimum of random number
+ * @param {Number} max - maximum of random number
+ * @returns {string} random number in this range (not include maximum)
+ */
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+}
 
 /***************** Env *****************/
 // prettier-ignore
