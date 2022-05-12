@@ -448,6 +448,7 @@ async function colorfulClouds(
  * @return {Object} object for `outputNextHour()`
  */
 function colorfulCloudsToNextHour(providerName, data) {
+	// words that used to insert into description
 	const LASTINGS = {
 		"zh_CN": "持续",
 		"zh_TW": "持續",
@@ -456,21 +457,21 @@ function colorfulCloudsToNextHour(providerName, data) {
 		// ColorfulClouds seems not prefer to display multiple times in en_GB
 		"en_GB": "lasting",
 	};
+	// the unit of server_time is second
 	const serverTime = parseInt(data?.server_time);
 	let unit;
 	let precipStandard;
 
 	// https://docs.caiyunapp.com/docs/tables/unit/
-	// https://www.convertunits.com/
 	switch (data?.unit) {
 		case "SI":
 			unit = "metersPerSecond";
-			// TODO: find out standard of this unit
+			// TODO: find out the standard of this unit
 			precipStandard = RADAR_PRECIPITATION_RANGE;
 			break;
 		case "imperial":
 			unit = "inchesPerHour";
-			// TODO: find out standard of this unit
+			// TODO: find out the standard of this unit
 			precipStandard = RADAR_PRECIPITATION_RANGE;
 			break;
 		case "metric:v2":
@@ -486,10 +487,10 @@ function colorfulCloudsToNextHour(providerName, data) {
 	}
 
 	// https://docs.caiyunapp.com/docs/tables/skycon/
+	// differ rain or snow
 	function getWeatherType(skycon) {
 		// enough for us
 		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
-		// do we need to slice it?
 		const ccWeatherType = skycon?.map(hourly => hourly.value)?.find(value =>
 			value.includes(CAIYUN_SKYCON_KEYWORDS.RAIN) || value.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
 		);
@@ -509,9 +510,12 @@ function colorfulCloudsToNextHour(providerName, data) {
 	function toMinutes(standard, weatherType, precipitations, probability) {
 		if (!Array.isArray(precipitations)) return [];
 
+		// initialze 0 as first bound
 		const bounds = [0];
 		for (const lastBound of bounds) {
 			const precipitationLevel = calculatePL(standard, precipitations[lastBound]);
+			// find different precipitation level as next bound
+			// this will ignore differences between the light and rain to avoid too many light weather
 			const relativeBound = precipitations.slice(lastBound).findIndex(value => {
 				if (precipitationLevel < PRECIPITATION_LEVEL.LIGHT) {
 					return calculatePL(standard, value) > PRECIPITATION_LEVEL.NO;
@@ -528,10 +532,12 @@ function colorfulCloudsToNextHour(providerName, data) {
 			}
 		}
 
+		// initialize minutes
 		const minutes = [];
 		bounds.forEach((bound, index, bounds) => {
 			const sameStatusMinutes = precipitations.slice(
 				bound,
+				// use last index of precipitations if is last bound
 				index + 1 < bounds.length ? bounds[index + 1] : precipitations.length - 1,
 			);
 			const precipitationLevel = calculatePL(standard, Math.max(...sameStatusMinutes));
@@ -539,9 +545,11 @@ function colorfulCloudsToNextHour(providerName, data) {
 			sameStatusMinutes.forEach((minute, index) => minutes.push({
 				weatherStatus: precipLevelToStatus(weatherType, precipitationLevel),
 				precipitation: minute,
+				// set chance to zero if clear
 				chance: precipitationLevel > PRECIPITATION_LEVEL.NO
 					// calculate order, 1 as first index
-					// because we have only 4 chances per half hour from API
+					// index here is relative to bound, plus bound for real index in precipitations
+					// we have only 4 chances per half hour from API
 					? parseInt(probability[parseInt((1 + bound + index) / 30)] * 100) : 0
 			}));
 		});
@@ -549,6 +557,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		return minutes;
 	};
 
+	// extract minute times that helpful for Apple to use cache data
 	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription, language) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
 		// match all numbers in descriptions to array
@@ -617,6 +626,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		};
 
 		// https://stackoverflow.com/a/20426113
+		// transfer numbers into ordinal numerals
 		function stringifyNumber(n) {
 			const special = [
 				'zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth',
@@ -639,6 +649,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 					longDescription = longDescription.replace(timeInString, '{' + key + '}');
 					// times after {firstAt} is lasting time in Apple Weather
+					// and will be displayed as `lasting for {secondAt} - {firstAt} min`
 					longDescription = insertLastingToDescription(language, longDescription);
 					parameters[key] = time;
 				}
@@ -654,8 +665,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 	return toNextHourObject(
 		serverTime ? serverTime * 1000 : (+ new Date()),
-		// this API doesn't support language switch
-		// replace `zh_CN` to `zh-CN`
+		// example: replace `zh_CN` to `zh-CN`
 		data.lang?.replace('_', '-') ?? "en-US",
 		{
 			latitude: Array.isArray(data?.location) ? data.location[0] : -1,
@@ -842,15 +852,16 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		"Latitude": nextHourObject.location.latitude,
 		"Language": nextHourObject.language,
 		"Name": nextHourObject.providerName,
+		// should be no Logo as same as the Apple Weather in nextHour
 		"Logo": "https://www.weatherol.cn/images/logo.png",
 		"Unit": nextHourObject.units,
-		// untested: I guess is the same as AQI data_source
+		// untested: I guess this is as same as the data_source in AQI
 		"Source": 0, //来自XX读数 0:监测站 1:模型
 	};
-	weather[NAME].metadata = Metadata(metadata);
 	// 注入数据
+	weather[NAME].metadata = Metadata(metadata);
 
-	// use next minute and set second to zero as next hour forecast as start time
+	// use next minute and set second to zero as start time in next hour forecast
 	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.timestamp), 1);
 	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
 	weather[NAME].condition = getConditions(
@@ -860,6 +871,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		nextHourObject.descriptions,
 	);
 	weather[NAME].summary = getSummaries(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
+
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, "");
 	return weather;
 
@@ -880,15 +892,16 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				return PERCEIVED_DIVIDERS.BEGINNING;
 			case PRECIPITATION_LEVEL.LIGHT:
 				return (
-					// multiple 10000 for precision of calculation
-					// base of previous levels + percentage of the value in its level
+					// multiple 1000 (PERCEIVED_DECIMAL_PLACES) for precision of calculation
+					// base of previous levels and plus the percentage of value at its level
 					PERCEIVED_DIVIDERS.BEGINNING +
-					// from the lower of range to value
+					// from the lower of range to the value
 					(((precipitation - NO.UPPER) * PERCEIVED_DECIMAL_PLACES) /
-						// sum of range
+						// sum of the range
 						((LIGHT.UPPER - LIGHT.LOWER) * PERCEIVED_DECIMAL_PLACES))
-					// then divided them and multiple Apple level range
-					// because Apple divided graph into 3 parts, value limitation is 3
+					// divided them to get percentage
+					// then calculate Apple standard value by percentage
+					// because Apple divided graph into 3 parts, value limitation is also 3
 					// we omit the "multiple one"
 				);
 			case PRECIPITATION_LEVEL.MODERATE:
@@ -910,7 +923,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 	};
 
 	function getMinutes(apiVersion, minutesData, startTime) {
-		//$.log(`🚧 ${$.name}, 开始设置Minutes`, '');
+		// $.log(`🚧 ${$.name}, 开始设置Minutes`, '');
 		const minutes = minutesData.map(({ precipitation, chance }, index) => {
 			const minute = {
 				"precipIntensity": precipitation,
@@ -919,7 +932,9 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 			if (apiVersion == "v1") {
 				minute.startAt = convertTime(apiVersion, new Date(startTime), index);
-				minute.perceivedIntensity = toApplePrecipitation(nextHourObject.precipStandard, precipitation);
+				minute.perceivedIntensity = toApplePrecipitation(
+					nextHourObject.precipStandard, precipitation,
+				);
 			} else {
 				minute.startTime = convertTime(apiVersion, new Date(startTime), index);
 				minute.precipIntensityPerceived = toApplePrecipitation(
@@ -930,7 +945,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			return minute;
 		});
 
-		//$.log(`🚧 ${$.name}, minutes = ${JSON.stringify(minutes)}`, '');
+		// $.log(`🚧 ${$.name}, minutes = ${JSON.stringify(minutes)}`, '');
 		return minutes;
 	};
 
@@ -951,29 +966,32 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			if (timeStatus.length > 0 && weatherStatus[0] !== WEATHER_STATUS.CLEAR) {
 				return `${tokenLeft}.${timeStatus.join('-')}`;
 			} else {
+				// weatherStatus is clear, no timeStatus needed
 				return tokenLeft;
 			}
 		};
 
 		function needPossible (precipChance) { precipChance < ADD_POSSIBLE_UPPER };
 
+		// initialize data
 		const slicedMinutes = minutesData.slice(0, 59);
+		// empty object for loop
 		const conditions = [{}];
 
-		// initialize data
 		let lastBoundIndex = 0;
 		let weatherStatus = [slicedMinutes[lastBoundIndex].weatherStatus];
 
 		for (const _condition of conditions) {
 			// initialize data
+			const index = conditions.length - 1;
 			const lastWeather = weatherStatus[weatherStatus.length - 1];
 			const minutesForConditions = slicedMinutes.slice(lastBoundIndex);
 			const boundIndex = minutesForConditions
 				.findIndex(minute => minute.weatherStatus !== lastWeather);
 
 			let timeStatus = [TIME_STATUS.START];
-			const descriptionsIndex = conditions.length - 1 < descriptions.length ?
-				conditions.length - 1 : descriptions.length - 1;
+			// set descriptions as more as possible
+			const descriptionsIndex = index < descriptions.length ? index : descriptions.length - 1;
 			const condition = {
 				longTemplate: descriptions[descriptionsIndex].long,
 				shortTemplate: descriptions[descriptionsIndex].short,
@@ -982,6 +1000,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			if (apiVersion !== "v1") {
 				condition.startTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex);
 			}
+			// time provided by nextHourObject is relative of startTime
 			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
 				// $.log(
 				// 	`🚧 ${$.name}, `,
@@ -989,10 +1008,12 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				// 	`startTime = ${startTime}, `,
 				// 	`new Date(startTime) = ${new Date(startTime)}`, ""
 				// );
+
 				condition.parameters[key] = convertTime(apiVersion, new Date(startTime), value);
 			};
 
 			if (boundIndex === -1) {
+				// cannot find the next bound
 				const isPossible = needPossible(
 					Math.max(...minutesForConditions.map(minute => minute.chance))
 				);
@@ -1064,6 +1085,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			}
 		}
 
+		// shift first empty object
 		conditions.shift();
 		$.log(`🚧 ${$.name}, conditions = ${JSON.stringify(conditions)}`, '');
 		return conditions;
@@ -1074,10 +1096,12 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 		const slicedMinutes = minutesData.slice(0, 59);
 
 		// initialize data
+		// empty object for loop
 		let summaries = [{}];
 		let lastBoundIndex = 0;
 
 		for (const _summary of summaries) {
+			// initialize data
 			const isClear = slicedMinutes[lastBoundIndex].weatherStatus === WEATHER_STATUS.CLEAR;
 			const minutesForSummary = slicedMinutes.slice(lastBoundIndex);
 			const boundIndex = minutesForSummary.findIndex(minute =>
@@ -1239,9 +1263,13 @@ function precipLevelToStatus(weatherType, precipitationLevel) {
 			return weatherType === WEATHER_TYPES.RAIN ? WEATHER_STATUS.RAIN : WEATHER_STATUS.SNOW;
 		case HEAVY:
 		case STORM:
-			return weatherType === WEATHER_TYPES.RAIN ? WEATHER_STATUS.HEAVY_RAIN : WEATHER_STATUS.HEAVY_SNOW;
+			return weatherType === WEATHER_TYPES.RAIN
+				? WEATHER_STATUS.HEAVY_RAIN : WEATHER_STATUS.HEAVY_SNOW;
 		default:
-			$.logErr(`❗️${$.name}, unexpeted precipitation level, `, `precipitationLevel = ${precipitationLevel}`);
+			$.logErr(
+				`❗️${$.name}, unexpeted precipitation level, `,
+				`precipitationLevel = ${precipitationLevel}`
+			);
 			return WEATHER_STATUS.CLEAR;
 	}
 };
