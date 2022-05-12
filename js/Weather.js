@@ -1022,6 +1022,9 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 				condition.token = toToken(isPossible, weatherStatus, timeStatus);
 
 				conditions.push(condition);
+
+				// avoid endless loop
+				lastBoundIndex = slicedMinutes.length - 1;
 				break;
 			} else {
 				const isPossible = needPossible(Math.max(
@@ -1140,6 +1143,9 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 
 			if (boundIndex === -1) {
 				summaries.push(summary);
+
+				// avoid endless loop
+				lastBoundIndex = slicedMinutes.length - 1;
 				break;
 			} else {
 				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
