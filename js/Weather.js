@@ -14,6 +14,7 @@ var { body } = $response;
 
 const WEATHER_TYPES = { CLEAR: "clear", RAIN: "rain", SNOW: "snow", SLEET: "sleet" };
 const PRECIPITATION_LEVEL = { INVALID: -1, NO: 0, LIGHT: 1, MODERATE: 2, HEAVY: 3, STORM: 4 };
+
 // https://docs.caiyunapp.com/docs/tables/precip
 const RADAR_PRECIPITATION_RANGE = {
 	NO: { LOWER: 0, UPPER: 0.031 },
@@ -363,82 +364,81 @@ function weatherOl(lat, lng) {
 
 /**
  * get data from ColorfulClouds
+ * https://docs.caiyunapp.com/docs/intro/
  * @author WordlessEcho
- * @param {object} headers - HTTP headers
- * @param {Object} input - location & token: { lat, lng, token }
- * @param {Number} timestamp - get old data by timestamp
+ * @author shindgewongxj
+ * @param {Object} headers - HTTP headers
+ * @param {Object} location - { lat, lng }
+ * @param {string} token - token for ColorfulClouds API
+ * @param {Object} parameters - parameters pass to URL
  * @return {Promise<*>} data from ColorfulClouds
  */
 async function colorfulClouds(
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
-                                    "AppleWebKit/605.1.15 (KHTML, like Gecko) " +
-                                    "Version/15.1 Mobile/15E148 Safari/604.1",
-    },
-    // Colorful Clouds example token
-    input = { lat: 0, lng: 0, token: "TAkhjf8d1nlSlspN" },
-    paramLang = Parameter.language,
-    timestamp = null,
+	headers = {
+		"Content-Type": "application/x-www-form-urlencoded",
+		"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
+			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
+	},
+	location,
+	// Colorful Clouds example token
+	token = "TAkhjf8d1nlSlspN",
+	parameters = { "alert": true, "dailysteps": 1, "hourlysteps": 24 },
 ) {
-    // $.log(`🚧 ${$.name}, input = ${JSON.stringify(input)}`, "");
-    // Build request
-    const toColorfulCloudsLang = paramLang => {
-        if (paramLang.toLowerCase().includes("hant")) {
-            return "zh_TW";
-        } else if (paramLang.toLowerCase().includes("us")) {
-            return "en_US";
-        } else if (paramLang.toLowerCase().includes("gb")) {
-            return "en_GB";
-        } else if (paramLang.toLowerCase().includes("ja")) {
-            return "ja";
-        } else {
-            return "zh_CN";
-        }
-    };
-    
-    const request = {
-        "url": `https://api.caiyunapp.com/v2.5/` +
-                     `${ input.token !== null ? input.token : "TAkhjf8d1nlSlspN" }/` +
-                     `${input.lng},${input.lat}/` +
-                     // https://docs.caiyunapp.com/docs/tables/unit/
-                     `weather?alert=true&dailysteps=1&hourlysteps=24&unit=metric:v2` +
-                     `&lang=` + toColorfulCloudsLang(paramLang) +
-                     `${ timestamp !== null ? `&begin=${timestamp}` : '' }`,
-        "headers": headers,
-    };
+	$.log(`🚧 ${$.name}, 正在使用彩云天气 API`, "");
 
-    // $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
+	let parametersString = '';
+	for (const [key, value] of Object.entries(parameters)) {
+		parametersString += `&${key}=${value}`;
+	}
 
-    // API Document
-    // https://docs.caiyunapp.com/docs/introreturn
-    return new Promise(resolve => {
-        $.get(request, (error, response, data) => {
-            try {
-                const _data = JSON.parse(data);
+	// Build request
+	const request = {
+		"url": `https://api.caiyunapp.com/v2.6/` +
+			`${token}/` +
+			`${location.lng},${location.lat}/` +
+			// https://docs.caiyunapp.com/docs/weather/
+			"weather" +
+			parametersString && parametersString.length > 0 ? `?${parametersString}` : '',
+		"headers": headers,
+	};
 
-                if (error) {
-                    throw new Error(error);
-                } else if (data) {
-                    $.log(`🎉 ${$.name}, ColorfulClouds: 获取完成`,
-                                `timestamp = ${timestamp}`,
-                                `realtime = ${JSON.stringify(_data?.result?.realtime)}`, '');
-                    resolve(_data);
-                }
-            } catch (e) {
-                $.logErr(`❗️${$.name}, colorfulClouds: 无法获取数据 `,
-                                 `request = ${JSON.stringify(request)}`,
-                                 `error = ${error || e} `,
-                                 `response = ${JSON.stringify(response)} `,
-                                 `data = ${data}`, '');
-            } finally {
-                $.log(`🚧 ${$.name}, colorfulClouds: ${type}调试信息 `,
-                            ` request = ${JSON.stringify(request)} `,
-                            `data = ${data}`, '');
-                resolve();
-            }
-        });
-    });
+  // $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
+
+	// API Document
+	// https://docs.caiyunapp.com/docs/introreturn
+	return new Promise(resolve => {
+		$.get(request, (error, response, data) => {
+			try {
+				const _data = JSON.parse(data);
+
+				if (error) {
+					throw new Error(error);
+				} else if (data) {
+					$.log(
+						`🎉 ${$.name}, ${colorfulClouds.name}: 获取完成, `,
+						`timestamp = ${timestamp}, `,
+						`realtime = ${JSON.stringify(_data?.result?.realtime)}`, ''
+					);
+					resolve(_data);
+				}
+			} catch (e) {
+				$.logErr(
+					`❗️${$.name}, ${colorfulClouds.name}: 无法获取数据 `,
+					`request = ${JSON.stringify(request)}, `,
+					`error = ${error || e}, `,
+					`response = ${JSON.stringify(response)}, `,
+					`data = ${data}`, ''
+				);
+			} finally {
+				// $.log(
+				// 	`🚧 ${$.name}, ${colorfulClouds.name}: 调试信息 `,
+				//   `request = ${JSON.stringify(request)}, `,
+				//   `data = ${data}`, ''
+				// );
+				resolve();
+			}
+		});
+	});
 }
 
 /**
@@ -1344,6 +1344,29 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
 		metadata.units = input.Unit;
 	}
 	return metadata
+};
+
+/**
+ * convert iOS language into ColorfulClouds style
+ * @author shindgewongxj
+ * @author WordlessEcho
+ * @param {string} languageWithReigon - "en-US-US" from Apple URL
+ * @returns {string} https://docs.caiyunapp.com/docs/tables/lang
+ */
+function toColorfulCloudsLang(languageWithReigon) {
+	const language = languageWithReigon.slice(0, languageWithReigon.lastIndexOf('-'));
+
+	if (language.includes("zh-Hans")) {
+		return "zh_CN";
+	} else if (language.includes("zh-Hant")) {
+		return "zh_TW";
+	} else if (language.includes("en-GB")) {
+		return "en_GB";
+	} else if (language.includes("ja")) {
+		return "ja";
+	} else {
+		return "en_US";
+	}
 };
 
 /***************** Env *****************/
