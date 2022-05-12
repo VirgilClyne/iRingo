@@ -551,22 +551,25 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 	function toDescriptions(weatherType, forecastKeypoint, minutelyDescription, language) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
+		// match all numbers in descriptions to array
 		const times = longDescription?.match(/\d+/g);
 		const parameters = {};
 
 		function insertLastingToDescription(language, description) {
 			const FIRST_AT = "{firstAt}";
+			// split into two part at `{firstAt}`
 			const splitedDescriptions = description?.split(FIRST_AT);
 
 			switch (language) {
 				case "en_GB":
-					// remove stopping & later
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
+							// remove stopping & later
 							// (.*?) will match `*At`
 							.replaceAll(/stopping {(.*?)} min later/g, "{$1} min");
 
-					// skip firstAt and find {*At} by `{` or `}`
+					// take second part to skip firstAt
+					// find {*At} by `{` or `}`
 					// append `for lasting ` to description
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
@@ -575,7 +578,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 				case "zh_CN":
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("直到", '');
+							.replaceAll("直到{", '{');
 
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
@@ -584,7 +587,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 				case "zh_TW":
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("直到", '');
+							.replaceAll("直到{", '{');
 
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
@@ -600,10 +603,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 					break;
 				case "en_US":
 				default:
-					// remove stopping & later
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							// (.*?) will match `*At`
 							.replaceAll(/stopping {(.*?)} min later/g, "{$1} min");
 
 					splitedDescriptions[splitedDescriptions.length - 1] =
