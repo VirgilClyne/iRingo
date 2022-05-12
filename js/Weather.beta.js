@@ -763,10 +763,10 @@ function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
 
 		return getRandomInt(
 			lower * INTENSITY_DECIMAL_PLACES, upper * INTENSITY_DECIMAL_PLACES
-		) / 10000;
+		) / INTENSITY_DECIMAL_PLACES;
 	};
 
-	const minutes = Array(80).map((_value, index) => {
+	const minutes = Array.apply(null, Array(80)).map((_value, index) => {
 		const minute = {
 			weatherStatus: WEATHER_STATUS.CLEAR,
 			precipitation: 0,
@@ -790,7 +790,7 @@ function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
 		"millimetersPerHour",
 		MMPERHR_PRECIPITATION_RANGE,
 		minutes,
-		{ long: "Raining", short: "Raining", parameters: {} },
+		[{ long: "Raining", short: "Raining", parameters: {} }],
 	);
 };
 
@@ -1069,7 +1069,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 
 			return getRandomInt(
 				lower * PERCEIVED_DECIMAL_PLACES, upper * PERCEIVED_DECIMAL_PLACES
-			) / 1000;
+			) / PERCEIVED_DECIMAL_PLACES;
 		};
 
 		return minutes.map(value => {
