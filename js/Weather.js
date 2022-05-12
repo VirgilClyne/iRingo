@@ -570,7 +570,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 				case "ja":
 					// Japanese support from ColorfulClouds is broken sometime
 					// https://lolic.at/notice/AJNH316TTSy1fRlOka
-					return splitedDescription.replaceAll("分後", `分${LASTINGS.ja}後`);
+					// remove space between the number and word
+					return splitedDescription.replaceAll("} 分後", `}分${LASTINGS.ja}後`);
 				case "en_US":
 				default:
 					return splitedDescription.replaceAll("{", `${LASTINGS.en_US}{`);
