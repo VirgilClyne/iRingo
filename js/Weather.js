@@ -368,7 +368,7 @@ function weatherOl(lat, lng) {
 			} catch (e) {
 				$.logErr(
 					`❗️ ${$.name}, ${weatherOl.name}执行失败！`,
-					`error = ${JSON.stringify(error || e)}, `,
+					`error = ${error || e}, `,
 					`response = ${JSON.stringify(response)}, `,
 					`data = ${JSON.stringify(data)}`, ''
 				);
@@ -456,7 +456,7 @@ async function colorfulClouds(
 				$.logErr(
 					`❗️${$.name}, ${colorfulClouds.name}: 无法获取数据 `,
 					`request = ${JSON.stringify(request)}, `,
-					`error = ${JSON.stringify(error || e)}, `,
+					`error = ${error || e}, `,
 					`response = ${JSON.stringify(response)}, `,
 					`data = ${JSON.stringify(data)}`, ''
 				);
