@@ -112,7 +112,7 @@
 ### Loon
   * plugin安装于`仪表`-`插件`-`+`
     1. [🌤天气](#天气)：[Weather.plugin](./plugin/Weather.plugin?raw=true " iRingo for Apple Weather") 
-    2. [📍定位服务](#定位服务)：[Location.plugin](./plugin/Location.beta.plugin?raw=true " iRingo for Location Services")
+    2. [📍定位服务](#定位服务)：[Location.plugin](./plugin/Location.plugin?raw=true " iRingo for Location Services")
     3. [🔍Siri与搜索](#siri与搜索)：[Siri.plugin](./plugin/Siri.plugin?raw=true " iRingo for Siri & Search")
     4. [🗺️Apple Maps](#apple-maps)：[Apple_Maps_CN.plugin](./plugin/Apple_Maps_CN.plugin?raw=true " Redirect Apple Maps to 🇨🇳CN")
     5. [📺Apple TV](#apple-tv)：[Apple_TV.plugin](./plugin/Apple_TV.plugin?raw=true " Enable Apple TV app")
