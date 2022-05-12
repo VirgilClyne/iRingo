@@ -971,7 +971,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, Settings) {
 			}
 		};
 
-		function needPossible (precipChance) { precipChance < ADD_POSSIBLE_UPPER };
+		function needPossible(precipChance) { return precipChance < ADD_POSSIBLE_UPPER };
 
 		// initialize data
 		const slicedMinutes = minutesData.slice(0, 59);
