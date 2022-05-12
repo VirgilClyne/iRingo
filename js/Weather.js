@@ -350,7 +350,7 @@ function weatherOl(lat, lng) {
 					throw new Error(error);
 				}
 
-				if (_data.status === "ok") {
+				if (_data?.status === "ok") {
 					$.log(`🎉 ${$.name}, ${weatherOl.name}: 获取完成`, '');
 					resolve(_data);
 				} else {
@@ -437,7 +437,7 @@ async function colorfulClouds(
 					throw new Error(error);
 				}
 				
-				if (_data.status === "ok") {
+				if (_data?.status === "ok") {
 					$.log(`🎉 ${$.name}, ${colorfulClouds.name}: 获取完成`, '');
 					resolve(_data);
 				} else {
