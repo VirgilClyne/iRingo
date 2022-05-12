@@ -22,11 +22,13 @@ http:
       type: response
       require-body: true
       timeout: 20
+      argument:
     - match: ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*)
       name: Apple_Weather_Map
       type: request
       require-body: false
       timeout: 10
+      argument:
 
 script-providers:
   Apple_Weather_Availability:
