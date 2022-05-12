@@ -783,7 +783,7 @@ function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
 		"millimetersPerHour",
 		MMPERHR_PRECIPITATION_RANGE,
 		minutes,
-		[{ long: "Raining", short: "Raining", parameters: {} }],
+		[{ long: "DEBUG MODE IS ON", short: "DEBUG MODE IS ON", parameters: {} }],
 	);
 };
 
