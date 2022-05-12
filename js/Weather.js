@@ -87,21 +87,16 @@ const WEATHER_STATUS = {
 		};
 		// NextHour
 		if (Settings.NextHour.Switch) {
-			$.log(
-				`🚧 ${$.name}, 下小时降水强度 ` +
-				`providerName = ${data?.forecastNextHour?.providerName ?? data?.next_hour?.provider_name}`,
-				""
-			);
-
-			if (Params.ver === "v1") {
-				$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段。`, "");
-				// $.log(`🚧 ${$.name}, next_hour = ${JSON.stringify(data?.next_hour)}`, "");
-			}
-
 			if (
 				url.params?.dataSets?.includes("forecastNextHour") ||
 				url.params?.include?.includes("next_hour_forecast")
 			) {
+				$.log(
+					`🚧 ${$.name}, 下小时降水强度 ` +
+					`providerName = ${data?.forecastNextHour?.providerName ?? data?.next_hour?.provider_name}`,
+					""
+				);
+
 				if (!(data?.forecastNextHour?.metadata?.providerName || data?.next_hour?.provider_name)) {
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
 						const minutelyData = await weatherOl(Params.lat, Params.lng);
@@ -127,6 +122,11 @@ const WEATHER_STATUS = {
 					//$.log(`🚧 ${$.name}, data = ${JSON.stringify(data?.forecastNextHour ?? data?.next_hour)}`, "");
 					$.log(`🎉 ${$.name}, 已有下一小时降水强度信息, 跳过`, "");
 				}
+			}
+
+			if (Params.ver === "v1") {
+				$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段。`, "");
+				// $.log(`🚧 ${$.name}, next_hour = ${JSON.stringify(data?.next_hour)}`, "");
 			}
 		};
 		body = JSON.stringify(data);
