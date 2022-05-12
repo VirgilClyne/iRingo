@@ -560,6 +560,12 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 			switch (language) {
 				case "en_GB":
+					// remove stopping & later
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							// (.*?) will match `*At`
+							.replaceAll(/stopping {(.*?)} min later/g, "{$1} min");
+
 					// skip firstAt and find {*At} by `{` or `}`
 					// append `for lasting ` to description
 					splitedDescriptions[splitedDescriptions.length - 1] =
@@ -569,15 +575,23 @@ function colorfulCloudsToNextHour(providerName, data) {
 				case "zh_CN":
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("直到", '');
+
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
 							.replaceAll("{", `${LASTINGS.zh_CN}{`);
 					break;
 				case "zh_TW":
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
+							.replaceAll("直到", '');
+
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
 							.replaceAll("{", `${LASTINGS.zh_TW}{`);
 					break;
 				case "ja":
-					// Japanese support from ColorfulClouds is broken sometime
+					// Japanese support from ColorfulClouds is broken for sometime
 					// https://lolic.at/notice/AJNH316TTSy1fRlOka
 					// remove space between the number and word
 					splitedDescriptions[splitedDescriptions.length - 1] =
@@ -586,6 +600,12 @@ function colorfulCloudsToNextHour(providerName, data) {
 					break;
 				case "en_US":
 				default:
+					// remove stopping & later
+					splitedDescriptions[splitedDescriptions.length - 1] =
+						splitedDescriptions[splitedDescriptions.length - 1]
+							// (.*?) will match `*At`
+							.replaceAll(/stopping {(.*?)} min later/g, "{$1} min");
+
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
 							.replaceAll("{", `${LASTINGS.en_US} {`);
