@@ -1021,18 +1021,19 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 	weather[NAME].metadata = Metadata(metadata);
 
 	// use next minute and set second to zero as start time in next hour forecast
-	weather[NAME].startTime = convertTime(apiVersion, new Date(nextHourObject.timestamp), 1);
-	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
+	const startTimestamp = nextHourObject.timestamp + 1000 * 60;
+	weather[NAME].startTime = convertTime(apiVersion, new Date(startTimestamp));
+	weather[NAME].minutes = getMinutes(apiVersion, nextHourObject.minutes, startTimestamp);
 	if (debugOptions?.Switch) {
 		weather[NAME].minutes = toDebugMinutes(weather[NAME].minutes, debugOptions);
 	}
 	weather[NAME].condition = getConditions(
 		apiVersion,
 		nextHourObject.minutes,
-		weather[NAME].startTime,
+		startTimestamp,
 		nextHourObject.descriptions,
 	);
-	weather[NAME].summary = getSummaries(apiVersion, nextHourObject.minutes, weather[NAME].startTime);
+	weather[NAME].summary = getSummaries(apiVersion, nextHourObject.minutes, startTimestamp);
 
 	$.log(`🎉 ${$.name}, 下一小时降水强度替换完成`, "");
 	return weather;
@@ -1084,7 +1085,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		}
 	};
 
-	function getMinutes(apiVersion, minutesData, startTime) {
+	function getMinutes(apiVersion, minutesData, startTimestamp) {
 		// $.log(`🚧 ${$.name}, 开始设置Minutes`, '');
 		const minutes = minutesData.map(({ precipitation, chance }, index) => {
 			const minute = {
@@ -1093,12 +1094,12 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 			};
 
 			if (apiVersion == "v1") {
-				minute.startAt = convertTime(apiVersion, new Date(startTime), index);
+				minute.startAt = convertTime(apiVersion, new Date(startTimestamp), index);
 				minute.perceivedIntensity = toApplePrecipitation(
 					nextHourObject.precipStandard, precipitation,
 				);
 			} else {
-				minute.startTime = convertTime(apiVersion, new Date(startTime), index);
+				minute.startTime = convertTime(apiVersion, new Date(startTimestamp), index);
 				minute.precipIntensityPerceived = toApplePrecipitation(
 					nextHourObject.precipStandard, precipitation,
 				);
@@ -1141,7 +1142,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		});
 	};
 
-	function getConditions(apiVersion, minutesData, startTime, descriptions) {
+	function getConditions(apiVersion, minutesData, startTimestamp, descriptions) {
 		$.log(`🚧 ${$.name}, 开始设置conditions`, "");
 		// TODO: when to add possible
 		const ADD_POSSIBLE_UPPER = 0;
@@ -1191,18 +1192,18 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				parameters: {},
 			};
 			if (apiVersion !== "v1") {
-				condition.startTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex);
+				condition.startTime = convertTime(apiVersion, new Date(startTimestamp), lastBoundIndex);
 			}
-			// time provided by nextHourObject is relative of startTime
+			// time provided by nextHourObject is relative of startTimestamp
 			for (const [key, value] of Object.entries(descriptions[descriptionsIndex].parameters)) {
 				// $.log(
 				// 	`🚧 ${$.name}, `,
 				// 	`descriptions[${descriptionsIndex}].parameters.${key} = ${value}, `,
-				// 	`startTime = ${startTime}, `,
-				// 	`new Date(startTime) = ${new Date(startTime)}`, ""
+				// 	`startTimestamp = ${startTimestamp}, `,
+				// 	`new Date(startTimestamp) = ${new Date(startTimestamp)}`, ""
 				// );
 
-				condition.parameters[key] = convertTime(apiVersion, new Date(startTime), value);
+				condition.parameters[key] = convertTime(apiVersion, new Date(startTimestamp), value);
 			};
 
 			if (boundIndex === -1) {
@@ -1226,7 +1227,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				// $.log(`🚧 ${$.name}, max chance = ${chance}`, '');
 				const possibleClear = needPossible(chance);
 				const currentWeather = minutesForConditions[boundIndex].weatherStatus;
-				const endTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex + boundIndex);
+				const endTime =
+					convertTime(apiVersion, new Date(startTimestamp), lastBoundIndex + boundIndex);
 
 				switch (apiVersion) {
 					case "v1":
@@ -1289,7 +1291,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 		return conditions;
 	};
 
-	function getSummaries(apiVersion, minutesData, startTime) {
+	function getSummaries(apiVersion, minutesData, startTimestamp) {
 		$.log(`🚧 ${$.name}, 开始设置summary`, "");
 		const slicedMinutes = minutesData.slice(0, 59);
 
@@ -1311,7 +1313,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				condition: weatherStatusToType(slicedMinutes[lastBoundIndex].weatherStatus),
 			};
 			if (apiVersion !== "v1") {
-				summary.startTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex);
+				summary.startTime = convertTime(apiVersion, new Date(startTimestamp), lastBoundIndex);
 			}
 
 			if (!isClear) {
@@ -1343,7 +1345,8 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				lastBoundIndex = slicedMinutes.length - 1;
 				break;
 			} else {
-				const endTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex + boundIndex);
+				const endTime =
+					convertTime(apiVersion, new Date(startTimestamp), lastBoundIndex + boundIndex);
 				switch (apiVersion) {
 					case "v1":
 						summary.validUntil = endTime;
