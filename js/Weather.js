@@ -105,8 +105,8 @@ const WEATHER_STATUS = {
 							if (token) {
 								const minutelyData = await colorfulClouds(
 									Settings.NextHour?.HTTPHeaders,
-									{ latitude: Params.lat, longitude: Params.lng },
 									token,
+									{ latitude: Params.lat, longitude: Params.lng },
 									"minutely",
 									// unit for calculate precipitations
 									// https://docs.caiyunapp.com/docs/tables/precip
@@ -436,8 +436,8 @@ function weatherOl(lat, lng) {
  * @author WordlessEcho
  * @author shindgewongxj
  * @param {Object} headers - HTTP headers
- * @param {Object} location - { latitude, longitude }
  * @param {string} token - token for ColorfulClouds API
+ * @param {Object} location - { latitude, longitude }
  * @param {Object} parameters - parameters pass to URL
  * @return {Promise<*>} data from ColorfulClouds
  */
