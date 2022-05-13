@@ -1052,8 +1052,9 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 			STOP: "stop"
 		};
 
-		function toToken(isPossible, weatherStatus, timeStatus) {
-			const tokenLeft = `${isPossible ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
+		function toToken(possibleClear, weatherStatus, timeStatus) {
+			const tokenLeft =
+				`${possibleClear ? POSSIBILITY.POSSIBLE + '-' : ''}${weatherStatus.join('-to-')}`;
 
 			if (timeStatus.length > 0 && weatherStatus[0] !== WEATHER_STATUS.CLEAR) {
 				return `${tokenLeft}.${timeStatus.join('-')}`;
@@ -1106,12 +1107,12 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 
 			if (boundIndex === -1) {
 				// cannot find the next bound
-				const isPossible = needPossible(
-					Math.max(...minutesForConditions.map(minute => minute.chance))
-				);
+				const chance = Math.max(...minutesForConditions.map(minute => minute.chance));
+				$.log(`🚧 ${$.name}, max chance = ${chance}`, '');
+				const possibleClear = needPossible(chance);
 				timeStatus = [TIME_STATUS.CONSTANT];
 
-				condition.token = toToken(isPossible, weatherStatus, timeStatus);
+				condition.token = toToken(possibleClear, weatherStatus, timeStatus);
 
 				conditions.push(condition);
 
@@ -1119,9 +1120,11 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 				lastBoundIndex = slicedMinutes.length - 1;
 				break;
 			} else {
-				const isPossible = needPossible(Math.max(
+				const chance = Math.max(
 					...slicedMinutes.slice(lastBoundIndex, boundIndex).map(minute => minute.chance)
-				));
+				);
+				$.log(`🚧 ${$.name}, max chance = ${chance}`, '');
+				const possibleClear = needPossible(chance);
 				const currentWeather = minutesForConditions[boundIndex].weatherStatus;
 				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
 
@@ -1156,7 +1159,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 
 				switch (lastWeather) {
 					case WEATHER_STATUS.CLEAR:
-						condition.token = toToken(isPossible, [currentWeather], timeStatus);
+						condition.token = toToken(possibleClear, [currentWeather], timeStatus);
 						break;
 					case WEATHER_STATUS.HEAVY_RAIN:
 					case WEATHER_STATUS.HEAVY_SNOW:
@@ -1169,7 +1172,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 					case WEATHER_STATUS.RAIN:
 					case WEATHER_STATUS.SNOW:
 					default:
-						condition.token = toToken(isPossible, weatherStatus, timeStatus);
+						condition.token = toToken(possibleClear, weatherStatus, timeStatus);
 						break;
 				}
 
