@@ -566,12 +566,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 		"ja": ["、"],
 	};
 
-	function getMajorVersion(apiVersion) {
-		const startIndex = apiVersion.indexOf('v') + 1;
-		const endIndex = apiVersion.indexOf('.');
-
-		return apiVersion.slice(startIndex, endIndex);
-	}
+	// version from API is beginning with `v`
+	function getMajorVersion(apiVersion) { return parseInt(apiVersion.slice(1)) };
 
 	const majorVersion = getMajorVersion(data?.api_version);
 	if (!SUPPORTED_VERSIONS.includes(majorVersion)) {
