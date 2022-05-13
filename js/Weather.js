@@ -1128,7 +1128,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 				$.log(`🚧 ${$.name}, max chance = ${chance}`, '');
 				const possibleClear = needPossible(chance);
 				const currentWeather = minutesForConditions[boundIndex].weatherStatus;
-				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
+				const endTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex + boundIndex);
 
 				switch (apiVersion) {
 					case "v1":
@@ -1245,7 +1245,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 				lastBoundIndex = slicedMinutes.length - 1;
 				break;
 			} else {
-				const endTime = convertTime(apiVersion, new Date(startTime), boundIndex);
+				const endTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex + boundIndex);
 				switch (apiVersion) {
 					case "v1":
 						summary.validUntil = endTime;
