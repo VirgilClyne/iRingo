@@ -626,7 +626,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 				const time = parseInt(timeInString);
 
 				if (!isNaN(time) && !(bounds.includes(time))) {
-					bounds.push(time);
+					// array start from 0
+					bounds.push(time - 1);
 				}
 			});
 
