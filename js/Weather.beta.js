@@ -597,8 +597,10 @@ async function WAQI(type = "", input = {}) {
 		// ignore clear
 		if (Math.max(...precipitations) >= standard.NO.UPPER) {
 			const times = minutelyDescription?.match(/\d+/g);
-			times.forEach(time => {
-				if (!(bounds.includes(time))) {
+			times?.forEach(timeInString => {
+				const time = parseInt(timeInString);
+
+				if (!isNaN(time) && !(bounds.includes(time))) {
 					bounds.push(time);
 				}
 			});
@@ -731,8 +733,8 @@ async function WAQI(type = "", input = {}) {
 
 		if (!isClear) {
 			// split sentence by time
-			times?.forEach(time => {
-				const startIndex = longDescription.indexOf(time) + time.length;
+			times?.forEach(timeInString => {
+				const startIndex = longDescription.indexOf(timeInString) + timeInString.length;
 				const splitors = getSentenceSplitors(language);
 
 				let splitIndex = 0;
