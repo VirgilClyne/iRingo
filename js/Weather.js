@@ -471,7 +471,7 @@ async function colorfulClouds(
 		"headers": headers,
 	};
 
-  // $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
+  $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
 
 	// API Document
 	// https://docs.caiyunapp.com/docs/introreturn
