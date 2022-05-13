@@ -129,10 +129,10 @@ const WEATHER_STATUS = {
 						}
 					}
 
-					if (
+					if (!(
 						data?.forecastNextHour?.metadata?.providerName ||
 						data?.next_hour?.provider_name
-					) {
+					)) {
 						$.log(`🚧 ${$.name}, 没有找到合适的API, 跳过`, "");
 					}
 				} else {
