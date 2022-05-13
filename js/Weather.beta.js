@@ -5,7 +5,7 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Weather v3.2.8-beta");
 const URL = new URLs();
 const DataBase = {
-	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Debug":{"Switch":false,"WeatherStatus":"rain","Chance":"100","Delay":"0","PrecipLower":"0.08","PrecipUpper":"51.30","IntensityLower":"0","IntensityUpper":"3"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+	"Weather":{"Switch":true,"NextHour":{"Switch":true,"Mode":"www.weatherol.cn","HTTPHeaders":{"Content-Type":"application/x-www-form-urlencoded","User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1"},"ColorfulClouds":{"Auth":null},"Debug":{"Switch":false,"WeatherStatus":"rain","Chance":"100","Delay":"0","PrecipLower":"0.08","PrecipUpper":"51.30","IntensityLower":"0","IntensityUpper":"3"}},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
 	"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
 };
@@ -114,6 +114,46 @@ const WEATHER_STATUS = {
 								`🚧 ${$.name}, debug模式: `,
 								`nextHour = ${JSON.stringify(data?.forecastNextHour ?? data?.next_hour)}`, ""
 							);
+						} else if (Settings.NextHour?.Mode === "api.caiyunapp.com") {
+							const token = Settings.NextHour?.ColorfulClouds?.Auth;
+							const languageWithReigon = Params.language;
+							if (token) {
+								const minutelyData = await colorfulClouds(
+									Settings.NextHour?.HTTPHeaders,
+									{ latitude: Params.lat, longitude: Params.lng },
+									token,
+									"minutely",
+									// unit for calculate precipitations
+									// https://docs.caiyunapp.com/docs/tables/precip
+									{ "unit": "metric:v2", "lang": toColorfulCloudsLang(languageWithReigon) },
+								);
+
+								let providerName = "ColorfulClouds";
+								switch (languageWithReigon) {
+									case "zh-Hans":
+										providerName = "彩云天气";
+										break;
+									case "zh-Hant":
+										providerName = "彩雲天氣";
+										break;
+									// No official name for Japanese
+									case "ja":
+									case "en-US":
+									case "en-GB":
+									default:
+										providerName = "ColorfulClouds";
+										break;
+								}
+
+								if (minutelyData) {
+									data = await outputNextHour(
+										Params.ver,
+										colorfulCloudsToNextHour(providerName, minutelyData),
+										data,
+										null,
+									);
+								}
+							}
 						} else {
 							const minutelyData = await weatherOl(Params.lat, Params.lng);
 							const providerName = "气象在线";
@@ -167,6 +207,7 @@ const WEATHER_STATUS = {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
+	Settings.NextHour.HTTPHeaders = JSON.parse(Settings.NextHour.HTTPHeaders) // BoxJs字符串转Object
 	if (Settings.NextHour?.Debug?.Switch) Settings.NextHour.Debug.Switch = JSON.parse(Settings.NextHour?.Debug?.Switch ?? false) // BoxJs字符串转Boolean
 	Settings.AQI.Switch = JSON.parse(Settings.AQI.Switch) // BoxJs字符串转Boolean
 	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
@@ -424,7 +465,8 @@ async function WAQI(type = "", input = {}) {
 	},
 	location,
 	// Colorful Clouds example token
-	token = "TAkhjf8d1nlSlspN",
+	token,
+	path = "weather",
 	parameters = { "alert": true, "dailysteps": 1, "hourlysteps": 24 },
 ) {
 	$.log(`🚧 ${$.name}, 正在使用彩云天气 API`, "");
@@ -440,7 +482,7 @@ async function WAQI(type = "", input = {}) {
 			`${token}/` +
 			`${location.lng},${location.lat}/` +
 			// https://docs.caiyunapp.com/docs/weather/
-			"weather" +
+			`${path}` +
 			parametersString && parametersString.length > 0 ? `?${parametersString}` : '',
 		"headers": headers,
 	};
@@ -1548,21 +1590,25 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
  * convert iOS language into ColorfulClouds style
  * @author shindgewongxj
  * @author WordlessEcho
- * @param {string} languageWithReigon - "en-US-US" from Apple URL
+ * @param {string} languageWithReigon - "zh-Hans-CA", "en-US", "ja-CA" from Apple URL
  * @returns {string} https://docs.caiyunapp.com/docs/tables/lang
  */
 function toColorfulCloudsLang(languageWithReigon) {
-	const language = languageWithReigon.slice(0, languageWithReigon.lastIndexOf('-'));
-
-	if (language.includes("zh-Hans")) {
+	if (languageWithReigon.includes("en-US")) {
+		return "en_US";
+	} else if (languageWithReigon.includes("zh-Hans")) {
 		return "zh_CN";
-	} else if (language.includes("zh-Hant")) {
+	} else if (languageWithReigon.includes("zh-Hant")) {
 		return "zh_TW";
-	} else if (language.includes("en-GB")) {
+	} else if (languageWithReigon.includes("en-GB")) {
 		return "en_GB";
-	} else if (language.includes("ja")) {
+	} else if (languageWithReigon.includes("ja")) {
 		return "ja";
 	} else {
+		$.log(
+			`⚠ ${$.name}, ColorfulClouds: unsupported language detected, fallback to en_US. `,
+			`languageWithReigon = ${languageWithReigon}`, ""
+		);
 		return "en_US";
 	}
 };

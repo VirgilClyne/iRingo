@@ -99,16 +99,58 @@ const WEATHER_STATUS = {
 
 				if (!(data?.forecastNextHour?.metadata?.providerName || data?.next_hour?.provider_name)) {
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
-						const minutelyData = await weatherOl(Params.lat, Params.lng);
-						const providerName = "气象在线";
+						if (Settings.NextHour?.Mode === "api.caiyunapp.com") {
+							const token = Settings.NextHour?.ColorfulClouds?.Auth;
+							const languageWithReigon = Params.language;
+							if (token) {
+								const minutelyData = await colorfulClouds(
+									Settings.NextHour?.HTTPHeaders,
+									{ latitude: Params.lat, longitude: Params.lng },
+									token,
+									"minutely",
+									// unit for calculate precipitations
+									// https://docs.caiyunapp.com/docs/tables/precip
+									{ "unit": "metric:v2", "lang": toColorfulCloudsLang(languageWithReigon) },
+								);
 
-						if (minutelyData) {
-							data = await outputNextHour(
-								Params.ver,
-								colorfulCloudsToNextHour(providerName, minutelyData),
-								data,
-								null,
-							);
+								let providerName = "ColorfulClouds";
+								switch (languageWithReigon) {
+									case "zh-Hans":
+										providerName = "彩云天气";
+										break;
+									case "zh-Hant":
+										providerName = "彩雲天氣";
+										break;
+									// No official name for Japanese
+									case "ja":
+									case "en-US":
+									case "en-GB":
+									default:
+										providerName = "ColorfulClouds";
+										break;
+								}
+
+								if (minutelyData) {
+									data = await outputNextHour(
+										Params.ver,
+										colorfulCloudsToNextHour(providerName, minutelyData),
+										data,
+										null,
+									);
+								}
+							}
+						} else {
+							const minutelyData = await weatherOl(Params.lat, Params.lng);
+							const providerName = "气象在线";
+
+							if (minutelyData) {
+								data = await outputNextHour(
+									Params.ver,
+									colorfulCloudsToNextHour(providerName, minutelyData),
+									data,
+									null,
+								);
+							}
 						}
 					}
 
@@ -150,6 +192,7 @@ const WEATHER_STATUS = {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
+	Settings.NextHour.HTTPHeaders = JSON.parse(Settings.NextHour.HTTPHeaders) // BoxJs字符串转Object
 	Settings.AQI.Switch = JSON.parse(Settings.AQI.Switch) // BoxJs字符串转Boolean
 	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
@@ -406,7 +449,8 @@ async function colorfulClouds(
 	},
 	location,
 	// Colorful Clouds example token
-	token = "TAkhjf8d1nlSlspN",
+	token,
+	path = "weather",
 	parameters = { "alert": true, "dailysteps": 1, "hourlysteps": 24 },
 ) {
 	$.log(`🚧 ${$.name}, 正在使用彩云天气 API`, "");
@@ -422,7 +466,7 @@ async function colorfulClouds(
 			`${token}/` +
 			`${location.lng},${location.lat}/` +
 			// https://docs.caiyunapp.com/docs/weather/
-			"weather" +
+			`${path}` +
 			parametersString && parametersString.length > 0 ? `?${parametersString}` : '',
 		"headers": headers,
 	};
@@ -1451,21 +1495,25 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
  * convert iOS language into ColorfulClouds style
  * @author shindgewongxj
  * @author WordlessEcho
- * @param {string} languageWithReigon - "en-US-US" from Apple URL
+ * @param {string} languageWithReigon - "zh-Hans-CA", "en-US", "ja-CA" from Apple URL
  * @returns {string} https://docs.caiyunapp.com/docs/tables/lang
  */
-function toColorfulCloudsLang(languageWithReigon) {
-	const language = languageWithReigon.slice(0, languageWithReigon.lastIndexOf('-'));
-
-	if (language.includes("zh-Hans")) {
+ function toColorfulCloudsLang(languageWithReigon) {
+	if (languageWithReigon.includes("en-US")) {
+		return "en_US";
+	} else if (languageWithReigon.includes("zh-Hans")) {
 		return "zh_CN";
-	} else if (language.includes("zh-Hant")) {
+	} else if (languageWithReigon.includes("zh-Hant")) {
 		return "zh_TW";
-	} else if (language.includes("en-GB")) {
+	} else if (languageWithReigon.includes("en-GB")) {
 		return "en_GB";
-	} else if (language.includes("ja")) {
+	} else if (languageWithReigon.includes("ja")) {
 		return "ja";
 	} else {
+		$.log(
+			`⚠ ${$.name}, ColorfulClouds: unsupported language detected, fallback to en_US. `,
+			`languageWithReigon = ${languageWithReigon}`, ""
+		);
 		return "en_US";
 	}
 };
