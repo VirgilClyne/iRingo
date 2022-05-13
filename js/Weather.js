@@ -483,7 +483,7 @@ async function colorfulClouds(
  */
 function colorfulCloudsToNextHour(providerName, data) {
 	// words that used to insert into description
-	const LASTINGS = {
+	const AFTER = {
 		"zh_CN": "再过",
 		"zh_TW": "再過",
 		"ja": "その後",
@@ -491,6 +491,15 @@ function colorfulCloudsToNextHour(providerName, data) {
 		// ColorfulClouds seems not prefer to display multiple times in en_GB
 		"en_GB": "after that",
 	};
+	// splitors for description
+	const SPLITORS = {
+		"en_US": ["but ", "and "],
+		"en_GB": ["but ", "and "],
+		"zh_CN": ["，"],
+		"zh_TW": ["，"],
+		"ja": ["、"],
+	};
+
 	// the unit of server_time is second
 	const serverTime = parseInt(data?.server_time);
 	let unit;
@@ -541,7 +550,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		}
 	};
 
-	function toMinutes(standard, weatherType, precipitations, probability) {
+	function toMinutes(standard, weatherType, minutelyDescription, precipitations, probability) {
 		if (!Array.isArray(precipitations)) return [];
 
 		// initialze 0 as first bound
@@ -564,6 +573,19 @@ function colorfulCloudsToNextHour(providerName, data) {
 			if (relativeBound !== -1) {
 				bounds.push(lastBound + relativeBound);
 			}
+		}
+
+		// detect weather change by description
+		// ignore clear
+		if (Math.max(...precipitations) >= standard.NO.UPPER) {
+			const times = minutelyDescription?.match(/\d+/g);
+			times.forEach(time => {
+				if (!(bounds.includes(time))) {
+					bounds.push(time);
+				}
+			});
+
+			bounds.sort((a, b) => a - b);
 		}
 
 		// initialize minutes
@@ -598,7 +620,23 @@ function colorfulCloudsToNextHour(providerName, data) {
 		const times = longDescription?.match(/\d+/g);
 		const parameters = {};
 
-		function insertLastingToDescription(language, description) {
+		function getSentenceSplitors(language) {
+			switch (language) {
+				case "en_GB":
+					return SPLITORS.en_GB;
+				case "zh_CN":
+					return SPLITORS.zh_CN;
+				case "zh_TW":
+					return SPLITORS.zh_TW;
+				case "ja":
+					return SPLITORS.ja;
+				case "en_US":
+				default:
+					return SPLITORS.en_US;
+			}
+		};
+
+		function insertAfterToDescription(language, description) {
 			const FIRST_AT = "{firstAt}";
 			// split into two part at `{firstAt}`
 			const splitedDescriptions = description?.split(FIRST_AT);
@@ -611,7 +649,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 						splitedDescriptions[splitedDescriptions.length - 1]
 							// remove stopping & later
 							// (.*?) will match `*At`
-							.replaceAll("} min later", `{$1} min later ${LASTINGS.en_US}`);
+							.replaceAll("} min later", `{$1} min later ${AFTER.en_GB}`);
 					break;
 				case "zh_CN":
 					splitedDescriptions[splitedDescriptions.length - 1] =
@@ -620,7 +658,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("{", `${LASTINGS.zh_CN}{`);
+							.replaceAll("{", `${AFTER.zh_CN}{`);
 					break;
 				case "zh_TW":
 					splitedDescriptions[splitedDescriptions.length - 1] =
@@ -629,7 +667,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("{", `${LASTINGS.zh_TW}{`);
+							.replaceAll("{", `${AFTER.zh_TW}{`);
 					break;
 				case "ja":
 					// Japanese support from ColorfulClouds is broken for sometime
@@ -638,13 +676,13 @@ function colorfulCloudsToNextHour(providerName, data) {
 					// TODO: I am not familiar for Japanese, contributions welcome
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("{", `${LASTINGS.ja}{`);
+							.replaceAll("{", `${AFTER.ja}{`);
 					break;
 				case "en_US":
 				default:
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("} min later", `{$1} min later ${LASTINGS.en_US}`);
+							.replaceAll("} min later", `{$1} min later ${AFTER.en_US}`);
 					break;
 			}
 
@@ -666,27 +704,54 @@ function colorfulCloudsToNextHour(providerName, data) {
 			return deca[Math.floor(n / 10) - 2] + 'y-' + special[n % 10];
 		};
 
-		if (!isClear) {
-			times?.forEach((timeInString, index) => {
-				const time = parseInt(timeInString);
-
-				if (!isNaN(time)) {
-					const key = `${stringifyNumber(index + 1)}At`;
-
-					longDescription = longDescription.replace(timeInString, '{' + key + '}');
-					// times after {firstAt} is lasting time in Apple Weather
-					// and will be displayed as `lasting for {secondAt} - {firstAt} min`
-					longDescription = insertLastingToDescription(language, longDescription);
-					parameters[key] = time;
-				}
-			});
-		}
-
-		return [{
+		const descriptions = [];
+		descriptions.push({
 			long: longDescription,
 			short: forecastKeypoint ?? minutelyDescription,
 			parameters,
-		}];
+		});
+
+		if (!isClear) {
+			// split sentence by time
+			times?.forEach(time => {
+				const startIndex = longDescription.indexOf(time) + time.length;
+				const splitors = getSentenceSplitors(language);
+
+				let splitIndex = 0;
+				for (const splitor of splitors) {
+					const index = longDescription.indexOf(splitor, startIndex) + splitor.length;
+
+					if (index !== -1 && (splitIndex === 0 || index < splitIndex)) {
+						splitIndex = index;
+					}
+				}
+
+				descriptions.push({
+					long: longDescription.slice(splitIndex),
+					short: forecastKeypoint ?? minutelyDescription,
+					parameters,
+				});
+			});
+
+			// format description.long and add parameters
+			for (const description of descriptions) {
+				times?.forEach((timeInString, index) => {
+					const time = parseInt(timeInString);
+	
+					if (!isNaN(time)) {
+						const key = `${stringifyNumber(index + 1)}At`;
+	
+						description.long = description.long.replace(timeInString, '{' + key + '}');
+						// times after {firstAt} is lasting time in Apple Weather
+						// and will be displayed as `lasting for {secondAt} - {firstAt} min`
+						description.long = insertAfterToDescription(language, description.long);
+						description.parameters[key] = time;
+					}
+				});
+			}
+		}
+
+		return descriptions;
 	};
 
 	return toNextHourObject(
@@ -703,6 +768,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 		toMinutes(
 			precipStandard,
 			getWeatherType(data?.result?.hourly?.skycon),
+			data?.result?.minutely?.description,
 			data?.result?.minutely?.precipitation_2h,
 			data?.result?.minutely?.probability,
 		),
