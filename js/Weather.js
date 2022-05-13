@@ -619,7 +619,6 @@ function colorfulCloudsToNextHour(providerName, data) {
 	function toDescriptions(isClear, forecastKeypoint, minutelyDescription, language) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
 		// match all numbers in descriptions to array
-		const times = longDescription?.match(/\d+/g);
 		const parameters = {};
 
 		function getSentenceSplitors(language) {
@@ -715,7 +714,8 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 		if (!isClear) {
 			// split sentence by time
-			times?.forEach(timeInString => {
+			const allTimes = longDescription?.match(/\d+/g);
+			allTimes?.forEach(timeInString => {
 				const startIndex = longDescription.indexOf(timeInString) + timeInString.length;
 				const splitors = getSentenceSplitors(language);
 
@@ -737,6 +737,7 @@ function colorfulCloudsToNextHour(providerName, data) {
 
 			// format description.long and add parameters
 			for (const description of descriptions) {
+				const times = description.long?.match(/\d+/g);
 				times?.forEach((timeInString, index) => {
 					const time = parseInt(timeInString);
 	

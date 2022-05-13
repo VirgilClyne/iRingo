@@ -637,7 +637,6 @@ async function WAQI(type = "", input = {}) {
 	function toDescriptions(isClear, forecastKeypoint, minutelyDescription, language) {
 		let longDescription = minutelyDescription ?? forecastKeypoint;
 		// match all numbers in descriptions to array
-		const times = longDescription?.match(/\d+/g);
 		const parameters = {};
 
 		function getSentenceSplitors(language) {
@@ -733,7 +732,8 @@ async function WAQI(type = "", input = {}) {
 
 		if (!isClear) {
 			// split sentence by time
-			times?.forEach(timeInString => {
+			const allTimes = longDescription?.match(/\d+/g);
+			allTimes?.forEach(timeInString => {
 				const startIndex = longDescription.indexOf(timeInString) + timeInString.length;
 				const splitors = getSentenceSplitors(language);
 
@@ -755,6 +755,7 @@ async function WAQI(type = "", input = {}) {
 
 			// format description.long and add parameters
 			for (const description of descriptions) {
+				const times = description.long?.match(/\d+/g);
 				times?.forEach((timeInString, index) => {
 					const time = parseInt(timeInString);
 	
