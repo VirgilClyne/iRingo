@@ -107,7 +107,7 @@ const WEATHER_STATUS = {
 									Settings.NextHour?.HTTPHeaders,
 									token,
 									{ latitude: Params.lat, longitude: Params.lng },
-									"minutely",
+									"weather",
 									// unit for calculate precipitations
 									// https://docs.caiyunapp.com/docs/tables/precip
 									{ "unit": "metric:v2", "lang": toColorfulCloudsLang(languageWithReigon) },
