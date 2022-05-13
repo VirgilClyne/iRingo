@@ -436,7 +436,7 @@ function weatherOl(lat, lng) {
  * @author WordlessEcho
  * @author shindgewongxj
  * @param {Object} headers - HTTP headers
- * @param {Object} location - { lat, lng }
+ * @param {Object} location - { latitude, longitude }
  * @param {string} token - token for ColorfulClouds API
  * @param {Object} parameters - parameters pass to URL
  * @return {Promise<*>} data from ColorfulClouds
@@ -464,7 +464,7 @@ async function colorfulClouds(
 	const request = {
 		"url": `https://api.caiyunapp.com/v2.6/` +
 			`${token}/` +
-			`${location.lng},${location.lat}/` +
+			`${location.latitude},${location.longitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
 			parametersString && parametersString.length > 0 ? `?${parametersString}` : '',
