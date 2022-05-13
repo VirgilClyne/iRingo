@@ -480,7 +480,7 @@ async function WAQI(type = "", input = {}) {
 	const request = {
 		"url": `https://api.caiyunapp.com/v2.6/` +
 			`${token}/` +
-			`${location.latitude},${location.longitude}/` +
+			`${location.longitude},${location.latitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
 			parametersString && parametersString.length > 0 ? `?${parametersString}` : '',
