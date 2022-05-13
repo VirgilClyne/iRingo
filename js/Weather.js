@@ -1123,7 +1123,7 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 				break;
 			} else {
 				const chance = Math.max(
-					...slicedMinutes.slice(lastBoundIndex, boundIndex).map(minute => minute.chance)
+					...minutesForConditions.slice(0, boundIndex).map(minute => minute.chance)
 				);
 				$.log(`🚧 ${$.name}, max chance = ${chance}`, '');
 				const possibleClear = needPossible(chance);
