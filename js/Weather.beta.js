@@ -471,9 +471,9 @@ async function WAQI(type = "", input = {}) {
 ) {
 	$.log(`🚧 ${$.name}, 正在使用彩云天气 API`, "");
 
-	let parametersString = '';
+	const parametersArray = [];
 	for (const [key, value] of Object.entries(parameters)) {
-		parametersString += `&${key}=${value}`;
+		parametersArray.push(key + '=' + value);
 	}
 
 	// Build request
@@ -483,7 +483,7 @@ async function WAQI(type = "", input = {}) {
 			`${location.longitude},${location.latitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
-			parametersString && parametersString.length > 0 ? `?${parametersString}` : '',
+			parametersArray.length > 0 ? `?${parametersArray.join('&')}` : '',
 		"headers": headers,
 	};
 
