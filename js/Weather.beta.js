@@ -1207,7 +1207,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 			if (boundIndex === -1) {
 				// cannot find the next bound
 				const chance = Math.max(...minutesForConditions.map(minute => minute.chance));
-				$.log(`🚧 ${$.name}, max chance = ${chance}`, '');
+				// $.log(`🚧 ${$.name}, max chance = ${chance}`, '');
 				const possibleClear = needPossible(chance);
 				timeStatus = [TIME_STATUS.CONSTANT];
 
@@ -1222,7 +1222,7 @@ async function outputAQI(apiVersion, now, obs, weather, Settings) {
 				const chance = Math.max(
 					...minutesForConditions.slice(0, boundIndex).map(minute => minute.chance)
 				);
-				$.log(`🚧 ${$.name}, max chance = ${chance}`, '');
+				// $.log(`🚧 ${$.name}, max chance = ${chance}`, '');
 				const possibleClear = needPossible(chance);
 				const currentWeather = minutesForConditions[boundIndex].weatherStatus;
 				const endTime = convertTime(apiVersion, new Date(startTime), lastBoundIndex + boundIndex);
