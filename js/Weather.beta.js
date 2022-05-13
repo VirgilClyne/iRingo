@@ -463,9 +463,8 @@ async function WAQI(type = "", input = {}) {
 		"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
 			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
 	},
-	location,
-	// Colorful Clouds example token
 	token,
+	location,
 	path = "weather",
 	parameters = { "alert": true, "dailysteps": 1, "hourlysteps": 24 },
 ) {
@@ -478,13 +477,13 @@ async function WAQI(type = "", input = {}) {
 
 	// Build request
 	const request = {
+		"headers": headers,
 		"url": `https://api.caiyunapp.com/v2.6/` +
 			`${token}/` +
 			`${location.longitude},${location.latitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
 			`${parametersArray.length > 0 ? '?' + parametersArray.join('&') : ''}`,
-		"headers": headers,
 	};
 
   // $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
