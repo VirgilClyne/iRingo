@@ -100,13 +100,17 @@ const WEATHER_STATUS = {
 				if (!(data?.forecastNextHour?.metadata?.providerName || data?.next_hour?.provider_name)) {
 					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
 						if (Settings.NextHour?.Mode === "api.caiyunapp.com") {
+							const CC_API_VERSION = "v2.6";
 							const token = Settings.NextHour?.ColorfulClouds?.Auth;
 							const languageWithReigon = Params.language;
+
 							if (token) {
 								const minutelyData = await colorfulClouds(
 									Settings.NextHour?.HTTPHeaders,
+									CC_API_VERSION,
 									token,
 									{ latitude: Params.lat, longitude: Params.lng },
+									// get hourly.skycon data to detect the weather type
 									"weather",
 									// unit for calculate precipitations
 									// https://docs.caiyunapp.com/docs/tables/precip
@@ -453,6 +457,7 @@ async function WAQI(type = "", input = {}) {
  * @author WordlessEcho
  * @author shindgewongxj
  * @param {Object} headers - HTTP headers
+ * @param {string} apiVersion - ColorfulClouds API version
  * @param {string} token - token for ColorfulClouds API
  * @param {Object} location - { latitude, longitude }
  * @param {Object} parameters - parameters pass to URL
@@ -464,6 +469,7 @@ async function colorfulClouds(
 		"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
 			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
 	},
+	apiVersion,
 	token,
 	location,
 	path = "weather",
@@ -479,8 +485,7 @@ async function colorfulClouds(
 	// Build request
 	const request = {
 		"headers": headers,
-		"url": `https://api.caiyunapp.com/v2.6/` +
-			`${token}/` +
+		"url": `https://api.caiyunapp.com/${apiVersion}/${token}/` +
 			`${location.longitude},${location.latitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
@@ -542,6 +547,7 @@ async function colorfulClouds(
  * @return {Object} object for `outputNextHour()`
  */
 function colorfulCloudsToNextHour(providerName, data) {
+	const SUPPORTED_VERSIONS = [ 2 ];
 	// words that used to insert into description
 	const AFTER = {
 		"zh_CN": "再过",
@@ -559,6 +565,22 @@ function colorfulCloudsToNextHour(providerName, data) {
 		"zh_TW": ["，"],
 		"ja": ["、"],
 	};
+
+	function getMajorVersion(apiVersion) {
+		const startIndex = apiVersion.indexOf('v') + 1;
+		const endIndex = apiVersion.indexOf('.');
+
+		return apiVersion.slice(startIndex, endIndex);
+	}
+
+	const majorVersion = getMajorVersion(data?.api_version);
+	if (!SUPPORTED_VERSIONS.includes(majorVersion)) {
+		$.logErr(
+			`❗️${$.name}, ${colorfulCloudsToNextHour.name}: 不支持此版本的API, `,
+			`api_version = ${data?.api_version}`, ''
+		);
+		throw new Error(`Unsupported API version ${data?.api_version}`);
+	}
 
 	// the unit of server_time is second
 	const serverTime = parseInt(data?.server_time);
