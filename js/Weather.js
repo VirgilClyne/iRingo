@@ -467,11 +467,11 @@ async function colorfulClouds(
 			`${location.longitude},${location.latitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
-			parametersArray.length > 0 ? `?${parametersArray.join('&')}` : '',
+			`${parametersArray.length > 0 ? '?' + parametersArray.join('&') : ''}`,
 		"headers": headers,
 	};
 
-  $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
+  // $.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
 
 	// API Document
 	// https://docs.caiyunapp.com/docs/introreturn

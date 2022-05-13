@@ -483,7 +483,7 @@ async function WAQI(type = "", input = {}) {
 			`${location.longitude},${location.latitude}/` +
 			// https://docs.caiyunapp.com/docs/weather/
 			`${path}` +
-			parametersArray.length > 0 ? `?${parametersArray.join('&')}` : '',
+			`${parametersArray.length > 0 ? '?' + parametersArray.join('&') : ''}`,
 		"headers": headers,
 	};
 
