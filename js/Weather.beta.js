@@ -159,7 +159,11 @@ const WEATHER_STATUS = {
 								}
 							}
 						} else {
-							const minutelyData = await weatherOl(Params.lat, Params.lng);
+							const minutelyData = await weatherOl(
+                Settings.NextHour?.HTTPHeaders,
+                { latitude: Params.lat, longitude: Params.lng },
+                "forecast",
+              );
 							const providerName = "气象在线";
 
 							if (minutelyData) {
@@ -396,15 +400,28 @@ async function WAQI(type = "", input = {}) {
  * Get data from "气象在线"
  * https://docs.caiyunapp.com/docs/v2.2/intro
  * https://open.caiyunapp.com/%E9%80%9A%E7%94%A8%E9%A2%84%E6%8A%A5%E6%8E%A5%E5%8F%A3/v2.2
+ * @author VirgilClyne
  * @author WordlessEcho
- * @param {Number} lat - latitude
- * @param {Number} lng - longitude
+ * @param {Object} headers - HTTP headers
+ * @param {Object} location - { latitude, longitude }
+ * @param {string} type - forecast or realtime
  * @return {Promise<*>} data from "气象在线"
  */
- function weatherOl(lat, lng) {
+ function weatherOl(
+	headers = {
+		"Content-Type": "application/x-www-form-urlencoded",
+		"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
+			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
+	},
+	type,
+	location,
+) {
 	// this API could be considered as unconfigurable ColorfulClouds API
 	const request = {
-		"url": `https://www.weatherol.cn/api/minute/getPrecipitation?type=forecast&ll=${lng},${lat}`
+		"headers": headers,
+		"url": "https://www.weatherol.cn/api/minute/getPrecipitation" +
+			`?type=${type}` +
+			`&ll=${location.longitude},${location.latitude}`,
 	};
 
 	return new Promise((resolve) => {
@@ -428,7 +445,7 @@ async function WAQI(type = "", input = {}) {
 					throw new Error(
 						_data?.error ??
 						`API returned status: ${_data?.status}` ??
-						"Failed to request weatherol.cn"
+						"Failed to request www.weatherol.cn"
 					);
 				}
 			} catch (e) {
