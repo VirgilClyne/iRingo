@@ -98,66 +98,74 @@ const WEATHER_STATUS = {
 				);
 
 				if (!(data?.forecastNextHour?.metadata?.providerName || data?.next_hour?.provider_name)) {
-					if (!out_of_china(parseFloat(Params.lng), parseFloat(Params.lat))) {
-						if (Settings.NextHour?.Mode === "api.caiyunapp.com") {
-							const CC_API_VERSION = "v2.6";
-							const token = Settings.NextHour?.ColorfulClouds?.Auth;
-							const languageWithReigon = Params.language;
+					if (Settings.NextHour?.Mode === "api.caiyunapp.com") {
+						const CC_API_VERSION = "v2.6";
+						const token = Settings.NextHour?.ColorfulClouds?.Auth;
+						const languageWithReigon = Params.language;
 
-							if (token) {
-								// No official name for Japanese
-								let providerName = "ColorfulClouds";
-								if (languageWithReigon.includes("zh-Hans")) {
-									providerName = "彩云天气";
-								} else if (languageWithReigon.includes("zh-Hant")) {
-									providerName = "彩雲天氣";
-								}
-
-								const weatherData = await colorfulClouds(
-									Settings.NextHour?.HTTPHeaders,
-									CC_API_VERSION,
-									token,
-									{ latitude: Params.lat, longitude: Params.lng },
-									// get hourly.skycon data to detect the weather type
-									"weather",
-									// unit for calculate precipitations
-									// https://docs.caiyunapp.com/docs/tables/precip
-									{ "unit": "metric:v2", "lang": toColorfulCloudsLang(languageWithReigon) },
-								);
-
-								if (weatherData) {
-									data = await outputNextHour(
-										Params.ver,
-										colorfulCloudsToNextHour(
-											providerName,
-											weatherData?.result?.hourly?.skycon,
-											weatherData,
-										),
-										data,
-										null,
-									);
-								}
+						if (token) {
+							// No official name for Japanese
+							let providerName = "ColorfulClouds";
+							if (languageWithReigon.includes("zh-Hans")) {
+								providerName = "彩云天气";
+							} else if (languageWithReigon.includes("zh-Hant")) {
+								providerName = "彩雲天氣";
 							}
-						} else {
-							const providerName = "气象在线";
-							const weatherData = await weatherOl(
-                Settings.NextHour?.HTTPHeaders,
-                { latitude: Params.lat, longitude: Params.lng },
-                "forecast",
-              );
 
-							if (weatherData) {
+							const weatherData = await colorfulClouds(
+								Settings.NextHour?.HTTPHeaders,
+								CC_API_VERSION,
+								token,
+								{ latitude: Params.lat, longitude: Params.lng },
+								// get hourly.skycon data to detect the weather type
+								"weather",
+								// unit for calculate precipitations
+								// https://docs.caiyunapp.com/docs/tables/precip
+								{ "unit": "metric:v2", "lang": toColorfulCloudsLang(languageWithReigon) },
+							);
+
+							// no data for current location, skip
+							if (
+								weatherData &&
+								weatherData?.result?.minutely?.datasource &&
+								weatherData.result.minutely.datasource !== "gfs"
+							) {
 								data = await outputNextHour(
 									Params.ver,
 									colorfulCloudsToNextHour(
 										providerName,
-										weatherData?.result?.hourly?.skycon,
+										weatherData.result?.hourly?.skycon,
 										weatherData,
 									),
 									data,
 									null,
 								);
 							}
+						}
+					} else {
+						const providerName = "气象在线";
+						const weatherData = await weatherOl(
+              Settings.NextHour?.HTTPHeaders,
+              { latitude: Params.lat, longitude: Params.lng },
+              "forecast",
+            );
+
+						// no data for current location, skip
+						if (
+							weatherData &&
+							weatherData?.result?.minutely?.datasource &&
+							weatherData.result.minutely.datasource !== "gfs"
+						) {
+							data = await outputNextHour(
+								Params.ver,
+								colorfulCloudsToNextHour(
+									providerName,
+									weatherData.result?.hourly?.skycon,
+									weatherData,
+								),
+								data,
+								null,
+							);
 						}
 					}
 
@@ -1367,21 +1375,6 @@ async function outputNextHour(apiVersion, nextHourObject, weather, debugOptions)
 };
 
 /***************** Fuctions *****************/
-/**
- * 判断是否在国内
- * https://github.com/wandergis/coordtransform/blob/master/index.js#L134
- * @author wandergis
- * @param {Number} lat - latitude
- * @param {Number} lng - longitude
- * @returns {boolean}
- */
-function out_of_china(lng, lat) {
-	var lat = +lat;
-	var lng = +lng;
-	// 纬度 3.86~53.55, 经度 73.66~135.05 
-	return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
-};
-
 /**
  * Convert Time
  * @author VirgilClyne
