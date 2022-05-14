@@ -913,7 +913,7 @@ function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
 		// 2 demical places in `precipIntensity`
 		const INTENSITY_DECIMAL_PLACES = 100;
 
-		return getRandomInt(
+		return getRandomIntInclusive(
 			lower * INTENSITY_DECIMAL_PLACES, upper * INTENSITY_DECIMAL_PLACES
 		) / INTENSITY_DECIMAL_PLACES;
 	};
@@ -1214,7 +1214,7 @@ async function outputNextHour(apiVersion, nextHourObject, debugOptions) {
 			// 3 demical places in `precipIntensityPerceived`
 			const PERCEIVED_DECIMAL_PLACES = 1000;
 
-			return getRandomInt(
+			return getRandomIntInclusive(
 				lower * PERCEIVED_DECIMAL_PLACES, upper * PERCEIVED_DECIMAL_PLACES
 			) / PERCEIVED_DECIMAL_PLACES;
 		};
@@ -1649,17 +1649,17 @@ function toColorfulCloudsLang(languageWithReigon) {
 };
 
 /**
- * get random int (not include maximum)
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+ * get random int
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values_inclusive
  * @author Mozilla
  * @param {Number} min - minimum of random number
  * @param {Number} max - maximum of random number
- * @returns {Number} random number in this range (not include maximum)
+ * @returns {Number} random number in this range
  */
-function getRandomInt(min, max) {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 }
 
 /***************** Env *****************/
