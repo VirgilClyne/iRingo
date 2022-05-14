@@ -105,6 +105,14 @@ const WEATHER_STATUS = {
 							const languageWithReigon = Params.language;
 
 							if (token) {
+								// No official name for Japanese
+								let providerName = "ColorfulClouds";
+								if (languageWithReigon.includes("zh-Hans")) {
+									providerName = "彩云天气";
+								} else if (languageWithReigon.includes("zh-Hant")) {
+									providerName = "彩雲天氣";
+								}
+
 								const weatherData = await colorfulClouds(
 									Settings.NextHour?.HTTPHeaders,
 									CC_API_VERSION,
@@ -116,23 +124,6 @@ const WEATHER_STATUS = {
 									// https://docs.caiyunapp.com/docs/tables/precip
 									{ "unit": "metric:v2", "lang": toColorfulCloudsLang(languageWithReigon) },
 								);
-
-								let providerName = "ColorfulClouds";
-								switch (languageWithReigon) {
-									case "zh-Hans":
-										providerName = "彩云天气";
-										break;
-									case "zh-Hant":
-										providerName = "彩雲天氣";
-										break;
-									// No official name for Japanese
-									case "ja":
-									case "en-US":
-									case "en-GB":
-									default:
-										providerName = "ColorfulClouds";
-										break;
-								}
 
 								if (weatherData) {
 									data = await outputNextHour(
@@ -148,12 +139,12 @@ const WEATHER_STATUS = {
 								}
 							}
 						} else {
+							const providerName = "气象在线";
 							const weatherData = await weatherOl(
                 Settings.NextHour?.HTTPHeaders,
                 { latitude: Params.lat, longitude: Params.lng },
                 "forecast",
               );
-							const providerName = "气象在线";
 
 							if (weatherData) {
 								data = await outputNextHour(
