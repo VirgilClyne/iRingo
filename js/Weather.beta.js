@@ -120,7 +120,7 @@ const WEATHER_STATUS = {
 							const languageWithReigon = Params.language;
 
 							if (token) {
-								const minutelyData = await colorfulClouds(
+								const weatherData = await colorfulClouds(
 									Settings.NextHour?.HTTPHeaders,
 									CC_API_VERSION,
 									token,
@@ -149,27 +149,35 @@ const WEATHER_STATUS = {
 										break;
 								}
 
-								if (minutelyData) {
+								if (weatherData) {
 									data = await outputNextHour(
 										Params.ver,
-										colorfulCloudsToNextHour(providerName, minutelyData),
+										colorfulCloudsToNextHour(
+											providerName,
+											weatherData?.result?.hourly?.skycon,
+											weatherData,
+										),
 										data,
 										null,
 									);
 								}
 							}
 						} else {
-							const minutelyData = await weatherOl(
+							const weatherData = await weatherOl(
                 Settings.NextHour?.HTTPHeaders,
                 { latitude: Params.lat, longitude: Params.lng },
                 "forecast",
               );
 							const providerName = "气象在线";
 
-							if (minutelyData) {
+							if (weatherData) {
 								data = await outputNextHour(
 									Params.ver,
-									colorfulCloudsToNextHour(providerName, minutelyData),
+									colorfulCloudsToNextHour(
+										providerName,
+										weatherData?.result?.hourly?.skycon,
+										weatherData,
+									),
 									data,
 									null,
 								);
@@ -557,13 +565,41 @@ async function WAQI(type = "", input = {}) {
 }
 
 /**
+ * differ rain or snow from ColorfulClouds hourly skycons
+ * https://docs.caiyunapp.com/docs/tables/skycon/
+ * @author WordlessEcho
+ * @param {Array} skycons - skycon array from ColorfulClouds
+ * @return {string} one of WEATHER_TYPES
+ */
+ function getCcWeatherType(skycons) {
+	// enough for us
+	const SKY_CONDITION_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
+	const skyCondition = skycons?.map(skycon => skycon.value)?.find(condition =>
+		condition.includes(SKY_CONDITION_KEYWORDS.RAIN) ||
+		condition.includes(SKY_CONDITION_KEYWORDS.SNOW)
+	);
+
+	if (!skyCondition) {
+		// although this function is designed for find out rain or snow
+		return WEATHER_TYPES.CLEAR;
+	} else {
+		if (skyCondition.includes(SKY_CONDITION_KEYWORDS.SNOW)) {
+			return WEATHER_TYPES.SNOW;
+		} else {
+			return WEATHER_TYPES.RAIN;
+		}
+	}
+};
+
+/**
  * Covert data from ColorfulClouds to NextHour object
  * @author WordlessEcho
- * @param {Object} data - data from ColorfulClouds API
+ * @param {Object} dataWithMinutely - data with minutely
+ * @param {Array} hourlySkycons - skycon array in hourly
  * @return {Object} object for `outputNextHour()`
  */
- function colorfulCloudsToNextHour(providerName, data) {
-	const SUPPORTED_VERSIONS = [ 2 ];
+ function colorfulCloudsToNextHour(providerName, hourlySkycons, dataWithMinutely) {
+	const SUPPORTED_APIS = [ 2 ];
 	// words that used to insert into description
 	const AFTER = {
 		"zh_CN": "再过",
@@ -585,22 +621,37 @@ async function WAQI(type = "", input = {}) {
 	// version from API is beginning with `v`
 	function getMajorVersion(apiVersion) { return parseInt(apiVersion.slice(1)) };
 
-	const majorVersion = getMajorVersion(data?.api_version);
-	if (!SUPPORTED_VERSIONS.includes(majorVersion)) {
+	const apiVersion = dataWithMinutely?.api_version;
+	const majorVersion = getMajorVersion(apiVersion);
+	if (!SUPPORTED_APIS.includes(majorVersion)) {
 		$.logErr(
 			`❗️${$.name}, ${colorfulCloudsToNextHour.name}: 不支持此版本的API, `,
-			`api_version = ${data?.api_version}`, ''
+			`api_version = ${apiVersion}`, ''
 		);
-		throw new Error(`Unsupported API version ${data?.api_version}`);
+		throw new Error(`Unsupported API version ${apiVersion}`);
 	}
 
 	// the unit of server_time is second
-	const serverTime = parseInt(data?.server_time);
-	let unit;
-	let precipStandard;
+	const serverTime = parseInt(dataWithMinutely?.server_time);
+	const serverTimestamp = !isNaN(serverTime) ? serverTime * 1000 : (+ new Date());
+	const ccLanguage = dataWithMinutely?.lang;
+	// example: replace `zh_CN` to `zh-CN`
+	const language = ccLanguage?.replace('_', '-') ?? "en-US";
+	const location = {
+		latitude: Array.isArray(dataWithMinutely?.location) ? dataWithMinutely.location[0] : -1,
+		longitude: Array.isArray(dataWithMinutely?.location) && dataWithMinutely.location.length > 1
+			? dataWithMinutely.location[1] : -1,
+	}
+	const minutely = dataWithMinutely?.result?.minutely;
+	const minutelyDescription = minutely?.description;
+	const precipitationTwoHr = minutely?.precipitation_2h;
+	const probability = minutely?.probability;
+	const forecastKeypoint = dataWithMinutely?.result?.forecast_keypoint;
 
+	let unit = "radar";
+	let precipStandard = RADAR_PRECIPITATION_RANGE;
 	// https://docs.caiyunapp.com/docs/tables/unit/
-	switch (data?.unit) {
+	switch (dataWithMinutely?.unit) {
 		case "SI":
 			unit = "metersPerSecond";
 			// TODO: find out the standard of this unit
@@ -622,27 +673,6 @@ async function WAQI(type = "", input = {}) {
 			precipStandard = RADAR_PRECIPITATION_RANGE;
 			break;
 	}
-
-	// https://docs.caiyunapp.com/docs/tables/skycon/
-	// differ rain or snow
-	function getWeatherType(skycon) {
-		// enough for us
-		const CAIYUN_SKYCON_KEYWORDS = { CLEAR: "CLEAR", RAIN: "RAIN", SNOW: "SNOW" };
-		const ccWeatherType = skycon?.map(hourly => hourly.value)?.find(value =>
-			value.includes(CAIYUN_SKYCON_KEYWORDS.RAIN) || value.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)
-		);
-
-		if (!ccWeatherType) {
-			// although getWeatherType() is designed for find out rain or snow
-			return WEATHER_TYPES.CLEAR;
-		} else {
-			if (ccWeatherType.includes(CAIYUN_SKYCON_KEYWORDS.SNOW)) {
-				return WEATHER_TYPES.SNOW;
-			} else {
-				return WEATHER_TYPES.RAIN;
-			}
-		}
-	};
 
 	function toMinutes(standard, weatherType, minutelyDescription, precipitations, probability) {
 		if (!Array.isArray(precipitations)) return [];
@@ -853,30 +883,27 @@ async function WAQI(type = "", input = {}) {
 	};
 
 	return toNextHourObject(
-		serverTime ? serverTime * 1000 : (+ new Date()),
-		// example: replace `zh_CN` to `zh-CN`
-		data.lang?.replace('_', '-') ?? "en-US",
-		{
-			latitude: Array.isArray(data?.location) ? data.location[0] : -1,
-			longitude: Array.isArray(data?.location) && data.location.length > 1 ? data.location[1] : -1,
-		},
+		serverTimestamp,
+		language,
+		location,
 		providerName,
 		unit,
 		precipStandard,
 		toMinutes(
 			precipStandard,
-			getWeatherType(data?.result?.hourly?.skycon),
-			data?.result?.minutely?.description,
-			data?.result?.minutely?.precipitation_2h,
-			data?.result?.minutely?.probability,
+			getCcWeatherType(hourlySkycons),
+			minutelyDescription,
+			precipitationTwoHr,
+			probability,
 		),
 		toDescriptions(
-			!(Math.max(...data?.result?.minutely?.precipitation ?? [0]) >= precipStandard.NO.UPPER),
-			data?.result?.forecast_keypoint,
-			data?.result?.minutely?.description,
-			data?.lang,
+			// display description only rain in one hour
+			!(Math.max(...precipitationTwoHr.slice(0, 59) ?? [0]) >= precipStandard.NO.UPPER),
+			forecastKeypoint,
+			minutelyDescription,
+			ccLanguage,
 		),
-	)
+	);
 };
 
 function debugToNextHour(debugOptions = DataBase.Weather.NextHour.Debug) {
