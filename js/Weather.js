@@ -180,11 +180,6 @@ const WEATHER_STATUS = {
 					$.log(`🎉 ${$.name}, 已有下一小时降水强度信息, 跳过`, "");
 				}
 			}
-
-			if (Params.ver === "v1") {
-				$.log(`🚧 ${$.name}, 检测到API版本为${Params.ver}，适配尚处于测试阶段。`, "");
-				// $.log(`🚧 ${$.name}, next_hour = ${JSON.stringify(data?.next_hour)}`, "");
-			}
 		};
 		body = JSON.stringify(data);
 	}
