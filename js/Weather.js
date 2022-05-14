@@ -387,7 +387,7 @@ async function WAQI(type = "", input = {}) {
  * @author WordlessEcho
  * @param {Object} headers - HTTP headers
  * @param {Object} location - { latitude, longitude }
- * @param {string} type - forecast or realtime
+ * @param {string} type - `forecast` or `realtime`
  * @return {Promise<*>} data from "气象在线"
  */
  function weatherOl(
