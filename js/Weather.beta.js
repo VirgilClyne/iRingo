@@ -161,8 +161,8 @@ const WEATHER_STATUS = {
 						const providerName = "气象在线";
 						const weatherData = await weatherOl(
               Settings.NextHour?.HTTPHeaders,
-              { latitude: Params.lat, longitude: Params.lng },
               "forecast",
+              { latitude: Params.lat, longitude: Params.lng },
             );
 
 						// no data for current location, skip
@@ -405,8 +405,8 @@ async function WAQI(type = "", input = {}) {
  * @author VirgilClyne
  * @author WordlessEcho
  * @param {Object} headers - HTTP headers
- * @param {Object} location - { latitude, longitude }
  * @param {string} type - `forecast` or `realtime`
+ * @param {Object} location - { latitude, longitude }
  * @return {Promise<*>} data from "气象在线"
  */
  function weatherOl(
