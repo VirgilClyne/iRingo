@@ -4,16 +4,10 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Location Services v2.0.0-beta");
 const URL = new URLs();
 const DataBase = {
-	"Location": {
-		"Settings":{"Switch":true,"CountryCode":"US"}
-	},
-	"Weather": {
-		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
-		"Config":{"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"},"Status":{"clear":"clear","sleet":"sleet","drizzle":"rain","rain":"rain","heavy_rain":"rain","flurries":"snow","snow":"snow","heavy_snow":"snow"},"Precipitation":{"Level":{"INVALID":-1,"NO":0,"LIGHT":1,"MODERATE":2,"HEAVY":3,"STORM":4},"Range":{"RADAR":{"NO":[0,0.031],"LIGHT":[0.031,0.25],"MODERATE":[0.25,0.35],"HEAVY":[0.35,0.48],"STORM":[0.48,1]},"MMPERHR":{"NO":[0,0.08],"LIGHT":[0.08,3.44],"MODERATE":[3.44,11.33],"HEAVY":[11.33,51.30],"STORM":[51.30,100]}}}}
-	},
-	"Siri": {
-		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
-	}
+	"Location":{"Switch":true,"CountryCode":"US"},
+	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
+	"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
 };
 var { url } = $request;
 if (typeof $response !== "undefined") var { headers, body } = $response
@@ -21,7 +15,7 @@ else var response
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings } = await setENV("iRingo", "Location", DataBase);
+	const Settings = await setENV("iRingo", "Location", DataBase);
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		console.log(url.path);
@@ -64,14 +58,14 @@ else var response
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(name, platform, database) {
+ async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let Settings = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return Settings
-	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n[e].Settings,g=i?.[e]?.Caches||n[e].Caches||{},f=i?.[e]?.Config||n[e].Config;if("undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)r(e,a,t[a]);Object.assign(s,e)}function r(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:g,Config:f}}
+	async function getENV(t,e,n){let i=$.getjson(t,n),r=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var s in t)f(e,s,t[s]);Object.assign(r,e)}function f(t,e,n){e.split(".").reduce(((t,i,r)=>t[i]=e.split(".").length===++r?n:t[i]||{}),t)}}return r}
 };
 
 /***************** Env *****************/
