@@ -216,7 +216,7 @@ const WEATHER_STATUS = {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
-	Settings.NextHour.HTTPHeaders = Settings.NextHour?.HTTPHeaders ?
+	Settings.NextHour.HTTPHeaders = typeof Settings.NextHour?.HTTPHeaders === "string" ?
 		JSON.parse(Settings.NextHour.HTTPHeaders) : database.Weather.NextHour.HTTPHeaders // BoxJs字符串转Object
 	if (Settings.NextHour?.Debug?.Switch) Settings.NextHour.Debug.Switch = JSON.parse(Settings.NextHour?.Debug?.Switch ?? false) // BoxJs字符串转Boolean
 	Settings.AQI.Switch = JSON.parse(Settings.AQI.Switch) // BoxJs字符串转Boolean
