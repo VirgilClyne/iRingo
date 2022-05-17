@@ -213,7 +213,6 @@ const WEATHER_STATUS = {
  async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let Settings = await getENV(name, platform, database);
-	$.log(`⚠ ${$.name}, Settings = ${JSON.stringify(Settings)}`, "");
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
@@ -355,7 +354,6 @@ async function WAQI(type = "", input = {}) {
 							// https://api.waqi.info/mapq/nearest/?n=1&geo=1/lat/lng
 							// https://api.waqi.info/mapq2/nearest?n=1&geo=1/lat/lng
 							if (type == "Nearest") {
-								$.log(`⚠ ${$.name}, nearest data = ${JSON.stringify(_data)}`, "");
 								// 空值合并运算符
 								var station = _data?.data?.stations?.[0] ?? _data?.d?.[0] ?? null;
 								var idx = station?.idx ?? station?.x ?? null;
