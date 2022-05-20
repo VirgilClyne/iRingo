@@ -755,7 +755,7 @@ async function colorfulClouds(
 						splitedDescriptions[splitedDescriptions.length - 1]
 							// remove stopping & later
 							// (.*?) will match `*At`
-							.replaceAll("} min later", `{$1} min later ${AFTER.en_GB}`);
+							.replaceAll("} min later", `} min later ${AFTER.en_GB}`);
 					break;
 				case "zh_CN":
 					splitedDescriptions[splitedDescriptions.length - 1] =
@@ -788,7 +788,7 @@ async function colorfulClouds(
 				default:
 					splitedDescriptions[splitedDescriptions.length - 1] =
 						splitedDescriptions[splitedDescriptions.length - 1]
-							.replaceAll("} min later", `{$1} min later ${AFTER.en_US}`);
+							.replaceAll("} min later", `} min later ${AFTER.en_US}`);
 					break;
 			}
 
