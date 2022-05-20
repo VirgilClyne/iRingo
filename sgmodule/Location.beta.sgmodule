@@ -6,10 +6,12 @@
 #!manual=https://github.com/VirgilClyne/iRingo#定位服务
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
+[Header Rewrite]
+http-request ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$ header-replace If-None-Match d63c3481b027fbc233b11e10ce10f2457ab11da6a
+
 [Script]
 # Rewrite Location Services Configuration Functions Internationalization
-# Location Services Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
-# Location Services Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
+Location Services Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
 # Response Location Services Geo Country Code Check Result
 Location Services GeoCountryCode = type=http-request, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.beta.js, argument=
 

@@ -1,9 +1,8 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.0.0-beta");
+const $ = new Env("Apple Location Services v2.1.0-beta");
 const URL = new URLs();
-const ParseXML = new XMLParser();
 const DataBase = {
 	"Location":{"Switch":true,"CountryCode":"US"},
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -34,8 +33,37 @@ else var response
 			if ($.isQuanX()) response.status = "HTTP/1.1 200 OK";
 			console.log(JSON.stringify(response));
 		} else if (url.path == "config/defaults") {
-			let XML = ParseXML(body);
-			$.log(JSON.stringify(XML));
+			let request = {
+				"url": "http://json2plist.sinaapp.com/convert.php",
+				"headers": {
+					"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+					"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
+				}
+			}
+			// plist2json
+			let type = "plist2json"
+			request.body = `do=${type}&content=${encodeURIComponent(body)}`
+			let data = await $.http.post(request).then(v => v.body);
+			//$.log(data);
+			data = JSON.parse(data);
+			data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
+			data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = true; // CN
+			delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
+			delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
+			data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = true; // CN
+			data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = true; // CN
+			data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = true; // CN
+			data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = true; // CN
+			data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
+			data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
+			data["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = true; // US
+			data["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = true; // US
+			data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = true; // US
+			data = JSON.stringify(data);
+			// json2plist
+			type = "json2plist"
+			request.body = `do=${type}&content=${encodeURIComponent(data)}`
+			$response.body = await $.http.post(request).then(v => v.body);
 		}
 	}
 })()
@@ -78,6 +106,3 @@ function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==
 
 // https://github.com/DualSubs/URL/blob/main/URLs.embedded.min.js
 function URLs(s){return new class{constructor(s=[]){this.name="URL v1.0.0",this.opts=s,this.json={url:{scheme:"",host:"",path:""},params:{}}}parse(s){let t=s.match(/(?<scheme>.+):\/\/(?<host>[^/]+)\/?(?<path>[^?]+)?\??(?<params>.*)?/)?.groups??null;return t?.params&&(t.params=Object.fromEntries(t.params.split("&").map((s=>s.split("="))))),t}stringify(s=this.json){return s?.params?s.scheme+"://"+s.host+"/"+s.path+"?"+Object.entries(s.params).map((s=>s.join("="))).join("&"):s.scheme+"://"+s.host+"/"+s.path}}(s)}
-
-// https://github.com/Peng-YM/QuanX/blob/master/Tools/XMLParser/xml-parser.min.js
-function XMLParser(){const r={"&amp;":"&","&lt;":"<","&gt;":">","&apos;":"'","&quot;":'"'};return function(r,e){return s(function(r){for(var s=String.prototype.split.call(r,/<([^!<>?](?:'[\S\s]*?'|"[\S\s]*?"|[^'"<>])*|!(?:--[\S\s]*?--|\[[^\[\]'"<>]+\[[\S\s]*?]]|DOCTYPE[^\[<>]*?\[[\S\s]*?]|(?:ENTITY[^"<>]*?"[\S\s]*?")?[\S\s]*?)|\?[\S\s]*?\?)>/),e=s.length,u={f:[]},f=u,a=[],i=0;i<e;){var o=s[i++];o&&v(o);var l=s[i++];l&&c(l)}return u;function c(r){var n=r.length,t=r[0];if("/"===t)for(var s=r.replace(/^\/|[\s\/].*$/g,"").toLowerCase();a.length;){var e=f.n&&f.n.toLowerCase();if(f=a.pop(),e===s)break}else if("?"===t)p({n:"?",r:r.substr(1,n-2)});else if("!"===t)"[CDATA["===r.substr(1,7)&&"]]"===r.substr(-2)?v(r.substr(8,n-10)):p({n:"!",r:r.substr(1)});else{var u=function(r){var n={f:[]},t=(r=r.replace(/\s*\/?$/,"")).search(/[\s='"\/]/);t<0?n.n=r:(n.n=r.substr(0,t),n.t=r.substr(t));return n}(r);p(u),"/"===r[n-1]?u.c=1:(a.push(f),f=u)}}function p(r){f.f.push(r)}function v(r){(r=n(r))&&p(t(r))}}(r),e)};function n(r){return r&&r.replace(/^\s+|\s+$/g,"")}function t(n){return n.replace(/(&(?:lt|gt|amp|apos|quot|#(?:\d{1,6}|x[0-9a-fA-F]{1,5}));)/g,(function(n){if("#"===n[1]){var t="x"===n[2]?parseInt(n.substr(3),16):parseInt(n.substr(2),10);if(t>-1)return String.fromCharCode(t)}return r[n]||n}))}function s(r,u){if("string"==typeof r)return r;var f=r.r;if(f)return f;var a,i=function(r,s){if(r.t){for(var u,f,a=r.t.split(/([^\s='"]+(?:\s*=\s*(?:'[\S\s]*?'|"[\S\s]*?"|[^\s'"]*))?)/),i=a.length,o=0;o<i;o++){var l=n(a[o]);if(l){u||(u={});var c=l.indexOf("=");if(c<0)l="@"+l,f=null;else{f=l.substr(c+1).replace(/^\s+/,""),l="@"+l.substr(0,c).replace(/\s+$/,"");var p=f[0];p!==f[f.length-1]||"'"!==p&&'"'!==p||(f=f.substr(1,f.length-2)),f=t(f)}s&&(f=s(l,f)),e(u,l,f)}}return u}}(r,u),o=r.f,l=o.length;if(i||l>1)a=i||{},o.forEach((function(r){"string"==typeof r?e(a,"#",r):e(a,r.n,s(r,u))}));else if(l){var c=o[0];if(a=s(c,u),c.n){var p={};p[c.n]=a,a=p}}else a=r.c?null:"";return u&&(a=u(r.n||"",a)),a}function e(r,n,t){if(void 0!==t){var s=r[n];s instanceof Array?s.push(t):r[n]=n in r?[s,t]:t}}}
