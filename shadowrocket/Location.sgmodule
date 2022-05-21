@@ -1,9 +1,0 @@
-#!name= iRingo for Location Services
-#!desc=(V2) 1.修改GCC(Geo Country Code)检测结果 2.Coming Soon……
-
-[Script]
-# Response Location Services Geo Country Code Check Result
-Location Services GeoCountryCode = type=http-request, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.js
-
-[MITM]
-hostname = %APPEND% gspe1-ssl.ls.apple.com
