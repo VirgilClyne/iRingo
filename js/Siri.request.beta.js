@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.2-request-beta");
+const $ = new Env("Apple Siri v2.1.3-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -48,7 +48,6 @@ $.log(`🚧 ${$.name}, url: ${url}`, "");
 		};
 		url = URL.stringify(url);
 		$.log(`🚧 ${$.name}, url: ${url}`, "");
-		if ($.isQuanX) headers["Accept-Encoding"] = "gzip";
 	}
 })()
 	.catch((e) => $.logErr(e))
