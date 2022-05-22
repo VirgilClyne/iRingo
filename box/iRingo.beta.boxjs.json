@@ -14,18 +14,19 @@
 				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
 			],
 			"keys": [
-				"@iRingo.Location"
+				"@iRingo.Settings.Location",
+				"@iRingo.Caches.Location"
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Location.Switch",
+					"id": "@iRingo.Settings.Location.Switch",
 					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Location.CountryCode",
+					"id": "@iRingo.Settings.Location.CountryCode",
 					"name": "国家或地区代码",
 					"val": "US",
 					"type": "selects",
