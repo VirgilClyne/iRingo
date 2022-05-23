@@ -154,21 +154,21 @@
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Weather.Switch",
+					"id": "@iRingo.Weather.Settings.Switch",
 					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Switch",
+					"id": "@iRingo.Weather.Settings.NextHour.Switch",
 					"name": "[下一小时降水]修改开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此功能修改，数据来源：气象在线"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Mode",
+					"id": "@iRingo.Weather.Settings.NextHour.Mode",
 					"name": "[下一小时降水]切换API",
 					"val": "www.weatherol.cn",
 					"type": "radios",
@@ -185,7 +185,7 @@
 					"desc": "气象在线使用的是彩云天气的数据，优点是无需付费，缺点是仅支持简体中文。彩云天气需要付费才能获取获取分钟级降水数据。"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.HTTPHeaders",
+					"id": "@iRingo.Weather.Settings.NextHour.HTTPHeaders",
 					"name": "[下一小时降水]HTTP请求头",
 					"val": "{ \"Content-Type\": \"application/x-www-form-urlencoded\", \"User-Agent\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1\" }",
 					"type": "text",
@@ -193,7 +193,7 @@
 					"desc": "请求API时使用的HTTP请求头"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.ColorfulClouds.Auth",
+					"id": "@iRingo.Weather.Settings.NextHour.ColorfulClouds.Auth",
 					"name": "[下一小时降水]彩云天气令牌",
 					"val": "",
 					"type": "text",
@@ -201,14 +201,14 @@
 					"desc": "彩云天气API令牌"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.Switch",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.Switch",
 					"name": "[下一小时降水]Debug开关",
 					"val": false,
 					"type": "boolean",
 					"desc": "如果您不知道这个开关是用来做什么的，请保持关闭"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.WeatherStatus",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.WeatherStatus",
 					"name": "[下一小时降水]天气类型",
 					"val": "rain",
 					"type": "text",
@@ -216,7 +216,7 @@
 					"desc": "请参见Weather.js中的WEATHER_STATUS"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.Chance",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.Chance",
 					"name": "[下一小时降水]降水或降雪概率",
 					"val": "100",
 					"type": "text",
@@ -224,7 +224,7 @@
 					"desc": "precipChance的值，范围在0到100"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.Delay",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.Delay",
 					"name": "[下一小时降水]雨雪发生时间（分钟后）",
 					"val": "0",
 					"type": "text",
@@ -232,7 +232,7 @@
 					"desc": "一段时间后开始降雨或降雪"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.PrecipLower",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.PrecipLower",
 					"name": "[下一小时降水]随机生成的降水数据的下限（mm/hr）",
 					"val": "0.08",
 					"type": "text",
@@ -240,7 +240,7 @@
 					"desc": "随机生成的precipIntensity的下限，两位小数"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.PrecipUpper",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.PrecipUpper",
 					"name": "[下一小时降水]随机生成的降水数据的上限（mm/hr）",
 					"val": "51.30",
 					"type": "text",
@@ -248,7 +248,7 @@
 					"desc": "随机生成的precipIntensity的上限，两位小数"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.IntensityLower",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.IntensityLower",
 					"name": "[下一小时降水]随机生成UI显示数据的下限",
 					"val": "0",
 					"type": "text",
@@ -256,7 +256,7 @@
 					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的下限，三位小数"
 				},
 				{
-					"id": "@iRingo.Weather.NextHour.Debug.IntensityUpper",
+					"id": "@iRingo.Weather.Settings.NextHour.Debug.IntensityUpper",
 					"name": "[下一小时降水]随机生成UI显示数据的上限",
 					"val": "3",
 					"type": "text",
@@ -264,14 +264,14 @@
 					"desc": "随机生成的precipIntensityPerceived或perceivedIntensity的上限，最大为3，三位小数"
 				},
 				{
-					"id": "@iRingo.Weather.AQI.Switch",
+					"id": "@iRingo.Weather.Settings.AQI.Switch",
 					"name": "[空气质量]修改开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此功能修改，数据来源：WAQI"
 				},
 				{
-					"id": "@iRingo.Weather.AQI.Mode",
+					"id": "@iRingo.Weather.Settings.AQI.Mode",
 					"name": "[空气质量]工作模式",
 					"val": "WAQI Public",
 					"type": "radios",
@@ -288,7 +288,7 @@
 					"desc": "没有申请自己Token的只能使用\"公共API\""
 				},
 				{
-					"id": "@iRingo.Weather.AQI.Location",
+					"id": "@iRingo.Weather.Settings.AQI.Location",
 					"name": "[空气质量]定位精度",
 					"val": "Station",
 					"type": "radios",
@@ -305,7 +305,7 @@
 					"desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
 				},
 				{
-					"id": "@iRingo.Weather.AQI.Auth",
+					"id": "@iRingo.Weather.Settings.AQI.Auth",
 					"name": "[空气质量]WAQI令牌",
 					"val": "",
 					"type": "text",
@@ -313,7 +313,7 @@
 					"desc": "私有API令牌"
 				},
 				{
-					"id": "@iRingo.Weather.AQI.Scale",
+					"id": "@iRingo.Weather.Settings.AQI.Scale",
 					"name": "[空气质量]测量标准代码",
 					"val": "EPA_NowCast.2204",
 					"type": "text",
@@ -321,7 +321,7 @@
 					"desc": "空气质量标准代码，会随系统更新而更新"
 				},
 				{
-					"id": "@iRingo.Weather.Map.AQI",
+					"id": "@iRingo.Weather.Settings.Map.AQI",
 					"name": "[空气质量地图]修改开关",
 					"val": false,
 					"type": "boolean",

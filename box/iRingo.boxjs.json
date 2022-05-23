@@ -14,19 +14,20 @@
 				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
 			],
 			"keys": [
-				"@iRingo.Location"
+				"@iRingo.Location.Settings",
+				"@iRingo.Location.Caches"
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Location.Switch",
+					"id": "@iRingo.Location.Settings.Switch",
 					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Location.CountryCode",
-					"name": "国家或地区代码",
+					"id": "@iRingo.Location.Settings.CountryCode",
+					"name": "[地区检测]国家或地区代码",
 					"val": "US",
 					"type": "selects",
 					"desc": "要更改为的地区或国家",
@@ -72,6 +73,62 @@
 							"label": "加拿大"
 						}
 					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.LagunaBeach",
+					"name": "[默认配置]为“地图”提供助力",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用“评分与照片”，可让您将图像、评分或其他内容发布到所选的兴趣点。(“设置” >“地图”>“评分与照片”)"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.GEOAddressCorrection",
+					"name": "[默认配置]地址校正",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用定位地址矫正"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.LookupMaxParametersCount",
+					"name": "[默认配置]Spatial批量查询上限",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否移除Spatial批量查询上限"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.LocalitiesAndLandmarks",
+					"name": "[默认配置]景点与地标支持",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用景点与地标支持"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.PedestrianAR",
+					"name": "[默认配置]现实世界中的路线",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用在增强现实中查看导航(“设置” >“地图”>“步行”>“举起以查看”)"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.6694982d2b14e95815e44e970235e230",
+					"name": "[默认配置]6694982d2b14e95815e44e970235e230",
+					"val": true,
+					"type": "boolean",
+					"desc": "6694982d2b14e95815e44e970235e230"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.OpticalHeading",
+					"name": "[默认配置]导航准确性",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置” >“地图”>“步行”>“增强”)"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.UseCLPedestrianMapMatchedLocations",
+					"name": "[默认配置]使用AR地图匹配地点",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否使用AR地图匹配地点"
 				}
 			],
 			"author": "@VirgilClyne",
@@ -83,7 +140,7 @@
 		},
 		{
 			"id": "iRingo.Weather",
-			"name": "iRingo: Weather",
+			"name": "iRingo: 天气",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
@@ -91,6 +148,8 @@
 				"定位精度:\"观测站\" > \"城市\""
 			],
 			"keys": [
+				"@iRingo.Weather.Settings",
+				"@iRingo.Weather.Caches",
 				"@iRingo.Weather"
 			],
 			"settings": [
@@ -221,20 +280,21 @@
 				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
 			],
 			"keys": [
-				"@iRingo.Siri"
+				"@iRingo.Siri.Settings",
+				"@iRingo.Siri.Caches"
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Siri.Switch",
+					"id": "@iRingo.Siri.Settings.Switch",
 					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Siri.CountryCode",
+					"id": "@iRingo.Siri.Settings.CountryCode",
 					"name": "国家或地区代码",
-					"val": "TW",
+					"val": "SG",
 					"type": "selects",
 					"desc": "不同国家或地区提供的内容或有差别，此选项同时会影响分配给您不同地区的Siri服务器",
 					"items": [
@@ -285,7 +345,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Domains",
+					"id": "@iRingo.Siri.Settings.Domains",
 					"name": "启用领域",
 					"val": [
 						"web",
@@ -325,7 +385,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Functions",
+					"id": "@iRingo.Siri.Settings.Functions",
 					"name": "强制启用的功能",
 					"val": [
 						"flightutilities",
@@ -380,7 +440,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Safari_Smart_History",
+					"id": "@iRingo.Siri.Settings.Safari_Smart_History",
 					"name": "Safari智能历史记录",
 					"val": true,
 					"type": "boolean",
