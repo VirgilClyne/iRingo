@@ -1,5 +1,5 @@
 #!name= iRingo for Location Services
-#!desc=(V2) 1.修改定位服务GCC(Geo Country Code)检测结果 2.修改GCC(Geo Country Code)检测结果
+#!desc=(V2) 1.修改定位服务(Location Services)配置文件 2.修改GCC(Geo Country Code)检测结果
 #!openUrl=http://boxjs.com/#/app/iRingo.Location
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
