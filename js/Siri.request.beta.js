@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.3-request-beta");
+const $ = new Env("Apple Siri v2.1.4-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -15,14 +15,12 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 	}
 };
-var { url, headers } = $request;
-$.log(`🚧 ${$.name}, url: ${url}`, "");
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches } = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
+		let url = URL.parse($request.url);
 		const locale = url.params.locale;
 		console.log(`🚧 ${$.name}, locale: ${locale}`, "");
 		if (Settings.CountryCode == "AUTO") Settings.CountryCode = locale?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode;
@@ -54,12 +52,15 @@ $.log(`🚧 ${$.name}, url: ${url}`, "");
 				else if (sf == "143464") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG")
 			};
 		};
-		url = URL.stringify(url);
+		$request.url = URL.stringify(url);
 		$.log(`🚧 ${$.name}, url: ${url}`, "");
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url, headers }))
+	.finally(() => {
+		if ($.isQuanX()) $.done({ url: $request.url })
+		else $.done($request)
+	})
 
 /***************** Function *****************/
 /**

@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.0-response-beta");
+const $ = new Env("Apple Siri v2.0.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -15,17 +15,13 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 	}
 };
-var { url } = $request;
-$.log(`🚧 ${$.name}, url: ${url}`, "");
-var { body } = $response;
-$.log(`🚧 ${$.name}, url: ${body}`, "");
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches } = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
-		let data = JSON.parse(body);
+		let url = URL.parse($request.url);
+		let data = JSON.parse($response.body);
 		if (url?.path == "bag") {
 			data.enabled = true;
 			data.feedback_enabled = true;
@@ -99,11 +95,14 @@ $.log(`🚧 ${$.name}, url: ${body}`, "");
 		} else if (url?.path == "search") {
 		} else if (url?.path == "card") {
 		}
-		body = JSON.stringify(data);
+		$response.body = JSON.stringify(data);
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ body }))
+	.finally(() => {
+		if ($.isQuanX()) $.done({ body: $response.body })
+		else $.done($response)
+	})
 
 /***************** Function *****************/
 /**
