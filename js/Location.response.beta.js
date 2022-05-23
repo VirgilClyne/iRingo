@@ -24,8 +24,8 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "config/defaults":
-				if ($request.status === 200 || $request.statusCode === 200) {
-					$.log($request.statusCode || $request.status);
+				if ($response.status === 200 || $response.statusCode === 200) {
+					$.log($response.statusCode || $response.status);
 					let request = {
 						"url": "http://json2plist.sinaapp.com/convert.php",
 						"headers": {
