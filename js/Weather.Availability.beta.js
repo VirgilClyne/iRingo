@@ -2,33 +2,51 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather Availability v1.0.0-beta");
+const $ = new Env("Apple Weather Availability v1.0.2-beta");
 const DataBase = {
-	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	"Location":{
+		"Settings":{"Switch":true,"CountryCode":"US","Config":{"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true}}
+	},
+	"Weather":{
+		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+		"Configs":{"availability": ["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality"],"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
+	},
+	"Siri":{
+		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	}
 };
-const { url } = $request;
-let { status, statusCode, body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
-	const Settings = await setENV("iRingo", "Weather", DataBase);
+	const { Settings, Caches, Configs } = await setENV("iRingo", "Weather", DataBase);
 	if (Settings.Switch) {
 		$.log(`🎉 ${$.name}, 可用性检查`, "");
-		const availability = ["currentWeather", "forecastDaily", "forecastHourly", "history", "weatherChange", "forecastNextHour", "severeWeather", "airQuality"];
-		let data = "";
-		if (statusCode == 200 || status == 200) {
-			data = JSON.parse(body);
-			data = Array.from(new Set([...data, ...availability]));
-		} else data = availability
-		$.log(`🎉 ${$.name}, 功能列表`, JSON.stringify(data), "");
-		body = JSON.stringify(data);
+		if ($response.statusCode === 200 || $response.status === 200) {
+			$.log($response.statusCode || $response.status);
+			let data = JSON.parse($response.body);
+			data = Array.from(new Set([...data, ...Configs.availability]));
+			$.log(`🎉 ${$.name}, 功能列表`, JSON.stringify(data), "");
+			$response.body = JSON.stringify(data);
+		}
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ body }))
+	.finally(() => {
+		if ($.isQuanX()) $.done({ body: $response.body })
+		else $.done($response)
+	})
 
 /***************** Async Function *****************/
+/**
+ * Get Environment Variables
+ * @author VirgilClyne
+ * @param {String} t - Persistent Store Key
+ * @param {String} e - Platform Name
+ * @param {Object} n - Default DataBase
+ * @return {Promise<*>}
+ */
+async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Settings||n?.Default?.Settings,g=i?.[e]?.Configs||n?.[e]?.Configs||n?.Default?.Configs,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)o(e,a,t[a]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Configs:g}}
+
 /**
  * Set Environment Variables
  * @author VirgilClyne
@@ -39,15 +57,14 @@ let { status, statusCode, body } = $response;
  */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let Settings = await getENV(name, platform, database);
+	let { Settings, Caches = {}, Configs } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.NextHour.Switch = JSON.parse(Settings.NextHour.Switch) // BoxJs字符串转Boolean
 	Settings.AQI.Switch = JSON.parse(Settings.AQI.Switch) // BoxJs字符串转Boolean
 	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return Settings
-	async function getENV(t,e,n){let i=$.getjson(t,n),r=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var s in t)f(e,s,t[s]);Object.assign(r,e)}function f(t,e,n){e.split(".").reduce(((t,i,r)=>t[i]=e.split(".").length===++r?n:t[i]||{}),t)}}return r}
+	return { Settings, Caches, Configs }
 };
 
 /***************** Env *****************/
