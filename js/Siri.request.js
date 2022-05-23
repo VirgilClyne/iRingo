@@ -1,54 +1,69 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.3-request");
+const $ = new Env("Apple Siri v2.1.5-request");
 const URL = new URLs();
 const DataBase = {
-	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	"Location":{
+		"Settings":{"Switch":true,"CountryCode":"US","Config":{"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true}}
+	},
+	"Weather":{
+		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+		"Configs":{"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
+	},
+	"Siri":{
+		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	}
 };
-var { url, headers } = $request;
 
 /***************** Processing *****************/
 !(async () => {
-	const Settings = await setENV("iRingo", "Siri", DataBase);
+	const { Settings, Caches } = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
+		let url = URL.parse($request.url);
 		const locale = url.params.locale;
 		if (Settings.CountryCode == "AUTO") Settings.CountryCode = locale?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode;
 		if (url?.params?.cc) url.params.cc = url.params.cc.replace(/[A-Z]{2}/, Settings.CountryCode);
-		if (url.path == "bag") {
-		} else if (url.path == "search") { //Search
-			if (url?.params?.card_locale) url.params.card_locale = locale;
-			if (url?.params?.qtype == "zkw") { // 处理"新闻"小组件
-				["CN", "HK", "MO", "TW", "SG"].includes(Settings.CountryCode) ? url.params.locale = `${url.params.esl}_SG`
-					: ["US", "CA", "UK", "AU"].includes(Settings.CountryCode) ? url.params.locale = url.params.locale
-						: url.params.locale = `${url.params.esl}_US`
-			} else { // 其他搜索
-				if (/^%E5%A4%A9%E6%B0%94%20/.test(url.params.q)) { // 处理"天气"搜索，搜索词"天气 "开头
-					console.log("Type A", ``);
-					url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
-					if (/^weather%20.*%E5%B8%82$/.test(url.params.q)) url.params.q = url.params.q.replace(/$/, "%E5%B8%82");
-				} else if (/%20%E5%A4%A9%E6%B0%94$/.test(url.params.q)) {// 处理"天气"搜索，搜索词" 天气"结尾
-					console.log("Type B", ``);
-					url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
-					if (/.*%E5%B8%82%20weather$/.test(url.params.q)) url.params.q = url.params.q.replace(/%20weather$/, "%E5%B8%82%20weather");
-				}
-			};
-		} else if (url.path == "card") {
-			const sf = url?.params?.storefront?.match(/[\d]{6}/g); //StoreFront ID, from App Store Region
-			if (url?.params?.card_locale) url.params.card_locale = locale;
-			if (url?.params?.include == "movies" || url?.params?.include == "tv") {
-				if (sf == "143463") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK")
-				else if (sf == "143470") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW")
-				else if (sf == "143464") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG")
-			};
+		$.log(url.path);
+		switch (url.path) {
+			case "bag":
+				break;
+			case "search": //Search
+				if (url?.params?.card_locale) url.params.card_locale = locale;
+				if (url?.params?.qtype == "zkw") { // 处理"新闻"小组件
+					["CN", "HK", "MO", "TW", "SG"].includes(Settings.CountryCode) ? url.params.locale = `${url.params.esl}_SG`
+						: ["US", "CA", "UK", "AU"].includes(Settings.CountryCode) ? url.params.locale = url.params.locale
+							: url.params.locale = `${url.params.esl}_US`
+				} else { // 其他搜索
+					if (/^%E5%A4%A9%E6%B0%94%20/.test(url.params.q)) { // 处理"天气"搜索，搜索词"天气 "开头
+						console.log("Type A", ``);
+						url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
+						if (/^weather%20.*%E5%B8%82$/.test(url.params.q)) url.params.q = url.params.q.replace(/$/, "%E5%B8%82");
+					} else if (/%20%E5%A4%A9%E6%B0%94$/.test(url.params.q)) {// 处理"天气"搜索，搜索词" 天气"结尾
+						console.log("Type B", ``);
+						url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
+						if (/.*%E5%B8%82%20weather$/.test(url.params.q)) url.params.q = url.params.q.replace(/%20weather$/, "%E5%B8%82%20weather");
+					}
+				};
+				break;
+			case "card":
+				const sf = url?.params?.storefront?.match(/[\d]{6}/g); //StoreFront ID, from App Store Region
+				if (url?.params?.card_locale) url.params.card_locale = locale;
+				if (url?.params?.include == "movies" || url?.params?.include == "tv") {
+					if (sf == "143463") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK")
+					else if (sf == "143470") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW")
+					else if (sf == "143464") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG")
+				};
+				break;
 		};
-		url = URL.stringify(url);
+		$request.url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url, headers }))
+	.finally(() => {
+		if ($.isQuanX()) $.done({ url: $request.url })
+		else $.done($request)
+	})
 
 /***************** Function *****************/
 /**
@@ -61,15 +76,23 @@ var { url, headers } = $request;
  */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let Settings = await getENV(name, platform, database);
+	let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return Settings
-	async function getENV(t,e,n){let i=$.getjson(t,n),r=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var s in t)f(e,s,t[s]);Object.assign(r,e)}function f(t,e,n){e.split(".").reduce(((t,i,r)=>t[i]=e.split(".").length===++r?n:t[i]||{}),t)}}return r}
+	return { Settings, Caches }
+	/**
+	 * Get Environment Variables
+	 * @author VirgilClyne
+	 * @param {String} t - Persistent Store Key
+	 * @param {String} e - Platform Name
+	 * @param {Object} n - Default DataBase
+	 * @return {Promise<*>}
+	 */
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n[e].Settings,g=i?.[e]?.Config||n?.[e]?.Config,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var r in t)o(e,r,t[r]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Config:g}}
 };
 
 /***************** Env *****************/
