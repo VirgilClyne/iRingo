@@ -4,21 +4,21 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Location Services v2.1.1-request-beta");
 const URL = new URLs();
 const DataBase = {
-	"Settings":{
-		"Location":{"Switch":true,"CountryCode":"US"},
-		"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
-		"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	"Location":{
+		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach": true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true}}
 	},
-	"Configs":{
-		"Weather":{
-			"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
-		}
+	"Weather":{
+		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+		"Configs":{"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
+	},
+	"Siri":{
+		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 	}
 };
 
 /***************** Processing *****************/
 !(async () => {
-	const {Settings, Caches} = await setENV("iRingo", "Location", DataBase);
+	const { Settings, Caches } = await setENV("iRingo", "Location", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(url.path);
@@ -45,8 +45,8 @@ const DataBase = {
 				if ($request?.headers?.["If-None-Match"] !== Caches?.ETag) {
 					let newCaches = Caches;
 					newCaches.ETag = $request?.headers?.["If-None-Match"]
-					$.setjson(newCaches, "@iRingo.Caches.Location");
-					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}!\"`
+					$.setjson(newCaches, "@iRingo.Location.Caches");
+					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
 					if ($.isQuanX()) $.done({ headers: $request.headers })
 					else $.done($request)
 				}
@@ -71,6 +71,7 @@ async function setENV(name, platform, database) {
 	 let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
+	if (Settings?.Config) for (let setting in Settings.Config) Settings.Config[setting] = JSON.parse(Settings.Config[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
 	/**
@@ -81,7 +82,7 @@ async function setENV(name, platform, database) {
 	 * @param {Object} n - Default DataBase
 	 * @return {Promise<*>}
 	 */
-	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.Settings?.[e]||n.Settings[e],g=i?.Config?.[e]||n?.Config?.[e],f=i?.Caches?.[e]||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var r in t)o(e,r,t[r]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Config:g}}
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n[e].Settings,g=i?.[e]?.Config||n?.[e]?.Config,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var r in t)o(e,r,t[r]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Config:g}}
 };
 
 /***************** Env *****************/
