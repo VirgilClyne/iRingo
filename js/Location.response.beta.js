@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.1-response-beta");
+const $ = new Env("Apple Location Services v2.1.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -15,18 +15,17 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 	}
 };
-var { url, status, statusCode } = $request;
-var { body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches } = await setENV("iRingo", "Location", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
+		let url = URL.parse($request.url);
 		$.log(url.path);
 		switch (url.path) {
 			case "config/defaults":
-				if (status === 200 || statusCode === 200) {
+				if ($request.status === 200 || $request.statusCode === 200) {
+					$.log($request.statusCode || $request.status);
 					let request = {
 						"url": "http://json2plist.sinaapp.com/convert.php",
 						"headers": {
@@ -36,10 +35,11 @@ var { body } = $response;
 					}
 					// plist2json
 					let type = "plist2json"
-					request.body = `do=${type}&content=${encodeURIComponent(body)}`
+					request.body = `do=${type}&content=${encodeURIComponent($response.body)}`
 					let data = await $.http.post(request).then(v => v.body);
 					//$.log(data);
 					data = JSON.parse(data);
+					// set settings
 					data["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.LagunaBeach; // XX
 					//data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
 					data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.GEOAddressCorrection; // CN
