@@ -16,6 +16,16 @@
 		}
 	},
 	"Config": {
+		"availability": [
+			"currentWeather",
+			"forecastDaily",
+			"forecastHourly",
+			"history",
+			"weatherChange",
+			"forecastNextHour",
+			"severeWeather",
+			"airQuality"
+		],
 		"Pollutants": {
 			"co": "CO",
 			"no": "NO",
