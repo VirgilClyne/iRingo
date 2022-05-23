@@ -59,6 +59,16 @@ const DataBase = {
 
 /***************** Async Function *****************/
 /**
+ * Get Environment Variables
+ * @author VirgilClyne
+ * @param {String} t - Persistent Store Key
+ * @param {String} e - Platform Name
+ * @param {Object} n - Default DataBase
+ * @return {Promise<*>}
+ */
+async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Settings||n?.Default?.Settings,g=i?.[e]?.Configs||n?.[e]?.Configs||n?.Default?.Configs,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)o(e,a,t[a]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Configs:g}}
+
+/**
  * Set Environment Variables
  * @author VirgilClyne
  * @param {String} name - Persistent Store Key
@@ -74,15 +84,6 @@ async function setENV(name, platform, database) {
 	if (Settings?.Config) for (let setting in Settings.Config) Settings.Config[setting] = JSON.parse(Settings.Config[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
-	/**
-	 * Get Environment Variables
-	 * @author VirgilClyne
-	 * @param {String} t - Persistent Store Key
-	 * @param {String} e - Platform Name
-	 * @param {Object} n - Default DataBase
-	 * @return {Promise<*>}
-	 */
-	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Settings||n?.Default?.Settings,g=i?.[e]?.Configs||n?.[e]?.Configs||n?.Default?.Configs,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)o(e,a,t[a]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Configs:g}}
 };
 
 /***************** Env *****************/
