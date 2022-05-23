@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.4-request-beta");
+const $ = new Env("Apple Siri v2.1.5-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,38 +22,43 @@ const DataBase = {
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		const locale = url.params.locale;
-		console.log(`🚧 ${$.name}, locale: ${locale}`, "");
+		$.log(`🚧 ${$.name}, locale: ${locale}`, "");
 		if (Settings.CountryCode == "AUTO") Settings.CountryCode = locale?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode;
 		if (url?.params?.cc) url.params.cc = url.params.cc.replace(/[A-Z]{2}/, Settings.CountryCode);
-		if (url.path == "bag") {
-		} else if (url.path == "search") { //Search
-			if (url?.params?.card_locale) url.params.card_locale = locale;
-			if (url?.params?.qtype == "zkw") { // 处理"新闻"小组件
-				["CN", "HK", "MO", "TW", "SG"].includes(Settings.CountryCode) ? url.params.locale = `${url.params.esl}_SG`
-					: ["US", "CA", "UK", "AU"].includes(Settings.CountryCode) ? url.params.locale = url.params.locale
-						: url.params.locale = `${url.params.esl}_US`
-			} else { // 其他搜索
-				if (/^%E5%A4%A9%E6%B0%94%20/.test(url.params.q)) { // 处理"天气"搜索，搜索词"天气 "开头
-					console.log("Type A", ``);
-					url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
-					if (/^weather%20.*%E5%B8%82$/.test(url.params.q)) url.params.q = url.params.q.replace(/$/, "%E5%B8%82");
-				} else if (/%20%E5%A4%A9%E6%B0%94$/.test(url.params.q)) {// 处理"天气"搜索，搜索词" 天气"结尾
-					console.log("Type B", ``);
-					url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
-					if (/.*%E5%B8%82%20weather$/.test(url.params.q)) url.params.q = url.params.q.replace(/%20weather$/, "%E5%B8%82%20weather");
-				}
-			};
-		} else if (url.path == "card") {
-			const sf = url?.params?.storefront?.match(/[\d]{6}/g); //StoreFront ID, from App Store Region
-			if (url?.params?.card_locale) url.params.card_locale = locale;
-			if (url?.params?.include == "movies" || url?.params?.include == "tv") {
-				if (sf == "143463") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK")
-				else if (sf == "143470") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW")
-				else if (sf == "143464") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG")
-			};
+		$.log(url.path);
+		switch (url.path) {
+			case "bag":
+				break;
+			case "search": //Search
+				if (url?.params?.card_locale) url.params.card_locale = locale;
+				if (url?.params?.qtype == "zkw") { // 处理"新闻"小组件
+					["CN", "HK", "MO", "TW", "SG"].includes(Settings.CountryCode) ? url.params.locale = `${url.params.esl}_SG`
+						: ["US", "CA", "UK", "AU"].includes(Settings.CountryCode) ? url.params.locale = url.params.locale
+							: url.params.locale = `${url.params.esl}_US`
+				} else { // 其他搜索
+					if (/^%E5%A4%A9%E6%B0%94%20/.test(url.params.q)) { // 处理"天气"搜索，搜索词"天气 "开头
+						console.log("Type A", ``);
+						url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
+						if (/^weather%20.*%E5%B8%82$/.test(url.params.q)) url.params.q = url.params.q.replace(/$/, "%E5%B8%82");
+					} else if (/%20%E5%A4%A9%E6%B0%94$/.test(url.params.q)) {// 处理"天气"搜索，搜索词" 天气"结尾
+						console.log("Type B", ``);
+						url.params.q = url.params.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
+						if (/.*%E5%B8%82%20weather$/.test(url.params.q)) url.params.q = url.params.q.replace(/%20weather$/, "%E5%B8%82%20weather");
+					}
+				};
+				break;
+			case "card":
+				const sf = url?.params?.storefront?.match(/[\d]{6}/g); //StoreFront ID, from App Store Region
+				if (url?.params?.card_locale) url.params.card_locale = locale;
+				if (url?.params?.include == "movies" || url?.params?.include == "tv") {
+					if (sf == "143463") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK")
+					else if (sf == "143470") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW")
+					else if (sf == "143464") url.params.q = url.params.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG")
+				};
+				break;
 		};
 		$request.url = URL.stringify(url);
-		$.log(`🚧 ${$.name}, url: ${url}`, "");
+		$.log(`🚧 ${$.name}, $request.url: ${$request.url}`, "");
 	}
 })()
 	.catch((e) => $.logErr(e))
