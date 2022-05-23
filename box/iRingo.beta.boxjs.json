@@ -341,20 +341,21 @@
 				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
 			],
 			"keys": [
-				"@iRingo.Siri"
+				"@iRingo.Siri.Settings",
+				"@iRingo.Siri.Caches"
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Siri.Switch",
+					"id": "@iRingo.Siri.Settings.Switch",
 					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Siri.CountryCode",
+					"id": "@iRingo.Siri.Settings.CountryCode",
 					"name": "国家或地区代码",
-					"val": "TW",
+					"val": "SG",
 					"type": "selects",
 					"desc": "不同国家或地区提供的内容或有差别，此选项同时会影响分配给您不同地区的Siri服务器",
 					"items": [
@@ -405,7 +406,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Domains",
+					"id": "@iRingo.Siri.Settings.Domains",
 					"name": "启用领域",
 					"val": [
 						"web",
@@ -445,7 +446,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Functions",
+					"id": "@iRingo.Siri.Settings.Functions",
 					"name": "强制启用的功能",
 					"val": [
 						"flightutilities",
@@ -500,7 +501,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Safari_Smart_History",
+					"id": "@iRingo.Siri.Settings.Safari_Smart_History",
 					"name": "Safari智能历史记录",
 					"val": true,
 					"type": "boolean",

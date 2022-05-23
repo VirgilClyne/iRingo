@@ -4,8 +4,16 @@ README:https://github.com/VirgilClyne/iRingo
 const $ = new Env("Apple Siri v2.0.0-response-beta");
 const URL = new URLs();
 const DataBase = {
-	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	"Location":{
+		"Settings":{"Switch":true,"CountryCode":"US","Config":{"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true}}
+	},
+	"Weather":{
+		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+		"Configs":{"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
+	},
+	"Siri":{
+		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	}
 };
 var { url } = $request;
 $.log(`🚧 ${$.name}, url: ${url}`, "");
@@ -14,7 +22,7 @@ $.log(`🚧 ${$.name}, url: ${body}`, "");
 
 /***************** Processing *****************/
 !(async () => {
-	const Settings = await setENV("iRingo", "Siri", DataBase);
+	const { Settings, Caches } = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
 		url = URL.parse(url);
 		let data = JSON.parse(body);
@@ -108,15 +116,23 @@ $.log(`🚧 ${$.name}, url: ${body}`, "");
  */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let Settings = await getENV(name, platform, database);
+	let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return Settings
-	async function getENV(t,e,n){let i=$.getjson(t,n),r=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var s in t)f(e,s,t[s]);Object.assign(r,e)}function f(t,e,n){e.split(".").reduce(((t,i,r)=>t[i]=e.split(".").length===++r?n:t[i]||{}),t)}}return r}
+	return { Settings, Caches }
+	/**
+	 * Get Environment Variables
+	 * @author VirgilClyne
+	 * @param {String} t - Persistent Store Key
+	 * @param {String} e - Platform Name
+	 * @param {Object} n - Default DataBase
+	 * @return {Promise<*>}
+	 */
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n[e].Settings,g=i?.[e]?.Config||n?.[e]?.Config,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var r in t)o(e,r,t[r]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Config:g}}
 };
 
 /***************** Env *****************/
