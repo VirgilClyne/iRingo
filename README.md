@@ -374,7 +374,7 @@
   2. 启用`Geo_Services_*.sgmodule`模块（🇨🇳CN版除外，可辅以`全局代理`确保稳定）
   3. 开启`✈️飞行模式`
   4. 重新打开一次`地图`应用
-  5. 此时应在`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
+  5. 此时应在`Loon`的`最近请求`或`Surge`的`最近请求`或`Quantumult X`的`网络活动`中观察到:
      1. `基于网络的地区检测`的`gspe1-ssl.ls.apple.com`链接
      2. 激活`Siri建议`的`api.smoot.apple.com/bag`链接
   6. 执行一次Spotlight搜索，测试「来自APPLE的内容\来自APPLE的建议\Siri建议」是否正常工作
