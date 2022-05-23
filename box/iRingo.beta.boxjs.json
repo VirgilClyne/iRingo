@@ -140,7 +140,7 @@
 		},
 		{
 			"id": "iRingo.Weather.beta",
-			"name": "iRingo: Weather β",
+			"name": "iRingo: 天气 β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
@@ -148,6 +148,8 @@
 				"定位精度:\"观测站\" > \"城市\""
 			],
 			"keys": [
+				"@iRingo.Weather.Settings",
+				"@iRingo.Weather.Caches",
 				"@iRingo.Weather"
 			],
 			"settings": [
