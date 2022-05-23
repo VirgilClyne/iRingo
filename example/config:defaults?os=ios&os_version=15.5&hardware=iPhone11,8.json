@@ -1,0 +1,542 @@
+{
+    "com.apple.GEO": {
+        "AllowResumingIncompleteResourceDownloads": false,
+        "BrooklynEnableSharingForAllGuides": true,
+        "CLAppleCollectionServer_Altimeter": "https:\/\/gsp10-ssl.ls.apple.com\/hvr\/alt",
+        "CLRealTimeBudgetBytesDefault": 838860,
+        "CLTrafficCrowdsourceRules": {
+            "Default": {
+                "Realtime": {
+                    "HarvestInterval": 1,
+                    "HarvesterEnabled": true,
+                    "UploadInterval": 120
+                }
+            }
+        },
+        "CellSaverRegionDownloadEnabled": false,
+        "CellSaverStaleThresholdInSeconds": 864000,
+        "CellSaverTileTypeEnabled.13": false,
+        "CellSaverTileTypeEnabled.37": false,
+        "CellSaverTileTypeEnabled.53": true,
+        "CellSaverTileTypeEnabled.54": true,
+        "CohortReportingThresholds": {
+            "optInPercent": 0.01,
+            "rollDate": 120
+        },
+        "CongestionZonesEnabled": true,
+        "CountryProviders": {
+            "AL": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "AM": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "AR": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "AT": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "AU": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "BD": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "BE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "BG": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "BO": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "BR": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "CA": {
+                "ClimateShowAirQualityIndex": true,
+                "ShouldEnableLagunaBeach": true
+            },
+            "CH": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "CI": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "CN": {
+                "CLAppleCollectionServer_CellWifi": "https:\/\/gsp10-ssl-cn.ls.apple.com\/cw",
+                "CLAppleCollectionServer_Indoor": "https:\/\/gsp10-ssl-cn.ls.apple.com\/incs",
+                "CLAppleLocationServer": "https:\/\/gs-loc-cn.apple.com\/clls\/wloc",
+                "CLCdmaTileServer": "https:\/\/cl2-cn.apple.com\/5\/v1",
+                "CLCoarseCdmaTileServer": "https:\/\/cl2-cn.apple.com\/8\/v1",
+                "CLCoarseGsmTileServer": "https:\/\/cl2-cn.apple.com\/6\/v1",
+                "CLCoarseLteTileServer": "https:\/\/cl2-cn.apple.com\/7\/v1",
+                "CLCoarseNrTileServer": "https:\/\/cl2-cn.apple.com\/11\/v1",
+                "CLGsmTileServer": "https:\/\/cl2-cn.apple.com\/3\/v1",
+                "CLLteTileServer": "https:\/\/cl2-cn.apple.com\/4\/v1",
+                "CLPipelineAvailabilityServer": "https:\/\/cl4-cn.apple.com\/2\/m2\/a.1",
+                "CLPipelineTileServer": "https:\/\/cl4-cn.apple.com\/",
+                "CLRealTimeBudgetBytesDefault": 262144,
+                "CLTransitTileServer": "https:\/\/cl2-cn.apple.com\/9\/v2",
+                "CLWifiTileServer": "https:\/\/cl2-cn.apple.com\/1\/v1",
+                "ClimateShowAirQualityIndex": true,
+                "EnableAlberta": true,
+                "GEOAddressCorrectionEnabled": false,
+                "GEOBatchSpatialEventLookupMaxParametersCount": 0,
+                "GEOBatchSpatialPlaceLookupMaxParametersCount": 0,
+                "GEOGeocoderIsEncrypted": false,
+                "GEOShouldPassABAssignInfo": false,
+                "GEOShouldPassABClientMetadata": true,
+                "GEOVoltaireSearchURLProviderID": 57879,
+                "LocalitiesAndLandmarksSupported": false,
+                "NavigationShowHeadingKey": true,
+                "POIBusynessDifferentialPrivacy": false,
+                "POIBusynessRealTime": false,
+                "PedestrianAREnabled": false,
+                "TransitDatePickerHorizonDuration": 604800,
+                "WiFiQualityNetworkDisabled": false,
+                "WiFiQualitySmallSearchRadiusMeters": 1000,
+                "WiFiQualityTileDisabled": false,
+                "WifiQualitySearchRadiusMeters": 1000
+            },
+            "CO": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "CR": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "CY": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "CZ": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "DE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "DK": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "DO": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "EC": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "EE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "ES": {
+                "ClimateShowAirQualityIndex": true,
+                "ShouldEnableLagunaBeach": true
+            },
+            "FI": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "FR": {
+                "ClimateShowAirQualityIndex": true
+            },
+            "GB": {
+                "ClimateShowAirQualityIndex": true,
+                "ShouldEnableLagunaBeach": true
+            },
+            "GE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "GH": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "GR": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "GT": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "HK": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "HN": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "HR": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "HU": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "IE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "IN": {
+                "ClimateShowAirQualityIndex": true
+            },
+            "IS": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "IT": {
+                "ClimateShowAirQualityIndex": true,
+                "ShouldEnableLagunaBeach": true
+            },
+            "JM": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "JP": {
+                "GEODefaultMapMode": 3,
+                "PreferredTransportType": 2,
+                "ShouldEnableLagunaBeach": true
+            },
+            "KH": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "KR": {
+                "ClimateShowAirQualityIndex": true,
+                "GEOAddressCorrectionEnabled": false,
+                "GEOVoltaireResourceManifestURL": "https:\/\/gspe35-kr-ssl.ls.apple.com\/geo_manifest\/dynamic\/config%{DEVICE_QUERY}"
+            },
+            "KZ": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "LA": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "LK": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "LT": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "LU": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "LV": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "LY": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "MC": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "MN": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "MO": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "MT": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "MX": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "MY": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "NG": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "NL": {
+                "ClimateShowAirQualityIndex": true,
+                "ShouldEnableLagunaBeach": true
+            },
+            "NP": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "NZ": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "PE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "PK": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "PL": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "PT": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "PY": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "RO": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "RS": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "RU": {
+                "GEOShouldSpeakWrittenAddresses": true,
+                "GEOShouldSpeakWrittenPlaceNames": true,
+                "ReportAProblemAddressEditIsProhibited": false
+            },
+            "SE": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "SI": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "SK": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "SN": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "TH": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "TW": {
+                "GEOShouldSpeakWrittenAddresses": true,
+                "GEOShouldSpeakWrittenPlaceNames": true,
+                "ShouldEnableLagunaBeach": true
+            },
+            "US": {
+                "6694982d2b14e95815e44e970235e230": true,
+                "ClimateShowAirQualityIndex": true,
+                "OpticalHeadingEnabled": true,
+                "ShouldEnableLagunaBeach": true,
+                "UseCLPedestrianMapMatchedLocations": true
+            },
+            "UZ": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "VA": {
+                "ShouldEnableLagunaBeach": true
+            },
+            "ZA": {
+                "ShouldEnableLagunaBeach": true
+            }
+        },
+        "EVRoutingNameForBundleIDKey": "app_bundle_id",
+        "EVRoutingNameForWhitelistKey": "siri_allowlist",
+        "EVRoutingShouldShowBatteryPercentageInVehiclePickers": true,
+        "EnableBakersfield": true,
+        "EnableDavisMode": true,
+        "ExperimentMaxRefreshInterval": 14400,
+        "FeatureFlags": [
+            "MapsSky",
+            "MapsEnableShelbyvilleFull",
+            "MapsDisableWatermark"
+        ],
+        "GEOAnalyticsPipelineHandlingPolicyType_AP_HANDLING_POLICY_LONG_STANDARD_config": {
+            "stages": [
+                {
+                    "ttl": 900,
+                    "type": 1
+                },
+                {
+                    "ttl": 604800,
+                    "type": 5
+                }
+            ],
+            "ttl": 604800
+        },
+        "GEOAnalyticsPipelineHandlingPolicyType_AP_HANDLING_POLICY_SHORT_STANDARD_config": {
+            "stages": [
+                {
+                    "ttl": 900,
+                    "type": 1
+                },
+                {
+                    "ttl": 604800,
+                    "type": 5
+                }
+            ],
+            "ttl": 604800
+        },
+        "GEOAnalyticsPipelineHandlingPolicyType_AP_HANDLING_POLICY_UGC_DELETE_NOTICE_config": {
+            "immediately": true,
+            "stages": [
+                {
+                    "ttl": 7776000,
+                    "type": 1
+                }
+            ],
+            "ttl": 7776000
+        },
+        "GEOBrooklynEnabled": true,
+        "GEOLogMessageType_SESSIONLESS_USAGE_requirePower": false,
+        "GEOLogMessageType_SESSIONLESS_USAGE_requireWifi": false,
+        "GEOLogMessageType_SESSIONLESS_USAGE_sendImmediately": true,
+        "GEOResourceManifestUpdateTimeInterval": 28800,
+        "GEOShouldUseHTTPPipelining": true,
+        "GEOSimpleTileRequesterMaxConcurrentRequests": 1000,
+        "GeneralMapsWidgetMaximumSuggestionsRoutingRequestsPerDay": 0,
+        "GeneralMapsWidgetNearbyCategoryCacheMaxAgeTimeInterval": 604800,
+        "GeoAnalyticsEvent_UGCSessionlessUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_UGCShortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_acSuggestionUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_accountSessionlessUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_arSessionUsage_validUntil": 1009785600,
+        "GeoAnalyticsEvent_arpPrivacy_validUntil": 1009785600,
+        "GeoAnalyticsEvent_batchTraffic_validUntil": 1009785600,
+        "GeoAnalyticsEvent_carplayUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_clientACKeypress_validUntil": 1009785600,
+        "GeoAnalyticsEvent_clientACResponse_validUntil": 1009785600,
+        "GeoAnalyticsEvent_clientACSuggestion_validUntil": 1009785600,
+        "GeoAnalyticsEvent_cohortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_commuteWindow_validUntil": 1009785600,
+        "GeoAnalyticsEvent_curatedCollectionSavedList_validUntil": 1009785600,
+        "GeoAnalyticsEvent_curatedCollectionViewCounts_validUntil": 1009785600,
+        "GeoAnalyticsEvent_curatedCollectionsSessionlessUserActionTargetPairRedactedCCState_validUntil": 1009785600,
+        "GeoAnalyticsEvent_curatedCollectionsSessionlessUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_curatedCollectionsShortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_dailyUseSummary_validUntil": 1009785600,
+        "GeoAnalyticsEvent_directionsRequestDetails_disabled": true,
+        "GeoAnalyticsEvent_directionsRequestDetails_validUntil": 1009785600,
+        "GeoAnalyticsEvent_directions_validUntil": 1009785600,
+        "GeoAnalyticsEvent_displayAnalytic_validUntil": 1009785600,
+        "GeoAnalyticsEvent_enterMapsShortAndCohortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_enterMapsShortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_evRoutingVehicleDetails_validUntil": 1009785600,
+        "GeoAnalyticsEvent_evTrip_validUntil": 1009785600,
+        "GeoAnalyticsEvent_extraStatesUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_gridDuration_validUntil": 1009785600,
+        "GeoAnalyticsEvent_hardStop_validUntil": 1009785600,
+        "GeoAnalyticsEvent_legacyUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_mapKitCounts_validUntil": 1009785600,
+        "GeoAnalyticsEvent_mapLaunch_validUntil": 1009785600,
+        "GeoAnalyticsEvent_mapsDeviceSettings_validUntil": 1009785600,
+        "GeoAnalyticsEvent_marcoLite_validUntil": 1009785600,
+        "GeoAnalyticsEvent_muninCameraUserActionShortOnly_validUntil": 1009785600,
+        "GeoAnalyticsEvent_muninUserActionShortCohortExitMunin_validUntil": 1009785600,
+        "GeoAnalyticsEvent_muninUserActionShortOnly_validUntil": 1009785600,
+        "GeoAnalyticsEvent_navThermalPressure_validUntil": 1009785600,
+        "GeoAnalyticsEvent_navTrace_validUntil": 1009785600,
+        "GeoAnalyticsEvent_nearbyTransitShortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_netEvent_validUntil": 1009785600,
+        "GeoAnalyticsEvent_networkEventGenericPlace_validUntil": 1009785600,
+        "GeoAnalyticsEvent_networkEventGeneric_validUntil": 1009785600,
+        "GeoAnalyticsEvent_networkEventMuninResources_validUntil": 1009785600,
+        "GeoAnalyticsEvent_networkEventNetDefaults_validUntil": 1009785600,
+        "GeoAnalyticsEvent_networkEventProtobufSession_validUntil": 1009785600,
+        "GeoAnalyticsEvent_networkEventTile_dropRate": 0.9,
+        "GeoAnalyticsEvent_networkEventTile_validUntil": 1009785600,
+        "GeoAnalyticsEvent_parkedCar_validUntil": 1009785600,
+        "GeoAnalyticsEvent_periodicSettings_validUntil": 1009785600,
+        "GeoAnalyticsEvent_poiBusynessData_validUntil": 1009785600,
+        "GeoAnalyticsEvent_predExSessionlessUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_predExShortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_predExTraining_validUntil": 1009785600,
+        "GeoAnalyticsEvent_pressureData_validUntil": 1009785600,
+        "GeoAnalyticsEvent_priorityShortUserActions_validUntil": 1009785600,
+        "GeoAnalyticsEvent_proactiveSuggestion_validUntil": 1009785600,
+        "GeoAnalyticsEvent_rapSessionlessUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_rapShortAndSessionlessUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_rapUserActionShortOnly_validUntil": 1009785600,
+        "GeoAnalyticsEvent_rapUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_realTraffic_validUntil": 1009785600,
+        "GeoAnalyticsEvent_rideBooked_validUntil": 1009785600,
+        "GeoAnalyticsEvent_rideBooking_validUntil": 1009785600,
+        "GeoAnalyticsEvent_sessionlessAndCohortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_sessionlessUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_shortAndCohortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_shortUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_standardShort_validUntil": 1009785600,
+        "GeoAnalyticsEvent_tableBooked_validUntil": 1009785600,
+        "GeoAnalyticsEvent_tableBooking_validUntil": 1009785600,
+        "GeoAnalyticsEvent_telemetric_validUntil": 1009785600,
+        "GeoAnalyticsEvent_throttleEvent_validUntil": 1009785600,
+        "GeoAnalyticsEvent_tileCacheHit_disabled": true,
+        "GeoAnalyticsEvent_tileCacheHit_validUntil": 1009785600,
+        "GeoAnalyticsEvent_tileCacheMiss_disabled": true,
+        "GeoAnalyticsEvent_tileCacheMiss_validUntil": 1009785600,
+        "GeoAnalyticsEvent_tileSetState_validUntil": 1009785600,
+        "GeoAnalyticsEvent_transitAppLaunch_validUntil": 1009785600,
+        "GeoAnalyticsEvent_transitShortUserActionTargetPair_validUntil": 1009785600,
+        "GeoAnalyticsEvent_tripDeparture_validUntil": 1009785600,
+        "GeoAnalyticsEvent_ttlHypothesis_validUntil": 1009785600,
+        "GeoAnalyticsEvent_ttlInitialTime_validUntil": 1009785600,
+        "GeoAnalyticsEvent_ugcDeleteLogs_validUntil": 1009785600,
+        "GeoAnalyticsEvent_venueUserAction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_vlfUsage_validUntil": 1009785600,
+        "GeoAnalyticsEvent_widgetInteraction_validUntil": 1009785600,
+        "GeoAnalyticsEvent_wifiProbe_validUntil": 1009785600,
+        "LaunchFromURLDelayInSeconds": 3,
+        "LocationShiftGridSizeDegrees": 0,
+        "LogMsgPolicy_CompressForRealtimeProbe": true,
+        "LogMsgPolicy_CompressForUsage": true,
+        "MED_COST_90D_config": {
+            "immediately": true,
+            "stages": [
+                {
+                    "ttl": 7776000,
+                    "type": 1
+                }
+            ],
+            "ttl": 7776000
+        },
+        "Maps377Enabled": false,
+        "MapsSuggestionsDistanceThresholdForWeatherUpdateKey": 500000,
+        "MapsSuggestionsHotelImproverEnabledKey": true,
+        "MapsSuggestionsNavigationTrackingTaskMinVisitsKey": 10000000,
+        "MapsSuggestionsWeatherFeelerEnabledKey": false,
+        "MuninRAPHideStoreLabels": false,
+        "MuninRAPHideStreetLabels": false,
+        "POIBusynessBluePOIServiceRateLimitDaily": 0,
+        "POIBusynessDifferentialPrivacy": true,
+        "POIBusynessLeechedLocationHorizontalAccuracyThresholdInMeters": 80,
+        "POIBusynessRateLimitDaily": 30,
+        "POIBusynessRealTime": true,
+        "PredExTrainingWeatherAllowed": true,
+        "RAPMaximumNumberOfSelectableCategories": 20,
+        "ReportAProblemAddStreetFlowIsVisible": true,
+        "RidesharingPickupLocationZoomRadius": 250,
+        "SKURegionsServiceWhitelist": [
+            "CH",
+            "ZA",
+            "ZP"
+        ],
+        "ShareETANavigationBannerDismissInterval": 15,
+        "ShareETASupportedReceivedTransportMask": 6,
+        "SpokenGuidanceVolume": 0.9,
+        "TLSSessionTicketsEnabled": true,
+        "ThresholdForPromptingHomeWorkChangeAddressDialogInMeters": 500,
+        "ThresholdForSubmittingHomeWorkRAPInMeters": 7,
+        "ThrottlePolicy": {
+            "app:com.apple.findmy": {
+                "0x20304": {
+                    "short": {
+                        "AllowedRequests": 100,
+                        "ResetInterval": 60
+                    }
+                }
+            },
+            "app:com.apple.weather": {
+                "0x20301": {
+                    "comment": "weather widget location lookup",
+                    "short": {
+                        "AllowedRequests": 200,
+                        "ResetInterval": 60
+                    }
+                }
+            }
+        },
+        "ThrottlePolicy.0x1000a": {
+            "AllowedRequestsPerResetInterval": 100,
+            "ResetInterval": 60
+        },
+        "ThrottlePolicy.0x20309": {
+            "AllowedRequestsPerResetInterval": 100,
+            "ResetInterval": 60
+        },
+        "TileNetworkEventDropRate": 0,
+        "TransitDatePickerHorizonDuration": 1209600,
+        "VLFSessionHomeWorkMonitorEnabled": true,
+        "VLFSessionHomeWorkMonitorHomeCheckEnabled": true,
+        "VLFSessionHomeWorkMonitorWorkCheckEnabled": false,
+        "VLFSessionLocationSignalEnvironmentAllowFoliage": false,
+        "VLFSessionLocationSignalEnvironmentAllowRural": false,
+        "VLFSessionLocationSignalEnvironmentAllowUrban": false,
+        "VLFSessionLocationSignalEnvironmentMonitorEnabled": true,
+        "WiFiQualitySmallSearchRadiusMeters": 2000,
+        "WifiQualitySearchRadiusMeters": 10000,
+        "WifiQualitySearchZoom": 13,
+        "https:\/\/gsp-ssl.ls.apple.com\/directions.arpc|44": "50|60",
+        "https:\/\/gsp-ssl.ls.apple.com\/search.arpc|43": "50|60",
+        "iPUPEnabled": true
+    }
+}
