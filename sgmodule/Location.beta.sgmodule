@@ -8,8 +8,8 @@
 
 [Script]
 # Rewrite Location Services Configuration Functions Internationalization
-Location Services Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
-Location Services Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
+Location Services Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Location Services Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
 # Response Location Services Geo Country Code Check Result
 Location Services GeoCountryCode = type=http-request, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 

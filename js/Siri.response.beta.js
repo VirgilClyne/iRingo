@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.0-response-beta");
+const $ = new Env("Apple Siri v2.0.3-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -15,95 +15,99 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 	}
 };
-var { url } = $request;
-$.log(`🚧 ${$.name}, url: ${url}`, "");
-var { body } = $response;
-$.log(`🚧 ${$.name}, url: ${body}`, "");
 
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches } = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
-		let data = JSON.parse(body);
-		if (url?.path == "bag") {
-			data.enabled = true;
-			data.feedback_enabled = true;
-			//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
-			//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
-			data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
-			data.min_query_len = 3;
-			$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
-			let Functions = data?.overrides;
-			if (Functions) {
-				Settings.Functions.forEach(app => {
-					let APP = Functions?.[`${app}`];
-					if (APP) {
-						APP.enabled = true;
-						APP.feedback_enabled = true;
-						//APP.min_query_len = 2;
-						//APP.search_render_timeout = 200;
-						//APP.first_use_description = "";
-						//APP.first_use_learn_more = "";
-					} else APP = { enabled: true, feedback_enabled: true };
-				});
-				let FlightUtilities = Functions?.flightutilities;
-				if (FlightUtilities) {
-					//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
-					//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
+		let url = URL.parse($request.url);
+		let data = JSON.parse($response.body);
+		$.log(url.path);
+		switch (url.path) {
+			case "bag":
+				data.enabled = true;
+				data.feedback_enabled = true;
+				//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
+				//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
+				data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
+				data.min_query_len = 3;
+				$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
+				let Functions = data?.overrides;
+				if (Functions) {
+					Settings.Functions.forEach(app => {
+						let APP = Functions?.[`${app}`];
+						if (APP) {
+							APP.enabled = true;
+							APP.feedback_enabled = true;
+							//APP.min_query_len = 2;
+							//APP.search_render_timeout = 200;
+							//APP.first_use_description = "";
+							//APP.first_use_learn_more = "";
+						} else APP = { enabled: true, feedback_enabled: true };
+					});
+					let FlightUtilities = Functions?.flightutilities;
+					if (FlightUtilities) {
+						//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
+						//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
+					};
+					let Lookup = Functions?.lookup;
+					if (Lookup) {
+						Lookup.min_query_len = 2;
+					};
+					let Mail = Functions?.mail;
+					let Messages = Functions?.messages;
+					let News = Functions?.news;
+					let Safari = Functions?.safari;
+					if (Safari) {
+						Safari.experiments_custom_feedback_enabled = true;
+					};
+					let Spotlight = Functions?.spotlight;
+					if (Spotlight) {
+						Spotlight.use_twolayer_ranking = true;
+						Spotlight.experiments_custom_feedback_enabled = true;
+						Spotlight.min_query_len = 2;
+						Spotlight.collect_scores = true;
+						Spotlight.collect_anonymous_metadata = true;
+					};
+					let VisualIntelligence = Functions?.visualintelligence;
+					if (VisualIntelligence) {
+						//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
+						//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
+					};
+				}
+				// Safari Smart History
+				data.safari_smart_history_enabled = (Settings.Safari_Smart_History) ? true : false;
+				data.smart_history_feature_feedback_enabled = (Settings.Safari_Smart_History) ? true : false;
+				/*
+				if (data?.mescal_enabled) {
+					data.mescal_enabled = true;
+					data.mescal_version = 200;
+					data.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
+					data.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
+				}
+				let smart_search_v2 = data?.smart_search_v2_parameters;
+				if (smart_search_v2) {
+					smart_search_v2.smart_history_score_v2_enabled = true;
+					smart_search_v2.smart_history_score_v2_enable_count = true;
 				};
-				let Lookup = Functions?.lookup;
-				if (Lookup) {
-					Lookup.min_query_len = 2;
-				};
-				let Mail = Functions?.mail;
-				let Messages = Functions?.messages;
-				let News = Functions?.news;
-				let Safari = Functions?.safari;
-				if (Safari) {
-					Safari.experiments_custom_feedback_enabled = true;
-				};
-				let Spotlight = Functions?.spotlight;
-				if (Spotlight) {
-					Spotlight.use_twolayer_ranking = true;
-					Spotlight.experiments_custom_feedback_enabled = true;
-					Spotlight.min_query_len = 2;
-					Spotlight.collect_scores = true;
-					Spotlight.collect_anonymous_metadata = true;
-				};
-				let VisualIntelligence = Functions?.visualintelligence;
-				if (VisualIntelligence) {
-					//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
-					//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
-				};
-			}
-			// Safari Smart History
-			data.safari_smart_history_enabled = (Settings.Safari_Smart_History) ? true : false;
-			data.smart_history_feature_feedback_enabled = (Settings.Safari_Smart_History) ? true : false;
-			/*
-			if (data?.mescal_enabled) {
-				data.mescal_enabled = true;
-				data.mescal_version = 200;
-				data.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
-				data.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
-			}
-			let smart_search_v2 = data?.smart_search_v2_parameters;
-			if (smart_search_v2) {
-				smart_search_v2.smart_history_score_v2_enabled = true;
-				smart_search_v2.smart_history_score_v2_enable_count = true;
-			};
-			data.session_experiment_metadata_enabled = true;
-			//data.sample_features = true;
-			//data.use_ledbelly = true;
-			*/
-		} else if (url?.path == "search") {
-		} else if (url?.path == "card") {
+				data.session_experiment_metadata_enabled = true;
+				//data.sample_features = true;
+				//data.use_ledbelly = true;
+				*/
+				break;
+			case "search":
+				break;
+			case "card":
+				break;
 		}
-		body = JSON.stringify(data);
+		$response.body = JSON.stringify(data);
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ body }))
+	.finally(() => {
+		if ($.isQuanX()) $.done({ body: $response.body })
+		else $.done($response)
+	})
 
 /***************** Function *****************/
 /**
@@ -132,7 +136,7 @@ async function setENV(name, platform, database) {
 	 * @param {Object} n - Default DataBase
 	 * @return {Promise<*>}
 	 */
-	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n[e].Settings,g=i?.[e]?.Config||n?.[e]?.Config,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var r in t)o(e,r,t[r]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Config:g}}
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Settings||n?.Default?.Settings,g=i?.[e]?.Configs||n?.[e]?.Configs||n?.Default?.Configs,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)o(e,a,t[a]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Configs:g}}
 };
 
 /***************** Env *****************/

@@ -1,17 +1,30 @@
 name:  iRingo for Location Services
-desc: (V2) 1.修改GCC(Geo Country Code)检测结果 2.Coming Soon……
+desc: (V2) 1.修改定位服务(Location Services)配置文件 2.修改GCC(Geo Country Code)检测结果
 
 http:
   mitm:
     - "gspe1-ssl.ls.apple.com"
   script:
+    - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
+      name: Location.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
+      name: Location.response
+      type: response
+      require-body: true
+      timeout: 10
     - match: ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc
-      name: Geo_Services
+      name: Location.request
       type: request
       require-body: false
       timeout: 10
 
 script-providers:
-  Geo_Services:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.js
+  Location.request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js
+    interval: 86400
+  Location.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js
     interval: 86400

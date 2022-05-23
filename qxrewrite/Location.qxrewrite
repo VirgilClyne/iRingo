@@ -1,9 +1,16 @@
 #!name= iRingo for Location Services
 #!version=V2
-#!desc=1.修改定位服务GCC(Geo Country Code)检测结果
-#!desc=2.Coming Soon……
+#!desc=(V2) 1.修改定位服务GCC(Geo Country Code)检测结果 2.修改GCC(Geo Country Code)检测结果
+#!openUrl=http://boxjs.com/#/app/iRingo.Location
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo#定位服务
+#!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
-# Response Geo Services to US
-^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc url script-echo-response https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.js
+# Rewrite Location Services Configuration Functions Internationalization
+^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js
+^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js
+# Response Location Services Geo Country Code Check Result
+^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc url script-echo-response https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js
 
-hostname = gspe1-ssl.ls.apple.com
+hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com

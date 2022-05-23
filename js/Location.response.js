@@ -1,83 +1,77 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.0-beta");
+const $ = new Env("Apple Location Services v2.1.2-response");
 const URL = new URLs();
 const DataBase = {
-	"Location":{"Switch":true,"CountryCode":"US"},
-	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
-	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
-	"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
+	"Location":{
+		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach": true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true}}
+	},
+	"Weather":{
+		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
+		"Configs":{"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
+	},
+	"Siri":{
+		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+	}
 };
-var { url } = $request;
-if (typeof $response !== "undefined") var { headers, body } = $response
-else var response
 
 /***************** Processing *****************/
 !(async () => {
-	const Settings = await setENV("iRingo", "Location", DataBase);
+	const { Settings, Caches } = await setENV("iRingo", "Location", DataBase);
 	if (Settings.Switch) {
-		url = URL.parse(url);
-		console.log(url.path);
-		if (url.path == "pep/gcc") {
-			response = {
-				"status": 200,
-				"headers": {
-					"Content-Type": "text/html",
-					"Date": new Date().toUTCString(),
-					"Connection": "keep-alive",
-					"Content-Encoding": "identity"
-				},
-				"body": Settings.CountryCode
-			};
-			if ($.isQuanX()) response.status = "HTTP/1.1 200 OK";
-			console.log(JSON.stringify(response));
-		} else if (url.path == "config/defaults") {
-			let request = {
-				"url": "http://json2plist.sinaapp.com/convert.php",
-				"headers": {
-					"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-					"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
+		let url = URL.parse($request.url);
+		$.log(url.path);
+		switch (url.path) {
+			case "config/defaults":
+				if ($request.status === 200 || $request.statusCode === 200) {
+					$.log($request.statusCode || $request.status);
+					let request = {
+						"url": "http://json2plist.sinaapp.com/convert.php",
+						"headers": {
+							"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+							"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
+						}
+					}
+					// plist2json
+					let type = "plist2json"
+					request.body = `do=${type}&content=${encodeURIComponent($response.body)}`
+					let data = await $.http.post(request).then(v => v.body);
+					//$.log(data);
+					data = JSON.parse(data);
+					// set settings
+					data["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.LagunaBeach; // XX
+					//data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
+					data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.GEOAddressCorrection; // CN
+					if (Settings?.Config?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.LookupMaxParametersCount) {
+						delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
+						delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
+					}
+					data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.LocalitiesAndLandmarks; // CN
+					if (Settings?.Config?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.LocalitiesAndLandmarks) {
+						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy // CN
+						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime // CN
+					}
+					data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.PedestrianAR; // CN
+					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
+					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
+					data["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.["6694982d2b14e95815e44e970235e230"] ?? DataBase?.Location?.Settings?.Config?.["6694982d2b14e95815e44e970235e230"]; // US
+					data["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.OpticalHeading ?? DataBase?.Location?.Settings?.Config?.OpticalHeading; // US
+					data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.UseCLPedestrianMapMatchedLocations; // US
+					data = JSON.stringify(data);
+					// json2plist
+					type = "json2plist"
+					request.body = `do=${type}&content=${encodeURIComponent(data)}`
+					$response.body = await $.http.post(request).then(v => v.body);
 				}
-			}
-			// plist2json
-			let type = "plist2json"
-			request.body = `do=${type}&content=${encodeURIComponent(body)}`
-			let data = await $.http.post(request).then(v => v.body);
-			//$.log(data);
-			data = JSON.parse(data);
-			data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
-			data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = true; // CN
-			delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
-			delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
-			data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = true; // CN
-			data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = true; // CN
-			data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = true; // CN
-			data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = true; // CN
-			data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
-			data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
-			data["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = true; // US
-			data["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = true; // US
-			data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = true; // US
-			data = JSON.stringify(data);
-			// json2plist
-			type = "json2plist"
-			request.body = `do=${type}&content=${encodeURIComponent(data)}`
-			$response.body = await $.http.post(request).then(v => v.body);
+				break;
 		}
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) {
-			if (typeof $response !== "undefined") {
-				const { headers, body } = $response
-				$.done({ headers, body })
-			} else $.done(response)
-		} else {
-			if (typeof $response !== "undefined") $.done($response)
-			else $.done({ response })
-		}
+		if ($.isQuanX()) $.done({ body: $response.body })
+		else $.done($response)
 	})
 
 /***************** Async Function *****************/
@@ -89,14 +83,23 @@ else var response
  * @param {Object} database - Default DataBase
  * @return {Promise<*>}
  */
- async function setENV(name, platform, database) {
+async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let Settings = await getENV(name, platform, database);
+	 let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
+	if (Settings?.Config) for (let setting in Settings.Config) Settings.Config[setting] = JSON.parse(Settings.Config[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return Settings
-	async function getENV(t,e,n){let i=$.getjson(t,n),r=i?.[e]||i?.Settings?.[e]||n[e];if("undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var s in t)f(e,s,t[s]);Object.assign(r,e)}function f(t,e,n){e.split(".").reduce(((t,i,r)=>t[i]=e.split(".").length===++r?n:t[i]||{}),t)}}return r}
+	return { Settings, Caches }
+	/**
+	 * Get Environment Variables
+	 * @author VirgilClyne
+	 * @param {String} t - Persistent Store Key
+	 * @param {String} e - Platform Name
+	 * @param {Object} n - Default DataBase
+	 * @return {Promise<*>}
+	 */
+	async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Settings||n?.Default?.Settings,g=i?.[e]?.Configs||n?.[e]?.Configs||n?.Default?.Configs,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)o(e,a,t[a]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Configs:g}}
 };
 
 /***************** Env *****************/
