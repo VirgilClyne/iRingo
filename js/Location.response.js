@@ -27,7 +27,7 @@ const DataBase = {
 				if ($request.status === 200 || $request.statusCode === 200) {
 					$.log($request.statusCode || $request.status);
 					let request = {
-						"url": "http://json2plist.sinaapp.com/convert.php",
+						"url": "https://json2plist-production.up.railway.app/convert.php",
 						"headers": {
 							"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 							"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
