@@ -29,9 +29,16 @@ const DataBase = {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-					const { tabs, tabsSplitScreen } = await createTabsGroup(url.params);
-					$.log(JSON.stringify(tabs));
-					$.log(JSON.stringify(tabsSplitScreen));
+					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params);
+					const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
+					AllTabs.forEach(tab => {
+						if (!Settings.Configs.Tabs.includes(tab)) {
+							delete tabs[tab]
+							delete tabsSplitScreen[tab]
+						}
+					})
+					//$.log(JSON.stringify(tabs));
+					//$.log(JSON.stringify(tabsSplitScreen));
 					$response.body = await outputData(url.params, $response.body, tabs, tabsSplitScreen);
 				}
 				break;
@@ -99,6 +106,7 @@ async function createTabsGroup(Params) {
 	var tabsSplitScreen =  [WatchNow, Originals, Store, Library, Search];
 
 	// 简体中文改Tabs语言
+	/*
 	if (Params.locale) var esl = Params.locale.match(/[a-z]{2}_[A-Za-z]{2,4}/g)
 	if (esl != "zh_Hans" || esl != "zh_Hant" || esl != "yue-Hant" || region != "CN") {
 		const titles = { "立即观看": "Watch Now", "Apple TV+": "Apple TV+", "原创内容": "Originals", "电影": "Movies", "电视节目": "TV", "体育节目": "Sports", "儿童": "Kids", "商店": "Store", "资料库": "Library", "搜索": "Search" };
@@ -113,7 +121,9 @@ async function createTabsGroup(Params) {
 			return tab;
 		});
 	};
-
+	*/
+	$.log(JSON.stringify(tabs));
+	$.log(JSON.stringify(tabsSplitScreen));
 	// 输出
 	return { tabs, tabsSplitScreen }
 };
