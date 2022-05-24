@@ -1,5 +1,5 @@
 name:  Enable Apple TV app
-desc: 解锁TV app全功能：使用🇺🇸US「体育节目」和「儿童」页面，优先简体中文(zh-Hans)。
+desc: (V1) 解锁TV app全功能：使用🇺🇸US「体育节目」和「儿童」页面，优先简体中文(zh-Hans)。
 
 http:
   mitm:
@@ -53,5 +53,5 @@ http:
 
 script-providers:
   Apple_TV:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Apple_TV.js
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Apple_TV.js
     interval: 86400
