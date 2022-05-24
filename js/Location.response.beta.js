@@ -23,6 +23,9 @@ const DataBase = {
 		let url = URL.parse($request.url);
 		$.log(url.path);
 		switch (url.path) {
+			case "pep/gcc":
+				$response.body = Settings.CountryCode;
+				break;
 			case "config/defaults":
 				if ($response.status === 200 || $response.statusCode === 200) {
 					$.log($response.statusCode || $response.status);

@@ -47,15 +47,16 @@ const DataBase = {
 					newCaches.ETag = $request?.headers?.["If-None-Match"]
 					$.setjson(newCaches, "@iRingo.Location.Caches");
 					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-					if ($.isQuanX()) $.done({ headers: $request.headers })
-					else $.done($request)
 				}
 				break;
 		}
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done())
+	.finally(() => {
+		if ($.isQuanX()) $.done({ headers: $request.headers })
+		else $.done($request)
+	})
 
 /***************** Async Function *****************/
 /**
