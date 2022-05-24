@@ -149,8 +149,7 @@
 			],
 			"keys": [
 				"@iRingo.Weather.Settings",
-				"@iRingo.Weather.Caches",
-				"@iRingo.Weather"
+				"@iRingo.Weather.Caches"
 			],
 			"settings": [
 				{
@@ -162,14 +161,14 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Switch",
-					"name": "[下一小时降水]修改开关",
+					"name": "[未来一小时降水强度]修改开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用此功能修改，数据来源：气象在线"
+					"desc": "是否启用此功能修改"
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Mode",
-					"name": "[下一小时降水]切换API",
+					"name": "[未来一小时降水强度]切换API",
 					"val": "www.weatherol.cn",
 					"type": "radios",
 					"items": [
@@ -186,7 +185,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.HTTPHeaders",
-					"name": "[下一小时降水]HTTP请求头",
+					"name": "[未来一小时降水强度]HTTP请求头",
 					"val": "{ \"Content-Type\": \"application/x-www-form-urlencoded\", \"User-Agent\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1\" }",
 					"type": "text",
 					"placeholder": "{ \"User-Agent\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1\" }",
@@ -194,7 +193,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.ColorfulClouds.Auth",
-					"name": "[下一小时降水]彩云天气令牌",
+					"name": "[未来一小时降水强度]彩云天气令牌",
 					"val": "",
 					"type": "text",
 					"placeholder": "ABcdef1g2hiJklmN",
@@ -202,14 +201,14 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.Switch",
-					"name": "[下一小时降水]Debug开关",
+					"name": "[未来一小时降水强度]Debug开关",
 					"val": false,
 					"type": "boolean",
 					"desc": "如果您不知道这个开关是用来做什么的，请保持关闭"
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.WeatherStatus",
-					"name": "[下一小时降水]天气类型",
+					"name": "[未来一小时降水强度]天气类型",
 					"val": "rain",
 					"type": "text",
 					"placeholder": "rain",
@@ -217,7 +216,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.Chance",
-					"name": "[下一小时降水]降水或降雪概率",
+					"name": "[未来一小时降水强度]降水或降雪概率",
 					"val": "100",
 					"type": "text",
 					"placeholder": "100",
@@ -225,7 +224,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.Delay",
-					"name": "[下一小时降水]雨雪发生时间（分钟后）",
+					"name": "[未来一小时降水强度]雨雪发生时间（分钟后）",
 					"val": "0",
 					"type": "text",
 					"placeholder": "0",
@@ -233,7 +232,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.PrecipLower",
-					"name": "[下一小时降水]随机生成的降水数据的下限（mm/hr）",
+					"name": "[未来一小时降水强度]随机生成的降水数据的下限（mm/hr）",
 					"val": "0.08",
 					"type": "text",
 					"placeholder": "0.08",
@@ -241,7 +240,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.PrecipUpper",
-					"name": "[下一小时降水]随机生成的降水数据的上限（mm/hr）",
+					"name": "[未来一小时降水强度]随机生成的降水数据的上限（mm/hr）",
 					"val": "51.30",
 					"type": "text",
 					"placeholder": "51.30",
@@ -249,7 +248,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.IntensityLower",
-					"name": "[下一小时降水]随机生成UI显示数据的下限",
+					"name": "[未来一小时降水强度]随机生成UI显示数据的下限",
 					"val": "0",
 					"type": "text",
 					"placeholder": "0",
@@ -257,7 +256,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.IntensityUpper",
-					"name": "[下一小时降水]随机生成UI显示数据的上限",
+					"name": "[未来一小时降水强度]随机生成UI显示数据的上限",
 					"val": "3",
 					"type": "text",
 					"placeholder": "3",
