@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.1-response-beta");
+const $ = new Env("Apple TV v2.0.1-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
