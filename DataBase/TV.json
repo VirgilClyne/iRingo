@@ -1,8 +1,48 @@
 {
 	"Settings": {
 		"Switch": true,
-		"CountryCode": "SG",
-		"LangCode": "zh-Hans"
+		"Third-Party": true,
+		"LangCode": "zh-Hans",
+		"Configs":{
+			"CountryCode": "SG",
+			"Tabs": [
+				"WatchNow",
+				"Originals",
+				"Movies",
+				"TV",
+				"Sports",
+				"Kids",
+				"Library",
+				"Search"
+			]
+		},
+		"WatchNow":{
+			"CountryCode": "US"
+		},
+		"Channels":{
+			"CountryCode": "US"
+		},
+		"Originals":{
+			"CountryCode": "SG"
+		},
+		"Movies":{
+			"CountryCode": "AUTO"
+		},
+		"TV":{
+			"CountryCode": "US"
+		},
+		"Sports":{
+			"CountryCode": "US"
+		},
+		"Kids":{
+			"CountryCode": "US"
+		},
+		"Persons":{
+			"CountryCode": "AUTO"
+		},
+		"Others":{
+			"CountryCode": "US"
+		}
 	},
 	"Configs": {
 		"Storefront": {
