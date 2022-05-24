@@ -74,7 +74,7 @@ const DataBase = {
 			case "uts/v2/favorites":
 			case "uts/v2/favorites/add":
 			case "uts/v2/favorites/remove":
-				if (url.params.sf) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
+				if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
 				break;
 			default:
