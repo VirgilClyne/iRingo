@@ -1,0 +1,65 @@
+name:  iRingo for TV app
+desc: (V2) 全面自定义TV app功能
+
+http:
+  mitm:
+    - "uts-api.itunes.apple.com"
+  script:
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*
+      name: TV.request
+      type: request
+      require-body: true
+      timeout: 10
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*
+      name: TV.response
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/canvases\/Roots\/.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/canvases\/Channels\/.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/(movies|shows|sports|sporting-events|shelves)\/.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/brands.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/playables.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/watchlist.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/favorites.*
+      name: TV.request
+      type: request
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/view\/.*
+      name: TV.request
+      type: request
+      require-body: false
+      timeout: 10
+
+script-providers:
+  TV.request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+    interval: 86400
+  TV.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+    interval: 86400

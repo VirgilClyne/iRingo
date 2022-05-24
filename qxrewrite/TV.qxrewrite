@@ -1,0 +1,20 @@
+#!name= iRingo for TV app
+#!desc=(V2) 全面自定义TV app功能
+#!openUrl=http://boxjs.com/#/app/iRingo.TV
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/📺TV-app
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_TV.png
+
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/canvases\/Roots\/.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/canvases\/Channels\/.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/(movies|shows|sports|sporting-events|shelves)\/.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/brands.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/playables.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/watchlist.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/favorites.* url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/view\/.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+
+hostname = uts-api.itunes.apple.com
