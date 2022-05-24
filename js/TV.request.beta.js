@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.3-request-beta");
+const $ = new Env("Apple TV v2.0.4-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -61,15 +61,8 @@ const DataBase = {
 			case "uts/v3/canvases/Roots/kids":
 				url.params.sf = Configs.Storefront[Settings.Kids.CountryCode] || url.params.sf
 				break;
-			case "uts/v3/canvases/Persons/":
-				url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] || url.params.sf
-				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
-				break;
 			case "uts/v3/watchlist":
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
-				break;
-			case "uts/v3/playables/":
-				url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				break;
 			case "uts/v2/favorites":
 			case "uts/v2/favorites/add":
@@ -79,12 +72,13 @@ const DataBase = {
 				break;
 			default:
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
-				if (url.path.includes("uts/v3/movies/")) url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
+				if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
+				else if (url.path.includes("uts/v3/movies/")) url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/shows/")) url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/sporting-events/")) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/shelves/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				else if (url.path.includes("uts/v3/sporting-events/")) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/playables/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				else if (url.path.includes("uts/v3/canvases/Persons/")) url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] || url.params.sf
 				else url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				break;
 		}
