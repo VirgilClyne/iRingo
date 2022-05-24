@@ -8,9 +8,9 @@
 	"apps": [
 		{
 			"id": "iRingo.Location",
-			"name": "iRingo: 定位服务",
+			"name": "定位服务",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#定位服务\">iRingo#定位服务</a>的使用说明进行配置",
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍定位服务\">iRingo#定位服务</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
 			],
 			"keys": [
@@ -140,9 +140,9 @@
 		},
 		{
 			"id": "iRingo.Weather",
-			"name": "iRingo: 天气",
+			"name": "天气",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#天气\">iRingo#天气</a>的使用说明进行配置",
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🌤天气\">iRingo#天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
 				"查询速度:\"私有API+城市\" > \"私有API+观测站\" > \"公共API+观测站\"",
 				"定位精度:\"观测站\" > \"城市\""
@@ -274,9 +274,9 @@
 		},
 		{
 			"id": "iRingo.Siri",
-			"name": "iRingo: Siri与搜索",
+			"name": "Siri与搜索",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo#siri与搜索\">iRingo#siri与搜索</a>的使用说明进行配置",
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🔍Siri与搜索\">iRingo#siri与搜索</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
 			],
 			"keys": [
