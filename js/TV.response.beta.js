@@ -128,12 +128,12 @@ async function outputData(Params, body, tabs, tabsSplitScreen) {
 	configurations.data.applicationProps.tvAppEnabledInStorefront = true;
 	configurations.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
 		: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
-	configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
+	//configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 	//configurations.data.applicationProps.storefront.storefrontId = 143470;
 	configurations.data.applicationProps.featureEnablers = {
 		"topShelf": true,
 		"unw": true,
-		"imageBasedSubtitles": true,
+		//"imageBasedSubtitles": true,
 		"ageVerification": false,
 		"seasonTitles": false
 	};

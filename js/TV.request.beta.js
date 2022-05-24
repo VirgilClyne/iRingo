@@ -28,58 +28,62 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "uts/v3/configurations":
-				if (url.params.country) url.params.country = Settings.Configs.CountryCode
-				if (url.params.locale) url.params.locale = Settings.LangCode
+				if (url.params.country) url.params.country = Settings.Configs.CountryCode ?? url.params.country
+				if (url.params.locale) url.params.locale = Settings.LangCode?? url.params.locale
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
 			case "uts/v3/canvases/roots/tahoma_watchnow":
-				if (url.params.pfm === "desktop") url.params.pfm = "appletv"
-				break;
-			case "uts/v3/canvases/Persons/":
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
+				url.params.sf = Configs.Storefront[Settings.WatchNow.CountryCode] ?? url.params.sf
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "appletv" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Channels/tvs.sbd.4000":
 			case "uts/v2/brands":
-				url.params.sf = "143441"
+				url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] ?? url.params.sf
 				break;
 			case "uts/v3/shelves/uts.col.UpNext":
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/movies":
 			case "uts/v3/movies/":
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
+				url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] ?? url.params.sf
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/tv":
 			case "uts/v3/shows/":
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
+				url.params.sf = Configs.Storefront[Settings.TV.CountryCode] ?? url.params.sf
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/sports":
 			case "uts/v2/sports/clockscore":
 			case "uts/v2/sports/leagues":
 			case "uts/v2/sports/competitors":
 			case "uts/v3/sporting-events/":
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
-				url.params.sf = "143441"
+				url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] ?? url.params.sf
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/Kids":
-				url.params.sf = "143441"
+				url.params.sf = Configs.Storefront[Settings.Kids.CountryCode] ?? url.params.sf
+				break;
+			case "uts/v3/canvases/Persons/":
+				url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] ?? url.params.sf
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/watchlist":
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/playables/":
-				url.params.sf = "143441"
+				url.params.sf = Configs.Storefront[Settings.Others.CountryCode] ?? url.params.sf
 				break;
 			case "uts/v2/favorites":
-				url.params.sf = "143441"
+				url.params.sf = Configs.Storefront[Settings.Others.CountryCode] ?? url.params.sf
 				break;
 			case "uts/v2/favorites/add":
 			case "uts/v2/favorites/remove":
-				$request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${"143441"}`);
+				$request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Others.CountryCode]}`);
 				break;
 			default:
-				if (url.params.pfm === "desktop") url.params.pfm = "ipad"
-				url.params.sf = Configs.Storefront[Settings.CountryCode]
+				url.params.sf = Configs.Storefront[Settings.Others.CountryCode] ?? url.params.sf
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 		}
 		$request.url = URL.stringify(url);
 	}
