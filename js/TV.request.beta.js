@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.4-request-beta");
+const $ = new Env("Apple TV v2.0.5-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -38,8 +38,9 @@ const DataBase = {
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "appletv" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Channels/tvs.sbd.4000":
+			case "uts/v2/brands/appleTvPlus":
 				url.params.sf = Configs.Storefront[Settings.Originals.CountryCode] || url.params.sf
-				break;				
+				break;
 			case "uts/v2/brands":
 				url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
 				break;
@@ -53,26 +54,38 @@ const DataBase = {
 				break;
 			case "uts/v3/canvases/Roots/sports":
 			case "uts/v2/sports/clockscore":
-			case "uts/v2/sports/leagues":
 			case "uts/v2/sports/competitors":
+			case "uts/v2/sports/league":
+			case "uts/v2/sports/leagues":
+			case "uts/v2/sports/statsIdLookup":
+			case "uts/v2/sports/teamsNearMe":
 				url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/kids":
 				url.params.sf = Configs.Storefront[Settings.Kids.CountryCode] || url.params.sf
 				break;
-			case "uts/v3/watchlist":
-				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
-				break;
+			case "uts/v3/favorite-people":
+			case "uts/v3/favorite-teams":
 			case "uts/v2/favorites":
 			case "uts/v2/favorites/add":
 			case "uts/v2/favorites/remove":
 				if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
 				break;
+			case "uts/v2/search/incremental":
+			case "uts/v2/search/landing":
+				if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings.Search.CountryCode] || url.params.sf
+				break;
+			case "uts/v3/watchlist":
+			case "uts/v2/watchlist/contains":
+			case "uts/v2/watchlist/search":
+				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
+				break;
 			default:
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
+				else if (url.path.includes("uts/v2/brands/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/movies/")) url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/shows/")) url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/shelves/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
