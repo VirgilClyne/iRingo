@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.2-response");
+const $ = new Env("Apple Location Services v2.1.4-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -23,9 +23,12 @@ const DataBase = {
 		let url = URL.parse($request.url);
 		$.log(url.path);
 		switch (url.path) {
+			case "pep/gcc":
+				$response.body = Settings.CountryCode;
+				break;
 			case "config/defaults":
-				if ($request.status === 200 || $request.statusCode === 200) {
-					$.log($request.statusCode || $request.status);
+				if ($response.status === 200 || $response.statusCode === 200) {
+					$.log($response.statusCode || $response.status);
 					let request = {
 						"url": "https://json2plist-production.up.railway.app/convert.php",
 						"headers": {

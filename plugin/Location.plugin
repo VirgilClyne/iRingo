@@ -11,7 +11,7 @@
 http-request ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Location Services Configuration, argument=
 http-response ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js, requires-body=1, tag=Location Services Configuration, argument=
 # Response Location Services Geo Country Code Check Result
-http-request ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Location Services GeoCountryCode, argument=
+http-response ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js, requires-body=1, tag=Location Services GeoCountryCode, argument=
 
 [MITM]
 hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com

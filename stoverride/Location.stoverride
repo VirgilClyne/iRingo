@@ -16,9 +16,9 @@ http:
       require-body: true
       timeout: 10
     - match: ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc
-      name: Location.request
-      type: request
-      require-body: false
+      name: Location.response
+      type: response
+      require-body: true
       timeout: 10
 
 script-providers:

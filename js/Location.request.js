@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.1-request");
+const $ = new Env("Apple Location Services v2.1.2-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -24,21 +24,6 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "pep/gcc":
-				var response = {
-					"status": 200,
-					"headers": {
-						"Content-Type": "text/html",
-						"Date": new Date().toUTCString(),
-						"Connection": "keep-alive",
-						"Content-Encoding": "identity"
-					},
-					"body": Settings.CountryCode
-				};
-				$.log(JSON.stringify(response));
-				if ($.isQuanX()) {
-					response.status = "HTTP/1.1 200 OK";
-					$.done(response)
-				} else $.done({ response })
 				break;
 			case "config/defaults":
 				$.log($request?.headers?.["If-None-Match"]);
@@ -47,15 +32,16 @@ const DataBase = {
 					newCaches.ETag = $request?.headers?.["If-None-Match"]
 					$.setjson(newCaches, "@iRingo.Location.Caches");
 					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-					if ($.isQuanX()) $.done({ headers: $request.headers })
-					else $.done($request)
 				}
 				break;
 		}
 	}
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done())
+	.finally(() => {
+		if ($.isQuanX()) $.done({ headers: $request.headers })
+		else $.done($request)
+	})
 
 /***************** Async Function *****************/
 /**

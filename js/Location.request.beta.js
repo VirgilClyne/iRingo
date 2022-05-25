@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.1-request-beta");
+const $ = new Env("Apple Location Services v2.1.2-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -24,6 +24,7 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "pep/gcc":
+				/*
 				var response = {
 					"status": 200,
 					"headers": {
@@ -39,6 +40,7 @@ const DataBase = {
 					response.status = "HTTP/1.1 200 OK";
 					$.done(response)
 				} else $.done({ response })
+				*/
 				break;
 			case "config/defaults":
 				$.log($request?.headers?.["If-None-Match"]);
