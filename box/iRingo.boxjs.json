@@ -637,59 +637,6 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Channels.CountryCode",
-					"name": "[TV频道]国家或地区代码",
-					"val": "US",
-					"type": "selects",
-					"desc": "“TV频道”栏目要更改为的地区或国家版本",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动(与当前登陆账号保持一致)"
-						},
-						{
-							"key": "CN",
-							"label": "中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "香港"
-						},
-						{
-							"key": "TW",
-							"label": "台湾"
-						},
-						{
-							"key": "SG",
-							"label": "新加坡"
-						},
-						{
-							"key": "US",
-							"label": "美国"
-						},
-						{
-							"key": "JP",
-							"label": "日本"
-						},
-						{
-							"key": "AU",
-							"label": "澳大利亚"
-						},
-						{
-							"key": "UK",
-							"label": "英国"
-						},
-						{
-							"key": "KR",
-							"label": "韩国"
-						},
-						{
-							"key": "CA",
-							"label": "加拿大"
-						}
-					]
-				},
-				{
 					"id": "@iRingo.TV.Settings.Originals.CountryCode",
 					"name": "[原创内容](TV+)国家或地区代码",
 					"val": "SG",
@@ -1013,6 +960,59 @@
 					"val": "AUTO",
 					"type": "selects",
 					"desc": "“人物”栏目(导演、演员等)要更改为的地区或国家版本",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "UK",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.Search.CountryCode",
+					"name": "[搜索]国家或地区代码",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "“搜索”栏目要更改为的地区或国家版本",
 					"items": [
 						{
 							"key": "AUTO",

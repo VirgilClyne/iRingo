@@ -40,6 +40,9 @@
 		"Persons":{
 			"CountryCode": "AUTO"
 		},
+		"Search":{
+			"CountryCode": "AUTO"
+		},
 		"Others":{
 			"CountryCode": "US"
 		}
