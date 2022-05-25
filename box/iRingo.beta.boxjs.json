@@ -646,6 +646,112 @@
 					]
 				},
 				{
+					"id": "@iRingo.TV.Settings.View.CountryCode[0]",
+					"name": "[内容详情]首选语言",
+					"val": "SG",
+					"type": "selects",
+					"desc": "“内容详情”(电影、电视节目、人物等详情页面)要更改为的首选语言",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "简体中文(中国)"
+						},
+						{
+							"key": "HK",
+							"label": "繁体粤语(香港)"
+						},
+						{
+							"key": "TW",
+							"label": "繁体中文(台湾)"
+						},
+						{
+							"key": "SG",
+							"label": "简体中文(新加坡)"
+						},
+						{
+							"key": "US",
+							"label": "英语(美国)"
+						},
+						{
+							"key": "JP",
+							"label": "日语(日本)"
+						},
+						{
+							"key": "AU",
+							"label": "英语(澳大利亚)"
+						},
+						{
+							"key": "UK",
+							"label": "英语(英国)"
+						},
+						{
+							"key": "KR",
+							"label": "韩语(韩国)"
+						},
+						{
+							"key": "CA",
+							"label": "英语(加拿大)"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.View.CountryCode[1]",
+					"name": "[内容详情]第二语言",
+					"val": "TW",
+					"type": "selects",
+					"desc": "当首选语言不可用时，“内容详情”(电影、电视节目、人物等详情页面)要更改为的第二语言",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "简体中文(中国)"
+						},
+						{
+							"key": "HK",
+							"label": "繁体粤语(香港)"
+						},
+						{
+							"key": "TW",
+							"label": "繁体中文(台湾)"
+						},
+						{
+							"key": "SG",
+							"label": "简体中文(新加坡)"
+						},
+						{
+							"key": "US",
+							"label": "英语(美国)"
+						},
+						{
+							"key": "JP",
+							"label": "日语(日本)"
+						},
+						{
+							"key": "AU",
+							"label": "英语(澳大利亚)"
+						},
+						{
+							"key": "UK",
+							"label": "英语(英国)"
+						},
+						{
+							"key": "KR",
+							"label": "韩语(韩国)"
+						},
+						{
+							"key": "CA",
+							"label": "英语(加拿大)"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.TV.Settings.WatchNow.CountryCode",
 					"name": "[立即观看]国家或地区代码",
 					"val": "US",

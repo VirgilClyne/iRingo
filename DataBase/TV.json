@@ -3,7 +3,7 @@
 		"Switch": true,
 		"Third-Party": true,
 		"LangCode": "zh-Hans",
-		"Configs":{
+		"Configs": {
 			"CountryCode": "SG",
 			"Tabs": [
 				"WatchNow",
@@ -16,34 +16,40 @@
 				"Search"
 			]
 		},
-		"WatchNow":{
+		"View": {
+			"CountryCode": [
+				"SG",
+				"TW"
+			]
+		},
+		"WatchNow": {
 			"CountryCode": "US"
 		},
-		"Channels":{
+		"Channels": {
 			"CountryCode": "US"
 		},
-		"Originals":{
+		"Originals": {
 			"CountryCode": "SG"
 		},
-		"Movies":{
+		"Movies": {
 			"CountryCode": "AUTO"
 		},
-		"TV":{
+		"TV": {
 			"CountryCode": "US"
 		},
-		"Sports":{
+		"Sports": {
 			"CountryCode": "US"
 		},
-		"Kids":{
+		"Kids": {
 			"CountryCode": "US"
 		},
-		"Persons":{
+		"Persons": {
 			"CountryCode": "AUTO"
 		},
-		"Search":{
+		"Search": {
 			"CountryCode": "AUTO"
 		},
-		"Others":{
+		"Others": {
 			"CountryCode": "US"
 		}
 	},
