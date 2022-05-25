@@ -233,6 +233,18 @@
 			"TO": "143608",
 			"VU": "143609",
 			"ZM": "143622"
+		},
+		"locale": {
+			"AU": "en_AU",
+			"CA": "en_CA",
+			"GB": "en_GB",
+			"KR": "ko_KR",
+			"HK": "yue_Hant",
+			"JP": "ja_JP",
+			"MO": "zh_Hant",
+			"TW": "zh_Hant",
+			"US": "en_US",
+			"SG": "zh_Hans"
 		}
 	}
 }
