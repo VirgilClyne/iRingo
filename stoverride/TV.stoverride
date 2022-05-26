@@ -5,55 +5,15 @@ http:
   mitm:
     - "uts-api.itunes.apple.com"
   script:
-    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
       name: TV.request
       type: request
       require-body: true
       timeout: 10
-    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
       name: TV.response
       type: response
       require-body: true
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/canvases\/Roots\/.*
-      name: TV.request
-      type: request
-      require-body: false
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/canvases\/Channels\/.*
-      name: TV.request
-      type: request
-      require-body: false
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/(movies|shows|sports|sporting-events|shelves)\/.*
-      name: TV.request
-      type: request
-      require-body: false
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/brands.*
-      name: TV.request
-      type: request
-      require-body: false
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/playables.*
-      name: TV.request
-      type: request
-      require-body: false
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/watchlist.*
-      name: TV.request
-      type: request
-      require-body: false
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/favorites.*
-      name: TV.request
-      type: request
-      require-body: true
-      timeout: 10
-    - match: ^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/view\/.*
-      name: TV.request
-      type: request
-      require-body: false
       timeout: 10
 
 script-providers:
