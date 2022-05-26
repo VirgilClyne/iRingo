@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.5-request");
+const $ = new Env("Apple TV v2.0.6-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -29,27 +29,32 @@ const DataBase = {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.country) url.params.country = Settings.Configs.CountryCode || url.params.country
-				if (url.params.locale) url.params.locale = Settings.LangCode || url.params.locale
+				if (url.params.locale) url.params.locale = Configs.Locale[Settings.Configs.CountryCode] || url.params.locale
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
 			case "uts/v3/canvases/roots/tahoma_watchnow":
 			case "uts/v3/shelves/uts.col.UpNext":
 				url.params.sf = Configs.Storefront[Settings.WatchNow.CountryCode] || url.params.sf
+				url.params.locale = Configs.Locale[Settings.WatchNow.CountryCode] || url.params.locale
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "appletv" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Channels/tvs.sbd.4000":
 			case "uts/v2/brands/appleTvPlus":
 				url.params.sf = Configs.Storefront[Settings.Originals.CountryCode] || url.params.sf
+				url.params.locale = Configs.Locale[Settings.Originals.CountryCode] || url.params.locale
 				break;
 			case "uts/v2/brands":
 				url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
+				url.params.locale = Configs.Locale[Settings.Channels.CountryCode] || url.params.locale
 				break;
 			case "uts/v3/canvases/Roots/movies":
 				url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
+				url.params.locale = Configs.Locale[Settings.Movies.CountryCode] || url.params.locale
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/tv":
 				url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
+				url.params.locale = Configs.Locale[Settings.TV.CountryCode] || url.params.locale
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Roots/sports":
@@ -86,15 +91,19 @@ const DataBase = {
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v2/brands/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/movies/")) url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/shows/")) url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/shelves/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				else if (url.path.includes("uts/v3/movies/")) {
+					url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
+					url.params.locale = Configs.Locale[Settings.Movies.CountryCode] || url.params.locale
+				} else if (url.path.includes("uts/v3/shows/")) {
+					url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
+					url.params.locale = Configs.Locale[Settings.TV.CountryCode] || url.params.locale
+				} else if (url.path.includes("uts/v3/shelves/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/sporting-events/")) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/playables/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/canvases/Persons/")) url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] || url.params.sf
 				else url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				break;
-			}
+		}
 		$request.url = URL.stringify(url);
 	}
 })()
