@@ -133,7 +133,7 @@ async function createTabsGroup(Params, requestHeaderXAppleILocale) {
 		$.log(`🎉 ${$.name}, TV Tab Multilang Error`, `Use default zh-Hans`, "");
 	}
 	let tabName = {...tabNameMultiLang[systemLang]}
-	if (tabName.length === 0) {
+	if (Object.keys(tabName).length === 0) {
 		tabName = {...tabNameMultiLang["zh-Hans"]}
 	}
 
