@@ -3,20 +3,20 @@
 #!openUrl=http://boxjs.com/#/app/iRingo.TV
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📺TV-app
+#!manual=https://github.com/zmlu/iRingo/wiki/📺TV-app
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_TV.png
 
 [Script]
-TV Configurations = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Configurations = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
-TV Roots = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/canvases\/Roots\/.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Channels = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/canvases\/Channels\/.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Details = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/(movies|shows|sports|sporting-events|shelves)\/.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Brands = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/brands.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Playables = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/playables.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Watchlist = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/watchlist.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV Favorites = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/favorites.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-TV View = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/view\/.*, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+TV Configurations = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*, requires-body=0, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Configurations = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/configurations\?.*, requires-body=1, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.response.js
+TV Roots = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/canvases\/Roots\/.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Channels = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/canvases\/Channels\/.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Details = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/(movies|shows|sports|sporting-events|shelves)\/.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Brands = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/brands.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Playables = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/playables.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Watchlist = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/watchlist.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV Favorites = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/favorites.*, requires-body=1, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
+TV View = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com(\/uts\/)(v1|v2|v3)\/view\/.*, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
 
 [MITM]
 hostname = %APPEND% uts-api.itunes.apple.com

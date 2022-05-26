@@ -81,22 +81,56 @@ async function setENV(name, platform, database) {
 
 // Create Tabs Group
 async function createTabsGroup(Params) {
+	
+	$.log(`🎉 ${$.name}, JacobTest`, `Params: ${typeof Params}`, `Params内容: ${JSON.stringify(Params)}`, "");
+
+	const tabNameZhCn = {
+		"WatchNow": "立即观看",
+		"Originals": "原创内容",
+		"Movies": "电影",
+		"TV": "电视节目",
+		"StoreMovies": "电影",
+		"StoreTV": "电视节目",
+		"Store": "商店",
+		"Sports": "体育节目",
+		"Kids": "儿童",
+		"Library": "资料库",
+		"Search": "搜索",
+	};
+
+	const tabNameEn = {
+		"WatchNow": "Watch Now",
+		"Originals": "Originals",
+		"Movies": "Movies",
+		"TV": "TV Shows",
+		"StoreMovies": "Movies",
+		"StoreTV": "TV Shows",
+		"Store": "Store",
+		"Sports": "Sports",
+		"Kids": "Kids",
+		"Library": "Library",
+		"Search": "Search",
+	};
+
+	//Tab名字多语言
+	const tabName = { ...tabNameZhCn}
+
 	//构建Tab内容
-	let WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
-	let Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
-	let Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": "电影", "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
-	let TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": "电视节目", "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
+	let WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": tabName.WatchNow, "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
+	let Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": tabName.Originals, "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
+	let Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": tabName.Movies, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
+	let TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": tabName.TV, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
 	let Store = {
 		"destinationType": "SubTabs",
-		"subTabs": [{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] }, { "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }],
-		"title": "商店",
+		"subTabs": [{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": tabName.StoreMovies, "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] }, { "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": tabName.StoreTV, "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }],
+		"title": tabName.Store,
 		"type": "Store",
 		"universalLinks": ["https://tv.apple.com/store"]
 	};
-	let Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": "体育节目", "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
-	let Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": "儿童", "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
-	let Library = { "destinationType": "Client", "title": "资料库", "type": "Library" };
-	let Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
+	let Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": tabName.Sports, "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
+	let Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": tabName.Kids, "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
+	let Library = { "destinationType": "Client", "title": tabName.Library, "type": "Library" };
+	let Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": tabName.Search, "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
 
 	// 创建分组
 	var tabs = (Params.v > 53) ? [WatchNow, Originals, Store, Sports, Kids, Library, Search]
