@@ -84,12 +84,12 @@ const DataBase = {
 				break;
 			default:
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
-				if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v2/brands/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/movies/")) url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/shows/")) url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/shelves/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/sporting-events/")) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
+				//if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
+				//else if (url.path.includes("uts/v2/brands/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
+				//else if (url.path.includes("uts/v3/movies/")) url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
+				//else if (url.path.includes("uts/v3/shows/")) url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
+				//else if (url.path.includes("uts/v3/shelves/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				if (url.path.includes("uts/v3/sporting-events/")) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/playables/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/canvases/Persons/")) url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] || url.params.sf
 				else url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf

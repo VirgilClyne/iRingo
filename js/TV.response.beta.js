@@ -177,14 +177,20 @@ async function getData(type, settings, database) {
 	//查询是否有符合语言的字幕
 	let data = [];
 	for await (const CC of CCs) {
-		let url = URL.parse($request.url);
-		url.params.sf = database.Storefront[CC]
-		$.log(`sf=${url.params.sf}`)
-		url.params.locale = database.Locale[CC]
-		$.log(`locale=${url.params.locale}`)
-		$request.url = URL.stringify(url)
-		$.log(`$request.url=${$request.url}`)
-		data = await $.http.get($request).then(data => data);
+		let request = {
+			"url": $request.url,
+			"headers": $request.headers
+		}
+		request.url = URL.parse(request.url);
+		request.url.params.sf = database.Storefront[CC]
+		$.log(`sf=${request.url.params.sf}`)
+		request.url.params.locale = database.Locale[CC]
+		$.log(`locale=${request.url.params.locale}`)
+		request.url = URL.stringify(request.url)
+		$.log(`request.url=${request.url}`)
+		request.headers["X-Surge-Skip-Scripting"] = "true"
+		data = await $.http.get(request).then(data => data);
+		$.log(`data=${JSON.stringify(data)}`)
 		if (data.statusCode === 200 || data.status === 200 ) break;
 	};
 	$.log(`🎉 ${$.name}, 调试信息`, "Get EXT-X-MEDIA Data", `datas: ${JSON.stringify(data.body)}`, "");
