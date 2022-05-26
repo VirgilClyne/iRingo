@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.1-response-beta");
+const $ = new Env("Apple TV v2.0.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -16,7 +16,11 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings":{"Switch":true,"Third-Party":true,"LangCode":"zh-Hans","Configs":{"CountryCode":"SG","Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"]},"View":{"CountryCode":["SG","TW"]},"WatchNow":{"CountryCode":"US"},"Channels":{"CountryCode":"US"},"Originals":{"CountryCode":"SG"},"Movies":{"CountryCode":"AUTO"},"TV":{"CountryCode":"US"},"Sports":{"CountryCode":"US"},"Kids":{"CountryCode":"US"},"Persons":{"CountryCode":"AUTO"},"Search":{"CountryCode":"AUTO"},"Others":{"CountryCode":"US"}},
-		"Configs":{"Storefront":{"AF":"143610","AL":"143575","AO":"143564","AI":"143538","AG":"143540","AR":"143505","AM":"143524","AU":"143460","AT":"143445","AZ":"143568","BA":"143612","BS":"143539","BH":"143559","BB":"143541","BD":"143490","BY":"143565","BE":"143446","BZ":"143555","BJ":"143576","BM":"143542","BT":"143577","BO":"143556","BW":"143525","BR":"143503","VG":"143543","BN":"143560","BG":"143526","BF":"143578","CA":"143455","CI":"143527","CM":"143574","CV":"143580","KY":"143544","TD":"143581","CL":"143483","CN":"143465","CO":"143501","CG":"143582","CR":"143495","HR":"143494","CY":"143557","CZ":"143489","DK":"143458","DM":"143545","DO":"143508","DZ":"143563","EC":"143509","EG":"143516","SV":"143506","EE":"143518","FJ":"143583","FI":"143447","FR":"143442","GM":"143584","DE":"143443","GH":"143573","GR":"143448","GD":"143546","GT":"143504","GW":"143585","GY":"143553","HN":"143510","HK":"143463","HU":"143482","IS":"143558","IN":"143467","ID":"143476","IE":"143449","IL":"143491","IT":"143450","JM":"143511","JP":"143462","JO":"143528","KH":"143579","KR":"143466","KZ":"143517","KE":"143529","KW":"143493","KG":"143586","LA":"143587","LV":"143519","LB":"143497","LR":"143588","LT":"143520","LI":"143522","LU":"143451","MO":"143515","MK":"143530","MG":"143531","MW":"143589","MY":"143473","MV":"143488","ML":"143532","MT":"143521","MR":"143590","MU":"143533","MX":"143468","FM":"143591","MD":"143523","MN":"143592","MS":"143547","MZ":"143593","NA":"143594","NP":"143484","NL":"143452","NZ":"143461","NI":"143512","NE":"143534","NG":"143561","NO":"143457","OM":"143562","PK":"143477","PW":"143595","PA":"143485","PG":"143597","PY":"143513","PE":"143507","PH":"143474","PL":"143478","PT":"143453","QA":"143498","RO":"143487","RU":"143469","ST":"143598","SA":"143479","SN":"143535","SC":"143599","SL":"143600","SG":"143464","SK":"143496","SI":"143499","SB":"143601","ZA":"143472","KP":"143466","ES":"143454","LK":"143486","KN":"143548","LC":"143549","VC":"143550","SR":"143554","SZ":"143602","SE":"143456","CH":"143459","TW":"143470","TJ":"143603","TZ":"143572","TH":"143475","TT":"143551","TN":"143536","TR":"143480","TM":"143604","TC":"143552","AE":"143481","UG":"143537","UA":"143492","GB":"143444","US":"143441","UY":"143514","UZ":"143566","VE":"143502","VN":"143471","YE":"143571","ZW":"143605","CD":"143613","GA":"143614","GF":"143615","IQ":"143617","XK":"143624","LY":"143567","ME":"143619","MA":"143620","MM":"143570","NR":"143606","RW":"143621","RS":"143500","TO":"143608","VU":"143609","ZM":"143622"},"Locale":{"AU":"en_AU","CA":"en_CA","GB":"en_GB","KR":"ko_KR","HK":"yue_Hant","JP":"ja_JP","MO":"zh_Hant","TW":"zh_Hant","US":"en_US","SG":"zh_Hans"}}
+		"Configs":{
+			"Storefront":{"AF":"143610","AL":"143575","AO":"143564","AI":"143538","AG":"143540","AR":"143505","AM":"143524","AU":"143460","AT":"143445","AZ":"143568","BA":"143612","BS":"143539","BH":"143559","BB":"143541","BD":"143490","BY":"143565","BE":"143446","BZ":"143555","BJ":"143576","BM":"143542","BT":"143577","BO":"143556","BW":"143525","BR":"143503","VG":"143543","BN":"143560","BG":"143526","BF":"143578","CA":"143455","CI":"143527","CM":"143574","CV":"143580","KY":"143544","TD":"143581","CL":"143483","CN":"143465","CO":"143501","CG":"143582","CR":"143495","HR":"143494","CY":"143557","CZ":"143489","DK":"143458","DM":"143545","DO":"143508","DZ":"143563","EC":"143509","EG":"143516","SV":"143506","EE":"143518","FJ":"143583","FI":"143447","FR":"143442","GM":"143584","DE":"143443","GH":"143573","GR":"143448","GD":"143546","GT":"143504","GW":"143585","GY":"143553","HN":"143510","HK":"143463","HU":"143482","IS":"143558","IN":"143467","ID":"143476","IE":"143449","IL":"143491","IT":"143450","JM":"143511","JP":"143462","JO":"143528","KH":"143579","KR":"143466","KZ":"143517","KE":"143529","KW":"143493","KG":"143586","LA":"143587","LV":"143519","LB":"143497","LR":"143588","LT":"143520","LI":"143522","LU":"143451","MO":"143515","MK":"143530","MG":"143531","MW":"143589","MY":"143473","MV":"143488","ML":"143532","MT":"143521","MR":"143590","MU":"143533","MX":"143468","FM":"143591","MD":"143523","MN":"143592","MS":"143547","MZ":"143593","NA":"143594","NP":"143484","NL":"143452","NZ":"143461","NI":"143512","NE":"143534","NG":"143561","NO":"143457","OM":"143562","PK":"143477","PW":"143595","PA":"143485","PG":"143597","PY":"143513","PE":"143507","PH":"143474","PL":"143478","PT":"143453","QA":"143498","RO":"143487","RU":"143469","ST":"143598","SA":"143479","SN":"143535","SC":"143599","SL":"143600","SG":"143464","SK":"143496","SI":"143499","SB":"143601","ZA":"143472","KP":"143466","ES":"143454","LK":"143486","KN":"143548","LC":"143549","VC":"143550","SR":"143554","SZ":"143602","SE":"143456","CH":"143459","TW":"143470","TJ":"143603","TZ":"143572","TH":"143475","TT":"143551","TN":"143536","TR":"143480","TM":"143604","TC":"143552","AE":"143481","UG":"143537","UA":"143492","GB":"143444","US":"143441","UY":"143514","UZ":"143566","VE":"143502","VN":"143471","YE":"143571","ZW":"143605","CD":"143613","GA":"143614","GF":"143615","IQ":"143617","XK":"143624","LY":"143567","ME":"143619","MA":"143620","MM":"143570","NR":"143606","RW":"143621","RS":"143500","TO":"143608","VU":"143609","ZM":"143622"},
+			"Locale":{"AU":"en_AU","CA":"en_CA","GB":"en_GB","KR":"ko_KR","HK":"yue_Hant","JP":"ja_JP","MO":"zh_Hant","TW":"zh_Hant","US":"en_US","SG":"zh_Hans"},
+			"Tabs":{"zh-Hans":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","StoreMovies":"电影","StoreTV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hant":{"WatchNow":"立即觀看","Originals":"原創內容","Movies":"電影","TV":"電視節目","StoreMovies":"電影","StoreTV":"電視節目","Store":"商店","Sports":"體育節目","Kids":"兒童","Library":"資料庫","Search":"蒐索"},"en":{"WatchNow":"Watch Now","Originals":"Originals","Movies":"Movies","TV":"TV Shows","StoreMovies":"Movies","StoreTV":"TV Shows","Store":"Store","Sports":"Sports","Kids":"Kids","Library":"Library","Search":"Search"}}
+		}
 	}
 };
 
@@ -29,7 +33,7 @@ const DataBase = {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params);
+					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params, $request?.headers?.["X-Apple-I-Locale"]);
 					const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
 					AllTabs.forEach(tab => {
 						if (!Settings.Configs.Tabs.includes(tab)) {
@@ -90,23 +94,79 @@ async function setENV(name, platform, database) {
 };
 
 // Create Tabs Group
-async function createTabsGroup(Params) {
+async function createTabsGroup(Params, requestHeaderXAppleILocale) {
+	$.log(`🎉 ${$.name}, Get System Language`, `request.header."X-Apple-I-Locale"内容: ${requestHeaderXAppleILocale}`, "");
+
+	//Tab名字根据系统语言显示，默认简体中文
+	const tabNameMultiLang = {
+		"zh-Hans": {
+			"WatchNow": "立即观看",
+			"Originals": "原创内容",
+			"Movies": "电影",
+			"TV": "电视节目",
+			"StoreMovies": "电影",
+			"StoreTV": "电视节目",
+			"Store": "商店",
+			"Sports": "体育节目",
+			"Kids": "儿童",
+			"Library": "资料库",
+			"Search": "搜索",
+		},
+		"zh-Hant": {
+			"WatchNow": "立即觀看",
+			"Originals": "原創內容",
+			"Movies": "電影",
+			"TV": "電視節目",
+			"StoreMovies": "電影",
+			"StoreTV": "電視節目",
+			"Store": "商店",
+			"Sports": "體育節目",
+			"Kids": "兒童",
+			"Library": "資料庫",
+			"Search": "蒐索",
+		},
+		"en": {
+			"WatchNow": "Watch Now",
+			"Originals": "Originals",
+			"Movies": "Movies",
+			"TV": "TV Shows",
+			"StoreMovies": "Movies",
+			"StoreTV": "TV Shows",
+			"Store": "Store",
+			"Sports": "Sports",
+			"Kids": "Kids",
+			"Library": "Library",
+			"Search": "Search",
+		}
+	};
+	let systemLang;
+	try {
+		systemLang = requestHeaderXAppleILocale.split('_')[0]
+	} catch (e) {
+		systemLang = "zh-Hans"
+		$.log(`🎉 ${$.name}, TV Tab Multilang Error`, `Use default zh-Hans`, "");
+	}
+	let tabName = {...tabNameMultiLang[systemLang]}
+	if (Object.keys(tabName).length === 0) {
+		tabName = {...tabNameMultiLang["zh-Hans"]}
+	}
+
 	//构建Tab内容
-	let WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
-	let Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
-	let Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": "电影", "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
-	let TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": "电视节目", "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
+	let WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": tabName.WatchNow, "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
+	let Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": tabName.Originals, "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
+	let Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": tabName.Movies, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
+	let TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": tabName.TV, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
 	let Store = {
 		"destinationType": "SubTabs",
-		"subTabs": [{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] }, { "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }],
-		"title": "商店",
+		"subTabs": [{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": tabName.StoreMovies, "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] }, { "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": tabName.StoreTV, "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }],
+		"title": tabName.Store,
 		"type": "Store",
 		"universalLinks": ["https://tv.apple.com/store"]
 	};
-	let Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": "体育节目", "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
-	let Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": "儿童", "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
-	let Library = { "destinationType": "Client", "title": "资料库", "type": "Library" };
-	let Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
+	let Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": tabName.Sports, "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
+	let Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": tabName.Kids, "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
+	let Library = { "destinationType": "Client", "title": tabName.Library, "type": "Library" };
+	let Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": tabName.Search, "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
 
 	// 创建分组
 	var tabs = (Params.v > 53) ? [WatchNow, Originals, Store, Sports, Kids, Library, Search]
