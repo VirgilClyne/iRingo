@@ -29,7 +29,7 @@ const DataBase = {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params);
+					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params, $request?.headers?.["X-Apple-I-Locale"]);
 					const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
 					AllTabs.forEach(tab => {
 						if (!Settings.Configs.Tabs.includes(tab)) {
@@ -80,40 +80,62 @@ async function setENV(name, platform, database) {
 };
 
 // Create Tabs Group
-async function createTabsGroup(Params) {
-	
-	$.log(`🎉 ${$.name}, JacobTest`, `Params: ${typeof Params}`, `Params内容: ${JSON.stringify(Params)}`, "");
+async function createTabsGroup(Params, requestHeaderXAppleILocale) {
+	$.log(`🎉 ${$.name}, Get System Language`, `request.header."X-Apple-I-Locale"内容: ${requestHeaderXAppleILocale}`, "");
 
-	const tabNameZhCn = {
-		"WatchNow": "立即观看",
-		"Originals": "原创内容",
-		"Movies": "电影",
-		"TV": "电视节目",
-		"StoreMovies": "电影",
-		"StoreTV": "电视节目",
-		"Store": "商店",
-		"Sports": "体育节目",
-		"Kids": "儿童",
-		"Library": "资料库",
-		"Search": "搜索",
+	//Tab名字根据系统语言显示，默认简体中文
+	const tabNameMultiLang = {
+		"zh-Hans": {
+			"WatchNow": "立即观看",
+			"Originals": "原创内容",
+			"Movies": "电影",
+			"TV": "电视节目",
+			"StoreMovies": "电影",
+			"StoreTV": "电视节目",
+			"Store": "商店",
+			"Sports": "体育节目",
+			"Kids": "儿童",
+			"Library": "资料库",
+			"Search": "搜索",
+		},
+		"zh-Hant": {
+			"WatchNow": "立即觀看",
+			"Originals": "原創內容",
+			"Movies": "電影",
+			"TV": "電視節目",
+			"StoreMovies": "電影",
+			"StoreTV": "電視節目",
+			"Store": "商店",
+			"Sports": "體育節目",
+			"Kids": "兒童",
+			"Library": "資料庫",
+			"Search": "蒐索",
+		},
+		"en": {
+			"WatchNow": "Watch Now",
+			"Originals": "Originals",
+			"Movies": "Movies",
+			"TV": "TV Shows",
+			"StoreMovies": "Movies",
+			"StoreTV": "TV Shows",
+			"Store": "Store",
+			"Sports": "Sports",
+			"Kids": "Kids",
+			"Library": "Library",
+			"Search": "Search",
+		}
 	};
-
-	const tabNameEn = {
-		"WatchNow": "Watch Now",
-		"Originals": "Originals",
-		"Movies": "Movies",
-		"TV": "TV Shows",
-		"StoreMovies": "Movies",
-		"StoreTV": "TV Shows",
-		"Store": "Store",
-		"Sports": "Sports",
-		"Kids": "Kids",
-		"Library": "Library",
-		"Search": "Search",
-	};
-
-	//Tab名字多语言
-	const tabName = { ...tabNameZhCn}
+	let systemLang;
+	try {
+		systemLang = requestHeaderXAppleILocale.split('_')[0]
+	} catch (e) {
+		systemLang = "zh-Hans"
+		$.log(`🎉 ${$.name}, TV Tab Multilang Error`, `Use default zh-Hans`, "");
+	}
+	let tabName = {...tabNameMultiLang[systemLang]}
+	if (tabName.length === 0) {
+		tabName = {...tabNameMultiLang["zh-Hans"]}
+	}
 
 	//构建Tab内容
 	let WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": tabName.WatchNow, "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
