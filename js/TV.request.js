@@ -106,13 +106,16 @@ const DataBase = {
 				} else if (url.path.includes("uts/v3/shows/")) {
 					url.params.sf = Configs.Storefront[Settings.TV.CountryCode] || url.params.sf
 					url.params.locale = Configs.Locale[Settings.TV.CountryCode] || url.params.locale
-				} else if (url.path.includes("uts/v3/shelves/")) {
-					url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
-					url.params.locale = Configs.Locale[Settings.Others.CountryCode] || url.params.locale
 				} else if (url.path.includes("uts/v3/sporting-events/")) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/playables/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
-				else if (url.path.includes("uts/v3/canvases/Persons/")) url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] || url.params.sf
-				else url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				else if (url.path.includes("uts/v3/canvases/Persons/")) {
+					url.params.sf = Configs.Storefront[Settings.Persons.CountryCode] || url.params.sf
+					url.params.locale = Configs.Locale[Settings.Search.CountryCode] || url.params.locale
+				//} else if (url.path.includes("/uts/v3/canvases/Rooms/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				//else if (url.path.includes("uts/v3/playables/")) url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				//else if (url.path.includes("uts/v3/shelves/")) {
+				//	url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
+				//	url.params.locale = Configs.Locale[Settings.Others.CountryCode] || url.params.locale
+				} else url.params.sf = Configs.Storefront[Settings.Others.CountryCode] || url.params.sf
 				break;
 		}
 		$request.url = URL.stringify(url);
