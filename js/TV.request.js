@@ -95,7 +95,10 @@ const DataBase = {
 				break;
 			default:
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
-				if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
+				if (url?.params?.ctx_brand === "tvs.sbd.4000") {
+					url.params.sf = Configs.Storefront[Settings.Originals.CountryCode] || url.params.sf
+					url.params.locale = Configs.Locale[Settings.Originals.CountryCode] || url.params.locale
+				} else if (url.path.includes("uts/v3/canvases/Channels/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v2/brands/")) url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
 				else if (url.path.includes("uts/v3/movies/")) {
 					url.params.sf = Configs.Storefront[Settings.Movies.CountryCode] || url.params.sf
