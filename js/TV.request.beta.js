@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.7-request-beta");
+const $ = new Env("Apple TV v2.0.8-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -84,9 +84,11 @@ const DataBase = {
 				if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings.Sports.CountryCode] || url.params.sf
 				if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
 				break;
+			case "uts/v3/search":
 			case "uts/v2/search/incremental":
 			case "uts/v2/search/landing":
-				if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings.Search.CountryCode] || url.params.sf
+				url.params.sf = Configs.Storefront[Settings.Search.CountryCode] || url.params.sf
+				url.params.locale = Configs.Locale[Settings.Search.CountryCode] || url.params.locale
 				break;
 			case "uts/v3/watchlist":
 			case "uts/v2/watchlist/contains":
