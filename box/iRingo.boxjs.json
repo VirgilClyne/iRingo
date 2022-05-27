@@ -586,7 +586,7 @@
 				{
 					"id": "@iRingo.TV.Settings.WatchNow.CountryCode",
 					"name": "[立即观看]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“立即观看”栏目要更改为的地区或国家版本",
 					"items": [
@@ -957,7 +957,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Persons.CountryCode",
 					"name": "[人物]国家或地区代码",
-					"val": "AUTO",
+					"val": "SG",
 					"type": "selects",
 					"desc": "“人物”栏目(导演、演员等)要更改为的地区或国家版本",
 					"items": [
@@ -1010,7 +1010,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Search.CountryCode",
 					"name": "[搜索]国家或地区代码",
-					"val": "AUTO",
+					"val": "SG",
 					"type": "selects",
 					"desc": "“搜索”栏目要更改为的地区或国家版本",
 					"items": [

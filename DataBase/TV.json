@@ -23,7 +23,7 @@
 			]
 		},
 		"WatchNow": {
-			"CountryCode": "US"
+			"CountryCode": "AUTO"
 		},
 		"Channels": {
 			"CountryCode": "US"
@@ -44,10 +44,10 @@
 			"CountryCode": "US"
 		},
 		"Persons": {
-			"CountryCode": "AUTO"
+			"CountryCode": "SG"
 		},
 		"Search": {
-			"CountryCode": "AUTO"
+			"CountryCode": "SG"
 		},
 		"Others": {
 			"CountryCode": "US"
