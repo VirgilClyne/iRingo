@@ -483,7 +483,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Configs.CountryCode",
 					"name": "[配置文件]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“配置文件”要更改为的地区或国家版本",
 					"items": [
@@ -584,6 +584,112 @@
 					]
 				},
 				{
+					"id": "@iRingo.TV.Settings.View.CountryCode[0]",
+					"name": "[内容详情]首选语言",
+					"val": "SG",
+					"type": "selects",
+					"desc": "“内容详情”(电影、电视节目、人物等详情页面)要更改为的首选语言",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "简体中文(中国)"
+						},
+						{
+							"key": "HK",
+							"label": "繁体粤语(香港)"
+						},
+						{
+							"key": "TW",
+							"label": "繁体中文(台湾)"
+						},
+						{
+							"key": "SG",
+							"label": "简体中文(新加坡)"
+						},
+						{
+							"key": "US",
+							"label": "英语(美国)"
+						},
+						{
+							"key": "JP",
+							"label": "日语(日本)"
+						},
+						{
+							"key": "AU",
+							"label": "英语(澳大利亚)"
+						},
+						{
+							"key": "GB",
+							"label": "英语(英国)"
+						},
+						{
+							"key": "KR",
+							"label": "韩语(韩国)"
+						},
+						{
+							"key": "CA",
+							"label": "英语(加拿大)"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.View.CountryCode[1]",
+					"name": "[内容详情]第二语言",
+					"val": "TW",
+					"type": "selects",
+					"desc": "当首选语言不可用时，“内容详情”(电影、电视节目、人物等详情页面)要更改为的第二语言",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "简体中文(中国)"
+						},
+						{
+							"key": "HK",
+							"label": "繁体粤语(香港)"
+						},
+						{
+							"key": "TW",
+							"label": "繁体中文(台湾)"
+						},
+						{
+							"key": "SG",
+							"label": "简体中文(新加坡)"
+						},
+						{
+							"key": "US",
+							"label": "英语(美国)"
+						},
+						{
+							"key": "JP",
+							"label": "日语(日本)"
+						},
+						{
+							"key": "AU",
+							"label": "英语(澳大利亚)"
+						},
+						{
+							"key": "GB",
+							"label": "英语(英国)"
+						},
+						{
+							"key": "KR",
+							"label": "韩语(韩国)"
+						},
+						{
+							"key": "CA",
+							"label": "英语(加拿大)"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.TV.Settings.WatchNow.CountryCode",
 					"name": "[立即观看]国家或地区代码",
 					"val": "AUTO",
@@ -639,7 +745,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Originals.CountryCode",
 					"name": "[原创内容](TV+)国家或地区代码",
-					"val": "SG",
+					"val": "TW",
 					"type": "selects",
 					"desc": "“原创内容”(TV+)栏目要更改为的地区或国家版本",
 					"items": [
@@ -692,7 +798,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Channels.CountryCode",
 					"name": "[TV频道]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“TV频道”栏目要更改为的地区或国家版本",
 					"items": [
@@ -798,7 +904,7 @@
 				{
 					"id": "@iRingo.TV.Settings.TV.CountryCode",
 					"name": "[电视节目]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“电视节目”栏目要更改为的地区或国家版本",
 					"items": [
@@ -1010,7 +1116,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Search.CountryCode",
 					"name": "[搜索]国家或地区代码",
-					"val": "SG",
+					"val": "TW",
 					"type": "selects",
 					"desc": "“搜索”栏目要更改为的地区或国家版本",
 					"items": [
@@ -1063,7 +1169,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Others.CountryCode",
 					"name": "[其他]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "其他未指定的栏目要更改为的地区或国家版本",
 					"items": [

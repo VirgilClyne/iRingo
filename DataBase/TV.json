@@ -2,9 +2,8 @@
 	"Settings": {
 		"Switch": true,
 		"Third-Party": true,
-		"LangCode": "zh-Hans",
 		"Configs": {
-			"CountryCode": "SG",
+			"CountryCode": "AUTO",
 			"Tabs": [
 				"WatchNow",
 				"Originals",
@@ -26,16 +25,16 @@
 			"CountryCode": "AUTO"
 		},
 		"Channels": {
-			"CountryCode": "US"
+			"CountryCode": "AUTO"
 		},
 		"Originals": {
-			"CountryCode": "SG"
+			"CountryCode": "TW"
 		},
 		"Movies": {
 			"CountryCode": "AUTO"
 		},
 		"TV": {
-			"CountryCode": "US"
+			"CountryCode": "AUTO"
 		},
 		"Sports": {
 			"CountryCode": "US"
@@ -47,10 +46,10 @@
 			"CountryCode": "SG"
 		},
 		"Search": {
-			"CountryCode": "SG"
+			"CountryCode": "TW"
 		},
 		"Others": {
-			"CountryCode": "US"
+			"CountryCode": "AUTO"
 		}
 	},
 	"Configs": {

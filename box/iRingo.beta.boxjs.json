@@ -545,7 +545,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Configs.CountryCode",
 					"name": "[配置文件]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“配置文件”要更改为的地区或国家版本",
 					"items": [
@@ -807,7 +807,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Originals.CountryCode",
 					"name": "[原创内容](TV+)国家或地区代码",
-					"val": "SG",
+					"val": "TW",
 					"type": "selects",
 					"desc": "“原创内容”(TV+)栏目要更改为的地区或国家版本",
 					"items": [
@@ -860,7 +860,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Channels.CountryCode",
 					"name": "[TV频道]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“TV频道”栏目要更改为的地区或国家版本",
 					"items": [
@@ -966,7 +966,7 @@
 				{
 					"id": "@iRingo.TV.Settings.TV.CountryCode",
 					"name": "[电视节目]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“电视节目”栏目要更改为的地区或国家版本",
 					"items": [
@@ -1178,7 +1178,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Search.CountryCode",
 					"name": "[搜索]国家或地区代码",
-					"val": "SG",
+					"val": "TW",
 					"type": "selects",
 					"desc": "“搜索”栏目要更改为的地区或国家版本",
 					"items": [
@@ -1231,7 +1231,7 @@
 				{
 					"id": "@iRingo.TV.Settings.Others.CountryCode",
 					"name": "[其他]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "其他未指定的栏目要更改为的地区或国家版本",
 					"items": [
