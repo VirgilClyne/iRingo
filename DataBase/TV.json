@@ -235,16 +235,16 @@
 			"ZM": "143622"
 		},
 		"Locale": {
-			"AU": "en_AU",
-			"CA": "en_CA",
-			"GB": "en_GB",
-			"KR": "ko_KR",
-			"HK": "yue_Hant",
-			"JP": "ja_JP",
-			"MO": "zh_Hant",
-			"TW": "zh_Hant",
-			"US": "en_US",
-			"SG": "zh_Hans"
+			"AU": "en-AU",
+			"CA": "en-CA",
+			"GB": "en-GB",
+			"KR": "ko-KR",
+			"HK": "yue-Hant",
+			"JP": "ja-JP",
+			"MO": "zh-Hant",
+			"TW": "zh-Hant",
+			"US": "en-US",
+			"SG": "zh-Hans"
 		},
 		"Tabs": {
 			"zh": {
