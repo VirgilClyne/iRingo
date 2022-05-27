@@ -45,7 +45,7 @@ const DataBase = {
 					})
 					//$.log(JSON.stringify(tabs));
 					//$.log(JSON.stringify(tabsSplitScreen));
-					$response.body = await outputData(url.params, $response.body, tabs, tabsSplitScreen);
+					$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
 				}
 				break;
 			default:
@@ -123,32 +123,13 @@ async function createTabsGroup(Params, locale, database) {
 	var tabs = (Params.v > 53) ? [WatchNow, Originals, Store, Sports, Kids, Library, Search]
 		: [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
 	var tabsSplitScreen =  [WatchNow, Originals, Store, Library, Search];
-
-	// 简体中文改Tabs语言
-	/*
-	if (Params.locale) var esl = Params.locale.match(/[a-z]{2}_[A-Za-z]{2,4}/g)
-	if (esl != "zh_Hans" || esl != "zh_Hant" || esl != "yue-Hant" || region != "CN") {
-		const titles = { "立即观看": "Watch Now", "Apple TV+": "Apple TV+", "原创内容": "Originals", "电影": "Movies", "电视节目": "TV", "体育节目": "Sports", "儿童": "Kids", "商店": "Store", "资料库": "Library", "搜索": "Search" };
-		tabs = tabs.map(tab => {
-			if (tab?.title) tab.title = titles[tab.title];
-			if (tab?.target?.title) tab.target.title = titles[tab.target.title];
-			return tab;
-		});
-		tabsSplitScreen = tabsSplitScreen.map(tab => {
-			if (tab?.title) tab.title = titles[tab.title];
-			if (tab?.target?.title) tab.target.title = titles[tab.target.title];
-			return tab;
-		});
-	};
-	*/
-	$.log(JSON.stringify(tabs));
-	$.log(JSON.stringify(tabsSplitScreen));
 	// 输出
 	return { tabs, tabsSplitScreen }
 };
 
-// Output Tabs Data
-async function outputData(Params, body, tabs, tabsSplitScreen) {
+// Output Configurations
+async function outputConfigs(Params, body, tabs, tabsSplitScreen) {
+	$.log(`⚠ ${$.name}, Create Configurations`, "");
 	// Input Data
 	let configurations = JSON.parse(body);
 	// 注入数据
@@ -171,12 +152,12 @@ async function outputData(Params, body, tabs, tabsSplitScreen) {
 		"ageVerification": false,
 		"seasonTitles": false
 	};
-	configurations.data.userProps.activeUser = true;
+	//configurations.data.userProps.activeUser = true;
 	//configurations.data.userProps.utsc = "1:18943";
 	//configurations.data.userProps.country = country;
-	configurations.data.userProps.gac = true;
+	//configurations.data.userProps.gac = true;
 	// Output Data
-	$.log(`🎉 ${$.name}, ${outputData.name}完成`, "");
+	$.log(`🎉 ${$.name}, ${outputConfigs.name}完成`, "");
 	body = JSON.stringify(configurations);
 	return body
 };

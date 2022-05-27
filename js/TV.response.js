@@ -43,7 +43,7 @@ const DataBase = {
 							delete tabsSplitScreen[tab]
 						}
 					})
-					$response.body = await outputData(url.params, $response.body, tabs, tabsSplitScreen);
+					$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
 				}
 				break;
 			default:
@@ -119,8 +119,9 @@ async function createTabsGroup(Params, locale, database) {
 	return { tabs, tabsSplitScreen }
 };
 
-// Output Tabs Data
-async function outputData(Params, body, tabs, tabsSplitScreen) {
+// Output Configurations
+async function outputConfigs(Params, body, tabs, tabsSplitScreen) {
+	$.log(`⚠ ${$.name}, Create Configurations`, "");
 	// Input Data
 	let configurations = JSON.parse(body);
 	// 注入数据
@@ -143,12 +144,12 @@ async function outputData(Params, body, tabs, tabsSplitScreen) {
 		"ageVerification": false,
 		"seasonTitles": false
 	};
-	configurations.data.userProps.activeUser = true;
+	//configurations.data.userProps.activeUser = true;
 	//configurations.data.userProps.utsc = "1:18943";
 	//configurations.data.userProps.country = country;
-	configurations.data.userProps.gac = true;
+	//configurations.data.userProps.gac = true;
 	// Output Data
-	$.log(`🎉 ${$.name}, ${outputData.name}完成`, "");
+	$.log(`🎉 ${$.name}, ${outputConfigs.name}完成`, "");
 	body = JSON.stringify(configurations);
 	return body
 };
