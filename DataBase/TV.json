@@ -247,6 +247,17 @@
 			"SG": "zh_Hans"
 		},
 		"Tabs": {
+			"zh": {
+				"WatchNow": "立即观看",
+				"Originals": "原创内容",
+				"Movies": "电影",
+				"TV": "电视节目",
+				"Store": "商店",
+				"Sports": "体育节目",
+				"Kids": "儿童",
+				"Library": "资料库",
+				"Search": "搜索"
+			},
 			"zh-Hans": {
 				"WatchNow": "立即观看",
 				"Originals": "原创内容",
