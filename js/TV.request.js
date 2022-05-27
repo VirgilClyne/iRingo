@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.6-request");
+const $ = new Env("Apple TV v2.0.7-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -43,10 +43,12 @@ const DataBase = {
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "appletv" : url.params.pfm;
 				break;
 			case "uts/v3/canvases/Channels/tvs.sbd.4000":
+			case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000":
 			case "uts/v2/brands/appleTvPlus":
 				url.params.sf = Configs.Storefront[Settings.Originals.CountryCode] || url.params.sf
 				url.params.locale = Configs.Locale[Settings.Originals.CountryCode] || url.params.locale
 				break;
+			case "uts/v3/channels":
 			case "uts/v2/brands":
 				url.params.sf = Configs.Storefront[Settings.Channels.CountryCode] || url.params.sf
 				url.params.locale = Configs.Locale[Settings.Channels.CountryCode] || url.params.locale
