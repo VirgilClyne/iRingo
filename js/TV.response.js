@@ -75,8 +75,6 @@ const DataBase = {
 			case "uts/v3/watchlist":
 			case "uts/v2/watchlist/contains":
 			case "uts/v2/watchlist/search":
-			case "uts/v3/shows":
-			case "uts/v3/canvases/Persons":
 				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 					$.log(`开始翻译: Jacob`, "");
 					$response.body = await zhHantTransToZhHans($response.body);
@@ -84,6 +82,12 @@ const DataBase = {
 				break;
 			default:
 				break;
+		}
+		if (url.path.contains("/uts/v3/shows/")||url.path.contains("/uts/v3/canvases/Persons/")){
+			if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
+				$.log(`开始翻译: Jacob`, "");
+				$response.body = await zhHantTransToZhHans($response.body);
+			}
 		}
 	}
 })()
