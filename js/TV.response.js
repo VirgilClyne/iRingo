@@ -78,7 +78,7 @@ const DataBase = {
 				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 					const locale = $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh-Hans"
 					if (locale === 'zh-Hans'){
-						$.log(`开始翻译: Jacob`, "");
+						$.log(`config: tw, system lang: zh-Hans, start translate`, "");
 						$response.body = await zhHantTransToZhHans($response.body);
 					}
 				}
@@ -94,7 +94,7 @@ const DataBase = {
 			if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 				const locale = $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh-Hans"
 				if (locale === 'zh-Hans'){
-					$.log(`开始翻译: Jacob`, "");
+					$.log(`config: tw, system lang: zh-Hans, start translate`, "");
 					$response.body = await zhHantTransToZhHans($response.body);
 				}
 			}

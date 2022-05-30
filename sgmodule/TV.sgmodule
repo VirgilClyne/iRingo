@@ -7,8 +7,8 @@
 #!icon=https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5y3uwaibjm_large.png
 
 [Script]
-TV Request = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.request.js
-TV Response = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/zmlu/iRingo/main/js/TV.response.js
+TV Request = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+TV Response = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
 
 [MITM]
 hostname = %APPEND% uts-api.itunes.apple.com
