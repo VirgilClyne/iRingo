@@ -47,6 +47,34 @@ const DataBase = {
 				}
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
+			case "uts/v3/canvases/roots/tahoma_watchnow":
+			case "uts/v3/shelves/uts.col.UpNext":
+			case "uts/v3/canvases/Channels/tvs.sbd.4000":
+			case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000":
+			case "uts/v2/brands/appleTvPlus":
+			case "uts/v3/channels":
+			case "uts/v2/brands":
+			case "uts/v3/canvases/Roots/movies":
+			case "uts/v3/canvases/Roots/tv":
+			case "uts/v3/canvases/Roots/sports":
+			case "uts/v2/sports/clockscore":
+			case "uts/v2/sports/competitors":
+			case "uts/v2/sports/league":
+			case "uts/v2/sports/leagues":
+			case "uts/v2/sports/statsIdLookup":
+			case "uts/v2/sports/teamsNearMe":
+			case "uts/v3/canvases/Roots/kids":
+			case "uts/v3/favorite-people":
+			case "uts/v3/favorite-teams":
+			case "uts/v2/favorites":
+			case "uts/v2/favorites/add":
+			case "uts/v2/favorites/remove":
+			case "uts/v3/search":
+			case "uts/v2/search/incremental":
+			case "uts/v2/search/landing":
+			case "uts/v3/watchlist":
+			case "uts/v2/watchlist/contains":
+			case "uts/v2/watchlist/search":
 				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 					$.log(`开始翻译: Jacob`, "");
 					$response.body = await zhHantTransToZhHans($response.body);
