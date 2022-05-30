@@ -5,7 +5,7 @@ const $ = new Env("Apple Location Services v2.1.5-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach": true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityTileDisabled": true}}
+		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":true,"WiFiQualityTileDisabled":true}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -64,6 +64,7 @@ const DataBase = {
 						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime // CN
 					}
 					data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.PedestrianAR; // CN
+					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.WiFiQualityNetworkDisabled; // CN
 					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.WiFiQualityTileDisabled; // CN
 					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
 					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW

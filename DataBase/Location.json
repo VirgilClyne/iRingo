@@ -11,6 +11,7 @@
 			"6694982d2b14e95815e44e970235e230": true,
 			"OpticalHeading": true,
 			"UseCLPedestrianMapMatchedLocations": true,
+			"WiFiQualityNetworkDisabled": true,
 			"WiFiQualityTileDisabled": true
 		}
 	}
