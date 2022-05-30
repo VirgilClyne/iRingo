@@ -129,12 +129,18 @@
 					"val": true,
 					"type": "boolean",
 					"desc": "是否使用AR地图匹配地点"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.WiFiQualityTileDisabled",
+					"name": "[默认配置]禁用Wi-Fi网络瓦片地图",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否禁用Wi-Fi网络下瓦片地图预加载"
 				}
 			],
 			"author": "@VirgilClyne",
 			"repo": "https://github.com/VirgilClyne/iRingo/",
 			"icons": [
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple_Update.png",
 				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png"
 			]
 		},
@@ -330,7 +336,6 @@
 			"author": "@VirgilClyne",
 			"repo": "https://github.com/VirgilClyne/iRingo/",
 			"icons": [
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple.png",
 				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp"
 			]
 		},
@@ -1285,8 +1290,7 @@
 			"author": "@VirgilClyne",
 			"repo": "https://github.com/VirgilClyne/iRingo/",
 			"icons": [
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple_TV.png",
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_TV.png"
+				"https://is1-ssl.mzstatic.com/image/thumb/Purple122/v4/9c/f7/8a/9cf78ad4-5443-acc0-3b36-f13d2ad7d64c/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp"
 			]
 		}
 	]

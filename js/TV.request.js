@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.1.0-request");
+const $ = new Env("Apple TV v2.1.1-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -34,8 +34,10 @@ const DataBase = {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				Type = "Configs";
-				if (url.params.region) url.params.region = Settings[Type].CountryCode || url.params.region
-				if (url.params.country) url.params.country = Settings[Type].CountryCode || url.params.country
+				if (Settings[Type].CountryCode !== "AUTO") {
+					if (url.params.region) url.params.region = Settings[Type].CountryCode || url.params.region
+					if (url.params.country) url.params.country = Settings[Type].CountryCode || url.params.country
+				}
 				if (url.params.sfh) url.params.sfh = (Configs.Storefront?.[Settings[Type].CountryCode]) ? url.params.sfh.replace(/\d{6}/, Configs.Storefront[Settings[Type].CountryCode]) : url.params.sfh
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
