@@ -228,8 +228,9 @@ function trans(parentObj,key,jsonObj) {
 	else {
 		if (key === 'title' || key === 'name' || key === 'promoText' ||
 			key === 'showTitle' || key === 'description' || key === 'shortNote' ||
-			key === 'displayName' || key === 'localizedContext' || key === 'roleTitle' ||
-			key === 'movieTitle' || key === 'genre' || key === 'roleTitle'
+			key === 'displayName' || key === 'localizedContext' || key === 'longNote' ||
+			key === 'movieTitle' || key === 'genre' || key === 'roleTitle' ||
+			key === 'tagLine'
 		) { //可能是繁体中文的key
 			parentObj[key] = toZhHans(jsonObj) // 此时 jsonObj 是繁体中文
 		}
