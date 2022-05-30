@@ -46,6 +46,11 @@ const DataBase = {
 					$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
 				}
 				break;
+			case "/uts/v3/canvases/Channels/tvs.sbd.4000":
+				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
+					$.log(`开始翻译: Jacob`, "");
+				}
+				break;
 			default:
 				break;
 		}
