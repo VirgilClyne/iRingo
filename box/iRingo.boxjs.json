@@ -129,6 +129,13 @@
 					"val": true,
 					"type": "boolean",
 					"desc": "是否使用AR地图匹配地点"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.WiFiQualityTileDisabled",
+					"name": "[默认配置]禁用Wi-Fi网络瓦片地图",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否禁用Wi-Fi网络下瓦片地图预加载"
 				}
 			],
 			"author": "@VirgilClyne",
