@@ -83,7 +83,10 @@ const DataBase = {
 			default:
 				break;
 		}
-		if (url.path.includes("uts/v3/shows/")||url.path.includes("uts/v3/canvases/Persons/")){
+		if (url.path.includes("uts/v3/shows/")||
+			url.path.includes("uts/v3/canvases/Persons/")||
+			url.path.includes("uts/v3/movies/")
+		){
 			if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 				$.log(`开始翻译: Jacob`, "");
 				$response.body = await zhHantTransToZhHans($response.body);
@@ -218,7 +221,8 @@ function trans(parentObj,key,jsonObj) {
 	else {
 		if (key === 'title' || key === 'name' || key === 'promoText' ||
 			key === 'showTitle' || key === 'description' || key === 'shortNote' ||
-			key === 'displayName' || key === 'localizedContext' || key === 'roleTitle'
+			key === 'displayName' || key === 'localizedContext' || key === 'roleTitle' ||
+			key === 'movieTitle' || key === 'genre' || key === 'roleTitle'
 		) { //可能是繁体中文的key
 			parentObj[key] = toZhHans(jsonObj) // 此时 jsonObj 是繁体中文
 		}
