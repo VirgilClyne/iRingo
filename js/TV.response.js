@@ -76,20 +76,27 @@ const DataBase = {
 			case "uts/v2/watchlist/contains":
 			case "uts/v2/watchlist/search":
 				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
-					$.log(`开始翻译: Jacob`, "");
-					$response.body = await zhHantTransToZhHans($response.body);
+					const locale = $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh-Hans"
+					if (locale === 'zh-Hans'){
+						$.log(`开始翻译: Jacob`, "");
+						$response.body = await zhHantTransToZhHans($response.body);
+					}
 				}
 				break;
 			default:
 				break;
 		}
+		// url中带节目id参数的处理
 		if (url.path.includes("uts/v3/shows/")||
 			url.path.includes("uts/v3/canvases/Persons/")||
 			url.path.includes("uts/v3/movies/")
 		){
 			if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
-				$.log(`开始翻译: Jacob`, "");
-				$response.body = await zhHantTransToZhHans($response.body);
+				const locale = $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh-Hans"
+				if (locale === 'zh-Hans'){
+					$.log(`开始翻译: Jacob`, "");
+					$response.body = await zhHantTransToZhHans($response.body);
+				}
 			}
 		}
 	}
