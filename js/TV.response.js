@@ -47,8 +47,9 @@ const DataBase = {
 				}
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
+				$.log(`开始翻译: Jacob`, "");
+				$.log(`开始翻译: ${typeof url.params.sf}`, "");
 				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
-					$.log(`开始翻译: Jacob`, "");
 				}
 				break;
 			default:
