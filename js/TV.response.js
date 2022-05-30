@@ -83,7 +83,7 @@ const DataBase = {
 			default:
 				break;
 		}
-		if (url.path.contains("/uts/v3/shows/")||url.path.contains("/uts/v3/canvases/Persons/")){
+		if (url.path.includes("/uts/v3/shows/")||url.path.includes("/uts/v3/canvases/Persons/")){
 			if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 				$.log(`开始翻译: Jacob`, "");
 				$response.body = await zhHantTransToZhHans($response.body);
