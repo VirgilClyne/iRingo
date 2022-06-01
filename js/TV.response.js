@@ -57,7 +57,6 @@ const DataBase = {
 			case "uts/v3/canvases/Roots/movies":
 			case "uts/v3/canvases/Roots/tv":
 			case "uts/v3/canvases/Roots/sports":
-			case "uts/v3/canvases/Rooms/edt":
 			case "uts/v2/sports/clockscore":
 			case "uts/v2/sports/competitors":
 			case "uts/v2/sports/league":
@@ -91,6 +90,7 @@ const DataBase = {
 		// url中带节目id参数的处理
 		if (url.path.includes("uts/v3/shows/")||
 			url.path.includes("uts/v3/canvases/Persons/")||
+			url.path.includes("uts/v3/canvases/Rooms/edt")||
 			url.path.includes("uts/v3/movies/")
 		){
 			if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
