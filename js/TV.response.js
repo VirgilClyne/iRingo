@@ -57,6 +57,7 @@ const DataBase = {
 			case "uts/v3/canvases/Roots/movies":
 			case "uts/v3/canvases/Roots/tv":
 			case "uts/v3/canvases/Roots/sports":
+			case "uts/v3/canvases/Rooms/edt":
 			case "uts/v2/sports/clockscore":
 			case "uts/v2/sports/competitors":
 			case "uts/v2/sports/league":
@@ -72,12 +73,13 @@ const DataBase = {
 			case "uts/v3/search":
 			case "uts/v2/search/incremental":
 			case "uts/v2/search/landing":
+			case "uts/v3/search/landing":
 			case "uts/v3/watchlist":
 			case "uts/v2/watchlist/contains":
 			case "uts/v2/watchlist/search":
 				if (url.params.caller !== "wta" && url.params.sf === '143470') { // 不修改caller=wta的configurations数据
 					const locale = $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh-Hans"
-					if (locale === 'zh-Hans'){
+					if (locale === 'zh-Hans' || locale === 'zh'){
 						$.log(`config: tw, system lang: zh-Hans, start translate`, "");
 						$response.body = await zhHantTransToZhHans($response.body);
 					}
