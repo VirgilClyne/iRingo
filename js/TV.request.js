@@ -85,6 +85,7 @@ const DataBase = {
 				if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
 				break;
 			case "uts/v3/search":
+			case "uts/v3/search/landing":
 			case "uts/v2/search/incremental":
 			case "uts/v2/search/landing":
 				Type = "Search";
