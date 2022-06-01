@@ -103,6 +103,7 @@ const DataBase = {
 				else if (url.path.includes("uts/v3/shows/")) Type = "TV";
 				else if (url.path.includes("uts/v3/sporting-events/")) Type = "Sports";
 				else if (url.path.includes("uts/v3/canvases/Persons/")) Type = "Persons";
+				else if (url.path.includes("uts/v3/canvases/Rooms")) Type = "Search";
 				else Type = "Others";
 				break;
 		}
