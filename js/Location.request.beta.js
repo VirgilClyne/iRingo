@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.2.0-request-beta");
+const $ = new Env("Apple Location Services v2.3.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -65,6 +65,11 @@ const DataBase = {
 			case "geo_manifest/dynamic/config":
 				url.params.country_code = Settings.Geo_manifest.Dynamic.Config.CountryCode
 				break;
+			//case "directions.arpc":
+			//case "directions":
+				//url.host = "direction2.is.autonavi.com"
+				//url.path = "directions"
+				//break;
 		}
 		$request.headers.Host = url.host;
 		$request.url = URL.stringify(url);
