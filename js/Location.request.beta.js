@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.3-request-beta");
+const $ = new Env("Apple Location Services v2.2.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":true,"WiFiQualityTileDisabled":true}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":true,"WiFiQualityTileDisabled":true}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -41,7 +41,7 @@ const DataBase = {
 						"Connection": "keep-alive",
 						"Content-Encoding": "identity"
 					},
-					"body": Settings.CountryCode
+					"body": Settings.PEP.GCC
 				};
 				$.log(JSON.stringify(response));
 				if ($.isQuanX()) {
@@ -59,12 +59,20 @@ const DataBase = {
 					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
 				}
 				break;
+			case "config/announcements":
+				url.params.environment = Settings.Config.Announcements.Environment
+				break;
+			case "geo_manifest/dynamic/config":
+				url.params.country_code = Settings.Geo_manifest.Dynamic.Config.CountryCode
+				break;
 		}
+		$request.headers.Host = url.host;
+		$request.url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) $.done({ headers: $request.headers })
+		if ($.isQuanX()) $.done({ url:$request.url, headers: $request.headers })
 		else $.done($request)
 	})
 
@@ -92,7 +100,7 @@ async function setENV(name, platform, database) {
 	 let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	if (Settings?.Config) for (let setting in Settings.Config) Settings.Config[setting] = JSON.parse(Settings.Config[setting]) // BoxJs字符串转Boolean
+	if (Settings?.Config?.Defaults) for (let setting in Settings.Config.Defaults) Settings.Config.Defaults[setting] = JSON.parse(Settings.Config.Defaults[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
 };
