@@ -7,14 +7,14 @@
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
 [Script]
-# Rewrite Defaults Location Services Configuration
+# Rewrite Location Services Defaults Configuration
 Location Services Defaults Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 Location Services Defaults Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
 # Rewrite Location Services PEP Geo Country Code
-Location Services GeoCountryCode = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
-# Redirect Announcements Location Services Configuration
+Location Services PEP Geo Country Code = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
+# Redirect Location Services Announcements Configuration
 Location Services Announcements Configuration = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
-# Redirect Dynamic Location Services Configuration
+# Redirect Location Services Dynamic Configuration
 Location Services Dynamic Configuration = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 # Redirect Dispatcher Services
 Dispatcher Services = type=http-request, pattern=^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=

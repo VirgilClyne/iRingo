@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.3-request");
+const $ = new Env("Apple Location Services v2.9.0-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":true,"WiFiQualityTileDisabled":true}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Dispatcher":{"Version":"AUTO"},"Directions":{"Version":"AUTO"},"Tiles":{"Version":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -34,20 +34,72 @@ const DataBase = {
 			case "pep/gcc":
 				break;
 			case "config/defaults":
-				$.log($request?.headers?.["If-None-Match"]);
-				if ($request?.headers?.["If-None-Match"] !== Caches?.ETag) {
-					let newCaches = Caches;
-					newCaches.ETag = $request?.headers?.["If-None-Match"]
-					$.setjson(newCaches, "@iRingo.Location.Caches");
-					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
+				await setETag("Defaults", Caches);
+				break;
+			case "config/announcements":
+				url.params.environment = Settings?.Config?.Announcements?.Environment ?? "prod-cn"
+				await setETag("Announcements", Caches);
+				break;
+			case "geo_manifest/dynamic/config":
+				url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? "CN"
+				await setETag("Dynamic", Caches);
+				break;
+			case "dispatcher.arpc":
+			case "dispatcher":
+				switch (Settings?.Dispatcher?.Version) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "dispatcher.is.autonavi.com"
+						url.path = "dispatcher"
+						break;
+					case "XX":
+						url.host = "gsp-ssl.ls.apple.com"
+						url.path = "dispatcher.arpc"
+						break;
+				}
+				break;
+			case "directions.arpc":
+			case "direction":
+				switch (Settings?.Directions?.Version) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "direction2.is.autonavi.com"
+						url.path = "direction"
+						break;
+					case "XX":
+						url.host = "gsp-ssl.ls.apple.com"
+						url.path = "directions.arpc"
+						break;
+				}
+				break;
+			case "tile.vf":
+			case "tiles":
+				switch (Settings?.Tiles?.Version) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "gspe19-cn-ssl.ls.apple.com"
+						url.path = "tiles"
+						break;
+					case "XX":
+						url.host = "gspe19-ssl.ls.apple.com"
+						url.path = "tile.vf"
+						break;
 				}
 				break;
 		}
+		$request.headers.Host = url.host;
+		$request.url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) $.done({ headers: $request.headers })
+		if ($.isQuanX()) $.done({ url:$request.url, headers: $request.headers })
 		else $.done($request)
 	})
 
@@ -72,14 +124,31 @@ async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Se
  */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	 let { Settings, Caches = {} } = await getENV(name, platform, database);
+	let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	if (Settings?.Config) for (let setting in Settings.Config) Settings.Config[setting] = JSON.parse(Settings.Config[setting]) // BoxJs字符串转Boolean
+	if (Settings?.Config?.Defaults) for (let setting in Settings.Config.Defaults) Settings.Config.Defaults[setting] = JSON.parse(Settings.Config.Defaults[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
 };
 
+/**
+ * Set ETag
+ * @author VirgilClyne
+ * @param {String} name - Config Name
+ * @param {Object} caches - Caches
+ * @return {Promise<*>}
+ */
+async function setETag(name, caches) {
+	$.log(`⚠ ${$.name}, Set ETag`, `caches.${name}.ETag = ${caches?.[name]?.ETag}`, "");
+	if ($request?.headers?.["If-None-Match"] !== caches?.[name]?.ETag) {
+		let newCaches = caches;
+		newCaches[name] = { "ETag": $request?.headers?.["If-None-Match"] }
+		$.setjson(newCaches, "@iRingo.Location.Caches");
+		$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
+	}
+	return $.log(`🎉 ${$.name}, Set ETag`, `If-None-Match = ${$request?.headers?.["If-None-Match"]}`, "");
+};
 /***************** Env *****************/
 // prettier-ignore
 // https://github.com/chavyleung/scripts/blob/master/Env.min.js
