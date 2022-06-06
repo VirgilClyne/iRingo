@@ -199,14 +199,14 @@
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.WiFiQualityNetworkDisabled",
 					"name": "[默认配置]禁用Wi-Fi网络数据",
-					"val": true,
+					"val": false,
 					"type": "boolean",
 					"desc": "是否禁用Wi-Fi下网络数据预加载"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.WiFiQualityTileDisabled",
 					"name": "[默认配置]禁用Wi-Fi瓦片地图",
-					"val": true,
+					"val": false,
 					"type": "boolean",
 					"desc": "是否禁用Wi-Fi下瓦片地图预加载"
 				}
