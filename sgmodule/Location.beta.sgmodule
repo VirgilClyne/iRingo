@@ -1,5 +1,5 @@
 #!name= iRingo for Location Services
-#!desc=(BETA) 1.修改定位服务默认配置(Defaults) 2.修改GCC(Geo Country Code)检测结果 3.重定向通告配置(Announcements)URL 4.重定向动态(Dynamic)配置URL 5.重定向导航(Directions)服务URL
+#!desc=(BETA) 1.修改定位服务默认(Defaults)配置 2.修改GCC(Geo Country Code)检测结果 3.重定向通告(Announcements)配置URL 4.重定向动态(Dynamic)配置URL 5.重定向导航(Directions)服务URL 6.重定向瓦片(Tiles)地图服务URL
 #!openUrl=http://boxjs.com/#/app/iRingo.Location
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
@@ -19,6 +19,9 @@ Location Services Dynamic Configuration = type=http-request, pattern=^https?:\/\
 # Redirect Directions Services
 Directions Services = type=http-request, pattern=^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 Directions Services = type=http-request, pattern=^https?:\/\/direction2\.is\.autonavi\.com\/direction$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+# Redirect Tiles Services
+Tiles Services = type=http-request, pattern=^https?:\/\/gspe19-ssl\.ls\.apple\.com\/tile\.vf(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Tiles Services = type=http-request, pattern=^https?:\/\/gspe19-cn-ssl\.ls\.apple\.com\/tiles(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 
 [MITM]
-hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, gsp-ssl.ls.apple.com, direction2.is.autonavi.com
+hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com, gspe19-ssl.ls.apple.com, gspe19-cn-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, gsp-ssl.ls.apple.com, direction2.is.autonavi.com, dispatcher.is.autonavi.com

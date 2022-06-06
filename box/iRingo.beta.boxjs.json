@@ -96,6 +96,27 @@
 					]
 				},
 				{
+					"id": "@iRingo.Location.Settings.Tiles.Version",
+					"name": "[瓦片地图]地区版本",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "瓦片地图的数据源，更改此选择可以强制使用特定版本的瓦片地图",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随地图数据版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆版"
+						},
+						{
+							"key": "XX",
+							"label": "国际版"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code",
 					"name": "[动态配置]地理服务清单的国家或地区代码",
 					"val": "CN",

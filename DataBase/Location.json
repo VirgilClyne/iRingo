@@ -7,6 +7,9 @@
 		"Directions": {
 			"Version": "AUTO"
 		},
+		"Tiles": {
+			"Version": "AUTO"
+		},
 		"Geo_manifest":{
 			"Dynamic":{
 				"Config":{
