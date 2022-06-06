@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.1.5-response-beta");
+const $ = new Env("Apple Location Services v2.3.0-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"CountryCode":"US","Config":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":true,"WiFiQualityTileDisabled":true}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":true,"WiFiQualityTileDisabled":true}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -32,7 +32,7 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "pep/gcc":
-				$response.body = Settings.CountryCode;
+				$response.body = Settings.PEP.GCC;
 				break;
 			case "config/defaults":
 				if ($response.status === 200 || $response.statusCode === 200) {
@@ -51,26 +51,26 @@ const DataBase = {
 					//$.log(data);
 					data = JSON.parse(data);
 					// set settings
-					data["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.LagunaBeach; // XX
+					data["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.Defaults?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.Defaults?.LagunaBeach; // XX
 					//data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
-					data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.GEOAddressCorrection; // CN
-					if (Settings?.Config?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.LookupMaxParametersCount) {
+					data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.Defaults?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.Defaults?.GEOAddressCorrection; // CN
+					if (Settings?.Config?.Defaults?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.Defaults?.LookupMaxParametersCount) {
 						delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
 						delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
 					}
-					data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.LocalitiesAndLandmarks; // CN
-					if (Settings?.Config?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.LocalitiesAndLandmarks) {
+					data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks; // CN
+					if (Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks) {
 						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy // CN
 						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime // CN
 					}
-					data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.PedestrianAR; // CN
-					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.WiFiQualityNetworkDisabled; // CN
-					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.WiFiQualityTileDisabled; // CN
+					data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.Defaults?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.Defaults?.PedestrianAR; // CN
+					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled; // CN
+					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.Defaults?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityTileDisabled; // CN
 					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
 					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
-					data["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.["6694982d2b14e95815e44e970235e230"] ?? DataBase?.Location?.Settings?.Config?.["6694982d2b14e95815e44e970235e230"]; // US
-					data["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.OpticalHeading ?? DataBase?.Location?.Settings?.Config?.OpticalHeading; // US
-					data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.UseCLPedestrianMapMatchedLocations; // US
+					data["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"] ?? DataBase?.Location?.Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"]; // US
+					data["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.Defaults?.OpticalHeading ?? DataBase?.Location?.Settings?.Config?.Defaults?.OpticalHeading; // US
+					data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations; // US
 					data = JSON.stringify(data);
 					// json2plist
 					type = "json2plist"

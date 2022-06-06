@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.3.0-request-beta");
+const $ = new Env("Apple Location Services v2.4.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -52,18 +52,18 @@ const DataBase = {
 				break;
 			case "config/defaults":
 				$.log($request?.headers?.["If-None-Match"]);
-				if ($request?.headers?.["If-None-Match"] !== Caches?.ETag) {
+				if ($request?.headers?.["If-None-Match"] !== Caches?.defaults?.ETag) {
 					let newCaches = Caches;
-					newCaches.ETag = $request?.headers?.["If-None-Match"]
+					newCaches.defaults = { "ETag": $request?.headers?.["If-None-Match"] }
 					$.setjson(newCaches, "@iRingo.Location.Caches");
 					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
 				}
 				break;
 			case "config/announcements":
-				url.params.environment = Settings.Config.Announcements.Environment
+				url.params.environment = Settings?.Config?.Announcements?.Environment ?? "prod-cn"
 				break;
 			case "geo_manifest/dynamic/config":
-				url.params.country_code = Settings.Geo_manifest.Dynamic.Config.CountryCode
+				url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? "CN"
 				break;
 			//case "directions.arpc":
 			//case "directions":
