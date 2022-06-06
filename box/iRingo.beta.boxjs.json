@@ -30,7 +30,56 @@
 					"name": "[地区检测]地理国家或地区代码",
 					"val": "US",
 					"type": "selects",
-					"desc": "要更改为的地区或国家",
+					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
+					"items": [
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code",
+					"name": "[动态配置]地理服务清单的国家或地区代码",
+					"val": "CN",
+					"type": "selects",
+					"desc": "要更改为的地区或国家，此代码决定地图数据的版本，中国大陆为高德版",
 					"items": [
 						{
 							"key": "CN",
@@ -87,7 +136,7 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版"
+							"label": "中国大陆版（高德）"
 						},
 						{
 							"key": "XX",
@@ -108,7 +157,7 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版"
+							"label": "中国大陆版（高德）"
 						},
 						{
 							"key": "XX",
@@ -134,55 +183,6 @@
 						{
 							"key": "XX",
 							"label": "国际版"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code",
-					"name": "[动态配置]地理服务清单的国家或地区代码",
-					"val": "CN",
-					"type": "selects",
-					"desc": "要更改为的地区或国家，此代码决定地图数据的版本，中国大陆为高德版",
-					"items": [
-						{
-							"key": "CN",
-							"label": "中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "香港"
-						},
-						{
-							"key": "TW",
-							"label": "台湾"
-						},
-						{
-							"key": "SG",
-							"label": "新加坡"
-						},
-						{
-							"key": "US",
-							"label": "美国"
-						},
-						{
-							"key": "JP",
-							"label": "日本"
-						},
-						{
-							"key": "AU",
-							"label": "澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "英国"
-						},
-						{
-							"key": "KR",
-							"label": "韩国"
-						},
-						{
-							"key": "CA",
-							"label": "加拿大"
 						}
 					]
 				},
