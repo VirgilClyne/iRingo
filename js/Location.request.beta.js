@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.4.0-request-beta");
+const $ = new Env("Apple Location Services v2.5.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -51,19 +51,15 @@ const DataBase = {
 				*/
 				break;
 			case "config/defaults":
-				$.log($request?.headers?.["If-None-Match"]);
-				if ($request?.headers?.["If-None-Match"] !== Caches?.defaults?.ETag) {
-					let newCaches = Caches;
-					newCaches.defaults = { "ETag": $request?.headers?.["If-None-Match"] }
-					$.setjson(newCaches, "@iRingo.Location.Caches");
-					$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-				}
+				await setETag("Defaults", Caches);
 				break;
 			case "config/announcements":
 				url.params.environment = Settings?.Config?.Announcements?.Environment ?? "prod-cn"
+				await setETag("Announcements", Caches);
 				break;
 			case "geo_manifest/dynamic/config":
 				url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? "CN"
+				await setETag("Dynamic", Caches);
 				break;
 			//case "directions.arpc":
 			//case "directions":
@@ -102,12 +98,30 @@ async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Se
  */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	 let { Settings, Caches = {} } = await getENV(name, platform, database);
+	let { Settings, Caches = {} } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (Settings?.Config?.Defaults) for (let setting in Settings.Config.Defaults) Settings.Config.Defaults[setting] = JSON.parse(Settings.Config.Defaults[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
+};
+
+/**
+ * Set ETag
+ * @author VirgilClyne
+ * @param {String} name - Config Name
+ * @param {Object} caches - Caches
+ * @return {Promise<*>}
+ */
+async function setETag(name, caches) {
+	$.log(`⚠ ${$.name}, Set ETag`, `caches.${name}.ETag = ${caches?.[name]?.ETag}`, "");
+	if ($request?.headers?.["If-None-Match"] !== caches?.[name]?.ETag) {
+		let newCaches = caches;
+		newCaches[name] = { "ETag": $request?.headers?.["If-None-Match"] }
+		$.setjson(newCaches, "@iRingo.Location.Caches");
+		$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
+	}
+	return $.log(`🎉 ${$.name}, Set ETag`, `If-None-Match = ${$request?.headers?.["If-None-Match"]}`, "");
 };
 
 /***************** Env *****************/
