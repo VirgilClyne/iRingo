@@ -4,6 +4,9 @@
 		"PEP": {
 			"GCC": "US"
 		},
+		"Dispatcher": {
+			"Version": "AUTO"
+		},
 		"Directions": {
 			"Version": "AUTO"
 		},

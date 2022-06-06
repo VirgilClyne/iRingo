@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.8.0-request-beta");
+const $ = new Env("Apple Location Services v2.9.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Directions":{"Version":"AUTO"},"Tiles":{"Version":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Dispatcher":{"Version":"AUTO"},"Directions":{"Version":"AUTO"},"Tiles":{"Version":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -60,6 +60,22 @@ const DataBase = {
 			case "geo_manifest/dynamic/config":
 				url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? "CN"
 				await setETag("Dynamic", Caches);
+				break;
+			case "dispatcher.arpc":
+			case "dispatcher":
+				switch (Settings?.Dispatcher?.Version) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "dispatcher.is.autonavi.com"
+						url.path = "dispatcher"
+						break;
+					case "XX":
+						url.host = "gsp-ssl.ls.apple.com"
+						url.path = "dispatcher.arpc"
+						break;
+				}
 				break;
 			case "directions.arpc":
 			case "direction":
