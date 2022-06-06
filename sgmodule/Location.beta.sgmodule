@@ -18,6 +18,7 @@ Location Services Announcements Configuration = type=http-request, pattern=^http
 Location Services Dynamic Configuration = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 # Redirect Directions Services
 Directions Services = type=http-request, pattern=^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Directions Services = type=http-request, pattern=^https?:\/\/direction2\.is\.autonavi\.com\/direction$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, gsp-ssl.ls.apple.com, direction2.is.autonavi.com

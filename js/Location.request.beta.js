@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.6.0-request-beta");
+const $ = new Env("Apple Location Services v2.7.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Directions":{"Version":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -61,11 +61,22 @@ const DataBase = {
 				url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? "CN"
 				await setETag("Dynamic", Caches);
 				break;
-			//case "directions.arpc":
-			//case "directions":
-				//url.host = "direction2.is.autonavi.com"
-				//url.path = "directions"
-				//break;
+			case "directions.arpc":
+			case "direction":
+				switch (Settings?.Directions?.Version) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "direction2.is.autonavi.com"
+						url.path = "direction"
+						break;
+					case "XX":
+						url.host = "gsp-ssl.ls.apple.com"
+						url.path = "directions.arpc"
+						break;
+				}
+				break;
 		}
 		$request.headers.Host = url.host;
 		$request.url = URL.stringify(url);

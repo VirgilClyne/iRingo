@@ -4,6 +4,9 @@
 		"PEP": {
 			"GCC": "US"
 		},
+		"Directions": {
+			"Version": "AUTO"
+		},
 		"Geo_manifest":{
 			"Dynamic":{
 				"Config":{
