@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.9.0-request");
+const $ = new Env("Apple Location Services v2.10.0-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Dispatcher":{"Version":"AUTO"},"Directions":{"Version":"AUTO"},"Tiles":{"Version":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -46,7 +46,7 @@ const DataBase = {
 				break;
 			case "dispatcher.arpc":
 			case "dispatcher":
-				switch (Settings?.Dispatcher?.Version) {
+				switch (Settings?.Services?.Dispatcher) {
 					case "AUTO":
 					default:
 						break;
@@ -62,7 +62,7 @@ const DataBase = {
 				break;
 			case "directions.arpc":
 			case "direction":
-				switch (Settings?.Directions?.Version) {
+				switch (Settings?.Services?.Directions) {
 					case "AUTO":
 					default:
 						break;
@@ -76,9 +76,22 @@ const DataBase = {
 						break;
 				}
 				break;
+			case "traffic":
+				switch (Settings?.Services?.Traffic) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "gspe12-cn-ssl.ls.apple.com"
+						break;
+					case "XX":
+						url.host = "gspe12-ssl.ls.apple.com"
+						break;
+				}
+				break;
 			case "tile.vf":
 			case "tiles":
-				switch (Settings?.Tiles?.Version) {
+				switch (Settings?.Services?.Tiles) {
 					case "AUTO":
 					default:
 						break;
@@ -149,6 +162,7 @@ async function setETag(name, caches) {
 	}
 	return $.log(`🎉 ${$.name}, Set ETag`, `If-None-Match = ${$request?.headers?.["If-None-Match"]}`, "");
 };
+
 /***************** Env *****************/
 // prettier-ignore
 // https://github.com/chavyleung/scripts/blob/master/Env.min.js
