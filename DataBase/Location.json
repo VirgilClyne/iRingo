@@ -1,18 +1,41 @@
 {
 	"Settings": {
 		"Switch": true,
-		"CountryCode": "US",
+		"PEP": {
+			"GCC": "US"
+		},
+		"Dispatcher": {
+			"Version": "AUTO"
+		},
+		"Directions": {
+			"Version": "AUTO"
+		},
+		"Tiles": {
+			"Version": "AUTO"
+		},
+		"Geo_manifest":{
+			"Dynamic":{
+				"Config":{
+					"Country_code": "CN"
+				}
+			}
+		},
 		"Config": {
-			"LagunaBeach": true,
-			"GEOAddressCorrection": true,
-			"LookupMaxParametersCount": true,
-			"LocalitiesAndLandmarks": true,
-			"PedestrianAR": true,
-			"6694982d2b14e95815e44e970235e230": true,
-			"OpticalHeading": true,
-			"UseCLPedestrianMapMatchedLocations": true,
-			"WiFiQualityNetworkDisabled": true,
-			"WiFiQualityTileDisabled": true
+			"Announcements":{
+				"Environment:": "prod-cn"
+			},
+			"Defaults":{
+				"LagunaBeach": true,
+				"GEOAddressCorrection": true,
+				"LookupMaxParametersCount": true,
+				"LocalitiesAndLandmarks": true,
+				"PedestrianAR": true,
+				"6694982d2b14e95815e44e970235e230": true,
+				"OpticalHeading": true,
+				"UseCLPedestrianMapMatchedLocations": true,
+				"WiFiQualityNetworkDisabled": false,
+				"WiFiQualityTileDisabled": false
+			}
 		}
 	}
 }

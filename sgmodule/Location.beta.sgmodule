@@ -1,5 +1,5 @@
 #!name= iRingo for Location Services
-#!desc=(BETA) 1.修改定位服务(Location Services)配置文件 2.修改GCC(Geo Country Code)检测结果
+#!desc=(BETA) 1.修改定位服务默认(Defaults)配置 2.修改GCC(Geo Country Code)检测结果 3.重定向通告(Announcements)配置URL 4.重定向动态(Dynamic)配置URL 5.重定向调度(Dispatcher)服务URL 6.重定向导航(Directions)服务URL 7.重定向瓦片(Tiles)地图服务URL
 #!openUrl=http://boxjs.com/#/app/iRingo.Location
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
@@ -7,11 +7,24 @@
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
 [Script]
-# Rewrite Location Services Configuration Functions Internationalization
-Location Services Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
-Location Services Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
-# Response Location Services Geo Country Code Check Result
-Location Services GeoCountryCode = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
+# Rewrite Location Services Defaults Configuration
+Location Services Defaults Configuration = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Location Services Defaults Configuration = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
+# Rewrite Location Services PEP Geo Country Code
+Location Services PEP Geo Country Code = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js, argument=
+# Redirect Location Services Announcements Configuration
+Location Services Announcements Configuration = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+# Redirect Location Services Dynamic Configuration
+Location Services Dynamic Configuration = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+# Redirect Dispatcher Services
+Dispatcher Services = type=http-request, pattern=^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Dispatcher Services = type=http-request, pattern=^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+# Redirect Directions Services
+Directions Services = type=http-request, pattern=^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Directions Services = type=http-request, pattern=^https?:\/\/direction2\.is\.autonavi\.com\/direction$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+# Redirect Tiles Services
+Tiles Services = type=http-request, pattern=^https?:\/\/gspe19-ssl\.ls\.apple\.com\/tile\.vf(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
+Tiles Services = type=http-request, pattern=^https?:\/\/gspe19-cn-ssl\.ls\.apple\.com\/tiles(\?.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=
 
 [MITM]
-hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com
+hostname = %APPEND% configuration.ls.apple.com, gspe1-ssl.ls.apple.com, gspe19-ssl.ls.apple.com, gspe19-cn-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, gsp-ssl.ls.apple.com, direction2.is.autonavi.com, dispatcher.is.autonavi.com

@@ -26,11 +26,11 @@
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Location.Settings.CountryCode",
-					"name": "[地区检测]国家或地区代码",
+					"id": "@iRingo.Location.Settings.PEP.GCC",
+					"name": "[地区检测]地理国家或地区代码",
 					"val": "US",
 					"type": "selects",
-					"desc": "要更改为的地区或国家",
+					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
 					"items": [
 						{
 							"key": "CN",
@@ -75,74 +75,181 @@
 					]
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.LagunaBeach",
+					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code",
+					"name": "[动态配置]地理服务清单的国家或地区代码",
+					"val": "CN",
+					"type": "selects",
+					"desc": "要更改为的地区或国家，此代码决定地图数据的版本，中国大陆为高德版",
+					"items": [
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Dispatcher.Version",
+					"name": "[调度器]地区版本",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "调度器的数据源，更改此选择可以强制使用特定版本的调度器",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随地图数据版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆版（高德）"
+						},
+						{
+							"key": "XX",
+							"label": "国际版"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Directions.Version",
+					"name": "[导航]地区版本",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "导航功能的数据源，更改此选择可以强制使用特定版本的导航数据源",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随地图数据版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆版（高德）"
+						},
+						{
+							"key": "XX",
+							"label": "国际版"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Tiles.Version",
+					"name": "[瓦片地图]地区版本",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "瓦片地图的数据源，更改此选择可以强制使用特定版本的瓦片地图",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随地图数据版本自动选择）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.Announcements.Environment",
+					"name": "[通告配置]环境代码",
+					"val": "prod-cn",
+					"type": "selects",
+					"desc": "通告的配置文件的环境代码，选择要更改为的地区或国家版本，影响地图和定位服务的功能和版本，具体影响功能未知",
+					"items": [
+						{
+							"key": "prod-cn",
+							"label": "中国大陆版"
+						},
+						{
+							"key": "prod",
+							"label": "国际版"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.Defaults.LagunaBeach",
 					"name": "[默认配置]为“地图”提供助力",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用“评分与照片”，可让您将图像、评分或其他内容发布到所选的兴趣点。(“设置” >“地图”>“评分与照片”)"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.GEOAddressCorrection",
+					"id": "@iRingo.Location.Settings.Config.Defaults.GEOAddressCorrection",
 					"name": "[默认配置]地址校正",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用定位地址矫正"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.LookupMaxParametersCount",
+					"id": "@iRingo.Location.Settings.Config.Defaults.LookupMaxParametersCount",
 					"name": "[默认配置]Spatial批量查询上限",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否移除Spatial批量查询上限"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.LocalitiesAndLandmarks",
+					"id": "@iRingo.Location.Settings.Config.Defaults.LocalitiesAndLandmarks",
 					"name": "[默认配置]景点与地标支持",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用景点与地标支持"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.PedestrianAR",
+					"id": "@iRingo.Location.Settings.Config.Defaults.PedestrianAR",
 					"name": "[默认配置]现实世界中的路线",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用在增强现实中查看导航(“设置” >“地图”>“步行”>“举起以查看”)"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.6694982d2b14e95815e44e970235e230",
+					"id": "@iRingo.Location.Settings.Config.Defaults.6694982d2b14e95815e44e970235e230",
 					"name": "[默认配置]6694982d2b14e95815e44e970235e230",
 					"val": true,
 					"type": "boolean",
 					"desc": "6694982d2b14e95815e44e970235e230"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.OpticalHeading",
+					"id": "@iRingo.Location.Settings.Config.Defaults.OpticalHeading",
 					"name": "[默认配置]导航准确性",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置” >“地图”>“步行”>“增强”)"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.UseCLPedestrianMapMatchedLocations",
+					"id": "@iRingo.Location.Settings.Config.Defaults.UseCLPedestrianMapMatchedLocations",
 					"name": "[默认配置]使用AR地图匹配地点",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否使用AR地图匹配地点"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.WiFiQualityNetworkDisabled",
-					"name": "[默认配置]禁用Wi-Fi网络数据",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否禁用Wi-Fi下网络数据预加载"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.WiFiQualityTileDisabled",
-					"name": "[默认配置]禁用Wi-Fi瓦片地图",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否禁用Wi-Fi下瓦片地图预加载"
 				}
 			],
 			"author": "@VirgilClyne",

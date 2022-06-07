@@ -1,6 +1,6 @@
 # iRingo
   * 解锁完整的Apple功能和集成服务
-  * Powered by Chavy‘s Env.js and BoxJs
+  * <font size=3>**Powered by [Chavy](https://github.com/chavyleung)‘s [Env.js](https://github.com/chavyleung/scripts/blob/master/Env.js) and [BoxJs](https://chavyleung.gitbook.io/boxjs/)**</font>
   * 有问题请至[Issue页面](https://github.com/VirgilClyne/iRingo/issues)反馈
   * 如需及时了解更新说明，请订阅Telegram频道:[🍟 整点薯条](https://t.me/GetSomeFriesChannel)
   * Telegram讨论组:[🍟 整点薯条 - 群组](https://t.me/GetSomeFries)
@@ -23,5 +23,23 @@
 | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/🌤天气#功能列表) | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/📍定位服务#功能列表) | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/🔍Siri与搜索#功能列表) | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/🗺%EF%B8%8F地图#功能列表) | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/📺TV-app#功能列表) | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/📰News#功能列表) | [功能列表](https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理#功能列表) |
 | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/🌤天气#安装链接) | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/📍定位服务#安装链接) | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/🔍Siri与搜索#安装链接) | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/🗺%EF%B8%8F地图#安装链接) | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/📺TV-app#安装链接) | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/📰News#安装链接) | [安装链接](https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理#安装链接) |
 | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/🌤天气#更新日志) | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/📍定位服务#更新日志) | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/🔍Siri与搜索#更新日志) | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/🗺%EF%B8%8F地图#更新日志) | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/📺TV-app#更新日志) | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/📰News#更新日志) | [更新日志](https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理#更新日志) |
-| 🆕新版<br>v3.2.x | 🆕新版<br>v2.1.x | 🆕新版<br>v2.1.x | v1.0.0 | 🆕新版<br>v2.1.x | v1.0.0 | v1.0.0 |
+| 🆕新版<br>v3.2.x | 🆕新版<br>v2.9.x<br>已合并<br>[`🗺️地图`](https://github.com/VirgilClyne/iRingo/wiki/🗺%EF%B8%8F地图) | 🆕新版<br>v2.1.x | 🆕新版<br>v2.9.x<br>已并入<br>[`📍定位服务`](https://github.com/VirgilClyne/iRingo/wiki/📍定位服务) | 🆕新版<br>v2.1.x | v1.0.0 | v1.0.0 |
 | [说明&讨论](https://t.me/GetSomeFriesChannel/108) | [说明&讨论](https://t.me/GetSomeFriesChannel/116) | [说明&讨论](https://t.me/GetSomeFriesChannel/64) | 说明&讨论 | [说明&讨论](https://t.me/GetSomeFriesChannel/118) | 说明&讨论 | 说明&讨论 |
+
+---
+
+# 鸣谢
+* 排名不分先后
+  * [@chavyleung](https://github.com/chavyleung)
+  * [@NobyDa](https://github.com/NobyDa)
+  * [@zZPiglet](https://github.com/zZPiglet)
+  * [@yichahucha](https://github.com/yichahucha)
+  * [@Peng-YM](https://github.com/Peng-YM)
+  * [@app2smile](https://github.com/app2smile)
+  * [@MuTu](https://github.com/githubdulong)
+  * [@Loon0x00](https://github.com/Loon0x00)
+  * [@Tartarus2014](https://github.com/Tartarus2014)
+  * [@Hackl0us](https://github.com/Hackl0us)
+  * [@Koolson](https://github.com/Koolson)
+  * [@LucaLin](https://github.com/LucaLin233)
+  * [@Shawn](https://github.com/KOP-XIAO)
