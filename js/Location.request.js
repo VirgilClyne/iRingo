@@ -112,7 +112,7 @@ const DataBase = {
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) $.done({ url:$request.url, headers: $request.headers })
+		if ($.isQuanX()) $.done({ url: $request.url, headers: $request.headers })
 		else $.done($request)
 	})
 
