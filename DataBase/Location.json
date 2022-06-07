@@ -4,14 +4,11 @@
 		"PEP": {
 			"GCC": "US"
 		},
-		"Dispatcher": {
-			"Version": "AUTO"
-		},
-		"Directions": {
-			"Version": "AUTO"
-		},
-		"Tiles": {
-			"Version": "AUTO"
+		"Services": {
+			"Dispatcher": "AUTO",
+			"Directions": "AUTO",
+			"Traffic": "AUTO",
+			"Tiles": "AUTO"
 		},
 		"Geo_manifest":{
 			"Dynamic":{
