@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.3-response-beta");
+const $ = new Env("Apple Siri v2.0.4-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -29,9 +29,15 @@ const DataBase = {
 				data.feedback_enabled = true;
 				//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
 				//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
-				data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
+				if (data?.enabled_domains) {
+					data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
+					$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
+				}
+				if (data?.scene_aware_lookup_enabled_domains) {
+					data.scene_aware_lookup_enabled_domains = Array.from(new Set([...data?.scene_aware_lookup_enabled_domains ?? [], ...Settings.Domains]));
+					$.log(`🎉 ${$.name}, 领域列表`, `scene_aware_lookup_enabled_domains: ${JSON.stringify(data.scene_aware_lookup_enabled_domains)}`, "");
+				}
 				data.min_query_len = 3;
-				$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
 				let Functions = data?.overrides;
 				if (Functions) {
 					Settings.Functions.forEach(app => {
