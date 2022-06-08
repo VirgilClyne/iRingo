@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.4.0-response");
+const $ = new Env("Apple Location Services v2.6.0-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -37,21 +37,12 @@ const DataBase = {
 			case "config/defaults":
 				if ($response.status === 200 || $response.statusCode === 200) {
 					$.log($response.statusCode || $response.status);
-					let request = {
-						"url": "https://json2plist-production.up.railway.app/convert.php",
-						"headers": {
-							"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-							"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
-						}
-					}
-					// plist2json
-					let type = "plist2json"
-					request.body = `do=${type}&content=${encodeURIComponent($response.body)}`
-					let data = await $.http.post(request).then(v => v.body);
+					let data = await PLIST("plist2json", $response.body);
 					//$.log(data);
 					data = JSON.parse(data);
 					// set settings
 					data["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.Defaults?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.Defaults?.LagunaBeach; // XX
+					data["com.apple.GEO"].CountryProviders.CN.DrivingMultiWaypointRoutesEnabled = Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled; // CN
 					//data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
 					data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.Defaults?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.Defaults?.GEOAddressCorrection; // CN
 					if (Settings?.Config?.Defaults?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.Defaults?.LookupMaxParametersCount) {
@@ -73,9 +64,7 @@ const DataBase = {
 					data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations; // US
 					data = JSON.stringify(data);
 					// json2plist
-					type = "json2plist"
-					request.body = `do=${type}&content=${encodeURIComponent(data)}`
-					$response.body = await $.http.post(request).then(v => v.body);
+					$response.body = await PLIST("json2plist", data);
 				}
 				break;
 		}
@@ -114,6 +103,26 @@ async function setENV(name, platform, database) {
 	if (Settings?.Config?.Defaults) for (let setting in Settings.Config.Defaults) Settings.Config.Defaults[setting] = JSON.parse(Settings.Config.Defaults[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
+};
+
+/**
+ * Parse Plist
+ * @author VirgilClyne
+ * @typedef { "json2plist" | "plist2json" } opt
+ * @param {opt} opt - do types
+ * @param {String} string - string
+ * @return {Promise<*>}
+ */
+async function PLIST(opt, string) {
+	const request = {
+		"url": "https://json2plist.nanocat.me/convert.php",
+		"headers": {
+			"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+			"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
+		},
+		"body": `do=${opt}&content=` + encodeURIComponent(string)
+	};
+	return await $.http.post(request).then(v => v.body);
 };
 
 /***************** Env *****************/
