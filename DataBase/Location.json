@@ -23,6 +23,7 @@
 			},
 			"Defaults":{
 				"LagunaBeach": true,
+				"DrivingMultiWaypointRoutesEnabled": true,
 				"GEOAddressCorrection": true,
 				"LookupMaxParametersCount": true,
 				"LocalitiesAndLandmarks": true,

@@ -232,6 +232,13 @@
 					"desc": "是否启用“评分与照片”，可让您将图像、评分或其他内容发布到所选的兴趣点。(“设置” >“地图”>“评分与照片”)"
 				},
 				{
+					"id": "@iRingo.Location.Settings.Config.Defaults.DrivingMultiWaypointRoutesEnabled",
+					"name": "[默认配置]多途经点路线规划",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用“多途经点路线规划”，可在一条路线中添加多个途经点。（iOS 16）"
+				},
+				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.GEOAddressCorrection",
 					"name": "[默认配置]地址校正",
 					"val": true,
