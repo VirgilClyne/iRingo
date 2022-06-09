@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.1.1-request");
+const $ = new Env("Apple TV v2.1.2-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -101,6 +101,7 @@ const DataBase = {
 				else if (url.path.includes("uts/v3/movies/")) Type = "Movies";
 				else if (url.path.includes("uts/v3/shows/")) Type = "TV";
 				else if (url.path.includes("uts/v3/sporting-events/")) Type = "Sports";
+				else if (url.path.includes("uts/v3/canvases/Sports/")) Type = "Sports";
 				else if (url.path.includes("uts/v3/canvases/Persons/")) Type = "Persons";
 				else Type = "Others";
 				break;
