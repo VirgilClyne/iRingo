@@ -1,13 +1,13 @@
 # iRingo
   * 解锁完整的Apple功能和集成服务
-  * <font size=3>**Powered by [Chavy](https://github.com/chavyleung)‘s [Env.js](https://github.com/chavyleung/scripts/blob/master/Env.js) and [BoxJs](https://chavyleung.gitbook.io/boxjs/)**</font>
+  * **Powered by [Chavy](https://github.com/chavyleung)‘s [Env.js](https://github.com/chavyleung/scripts/blob/master/Env.js) and [BoxJs](https://chavyleung.gitbook.io/boxjs/)**
   * 有问题请至[Issue页面](https://github.com/VirgilClyne/iRingo/issues)反馈
   * 如需及时了解更新说明，请订阅Telegram频道:[🍟 整点薯条](https://t.me/GetSomeFriesChannel)
   * Telegram讨论组:[🍟 整点薯条 - 群组](https://t.me/GetSomeFries)
 
-
 ---
 
+# 快速导航
   * 支持Shadowrocket, Loon, Quantumult X, Surge, Stash
   * macOS 12.3, iOS 15.4, iOS 14.8 测试通过
   * 如无特别声明，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用
@@ -37,6 +37,7 @@
   * [@Peng-YM](https://github.com/Peng-YM)
   * [@app2smile](https://github.com/app2smile)
   * [@MuTu](https://github.com/githubdulong)
+  * [@fengchang](https://github.com/fengchang)
   * [@Loon0x00](https://github.com/Loon0x00)
   * [@Tartarus2014](https://github.com/Tartarus2014)
   * [@Hackl0us](https://github.com/Hackl0us)
