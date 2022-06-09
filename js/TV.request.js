@@ -104,7 +104,7 @@ const DataBase = {
 				else if (url.path.includes("uts/v3/sporting-events/")) Type = "Sports";
 				else if (url.path.includes("uts/v3/canvases/Sports/")) Type = "Sports";
 				else if (url.path.includes("uts/v3/canvases/Persons/")) Type = "Persons";
-				else if (url.path.includes("uts/v3/canvases/Rooms/")) Type = "Search";
+				else if (url.path.includes("uts/v3/canvases/Rooms/")) Type = "Others";
 				else Type = "Others";
 				break;
 		}

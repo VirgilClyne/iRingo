@@ -86,6 +86,7 @@ const DataBase = {
 				if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
 				break;
 			case "uts/v3/search":
+			case "uts/v3/search/landing":
 			case "uts/v2/search/incremental":
 			case "uts/v2/search/landing":
 				Type = "Search";
@@ -105,7 +106,7 @@ const DataBase = {
 				else if (url.path.includes("uts/v3/sporting-events/")) Type = "Sports";
 				else if (url.path.includes("uts/v3/canvases/Sports/")) Type = "Sports";
 				else if (url.path.includes("uts/v3/canvases/Persons/")) Type = "Persons";
-				//else if (url.path.includes("/uts/v3/canvases/Rooms/")) Type = "Others";
+				else if (url.path.includes("uts/v3/canvases/Rooms/")) Type = "Others";
 				//else if (url.path.includes("uts/v3/playables/")) Type = "Others";
 				//else if (url.path.includes("uts/v3/shelves/")) Type = "Others";
 				else Type = "Others";
