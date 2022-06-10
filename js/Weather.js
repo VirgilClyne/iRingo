@@ -1549,7 +1549,7 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
 	} else {
 		$.log(
 			`⚠ ${$.name}, ColorfulClouds: unsupported language detected, fallback to en_US. `,
-			`languageWithReigon = ${languageWithReigon}`, ""
+			`---> languageWithReigon = ${languageWithReigon}`, ""
 		);
 		return "en_US";
 	}
