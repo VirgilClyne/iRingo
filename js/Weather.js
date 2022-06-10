@@ -108,7 +108,7 @@ const WEATHER_STATUS = {
 						if (token) {
 							// No official name for Japanese
 							let providerName = "ColorfulClouds";
-							if (languageWithReigon.includes("zh-Hans")) {
+							if (languageWithReigon.includes("zh-Hans") || languageWithReigon.include("zh-CN")) {
 								providerName = "彩云天气";
 							} else if (languageWithReigon.includes("zh-Hant")) {
 								providerName = "彩雲天氣";
@@ -1538,7 +1538,7 @@ function Metadata(input = { "Version": new Number, "Time": new Date, "Expire": n
  function toColorfulCloudsLang(languageWithReigon) {
 	if (languageWithReigon.includes("en-US")) {
 		return "en_US";
-	} else if (languageWithReigon.includes("zh-Hans")) {
+	} else if (languageWithReigon.includes("zh-Hans") || languageWithReigon.includes("zh-CN")) {
 		return "zh_CN";
 	} else if (languageWithReigon.includes("zh-Hant")) {
 		return "zh_TW";
