@@ -108,7 +108,7 @@ const WEATHER_STATUS = {
 						if (token) {
 							// No official name for Japanese
 							let providerName = "ColorfulClouds";
-							if (languageWithReigon.includes("zh-Hans") || languageWithReigon.include("zh-CN")) {
+							if (languageWithReigon.includes("zh-Hans") || languageWithReigon.includes("zh-CN")) {
 								providerName = "彩云天气";
 							} else if (languageWithReigon.includes("zh-Hant")) {
 								providerName = "彩雲天氣";
