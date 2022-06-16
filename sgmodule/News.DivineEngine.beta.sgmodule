@@ -1,6 +1,6 @@
 #!name= iRingo for News
 #!desc=(V2) 1.解锁自定义地区的News 2.Coming Soon 注：使用过程中gateway.icloud.com会走与News相同的代理线路。
-#!openUrl=http://boxjs.com/#/app/iRingo.News
+#!openUrl=http://boxjs.com/#/app/iRingo.News.beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/📰News

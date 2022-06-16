@@ -3,7 +3,7 @@
 #!openUrl=http://boxjs.com/#/app/iRingo.Location
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo#定位服务
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/📍定位服务
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
 # Rewrite Location Services Defaults Configuration

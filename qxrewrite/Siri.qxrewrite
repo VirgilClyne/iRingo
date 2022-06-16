@@ -1,6 +1,10 @@
 #!name= iRingo for Siri & Search
-#!version=V2
-#!desc=全面自定义「Siri与搜索」的功能。
+#!desc=(V2) 全面自定义「Siri与搜索」的功能。
+#!openUrl=http://boxjs.com/#/app/iRingo.Siri
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne//iRingo/wiki/🔍Siri与搜索
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 
 # Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)

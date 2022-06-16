@@ -1,9 +1,9 @@
 #!name= iRingo for Location Services
 #!desc=(BETA) 1.修改定位服务默认(Defaults)配置 2.修改GCC(Geo Country Code)检测结果 3.重定向通告(Announcements)配置 4.重定向动态(Dynamic)配置 5.重定向调度(Dispatcher)服务 6.重定向导航(Directions)服务 7.重定向交通状况(Traffic)服务 8.重定向瓦片(Tiles)地图服务
-#!openUrl=http://boxjs.com/#/app/iRingo.Location
+#!openUrl=http://boxjs.com/#/app/iRingo.Location.beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo#定位服务
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/📍定位服务
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
 [Script]
