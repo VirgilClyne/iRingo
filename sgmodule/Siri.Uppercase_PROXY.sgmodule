@@ -12,14 +12,14 @@ RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Look_
 
 [Script]
 # Bag (iOS/macOS)
-Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
-Siri Suggestions Service = type=http-response, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*), requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
+Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?, requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
+Siri Suggestions Service = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?, requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
 # Spotlight & Look Up Search (iOS/macOS)
-Spotlight & Look Up Search = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
-Spotlight & Look Up Search = type=http-response, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*), requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
+Spotlight & Look Up Search = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?, requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
+Spotlight & Look Up Search = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?, requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
 # Siri Infomation Card (macOS)
-Siri Infomation Card = type=http-request, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*), requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
-Siri Infomation Card = type=http-response, pattern=^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*), requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
+Siri Infomation Card = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?, requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
+Siri Infomation Card = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?, requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
 
 [MITM]
 hostname = %APPEND% api*.smoot.apple.com, api*.smoot.apple.cn

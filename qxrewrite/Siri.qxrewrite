@@ -8,13 +8,13 @@
 
 # Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)? url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)? url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
 # Spotlight & Look Up Search (iOS/macOS)
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)? url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)? url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
 # Siri Infomation Card (macOS)
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)? url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)? url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
 
 hostname = api*.smoot.apple.com, api*.smoot.apple.cn
