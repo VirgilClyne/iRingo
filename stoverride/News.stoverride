@@ -1,0 +1,32 @@
+name:  iRingo for News
+desc: (V2) 1.自定义解锁News的地区 2.Coming Soon… 注：该覆写包含代理规则，使用过程中gateway.icloud.com会走与News相同的代理线路。
+
+rules:
+  - DOMAIN-SUFFIX,news-edge.apple.com,Proxy
+  - DOMAIN-SUFFIX,news-events.apple.com,Proxy
+  - DOMAIN-SUFFIX,apple.comscoreresearch.com,Proxy
+  - URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*,Proxy
+  
+http:
+  mitm:
+    - "news-client.apple.com"
+    - "news-client-search.apple.com"
+    - "news-edge.apple.com"
+    - "news-events.apple.com"
+    - "newsletter-edge.apple.com"
+  script:
+    - match: ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?
+      name: News.request
+      type: request
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?
+      name: News.request
+      type: request
+      require-body: false
+      timeout: 10
+
+script-providers:
+  News.request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/News.request.js
+    interval: 86400

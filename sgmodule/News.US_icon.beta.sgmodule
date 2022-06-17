@@ -8,10 +8,10 @@
 
 [Rule]
 # > Apple News
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/News.list,🌑Proxy
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/News.list,🇺🇸美国
 
 [Script]
-News = type=http-request, pattern=^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async).*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/News.request.beta.js
+News = type=http-request, pattern=^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/News.request.beta.js
 News Search = type=http-request, pattern=^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/News.request.beta.js
 
 [MITM]

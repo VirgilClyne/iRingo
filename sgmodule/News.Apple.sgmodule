@@ -1,0 +1,18 @@
+#!name= iRingo for News
+#!desc=(V2) 1.自定义解锁News的地区 2.Coming Soon… 注：该模块包含代理规则组，使用过程中gateway.icloud.com会走与News相同的代理线路。
+#!openUrl=http://boxjs.com/#/app/iRingo.News
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/📰News
+#!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
+
+[Rule]
+# > Apple News
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/News.list,Apple
+
+[Script]
+News = type=http-request, pattern=^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async).*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+News Search = type=http-request, pattern=^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+
+[MITM]
+hostname = %APPEND% news-client.apple.com, news-client-search.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com
