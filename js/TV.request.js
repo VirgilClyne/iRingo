@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.1.2-request");
+const $ = new Env("Apple TV v2.1.3-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -123,22 +123,23 @@ const DataBase = {
 /***************** Async Function *****************/
 /**
  * Get Environment Variables
+ * @link https://github.com/VirgilClyne/VirgilClyne/blob/main/function/getENV/getENV.min.js
  * @author VirgilClyne
  * @param {String} t - Persistent Store Key
  * @param {String} e - Platform Name
- * @param {Object} n - Default DataBase
+ * @param {Object} n - Default Database
  * @return {Promise<*>}
  */
-async function getENV(t,e,n){let i=$.getjson(t,n),s=i?.[e]?.Settings||n?.[e]?.Settings||n?.Default?.Settings,g=i?.[e]?.Configs||n?.[e]?.Configs||n?.Default?.Configs,f=i?.[e]?.Caches||void 0;if("string"==typeof f&&(f=JSON.parse(f)),"undefined"!=typeof $argument){if($argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("=")))),e={};for(var a in t)o(e,a,t[a]);Object.assign(s,e)}function o(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}return{Settings:s,Caches:f,Configs:g}}
+async function getENV(t,e,n){let i=$.getjson(t,n),s={};if("undefined"!=typeof $argument&&Boolean($argument)){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));for(let e in t)f(s,e,t[e])}let g={...n?.Default?.Settings,...n?.[e]?.Settings,...i?.[e]?.Settings,...s},o={...n?.Default?.Configs,...n?.[e]?.Configs,...i?.[e]?.Configs},a=i?.[e]?.Caches||void 0;return"string"==typeof a&&(a=JSON.parse(a)),{Settings:g,Caches:a,Configs:o};function f(t,e,n){e.split(".").reduce(((t,i,s)=>t[i]=e.split(".").length===++s?n:t[i]||{}),t)}}
 
- /**
-  * Set Environment Variables
-  * @author VirgilClyne
-  * @param {String} name - Persistent Store Key
-  * @param {String} platform - Platform Name
-  * @param {Object} database - Default DataBase
-  * @return {Promise<*>}
-  */
+/**
+ * Set Environment Variables
+ * @author VirgilClyne
+ * @param {String} name - Persistent Store Key
+ * @param {String} platform - Platform Name
+ * @param {Object} database - Default DataBase
+ * @return {Promise<*>}
+ */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches = {}, Configs } = await getENV(name, platform, database);
