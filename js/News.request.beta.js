@@ -34,7 +34,7 @@ const DataBase = {
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings, Caches, Configs } = await setENV("iRingo", "TV", DataBase);
+	const { Settings, Caches, Configs } = await setENV("iRingo", "News", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
