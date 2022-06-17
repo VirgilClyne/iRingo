@@ -15,12 +15,12 @@ http:
     - "news-events.apple.com"
     - "newsletter-edge.apple.com"
   script:
-    - match: ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?
+    - match: ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?$
       name: News.request
       type: request
       require-body: true
       timeout: 10
-    - match: ^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?
+    - match: ^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?$
       name: News.request
       type: request
       require-body: false

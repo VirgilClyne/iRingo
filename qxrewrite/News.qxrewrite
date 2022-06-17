@@ -6,7 +6,7 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/📰News
 #!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
 
-^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)? url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
-^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)? url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?$ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
 
 hostname = news-client.apple.com, news-client-search.apple.com, news-edge.apple.com, news-events.apple.com, newsletter-edge.apple.com
