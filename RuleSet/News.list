@@ -5,5 +5,6 @@ DOMAIN-SUFFIX,gateway.icloud.com
 DOMAIN-SUFFIX,news-edge.apple.com
 DOMAIN-SUFFIX,news-events.apple.com
 DOMAIN-SUFFIX,apple.comscoreresearch.com
-# News+ Audio
+
+# > News+ Audio
 URL-REGEX,^https?:\/\/news-assets\.apple\.com\/.*(audio-narrative).*
