@@ -1484,7 +1484,7 @@
 					"name": "国家或地区代码",
 					"val": "US",
 					"type": "selects",
-					"desc": "不同国家或地区提供的内容或有差别，此选项同时会影响分配给您不同地区的Siri服务器",
+					"desc": "不同国家或地区提供的内容或有差别",
 					"items": [
 						{
 							"key": "AUTO",
@@ -1531,6 +1531,13 @@
 							"label": "加拿大"
 						}
 					]
+				},
+				{
+					"id": "@iRingo.News.Settings.newsPlusUser",
+					"name": "是否News+用户",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否News+用户"
 				}
 			],
 			"author": "@VirgilClyne",
