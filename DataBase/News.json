@@ -2,6 +2,6 @@
     "Settings": {
         "Switch": true,
         "CountryCode": "US",
-        "newsPlusUser": "AUTO"
+        "newsPlusUser": true
     }
 }

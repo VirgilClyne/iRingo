@@ -22,7 +22,7 @@ const DataBase = {
 		}
 	},
     "News":{
-		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":"AUTO"}
+		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -56,7 +56,7 @@ const DataBase = {
 				break;
 			case "v1/search":
 				if (Settings.CountryCode !== "AUTO") url.params.storefrontID = Configs?.Storefront[Settings?.CountryCode] ?? "143441"
-				if (Settings.newsPlusUser !== "AUTO") url.params.newsPlusUser = Settings?.newsPlusUser ?? true
+				url.params.newsPlusUser = Settings?.newsPlusUser ?? true
 				break;
 			default:
 				break;
