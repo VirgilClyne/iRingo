@@ -41,7 +41,7 @@ const DataBase = {
 		switch (url.path) {
 			case "v1/configs":
                 let configs = JSON.parse($request.body);
-                if (configs.deviceInfo.preferredLanguages) configs.deviceInfo.preferredLanguages = configs.deviceInfo.preferredLanguages.unshift(["zh-CN", "zh-Hans-US", "zh-Hant-US"]);
+                if (configs?.deviceInfo?.preferredLanguages) configs.deviceInfo.preferredLanguages.unshift("zh-CN", "zh-Hans-US", "zh-Hant-US");
                 if (Settings.CountryCode !== "AUTO") configs.deviceInfo.countryCode = Settings?.CountryCode ?? "US";
                 $request.body = JSON.stringify(configs);
 				break;
