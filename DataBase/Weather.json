@@ -16,7 +16,7 @@
 		}
 	},
 	"Config": {
-		"availability": [
+		"Availability": [
 			"currentWeather",
 			"forecastDaily",
 			"forecastHourly",
