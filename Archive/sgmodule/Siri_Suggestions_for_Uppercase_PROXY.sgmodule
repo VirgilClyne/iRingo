@@ -3,7 +3,7 @@
 
 [Rule]
 # > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Wikipedia_for_Look_Up.list,PROXY
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/RuleSet/Wikipedia_for_Look_Up.list,PROXY
 
 [Script]
 # Redirect Siri Suggestions Service 
