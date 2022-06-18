@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple News v2.0.1-request-beta");
+const $ = new Env("Apple News v2.0.2-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -21,7 +21,7 @@ const DataBase = {
 			"Tabs":{"zh":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hans":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hant":{"WatchNow":"立即觀看","Originals":"原創內容","Movies":"電影","TV":"電視節目","Store":"商店","Sports":"體育節目","Kids":"兒童","Library":"資料庫","Search":"蒐索"},"en":{"WatchNow":"Watch Now","Originals":"Originals","Movies":"Movies","TV":"TV Shows","Store":"Store","Sports":"Sports","Kids":"Kids","Library":"Library","Search":"Search"}}
 		}
 	},
-    "News":{
+	"News":{
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"Default": {
@@ -40,19 +40,23 @@ const DataBase = {
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
 		switch (url.path) {
 			case "v1/configs":
-                let configs = JSON.parse($request.body);
-                if (configs?.deviceInfo?.preferredLanguages) configs.deviceInfo.preferredLanguages.unshift("zh-CN", "zh-Hans-US", "zh-Hant-US");
-                if (Settings.CountryCode !== "AUTO") configs.deviceInfo.countryCode = Settings?.CountryCode ?? "US";
-                $request.body = JSON.stringify(configs);
+				let configs = JSON.parse($request.body);
+				if (Settings.CountryCode !== "AUTO") configs.storefrontId = Configs?.Storefront[Settings?.CountryCode] ?? "143441"
+				if (configs?.deviceInfo?.preferredLanguages) {
+					configs.deviceInfo.preferredLanguages.unshift("zh-SG", "zh-Hans-US", "zh-Hant-US");
+					configs.deviceInfo.preferredLanguages.push("en");
+				}
+				if (Settings.CountryCode !== "AUTO") configs.deviceInfo.countryCode = Settings?.CountryCode ?? "US";
+				$request.body = JSON.stringify(configs);
 				break;
 			case "analyticseventsv2/async":
-                let async = JSON.parse($request.body);
-                if (async?.data?.session?.mobileData) {
-                    async.data.session.mobileData.countryCode = "310";
-                    async.data.session.mobileData.carrier = "Google Fi";
-                    async.data.session.mobileData.networkCode = "260";
-                };
-                $request.body = JSON.stringify(async);
+				let async = JSON.parse($request.body);
+				if (async?.data?.session?.mobileData) {
+					async.data.session.mobileData.countryCode = "310";
+					async.data.session.mobileData.carrier = "Google Fi";
+					async.data.session.mobileData.networkCode = "260";
+				};
+				$request.body = JSON.stringify(async);
 				break;
 			case "v1/search":
 				if (Settings.CountryCode !== "AUTO") url.params.storefrontID = Configs?.Storefront[Settings?.CountryCode] ?? "143441"
