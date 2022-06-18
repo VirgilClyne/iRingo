@@ -1,0 +1,10 @@
+payload:
+# > iCloud Private Relay
+  # https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
+  # https://mask-api.icloud.com/egress-ip-ranges.csv
+  - DOMAIN,mask-api.icloud.com
+  - DOMAIN,mask-api.fe.apple-dns.net
+  - DOMAIN,mask.icloud.com
+  - DOMAIN,mask.apple-dns.net
+  - DOMAIN,mask-h2.icloud.com
+  - DOMAIN,mask-t.apple-dns.net
