@@ -4,10 +4,10 @@
 
 # Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Siri_Suggestions.js
+^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/bag\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Siri_Suggestions.js
 # Spotlight & Look Up Search (iOS/macOS)
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Siri_Suggestions.js
+^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/search\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Siri_Suggestions.js
 # Siri Infomation Card (macOS)
-^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Siri_Suggestions.js
+^https?:\/\/api.*\.smoot\.apple\.(com|cn)\/card\?(.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Siri_Suggestions.js
 
 hostname = api*.smoot.apple.com, api*.smoot.apple.cn

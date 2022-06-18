@@ -53,5 +53,5 @@ http:
 
 script-providers:
   Apple_TV:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/Apple_TV.js
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Apple_TV.js
     interval: 86400
