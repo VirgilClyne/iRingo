@@ -1,7 +1,7 @@
 {
-    "Settings": {
-        "Switch": true,
-        "CountryCode": "US",
-        "newsPlusUser": true
-    }
+	"Settings": {
+		"Switch": true,
+		"CountryCode": "US",
+		"newsPlusUser": true
+	}
 }
