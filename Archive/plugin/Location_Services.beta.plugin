@@ -8,10 +8,10 @@
 
 [Script]
 # Response Location Services Geo Country Code Check Result to US
-http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/archive/Location_Services.beta.js, tag=Location_Services
+http-request ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Location_Services.beta.js, tag=Location_Services
 # Rewrite Location Services Configuration Functions Internationalization
-http-request ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/archive/Location_Services.beta.js, requires-body=true, tag=Location_Services
-http-response ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/archive/Location_Services.beta.js, requires-body=true, tag=Location_Services, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true
+http-request ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Location_Services.beta.js, requires-body=true, tag=Location_Services
+http-response ^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Location_Services.beta.js, requires-body=true, tag=Location_Services, argument=EnableAlberta=false&GEOAddressCorrectionEnabled=true&LocalitiesAndLandmarksSupported=true&PedestrianAREnabled=true&ShouldEnableLagunaBeach=true
 
 [MITM]
 hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com
