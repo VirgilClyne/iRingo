@@ -1,0 +1,28 @@
+#!name= Enable iCloud Private Relay on gateway
+#!desc=(BETA) 为终端设备启用iCloud专用代理，需要Surge for macOS启用网关模式。
+#!system=mac
+
+[Rule]
+# > iCloud Private Relay
+# https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
+DOMAIN,mask-api.icloud.com,🌑Proxy
+DOMAIN,mask-api.fe.apple-dns.net,🌑Proxy
+# Optimize for Private Relay connections
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(IP-CIDR,17.0.0.0/8,no-resolve)),🌐Direct, interface=en0, allow-other-interface=true
+# Allow for network traffic audits
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌑Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌑Proxy
+
+[Header Rewrite]
+^https?:\/\/p[\d]{1,3}-acsegateway\.icloud\.com header-replace X-MMe-Country TW
+
+[MITM]
+hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, p*-acsegateway.icloud.com
