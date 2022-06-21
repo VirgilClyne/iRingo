@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.0.0-request");
+const $ = new Env("TestFlight v1.1.0-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US"}
+		"Settings":{"Switch":true,"CountryCode":"US","storeCookies":false}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -42,9 +42,19 @@ const DataBase = {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
 		switch (url.path) {
+			case "v1/properties/testflight":
+				break;
 			case "v1/session/authenticate":
 				let authenticate = JSON.parse($request.body);
 				if (Settings.CountryCode !== "AUTO") authenticate.storeFrontIdentifier = authenticate.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
+				if (Settings.storeCookies) { // 保存Cookies
+					if (Object.keys(Caches).length !== 0) { // Caches非空
+						if (authenticate.dsId !== Caches?.dsId) { // DS ID不相等，覆盖iTunes Store Cookie
+							authenticate.dsId = Caches.dsId;
+							authenticate.storeCookies = Caches.storeCookies;
+						} else $.setjson(authenticate, "@iRingo.TestFlight.Caches");
+					} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // Caches空
+				}
 				$request.body = JSON.stringify(authenticate);
 				break;
 			default:
@@ -88,6 +98,7 @@ async function setENV(name, platform, database) {
 	let { Settings, Caches = {}, Configs } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
+	Settings.storeCookies = JSON.parse(Settings.storeCookies) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };

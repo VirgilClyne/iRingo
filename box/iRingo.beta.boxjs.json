@@ -1546,6 +1546,93 @@
 				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Apple_News.png",
 				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple_News.png"
 			]
+		},
+		{
+			"id": "iRingo.TestFlight.beta",
+			"name": "TestFlight β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/✈️TestFlight\">✈️TestFlight</a>的使用说明进行配置",
+				"影响功能范围……等"
+			],
+			"keys": [
+				"@iRingo.TestFlight.Settings",
+				"@iRingo.TestFlight.Caches"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.TestFlight.Settings.Switch",
+					"name": "总功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此APP修改"
+				},
+				{
+					"id": "@iRingo.TestFlight.Settings.CountryCode",
+					"name": "国家或地区代码",
+					"val": "US",
+					"type": "selects",
+					"desc": "不同国家或地区提供的内容或有差别",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（跟随地区检测结果）"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TestFlight.Settings.storeCookies",
+					"name": "是否保存iTunes Store Cookie",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否保存iTunes Store Cookie"
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/",
+			"icons": [
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/TestFlight_2.png",
+				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TestFlight_2.png"
+			]
 		}
 	]
 }
