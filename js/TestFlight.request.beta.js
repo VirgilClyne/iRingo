@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.2.0-request");
+const $ = new Env("TestFlight v1.2.1-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -48,24 +48,27 @@ const DataBase = {
 				let authenticate = JSON.parse($request.body);
 				if (Settings.CountryCode !== "AUTO") authenticate.storeFrontIdentifier = authenticate.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
 				if (Settings.storeCookies) { // 保存Cookies
+					$.log(`🚧 ${$.name}, storeCookies`, "");
 					if (Object.keys(Caches).length !== 0) { // Caches非空
+						$.log(`🚧 ${$.name}, Caches非空`, "");
 						if (authenticate.dsId !== Caches?.dsId) { // DS ID不相等，覆盖iTunes Store Cookie
+							$.log(`🚧 ${$.name}, DS ID不相等，覆盖iTunes Store Cookie`, "");
 							authenticate.dsId = Caches.dsId;
 							authenticate.storeCookies = Caches.storeCookies;
-						} else $.setjson(authenticate, "@iRingo.TestFlight.Caches");
+						} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // DS ID相等
 					} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // Caches空
 				}
 				$request.body = JSON.stringify(authenticate);
 				break;
 			default:
-				if (/\/apps$/i.test(url.path)) $.log(`⚠ ${$.name}, /app`, "");
-				else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`⚠ ${$.name}, /app/bulids`, "");
+				if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /app`, "");
+				else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
 				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-					$.log(`⚠ ${$.name}, /app/bulids/install`, "");
+					$.log(`🚧 ${$.name}, /app/bulids/install`, "");
 					let install = JSON.parse($request.body);
 					if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
 					$request.body = JSON.stringify(install);
-				} else $.log(`⚠ ${$.name}, unknown`, "");
+				} else $.log(`🚧 ${$.name}, unknown`, "");
 				break;
 		}
 		$request.url = URL.stringify(url);
