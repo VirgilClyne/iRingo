@@ -7,9 +7,8 @@
 #!icon=https://github.com/Koolson/Qure/blob/master/IconSet/Color/TestFlight_2.png
 
 [Script]
-# Rewrite TestFlight
 TestFlight Authenticate = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/v1\/session\/authenticate(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=
-# TestFlight Authenticate  = type=http-response, pattern=^https?:\/\/testflight\.apple\.com\/v1\/session\/authenticate(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.response.beta.js, argument=
+TestFlight Apps Install  = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/v2\/accounts\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\/apps\/\d+\/builds\/\d+\/install(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% testflight.apple.com

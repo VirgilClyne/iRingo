@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.1.0-request");
+const $ = new Env("TestFlight v1.2.0-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -60,8 +60,12 @@ const DataBase = {
 			default:
 				if (/\/apps$/i.test(url.path)) $.log(`⚠ ${$.name}, /app`, "");
 				else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`⚠ ${$.name}, /app/bulids`, "");
-				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) $.log(`⚠ ${$.name}, /app/bulids/install`, "");
-				else $.log(`⚠ ${$.name}, unknown`, "");
+				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+					$.log(`⚠ ${$.name}, /app/bulids/install`, "");
+					let install = JSON.parse($request.body);
+					if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
+					$request.body = JSON.stringify(install);
+				} else $.log(`⚠ ${$.name}, unknown`, "");
 				break;
 		}
 		$request.url = URL.stringify(url);
