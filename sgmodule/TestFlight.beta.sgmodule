@@ -1,5 +1,5 @@
 #!name= iRingo for TestFlight
-#!desc=(BETA) 1.自定义TestFlight登录商店地区
+#!desc=(BETA) 1.自定义TestFlight登录商店地区 2.多TF账户切换支持
 #!openUrl=http://boxjs.com/#/app/iRingo.TestFlight.beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
@@ -7,8 +7,8 @@
 #!icon=https://github.com/Koolson/Qure/blob/master/IconSet/Color/TestFlight_2.png
 
 [Script]
-TestFlight Authenticate = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/v1\/session\/authenticate(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=
-TestFlight Apps Install  = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/v2\/accounts\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\/apps\/\d+\/builds\/\d+\/install(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=
+TestFlight = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=
+TestFlight = type=http-response, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.response.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% testflight.apple.com

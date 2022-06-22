@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.0-request-beta");
+const $ = new Env("TestFlight v1.0.0-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -45,9 +45,16 @@ const DataBase = {
 			case "v1/properties/testflight":
 				break;
 			case "v1/session/authenticate":
-				let authenticate = JSON.parse($request.body);
-				if (Settings.CountryCode !== "AUTO") authenticate.storeFrontIdentifier = authenticate.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
-				$request.body = JSON.stringify(authenticate);
+				let authenticate = JSON.parse($response.body);
+				if (Settings.storeCookies) { // 保存Cookies
+					$.log(`🚧 ${$.name}, storeCookies`, "");
+					if (Object.keys(Caches).length !== 0) { // Caches非空
+						$.log(`🚧 ${$.name}, Caches非空`, "");
+						if (authenticate?.data?.accountId !== Caches?.data?.accountId) { // Account ID不相等，Rewrite
+							$.log(`🚧 ${$.name}, Account ID不相等`, "");
+						} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // Account ID相等，刷新缓存
+					} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // Caches空
+				}
 				break;
 			case "v1/devices":
 			case "v1/devices/apns":
@@ -57,39 +64,17 @@ const DataBase = {
 			default:
 				if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /app`, "");
 				else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-					$.log(`🚧 ${$.name}, /app/bulids/install`, "");
-					let install = JSON.parse($request.body);
-					if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
-					$request.body = JSON.stringify(install);
-				} else $.log(`🚧 ${$.name}, unknown`, "");
+				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids/install`, "");
+				else $.log(`🚧 ${$.name}, unknown`, "");
 				break;
-		};
-
-		if (Settings.storeCookies) { // 保存Cookies
-			$.log(`🚧 ${$.name}, storeCookies`, "");
-			if (Object.keys(Caches).length !== 0) { // Caches非空
-				$.log(`🚧 ${$.name}, Caches非空`, "");
-				if (Caches?.data) { // data存在`
-					$.log(`🚧 ${$.name}, data存在`, "");
-					if (/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i.test(url.path)) {// UUID 存在
-						$.log(`🚧 ${$.name}, UUID 存在`, "");
-						url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//, `/${Caches.data.accountId}/`);
-					}
-					if ($request?.headers?.["X-Session-Id"]) {// "X-Session-Id"存在
-						$.log(`🚧 ${$.name}, "X-Session-Id"存在`, "");
-						$request.headers["X-Session-Id"] = Caches.data.sessionId;
-					}
-				}
-			};
 		};
 		$request.url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) $.done({  url: $request.url, headers: $request.headers, body: $request.body })
-		else $.done($request)
+		if ($.isQuanX()) $.done()
+		else $.done()
 	})
 
 /***************** Function *****************/
