@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.0.0-response-beta");
+const $ = new Env("TestFlight v1.0.4-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -37,7 +37,7 @@ const DataBase = {
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings, Caches, Configs } = await setENV("iRingo", "TestFlight", DataBase);
+	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "TestFlight", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
@@ -48,13 +48,15 @@ const DataBase = {
 				let authenticate = JSON.parse($response.body);
 				if (Settings.storeCookies) { // 保存Cookies
 					$.log(`🚧 ${$.name}, storeCookies`, "");
-					if (Object.keys(Caches).length !== 0) { // Caches非空
-						$.log(`🚧 ${$.name}, Caches非空`, "");
+					if (Caches?.data) { //有data
+						$.log(`🚧 ${$.name}, 有Caches, Caches.data`, "");
 						if (authenticate?.data?.accountId !== Caches?.data?.accountId) { // Account ID不相等，Rewrite
-							$.log(`🚧 ${$.name}, Account ID不相等`, "");
-						} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // Account ID相等，刷新缓存
-					} else $.setjson(authenticate, "@iRingo.TestFlight.Caches"); // Caches空
+							$.log(`🚧 ${$.name}, Account ID不相等，覆盖accountId和sessionId`, "");
+							authenticate.data = Caches.data;
+						} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Account ID相等，刷新缓存
+					} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Caches空
 				}
+				$request.body = JSON.stringify(authenticate);
 				break;
 			case "v1/devices":
 			case "v1/devices/apns":
@@ -68,13 +70,13 @@ const DataBase = {
 				else $.log(`🚧 ${$.name}, unknown`, "");
 				break;
 		};
-		$request.url = URL.stringify(url);
+		$request.url = URL.stringify(url)
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) $.done()
-		else $.done()
+		if ($.isQuanX()) $.done({ body: $response.body })
+		else $.done($response)
 	})
 
 /***************** Function *****************/

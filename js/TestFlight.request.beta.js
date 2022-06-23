@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.0-request-beta");
+const $ = new Env("TestFlight v1.3.4-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -37,7 +37,7 @@ const DataBase = {
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings, Caches, Configs } = await setENV("iRingo", "TestFlight", DataBase);
+	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "TestFlight", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
@@ -46,6 +46,17 @@ const DataBase = {
 				break;
 			case "v1/session/authenticate":
 				let authenticate = JSON.parse($request.body);
+				if (Settings.storeCookies) { // 保存Cookies
+					$.log(`🚧 ${$.name}, storeCookies`, "");
+					if (Caches?.dsId && Caches?.storeCookies) { // 有 DS ID和iTunes Store Cookie
+						$.log(`🚧 ${$.name}, 有Caches, DS ID和iTunes Store Cookie`, "");
+						if (authenticate.dsId !== Caches?.dsId) { // DS ID不相等，覆盖iTunes Store Cookie
+							$.log(`🚧 ${$.name}, DS ID不相等，覆盖DS ID和iTunes Store Cookie`, "");
+							authenticate.dsId = Caches.dsId;
+							authenticate.storeCookies = Caches.storeCookies;
+						} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // DS ID相等，刷新缓存
+					} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Caches空
+				}
 				if (Settings.CountryCode !== "AUTO") authenticate.storeFrontIdentifier = authenticate.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
 				$request.body = JSON.stringify(authenticate);
 				break;
@@ -70,7 +81,7 @@ const DataBase = {
 			$.log(`🚧 ${$.name}, storeCookies`, "");
 			if (Object.keys(Caches).length !== 0) { // Caches非空
 				$.log(`🚧 ${$.name}, Caches非空`, "");
-				if (Caches?.data) { // data存在`
+				if (Caches?.data) { // authenticate.data存在`
 					$.log(`🚧 ${$.name}, data存在`, "");
 					if (/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i.test(url.path)) {// UUID 存在
 						$.log(`🚧 ${$.name}, UUID 存在`, "");
