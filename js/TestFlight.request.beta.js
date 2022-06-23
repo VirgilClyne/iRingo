@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.5-request-beta");
+const $ = new Env("TestFlight v1.3.6-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -54,7 +54,10 @@ const DataBase = {
 						if (authenticate.dsId !== Caches?.dsId) { // DS ID不相等，覆盖iTunes Store Cookie
 							$.log(`🚧 ${$.name}, DS ID不相等，覆盖DS ID和iTunes Store Cookie`, "");
 							authenticate.dsId = Caches.dsId;
+							authenticate.deviceModel = Caches.deviceModel;
 							authenticate.storeCookies = Caches.storeCookies;
+							authenticate.deviceVendorId = Caches.deviceVendorId;
+							authenticate.deviceName = Caches.deviceName;
 						} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // DS ID相等，刷新缓存
 					} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Caches空
 				}
