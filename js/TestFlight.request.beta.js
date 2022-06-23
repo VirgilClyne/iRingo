@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.4-request-beta");
+const $ = new Env("TestFlight v1.3.5-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US","storeCookies":false}
+		"Settings":{"Switch":true,"CountryCode":"US","storeCookies":false,"Rosetta":true}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -43,6 +43,7 @@ const DataBase = {
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
 		switch (url.path) {
 			case "v1/properties/testflight":
+				$request.headers["X-Apple-Rosetta-Available"] = Settings.Rosetta;
 				break;
 			case "v1/session/authenticate":
 				let authenticate = JSON.parse($request.body);
@@ -129,6 +130,7 @@ async function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.storeCookies = JSON.parse(Settings.storeCookies) // BoxJs字符串转Boolean
+	Settings.Rosetta = JSON.parse(Settings.Rosetta) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };
