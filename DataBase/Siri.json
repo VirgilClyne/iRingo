@@ -22,5 +22,34 @@
 			"visualintelligence"
 		],
 		"Safari_Smart_History": true
+	},
+	"Configs": {
+		"VisualIntelligence": {
+			"enabled_domains": [
+				"pets",
+				"media",
+				"books",
+				"art",
+				"nature",
+				"landmarks"
+			],
+			"supported_domains": [
+				"OBJECT_2D",
+				"SCULPTURE",
+				"ART",
+				"CATS",
+				"DOGS",
+				"LANDMARK",
+				"ALBUM",
+				"SKYLINE",
+				"BIRDS",
+				"NATURE",
+				"ANIMALS",
+				"INSECTS",
+				"BOOK",
+				"MEDIA",
+				"NATURAL_LANDMARK"
+			]
+		}
 	}
 }
