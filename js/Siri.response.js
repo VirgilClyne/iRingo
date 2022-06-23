@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.0.6-response");
+const $ = new Env("Apple Siri v2.1.3-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -12,7 +12,10 @@ const DataBase = {
 		"Configs":{"Availability":["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality"],"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
 	},
 	"Siri":{
-		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
+		"Configs":{
+			"VisualIntelligence":{"enabled_domains":["pets","media","books","art","nature","landmarks"],"supported_domains":["OBJECT_2D","SCULPTURE","ART","CATS","DOGS","LANDMARK","ALBUM","SKYLINE","BIRDS","NATURE","ANIMALS","INSECTS","BOOK","MEDIA","NATURAL_LANDMARK"]}
+		}
 	},
 	"TV":{
 		"Settings":{"Switch":true,"Third-Party":true,"Configs":{"CountryCode":"AUTO","Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"]},"View":{"CountryCode":["SG","TW"]},"WatchNow":{"CountryCode":"AUTO"},"Channels":{"CountryCode":"AUTO"},"Originals":{"CountryCode":"TW"},"Movies":{"CountryCode":"AUTO"},"TV":{"CountryCode":"AUTO"},"Sports":{"CountryCode":"US"},"Kids":{"CountryCode":"US"},"Persons":{"CountryCode":"SG"},"Search":{"CountryCode":"TW"},"Others":{"CountryCode":"AUTO"}},
@@ -34,7 +37,7 @@ const DataBase = {
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings, Caches } = await setENV("iRingo", "Siri", DataBase);
+	const { Settings, Caches, Configs } = await setENV("iRingo", "Siri", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		let data = JSON.parse($response.body);
@@ -46,11 +49,11 @@ const DataBase = {
 				//data.search_url = data?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
 				//data.feedback_url = data?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
 				if (data?.enabled_domains) {
-					data.enabled_domains = Array.from(new Set([...data?.enabled_domains ?? [], ...Settings.Domains]));
+					data.enabled_domains = [...new Set([...data?.enabled_domains ?? [], ...Settings.Domains])];
 					$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(data.enabled_domains)}`, "");
 				}
 				if (data?.scene_aware_lookup_enabled_domains) {
-					data.scene_aware_lookup_enabled_domains = Array.from(new Set([...data?.scene_aware_lookup_enabled_domains ?? [], ...Settings.Domains]));
+					data.scene_aware_lookup_enabled_domains = [...new Set([...data?.scene_aware_lookup_enabled_domains ?? [], ...Settings.Domains])];
 					$.log(`🎉 ${$.name}, 领域列表`, `scene_aware_lookup_enabled_domains: ${JSON.stringify(data.scene_aware_lookup_enabled_domains)}`, "");
 				}
 				data.min_query_len = 3;
@@ -93,8 +96,8 @@ const DataBase = {
 					};
 					let VisualIntelligence = Functions?.visualintelligence;
 					if (VisualIntelligence) {
-						//VisualIntelligence.enabled_domains = ["pets","media","books","art","nature","landmarks"];
-						//VisualIntelligence.supported_domains = ["ART","BOOK","CATS","DOGS","NATURE","MEDIA","LANDMARK","OBJECT_2D","ALBUM"],
+						VisualIntelligence.enabled_domains = [...new Set([...VisualIntelligence.enabled_domains ?? [], ...Configs.VisualIntelligence.enabled_domains])];
+						VisualIntelligence.supported_domains = [...new Set([...VisualIntelligence.supported_domains ?? [], ...Configs.VisualIntelligence.supported_domains])];
 					};
 				}
 				// Safari Smart History
@@ -153,14 +156,14 @@ async function getENV(t,e,n){let i=$.getjson(t,n),s={};if("undefined"!=typeof $a
  */
 async function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let { Settings, Caches = {} } = await getENV(name, platform, database);
+	let { Settings, Caches = {}, Configs } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return { Settings, Caches }
+	return { Settings, Caches, Configs }
 };
 
 /***************** Env *****************/
