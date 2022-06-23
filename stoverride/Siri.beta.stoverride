@@ -1,6 +1,11 @@
 name:  iRingo for Siri & Search
-desc: (V2) 全面自定义「Siri与搜索」的功能。
+desc: (BETA for Stash 2.0) 全面自定义「Siri与搜索」的功能。注：该覆写包含代理规则。
 
+rules:
+  - DOMAIN-SUFFIX,lookup-api.apple.com,Proxy
+  - DOMAIN-SUFFIX,lookup-api.apple.com.edgekey.net,Proxy
+  - DOMAIN-SUFFIX,e16991.b.akamaiedge.net,Proxy
+  
 http:
   mitm:
     - "api*.smoot.apple.com"
