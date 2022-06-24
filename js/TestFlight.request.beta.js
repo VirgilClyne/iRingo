@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.9-request-beta");
+const $ = new Env("TestFlight v1.3.10-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US","storeCookies":false}
+		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -74,7 +74,8 @@ const DataBase = {
 			default:
 				if (/\/accounts\//i.test(url.path)) {
 					// headers auth mod
-					if (Settings.storeCookies) { // 使用Cookies
+					if (Settings.MultiAccount) { // MultiAccount
+						$.log(`🚧 ${$.name}, 启用多账号支持`, "");
 						if (Caches?.data) { // Caches.data存在`
 							$.log(`🚧 ${$.name}, data存在`, "");
 							if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
@@ -155,7 +156,7 @@ async function setENV(name, platform, database) {
 	let { Settings, Caches = {}, Configs } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	Settings.storeCookies = JSON.parse(Settings.storeCookies) // BoxJs字符串转Boolean
+	Settings.MultiAccount = JSON.parse(Settings.MultiAccount) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };

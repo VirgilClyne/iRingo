@@ -1620,11 +1620,11 @@
 					]
 				},
 				{
-					"id": "@iRingo.TestFlight.Settings.storeCookies",
-					"name": "是否保存iTunes Store Cookie",
+					"id": "@iRingo.TestFlight.Settings.MultiAccount",
+					"name": "启用多账号支持",
 					"val": false,
 					"type": "boolean",
-					"desc": "是否保存iTunes Store Cookie"
+					"desc": "是否启用多账号支持，会自动保存保存更新当前账号信息"
 				}
 			],
 			"author": "@VirgilClyne",
