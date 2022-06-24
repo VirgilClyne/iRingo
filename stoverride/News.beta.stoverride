@@ -28,5 +28,5 @@ http:
 
 script-providers:
   News.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/News.request.js
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/News.request.beta.js
     interval: 86400
