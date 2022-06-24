@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.10-request-beta");
+const $ = new Env("TestFlight v1.3.11-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false}
+		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false,"Universal":true}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -157,6 +157,7 @@ async function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.MultiAccount = JSON.parse(Settings.MultiAccount) // BoxJs字符串转Boolean
+	Settings.Universal = JSON.parse(Settings.Universal) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };

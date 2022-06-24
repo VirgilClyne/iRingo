@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.0.8-response-beta");
+const $ = new Env("TestFlight v1.1.0-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false}
+		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false,"Universal":true}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -79,9 +79,44 @@ const DataBase = {
 				if (/\/accounts\//i.test(url.path)) {
 					// app info mod
 					if (/\/apps/i.test(url.path)) {
-						$.log(`🚧 ${$.name}, /apps`, "");
-						if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /apps`, "");
-						else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
+						$.log(`🚧 ${$.name}, apps`, "");
+						if (/\/apps$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /apps`, "")
+							if (Settings.Universal) { // 通用
+								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+								let apps = JSON.parse($response.body);
+								if (apps.error === null) { // 数据无错误
+									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									apps.data = apps.data.map(app => {
+										if (app.previouslyTested !== false) { // 不是前测试人员
+											$.log(`🚧 ${$.name}, 不是前测试人员`, "");
+											app.platforms = app.platforms.map(platform => {
+												switch (platform) {
+													case "ios":
+														$.log(`🚧 ${$.name}, ios`, "");
+														platform.build.universal = true;
+														platform.build.compatible = true;
+														break;
+													case "osx":
+														$.log(`🚧 ${$.name}, osx`, "");
+														if (platform.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
+															$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
+															platform.build.compatible = true;
+														}
+														break;
+													case "appletvos":
+														$.log(`🚧 ${$.name}, appletvos`, "");
+														break;
+												}
+												return platform
+											});
+										}
+										return app
+									});
+								}
+								$response.body = JSON.stringify(apps);
+							}
+						} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
 						else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
 						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
@@ -125,6 +160,7 @@ async function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.MultiAccount = JSON.parse(Settings.MultiAccount) // BoxJs字符串转Boolean
+	Settings.Universal = JSON.parse(Settings.Universal) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };
