@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.0.5-response-beta");
+const $ = new Env("TestFlight v1.0.6-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -49,23 +49,23 @@ const DataBase = {
 				if (Settings.storeCookies) { // 使用Cookies
 					$.log(`🚧 ${$.name}, storeCookies`, "");
 					if (Caches?.data) { //有data
-						$.log(`🚧 ${$.name}, 有Caches, Caches.data`, "");
-						if (authenticate?.data?.accountId !== Caches?.data?.accountId) { // Account ID不相等，Rewrite
-							$.log(`🚧 ${$.name}, Account ID不相等，覆盖accountId和sessionId`, "");
-							//authenticate.data = Caches.data;
-						} else {
+						$.log(`🚧 ${$.name}, 有Caches.data`, "");
+						if (authenticate?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
 							$.log(`🚧 ${$.name}, Account ID相等，刷新缓存`, "");
 							authenticate.data["X-Request-Id"] = $request.headers["X-Request-Id"];
 							//authenticate.data.sessionId = $request.headers["X-Session-Id"];
 							authenticate.data["X-Session-Digest"] = $request.headers["X-Session-Digest"];
-							$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Account ID相等，刷新缓存
+							$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
+						} else { // Account ID不相等，Rewrite
+							$.log(`🚧 ${$.name}, Account ID不相等，覆盖accountId和sessionId`, "");
+							//authenticate.data = Caches.data;
 						}
-					} else {
+					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
 						authenticate.data["X-Request-Id"] = $request.headers["X-Request-Id"];
 						//authenticate.data.sessionId = $request.headers["X-Session-Id"];
 						authenticate.data["X-Session-Digest"] = $request.headers["X-Session-Digest"];
-						$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Caches空
+						$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
 					}
 				}
 				//$request.body = JSON.stringify(authenticate);

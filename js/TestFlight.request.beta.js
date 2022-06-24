@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.7-request-beta");
+const $ = new Env("TestFlight v1.3.8-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -79,6 +79,7 @@ const DataBase = {
 							if ($request?.headers?.["X-Session-Id"] !== Caches?.data?.sessionId) {// "X-Session-Id"不同
 								$.log(`🚧 ${$.name}, "X-Session-Id"不同，替换`, "");
 								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//, `/${Caches.data.accountId}/`);
+								$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
 								$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
 								$request.headers["X-Session-Id"] = Caches.data.sessionId;
 								$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
@@ -95,23 +96,6 @@ const DataBase = {
 					} else $.log(`🚧 ${$.name}, unknown`, "");
 				}
 				break;
-		};
-
-		if (Settings.storeCookies) { // 保存Cookies
-			$.log(`🚧 ${$.name}, storeCookies`, "");
-			if (Object.keys(Caches).length !== 0) { // Caches非空
-				$.log(`🚧 ${$.name}, Caches非空`, "");
-				if (Caches?.data) { // authenticate.data存在`
-					$.log(`🚧 ${$.name}, data存在`, "");
-					if (/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i.test(url.path)) {// UUID 存在
-						$.log(`🚧 ${$.name}, UUID 存在`, "");
-						url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//, `/${Caches.data.accountId}/`);
-					}
-					$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
-					$request.headers["X-Session-Id"] = Caches.data.sessionId;
-					$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
-				}
-			};
 		};
 		$request.url = URL.stringify(url);
 	}
