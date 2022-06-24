@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.0.6-response-beta");
+const $ = new Env("TestFlight v1.0.7-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -68,7 +68,7 @@ const DataBase = {
 						$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
 					}
 				}
-				//$request.body = JSON.stringify(authenticate);
+				//$response.body = JSON.stringify(authenticate);
 				break;
 			case "v1/devices":
 			case "v1/devices/apns":
@@ -76,13 +76,21 @@ const DataBase = {
 			case "v1/devices/remove":
 				break;
 			default:
-				if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /app`, "");
-				else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids/install`, "");
-				else $.log(`🚧 ${$.name}, unknown`, "");
+				if (/\/accounts\//i.test(url.path)) {
+					// app info mod
+					if (/\/apps/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /apps`, "");
+						if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /apps`, "");
+						else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
+						else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
+						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
+						} else $.log(`🚧 ${$.name}, unknown`, "");
+					};
+				};
 				break;
 		};
-		$request.url = URL.stringify(url)
+		//$request.url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))

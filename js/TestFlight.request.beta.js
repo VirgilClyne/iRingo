@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.8-request-beta");
+const $ = new Env("TestFlight v1.3.9-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US","storeCookies":false,"Rosetta":true}
+		"Settings":{"Switch":true,"CountryCode":"US","storeCookies":false}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -43,7 +43,7 @@ const DataBase = {
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
 		switch (url.path) {
 			case "v1/properties/testflight":
-				$request.headers["X-Apple-Rosetta-Available"] = Settings.Rosetta;
+				//$request.headers["X-Apple-Rosetta-Available"] = Settings.Rosetta;
 				break;
 			case "v1/session/authenticate":
 				let authenticate = JSON.parse($request.body);
@@ -72,29 +72,53 @@ const DataBase = {
 			case "v1/devices/remove":
 				break;
 			default:
-				if (/\/v3\/accounts\//i.test(url.path)) {
+				if (/\/accounts\//i.test(url.path)) {
+					// headers auth mod
 					if (Settings.storeCookies) { // 使用Cookies
-						if (Caches?.data) { // authenticate.data存在`
+						if (Caches?.data) { // Caches.data存在`
 							$.log(`🚧 ${$.name}, data存在`, "");
-							if ($request?.headers?.["X-Session-Id"] !== Caches?.data?.sessionId) {// "X-Session-Id"不同
-								$.log(`🚧 ${$.name}, "X-Session-Id"不同，替换`, "");
-								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//, `/${Caches.data.accountId}/`);
-								$request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
+							if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
+								$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
+								let newCaches = Caches;
+								newCaches.data["X-Request-Id"] = $request.headers["X-Request-Id"];
+								newCaches.data.sessionId = $request.headers["X-Session-Id"];
+								newCaches.data["X-Session-Digest"] = $request.headers["X-Session-Digest"];
+								$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+							} else { // "accountId"不同
+								$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
+								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+								if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
 								$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
 								$request.headers["X-Session-Id"] = Caches.data.sessionId;
 								$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
 							}
+						} else { // Caches空
+							$.log(`🚧 ${$.name}, Caches空，写入`, "");
+							let newCaches = {
+								"data": {
+									"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
+									"X-Request-Id": $request.headers["X-Request-Id"],
+									"sessionId": $request.headers["X-Session-Id"],
+									"X-Session-Digest": $request.headers["X-Session-Digest"]
+								}
+							};
+							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
 						}
-					}
-					if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /app`, "");
-					else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-					else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-						$.log(`🚧 ${$.name}, /app/bulids/install`, "");
-						let install = JSON.parse($request.body);
-						if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
-						$request.body = JSON.stringify(install);
-					} else $.log(`🚧 ${$.name}, unknown`, "");
-				}
+					};
+					// app info mod
+					if (/\/apps/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /apps`, "");
+						if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /apps`, "");
+						else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
+						else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
+						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
+							let install = JSON.parse($request.body);
+							if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
+							$request.body = JSON.stringify(install);
+						} else $.log(`🚧 ${$.name}, unknown`, "");
+					};
+				};
 				break;
 		};
 		$request.url = URL.stringify(url);
@@ -132,7 +156,6 @@ async function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.storeCookies = JSON.parse(Settings.storeCookies) // BoxJs字符串转Boolean
-	Settings.Rosetta = JSON.parse(Settings.Rosetta) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };
