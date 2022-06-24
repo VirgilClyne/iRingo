@@ -1,0 +1,17 @@
+#!name= iRingo for TestFlight
+#!desc=(V1) 1.自定义TestFlight登录商店地区 2.多账户保存及切换
+#!openUrl=http://boxjs.com/#/app/iRingo.TestFlight
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/✈️TestFlight
+#!icon=https://github.com/Koolson/Qure/blob/master/IconSet/Color/TestFlight_2.png
+
+[General]
+skip-proxy = %APPEND% iosapps.itunes.apple.com
+
+[Script]
+TestFlight = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js, argument=
+TestFlight = type=http-response, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js, argument=
+
+[MITM]
+hostname = %APPEND% testflight.apple.com

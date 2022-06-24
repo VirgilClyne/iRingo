@@ -1,0 +1,27 @@
+name:  iRingo for TestFlight
+desc: (V1) 1.自定义TestFlight登录商店地区 2.多账户保存及切换
+
+http:
+  mitm:
+    - "testflight.apple.com"
+  script:
+    - match: ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$
+      name: TestFlight.request
+      type: request
+      require-body: true
+      timeout: 10
+      argument:
+    - match: ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$
+      name: TestFlight.response
+      type: response
+      require-body: true
+      timeout: 10
+      argument:
+
+script-providers:
+  TestFlight.request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js
+    interval: 86400
+  TestFlight.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js
+    interval: 86400
