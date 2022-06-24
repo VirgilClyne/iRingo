@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.6-request-beta");
+const $ = new Env("TestFlight v1.3.7-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -47,7 +47,8 @@ const DataBase = {
 				break;
 			case "v1/session/authenticate":
 				let authenticate = JSON.parse($request.body);
-				if (Settings.storeCookies) { // 保存Cookies
+				/*
+				if (Settings.storeCookies) { // 使用Cookies
 					$.log(`🚧 ${$.name}, storeCookies`, "");
 					if (Caches?.dsId && Caches?.storeCookies) { // 有 DS ID和iTunes Store Cookie
 						$.log(`🚧 ${$.name}, 有Caches, DS ID和iTunes Store Cookie`, "");
@@ -61,6 +62,7 @@ const DataBase = {
 						} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // DS ID相等，刷新缓存
 					} else $.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches"); // Caches空
 				}
+				*/
 				if (Settings.CountryCode !== "AUTO") authenticate.storeFrontIdentifier = authenticate.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
 				$request.body = JSON.stringify(authenticate);
 				break;
@@ -70,14 +72,28 @@ const DataBase = {
 			case "v1/devices/remove":
 				break;
 			default:
-				if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /app`, "");
-				else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-				else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-					$.log(`🚧 ${$.name}, /app/bulids/install`, "");
-					let install = JSON.parse($request.body);
-					if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
-					$request.body = JSON.stringify(install);
-				} else $.log(`🚧 ${$.name}, unknown`, "");
+				if (/\/v3\/accounts\//i.test(url.path)) {
+					if (Settings.storeCookies) { // 使用Cookies
+						if (Caches?.data) { // authenticate.data存在`
+							$.log(`🚧 ${$.name}, data存在`, "");
+							if ($request?.headers?.["X-Session-Id"] !== Caches?.data?.sessionId) {// "X-Session-Id"不同
+								$.log(`🚧 ${$.name}, "X-Session-Id"不同，替换`, "");
+								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//, `/${Caches.data.accountId}/`);
+								$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
+								$request.headers["X-Session-Id"] = Caches.data.sessionId;
+								$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
+							}
+						}
+					}
+					if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /app`, "");
+					else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
+					else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /app/bulids/install`, "");
+						let install = JSON.parse($request.body);
+						if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
+						$request.body = JSON.stringify(install);
+					} else $.log(`🚧 ${$.name}, unknown`, "");
+				}
 				break;
 		};
 
@@ -91,10 +107,9 @@ const DataBase = {
 						$.log(`🚧 ${$.name}, UUID 存在`, "");
 						url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//, `/${Caches.data.accountId}/`);
 					}
-					if ($request?.headers?.["X-Session-Id"]) {// "X-Session-Id"存在
-						$.log(`🚧 ${$.name}, "X-Session-Id"存在`, "");
-						$request.headers["X-Session-Id"] = Caches.data.sessionId;
-					}
+					$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
+					$request.headers["X-Session-Id"] = Caches.data.sessionId;
+					$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
 				}
 			};
 		};
