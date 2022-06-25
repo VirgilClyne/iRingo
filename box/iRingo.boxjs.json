@@ -1526,6 +1526,13 @@
 					"val": false,
 					"type": "boolean",
 					"desc": "是否启用多账号支持，会自动保存保存更新当前账号信息"
+				},
+				{
+					"id": "@iRingo.TestFlight.Settings.Universal",
+					"name": "启用通用应用支持(测试)",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否启用通用应用支持，解除TF中app的iOS/iPadOS/macOS(AppleSilicon)平台限制"
 				}
 			],
 			"author": "@VirgilClyne",

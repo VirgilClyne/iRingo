@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.0.8-response");
+const $ = new Env("TestFlight v1.1.3-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -25,7 +25,7 @@ const DataBase = {
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
 	"TestFlight":{
-		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false}
+		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false,"Universal":true}
 	},
 	"Default": {
 		"Settings":{"Switch":true},
@@ -74,13 +74,59 @@ const DataBase = {
 				break;
 			default:
 				if (/\/accounts\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, accounts`, "");
 					// app info mod
 					if (/\/apps/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /apps`, "");
-						if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /apps`, "");
-						else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-						else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
-						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+						if (/\/apps$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /apps`, "");
+							if (Settings.Universal) { // 通用
+								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+								let apps = JSON.parse($response.body);
+								if (apps.error === null) { // 数据无错误
+									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									apps.data = apps.data.map(app => {
+										if (app.previouslyTested !== false) { // 不是前测试人员
+											$.log(`🚧 ${$.name}, 不是前测试人员`, "");
+											app.platforms = app.platforms.map(platform => {
+												platform.build = modBuild(platform.build);
+												return platform
+											});
+										}
+										return app
+									});
+								}
+								$response.body = JSON.stringify(apps);
+							}
+						} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids`, "");
+							if (Settings.Universal) { // 通用
+								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+								let builds = JSON.parse($response.body);
+								if (builds.error === null) { // 数据无错误
+									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									// 当前Bulid
+									builds.data.currentBuild = modBuild(builds.data.currentBuild);
+									// Build列表
+									builds.data.builds = builds.data.builds.map(build => modBuild(build));
+								}
+								$response.body = JSON.stringify(builds);
+							}
+						} else if (/\/apps\/\d+\/platforms\/\w+\/trains$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/platforms/trains`, "");
+						} else if (/\/apps\/\d+\/platforms\/\w+\/trains\/[\d.]+\/builds$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/platforms/trains/builds`, "");
+							if (Settings.Universal) { // 通用
+								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+								let builds = JSON.parse($response.body);
+								if (builds.error === null) { // 数据无错误
+									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									// 当前Bulid
+									builds.data = builds.data.map(data => modBuild(data));
+								}
+								$response.body = JSON.stringify(builds);
+							}
+						} else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
@@ -121,8 +167,92 @@ async function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings.MultiAccount = JSON.parse(Settings.MultiAccount) // BoxJs字符串转Boolean
+	Settings.Universal = JSON.parse(Settings.Universal) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
+};
+
+/**
+ * mod Build
+ * @author VirgilClyne
+ * @param {Object} build - Build
+ * @return {Object}
+ */
+function modBuild(build) {
+	switch (build.platform || build.name) {
+		case "ios":
+			$.log(`🚧 ${$.name}, ios`, "");
+			build = Build(build);
+			break;
+		case "osx":
+			$.log(`🚧 ${$.name}, osx`, "");
+			if (build.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
+				$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
+				build = Build(build);
+			}
+			break;
+		case "appletvos":
+			$.log(`🚧 ${$.name}, appletvos`, "");
+			break;
+		default:
+			$.log(`🚧 ${$.name}, unknown platform: ${build.platform || build.name}`, "");
+			break;
+	};
+	return build
+
+	function Build(build) {
+		if (build.universal === true) {
+			build.compatible = true;
+			build.platformCompatible = true;
+			build.hardwareCompatible = true;
+			build.osCompatible = true;
+			if (build?.permission) build.permission = "install";
+			if (build?.deviceFamilyInfo) {
+				build.deviceFamilyInfo = [
+					{
+						"number": 1,
+						"name": "iOS",
+						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_1.png"
+					},
+					{
+						"number": 2,
+						"name": "iPad",
+						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_2.png"
+					},
+					{
+						"number": 3,
+						"name": "Apple TV",
+						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_3.png"
+					}
+				];
+			}
+			if (build?.compatibilityData?.compatibleDeviceFamilies) {
+				build.compatibilityData.compatibleDeviceFamilies = [
+					{
+						"name": "iPad",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					},
+					{
+						"name": "iPhone",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					},
+					{
+						"name": "iPod",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					},
+					{
+						"name": "Mac",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					}
+				];
+			}
+		};
+		return build
+	};
 };
 
 /***************** Env *****************/

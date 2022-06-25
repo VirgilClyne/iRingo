@@ -1628,10 +1628,10 @@
 				},
 				{
 					"id": "@iRingo.TestFlight.Settings.Universal",
-					"name": "启用通用应用支持",
+					"name": "启用通用应用支持(测试)",
 					"val": false,
 					"type": "boolean",
-					"desc": "是否启用通用应用支持，解除TF中app的iOS/iPadOS/macOS(AppleSilicon)/tvOS平台限制"
+					"desc": "是否启用通用应用支持，解除TF中app的iOS/iPadOS/macOS(AppleSilicon)平台限制"
 				}
 			],
 			"author": "@VirgilClyne",
