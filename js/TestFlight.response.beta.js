@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.1.2-response-beta");
+const $ = new Env("TestFlight v1.1.3-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -77,11 +77,12 @@ const DataBase = {
 				break;
 			default:
 				if (/\/accounts\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, accounts`, "");
 					// app info mod
 					if (/\/apps/i.test(url.path)) {
-						$.log(`🚧 ${$.name}, apps`, "");
+						$.log(`🚧 ${$.name}, /apps`, "");
 						if (/\/apps$/i.test(url.path)) {
-							$.log(`🚧 ${$.name}, /apps`, "")
+							$.log(`🚧 ${$.name}, /apps`, "");
 							if (Settings.Universal) { // 通用
 								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
 								let apps = JSON.parse($response.body);
@@ -91,22 +92,7 @@ const DataBase = {
 										if (app.previouslyTested !== false) { // 不是前测试人员
 											$.log(`🚧 ${$.name}, 不是前测试人员`, "");
 											app.platforms = app.platforms.map(platform => {
-												switch (platform.name) {
-													case "ios":
-														$.log(`🚧 ${$.name}, ios`, "");
-														platform.build = await modData(platform.build);
-														break;
-													case "osx":
-														$.log(`🚧 ${$.name}, osx`, "");
-														if (platform.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
-															$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
-															platform.build = await modData(platform.build);
-														}
-														break;
-													case "appletvos":
-														$.log(`🚧 ${$.name}, appletvos`, "");
-														break;
-												}
+												platform.build = modBuild(platform.build);
 												return platform
 											});
 										}
@@ -123,47 +109,27 @@ const DataBase = {
 								if (builds.error === null) { // 数据无错误
 									$.log(`🚧 ${$.name}, 数据无错误`, "");
 									// 当前Bulid
-									switch (builds.data.currentBuild.platform) {
-										case "ios":
-											$.log(`🚧 ${$.name}, ios`, "");
-											builds.data.currentBuild = await modData(builds.data.currentBuild);
-											break;
-										case "osx":
-											$.log(`🚧 ${$.name}, osx`, "");
-											if (builds.data.currentBuild.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
-												$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
-												builds.data.currentBuild = await modData(builds.data.currentBuild);
-											}
-											break;
-										case "appletvos":
-											$.log(`🚧 ${$.name}, appletvos`, "");
-											break;
-									};
+									builds.data.currentBuild = modBuild(builds.data.currentBuild);
 									// Build列表
-									builds.data.builds = builds.data.builds.map(build => {
-										switch (build.platform) {
-											case "ios":
-												$.log(`🚧 ${$.name}, ios`, "");
-												build = await modData(build);
-												break;
-											case "osx":
-												$.log(`🚧 ${$.name}, osx`, "");
-												if (build.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
-													$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
-													build = await modData(build);
-												}
-												break;
-											case "appletvos":
-												$.log(`🚧 ${$.name}, appletvos`, "");
-												break;
-										}
-										return build
-									});
+									builds.data.builds = builds.data.builds.map(build => modBuild(build));
 								}
 								$response.body = JSON.stringify(builds);
 							}
-						} else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
-						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+						} else if (/\/apps\/\d+\/platforms\/\w+\/trains$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/platforms/trains`, "");
+						} else if (/\/apps\/\d+\/platforms\/\w+\/trains\/[\d.]+\/builds$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/platforms/trains/builds`, "");
+							if (Settings.Universal) { // 通用
+								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+								let builds = JSON.parse($response.body);
+								if (builds.error === null) { // 数据无错误
+									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									// 当前Bulid
+									builds.data = builds.data.map(data => modBuild(data));
+								}
+								$response.body = JSON.stringify(builds);
+							}
+						} else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
@@ -210,58 +176,87 @@ async function setENV(name, platform, database) {
 	return { Settings, Caches, Configs }
 };
 
-async function modData(build) {
-	if (build.universal === true) {
-		build.compatible = true;
-		build.platformCompatible = true;
-		build.hardwareCompatible = true;
-		build.osCompatible = true;
-		if (build?.permission) build.permission = "install";
-		if (build?.deviceFamilyInfo) {
-			build.deviceFamilyInfo = [
-				{
-					"number": 1,
-					"name": "iOS",
-					"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_1.png"
-				},
-				{
-					"number": 2,
-					"name": "iPad",
-					"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_2.png"
-				},
-				{
-					"number": 3,
-					"name": "Apple TV",
-					"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_3.png"
-				}
-			];
-		}
-		if (build?.compatibilityData?.compatibleDeviceFamilies) {
-			build.compatibilityData.compatibleDeviceFamilies = [
-				{
-					"name": "iPad",
-					"minimumSupportedDevice": null,
-					"unsupportedDevices": []
-				},
-				{
-					"name": "iPhone",
-					"minimumSupportedDevice": null,
-					"unsupportedDevices": []
-				},
-				{
-					"name": "iPod",
-					"minimumSupportedDevice": null,
-					"unsupportedDevices": []
-				},
-				{
-					"name": "Mac",
-					"minimumSupportedDevice": null,
-					"unsupportedDevices": []
-				}
-			];
-		}
+/**
+ * mod Build
+ * @author VirgilClyne
+ * @param {Object} build - Build
+ * @return {Object}
+ */
+function modBuild(build) {
+	switch (build.platform || build.name) {
+		case "ios":
+			$.log(`🚧 ${$.name}, ios`, "");
+			build = Build(build);
+			break;
+		case "osx":
+			$.log(`🚧 ${$.name}, osx`, "");
+			if (build.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
+				$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
+				build = Build(build);
+			}
+			break;
+		case "appletvos":
+			$.log(`🚧 ${$.name}, appletvos`, "");
+			break;
+		default:
+			$.log(`🚧 ${$.name}, unknown platform: ${build.platform || build.name}`, "");
+			break;
 	};
 	return build
+
+	function Build(build) {
+		if (build.universal === true) {
+			build.compatible = true;
+			build.platformCompatible = true;
+			build.hardwareCompatible = true;
+			build.osCompatible = true;
+			if (build?.permission) build.permission = "install";
+			if (build?.deviceFamilyInfo) {
+				build.deviceFamilyInfo = [
+					{
+						"number": 1,
+						"name": "iOS",
+						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_1.png"
+					},
+					{
+						"number": 2,
+						"name": "iPad",
+						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_2.png"
+					},
+					{
+						"number": 3,
+						"name": "Apple TV",
+						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_3.png"
+					}
+				];
+			}
+			if (build?.compatibilityData?.compatibleDeviceFamilies) {
+				build.compatibilityData.compatibleDeviceFamilies = [
+					{
+						"name": "iPad",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					},
+					{
+						"name": "iPhone",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					},
+					{
+						"name": "iPod",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					},
+					{
+						"name": "Mac",
+						"minimumSupportedDevice": null,
+						"unsupportedDevices": []
+					}
+				];
+			}
+		};
+		return build
+	};
 };
 
 /***************** Env *****************/
