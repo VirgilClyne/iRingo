@@ -73,6 +73,7 @@ const DataBase = {
 				break;
 			default:
 				if (/\/accounts\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, accounts`, "");
 					// headers auth mod
 					if (Settings.MultiAccount) { // MultiAccount
 						$.log(`🚧 ${$.name}, 启用多账号支持`, "");
@@ -109,10 +110,15 @@ const DataBase = {
 					// app info mod
 					if (/\/apps/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /apps`, "");
-						if (/\/apps$/i.test(url.path)) $.log(`🚧 ${$.name}, /apps`, "");
-						else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-						else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
-						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
+						if (/\/apps$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /apps`, "");
+						} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids`, "");
+						} else if (/\/apps\/\d+\/platforms\/\w+\/trains$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/platforms/trains`, "");
+						} else if (/\/apps\/\d+\/platforms\/\w+\/trains\/[\d.]+\/builds$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/platforms/trains/builds`, "");
+						} else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
 							let install = JSON.parse($request.body);
 							if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
