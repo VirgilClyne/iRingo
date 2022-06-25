@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.1.1-response-beta");
+const $ = new Env("TestFlight v1.1.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -94,14 +94,13 @@ const DataBase = {
 												switch (platform.name) {
 													case "ios":
 														$.log(`🚧 ${$.name}, ios`, "");
-														platform.build.universal = true;
-														platform.build.compatible = true;
+														platform.build = await modData(platform.build);
 														break;
 													case "osx":
 														$.log(`🚧 ${$.name}, osx`, "");
 														if (platform.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
 															$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
-															platform.build.compatible = true;
+															platform.build = await modData(platform.build);
 														}
 														break;
 													case "appletvos":
@@ -123,35 +122,35 @@ const DataBase = {
 								let builds = JSON.parse($response.body);
 								if (builds.error === null) { // 数据无错误
 									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									// 当前Bulid
 									switch (builds.data.currentBuild.platform) {
 										case "ios":
 											$.log(`🚧 ${$.name}, ios`, "");
-											builds.data.currentBuild.universal = true;
-											builds.data.currentBuild.compatible = true;
+											builds.data.currentBuild = await modData(builds.data.currentBuild);
 											break;
 										case "osx":
 											$.log(`🚧 ${$.name}, osx`, "");
 											if (builds.data.currentBuild.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
 												$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
-												builds.data.currentBuild.compatible = true;
+												builds.data.currentBuild = await modData(builds.data.currentBuild);
 											}
 											break;
 										case "appletvos":
 											$.log(`🚧 ${$.name}, appletvos`, "");
 											break;
 									};
+									// Build列表
 									builds.data.builds = builds.data.builds.map(build => {
 										switch (build.platform) {
 											case "ios":
 												$.log(`🚧 ${$.name}, ios`, "");
-												build.universal = true;
-												build.compatible = true;
+												build = await modData(build);
 												break;
 											case "osx":
 												$.log(`🚧 ${$.name}, osx`, "");
 												if (build.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
 													$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
-													build.compatible = true;
+													build = await modData(build);
 												}
 												break;
 											case "appletvos":
@@ -209,6 +208,60 @@ async function setENV(name, platform, database) {
 	Settings.Universal = JSON.parse(Settings.Universal) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
+};
+
+async function modData(build) {
+	if (build.universal === true) {
+		build.compatible = true;
+		build.platformCompatible = true;
+		build.hardwareCompatible = true;
+		build.osCompatible = true;
+		if (build?.permission) build.permission = "install";
+		if (build?.deviceFamilyInfo) {
+			build.deviceFamilyInfo = [
+				{
+					"number": 1,
+					"name": "iOS",
+					"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_1.png"
+				},
+				{
+					"number": 2,
+					"name": "iPad",
+					"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_2.png"
+				},
+				{
+					"number": 3,
+					"name": "Apple TV",
+					"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_3.png"
+				}
+			];
+		}
+		if (build?.compatibilityData?.compatibleDeviceFamilies) {
+			build.compatibilityData.compatibleDeviceFamilies = [
+				{
+					"name": "iPad",
+					"minimumSupportedDevice": null,
+					"unsupportedDevices": []
+				},
+				{
+					"name": "iPhone",
+					"minimumSupportedDevice": null,
+					"unsupportedDevices": []
+				},
+				{
+					"name": "iPod",
+					"minimumSupportedDevice": null,
+					"unsupportedDevices": []
+				},
+				{
+					"name": "Mac",
+					"minimumSupportedDevice": null,
+					"unsupportedDevices": []
+				}
+			];
+		}
+	};
+	return build
 };
 
 /***************** Env *****************/
