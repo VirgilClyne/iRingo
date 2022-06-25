@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.1.0-response-beta");
+const $ = new Env("TestFlight v1.1.1-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -91,7 +91,7 @@ const DataBase = {
 										if (app.previouslyTested !== false) { // 不是前测试人员
 											$.log(`🚧 ${$.name}, 不是前测试人员`, "");
 											app.platforms = app.platforms.map(platform => {
-												switch (platform) {
+												switch (platform.name) {
 													case "ios":
 														$.log(`🚧 ${$.name}, ios`, "");
 														platform.build.universal = true;
@@ -116,8 +116,54 @@ const DataBase = {
 								}
 								$response.body = JSON.stringify(apps);
 							}
-						} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) $.log(`🚧 ${$.name}, /app/bulids`, "");
-						else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
+						} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids`, "");
+							if (Settings.Universal) { // 通用
+								$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+								let builds = JSON.parse($response.body);
+								if (builds.error === null) { // 数据无错误
+									$.log(`🚧 ${$.name}, 数据无错误`, "");
+									switch (builds.data.currentBuild.platform) {
+										case "ios":
+											$.log(`🚧 ${$.name}, ios`, "");
+											builds.data.currentBuild.universal = true;
+											builds.data.currentBuild.compatible = true;
+											break;
+										case "osx":
+											$.log(`🚧 ${$.name}, osx`, "");
+											if (builds.data.currentBuild.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
+												$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
+												builds.data.currentBuild.compatible = true;
+											}
+											break;
+										case "appletvos":
+											$.log(`🚧 ${$.name}, appletvos`, "");
+											break;
+									};
+									builds.data.builds = builds.data.builds.map(build => {
+										switch (build.platform) {
+											case "ios":
+												$.log(`🚧 ${$.name}, ios`, "");
+												build.universal = true;
+												build.compatible = true;
+												break;
+											case "osx":
+												$.log(`🚧 ${$.name}, osx`, "");
+												if (build.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
+													$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
+													build.compatible = true;
+												}
+												break;
+											case "appletvos":
+												$.log(`🚧 ${$.name}, appletvos`, "");
+												break;
+										}
+										return build
+									});
+								}
+								$response.body = JSON.stringify(builds);
+							}
+						} else if (/\/apps\/\d+\/platforms\//i.test(url.path)) $.log(`🚧 ${$.name}, /app/platforms`, "");
 						else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
