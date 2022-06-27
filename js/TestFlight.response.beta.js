@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.1.3-response-beta");
+const $ = new Env("TestFlight v1.1.4-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -133,6 +133,13 @@ const DataBase = {
 							$.log(`🚧 ${$.name}, /app/bulids/install`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
+				} else if (/\/invites\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, invites`, "");
+					if (/\/app$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /app`, "");
+					} else if (/\/accept$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /accept`, "");
+					} else $.log(`🚧 ${$.name}, unknown`, "");
 				};
 				break;
 		};
