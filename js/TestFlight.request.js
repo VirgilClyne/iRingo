@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.11-request");
+const $ = new Env("TestFlight v1.3.12-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -55,41 +55,41 @@ const DataBase = {
 			case "v1/devices/remove":
 				break;
 			default:
+				// headers auth mod
+				if (Settings.MultiAccount) { // MultiAccount
+					$.log(`🚧 ${$.name}, 启用多账号支持`, "");
+					if (Caches?.data) { // Caches.data存在`
+						$.log(`🚧 ${$.name}, data存在`, "");
+						if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
+							$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
+							let newCaches = Caches;
+							newCaches.data["X-Request-Id"] = $request.headers["X-Request-Id"];
+							newCaches.data.sessionId = $request.headers["X-Session-Id"];
+							newCaches.data["X-Session-Digest"] = $request.headers["X-Session-Digest"];
+							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+						} else { // "accountId"不同
+							$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
+							url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+							if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
+							$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
+							$request.headers["X-Session-Id"] = Caches.data.sessionId;
+							$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
+						}
+					} else { // Caches空
+						$.log(`🚧 ${$.name}, Caches空，写入`, "");
+						let newCaches = {
+							"data": {
+								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
+								"X-Request-Id": $request.headers["X-Request-Id"],
+								"sessionId": $request.headers["X-Session-Id"],
+								"X-Session-Digest": $request.headers["X-Session-Digest"]
+							}
+						};
+						$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+					}
+				};
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
-					// headers auth mod
-					if (Settings.MultiAccount) { // MultiAccount
-						$.log(`🚧 ${$.name}, 启用多账号支持`, "");
-						if (Caches?.data) { // Caches.data存在`
-							$.log(`🚧 ${$.name}, data存在`, "");
-							if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
-								$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
-								let newCaches = Caches;
-								newCaches.data["X-Request-Id"] = $request.headers["X-Request-Id"];
-								newCaches.data.sessionId = $request.headers["X-Session-Id"];
-								newCaches.data["X-Session-Digest"] = $request.headers["X-Session-Digest"];
-								$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
-							} else { // "accountId"不同
-								$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
-								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
-								if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-								$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
-								$request.headers["X-Session-Id"] = Caches.data.sessionId;
-								$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
-							}
-						} else { // Caches空
-							$.log(`🚧 ${$.name}, Caches空，写入`, "");
-							let newCaches = {
-								"data": {
-									"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
-									"X-Request-Id": $request.headers["X-Request-Id"],
-									"sessionId": $request.headers["X-Session-Id"],
-									"X-Session-Digest": $request.headers["X-Session-Digest"]
-								}
-							};
-							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
-						}
-					};
 					// app info mod
 					if (/\/apps/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /apps`, "");
@@ -108,6 +108,13 @@ const DataBase = {
 							$request.body = JSON.stringify(install);
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
+				} else if (/\/invites\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, invites`, "");
+					if (/\/app$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /app`, "");
+					} else if (/\/accept$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /accept`, "");
+					} else $.log(`🚧 ${$.name}, unknown`, "");
 				};
 				break;
 		};
