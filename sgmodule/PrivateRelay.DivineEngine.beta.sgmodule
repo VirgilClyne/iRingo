@@ -1,11 +1,10 @@
 #!name= iRingo for iCloud Private Relay
-#!desc=(BETA for Gateway) 为终端设备启用iCloud专用代理，需要Surge for macOS启用网关模式。注:使用专用代理需允许QUIC流量
-#!openUrl=http://boxjs.com/#/app/iRingo.PrivateRelay
+#!desc=(BETA) 启用「iCloud专用代理」
+#!openUrl=http://boxjs.com/#/app/iRingo.PrivateRelay.beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne//iRingo/wiki/🌐专用代理
 #!icon=https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png
-#!system=mac
 
 [Rule]
 # > iCloud Private Relay
@@ -13,12 +12,12 @@
 DOMAIN,mask-api.icloud.com,🌑Proxy
 DOMAIN,mask-api.fe.apple-dns.net,🌑Proxy
 # Optimize for Private Relay connections
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌐Direct, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌐Direct, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),🌐Direct, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌐Direct, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌐Direct, interface=en0, allow-other-interface=true
-AND,((PROTOCOL,UDP),(DEST-PORT,443),(IP-CIDR,17.0.0.0/8,no-resolve)),🌐Direct, interface=en0, allow-other-interface=true
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌐Direct
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌐Direct
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),🌐Direct
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌐Direct
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌐Direct
+AND,((PROTOCOL,UDP),(DEST-PORT,443),(IP-CIDR,17.0.0.0/8,no-resolve)),🌐Direct
 # Allow for network traffic audits
 AND,((PROTOCOL,TCP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),🌑Proxy
 AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),🌑Proxy
@@ -27,8 +26,8 @@ AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌑Proxy
 AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌑Proxy
 
 [Script]
-iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p[\d]{1,3}-acsegateway\.icloud\.com(\.cn)?\/accounts\/(\d)+\/subscriptions\/features\/networking\.privacy\.subscriber$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/PrivateRelay.request.beta.js
-iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p[\d]{1,3}-acsegateway\.icloud\.com(\.cn)?\/accounts\/(\d)+\/subscriptions\/features\/networking\.privacy\.subscriber$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/PrivateRelay.response.beta.js
+iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p[\d]{1,3}-acsegateway\.icloud\.com(\.cn)?\/v2\/accounts\/(\d+)\/subscriptions\/features\/networking\.privacy\.subscriber$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/PrivateRelay.request.beta.js, argument=
+iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p[\d]{1,3}-acsegateway\.icloud\.com(\.cn)?\/v2\/accounts\/(\d+)\/subscriptions\/features\/networking\.privacy\.subscriber$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/PrivateRelay.response.beta.js, argument=
 
 [MITM]
-hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, mask-h2.icloud.com, mask-t.apple-dns.net, p*-acsegateway.icloud.com, p*-acsegateway.icloud.com.cn
+hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, -mask-h2.icloud.com, -mask-t.apple-dns.net, p*-acsegateway.icloud.com, p*-acsegateway.icloud.com.cn

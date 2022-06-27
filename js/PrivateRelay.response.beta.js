@@ -45,6 +45,8 @@ const DataBase = {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
 		switch (url.path) {
+			case "v1/fetchAuthTokens":
+				break;
 			default:
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
