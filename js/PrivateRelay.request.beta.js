@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.1-request-beta");
+const $ = new Env("Private Relay v1.0.3-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -44,6 +44,20 @@ const DataBase = {
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
+		switch (url.host) {
+			case "p207-acsegateway.icloud.com.cn":
+				url.host = "p107-acsegateway.icloud.com"
+				break;
+			case "p212-acsegateway.icloud.com.cn":
+				url.host = "p112-acsegateway.icloud.com"
+				break;
+			default:
+				if (url.host.includes(".cn")) {
+					url.host = url.host.replace(/^p2(\d\d)-/, "p1$1-");
+					url.host = url.host.replace(/\.cn$/, "");
+				}
+				break;
+		}
 		switch (url.path) {
 			case "v1/fetchAuthTokens":
 				$request.headers["X-Mask-User-Tier"] = "FREE";
@@ -51,6 +65,24 @@ const DataBase = {
 			default:
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
+					// app info mod
+					if (/\/subscriptions\/features/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /subscriptions/features`, "");
+						$request.headers["X-MMe-Country"] = Settings.CountryCode;
+						if (/\/features$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /features`, "");
+						} else if (/\/networking\.privacy\.subscriber$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /networking.privacy.subscriber`, "");
+						} else if (/\/networking\.privacy\.attestation$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /networking.privacy.attestation`, "");
+						} else if (/\/mail\.hide-my-email\.create$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.hide-my-email.create`, "");
+						} else if (/\/mail\.custom-domains\.transfer$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
+						} else $.log(`🚧 ${$.name}, unknown`, "");
+					};
+				} else if (/\/devices\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, devices`, "");
 					// app info mod
 					if (/\/subscriptions\/features/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /subscriptions/features`, "");
@@ -104,8 +136,7 @@ async function setENV(name, platform, database) {
 	let { Settings, Caches = {}, Configs } = await getENV(name, platform, database);
 	/***************** Prase *****************/
 	Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	Settings.MultiAccount = JSON.parse(Settings.MultiAccount) // BoxJs字符串转Boolean
-	Settings.Universal = JSON.parse(Settings.Universal) // BoxJs字符串转Boolean
+	Settings.canUse = JSON.parse(Settings.canUse) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };

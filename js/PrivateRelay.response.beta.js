@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.1-response-beta");
+const $ = new Env("Private Relay v1.0.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -66,6 +66,24 @@ const DataBase = {
 							$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
+				} else if (/\/devices\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, devices`, "");
+					// app info mod
+					if (/\/subscriptions\/features/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /subscriptions/features`, "");
+						$request.headers["X-MMe-Country"] = Settings.CountryCode;
+						if (/\/features$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /features`, "");
+						} else if (/\/networking\.privacy\.subscriber$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /networking.privacy.subscriber`, "");
+						} else if (/\/networking\.privacy\.attestation$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /networking.privacy.attestation`, "");
+						} else if (/\/mail\.hide-my-email\.create$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.hide-my-email.create`, "");
+						} else if (/\/mail\.custom-domains\.transfer$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
+						} else $.log(`🚧 ${$.name}, unknown`, "");
+					};
 				};
 				break;
 		};
@@ -108,7 +126,6 @@ async function setENV(name, platform, database) {
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };
-
 
 /**
  * mod Features
