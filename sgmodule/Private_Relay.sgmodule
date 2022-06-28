@@ -7,8 +7,8 @@
 #!icon=https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png
 
 [Script]
-iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.request.js, argument=
-iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.response.js, argument=
+iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Private_Relay.request.js, argument=
+iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Private_Relay.response.js, argument=
 
 [MITM]
 hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, -mask-h2.icloud.com, -mask-t.apple-dns.net, p*-acsegateway.icloud.com, p*-acsegateway.icloud.com.cn

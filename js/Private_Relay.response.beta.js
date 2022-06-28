@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.2-response");
+const $ = new Env("Private Relay v1.0.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -24,7 +24,7 @@ const DataBase = {
 	"News":{
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
-	"PrivateRelay":{
+	"Private_Relay":{
 		"Settings":{"Switch":true,"CountryCode":"US","canUse":true}
 	},
 	"TestFlight":{
@@ -40,7 +40,7 @@ const DataBase = {
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "PrivateRelay", DataBase);
+	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "Private_Relay", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
@@ -125,6 +125,22 @@ async function setENV(name, platform, database) {
 	Settings.canUse = JSON.parse(Settings.canUse) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
+};
+
+/**
+ * mod Features
+ * @author VirgilClyne
+ * @param {Object} features - features
+ * @param {String} featureKey -featureKey
+ * @return {Object}
+ */
+function modfeature(feature, featureKey) {
+	let time = new Date();
+	time.setHours(time.getHours() + 24);
+	feature.featureKey = featureKey;
+	feature.canUse = true;
+	feature.cacheTill = time.toISOString();
+	return feature
 };
 
 /***************** Env *****************/

@@ -9,8 +9,8 @@
 [Rule]
 # > iCloud Private Relay
 # https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
-DOMAIN,mask-api.icloud.com,Proxy
-DOMAIN,mask-api.fe.apple-dns.net,Proxy
+DOMAIN,mask-api.icloud.com,PROXY
+DOMAIN,mask-api.fe.apple-dns.net,PROXY
 # Optimize for Private Relay connections
 AND,((PROTOCOL,UDP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),DIRECT
 AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),DIRECT
@@ -19,15 +19,15 @@ AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),DIRECT
 AND,((PROTOCOL,UDP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),DIRECT
 AND,((PROTOCOL,UDP),(DEST-PORT,443),(IP-CIDR,17.0.0.0/8,no-resolve)),DIRECT
 # Allow for network traffic audits
-AND,((PROTOCOL,TCP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),Proxy
-AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),Proxy
-AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),Proxy
-AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),Proxy
-AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),Proxy
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*)),PROXY
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.icloud.com)),PROXY
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask.apple-dns.net)),PROXY
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),PROXY
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),PROXY
 
 [Script]
-iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.request.js, argument=
-iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.response.js, argument=
+iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Private_Relay.request.js, argument=
+iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Private_Relay.response.js, argument=
 
 [MITM]
 hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, -mask-h2.icloud.com, -mask-t.apple-dns.net, p*-acsegateway.icloud.com, p*-acsegateway.icloud.com.cn

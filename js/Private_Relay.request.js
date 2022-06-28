@@ -24,7 +24,7 @@ const DataBase = {
 	"News":{
 		"Settings":{"Switch":true,"CountryCode":"US","newsPlusUser":true}
 	},
-	"PrivateRelay":{
+	"Private_Relay":{
 		"Settings":{"Switch":true,"CountryCode":"US","canUse":true}
 	},
 	"TestFlight":{
@@ -40,7 +40,7 @@ const DataBase = {
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "PrivateRelay", DataBase);
+	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "Private_Relay", DataBase);
 	if (Settings.Switch) {
 		let url = URL.parse($request.url);
 		$.log(`⚠ ${$.name}, url.path=${url.path}`);
