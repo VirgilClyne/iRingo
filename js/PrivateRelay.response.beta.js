@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.0-response-beta");
+const $ = new Env("Private Relay v1.0.1-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -51,13 +51,19 @@ const DataBase = {
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
 					// app info mod
-					if (/\/subscriptions\/features\//i.test(url.path)) {
-						$.log(`🚧 ${$.name}, /subscriptions/features/`, "");
-						if (/\/networking\.privacy\.subscriber$/i.test(url.path)) {
+					if (/\/subscriptions\/features/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /subscriptions/features`, "");
+						$request.headers["X-MMe-Country"] = Settings.CountryCode;
+						if (/\/features$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /features`, "");
+						} else if (/\/networking\.privacy\.subscriber$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /networking.privacy.subscriber`, "");
-							let subscriber = JSON.parse($response.body);
-							subscriber.canUse = Settings.canUse;
-							$response.body = JSON.stringify(subscriber);
+						} else if (/\/networking\.privacy\.attestation$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /networking.privacy.attestation`, "");
+						} else if (/\/mail\.hide-my-email\.create$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.hide-my-email.create`, "");
+						} else if (/\/mail\.custom-domains\.transfer$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
 				};
@@ -101,6 +107,23 @@ async function setENV(name, platform, database) {
 	Settings.canUse = JSON.parse(Settings.canUse) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
+};
+
+
+/**
+ * mod Features
+ * @author VirgilClyne
+ * @param {Object} features - features
+ * @param {String} featureKey -featureKey
+ * @return {Object}
+ */
+function modfeature(feature, featureKey) {
+	let time = new Date();
+	time.setHours(time.getHours() + 24);
+	feature.featureKey = featureKey;
+	feature.canUse = true;
+	feature.cacheTill = time.toISOString();
+	return feature
 };
 
 /***************** Env *****************/

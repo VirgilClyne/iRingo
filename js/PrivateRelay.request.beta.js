@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.0-request-beta");
+const $ = new Env("Private Relay v1.0.1-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -52,11 +52,19 @@ const DataBase = {
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
 					// app info mod
-					if (/\/subscriptions\/features\//i.test(url.path)) {
-						$.log(`🚧 ${$.name}, /subscriptions/features/`, "");
-						if (/\/networking\.privacy\.subscriber$/i.test(url.path)) {
+					if (/\/subscriptions\/features/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /subscriptions/features`, "");
+						$request.headers["X-MMe-Country"] = Settings.CountryCode;
+						if (/\/features$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /features`, "");
+						} else if (/\/networking\.privacy\.subscriber$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /networking.privacy.subscriber`, "");
-							$request.headers["X-MMe-Country"] = Settings.CountryCode;
+						} else if (/\/networking\.privacy\.attestation$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /networking.privacy.attestation`, "");
+						} else if (/\/mail\.hide-my-email\.create$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.hide-my-email.create`, "");
+						} else if (/\/mail\.custom-domains\.transfer$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
 				};
