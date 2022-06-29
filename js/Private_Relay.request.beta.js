@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.3-request-beta");
+const $ = new Env("Private Relay v1.0.4-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -102,12 +102,13 @@ const DataBase = {
 				};
 				break;
 		};
+		$request.headers.Host = url.host;
 		$request.url = URL.stringify(url);
 	}
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => {
-		if ($.isQuanX()) $.done({  url: $request.url, headers: $request.headers, body: $request.body })
+		if ($.isQuanX()) $.done({  url: $request.url, headers: $request.headers })
 		else $.done($request)
 	})
 
