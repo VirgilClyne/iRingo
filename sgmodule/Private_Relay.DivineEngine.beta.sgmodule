@@ -9,7 +9,6 @@
 [Rule]
 # > iCloud Private Relay
 # https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
-PROCESS-NAME,/usr/libexec/networkserviceproxy,🌑Proxy
 DOMAIN,mask-api.icloud.com,🌑Proxy
 DOMAIN,mask-api.fe.apple-dns.net,🌑Proxy
 # Optimize for Private Relay connections
