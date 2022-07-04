@@ -6,10 +6,20 @@
   * Telegram讨论组:[🍟 整点薯条 - 群组](https://t.me/GetSomeFries)
 
 ---
+# 视频教程
+  * 感谢视频作者的分享和贡献
+  * 点击图片即可跳转视频教程
+  * 如有意见或建议可至`说明&讨论`反馈
 
+| [Hell Cell](https://www.youtube.com/c/HellCell) | [Time](https://www.youtube.com/channel/UChfq00yeRrW4pB3idAypPVw) |
+| :---: | :---: |
+| [说明&讨论](https://t.me/HellCellZC123/1802) | [说明&讨论](https://t.me/GetSomeFriesChannel/119) |
+| [![iRingo教程01：给你的苹果前所未有的Siri与搜索体验](https://res.cloudinary.com/marcomontalbano/image/upload/v1656898276/video_to_markdown/images/youtube--zNWVT08Hju0-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=zNWVT08Hju0 "iRingo教程01：给你的苹果前所未有的Siri与搜索体验") | [![iRingo Siri建议,天气激活](https://res.cloudinary.com/marcomontalbano/image/upload/v1656898353/video_to_markdown/images/youtube--G-RH7icI9Wc-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=G-RH7icI9Wc "iRingo Siri建议,天气激活") |
+
+---
 # 快速导航
-  * 支持Shadowrocket, Loon, Quantumult X, Surge, Stash
-  * macOS 12.3, iOS 15.4, iOS 14.8 测试通过
+  * 支持 🎈Loon(推荐), Surge, Stash, Shadowrocket, Quantumult X
+  * macOS 12.3, iOS 15.5, iOS 14.8 测试通过
   * 如无特别声明，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用
   * 需要启用`重写`、`脚本`、`MitM`功能
   * 本项目可视化配置面板订阅及使用方法详见[🧰BoxJs](https://github.com/VirgilClyne/iRingo/wiki/🧰BoxJs)
@@ -27,7 +37,6 @@
 | [说明&讨论](https://t.me/GetSomeFriesChannel/108) | [说明&讨论](https://t.me/GetSomeFriesChannel/116) | [说明&讨论](https://t.me/GetSomeFriesChannel/64) | [说明&讨论](https://t.me/GetSomeFriesChannel/120) | [说明&讨论](https://t.me/GetSomeFriesChannel/118) | 说明&讨论 | 说明&讨论 | 说明&讨论 |
 
 ---
-
 # 鸣谢
 * 排名不分先后
   * [@chavyleung](https://github.com/chavyleung)
