@@ -3349,7 +3349,7 @@ const appendQweatherSourceToProviderName = (providerName, source) => {
  * @return {Object}
  */
 const toMetadata = (appleApiVersion, metadataObject) => {
-  const supportedApis = [1, 2];
+  const supportedApis = [1, 2, 3];
   if (!supportedApis.includes(appleApiVersion)) {
     return {};
   }
@@ -3597,7 +3597,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
    * @return { nextHourConditionV1[] | nextHourConditionV2[] } - For `forecastNextHour.condition`
    */
   const toConditions = (apiVersion, minutesData, startTimestamp) => {
-    const supportedApis = [1, 2];
+    const supportedApis = [1, 2, 3];
     if (!supportedApis.includes(apiVersion) || !isMinuteArray(minutesData)) {
       return [];
     }
@@ -3746,7 +3746,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
    * @return {nextHourSummaryV1[] | nextHourSummaryV2[]} - value for `forecastNextHour.summary[]`
    */
   const toSummaries = (apiVersions, minutesData, startTimestamp) => {
-    const supportedApis = [1, 2];
+    const supportedApis = [1, 2, 3];
     if (!supportedApis.includes(apiVersions) || !isMinuteArray(minutesData)) {
       return [];
     }
@@ -3843,7 +3843,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
    * @return {nextHourMinuteV1[] | nextHourMinuteV2[]} - For `forecastNextHour.minutes`
    */
   const toMinutes = (apiVersions, minutesData, startTimestamp) => {
-    const supportedApis = [1, 2];
+    const supportedApis = [1, 2, 3];
     if (!supportedApis.includes(apiVersions) || !isMinuteArray(minutesData)) {
       return [];
     }
@@ -3994,7 +3994,7 @@ const toResponseBody = (envs, request, response) => {
   const settings = toSettings(envs);
   const caches = toCaches(envs);
 
-  const supportedAppleApis = [1, 2];
+  const supportedAppleApis = [1, 2, 3];
   const apiWithAqiComparison = ['api.caiyunapp.com'];
   const toAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
   const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
@@ -4429,7 +4429,7 @@ const caches = toCaches(envs);
 
 // eslint-disable-next-line functional/no-conditional-statement
 if (!settings.switch) {
-  const supportedAppleApis = [1, 2];
+  const supportedAppleApis = [1, 2, 3];
 
   // eslint-disable-next-line no-undef
   const url = (new URLs()).parse($response?.url);
