@@ -4457,16 +4457,17 @@ if (!settings.switch) {
       const longitude = parseFloat(parameters?.longitude);
       const location = { latitude, longitude };
       const providerName = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
+      const scale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
       const qweatherNames = ['和风天气', 'QWeather'];
       // eslint-disable-next-line functional/no-conditional-statement
-      if (isLocation(location)) {
+      if (isLocation(location) && typeof scale === 'string' && scale.length > 0) {
         // eslint-disable-next-line functional/no-expression-statement
         $.setjson(cacheAqi(
           caches,
           timestamp,
           location,
           qweatherNames.includes(providerName) ? responseBody?.[AIR_QUALITY]?.[SOURCE] : null,
-          responseBody?.[AIR_QUALITY]?.[AQI_SCALE],
+          scale.slice(0, scale.indexOf('.')),
           responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
         ));
       }
