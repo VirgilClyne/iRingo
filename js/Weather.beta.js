@@ -3788,36 +3788,19 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
    * @param {supportedIosApi} apiVersions - Apple Weather API Version
    * @param {minute[]} minutesData - array of minute precipitation data
    * @param {number} startTimestamp - UNIX timestamp when minutes start
-   * @param {precipitationLevels} levels - range of each precipitation level
    * @return {nextHourMinuteV1[] | nextHourMinuteV2[]} - For `forecastNextHour.minutes`
    */
-  const toMinutes = (apiVersions, minutesData, startTimestamp, levels) => {
+  const toMinutes = (apiVersions, minutesData, startTimestamp) => {
     const supportedApis = [1, 2];
     if (!supportedApis.includes(apiVersions) || !isMinuteArray(minutesData)) {
       return [];
     }
 
-    /**
-     * Mapping the precipitation level ranges to 3 level of ranges of Apple
-     * @author WordlessEcho <wordless@echo.moe>
-     * @param {precipitationLevels} ranges - Range of each precipitation level
-     * @param {number} precipitation - Value of precipitation
-     * @return {number} - Value for `forecastNextHour.minutes[].precipIntensityPerceived`
-     */
-    const toApplePrecipitation = (ranges, precipitation) => {
-      const range = Object.values(ranges)
-        .find(({ RANGE }) => precipitation >= RANGE.LOWER && precipitation < RANGE.UPPER) ?? -1;
-      const lastRange = Object.values(ranges).find(({ VALUE }) => VALUE === range.VALUE - 1) ?? -1;
-
-      return range.VALUE <= 0 || range.VALUE >= 4 ? range.VALUE : range.VALUE
-        + (((precipitation - lastRange.UPPER) * 1000) / ((range.UPPER - range.LOWER) * 1000));
-    };
-
     const validMinutesData = toValidMinutes(minutesData);
     const timestamp = isNonNanNumber(startTimestamp) && startTimestamp > 0
       ? startTimestamp : (+(new Date()));
 
-    return validMinutesData.map(({ precipitation, chance }, index) => {
+    return validMinutesData.map(({ precipitation, chance, precipitationIntensityPerceived }, index) => {
       const sharedMinute = {
         precipIntensity: typeof precipitation === 'number' && !Number.isNaN(precipitation)
           && precipitation > 0 ? precipitation : 0,
@@ -3830,7 +3813,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
           return {
             startAt: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
             ...sharedMinute,
-            perceivedIntensity: toApplePrecipitation(levels, sharedMinute.precipIntensity),
+            perceivedIntensity: precipitationIntensityPerceived,
           };
         // to make JSDoc or ESLint happy
         case 2:
@@ -3838,7 +3821,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
           return {
             startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
             ...sharedMinute,
-            precipIntensityPerceived: toApplePrecipitation(levels, sharedMinute.precipIntensity),
+            precipIntensityPerceived: precipitationIntensityPerceived,
           };
       }
     });
@@ -3853,12 +3836,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
   const condition = toConditions(appleApiVersion, nextHourObject.minutes, startTimestamp);
   const summary = toSummaries(appleApiVersion, nextHourObject.minutes, startTimestamp);
-  const minutes = toMinutes(
-    appleApiVersion,
-    nextHourObject.minutes,
-    startTimestamp,
-    nextHourObject.precipitationLevels,
-  );
+  const minutes = toMinutes(appleApiVersion, nextHourObject.minutes, startTimestamp);
 
   const nextHour = {
     ...(condition.length > 0 && { condition }),
