@@ -2147,6 +2147,7 @@ const toAppleTime = (apiVersion, timestamp) => {
     case 1:
       return Math.trunc((+timeDate) / 1000);
     case 2:
+    case 3:
       return `${timeDate.toISOString().split('.')[0]}Z`;
     default:
       return '';
@@ -2633,7 +2634,7 @@ const colorfulCloudsToAqiComparison = (realtimeAndHistoryData, forceChn) => {
   return 'unknown';
 };
 
-const colorfulCloudsToAqiMetadata = (providerName, data) => {
+const colorfulCloudsToAqiMetadata = (providerName, url, data) => {
   const language = data?.lang;
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
   // the unit of server_time is second
@@ -2660,6 +2661,7 @@ const colorfulCloudsToAqiMetadata = (providerName, data) => {
     dataSource: 1,
     // https://developer.apple.com/documentation/weatherkitrestapi/unitssystem
     unit: 'm',
+    url,
   };
 };
 
@@ -2778,6 +2780,7 @@ const waqiToAqiMetadata = (data) => {
     dataSource: 0,
     // https://developer.apple.com/documentation/weatherkitrestapi/unitssystem
     unit: 'm',
+    url: 'https://waqi.info'
   };
 };
 
@@ -2915,7 +2918,7 @@ const weatherStatusToType = (weatherStatus) => {
   }
 };
 
-const colorfulCloudsToNextHourMetadata = (providerName, data) => {
+const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
   const language = data?.lang;
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
   // the unit of server_time is second
@@ -2937,6 +2940,7 @@ const colorfulCloudsToNextHourMetadata = (providerName, data) => {
     dataSource: 1,
     // https://developer.apple.com/documentation/weatherkitrestapi/unitssystem
     unit: 'm',
+    url,
   };
 };
 
@@ -3395,6 +3399,24 @@ const toMetadata = (appleApiVersion, metadataObject) => {
           ...(typeof metadataObj?.unit === 'string' && metadataObj.unit.length > 0
             && { units: metadataObj.unit }),
         };
+      case 3:
+        return {
+          ...sharedMetadata,
+          ...(typeof metadataObj?.url === 'string' && metadataObj.url.length > 0
+            && { attributionURL: metadataObj.url }),
+          ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
+            && { expireTime: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
+          ...(typeof metadataObj?.providerLogo?.forV2 === 'string' && metadataObj.providerLogo.forV2.length > 0
+            && { providerLogo: metadataObj.providerLogo.forV2 }),
+          ...(typeof metadataObj?.providerName === 'string' && metadataObj.providerName.length > 0
+            && { providerName: metadataObj.providerName }),
+          ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
+            && { readTime: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
+          ...(isNonNanNumber(metadataObj?.reportedTimestamp) && metadataObj.reportedTimestamp > 0
+            && { reportedTime: toAppleTime(apiVersion, metadataObj.reportedTimestamp) }),
+          ...(typeof metadataObj?.unit === 'string' && metadataObj.unit.length > 0
+            && { units: metadataObj.unit }),
+        };
       default:
         return {};
     }
@@ -3403,7 +3425,8 @@ const toMetadata = (appleApiVersion, metadataObject) => {
   const metadata = getMetadata(appleApiVersion, metadataObject);
   return Object.keys(sharedMetadata).length > 0 || Object.keys(metadata)
     ? {
-      ...(isNonNanNumber(appleApiVersion) && appleApiVersion > 0 && { version: appleApiVersion }),
+      ...(isNonNanNumber(appleApiVersion) && appleApiVersion > 0
+        && { version: appleApiVersion > 2 ? appleApiVersion - 2 : appleApiVersion }),
       ...sharedMetadata,
       ...metadata,
     } : {};
@@ -3423,6 +3446,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
       case 1:
         return sharedUnit.concat(['µg/m3']);
       case 2:
+      case 3:
         return sharedUnit.concat(['microgramsPerM3']);
       default:
         return [];
@@ -3445,12 +3469,13 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
       )),
     }),
     ...(iosPollutantNames.includes(aqiObject.primary) && { primaryPollutant: aqiObject.primary }),
+    // TODO: source was removed after APIv3
     ...(typeof aqiObject?.sourceName === 'string' && aqiObject.sourceName.length > 0
       && { source: aqiObject.sourceName }),
   };
 
   const getAirQuality = (apiVersion, aqiObj) => {
-    switch (appleApiVersion) {
+    switch (apiVersion) {
       case 1:
         return {
           ...sharedAirQuality,
@@ -3463,6 +3488,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { airQualityScale: aqiObj.scale }),
         };
       case 2:
+      case 3:
         return {
           ...sharedAirQuality,
           ...(isNonNanNumber(aqiObj?.categoryIndex) && aqiObj.categoryIndex > 0
@@ -3666,12 +3692,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       const sharedCondition = {
         token,
-        longTemplate: longDescription,
-        shortTemplate: shortDescription,
-        parameters: typeof minute.parameters === 'object'
-          ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
-            key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-          ])) : {},
       };
 
       switch (apiVersion) {
@@ -3681,8 +3701,13 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
               validUntil: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
             ...sharedCondition,
+            longTemplate: longDescription,
+            shortTemplate: shortDescription,
+            parameters: typeof minute.parameters === 'object'
+              ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
+                key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
+              ])) : {},
           };
-        // to make ESLint and JSDoc happy
         case 2:
           return {
             startTime: toAppleTime(apiVersion, timestamp + lastBound * 60 * 1000),
@@ -3690,6 +3715,21 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
               endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
             ...sharedCondition,
+            longTemplate: longDescription,
+            shortTemplate: shortDescription,
+            parameters: typeof minute.parameters === 'object'
+              ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
+                key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
+              ])) : {},
+          };
+        case 3:
+          return {
+            startTime: toAppleTime(apiVersion, timestamp + lastBound * 60 * 1000),
+            ...(needEndTime && {
+              endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
+            }),
+            ...sharedCondition,
+            parameters: {},
           };
         default:
           return {};
@@ -3775,6 +3815,18 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
               precipIntensity: Math.max(...precipitations),
             }),
           };
+        case 3:
+          return {
+            startTime: toAppleTime(apiVersions, timestamp + lastBound * 60 * 1000),
+            ...(needEndTime && {
+              endTime: toAppleTime(apiVersions, timestamp + bound * 60 * 1000),
+            }),
+            condition,
+            ...(isNotClear && {
+              precipitationChance: maxChance,
+              precipitationIntensity: Math.max(...precipitations),
+            }),
+          };
         default:
           return {};
       }
@@ -3801,33 +3853,41 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       ? startTimestamp : (+(new Date()));
 
     return validMinutesData.map(({ precipitation, chance, precipitationIntensityPerceived }, index) => {
-      const sharedMinute = {
-        precipIntensity: typeof precipitation === 'number' && !Number.isNaN(precipitation)
-          && precipitation > 0 ? precipitation : 0,
-        precipChance: typeof chance === 'number' && !Number.isNaN(chance) && chance > 0
-          ? chance : 0,
+      const v1AndV2Minute = {
+        precipIntensity: isNonNanNumber(precipitation) && precipitation > 0 ? precipitation : 0,
+        precipChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
       };
 
       switch (apiVersions) {
         case 1:
           return {
             startAt: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-            ...sharedMinute,
+            ...v1AndV2Minute,
             perceivedIntensity: precipitationIntensityPerceived,
           };
         // to make JSDoc or ESLint happy
         case 2:
-        default:
           return {
             startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-            ...sharedMinute,
+            ...v1AndV2Minute,
             precipIntensityPerceived: precipitationIntensityPerceived,
           };
+        case 3:
+          return {
+            startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
+            precipitationChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
+            precipitationIntensity: isNonNanNumber(precipitation) && precipitation > 0
+              ? precipitation : 0,
+            precipitationIntensityPerceived: precipitationIntensityPerceived,
+          };
+        default:
+          return {};
       }
     });
   };
 
-  const haveReadTime = isNonNanNumber(nextHourObject?.readTimestamp);
+  const haveReadTime = isNonNanNumber(nextHourObject?.readTimestamp)
+    && nextHourObject.readTimestamp > 0;
 
   // use next minute with zero second and zero millisecond as startTime
   const startTimestamp = haveReadTime
@@ -3844,6 +3904,32 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     // use next minute with zero second and zero millisecond as startTime
     ...(haveReadTime && { startTime: toAppleTime(appleApiVersion, startTimestamp) }),
     ...(minutes.length > 0 && { minutes }),
+  };
+
+  const getNextHour = (apiVersion, condition, summary, minutes, timestamp) => {
+    const sharedNextHour = {
+      ...(Array.isArray(condition) && condition.length > 0 && { condition }),
+      ...(Array.isArray(summary) && summary.length > 0 && { summary }),
+      ...(Array.isArray(minutes) && minutes.length > 0 && { minutes }),
+    };
+
+    switch (apiVersion) {
+      case 1:
+      case 2:
+        return {
+          ...sharedNextHour,
+          ...(isNonNanNumber(timestamp) && timestamp > 0
+            && { startTime: toAppleTime(appleApiVersion, timestamp) }),
+        };
+      case 3:
+        return {
+          ...sharedNextHour,
+          ...(isNonNanNumber(timestamp) && timestamp > 0
+            && { forecastStart: toAppleTime(appleApiVersion, timestamp) }),
+          ...$(Array.isArray(minutes) && minutes.length > 0
+            && { forecastEnd: toAppleTime(appleApiVersion, timestamp + 1000 * 60 * minutes.length) }),
+        };
+    }
   };
 
   return Object.keys(nextHour).length > 0 ? { name: 'NextHourForecast', ...nextHour } : {};
@@ -3867,6 +3953,7 @@ const getKeywords = (apiVersion) => {
         AQI_COMPARISON: '',
       };
     case 2:
+    case 3:
       return {
         METADATA: 'metadata',
         AIR_QUALITY: 'airQuality',
@@ -3923,7 +4010,8 @@ const toResponseBody = (envs, request, response) => {
         const requirement = parsedUrl.params?.include;
         return Array.isArray(requirement) ? requirement : [];
       }
-      case 2: {
+      case 2:
+      case 3: {
         const requirement = parsedUrl.params?.dataSets;
         return Array.isArray(requirement) ? requirement : [];
       }
@@ -4007,6 +4095,7 @@ const toResponseBody = (envs, request, response) => {
         return {
           [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
             '气象在线',
+            'https://www.weatherol.cn/',
             promiseData?.returnedData,
           )),
           ...toAirQuality(apiVersion, colorfulCloudsToAqi(
@@ -4021,6 +4110,7 @@ const toResponseBody = (envs, request, response) => {
         return {
           [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
             getColorfulCloudsName(appleLanguage),
+            'https://caiyunapp.com/weather/',
             promiseData?.returnedData,
           )),
           ...toAirQuality(apiVersion, colorfulCloudsToAqi(
@@ -4080,6 +4170,7 @@ const toResponseBody = (envs, request, response) => {
         return {
           [METADATA]: toMetadata(apiVersion, colorfulCloudsToNextHourMetadata(
             '气象在线',
+            'https://www.weatherol.cn/',
             promiseData?.returnedData,
           )),
           ...toNextHour(apiVersion, colorfulCloudsToNextHour(
@@ -4091,6 +4182,7 @@ const toResponseBody = (envs, request, response) => {
         return {
           [METADATA]: toMetadata(apiVersion, colorfulCloudsToNextHourMetadata(
             getColorfulCloudsName(appleLanguage),
+            'https://caiyunapp.com/weather/',
             promiseData?.returnedData,
           )),
           ...toNextHour(apiVersion, colorfulCloudsToNextHour(
