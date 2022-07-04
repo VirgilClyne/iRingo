@@ -44,9 +44,16 @@ const database = {
         Switch: true, Targets: ['HJ6332012'], Local: { Switch: true, Standard: 'WAQI_InstantCast' }, Source: 'WAQI Public', Comparison: { Switch: true, Source: 'Local' },
       },
       Map: { AQI: false },
-      HTTPHeaders: { 'Content-Type': 'application/json' },
-      ColorfulClouds: { Token: null, AQI: { CN: true, Comparison: { CN: false } } },
-      WAQI: { Token: null, Mode: 'Coordinate' },
+      APIs: {
+        WeatherOL: { HTTPHeaders: { 'Content-Type': 'application/json' } },
+        ColorfulClouds: {
+          HTTPHeaders: { 'Content-Type': 'application/json' },
+          Token: null,
+          ForceCNForAQI: false,
+          ForceCNForComparison: false,
+        },
+        WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: null, Mode: 'Location' },
+      }
     },
     Configs: {
       Version: 1,
@@ -1089,33 +1096,31 @@ const toSettings = (envs) => {
         // TODO
         apis: {
           weatherOl: {
-            // TODO
             httpHeaders: parseJsonWithDefault(
               envs?.Settings?.APIs?.WeatherOl?.HTTPHeaders,
-              settings.HTTPHeaders,
+              settings.APIs.WeatherOL.HTTPHeaders,
             ),
           },
           colorfulClouds: {
-            // TODO
             httpHeaders: parseJsonWithDefault(
               envs?.Settings?.APIs?.ColorfulClouds?.HTTPHeaders,
-              settings.HTTPHeaders,
+              settings.APIs.ColorfulClouds.HTTPHeaders,
             ),
             token: envs?.Settings?.APIs?.ColorfulClouds?.Token,
             forceCnForAqi: parseJsonWithDefault(
               envs?.Settings?.APIs?.ColorfulClouds?.ForceCNForAQI,
-              settings.apis.colorfulClouds.forceCnForAqi,
+              settings.APIs.ColorfulClouds.ForceCNForAQI,
             ),
             forceCnForComparison: parseJsonWithDefault(
               envs?.Settings?.APIs?.ColorfulClouds?.ForceCNForComparison,
-              settings.apis.colorfulClouds.forceCnForComparison,
+              settings.APIs.ColorfulClouds.ForceCNForComparison,
             ),
           },
           waqi: {
             // TODO
             httpHeaders: parseJsonWithDefault(
               envs?.Settings?.APIs?.WAQI?.HTTPHeaders,
-              settings.HTTPHeaders,
+              settings.APIs.WAQI.HTTPHeaders,
             ),
             token: envs?.Settings?.APIs?.WAQI?.Token,
             // TODO
