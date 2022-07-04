@@ -53,7 +53,7 @@ const database = {
           ForceCNForComparison: false,
         },
         WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: null, Mode: 'Location' },
-      }
+      },
     },
     Configs: {
       Version: 1,
@@ -2780,7 +2780,7 @@ const waqiToAqiMetadata = (data) => {
     dataSource: 0,
     // https://developer.apple.com/documentation/weatherkitrestapi/unitssystem
     unit: 'm',
-    url: 'https://waqi.info'
+    url: 'https://waqi.info',
   };
 };
 
@@ -3852,38 +3852,40 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     const timestamp = isNonNanNumber(startTimestamp) && startTimestamp > 0
       ? startTimestamp : (+(new Date()));
 
-    return validMinutesData.map(({ precipitation, chance, precipitationIntensityPerceived }, index) => {
-      const v1AndV2Minute = {
-        precipIntensity: isNonNanNumber(precipitation) && precipitation > 0 ? precipitation : 0,
-        precipChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
-      };
+    return validMinutesData.map(
+      ({ precipitation, chance, precipitationIntensityPerceived }, index) => {
+        const v1AndV2Minute = {
+          precipIntensity: isNonNanNumber(precipitation) && precipitation > 0 ? precipitation : 0,
+          precipChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
+        };
 
-      switch (apiVersions) {
-        case 1:
-          return {
-            startAt: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-            ...v1AndV2Minute,
-            perceivedIntensity: precipitationIntensityPerceived,
-          };
-        // to make JSDoc or ESLint happy
-        case 2:
-          return {
-            startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-            ...v1AndV2Minute,
-            precipIntensityPerceived: precipitationIntensityPerceived,
-          };
-        case 3:
-          return {
-            startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-            precipitationChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
-            precipitationIntensity: isNonNanNumber(precipitation) && precipitation > 0
-              ? precipitation : 0,
-            precipitationIntensityPerceived: precipitationIntensityPerceived,
-          };
-        default:
-          return {};
-      }
-    });
+        switch (apiVersions) {
+          case 1:
+            return {
+              startAt: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
+              ...v1AndV2Minute,
+              perceivedIntensity: precipitationIntensityPerceived,
+            };
+          // to make JSDoc or ESLint happy
+          case 2:
+            return {
+              startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
+              ...v1AndV2Minute,
+              precipIntensityPerceived: precipitationIntensityPerceived,
+            };
+          case 3:
+            return {
+              startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
+              precipitationChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
+              precipitationIntensity: isNonNanNumber(precipitation) && precipitation > 0
+                ? precipitation : 0,
+              precipitationIntensityPerceived,
+            };
+          default:
+            return {};
+        }
+      },
+    );
   };
 
   const haveReadTime = isNonNanNumber(nextHourObject?.readTimestamp)
@@ -3893,18 +3895,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
   const startTimestamp = haveReadTime
     ? (new Date(nextHourObject.readTimestamp + 1000 * 60)).setSeconds(0, 0)
     : (new Date((+(new Date())) + 1000 * 60)).setSeconds(0, 0);
-
-  const condition = toConditions(appleApiVersion, nextHourObject.minutes, startTimestamp);
-  const summary = toSummaries(appleApiVersion, nextHourObject.minutes, startTimestamp);
-  const minutes = toMinutes(appleApiVersion, nextHourObject.minutes, startTimestamp);
-
-  const nextHour = {
-    ...(condition.length > 0 && { condition }),
-    ...(summary.length > 0 && { summary }),
-    // use next minute with zero second and zero millisecond as startTime
-    ...(haveReadTime && { startTime: toAppleTime(appleApiVersion, startTimestamp) }),
-    ...(minutes.length > 0 && { minutes }),
-  };
 
   const getNextHour = (apiVersion, condition, summary, minutes, timestamp) => {
     const sharedNextHour = {
@@ -3926,11 +3916,22 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
           ...sharedNextHour,
           ...(isNonNanNumber(timestamp) && timestamp > 0
             && { forecastStart: toAppleTime(appleApiVersion, timestamp) }),
-          ...$(Array.isArray(minutes) && minutes.length > 0
-            && { forecastEnd: toAppleTime(appleApiVersion, timestamp + 1000 * 60 * minutes.length) }),
+          ...(Array.isArray(minutes) && minutes.length > 0 && {
+            forecastEnd: toAppleTime(appleApiVersion, timestamp + 1000 * 60 * minutes.length),
+          }),
         };
+      default:
+        return {};
     }
   };
+
+  const nextHour = getNextHour(
+    appleApiVersion,
+    toConditions(appleApiVersion, nextHourObject.minutes, startTimestamp),
+    toSummaries(appleApiVersion, nextHourObject.minutes, startTimestamp),
+    toMinutes(appleApiVersion, nextHourObject.minutes, startTimestamp),
+    haveReadTime ? startTimestamp : null,
+  );
 
   return Object.keys(nextHour).length > 0 ? { name: 'NextHourForecast', ...nextHour } : {};
 };
