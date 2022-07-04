@@ -4453,11 +4453,14 @@ if (!settings.switch) {
       const time = responseBody?.[AIR_QUALITY]?.[METADATA]?.[REPORTED_TIME];
       const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
       const timestamp = appleTimeToTimestamp(appleApiVersion, time, nowHourTimestamp);
+
       const latitude = parseFloat(parameters?.latitude);
       const longitude = parseFloat(parameters?.longitude);
       const location = { latitude, longitude };
+
       const providerName = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
       const scale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
+
       const qweatherNames = ['和风天气', 'QWeather'];
       // eslint-disable-next-line functional/no-conditional-statement
       if (isLocation(location) && typeof scale === 'string' && scale.length > 0) {
@@ -4469,7 +4472,7 @@ if (!settings.switch) {
           qweatherNames.includes(providerName) ? responseBody?.[AIR_QUALITY]?.[SOURCE] : null,
           scale.slice(0, scale.indexOf('.')),
           responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
-        ));
+        ), '@iRingo.Weather.Caches');
       }
       // eslint-disable-next-line functional/no-expression-statement
       $.done({ body: responseBody });
