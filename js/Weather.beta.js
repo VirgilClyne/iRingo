@@ -4031,7 +4031,8 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
 };
 
 const toResponseBody = (envs, request, response) => {
-  if (typeof request?.url !== 'string') {
+  const dataFromApple = parseJsonWithDefault(response?.body, {});
+  if (typeof request?.url !== 'string' || Object.keys(dataFromApple).length <= 0) {
     return Promise.resolve(response?.body);
   }
 
@@ -4240,12 +4241,6 @@ const toResponseBody = (envs, request, response) => {
     }
   };
 
-  const dataFromApple = parseJsonWithDefault(response?.body, {});
-
-  if (Object.keys(dataFromApple).length <= 0) {
-    return Promise.resolve(response?.body);
-  }
-
   const latitude = parseFloat(parameters?.lat);
   const longitude = parseFloat(parameters?.lng);
   const languageWithRegion = parameters?.language;
@@ -4255,7 +4250,7 @@ const toResponseBody = (envs, request, response) => {
     || !isLongitude(longitude) || typeof languageWithRegion !== 'string'
     || languageWithRegion.length <= 0
   ) {
-    return Promise.resolve(response?.body);
+    return Promise.resolve(dataFromApple);
   }
 
   const {
@@ -4421,7 +4416,7 @@ const toResponseBody = (envs, request, response) => {
 
   return Promise.all(promises).then((dataArray) => {
     if (!Array.isArray(dataArray)) {
-      return response;
+      return dataFromApple;
     }
 
     const dataForAqi = dataArray.find((data) => (
@@ -4448,7 +4443,7 @@ const toResponseBody = (envs, request, response) => {
     const modifiedNextHour = getNextHour(appleApiVersion, dataForNextHour, languageWithRegion);
 
     return {
-      ...response,
+      ...dataFromApple,
       [AIR_QUALITY]: {
         ...mergedAirQuality,
         ...(settings.aqi.local.switch && toAirQuality(appleApiVersion, appleToEpaAirQuality(
