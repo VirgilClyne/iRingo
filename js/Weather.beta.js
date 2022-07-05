@@ -4446,6 +4446,7 @@ if (settings.switch) {
   if (!supportedAppleApis.includes(appleApiVersion)) {
     // eslint-disable-next-line functional/no-expression-statement
     $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
+    $.done($response);
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
     const {
