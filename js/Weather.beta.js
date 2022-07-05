@@ -4242,9 +4242,7 @@ const toResponseBody = (envs, request, response) => {
 
   const dataFromApple = parseJsonWithDefault(response?.body, {});
 
-  if (
-    typeof response?.url !== 'string' || response.url.legth <= 0 || Object.keys(dataFromApple).length <= 0
-  ) {
+  if (Object.keys(dataFromApple).length <= 0) {
     return Promise.resolve(response?.body);
   }
 
