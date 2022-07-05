@@ -4031,7 +4031,7 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
 };
 
 const toResponseBody = (envs, request, response) => {
-  if (typeof response?.url !== 'string') {
+  if (typeof request?.url !== 'string') {
     return Promise.resolve(response?.body);
   }
 
@@ -4043,7 +4043,7 @@ const toResponseBody = (envs, request, response) => {
   const toAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
   const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
 
-  const url = (new URLs()).parse(response.url);
+  const url = (new URLs()).parse(request.url);
   const parameters = getParams(url.path);
   const appleApiVersionString = parameters?.ver;
   const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
@@ -4472,11 +4472,11 @@ const settings = toSettings(envs);
 const caches = toCaches(envs);
 
 // eslint-disable-next-line functional/no-conditional-statement
-if (settings.switch && typeof $response?.url === 'string') {
+if (settings.switch && typeof $request?.url === 'string') {
   const supportedAppleApis = [1, 2, 3];
 
   // eslint-disable-next-line no-undef
-  const url = (new URLs()).parse($response.url);
+  const url = (new URLs()).parse($request.url);
   const parameters = getParams(url.path);
   const appleApiVersionString = parameters?.ver;
   const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
@@ -4521,7 +4521,7 @@ if (settings.switch && typeof $response?.url === 'string') {
         ), '@iRingo.Weather.Caches');
       }
       // eslint-disable-next-line functional/no-expression-statement
-      $.done({ body: responseBody });
+      $.done({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
   }
 } else {
