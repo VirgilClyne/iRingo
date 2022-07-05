@@ -23,7 +23,7 @@ function URLs(s){return new class{constructor(s=[]){this.name="URL v1.0.0",this.
  */
 // noinspection
 // eslint-disable-next-line
-async function getENV(t, e, n) { const i = $.getjson(t, n); const s = i?.[e]?.Settings || n?.[e]?.Settings || n?.Default?.Settings; const g = i?.[e]?.Configs || n?.[e]?.Configs || n?.Default?.Configs; let f = i?.[e]?.Caches || void 0; if (typeof f === 'string' && (f = JSON.parse(f)), typeof $argument !== 'undefined') { if ($argument) { const t = Object.fromEntries($argument.split('&').map(((t) => t.split('=')))); const e = {}; for (const a in t)o(e, a, t[a]); Object.assign(s, e); } function o(t, e, n) { e.split('.').reduce(((t, i, s) => t[i] = e.split('.').length === ++s ? n : t[i] || {}), t); } } return { Settings: s, Caches: f, Configs: g }; }
+function getENV(t, e, n) { const i = $.getjson(t, n); const s = i?.[e]?.Settings || n?.[e]?.Settings || n?.Default?.Settings; const g = i?.[e]?.Configs || n?.[e]?.Configs || n?.Default?.Configs; let f = i?.[e]?.Caches || void 0; if (typeof f === 'string' && (f = JSON.parse(f)), typeof $argument !== 'undefined') { if ($argument) { const t = Object.fromEntries($argument.split('&').map(((t) => t.split('=')))); const e = {}; for (const a in t)o(e, a, t[a]); Object.assign(s, e); } function o(t, e, n) { e.split('.').reduce(((t, i, s) => t[i] = e.split('.').length === ++s ? n : t[i] || {}), t); } } return { Settings: s, Caches: f, Configs: g }; }
 
 const database = {
   Location: {
@@ -49,7 +49,7 @@ const database = {
         ColorfulClouds: {
           HTTPHeaders: { 'Content-Type': 'application/json' },
           Token: null,
-          ForceCNForAQI: false,
+          ForceCNForAQI: true,
           ForceCNForComparison: false,
         },
         WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: null, Mode: 'Location' },
@@ -1129,7 +1129,47 @@ const toSettings = (envs) => {
         },
       };
     default:
-      return settings;
+      return {
+        switch: settings.Switch,
+        nextHour: {
+          switch: settings.NextHour.Switch,
+          source: settings.NextHour.Source,
+        },
+        aqi: {
+          switch: settings.AQI.Switch,
+          targets: settings.AQI.Targets,
+          local: {
+            switch: settings.AQI.Local.Switch,
+            standard: settings.AQI.Local.Standard,
+          },
+          source: settings.AQI.Source,
+          comparison: {
+            switch: settings.AQI.Comparison.Switch,
+            source: settings.AQI.Comparison.Source,
+          },
+        },
+        map: {
+          aqi: settings.Map.AQI,
+        },
+        // TODO
+        apis: {
+          weatherOl: {
+            httpHeaders: settings.APIs.WeatherOL.HTTPHeaders,
+          },
+          colorfulClouds: {
+            httpHeaders: settings.APIs.ColorfulClouds.HTTPHeaders,
+            token: settings.APIs.ColorfulClouds.Token,
+            forceCnForAqi: settings.APIs.ColorfulClouds.ForceCNForAQI,
+            forceCnForComparison: settings.APIs.ColorfulClouds.ForceCNForComparison,
+          },
+          waqi: {
+            // TODO
+            httpHeaders: settings.APIs.WAQI.HTTPHeaders,
+            token: settings.APIs.WAQI.Token,
+            mode: settings.APIs.WAQI.Mode,
+          },
+        },
+      };
   }
 };
 
@@ -4432,11 +4472,11 @@ const settings = toSettings(envs);
 const caches = toCaches(envs);
 
 // eslint-disable-next-line functional/no-conditional-statement
-if (settings.switch) {
+if (settings.switch && typeof $response?.url === 'string') {
   const supportedAppleApis = [1, 2, 3];
 
   // eslint-disable-next-line no-undef
-  const url = (new URLs()).parse($response?.url);
+  const url = (new URLs()).parse($response.url);
   const parameters = getParams(url.path);
   const appleApiVersionString = parameters?.ver;
   const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
