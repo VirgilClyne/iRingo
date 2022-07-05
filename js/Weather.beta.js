@@ -4524,4 +4524,6 @@ if (settings.switch && typeof $response?.url === 'string') {
       $.done({ body: responseBody });
     });
   }
+} else {
+  $.done($response);
 }
