@@ -1291,7 +1291,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
  * @author VirgilClyne
  * @author WordlessEcho <wordless@echo.moe>
  * @param {String} path - Path of URL
- * @return {Object.<'version'|'language'|'latitude'|'longitude'|'regionCode', string>|{}} -
+ * @return {Object.<'ver'|'language'|'lat'|'lng'|'countryCode', string>|{}} -
  * `version`, `language`, `latitude`, `longitude` and `regionCode` from path.
  * Empty object will be returned if type of path is invalid.
  */
@@ -1300,7 +1300,7 @@ const getParams = (path) => {
     return {};
   }
 
-  const regExp = /^(?<version>v1|v2|v3)\/weather\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<regionCode>country=[A-Z]{2})?.*/i;
+  const regExp = /^(?<ver>v1|v2|v3)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
   return path.match(regExp).groups;
 };
 
@@ -4001,9 +4001,9 @@ const toResponseBody = (envs, request, response) => {
 
   const url = (new URLs()).parse(response?.url);
   const parameters = getParams(url.path);
-  const appleApiVersionString = parameters?.version;
+  const appleApiVersionString = parameters?.ver;
   const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
-    ? parseInt(parameters?.version, 10) : -1;
+    ? parseInt(appleApiVersionString.slice(1), 10) : -1;
 
   const getRequireData = (apiVersion, parsedUrl) => {
     switch (apiVersion) {
@@ -4204,8 +4204,8 @@ const toResponseBody = (envs, request, response) => {
     return Promise.resolve(response);
   }
 
-  const latitude = parseFloat(parameters?.latitude);
-  const longitude = parseFloat(parameters?.longitude);
+  const latitude = parseFloat(parameters?.lat);
+  const longitude = parseFloat(parameters?.lng);
   const languageWithRegion = parameters?.language;
 
   if (
@@ -4434,9 +4434,9 @@ if (!settings.switch) {
   // eslint-disable-next-line no-undef
   const url = (new URLs()).parse($response?.url);
   const parameters = getParams(url.path);
-  const appleApiVersionString = parameters?.version;
+  const appleApiVersionString = parameters?.ver;
   const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
-    ? parseInt(parameters?.version, 10) : -1;
+    ? parseInt(appleApiVersionString.slice(1), 10) : -1;
 
   // eslint-disable-next-line functional/no-conditional-statement
   if (!supportedAppleApis.includes(appleApiVersion)) {
@@ -4455,8 +4455,8 @@ if (!settings.switch) {
       const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
       const timestamp = appleTimeToTimestamp(appleApiVersion, time, nowHourTimestamp);
 
-      const latitude = parseFloat(parameters?.latitude);
-      const longitude = parseFloat(parameters?.longitude);
+      const latitude = parseFloat(parameters?.lat);
+      const longitude = parseFloat(parameters?.lng);
       const location = { latitude, longitude };
 
       const providerName = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
