@@ -3991,6 +3991,10 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
 };
 
 const toResponseBody = (envs, request, response) => {
+  if (typeof response?.url !== 'string') {
+    return Promise.resolve(response?.body);
+  }
+
   const settings = toSettings(envs);
   const caches = toCaches(envs);
 
@@ -3999,7 +4003,7 @@ const toResponseBody = (envs, request, response) => {
   const toAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
   const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
 
-  const url = (new URLs()).parse(response?.url);
+  const url = (new URLs()).parse(response.url);
   const parameters = getParams(url.path);
   const appleApiVersionString = parameters?.ver;
   const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
@@ -4201,7 +4205,7 @@ const toResponseBody = (envs, request, response) => {
   if (
     typeof response?.url !== 'string' || response.url.legth <= 0 || Object.keys(dataFromApple).length <= 0
   ) {
-    return Promise.resolve(response);
+    return Promise.resolve(response?.body);
   }
 
   const latitude = parseFloat(parameters?.lat);
@@ -4213,7 +4217,7 @@ const toResponseBody = (envs, request, response) => {
     || !isLongitude(longitude) || typeof languageWithRegion !== 'string'
     || languageWithRegion.length <= 0
   ) {
-    return Promise.resolve(response);
+    return Promise.resolve(response?.body);
   }
 
   const {
@@ -4428,7 +4432,7 @@ const settings = toSettings(envs);
 const caches = toCaches(envs);
 
 // eslint-disable-next-line functional/no-conditional-statement
-if (!settings.switch) {
+if (settings.switch) {
   const supportedAppleApis = [1, 2, 3];
 
   // eslint-disable-next-line no-undef
