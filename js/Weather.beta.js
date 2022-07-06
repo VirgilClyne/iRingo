@@ -1741,7 +1741,7 @@ const waqiNearestToFeed = (version, nearestData) => {
             ...(!Number.isNaN(stationId) && { idx: stationId }),
             attributions: [{
               url: 'https://waqi.info/',
-              name: 'World Air Quality Index Project',
+              name: 'The World Air Quality Project',
             }],
             city: {
               geo: station.geo,
@@ -1799,7 +1799,7 @@ const waqiNearestToFeed = (version, nearestData) => {
             ...(!Number.isNaN(stationId) && { idx: stationId }),
             attributions: [{
               url: 'https://waqi.info/',
-              name: 'World Air Quality Index Project',
+              name: 'The World Air Quality Project',
             }],
             city: {
               geo: nearestData.geo,
@@ -1915,7 +1915,7 @@ const waqiV1ToFeed = (v1Data) => {
         && station.msg.attributions.length > 0 ? station.msg.attributions
           : [{
             url: 'https://waqi.info/',
-            name: 'World Air Quality Index Project',
+            name: 'The World Air Quality Project',
           }],
         city: {
           url: 'https://aqicn.org',
@@ -2831,7 +2831,7 @@ const waqiToAqiMetadata = (feedData) => {
       forV1: 'https://waqi.info/images/logo.png',
       forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png',
     },
-    providerName: 'World Air Quality Index Project',
+    providerName: 'The World Air Quality Project',
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 0,
@@ -2870,7 +2870,7 @@ const waqiToAqi = (feedData) => {
     ...(Object.keys(toApplePollutantName).includes(feedData?.data?.dominentpol)
       && { primary: toApplePollutantName[feedData.data.dominentpol] }),
     sourceName: typeof feedData?.data?.city?.name === 'string' && feedData.data.city.name.length > 0
-      ? feedData.data.city.name : 'World Air Quality Index Project',
+      ? feedData.data.city.name : 'The World Air Quality Project',
     categoryIndex,
     aqi: validAqi,
     scale: WAQI_INSTANT_CAST.APPLE_SCALE,
