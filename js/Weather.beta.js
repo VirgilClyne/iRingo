@@ -3275,9 +3275,13 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       ja: ['、'],
     };
 
+    const allTimesString = description.match(/\d+/g);
+    if (!Array.isArray(allTimesString)) {
+      return { shortDescription: description, parameters: {} };
+    }
+
     // Split sentence by time
-    const allTimes = description.match(/\d+/g)
-      .map((timeInString) => parseInt(timeInString, 10))
+    const allTimes = allTimesString.map((timeInString) => parseInt(timeInString, 10))
       .filter((time) => !Number.isNaN(time) && time > 0);
 
     const expiredTimes = allTimes.filter((time) => time <= timeInMinute);
@@ -3355,11 +3359,18 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
     const validChance = chance >= 0 ? chance : 100;
     const ccDescription = dataWithMinutely.result.minutely.description;
-    const descriptionWithParameters = toDescription(
-      ccDescription,
-      dataWithMinutely?.lang,
-      timeInMinute,
-    );
+    // ColorfulClouds may report no rain even if precipitation > no rain
+    const descriptionWithParameters = isClear || ccDescription.includes(KM[dataWithMinutely?.lang])
+      ? {
+        shortDescription: ccDescription.length > 0 ? ccDescription : provider,
+        parameters: {},
+      }
+      : toDescription(
+        ccDescription,
+        dataWithMinutely?.lang,
+        timeInMinute,
+      );
+
     const validDescriptionWithParameters = descriptionWithParameters.shortDescription.length > 0
       ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
 
@@ -3370,11 +3381,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       // Set chance to zero if clear
       chance: isClear ? 0 : validChance,
       longDescription: dataWithMinutely.result.forecast_keypoint,
-      // ColorfulClouds may report no rain even if precipitation > no rain
-      ...(isClear || ccDescription.includes(KM[dataWithMinutely?.lang]) ? {
-        shortDescription: ccDescription.length > 0 ? ccDescription : provider,
-        parameters: {},
-      } : validDescriptionWithParameters),
+      ...validDescriptionWithParameters,
     };
   });
 
