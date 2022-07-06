@@ -2852,7 +2852,7 @@ const waqiToAqi = (feedData) => {
     no2: 'NO2', no: 'NO', nox: 'NOX', pm25: 'PM2.5', so2: 'SO2', o3: 'OZONE', pm10: 'PM10', co: 'CO', other: 'OTHER',
   };
 
-  const aqi = feedData?.aqi;
+  const aqi = feedData?.data?.aqi;
   if (!isNonNanNumber(aqi) || aqi < 0) {
     return {};
   }
@@ -2863,14 +2863,14 @@ const waqiToAqi = (feedData) => {
   return isNonNanNumber(aqi) && aqi >= 0 ? {
     isSignificant: categoryIndex >= (isNonNanNumber(WAQI_INSTANT_CAST.SIGNIFICANT_LEVEL)
       ? WAQI_INSTANT_CAST.SIGNIFICANT_LEVEL : Number.MAX_VALUE),
-    url: typeof feedData?.city?.url === 'string' && feedData.city.url.length > 0
-      ? feedData.city.url : 'https://aqicn.org/',
+    url: typeof feedData?.data?.city?.url === 'string' && feedData.data.city.url.length > 0
+      ? feedData.data.city.url : 'https://aqicn.org/',
     // Pollutant data from WAQI is AQI not amount
     pollutants: {},
-    ...(Object.keys(toApplePollutantName).includes(feedData?.dominentpol)
-      && { primary: toApplePollutantName[feedData.dominentpol] }),
-    sourceName: typeof feedData?.city?.name === 'string' && feedData.city.name.length > 0
-      ? feedData.city.name : 'World Air Quality Index Project',
+    ...(Object.keys(toApplePollutantName).includes(feedData?.data?.dominentpol)
+      && { primary: toApplePollutantName[feedData.data.dominentpol] }),
+    sourceName: typeof feedData?.data?.city?.name === 'string' && feedData.data.city.name.length > 0
+      ? feedData.data.city.name : 'World Air Quality Index Project',
     categoryIndex,
     aqi: validAqi,
     scale: WAQI_INSTANT_CAST.APPLE_SCALE,
