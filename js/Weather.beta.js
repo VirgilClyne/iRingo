@@ -2919,7 +2919,7 @@ const toPrecipitationIntensityPerceived = (precipitationLevels, precipitation) =
       isPositiveWithZeroRange(currentLevel?.RANGE) && isPositiveWithZeroRange(lastLevel?.RANGE)
       && isNonNanNumber(currentLevel?.VALUE) && isNonNanNumber(lastLevel?.VALUE)
     ) {
-      return currentLevel.VALUE <= 0 || currentLevel.VALUE >= 4 ? currentLevel.VALUE
+      return currentLevel.VALUE <= 0 || currentLevel.VALUE >= 3 ? currentLevel.VALUE
         : currentLevel.VALUE + (((precipitation - lastLevel.RANGE.UPPER) * 1000)
         / ((currentLevel.RANGE.UPPER - currentLevel.RANGE.LOWER) * 1000));
     }
