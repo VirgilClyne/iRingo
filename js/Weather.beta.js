@@ -4222,7 +4222,7 @@ const toResponseBody = (envs, request, response) => {
 
   const getAqiComparison = (promiseData) => {
     if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('forCompareAqi')) {
-      return {};
+      return 'unknown';
     }
 
     switch (promiseData?.api) {
@@ -4232,7 +4232,7 @@ const toResponseBody = (envs, request, response) => {
           settings.apis.colorfulClouds.forceCnForComparison,
         );
       default:
-        return {};
+        return 'unknown';
     }
   };
 
