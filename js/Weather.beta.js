@@ -4296,10 +4296,13 @@ const toResponseBody = (envs, request, response) => {
     ...dataFromApple?.[AIR_QUALITY],
     ...(qweatherNames.includes(dataFromApple?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME])
       && {
-        [PROVIDER_NAME]: appendQweatherSourceToProviderName(
-          dataFromApple[AIR_QUALITY][METADATA][PROVIDER_NAME],
-          dataFromApple[AIR_QUALITY]?.[SOURCE],
-        ),
+        [METADATA]: {
+          ...dataFromApple[AIR_QUALITY][METADATA],
+          [PROVIDER_NAME]: appendQweatherSourceToProviderName(
+            dataFromApple[AIR_QUALITY][METADATA][PROVIDER_NAME],
+            dataFromApple[AIR_QUALITY]?.[SOURCE],
+          ),
+        },
         ...(typeof dataFromApple[AIR_QUALITY]?.[POLLUTANTS] === 'object' && {
           [POLLUTANTS]: Object.fromEntries(Object.entries(dataFromApple[AIR_QUALITY][POLLUTANTS])
             .map(([key, value]) => {
