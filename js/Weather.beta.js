@@ -2687,6 +2687,8 @@ const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
 
   const reportedTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
   const expireTimestamp = reportedTimestamp + 1000 * 60 * 60;
+  const validExpireTimestamp = expireTimestamp > (+(new Date()))
+    ? expireTimestamp : (+(new Date())) + 1000 * 60 * 15;
 
   const validProviderLogo = {
     ...(typeof providerLogo?.forV1 === 'string' && providerLogo.forV1.length > 0
@@ -2706,7 +2708,7 @@ const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
 
   return Object.keys(variableMetadata).length > 0 ? {
     ...variableMetadata,
-    expireTimestamp,
+    expireTimestamp: validExpireTimestamp,
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 1,
@@ -2822,11 +2824,13 @@ const waqiToAqiMetadata = (feedData) => {
 
   const reportedTimestamp = (new Date(validServerTimestamp)).setMinutes(0, 0, 0);
   const expireTimestamp = reportedTimestamp + 1000 * 60 * 60;
+  const validExpireTimestamp = expireTimestamp > (+(new Date()))
+    ? expireTimestamp : (+(new Date())) + 1000 * 60 * 15;
 
   return {
     language: 'en-US',
     location,
-    expireTimestamp,
+    expireTimestamp: validExpireTimestamp,
     providerLogo: {
       forV1: 'https://waqi.info/images/logo.png',
       forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png',
@@ -2984,9 +2988,7 @@ const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
   const serverTime = parseInt(data?.server_time, 10);
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
     ? serverTime * 1000 : (+(new Date()));
-
-  const reportedTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
-  const expireTimestamp = reportedTimestamp + 1000 * 60 * 15;
+  const expireTimestamp = serverTimestamp + 1000 * 60 * 15;
 
   return {
     language: typeof language === 'string' && language.length > 0
