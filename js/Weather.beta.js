@@ -4477,18 +4477,22 @@ const toResponseBody = (envs, request, response) => {
 
     return {
       ...dataFromApple,
-      [AIR_QUALITY]: {
-        ...mergedAirQuality,
-        ...(settings.aqi.local.switch && toAirQuality(appleApiVersion, appleToEpaAirQuality(
-          toAqiStandard[settings.aqi.local.standard],
-          mergedAirQuality?.[POLLUTANTS],
-        ))),
-      },
-      [NEXT_HOUR]: {
-        ...nextHour,
-        ...modifiedNextHour,
-        metadata: { ...nextHour?.[METADATA], ...modifiedNextHour?.[METADATA] },
-      },
+      ...(requireData.includes(AIR_QUALITY) && {
+        [AIR_QUALITY]: {
+          ...mergedAirQuality,
+          ...(settings.aqi.local.switch && toAirQuality(appleApiVersion, appleToEpaAirQuality(
+            toAqiStandard[settings.aqi.local.standard],
+            mergedAirQuality?.[POLLUTANTS],
+          ))),
+        },
+      }),
+      ...(requireData.includes(NEXT_HOUR) && {
+        [NEXT_HOUR]: {
+          ...nextHour,
+          ...modifiedNextHour,
+          metadata: { ...nextHour?.[METADATA], ...modifiedNextHour?.[METADATA] },
+        },
+      }),
     };
   });
 };
