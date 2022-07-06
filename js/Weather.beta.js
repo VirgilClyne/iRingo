@@ -2809,6 +2809,10 @@ const colorfulCloudsToAqi = (
 
 const waqiToAqiMetadata = (data) => {
   const location = { latitude: data?.city?.geo?.[0], longitude: data?.city?.geo?.[1] };
+  if (!isLocation(location)) {
+    return {};
+  }
+
   const serverTimestamp = Date.parse(data?.time?.iso);
   const validServerTimestamp = isNonNanNumber(serverTimestamp) && serverTimestamp > 0
     ? serverTimestamp : (+(new Date()));
@@ -2818,7 +2822,7 @@ const waqiToAqiMetadata = (data) => {
 
   return {
     language: 'en-US',
-    ...(isLocation(location) && { location }),
+    location,
     expiredTimestamp,
     providerLogo: {
       forV1: 'https://waqi.info/images/logo.png',
