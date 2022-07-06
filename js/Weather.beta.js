@@ -2677,7 +2677,7 @@ const colorfulCloudsToAqiComparison = (realtimeAndHistoryData, forceChn) => {
   return 'unknown';
 };
 
-const colorfulCloudsToAqiMetadata = (providerName, url, data) => {
+const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
   const language = data?.lang;
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
   // the unit of server_time is second
@@ -2688,24 +2688,31 @@ const colorfulCloudsToAqiMetadata = (providerName, url, data) => {
   const reportedTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
   const expiredTimestamp = reportedTimestamp + 1000 * 60 * 60;
 
-  return {
-    language: typeof language === 'string' && language.length > 0
-      ? language.replace('_', '-') : 'zh-CN',
+  const validProviderLogo = {
+    ...(typeof providerLogo?.forV1 === 'string' && providerLogo.forV1.length > 0
+      && { forV1: providerLogo.forV1 }),
+    ...(typeof providerLogo?.forV2 === 'string' && providerLogo.forV2.length > 0
+      && { forV2: providerLogo.forV2 }),
+  };
+
+  const variableMetadata = {
+    ...(typeof language === 'string' && language.length > 0
+      && { language: language.replace('_', '-') }),
     ...(isLocation(location) && { location }),
+    ...(Object.keys(validProviderLogo).length > 0 && { providerLogo: validProviderLogo }),
+    ...(typeof providerName === 'string' && providerName.length > 0 && { providerName }),
+    url,
+  };
+
+  return Object.keys(variableMetadata).length > 0 ? {
+    ...variableMetadata,
     expiredTimestamp,
-    providerLogo: {
-      forV1: 'https://docs.caiyunapp.com/img/favicon.ico',
-      forV2: 'https://caiyunapp.com/imgs/logo/logo-website-white.png',
-    },
-    providerName: typeof providerName === 'string' && providerName.length > 0
-      ? providerName : 'ColorfulClouds',
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 1,
     // https://developer.apple.com/documentation/weatherkitrestapi/unitssystem
     unit: 'm',
-    url,
-  };
+  } : {};
 };
 
 // TODO: Type of realtimeAndHistoryData
@@ -4147,6 +4154,7 @@ const toResponseBody = (envs, request, response) => {
       case 'www.weatherol.cn':
         return {
           [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
+            { forV1: 'https://www.weatherol.cn/images/logo.png' },
             '气象在线',
             'https://www.weatherol.cn/',
             promiseData?.returnedData,
@@ -4162,6 +4170,10 @@ const toResponseBody = (envs, request, response) => {
       case 'api.caiyunapp.com':
         return {
           [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
+            {
+              forV1: 'https://docs.caiyunapp.com/img/favicon.ico',
+              forV2: 'https://caiyunapp.com/imgs/logo/logo-website-white.png',
+            },
             getColorfulCloudsName(appleLanguage),
             'https://caiyunapp.com/weather/',
             promiseData?.returnedData,
