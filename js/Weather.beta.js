@@ -2833,7 +2833,7 @@ const waqiToAqiMetadata = (feedData) => {
     },
     providerName: `${typeof feedData?.data?.city?.name === 'string'
       && feedData.data.city.name.length > 0 ? feedData.data.city.name : ''}`
-      + ' (World Air Quality Index Project)',
+      + ' (The World Air Quality Project)',
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 0,
