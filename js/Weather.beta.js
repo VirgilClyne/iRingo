@@ -3098,7 +3098,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       const chance = probabilities?.[Math.floor(timeInMinute / 30)];
 
       if (isNonNanNumber(chance) && chance >= 0) {
-        return chance;
+        return chance * 100;
       }
     }
 
