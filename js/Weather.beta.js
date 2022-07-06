@@ -2686,7 +2686,7 @@ const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
     ? serverTime * 1000 : (+(new Date()));
 
   const reportedTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
-  const expiredTimestamp = reportedTimestamp + 1000 * 60 * 60;
+  const expireTimestamp = reportedTimestamp + 1000 * 60 * 60;
 
   const validProviderLogo = {
     ...(typeof providerLogo?.forV1 === 'string' && providerLogo.forV1.length > 0
@@ -2706,7 +2706,7 @@ const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
 
   return Object.keys(variableMetadata).length > 0 ? {
     ...variableMetadata,
-    expiredTimestamp,
+    expireTimestamp,
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 1,
@@ -2821,12 +2821,12 @@ const waqiToAqiMetadata = (feedData) => {
     ? serverTimestamp : (+(new Date()));
 
   const reportedTimestamp = (new Date(validServerTimestamp)).setMinutes(0, 0, 0);
-  const expiredTimestamp = reportedTimestamp + 1000 * 60 * 60;
+  const expireTimestamp = reportedTimestamp + 1000 * 60 * 60;
 
   return {
     language: 'en-US',
     location,
-    expiredTimestamp,
+    expireTimestamp,
     providerLogo: {
       forV1: 'https://waqi.info/images/logo.png',
       forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png',
@@ -2986,13 +2986,13 @@ const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
     ? serverTime * 1000 : (+(new Date()));
 
   const reportedTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
-  const expiredTimestamp = reportedTimestamp + 1000 * 60 * 15;
+  const expireTimestamp = reportedTimestamp + 1000 * 60 * 15;
 
   return {
     language: typeof language === 'string' && language.length > 0
       ? language.replace('_', '-') : 'zh-CN',
     ...(isLocation(location) && { location }),
-    expiredTimestamp,
+    expireTimestamp,
     providerName: typeof providerName === 'string' && providerName.length > 0
       ? providerName : 'ColorfulClouds',
     readTimestamp: serverTimestamp,
