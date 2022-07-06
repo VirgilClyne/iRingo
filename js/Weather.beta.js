@@ -2993,7 +2993,7 @@ const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
  * @author WordlessEcho <wordless@echo.moe>
  * @param {string} providerName - Name of the provider. Will be used as placeholder.
  * @param {Object} dataWithMinutely - Data from ColorfulClouds with minutely
- * @return {minute[]|[]} Minutes for {@link toNextHour}
+ * @return {Object} nextHourObject for {@link toNextHour}
  */
 const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
   const supportedCcApis = [2];
@@ -3314,7 +3314,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
   const maxPrecipitation = Math.max(...dataWithMinutely.result.minutely.precipitation_2h);
   const levels = dataWithMinutely?.unit === 'metric:v2' ? mmPerHourLevels : radarLevels;
 
-  return dataWithMinutely.result.minutely.precipitation_2h.map((precipitation, index) => {
+  const minutes = dataWithMinutely.result.minutely.precipitation_2h.map((precipitation, index) => {
     const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
       ? precipitation : 0;
 
@@ -3346,7 +3346,6 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
 
     return {
-      readTimestamp: serverTimestamp,
       weatherStatus: perceivedToStatus(precipitationType, precipitationIntensityPerceived),
       precipitation: validPrecipitation,
       precipitationIntensityPerceived,
@@ -3360,6 +3359,11 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       } : validDescriptionWithParameters),
     };
   });
+
+  return {
+    readTimestamp: serverTimestamp,
+    minutes,
+  };
 };
 
 /**
