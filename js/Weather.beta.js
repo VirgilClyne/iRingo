@@ -4077,12 +4077,14 @@ const toResponseBody = (envs, request, response) => {
     switch (apiVersion) {
       case 1: {
         const requirement = parsedUrl.params?.include;
-        return Array.isArray(requirement) ? requirement : [];
+        return typeof requirement === 'string' && requirement.length > 0
+          ? requirement.split(',') : [];
       }
       case 2:
       case 3: {
         const requirement = parsedUrl.params?.dataSets;
-        return Array.isArray(requirement) ? requirement : [];
+        return typeof requirement === 'string' && requirement.length > 0
+          ? requirement.split(',') : [];
       }
       default:
         return [];
