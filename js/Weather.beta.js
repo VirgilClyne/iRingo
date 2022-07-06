@@ -2831,7 +2831,9 @@ const waqiToAqiMetadata = (feedData) => {
       forV1: 'https://waqi.info/images/logo.png',
       forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png',
     },
-    providerName: 'The World Air Quality Project',
+    providerName: `${typeof feedData?.data?.city?.name === 'string'
+      && feedData.data.city.name.length > 0 ? feedData.data.city.name : ''}`
+      + ' (World Air Quality Index Project)',
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 0,
