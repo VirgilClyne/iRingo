@@ -2326,15 +2326,15 @@ const pollutantUnitConverterUs = (unit, unitToConvert, amount, pollutantName) =>
  * @returns {number|-1} - Air quality index, -1 if amount is not a valid number
  */
 const toEpaAqi = (concentrationRanges, amount) => {
-  if (isNonNanNumber(amount) && amount >= 0) {
-    const ranges = concentrationRanges?.filter((r) => (
-      isPositiveRange(r?.AMOUNT) && isPositiveWithZeroRange(r?.AQI)
+  if (Array.isArray(concentrationRanges) && isNonNanNumber(amount) && amount >= 0) {
+    const ranges = concentrationRanges.filter((r) => (
+      isPositiveWithZeroRange(r?.AMOUNT) && isPositiveWithZeroRange(r?.AQI)
     ));
 
     if (ranges.length > 0) {
       const range = ranges.find(({ AMOUNT }) => amount >= AMOUNT.LOWER && amount <= AMOUNT.UPPER);
 
-      if (isPositiveWithZeroRange(range?.AQI) && isPositiveRange(range?.AMOUNT)) {
+      if (isPositiveWithZeroRange(range?.AQI) && isPositiveWithZeroRange(range?.AMOUNT)) {
         const { AQI, AMOUNT } = range;
         return Math.round(
           ((AQI.UPPER - AQI.LOWER) * (amount - AMOUNT.LOWER))
@@ -2349,7 +2349,7 @@ const toEpaAqi = (concentrationRanges, amount) => {
 
       // Or we just return `topRange.AQI.UPPER`?
       if (
-        isPositiveRange(topRange?.AMOUNT) && isPositiveWithZeroRange(topRange?.AQI)
+        isPositiveWithZeroRange(topRange?.AMOUNT) && isPositiveWithZeroRange(topRange?.AQI)
         && amount > topRange.AMOUNT.UPPER
       ) {
         return Math.round(amount - topRange.AMOUNT.UPPER + topRange.AQI.UPPER);
@@ -2373,12 +2373,15 @@ const toEpaAqis = (concentrationsInfo, pollutants) => {
     return { index: -1, pollutants: [] };
   }
 
-  const appleSupportedUnits = ['ppb', 'microgramsPerM3'];
-
-  const concentrations = Object.entries(concentrationsInfo).filter(([key, value]) => (
-    typeof key === 'string' && key.length > 0 && appleSupportedUnits.includes(value?.UNIT)
-    && isPositiveWithZeroRange(value?.RANGES?.AQI) && isPositiveRange(value?.RANGES?.AMOUNT)
-  ));
+  const concentrations = Object.fromEntries(Object.entries(concentrationsInfo)
+    .filter(([key, value]) => (
+      typeof key === 'string' && key.length > 0 && typeof value?.UNIT === 'string'
+      && value.UNIT.length > 0 && typeof value?.RANGES === 'object'
+      && !Object.values(value.RANGES).some((rangesForLevel) => (
+        !isPositiveWithZeroRange(rangesForLevel?.AMOUNT)
+        || !isPositiveWithZeroRange(rangesForLevel?.AQI)
+      ))
+    )));
 
   const pollutantAqis = pollutants
     .filter((pollutant) => typeof pollutant?.name === 'string' && pollutant.name.length > 0)
@@ -3508,7 +3511,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
         ([, info]) => !getUnits(appleApiVersion).includes(info?.unit),
       )),
     }),
-    ...(iosPollutantNames.includes(aqiObject.primary) && { primaryPollutant: aqiObject.primary }),
+    ...(iosPollutantNames.includes(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }),
     // TODO: source was removed after APIv3
     ...(typeof aqiObject?.sourceName === 'string' && aqiObject.sourceName.length > 0
       && { source: aqiObject.sourceName }),
@@ -3535,12 +3538,12 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { categoryIndex: aqiObj.categoryIndex }),
           ...(isNonNanNumber(aqiObj?.aqi) && aqiObj.aqi >= 0
             && { index: aqiObj.aqi }),
-          ...(comparisonValues.includes(aqiObj.previousDayComparison)
+          ...(comparisonValues.includes(aqiObj?.previousDayComparison)
             && { previousDayComparison: aqiObj.previousDayComparison }),
           // TODO: find out all scales
           ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
             && { scale: aqiObj.scale }),
-          ...(sourceTypes.includes(aqiObj.sourceType) && { sourceType: aqiObj.sourceType }),
+          ...(sourceTypes.includes(aqiObj?.sourceType) && { sourceType: aqiObj.sourceType }),
         };
       default:
         return {};
@@ -4464,7 +4467,7 @@ const envs = getENV('iRingo', 'Weather', database);
 const settings = toSettings(envs);
 const caches = toCaches(envs);
 
-// eslint-disable-next-line functional/no-conditional-statement
+// eslint-disable-next-line functional/no-conditional-statement,no-undef
 if (settings.switch && typeof $request?.url === 'string') {
   const supportedAppleApis = [1, 2, 3];
 
@@ -4479,6 +4482,7 @@ if (settings.switch && typeof $request?.url === 'string') {
   if (!supportedAppleApis.includes(appleApiVersion)) {
     // eslint-disable-next-line functional/no-expression-statement
     $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
+    // eslint-disable-next-line functional/no-expression-statement,no-undef
     $.done($response);
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
@@ -4513,10 +4517,12 @@ if (settings.switch && typeof $request?.url === 'string') {
           responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
         ), '@iRingo.Weather.Caches');
       }
-      // eslint-disable-next-line functional/no-expression-statement
+      // eslint-disable-next-line functional/no-expression-statement,no-undef
       $.done({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
   }
+// eslint-disable-next-line functional/no-conditional-statement
 } else {
+  // eslint-disable-next-line functional/no-expression-statement,no-undef
   $.done($response);
 }
