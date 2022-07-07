@@ -3282,7 +3282,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
     const allTimesString = description.match(/\d+/g);
     if (!Array.isArray(allTimesString)) {
-      return { shortDescription: description, parameters: {} };
+      return { shortDescription: '', parameters: {} };
     }
 
     // Split sentence by time
@@ -3291,8 +3291,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
     const expiredTimes = allTimes.filter((time) => time <= timeInMinute);
     if (expiredTimes.length <= 0) {
-      const modifiedDescription = modifyDescription(description);
-      return modifiedDescription.shortDescription.length > 0 ? modifiedDescription : '';
+      return modifyDescription(description);
     }
 
     const maxExpiredTime = Math.max(...expiredTimes);
