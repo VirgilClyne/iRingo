@@ -1029,22 +1029,6 @@ const isPositiveRange = (range) => (
   isPositiveWithZeroRange(range) && range.LOWER !== 0 && range.UPPER !== 0
 );
 
-// https://stackoverflow.com/a/17415677
-const toIsoString = (date) => {
-  const tzo = -date.getTimezoneOffset();
-  const dif = tzo >= 0 ? '+' : '-';
-  const pad = (number) => (number < 10 ? '0' : '') + number;
-
-  return `${date.getFullYear()}-`
-    + `${pad(date.getMonth() + 1)}-`
-    + `${pad(date.getDate())}T`
-    + `${pad(date.getHours())}:`
-    + `${pad(date.getMinutes())}:`
-    + `${pad(date.getSeconds())}${dif}`
-    + `${pad(Math.floor(Math.abs(tzo) / 60))}:`
-    + `${pad(Math.abs(tzo) % 60)}`;
-};
-
 /**
  * Set Environment Variables
  * @author VirgilClyne
@@ -1689,14 +1673,14 @@ const waqiNearestToFeed = (version, nearestData) => {
    */
   const serverTimeToIsoString = (data) => {
     if (isNonNanNumber(data?.t) && data.t > 0) {
-      return toIsoString(new Date(data.t * 1000));
+      return `${new Date(data.t * 1000).toISOString().slice(0, -5)}+00:00`;
     }
 
     if (!Number.isNaN(Date.parse(data?.utime))) {
       return data.utime;
     }
 
-    return toIsoString((new Date()).setMinutes(0, 0, 0));
+    return `${(new Date((new Date()).setMinutes(0, 0, 0))).toISOString().slice(0, -5)}+00:00`;
   };
 
   switch (version) {
@@ -1867,7 +1851,7 @@ const waqiV1ToFeed = (v1Data) => {
       return data.msg.time.iso;
     }
 
-    return toIsoString((new Date()).setMinutes(0, 0, 0));
+    return `${(new Date((new Date()).setMinutes(0, 0, 0))).toISOString().slice(0, -5)}+00:00`;
   };
 
   /**
@@ -1878,7 +1862,7 @@ const waqiV1ToFeed = (v1Data) => {
    */
   const getDebug = (data) => {
     if (isNonNanNumber(data?.msg?.xsync?.gen) && data.msg.xsync.gen > 0) {
-      return toIsoString(new Date(data.msg.xsync.gen * 1000));
+      return `${(new Date(data.msg.xsync.gen * 1000)).toISOString().slice(0, -5)}+00:00`;
     }
 
     if (!Number.isNaN(Date.parse(data.msg?.debug?.sync))) {
@@ -2608,6 +2592,13 @@ const getCcAirQuality = (dataWithRealtime) => {
   return { aqi: { usa: -1, chn: -1 } };
 };
 
+const isoTimezoneOffset = (offset) => {
+  const validOffset = isNonNanNumber(offset) ? offset : (new Date()).getTimezoneOffset();
+  return `${validOffset < 0 ? '+' : '-'}`
+    + `${Math.floor(Math.abs(validOffset / 60)).toString().padStart(2, '0')}`
+    + `:${(Math.abs(validOffset % 60)).toString().padStart(2, '0')}`;
+};
+
 const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
   if (!isNonNanNumber(timestamp) || timestamp <= 0) {
     return { usa: -1, chn: -1 };
@@ -2625,7 +2616,15 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
 
   // An hour as range
   const aqis = Array.isArray(historyAqis) && historyAqis?.find((aqi) => {
-    const ts = Date.parse(aqi?.datetime);
+    if (
+      typeof aqi?.datetime !== 'string' || aqi.datetime.length <= 0
+      || !isNonNanNumber(historyData?.tzshift) || historyData.tzshift % 60 !== 0
+    ) {
+      return false;
+    }
+
+    const isoTimezone = isoTimezoneOffset(-(historyData.tzshift / 60));
+    const ts = Date.parse(`${aqi.datetime.replace(' ', 'T')}:00.000${isoTimezone}`);
 
     return isNonNanNumber(ts) && ts > 0
       && ts >= hourTimestamp && ts < hourTimestamp + 1000 * 60 * 60;
@@ -3061,7 +3060,15 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const nowHourTimestamp = (new Date(validTimestamp)).setMinutes(0, 0, 0);
 
     const skyCondition = skycons?.find((skycon) => {
-      const ts = Date.parse(skycon?.datetime);
+      if (
+        typeof skycon?.datetime !== 'string' || skycon.datetime.length <= 0
+        || !isNonNanNumber(dataWithMinutely?.tzshift) || dataWithMinutely.tzshift % 60 !== 0
+      ) {
+        return false;
+      }
+
+      const isoTimezone = isoTimezoneOffset(-(dataWithMinutely.tzshift / 60));
+      const ts = Date.parse(`${skycon.datetime.replace(' ', 'T')}:00.000${isoTimezone}`);
 
       return isNonNanNumber(ts) && ts > 0
         && ts >= nowHourTimestamp && ts < nowHourTimestamp + 1000 * 60 * 60;
@@ -3260,9 +3267,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       );
 
       return {
-        // Unsupported language
-        shortDescription: shortDescription.length > 0
-          ? shortDescription : descriptionWithParameters.shortDescription,
+        shortDescription,
         parameters: descriptionWithParameters.parameters,
       };
     };
@@ -3305,8 +3310,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       description.indexOf(splitter, startIndex)
     )).filter((index) => index !== -1);
 
-    const modifiedDescription = modifyDescription(description.slice(Math.min(...splitIndexes)));
-    return modifiedDescription.shortDescription.length > 0 ? modifiedDescription : '';
+    return modifyDescription(description.slice(Math.min(...splitIndexes)));
   };
 
   const provider = typeof providerName === 'string' && providerName.length > 0
@@ -4534,6 +4538,10 @@ if (settings.switch && typeof $request?.url === 'string') {
     } = getKeywords(appleApiVersion);
     // eslint-disable-next-line functional/no-expression-statement
     $.log(`🚧 ${$.name}：模块已启用`, '');
+    // eslint-disable-next-line functional/no-expression-statement
+    $.log(`🚧 ${$.name}：Latitude: ${parameters?.lat}`, '');
+    // eslint-disable-next-line functional/no-expression-statement
+    $.log(`🚧 ${$.name}：Longitude: ${parameters?.lng}`, '');
     // eslint-disable-next-line no-undef,functional/no-expression-statement
     toResponseBody(envs, $request, $response).then((responseBody) => {
       const time = responseBody?.[AIR_QUALITY]?.[METADATA]?.[REPORTED_TIME];
@@ -4560,6 +4568,10 @@ if (settings.switch && typeof $request?.url === 'string') {
           responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
         ), '@iRingo.Weather.Caches');
       }
+      // eslint-disable-next-line functional/no-expression-statement
+      $.log(`🚧 ${$.name}：condition: ${JSON.stringify(responseBody?.forecastNextHour?.condition)}`, '');
+      // eslint-disable-next-line functional/no-expression-statement
+      $.log(`🚧 ${$.name}：summary: ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
       // eslint-disable-next-line functional/no-expression-statement,no-undef
       $.done({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
