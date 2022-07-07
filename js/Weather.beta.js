@@ -73,7 +73,7 @@ const database = {
   },
 };
 
-/** @typedef {1|2} supportedIosApi */
+/** @typedef {1|2|3} supportedIosApi */
 /** @typedef {{ latitude: number, longitude: number }} coordinate */
 // TODO
 /** @typedef { "EPA_NowCast.2204" | "HJ6332012.2204" } iosAqiScale */
