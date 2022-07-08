@@ -435,7 +435,7 @@
 				{
 					"id": "@iRingo.Weather.Settings.AQI.Comparison.Source",
 					"name": "[空气质量]对比昨日空气质量数据源",
-					"val": "www.weatherol.cn",
+					"val": "Local",
 					"type": "radios",
 					"items": [
 						{
