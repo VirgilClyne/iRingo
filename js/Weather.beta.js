@@ -4048,11 +4048,18 @@ const toResponseBody = (envs, request, response) => {
   // TODO
   const getTargetScale = (projectSettings, appleScale) => {
     if (projectSettings.aqi.local.switch) {
+      const scale = toAqiStandard[projectSettings.aqi.local.standard]?.APPLE_SCALE;
+      // TODO
+      if (typeof scale !== 'string' || scale.length <= 0) {
+        return '';
+      }
+
       return toAqiStandard[projectSettings.aqi.local.standard].APPLE_SCALE;
     }
 
     if (!projectSettings.aqi.switch) {
-      return appleScale;
+      // TODO
+      return appleScale === 'string' && appleScale.length > 0 ? appleScale : '';
     }
 
     switch (projectSettings.aqi.source) {
