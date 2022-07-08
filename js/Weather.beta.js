@@ -3654,7 +3654,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       const validMinuteArray = toValidMinutes(minuteArray);
       const firstStatus = checkWeatherStatus(validMinuteArray[bound]);
       const secondStatusIndex = validMinuteArray.slice(bound).findIndex((minute) => (
-        checkWeatherStatus(minute) !== firstStatus));
+        checkWeatherStatus(minute) !== firstStatus)) + bound;
       const secondStatus = secondStatusIndex === -1 ? null
         : checkWeatherStatus(validMinuteArray[secondStatusIndex]);
 
