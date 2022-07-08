@@ -1037,6 +1037,10 @@ const isPositiveRange = (range) => (
  */
 const toSettings = (envs) => {
   const settings = database.Weather.Settings;
+  // eslint-disable-next-line functional/no-expression-statement
+  $.log(`🚧 ${toSettings.name}：envs settings: ${envs?.Settings ? JSON.stringify(envs?.Settings) : envs?.Settings}`, '');
+  // eslint-disable-next-line functional/no-expression-statement
+  $.log(`🚧 ${toSettings.name}：Settings version: ${envs?.Settings?.Version}`, '');
   switch (envs?.Settings?.Version) {
     case 1:
       return {
@@ -3540,7 +3544,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
     ...(typeof aqiObject?.url === 'string' && aqiObject.url.length > 0 && { learnMoreURL: aqiObject.url }),
     ...(Object.keys(aqiObject?.pollutants ?? {}).length > 0 && {
       pollutants: Object.fromEntries(Object.entries(aqiObject.pollutants).filter(
-        ([, info]) => !getUnits(appleApiVersion).includes(info?.unit),
+        ([, info]) => getUnits(appleApiVersion).includes(info?.unit),
       )),
     }),
     ...(iosPollutantNames.includes(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }),
@@ -4484,6 +4488,7 @@ const toResponseBody = (envs, request, response) => {
       metadata: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
       ...(needCompareAqi && { [AQI_COMPARISON]: modifiedComapreAqi }),
     };
+    const mergedScale = mergedAirQuality?.[AQI_SCALE];
     const modifiedNextHour = getNextHour(appleApiVersion, dataForNextHour, languageWithRegion);
 
     return {
@@ -4491,10 +4496,14 @@ const toResponseBody = (envs, request, response) => {
       ...(requireData.includes(AIR_QUALITY) && {
         [AIR_QUALITY]: {
           ...mergedAirQuality,
-          ...(settings.aqi.local.switch && toAirQuality(appleApiVersion, appleToEpaAirQuality(
-            toAqiStandard[settings.aqi.local.standard],
-            mergedAirQuality?.[POLLUTANTS],
-          ))),
+          ...(settings.aqi.local.switch && typeof mergedAirQuality?.[POLLUTANTS] === 'object'
+            && settings.aqi.targets.includes(
+              mergedScale.slice(0, mergedScale.lastIndexOf('.')),
+            )
+            && toAirQuality(appleApiVersion, appleToEpaAirQuality(
+              toAqiStandard[settings.aqi.local.standard],
+              mergedAirQuality[POLLUTANTS],
+            ))),
         },
       }),
       ...(requireData.includes(NEXT_HOUR) && {
