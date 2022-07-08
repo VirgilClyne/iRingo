@@ -73,7 +73,7 @@ const database = {
 /** @typedef {1|2|3} supportedIosApi */
 /** @typedef {{ latitude: number, longitude: number }} coordinate */
 // TODO
-/** @typedef { "EPA_NowCast.2204" | "HJ6332012.2204" } iosAqiScale */
+/** @typedef { "EPA_NowCast.2207" | "HJ6332012.2207" } iosAqiScale */
 /** @typedef { "EPA_NowCast" | "HJ6332012" } scaleName */
 /** @typedef { forV2: string, forV1: string } providerLogo */
 
@@ -352,7 +352,7 @@ const EPA_454_AQI_LEVELS = {
  * @type aqiStandard
  */
 const EPA_454 = {
-  APPLE_SCALE: 'EPA_NowCast.2204',
+  APPLE_SCALE: 'EPA_NowCast.2207',
   AQI_LEVELS: EPA_454_AQI_LEVELS,
   // unhealthy for sensitive groups
   SIGNIFICANT_LEVEL: 3,
@@ -591,7 +591,7 @@ const EPA_454 = {
  * @type aqiStandard
  */
 const HJ_633 = {
-  APPLE_SCALE: 'HJ6332012.2204',
+  APPLE_SCALE: 'HJ6332012.2207',
   AQI_LEVELS: EPA_454.AQI_LEVELS,
   SIGNIFICANT_LEVEL: EPA_454.SIGNIFICANT_LEVEL,
 
