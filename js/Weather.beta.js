@@ -47,11 +47,11 @@ const database = {
         WeatherOL: { HTTPHeaders: { 'Content-Type': 'application/json' } },
         ColorfulClouds: {
           HTTPHeaders: { 'Content-Type': 'application/json' },
-          Token: null,
+          Token: '',
           ForceCNForAQI: true,
           ForceCNForComparison: false,
         },
-        WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: null, Mode: 'Location' },
+        WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: '', Mode: 'Location' },
       },
     },
     Configs: {
