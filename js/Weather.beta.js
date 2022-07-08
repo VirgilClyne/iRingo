@@ -4299,9 +4299,10 @@ const toResponseBody = (envs, request, response) => {
   const aqiProvider = airQuality?.[METADATA]?.[PROVIDER_NAME];
   const aqiScale = airQuality?.[AQI_SCALE];
   const needAqi = requireData.includes(AIR_QUALITY) && settings.aqi.switch
-    && (typeof aqiScale !== 'string' || settings.aqi.targets.includes(
-      aqiScale.slice(0, aqiScale.lastIndexOf('.')),
-    ));
+    && (typeof aqiScale !== 'string'
+      || (!settings.aqi.local.switch && settings.aqi.targets.includes(
+        aqiScale.slice(0, aqiScale.lastIndexOf('.')),
+      )));
 
   const needCompareAqi = requireData.includes(AIR_QUALITY) && settings.aqi.comparison.switch
     && AQI_COMPARISON.length > 0 && ((needAqi
