@@ -41,7 +41,7 @@ const database = {
       Switch: true,
       NextHour: { Switch: true, Source: 'www.weatherol.cn' },
       AQI: {
-        Switch: true, Targets: ['HJ6332012'], Local: { Switch: true, Standard: 'WAQI_InstantCast' }, Source: 'WAQI Public', Comparison: { Switch: true, Source: 'Local' },
+        Switch: true, Targets: ['HJ6332012'], Local: { Switch: true, Standard: 'WAQI_InstantCast' }, Source: 'www.weatherol.cn', Comparison: { Switch: true, Source: 'Local' },
       },
       Map: { AQI: false },
       APIs: {
@@ -3681,14 +3681,14 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
      * Merge possibility, weather status and time status for `forecastNextHour.condition.token`
      * @author WordlessEcho <wordless@echo.moe>
      * @param {minute[]} minuteArray - add `possible-` prefix to token
-     * @param {number} lastBound
      * @param {number} bound
+     * @param {number} nextBound
      * @return {string} token for Apple Weather
      */
-    const toToken = (minuteArray, lastBound, bound) => {
+    const toToken = (minuteArray, bound, nextBound) => {
       if (
-        !isMinuteArray(minuteArray) || !isNonNanNumber(bound) || bound < 0
-        || !isNonNanNumber(lastBound) || lastBound < 0
+        !isMinuteArray(minuteArray) || !isNonNanNumber(nextBound) || nextBound < 1
+        || !isNonNanNumber(bound) || bound < 0
       ) {
         return 'precipitation';
       }
@@ -3701,7 +3701,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         : checkWeatherStatus(validMinuteArray[secondStatusIndex]);
 
       const maxChance = Math.max(...validMinuteArray
-        .slice(lastBound, bound).map((minute) => minute.chance));
+        .slice(bound, nextBound).map((minute) => minute.chance));
       // https://developer.apple.com/documentation/weatherkitrestapi/certainty
       const needPossible = maxChance < 50;
 
@@ -3733,8 +3733,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     };
 
     const validMinutesData = toValidMinutes(minutesData);
-    /** @type number[] */
-    const bounds = validMinutesData.slice(0, 59).flatMap((current, index, array) => {
+    const bounds = validMinutesData.slice(0, 60).flatMap((current, index, array) => {
       const previous = array[index - 1];
 
       if (
@@ -4568,9 +4567,9 @@ if (settings.switch && typeof $request?.url === 'string') {
         ), '@iRingo.Weather.Caches');
       }
       // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：condition: ${JSON.stringify(responseBody?.forecastNextHour?.condition)}`, '');
+      $.log(`🚧 ${$.name}：nextHour condition: ${JSON.stringify(responseBody?.forecastNextHour?.condition)}`, '');
       // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：summary: ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
+      $.log(`🚧 ${$.name}：nextHour summary: ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
       // eslint-disable-next-line functional/no-expression-statement,no-undef
       $.done({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
