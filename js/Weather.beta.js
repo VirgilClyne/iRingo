@@ -3724,6 +3724,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       const sharedCondition = {
         token,
+        parameters: typeof minute.parameters === 'object'
+          ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
+            key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
+          ])) : {},
       };
 
       switch (apiVersion) {
@@ -3735,10 +3739,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             ...sharedCondition,
             longTemplate: longDescription,
             shortTemplate: shortDescription,
-            parameters: typeof minute.parameters === 'object'
-              ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
-                key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-              ])) : {},
           };
         case 2:
           return {
@@ -3749,10 +3749,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             ...sharedCondition,
             longTemplate: longDescription,
             shortTemplate: shortDescription,
-            parameters: typeof minute.parameters === 'object'
-              ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
-                key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-              ])) : {},
           };
         case 3:
           return {
@@ -3761,7 +3757,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
               endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
             ...sharedCondition,
-            parameters: {},
           };
         default:
           return {};
