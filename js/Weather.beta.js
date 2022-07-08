@@ -2548,7 +2548,7 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
   }
 
   const apiVersion = historyData?.api_version;
-  const versionCode = typeof historyData?.api_version === 'string' && parseFloat(apiVersion.slice(1));
+  const versionCode = typeof apiVersion === 'string' && parseFloat(apiVersion.slice(1));
   const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
   const hourTimestamp = (new Date(timestamp)).setMinutes(0, 0, 0);
@@ -2559,15 +2559,20 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
 
   // An hour as range
   const aqis = Array.isArray(historyAqis) && historyAqis?.find((aqi) => {
-    if (
-      typeof aqi?.datetime !== 'string' || aqi.datetime.length <= 0
-      || !isNonNanNumber(historyData?.tzshift) || historyData.tzshift % 60 !== 0
-    ) {
+    if (typeof aqi?.datetime !== 'string' || aqi.datetime.length <= 0) {
       return false;
     }
 
-    const isoTimezone = isoTimezoneOffset(-(historyData.tzshift / 60));
-    const ts = Date.parse(`${aqi.datetime.replace(' ', 'T')}:00.000${isoTimezone}`);
+    // https://docs.caiyunapp.com/docs/v2.3/intro#%E4%B8%8D%E5%85%BC%E5%AE%B9%E7%9A%84%E6%9B%B4%E6%96%B0
+    if (
+      validVersionCode < 2.3 && (!isNonNanNumber(historyData?.tzshift)
+        || historyData.tzshift % 60 !== 0)
+    ) {
+      return false;
+    }
+    const ts = Date.parse(validVersionCode < 2.3
+      ? `${aqi.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(historyData.tzshift / 60))}`
+      : aqi.datetime.split('+').join(':00.000+'));
 
     return isNonNanNumber(ts) && ts > 0
       && ts >= hourTimestamp && ts < hourTimestamp + 1000 * 60 * 60;
@@ -2991,27 +2996,37 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
    * [天气现象 | 彩云天气API]{@link https://docs.caiyunapp.com/docs/tables/skycon/}
    * @author WordlessEcho <wordless@echo.moe>
    * @param {number} timestamp - UNIX timestamp of server time
-   * @param {{datetime: string, value: string}[]} skycons - skycon array from ColorfulClouds
+   * @param {Object} dataWithHourlySkycons - Date with hourly.skycon[] from ColorfulClouds
    * @return {precipitationType|''} - Weather type or empty string if no valid sky condition
    */
-  const getPrecipitationType = (timestamp, skycons) => {
-    if (!Array.isArray(skycons)) {
+  const getPrecipitationType = (timestamp, dataWithHourlySkycons) => {
+    const skycons = dataWithHourlySkycons?.result?.hourly?.skycon;
+    if (typeof dataWithHourlySkycons !== 'object' || !Array.isArray(skycons)) {
       return '';
     }
+
+    const apiVersion = dataWithHourlySkycons?.api_version;
+    const versionCode = typeof apiVersion === 'string' && parseFloat(apiVersion.slice(1));
+    const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
     const validTimestamp = isNonNanNumber(timestamp) && timestamp > 0 ? timestamp : (+(new Date()));
     const nowHourTimestamp = (new Date(validTimestamp)).setMinutes(0, 0, 0);
 
-    const skyCondition = skycons?.find((skycon) => {
-      if (
-        typeof skycon?.datetime !== 'string' || skycon.datetime.length <= 0
-        || !isNonNanNumber(dataWithMinutely?.tzshift) || dataWithMinutely.tzshift % 60 !== 0
-      ) {
+    const skyCondition = skycons.find((skycon) => {
+      if (typeof skycon?.datetime !== 'string' || skycon.datetime.length <= 0) {
         return false;
       }
 
-      const isoTimezone = isoTimezoneOffset(-(dataWithMinutely.tzshift / 60));
-      const ts = Date.parse(`${skycon.datetime.replace(' ', 'T')}:00.000${isoTimezone}`);
+      // https://docs.caiyunapp.com/docs/v2.3/intro#%E4%B8%8D%E5%85%BC%E5%AE%B9%E7%9A%84%E6%9B%B4%E6%96%B0
+      if (
+        validVersionCode < 2.3 && (!isNonNanNumber(dataWithHourlySkycons?.tzshift)
+          || dataWithHourlySkycons.tzshift % 60 !== 0)
+      ) {
+        return false;
+      }
+      const ts = Date.parse(validVersionCode < 2.3
+        ? `${skycon.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(dataWithHourlySkycons.tzshift / 60))}`
+        : skycon.datetime.split('+').join(':00.000+'));
 
       return isNonNanNumber(ts) && ts > 0
         && ts >= nowHourTimestamp && ts < nowHourTimestamp + 1000 * 60 * 60;
@@ -3290,7 +3305,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
     const hourlyPrecipitationType = getPrecipitationType(
       serverTimestamp + 1000 * 60 * timeInMinute,
-      dataWithMinutely.result?.hourly?.skycon,
+      dataWithMinutely,
     );
     const hourlyType = hourlyPrecipitationType === 'clear' || hourlyPrecipitationType.length <= 0
       ? 'precipitation' : hourlyPrecipitationType;
