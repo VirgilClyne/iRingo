@@ -37,7 +37,6 @@ const database = {
   },
   Weather: {
     Settings: {
-      Version: 1,
       Switch: true,
       NextHour: { Switch: true, Source: 'www.weatherol.cn' },
       AQI: {
@@ -56,13 +55,11 @@ const database = {
       },
     },
     Configs: {
-      Version: 1,
       Pollutants: {
         co: 'CO', no: 'NO', no2: 'NO2', so2: 'SO2', o3: 'OZONE', nox: 'NOX', pm25: 'PM2.5', pm10: 'PM10', other: 'OTHER',
       },
     },
     Cache: {
-      Version: 1,
       aqis: {},
     },
   },
@@ -1037,144 +1034,86 @@ const isPositiveRange = (range) => (
  */
 const toSettings = (envs) => {
   const settings = database.Weather.Settings;
-  // eslint-disable-next-line functional/no-expression-statement
-  $.log(`🚧 ${toSettings.name}：envs settings: ${envs?.Settings ? JSON.stringify(envs?.Settings) : envs?.Settings}`, '');
-  // eslint-disable-next-line functional/no-expression-statement
-  $.log(`🚧 ${toSettings.name}：Settings version: ${envs?.Settings?.Version}`, '');
-  switch (envs?.Settings?.Version) {
-    case 1:
-      return {
-        switch: parseJsonWithDefault(envs?.Settings?.Switch, settings.Switch),
-        nextHour: {
-          switch: parseJsonWithDefault(
-            envs?.Settings?.NextHour?.Switch,
-            settings.NextHour.Switch,
-          ),
-          source: typeof envs?.Settings?.NextHour?.Source === 'string' && envs.Settings.NextHour.Source.length > 0
-            ? envs.Settings.NextHour.Source : settings.NextHour.Source,
-        },
-        aqi: {
-          switch: parseJsonWithDefault(envs?.Settings?.AQI?.Switch, settings.AQI.Switch),
-          targets: parseJsonWithDefault(`[${envs?.Settings?.AQI?.Targets}]`, settings.AQI.Targets),
-          local: {
-            switch: parseJsonWithDefault(
-              envs?.Settings?.AQI?.Local?.Switch,
-              settings.AQI.Local.Switch,
-            ),
-            standard: typeof envs?.Settings?.AQI?.Local?.Standard === 'string'
-            && envs.Settings.AQI.Local.Standard.length > 0 ? envs.Settings.AQI.Standard
-              : settings.AQI.Local.Standard,
-          },
-          source: typeof envs?.Settings?.AQI?.Source === 'string' && envs.Settings.AQI.Source.length > 0
-            ? envs.Settings.AQI.Source : settings.AQI.Source,
-          comparison: {
-            switch: parseJsonWithDefault(
-              envs?.Settings?.AQI?.Comparison.Switch,
-              settings.AQI.Comparison.Switch,
-            ),
-            source: typeof envs?.Settings?.AQI?.Comparison?.Source === 'string'
-            && envs.Settings.AQI.Comparison.Source.length > 0
-              ? envs.Settings.AQI.Comparison.Source
-              : settings.AQI.Comparison.Source,
-          },
-        },
-        map: {
-          aqi: parseJsonWithDefault(envs?.Settings?.Map?.AQI, settings.Map.AQI),
-        },
+  return {
+    switch: parseJsonWithDefault(envs?.Settings?.Switch, settings.Switch),
+    nextHour: {
+      switch: parseJsonWithDefault(
+        envs?.Settings?.NextHour?.Switch,
+        settings.NextHour.Switch,
+      ),
+      source: typeof envs?.Settings?.NextHour?.Source === 'string' && envs.Settings.NextHour.Source.length > 0
+        ? envs.Settings.NextHour.Source : settings.NextHour.Source,
+    },
+    aqi: {
+      switch: parseJsonWithDefault(envs?.Settings?.AQI?.Switch, settings.AQI.Switch),
+      targets: parseJsonWithDefault(`[${envs?.Settings?.AQI?.Targets}]`, settings.AQI.Targets),
+      local: {
+        switch: parseJsonWithDefault(
+          envs?.Settings?.AQI?.Local?.Switch,
+          settings.AQI.Local.Switch,
+        ),
+        standard: typeof envs?.Settings?.AQI?.Local?.Standard === 'string'
+        && envs.Settings.AQI.Local.Standard.length > 0 ? envs.Settings.AQI.Local.Standard
+          : settings.AQI.Local.Standard,
+      },
+      source: typeof envs?.Settings?.AQI?.Source === 'string' && envs.Settings.AQI.Source.length > 0
+        ? envs.Settings.AQI.Source : settings.AQI.Source,
+      comparison: {
+        switch: parseJsonWithDefault(
+          envs?.Settings?.AQI?.Comparison.Switch,
+          settings.AQI.Comparison.Switch,
+        ),
+        source: typeof envs?.Settings?.AQI?.Comparison?.Source === 'string'
+        && envs.Settings.AQI.Comparison.Source.length > 0
+          ? envs.Settings.AQI.Comparison.Source
+          : settings.AQI.Comparison.Source,
+      },
+    },
+    map: {
+      aqi: parseJsonWithDefault(envs?.Settings?.Map?.AQI, settings.Map.AQI),
+    },
+    // TODO
+    apis: {
+      weatherOl: {
+        httpHeaders: parseJsonWithDefault(
+          envs?.Settings?.APIs?.WeatherOl?.HTTPHeaders,
+          settings.APIs.WeatherOL.HTTPHeaders,
+        ),
+      },
+      colorfulClouds: {
+        httpHeaders: parseJsonWithDefault(
+          envs?.Settings?.APIs?.ColorfulClouds?.HTTPHeaders,
+          settings.APIs.ColorfulClouds.HTTPHeaders,
+        ),
+        token: envs?.Settings?.APIs?.ColorfulClouds?.Token,
+        forceCnForAqi: parseJsonWithDefault(
+          envs?.Settings?.APIs?.ColorfulClouds?.ForceCNForAQI,
+          settings.APIs.ColorfulClouds.ForceCNForAQI,
+        ),
+        forceCnForComparison: parseJsonWithDefault(
+          envs?.Settings?.APIs?.ColorfulClouds?.ForceCNForComparison,
+          settings.APIs.ColorfulClouds.ForceCNForComparison,
+        ),
+      },
+      waqi: {
         // TODO
-        apis: {
-          weatherOl: {
-            httpHeaders: parseJsonWithDefault(
-              envs?.Settings?.APIs?.WeatherOl?.HTTPHeaders,
-              settings.APIs.WeatherOL.HTTPHeaders,
-            ),
-          },
-          colorfulClouds: {
-            httpHeaders: parseJsonWithDefault(
-              envs?.Settings?.APIs?.ColorfulClouds?.HTTPHeaders,
-              settings.APIs.ColorfulClouds.HTTPHeaders,
-            ),
-            token: envs?.Settings?.APIs?.ColorfulClouds?.Token,
-            forceCnForAqi: parseJsonWithDefault(
-              envs?.Settings?.APIs?.ColorfulClouds?.ForceCNForAQI,
-              settings.APIs.ColorfulClouds.ForceCNForAQI,
-            ),
-            forceCnForComparison: parseJsonWithDefault(
-              envs?.Settings?.APIs?.ColorfulClouds?.ForceCNForComparison,
-              settings.APIs.ColorfulClouds.ForceCNForComparison,
-            ),
-          },
-          waqi: {
-            // TODO
-            httpHeaders: parseJsonWithDefault(
-              envs?.Settings?.APIs?.WAQI?.HTTPHeaders,
-              settings.APIs.WAQI.HTTPHeaders,
-            ),
-            token: envs?.Settings?.APIs?.WAQI?.Token,
-            // TODO
-            mode: envs?.Settings?.APIs?.WAQI?.Mode,
-          },
-        },
-      };
-    default:
-      return {
-        switch: settings.Switch,
-        nextHour: {
-          switch: settings.NextHour.Switch,
-          source: settings.NextHour.Source,
-        },
-        aqi: {
-          switch: settings.AQI.Switch,
-          targets: settings.AQI.Targets,
-          local: {
-            switch: settings.AQI.Local.Switch,
-            standard: settings.AQI.Local.Standard,
-          },
-          source: settings.AQI.Source,
-          comparison: {
-            switch: settings.AQI.Comparison.Switch,
-            source: settings.AQI.Comparison.Source,
-          },
-        },
-        map: {
-          aqi: settings.Map.AQI,
-        },
+        httpHeaders: parseJsonWithDefault(
+          envs?.Settings?.APIs?.WAQI?.HTTPHeaders,
+          settings.APIs.WAQI.HTTPHeaders,
+        ),
+        token: envs?.Settings?.APIs?.WAQI?.Token,
         // TODO
-        apis: {
-          weatherOl: {
-            httpHeaders: settings.APIs.WeatherOL.HTTPHeaders,
-          },
-          colorfulClouds: {
-            httpHeaders: settings.APIs.ColorfulClouds.HTTPHeaders,
-            token: settings.APIs.ColorfulClouds.Token,
-            forceCnForAqi: settings.APIs.ColorfulClouds.ForceCNForAQI,
-            forceCnForComparison: settings.APIs.ColorfulClouds.ForceCNForComparison,
-          },
-          waqi: {
-            // TODO
-            httpHeaders: settings.APIs.WAQI.HTTPHeaders,
-            token: settings.APIs.WAQI.Token,
-            mode: settings.APIs.WAQI.Mode,
-          },
-        },
-      };
-  }
+        mode: envs?.Settings?.APIs?.WAQI?.Mode,
+      },
+    },
+  };
 };
 
-const toCaches = (envs) => {
-  const cache = database.Weather.Cache;
-  switch (envs?.Cache?.Version) {
-    case 1:
-      return {
-        ...envs?.Cache,
-        aqis: {
-          ...envs?.Cache?.aqis,
-        },
-      };
-    default:
-      return cache;
-  }
-};
+const toCaches = (envs) => ({
+  aqis: {
+    ...envs?.Cache?.aqis,
+  },
+});
 
 /**
  * Get AQI from cache
