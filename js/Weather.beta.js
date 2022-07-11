@@ -2932,6 +2932,7 @@ const weatherStatusToType = (weatherStatus) => {
 const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
   const language = data?.lang;
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
+  const nowTimestamp = (+(new Date()));
   // the unit of server_time is second
   const serverTime = parseInt(data?.server_time, 10);
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
@@ -2942,7 +2943,8 @@ const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
     language: typeof language === 'string' && language.length > 0
       ? language.replace('_', '-') : 'zh-CN',
     ...(isLocation(location) && { location }),
-    expireTimestamp,
+    expireTimestamp: expireTimestamp < nowTimestamp
+      ? nowTimestamp + 1000 * 60 * 5 : expireTimestamp,
     providerName: typeof providerName === 'string' && providerName.length > 0
       ? providerName : 'ColorfulClouds',
     readTimestamp: serverTimestamp,
@@ -3294,61 +3296,65 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
   const serverTime = parseInt(dataWithMinutely?.server_time, 10);
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
     ? serverTime * 1000 : (+(new Date()));
+  const startTimestamp = (new Date()).setSeconds(0, 0) + 1000 * 60;
+  const startIndex = (startTimestamp - (new Date(serverTimestamp).setSeconds(0, 0) + 1000 * 60))
+    / 1000 / 60 - 2;
 
   const maxPrecipitation = Math.max(...dataWithMinutely.result.minutely.precipitation_2h);
   const levels = dataWithMinutely?.unit === 'metric:v2' ? mmPerHourLevels : radarLevels;
 
-  const minutes = dataWithMinutely.result.minutely.precipitation_2h.map((precipitation, index) => {
-    const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
-      ? precipitation : 0;
+  const minutes = dataWithMinutely.result.minutely.precipitation_2h.slice(startIndex)
+    .map((precipitation, index) => {
+      const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
+        ? precipitation : 0;
 
-    const timeInMinute = index + 1;
+      const timeInMinute = index + 1;
 
-    const hourlyPrecipitationType = getPrecipitationType(
-      serverTimestamp + 1000 * 60 * timeInMinute,
-      dataWithMinutely,
-    );
-    const hourlyType = hourlyPrecipitationType === 'clear' || hourlyPrecipitationType.length <= 0
-      ? 'precipitation' : hourlyPrecipitationType;
-    const precipitationType = maxPrecipitation >= Object.values(levels)
-      .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyType : 'clear';
-
-    const precipitationIntensityPerceived = toPrecipitationIntensityPerceived(
-      levels,
-      validPrecipitation,
-    );
-    const isClear = validPrecipitation < levels.NO.RANGE.UPPER;
-    const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
-    const validChance = chance >= 0 ? chance : 100;
-    const ccDescription = dataWithMinutely.result.minutely.description;
-    // ColorfulClouds may report no rain even if precipitation > no rain
-    const descriptionWithParameters = isClear || ccDescription.includes(KM[dataWithMinutely?.lang])
-      ? {
-        shortDescription: ccDescription.length > 0 ? ccDescription : provider,
-        parameters: {},
-      }
-      : toDescription(
-        ccDescription,
-        dataWithMinutely?.lang,
-        timeInMinute,
+      const hourlyPrecipitationType = getPrecipitationType(
+        serverTimestamp + 1000 * 60 * timeInMinute,
+        dataWithMinutely,
       );
+      const hourlyType = hourlyPrecipitationType === 'clear' || hourlyPrecipitationType.length <= 0
+        ? 'precipitation' : hourlyPrecipitationType;
+      const precipitationType = maxPrecipitation >= Object.values(levels)
+        .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyType : 'clear';
 
-    const validDescriptionWithParameters = descriptionWithParameters.shortDescription.length > 0
-      ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
+      const precipitationIntensityPerceived = toPrecipitationIntensityPerceived(
+        levels,
+        validPrecipitation,
+      );
+      const isClear = validPrecipitation < levels.NO.RANGE.UPPER;
+      const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
+      const validChance = chance >= 0 ? chance : 100;
+      const ccDescription = dataWithMinutely.result.minutely.description;
+      // ColorfulClouds may report no rain even if precipitation > no rain
+      const descriptionWithParameters = isClear || ccDescription.includes(KM[dataWithMinutely?.lang])
+        ? {
+          shortDescription: ccDescription.length > 0 ? ccDescription : provider,
+          parameters: {},
+        }
+        : toDescription(
+          ccDescription,
+          dataWithMinutely?.lang,
+          timeInMinute,
+        );
 
-    return {
-      weatherStatus: perceivedToStatus(precipitationType, precipitationIntensityPerceived),
-      precipitation: validPrecipitation,
-      precipitationIntensityPerceived,
-      // Set chance to zero if clear
-      chance: isClear ? 0 : validChance,
-      longDescription: dataWithMinutely.result.forecast_keypoint,
-      ...validDescriptionWithParameters,
-    };
-  });
+      const validDescriptionWithParameters = descriptionWithParameters.shortDescription.length > 0
+        ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
+
+      return {
+        weatherStatus: perceivedToStatus(precipitationType, precipitationIntensityPerceived),
+        precipitation: validPrecipitation,
+        precipitationIntensityPerceived,
+        // Set chance to zero if clear
+        chance: isClear ? 0 : validChance,
+        longDescription: dataWithMinutely.result.forecast_keypoint,
+        ...validDescriptionWithParameters,
+      };
+    });
 
   return {
-    readTimestamp: serverTimestamp,
+    startTimestamp,
     minutes,
   };
 };
@@ -3563,7 +3569,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     ))
   );
 
-  if (!isMinuteArray(nextHourObject?.minutes)) {
+  if (
+    !isMinuteArray(nextHourObject?.minutes) || !isNonNanNumber(nextHourObject?.startTimestamp)
+    || nextHourObject.startTimestamp <= 0
+  ) {
     return {};
   }
 
@@ -3916,14 +3925,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     );
   };
 
-  const haveReadTime = isNonNanNumber(nextHourObject?.readTimestamp)
-    && nextHourObject.readTimestamp > 0;
-
-  // use next minute with zero second and zero millisecond as startTime
-  const startTimestamp = haveReadTime
-    ? (new Date(nextHourObject.readTimestamp + 1000 * 60)).setSeconds(0, 0)
-    : (new Date((+(new Date())) + 1000 * 60)).setSeconds(0, 0);
-
   const getNextHour = (apiVersion, condition, summary, minutes, timestamp) => {
     const sharedNextHour = {
       ...(Array.isArray(condition) && condition.length > 0 && { condition }),
@@ -3955,10 +3956,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
   const nextHour = getNextHour(
     appleApiVersion,
-    toConditions(appleApiVersion, nextHourObject.minutes, startTimestamp),
-    toSummaries(appleApiVersion, nextHourObject.minutes, startTimestamp),
-    toMinutes(appleApiVersion, nextHourObject.minutes, startTimestamp),
-    haveReadTime ? startTimestamp : null,
+    toConditions(appleApiVersion, nextHourObject.minutes, nextHourObject.startTimestamp),
+    toSummaries(appleApiVersion, nextHourObject.minutes, nextHourObject.startTimestamp),
+    toMinutes(appleApiVersion, nextHourObject.minutes, nextHourObject.startTimestamp),
+    nextHourObject.startTimestamp,
   );
 
   return Object.keys(nextHour).length > 0 ? { name: 'NextHourForecast', ...nextHour } : {};
@@ -4543,9 +4544,9 @@ if (settings.switch && typeof $request?.url === 'string') {
         ), '@iRingo.Weather.Caches');
       }
       // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：nextHour condition: ${JSON.stringify(responseBody?.forecastNextHour?.condition)}`, '');
+      $.log(`🚧 ${$.name}：nextHour condition = ${JSON.stringify(responseBody?.forecastNextHour?.condition)}`, '');
       // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：nextHour summary: ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
+      $.log(`🚧 ${$.name}：nextHour summary = ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
       // eslint-disable-next-line functional/no-expression-statement,no-undef
       $.done({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
