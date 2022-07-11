@@ -3328,9 +3328,9 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       const validChance = chance >= 0 ? chance : 100;
       const ccDescription = dataWithMinutely.result.minutely.description;
       // ColorfulClouds may report no rain even if precipitation > no rain
-      const descriptionWithParameters = isClear || ccDescription.includes(KM[dataWithMinutely?.lang])
+      const descriptionWithParameters = ccDescription.includes(KM[dataWithMinutely?.lang])
         ? {
-          shortDescription: ccDescription.length > 0 ? ccDescription : provider,
+          shortDescription: provider,
           parameters: {},
         }
         : toDescription(
