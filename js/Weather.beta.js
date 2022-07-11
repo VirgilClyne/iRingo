@@ -2041,7 +2041,8 @@ const colorfulClouds = (
     }
 
     const parametersString = typeof parameters === 'object'
-      ? Object.entries(parameters).map(([key, value]) => `&${key}=${value}`)
+      ? Object.entries({ lang: toColorfulCloudsLang(language), ...parameters })
+        .map(([key, value]) => `${key}=${value}`).join('&')
       : '';
 
     const request = {
@@ -2049,7 +2050,7 @@ const colorfulClouds = (
       url: `https://api.caiyunapp.com/${apiVersion}/${token}/`
         + `${location.longitude},${location.latitude}/`
         // https://docs.caiyunapp.com/docs/weather/
-        + `${path}?lang=${toColorfulCloudsLang(language)}${parametersString}`,
+        + `${path}?${parametersString}`,
     };
 
     // eslint-disable-next-line functional/no-expression-statement
@@ -4028,7 +4029,8 @@ const toResponseBody = (envs, request, response) => {
 
   const supportedAppleApis = [1, 2, 3];
   const apiWithAqiComparison = ['api.caiyunapp.com'];
-  const toAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
+  const settingsToAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
+  const scaleToAqiStandard = { [EPA_454.APPLE_SCALE]: EPA_454, [HJ_633.APPLE_SCALE]: HJ_633 };
   const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
 
   const url = (new URLs()).parse(request.url);
@@ -4058,13 +4060,13 @@ const toResponseBody = (envs, request, response) => {
   // TODO
   const getTargetScale = (projectSettings, appleScale) => {
     if (projectSettings.aqi.local.switch) {
-      const scale = toAqiStandard[projectSettings.aqi.local.standard]?.APPLE_SCALE;
+      const scale = settingsToAqiStandard[projectSettings.aqi.local.standard]?.APPLE_SCALE;
       // TODO
       if (typeof scale !== 'string' || scale.length <= 0) {
         return '';
       }
 
-      return toAqiStandard[projectSettings.aqi.local.standard].APPLE_SCALE;
+      return settingsToAqiStandard[projectSettings.aqi.local.standard].APPLE_SCALE;
     }
 
     if (!projectSettings.aqi.switch) {
@@ -4303,12 +4305,13 @@ const toResponseBody = (envs, request, response) => {
     && AQI_COMPARISON.length > 0 && ((needAqi
       && !apiWithAqiComparison.includes(settings.aqi.source))
       || airQuality?.[AQI_COMPARISON] === 'unknown');
-  const yesterdayHourTimestamp = (new Date()).setMinutes(0, 0, 0) - 1000 * 60 * 60;
+  const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
+  const yesterdayHourTimestamp = nowHourTimestamp - 1000 * 60 * 60 * 24;
   const yesterdayReportTimestamp = needAqi ? yesterdayHourTimestamp : appleTimeToTimestamp(
     appleApiVersion,
     airQuality?.[METADATA]?.[REPORTED_TIME],
-    yesterdayHourTimestamp,
-  );
+    nowHourTimestamp,
+  ) - 1000 * 60 * 60 * 24;
   const cachedAqi = needCompareAqi ? getCachedAqi(
     caches.aqis,
     yesterdayReportTimestamp,
@@ -4324,7 +4327,7 @@ const toResponseBody = (envs, request, response) => {
 
   const missionList = toMissions(
     needAqi ? settings.aqi.source : null,
-    needCompareAqi ? settings.aqi.comparison.source : null,
+    cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
     needNextHour ? settings.nextHour.source : null,
   );
 
@@ -4367,7 +4370,7 @@ const toResponseBody = (envs, request, response) => {
           });
         case 'api.caiyunapp.com': {
           const path = missionsToCcPath(missions);
-          const needHistory = missions.includes('aqiComparison');
+          const needHistory = missions.includes('forCompareAqi');
 
           return [colorfulClouds(
             settings.apis.colorfulClouds.token,
@@ -4377,7 +4380,7 @@ const toResponseBody = (envs, request, response) => {
             path,
             {
               unit: 'metric:v2',
-              ...(needHistory && { begin: yesterdayHourTimestamp }),
+              ...(needHistory && { begin: yesterdayHourTimestamp / 1000 }),
             },
           ).then((returnedData) => ({
             missions,
@@ -4435,32 +4438,39 @@ const toResponseBody = (envs, request, response) => {
     ));
 
     const modifiedAirQuality = getAirQuality(appleApiVersion, dataForAqi, languageWithRegion);
-    const modifiedComapreAqi = cachedAqi?.aqi >= 0 ? compareAqi(
-      cachedAqi.aqi,
-      modifiedAirQuality?.[AQI_INDEX],
-    ) : getAqiComparison(dataForAqiComparison);
     const mergedAirQuality = {
       ...airQuality,
       ...modifiedAirQuality,
       metadata: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
-      ...(needCompareAqi && { [AQI_COMPARISON]: modifiedComapreAqi }),
     };
     const mergedScale = mergedAirQuality?.[AQI_SCALE];
+    const localConvertedAirQuality = {
+      ...mergedAirQuality,
+      ...(settings.aqi.local.switch && typeof mergedAirQuality?.[POLLUTANTS] === 'object'
+        && settings.aqi.targets.includes(
+          mergedScale.slice(0, mergedScale.lastIndexOf('.')),
+        )
+        && toAirQuality(appleApiVersion, appleToEpaAirQuality(
+          settingsToAqiStandard[settings.aqi.local.standard],
+          mergedAirQuality[POLLUTANTS],
+        ))),
+    };
+    const aqiLevels = scaleToAqiStandard[localConvertedAirQuality?.[AQI_SCALE]]?.AQI_LEVELS;
+    const modifiedComapreAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0 && cachedAqi.aqi >= 0
+    && typeof aqiLevels === 'object'
+      ? compareAqi(
+        toAqiLevel(aqiLevels, localConvertedAirQuality[AQI_INDEX]),
+        toAqiLevel(aqiLevels, cachedAqi.aqi),
+      )
+      : getAqiComparison(dataForAqiComparison);
     const modifiedNextHour = getNextHour(appleApiVersion, dataForNextHour, languageWithRegion);
 
     return {
       ...dataFromApple,
       ...(requireData.includes(AIR_QUALITY) && {
         [AIR_QUALITY]: {
-          ...mergedAirQuality,
-          ...(settings.aqi.local.switch && typeof mergedAirQuality?.[POLLUTANTS] === 'object'
-            && settings.aqi.targets.includes(
-              mergedScale.slice(0, mergedScale.lastIndexOf('.')),
-            )
-            && toAirQuality(appleApiVersion, appleToEpaAirQuality(
-              toAqiStandard[settings.aqi.local.standard],
-              mergedAirQuality[POLLUTANTS],
-            ))),
+          ...localConvertedAirQuality,
+          ...(needCompareAqi && { [AQI_COMPARISON]: modifiedComapreAqi }),
         },
       }),
       ...(requireData.includes(NEXT_HOUR) && {
