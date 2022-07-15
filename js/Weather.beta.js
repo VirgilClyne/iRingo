@@ -2935,6 +2935,36 @@ const weatherStatusToType = (weatherStatus) => {
   }
 };
 
+/**
+ * Transfer numbers into ordinal numerals. [Source code]{@link https://stackoverflow.com/a/20426113}
+ * @author WordlessEcho <wordless@echo.moe>
+ * @param {number} number - Number to transfer
+ * @return {string} - Ordinal numeral of given number.
+ * Empty string will be returned if given number is invalid.
+ */
+const stringifyNumber = (number) => {
+  const special = [
+    'zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth',
+    'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth',
+    'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth',
+  ];
+  const deca = ['twent', 'thirt', 'fort', 'fift', 'sixt', 'sevent', 'eight', 'ninet'];
+
+  if (!isNonNanNumber(number) || number < 0) {
+    return '';
+  }
+
+  if (number < 20) {
+    return special[number];
+  }
+
+  if (number % 10 === 0) {
+    return `${deca[Math.floor(number / 10) - 2]}ieth`;
+  }
+
+  return `${deca[Math.floor(number / 10) - 2]}y-${special[number % 10]}`;
+};
+
 const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
   const language = data?.lang;
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
@@ -3095,36 +3125,6 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         parameters: {},
       };
     }
-
-    /**
-     * Transfer numbers into ordinal numerals. [Source code]{@link https://stackoverflow.com/a/20426113}
-     * @author WordlessEcho <wordless@echo.moe>
-     * @param {number} number - Number to transfer
-     * @return {string} - Ordinal numeral of given number.
-     * Empty string will be returned if given number is invalid.
-     */
-    const stringifyNumber = (number) => {
-      const special = [
-        'zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth',
-        'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth',
-        'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth',
-      ];
-      const deca = ['twent', 'thirt', 'fort', 'fift', 'sixt', 'sevent', 'eight', 'ninet'];
-
-      if (!isNonNanNumber(number) || number < 0) {
-        return '';
-      }
-
-      if (number < 20) {
-        return special[number];
-      }
-
-      if (number % 10 === 0) {
-        return `${deca[Math.floor(number / 10) - 2]}ieth`;
-      }
-
-      return `${deca[Math.floor(number / 10) - 2]}y-${special[number % 10]}`;
-    };
 
     /**
      * Map times in description to `{firstAt}`, `{secondAt}`, etc...
