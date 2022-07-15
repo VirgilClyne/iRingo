@@ -3086,6 +3086,39 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     return 'clear';
   };
 
+  const toWeatherStatus = (precipitationInfo, timeInMinute, precipitationType, perceived) => {
+    if (
+      !Array.isArray(precipitationInfo) || !isNonNanNumber(timeInMinute) || timeInMinute < 0
+      || precipitationInfo.some((info) => (
+        !isNonNanNumber(info?.start) || !isNonNanNumber(info?.end)
+      ))
+    ) {
+      return 'precipitation';
+    }
+
+    const status = perceivedToStatus(precipitationType, perceived);
+    const rainStatus = ['rain', 'drizzle'];
+    const snowStatus = ['snow', 'flurries'];
+    const targets = [...rainStatus, ...snowStatus];
+    if (targets.includes(status)) {
+      const infoOfMinute = precipitationInfo.find((info) => (
+        timeInMinute >= info.start && timeInMinute <= info.end
+      ));
+
+      if (typeof infoOfMinute?.isDrizzleOrFlurries === 'boolean') {
+        if (rainStatus.includes(status)) {
+          return infoOfMinute.isDrizzleOrFlurries ? 'drizzle' : 'rain';
+        }
+
+        if (snowStatus.includes(status)) {
+          return infoOfMinute.isDrizzleOrFlurries ? 'flurries' : 'snow';
+        }
+      }
+    }
+
+    return status;
+  };
+
   /**
    * Assign chance for each minute
    * since ColorfulClouds only provider chances for periods of 30 minutes
@@ -3310,54 +3343,96 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
   const maxPrecipitation = Math.max(...dataWithMinutely.result.minutely.precipitation_2h);
   const levels = dataWithMinutely?.unit === 'metric:v2' ? mmPerHourLevels : radarLevels;
 
-  const minutes = dataWithMinutely.result.minutely.precipitation_2h.slice(validStartIndex)
-    .map((precipitation, index) => {
-      const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
-        ? precipitation : 0;
+  const precipitations = dataWithMinutely.result.minutely.precipitation_2h.slice(validStartIndex);
+  const precipitationBounds = precipitations.flatMap((current, index, array) => {
+    const previous = array[index - 1];
 
-      const timeInMinute = index + 1;
+    if (index === 0 || previous < levels.NO.RANGE.UPPER) {
+      if (current >= levels.NO.RANGE.UPPER) {
+        return [index];
+      }
+    } else if (previous >= levels.NO.RANGE.UPPER) {
+      if (current < levels.NO.RANGE.UPPER) {
+        return [index];
+      }
+    }
 
-      const hourlyPrecipitationType = getPrecipitationType(
-        serverTimestamp + 1000 * 60 * timeInMinute,
-        dataWithMinutely,
+    return [];
+  });
+  const precipitationInfo = precipitationBounds.flatMap((value, index, array) => {
+    if (index % 2 > 0) {
+      return [];
+    }
+
+    const start = value;
+    const end = array?.[index + 1];
+    const validEnd = isNonNanNumber(end) && end >= 0 ? end : precipitations.length;
+
+    const slicedPrecipitations = precipitations.slice(start, validEnd);
+    const sum = slicedPrecipitations.reduce((p, c) => p + c, 0);
+    const average = sum / slicedPrecipitations.length;
+
+    return [{
+      start,
+      end: validEnd,
+      isDrizzleOrFlurries: isNonNanNumber(sum)
+        && Math.max(...slicedPrecipitations) < levels.HEAVY.RANGE.LOWER
+        && average < levels.MODERATE.RANGE.UPPER,
+    }];
+  });
+
+  const minutes = precipitations.map((precipitation, index) => {
+    const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
+      ? precipitation : 0;
+
+    const timeInMinute = index + 1;
+
+    const hourlyPrecipitationType = getPrecipitationType(
+      serverTimestamp + 1000 * 60 * timeInMinute,
+      dataWithMinutely,
+    );
+    const hourlyType = hourlyPrecipitationType === 'clear' || hourlyPrecipitationType.length <= 0
+      ? 'precipitation' : hourlyPrecipitationType;
+    const precipitationType = maxPrecipitation >= Object.values(levels)
+      .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyType : 'clear';
+
+    const precipitationIntensityPerceived = toPerceived(levels, validPrecipitation);
+
+    const isClear = validPrecipitation < levels.NO.RANGE.UPPER;
+    const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
+    const validChance = chance >= 0 ? chance : 100;
+
+    const ccDescription = dataWithMinutely.result.minutely.description;
+    // ColorfulClouds may report no rain even if precipitation > no rain
+    const descriptionWithParameters = ccDescription.includes(KM[dataWithMinutely?.lang])
+      ? {
+        shortDescription: provider,
+        parameters: {},
+      }
+      : toDescription(
+        ccDescription,
+        dataWithMinutely?.lang,
+        timeInMinute,
       );
-      const hourlyType = hourlyPrecipitationType === 'clear' || hourlyPrecipitationType.length <= 0
-        ? 'precipitation' : hourlyPrecipitationType;
-      const precipitationType = maxPrecipitation >= Object.values(levels)
-        .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyType : 'clear';
 
-      const precipitationIntensityPerceived = toPerceived(levels, validPrecipitation);
+    const validDescriptionWithParameters = descriptionWithParameters.shortDescription.length > 0
+      ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
 
-      const isClear = validPrecipitation < levels.NO.RANGE.UPPER;
-      const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
-      const validChance = chance >= 0 ? chance : 100;
-
-      const ccDescription = dataWithMinutely.result.minutely.description;
-      // ColorfulClouds may report no rain even if precipitation > no rain
-      const descriptionWithParameters = ccDescription.includes(KM[dataWithMinutely?.lang])
-        ? {
-          shortDescription: provider,
-          parameters: {},
-        }
-        : toDescription(
-          ccDescription,
-          dataWithMinutely?.lang,
-          timeInMinute,
-        );
-
-      const validDescriptionWithParameters = descriptionWithParameters.shortDescription.length > 0
-        ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
-
-      return {
-        weatherStatus: perceivedToStatus(precipitationType, precipitationIntensityPerceived),
-        precipitation: validPrecipitation,
+    return {
+      weatherStatus: toWeatherStatus(
+        precipitationInfo,
+        timeInMinute,
+        precipitationType,
         precipitationIntensityPerceived,
-        // Set chance to zero if clear
-        chance: isClear ? 0 : validChance,
-        longDescription: dataWithMinutely.result.forecast_keypoint,
-        ...validDescriptionWithParameters,
-      };
-    });
+      ),
+      precipitation: validPrecipitation,
+      precipitationIntensityPerceived,
+      // Set chance to zero if clear
+      chance: isClear ? 0 : validChance,
+      longDescription: dataWithMinutely.result.forecast_keypoint,
+      ...validDescriptionWithParameters,
+    };
+  });
 
   return {
     startTimestamp,
