@@ -3689,16 +3689,8 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       const validLongDescription = typeof minute?.longDescription === 'string'
       && minute.longDescription.length > 0 ? minute.longDescription : $.name;
-      const shortDescriptionWithParameters = typeof minute?.shortDescription === 'string'
-      && minute.shortDescription.length > 0 && typeof minute.parameters === 'object'
-        ? {
-          shortDescription: minute.shortDescription,
-          parameters: minute.parameters,
-        }
-        : {
-          shortDescription: validLongDescription,
-          parameters: {},
-        };
+      const validShortDescription = typeof minute?.shortDescription === 'string'
+      && minute.shortDescription.length > 0 ? minute.shortDescription : validLongDescription;
 
       return {
         ...minute,
@@ -3707,7 +3699,8 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         precipitationIntensityPerceived: pip,
         chance,
         longDescription: validLongDescription,
-        ...shortDescriptionWithParameters,
+        shortDescription: validShortDescription,
+        ...(typeof minute?.parameters === 'object' && { parameters: minute.parameters }),
       };
     });
   };
@@ -3817,10 +3810,8 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       const sharedCondition = {
         token,
-        parameters: typeof minute.parameters === 'object'
-          ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
-            key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-          ])) : {},
+        // TODO
+        parameters: {},
       };
 
       switch (apiVersion) {
