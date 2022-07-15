@@ -2841,7 +2841,7 @@ const waqiToAqi = (feedData) => {
  * @return {number} - Value for `forecastNextHour.minutes[].precipIntensityPerceived`.
  * 0 will be returned if precipitation levels or precipitation is invalid.
  */
-const toPrecipitationIntensityPerceived = (precipitationLevels, precipitation) => {
+const toPerceived = (precipitationLevels, precipitation) => {
   const levels = typeof precipitationLevels === 'object'
     ? Object.values(precipitationLevels).filter((level) => (
       isPositiveWithZeroRange(level.RANGE) && isNonNanNumber(level.VALUE)
@@ -2867,8 +2867,14 @@ const toPrecipitationIntensityPerceived = (precipitationLevels, precipitation) =
       isPositiveWithZeroRange(currentLevel?.RANGE) && isPositiveWithZeroRange(lastLevel?.RANGE)
       && isNonNanNumber(currentLevel?.VALUE) && isNonNanNumber(lastLevel?.VALUE)
     ) {
-      return currentLevel.VALUE <= 0 || currentLevel.VALUE >= 3 ? currentLevel.VALUE
-        : lastLevel.VALUE + (((precipitation - lastLevel.RANGE.UPPER) * 1000)
+      if (currentLevel.VALUE <= 0) {
+        return 0;
+      }
+      if (currentLevel.VALUE > 3) {
+        return 3;
+      }
+
+      return lastLevel.VALUE + (((precipitation - lastLevel.RANGE.UPPER) * 1000)
         / ((currentLevel.RANGE.UPPER - currentLevel.RANGE.LOWER) * 1000));
     }
   }
@@ -2881,7 +2887,7 @@ const toPrecipitationIntensityPerceived = (precipitationLevels, precipitation) =
  * @author WordlessEcho <wordless@echo.moe>
  * @param {precipitationType} precipitationType - Type of precipitation
  * @param {number} precipitationIntensityPerceived - Apple precipitation.
- * Can be generated from {@link toPrecipitationIntensityPerceived}
+ * Can be generated from {@link toPerceived}
  * @returns {weatherStatus} Weather status of current type and precipitation
  */
 const perceivedToStatus = (precipitationType, precipitationIntensityPerceived) => {
@@ -3319,10 +3325,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       const precipitationType = maxPrecipitation >= Object.values(levels)
         .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyType : 'clear';
 
-      const precipitationIntensityPerceived = toPrecipitationIntensityPerceived(
-        levels,
-        validPrecipitation,
-      );
+      const precipitationIntensityPerceived = toPerceived(levels, validPrecipitation);
+
       const isClear = validPrecipitation < levels.NO.RANGE.UPPER;
       const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
       const validChance = chance >= 0 ? chance : 100;
