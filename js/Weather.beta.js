@@ -3304,12 +3304,13 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     ? serverTime * 1000 : (+(new Date()));
   const startTimestamp = (new Date()).setSeconds(0, 0) + 1000 * 60;
   const startIndex = (startTimestamp - (new Date(serverTimestamp).setSeconds(0, 0) + 1000 * 60))
-    / 1000 / 60 - 2;
+    / 1000 / 60;
+  const validStartIndex = startIndex >= 0 ? startIndex : 0;
 
   const maxPrecipitation = Math.max(...dataWithMinutely.result.minutely.precipitation_2h);
   const levels = dataWithMinutely?.unit === 'metric:v2' ? mmPerHourLevels : radarLevels;
 
-  const minutes = dataWithMinutely.result.minutely.precipitation_2h.slice(startIndex)
+  const minutes = dataWithMinutely.result.minutely.precipitation_2h.slice(validStartIndex)
     .map((precipitation, index) => {
       const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
         ? precipitation : 0;
@@ -3330,6 +3331,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       const isClear = validPrecipitation < levels.NO.RANGE.UPPER;
       const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
       const validChance = chance >= 0 ? chance : 100;
+
       const ccDescription = dataWithMinutely.result.minutely.description;
       // ColorfulClouds may report no rain even if precipitation > no rain
       const descriptionWithParameters = ccDescription.includes(KM[dataWithMinutely?.lang])
