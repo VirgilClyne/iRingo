@@ -3152,7 +3152,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
    * @return {{longDescription: string, parameters: Object.<string, number>}} -
    * Short description and parameters for Apple Weather
    */
-  const toDescription = (description, ccLanguage, timeInMinute) => {
+  const toDescription = (description, ccLanguage, timeInMinute, timeShift) => {
     if (typeof description !== 'string') {
       return {
         longDescription: '',
@@ -3248,7 +3248,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       };
 
       const times = rawDescription
-        .match(/\d+/g).map((timeInString) => parseInt(timeInString, 10))
+        .match(/\d+/g).map((timeInString) => parseInt(timeInString, 10) - timeShift)
         .filter((time) => isNonNanNumber(time) && time > 0);
 
       const descriptionWithParameters = times.reduce(
@@ -3414,6 +3414,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         ccDescription,
         dataWithMinutely?.lang,
         timeInMinute,
+        validStartIndex,
       );
 
     const validDescriptionWithParameters = descriptionWithParameters.longDescription.length > 0
@@ -3842,7 +3843,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             token,
             longTemplate: longDescription,
             shortTemplate: shortDescription,
-            parameters: haveShortDescription && typeof minute.parameters === 'object'
+            parameters: haveLongDescription && typeof minute.parameters === 'object'
               ? minute.parameters : toParameters(array, index, slicedMinutesData, timestamp),
           };
         case 2:
@@ -3854,7 +3855,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             token,
             longTemplate: longDescription,
             shortTemplate: shortDescription,
-            parameters: haveShortDescription && typeof minute.parameters === 'object'
+            parameters: haveLongDescription && typeof minute.parameters === 'object'
               ? minute.parameters : toParameters(array, index, slicedMinutesData, timestamp),
           };
         case 3:
