@@ -3725,14 +3725,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
      * @author WordlessEcho <wordless@echo.moe>
      * @param {minute[]} minuteArray - add `possible-` prefix to token
      * @param {number} bound
-     * @param {number} nextBound
      * @return {string} token for Apple Weather
      */
-    const toToken = (minuteArray, bound, nextBound) => {
-      if (
-        !isMinuteArray(minuteArray) || !isNonNanNumber(nextBound) || nextBound < 1
-        || !isNonNanNumber(bound) || bound < 0
-      ) {
+    const toToken = (minuteArray, bound) => {
+      if (!isMinuteArray(minuteArray) || !isNonNanNumber(bound) || bound < 0) {
         return 'precipitation';
       }
 
@@ -3745,11 +3741,6 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       const secondStatus = secondStatusIndex === -1 ? null
         : checkWeatherStatus(validMinuteArray[secondStatusIndex]);
 
-      const maxChance = Math.max(...validMinuteArray
-        .slice(bound, nextBound).map((minute) => minute.chance));
-      // https://developer.apple.com/documentation/weatherkitrestapi/certainty
-      const needPossible = maxChance < 50;
-
       if (firstStatus === 'clear') {
         if (secondStatusIndex === -1) {
           return firstStatus;
@@ -3758,23 +3749,38 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         const nextClearIndex = validMinuteArray.slice(secondStatusIndex)
           .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
         if (nextClearIndex === -1) {
-          return `${needPossible ? 'possible-' : ''}${secondStatus}.start`;
+          const maxChance = Math.max(...validMinuteArray
+            .slice(secondStatusIndex).map((minute) => minute.chance));
+          // https://developer.apple.com/documentation/weatherkitrestapi/certainty
+          return `${maxChance < 50 ? 'possible-' : ''}${secondStatus}.start`;
         }
-        return `${needPossible ? 'possible-' : ''}${secondStatus}.start-stop`;
+
+        const maxChance = Math.max(...validMinuteArray
+          .slice(secondStatusIndex, nextClearIndex).map((minute) => minute.chance));
+        return `${maxChance < 50 ? 'possible-' : ''}${secondStatus}.start-stop`;
       }
 
       // if current weather is not clear
       if (secondStatus === 'clear') {
         const nextNotClearIndex = validMinuteArray.slice(secondStatusIndex)
           .findIndex((minute) => checkWeatherStatus(minute) !== 'clear');
+        const endIndex = validMinuteArray.slice(secondStatusIndex)
+          .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
+        const maxChance = Math.max(...validMinuteArray
+          .slice(bound, endIndex).map((minute) => minute.chance));
+
         if (nextNotClearIndex !== -1) {
-          return `${needPossible ? 'possible-' : ''}${firstStatus}.stop-start`;
+          return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.stop-start`;
         }
 
-        return `${needPossible ? 'possible-' : ''}${firstStatus}.stop`;
+        return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.stop`;
       }
 
-      return `${needPossible ? 'possible-' : ''}${firstStatus}.constant`;
+      const nextClearIndex = validMinuteArray.slice(secondStatusIndex)
+        .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
+      const maxChance = Math.max(...validMinuteArray
+        .slice(bound, nextClearIndex).map((minute) => minute.chance));
+      return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`;
     };
 
     const validMinutesData = toValidMinutes(minutesData);
@@ -3798,7 +3804,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       const minute = validMinutesData[bound];
       const lastBound = index === 0 ? 0 : array[index - 1];
 
-      const token = toToken(validMinutesData.slice(0, 60), lastBound, bound);
+      const token = toToken(validMinutesData.slice(0, 60), lastBound);
       const needEndTime = !(
         index + 1 === array.length
         && checkWeatherStatus(minute) === checkWeatherStatus(validMinutesData[bound + 1])
