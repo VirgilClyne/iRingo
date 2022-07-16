@@ -3844,7 +3844,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             longTemplate: longDescription,
             shortTemplate: shortDescription,
             parameters: haveLongDescription && typeof minute.parameters === 'object'
-              ? minute.parameters : toParameters(array, index, slicedMinutesData, timestamp),
+            && Object.keys(minute.parameters).length > 0
+              ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
+                key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
+              ])) : toParameters(array, index, slicedMinutesData, timestamp),
           };
         case 2:
           return {
@@ -3856,7 +3859,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             longTemplate: longDescription,
             shortTemplate: shortDescription,
             parameters: haveLongDescription && typeof minute.parameters === 'object'
-              ? minute.parameters : toParameters(array, index, slicedMinutesData, timestamp),
+            && Object.keys(minute.parameters).length > 0
+              ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
+                key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
+              ])) : toParameters(array, index, slicedMinutesData, timestamp),
           };
         case 3:
           return {
