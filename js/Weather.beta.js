@@ -3764,10 +3764,8 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       if (secondStatus === 'clear') {
         const nextNotClearIndex = validMinuteArray.slice(secondStatusIndex)
           .findIndex((minute) => checkWeatherStatus(minute) !== 'clear');
-        const endIndex = validMinuteArray.slice(secondStatusIndex)
-          .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
         const maxChance = Math.max(...validMinuteArray
-          .slice(bound, endIndex).map((minute) => minute.chance));
+          .slice(bound, secondStatusIndex).map((minute) => minute.chance));
 
         if (nextNotClearIndex !== -1) {
           return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.stop-start`;
@@ -3776,11 +3774,9 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.stop`;
       }
 
-      const nextClearIndex = validMinuteArray.slice(secondStatusIndex)
-        .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
-      const maxChance = Math.max(...validMinuteArray
-        .slice(bound, nextClearIndex).map((minute) => minute.chance));
-      return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`;
+      const maxChance = Math.max(...validMinuteArray.map((minute) => minute.chance));
+      return secondStatusIndex === -1 ? `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`
+        : `${maxChance < 50 ? 'possible-' : ''}${firstStatus}-to-${secondStatus}.constant`;
     };
 
     const toParameters = (bounds, indexInBound, minutes, timestamp) => bounds
