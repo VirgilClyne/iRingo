@@ -3790,7 +3790,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
         return {
           ...parameters,
-          ...((lastStatus !== 'clear' || currentStatus !== 'clear') && {
+          ...((lastStatus !== 'clear' || currentStatus !== 'clear' || (
+            currentBound + 1 === minutes.length
+            && currentBound > 0 && currentStatus !== minutes[currentBound - 1].weatherStatus
+          )) && {
             [`${stringifyNumber(Object.keys(parameters).length + 1)}At`]: toAppleTime(
               apiVersion,
               timestamp + currentBound * 60 * 1000,
