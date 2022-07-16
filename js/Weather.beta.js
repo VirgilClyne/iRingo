@@ -3780,8 +3780,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     };
 
     const toParameters = (bounds, indexInBound, minutes, timestamp) => bounds
-      .slice(indexInBound + 1).reduce((parameters, currentBound, index) => {
-        const lastStatus = index === 0 ? 'clear' : minutes[bounds[index - 1]].weatherStatus;
+      .slice(indexInBound).reduce((parameters, currentBound, index) => {
+        const lastStatus = minutes[
+          indexInBound + index - 1 < 0 ? 0 : bounds[indexInBound + index - 1]
+        ].weatherStatus;
         const currentStatus = minutes[currentBound].weatherStatus;
 
         return {
