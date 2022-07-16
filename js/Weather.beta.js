@@ -3068,7 +3068,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         : skycon.datetime.split('+').join(':00.000+'));
 
       return isNonNanNumber(ts) && ts > 0
-        && ts >= nowHourTimestamp && ts < nowHourTimestamp + 1000 * 60 * 60;
+        // Limit to two hour since ColorfulClouds provide two hours report
+        && ts >= nowHourTimestamp && ts < nowHourTimestamp + 1000 * 60 * 60 * 2;
     })?.value;
 
     if (typeof skyCondition !== 'string' || skyCondition.length <= 0) {
