@@ -3775,8 +3775,9 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       }
 
       const maxChance = Math.max(...validMinuteArray.map((minute) => minute.chance));
-      return secondStatusIndex === -1 ? `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`
-        : `${maxChance < 50 ? 'possible-' : ''}${firstStatus}-to-${secondStatus}.constant`;
+      return firstStatus.startsWith('heavy-')
+        ? `${maxChance < 50 ? 'possible-' : ''}${firstStatus}-to-${secondStatus}.constant`
+        : `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`;
     };
 
     const toParameters = (bounds, indexInBound, minutes, timestamp) => bounds
