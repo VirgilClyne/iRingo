@@ -3783,8 +3783,25 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`;
     };
 
+    const toParameters = (bounds, indexInBound, minutes, timestamp) => bounds
+      .slice(indexInBound + 1).reduce((parameters, currentBound, index) => {
+        const lastStatus = index === 0 ? 'clear' : minutes[bounds[index - 1]].weatherStatus;
+        const currentStatus = minutes[currentBound].weatherStatus;
+
+        return {
+          ...parameters,
+          ...((lastStatus !== 'clear' || currentStatus !== 'clear') && {
+            [`${stringifyNumber(Object.keys(parameters).length + 1)}At`]: toAppleTime(
+              apiVersion,
+              timestamp + currentBound * 60 * 1000,
+            ),
+          }),
+        };
+      }, {});
+
     const validMinutesData = toValidMinutes(minutesData);
-    const bounds = validMinutesData.slice(0, 60).flatMap((current, index, array) => {
+    const slicedMinutesData = validMinutesData.slice(0, 60);
+    const bounds = slicedMinutesData.flatMap((current, index, array) => {
       const previous = array[index - 1];
 
       if (
@@ -3800,11 +3817,12 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
     const timestamp = isNonNanNumber(startTimestamp) && startTimestamp > 0
       ? startTimestamp : (+(new Date()));
 
+    // TODO: (FIX) Infinite loop while length of minutesData is 1
     return bounds.map((bound, index, array) => {
-      const minute = validMinutesData[bound];
+      const minute = slicedMinutesData[bound];
       const lastBound = index === 0 ? 0 : array[index - 1];
 
-      const token = toToken(validMinutesData.slice(0, 60), lastBound);
+      const token = toToken(slicedMinutesData, lastBound);
       const needEndTime = !(
         index + 1 === array.length
         && checkWeatherStatus(minute) === checkWeatherStatus(validMinutesData[bound + 1])
@@ -3812,14 +3830,9 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       const longDescription = typeof minute.longDescription === 'string'
       && minute.longDescription.length > 0 ? minute.longDescription : $.name;
-      const shortDescription = typeof minute.shortDescription === 'string'
-      && minute.shortDescription.length > 0 ? minute.shortDescription : $.name;
-
-      const sharedCondition = {
-        token,
-        // TODO
-        parameters: {},
-      };
+      const haveShortDescription = typeof minute.shortDescription === 'string'
+        && minute.shortDescription.length > 0;
+      const shortDescription = haveShortDescription ? minute.shortDescription : $.name;
 
       switch (apiVersion) {
         case 1:
@@ -3827,9 +3840,11 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             ...(needEndTime && {
               validUntil: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
-            ...sharedCondition,
+            token,
             longTemplate: longDescription,
             shortTemplate: shortDescription,
+            parameters: haveShortDescription && typeof minute.parameters === 'object'
+              ? minute.parameters : toParameters(array, index, slicedMinutesData, timestamp),
           };
         case 2:
           return {
@@ -3837,9 +3852,11 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             ...(needEndTime && {
               endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
-            ...sharedCondition,
+            token,
             longTemplate: longDescription,
             shortTemplate: shortDescription,
+            parameters: haveShortDescription && typeof minute.parameters === 'object'
+              ? minute.parameters : toParameters(array, index, slicedMinutesData, timestamp),
           };
         case 3:
           return {
@@ -3847,7 +3864,8 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             ...(needEndTime && {
               endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
-            ...sharedCondition,
+            token,
+            parameters: toParameters(array, index, slicedMinutesData, timestamp),
           };
         default:
           return {};
