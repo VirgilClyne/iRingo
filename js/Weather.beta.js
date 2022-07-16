@@ -3149,13 +3149,13 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
    * @param {string} description - Description for next two hours from ColorfulClouds
    * @param {string} ccLanguage - Language code from ColorfulClouds
    * @param {number} timeInMinute - Minutes from start time of precipitaion
-   * @return {{shortDescription: string, parameters: Object.<string, number>}} -
+   * @return {{longDescription: string, parameters: Object.<string, number>}} -
    * Short description and parameters for Apple Weather
    */
   const toDescription = (description, ccLanguage, timeInMinute) => {
     if (typeof description !== 'string') {
       return {
-        shortDescription: '',
+        longDescription: '',
         parameters: {},
       };
     }
@@ -3164,13 +3164,13 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
      * Map times in description to `{firstAt}`, `{secondAt}`, etc...
      * @author WordlessEcho <wordless@echo.moe>
      * @param {string} rawDescription - Description with times
-     * @return {{shortDescription: string|'', parameters: Object.<string, number>}} -
+     * @return {{longDescription: string|'', parameters: Object.<string, number>}} -
      * Short description and parameters for Apple Weather
      */
     const modifyDescription = (rawDescription) => {
       if (typeof rawDescription !== 'string' || rawDescription.length <= 0) {
         return {
-          shortDescription: '',
+          longDescription: '',
           parameters: {},
         };
       }
@@ -3252,23 +3252,23 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         .filter((time) => isNonNanNumber(time) && time > 0);
 
       const descriptionWithParameters = times.reduce(
-        ({ shortDescription, parameters }, time, index) => {
+        ({ longDescription, parameters }, time, index) => {
           const key = `${stringifyNumber(index + 1)}At`;
           return {
-            shortDescription: shortDescription.replace(`${time}`, `{${key}}`),
+            longDescription: longDescription.replace(`${time}`, `{${key}}`),
             parameters: { ...parameters, [key]: time },
           };
         },
-        { shortDescription: rawDescription, parameters: {} },
+        { longDescription: rawDescription, parameters: {} },
       );
 
-      const shortDescription = insertAfterToDescription(
+      const longDescription = insertAfterToDescription(
         ccLanguage,
-        descriptionWithParameters.shortDescription,
+        descriptionWithParameters.longDescription,
       );
 
       return {
-        shortDescription,
+        longDescription,
         parameters: descriptionWithParameters.parameters,
       };
     };
@@ -3283,7 +3283,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
     const allTimesString = description.match(/\d+/g);
     if (!Array.isArray(allTimesString)) {
-      return { shortDescription: '', parameters: {} };
+      return { longDescription: '', parameters: {} };
     }
 
     // Split sentence by time
@@ -3298,7 +3298,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const maxExpiredTime = Math.max(...expiredTimes);
     if (maxExpiredTime === allTimes[allTimes.length - 1]) {
       return {
-        shortDescription: '',
+        longDescription: '',
         parameters: {},
       };
     }
@@ -3407,7 +3407,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     // ColorfulClouds may report no rain even if precipitation > no rain
     const descriptionWithParameters = ccDescription.includes(KM[dataWithMinutely?.lang])
       ? {
-        shortDescription: provider,
+        longDescription: provider,
         parameters: {},
       }
       : toDescription(
@@ -3416,8 +3416,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         timeInMinute,
       );
 
-    const validDescriptionWithParameters = descriptionWithParameters.shortDescription.length > 0
-      ? descriptionWithParameters : { shortDescription: provider, parameters: {} };
+    const validDescriptionWithParameters = descriptionWithParameters.longDescription.length > 0
+      ? descriptionWithParameters : { longDescription: provider, parameters: {} };
 
     return {
       weatherStatus: toWeatherStatus(
@@ -3430,7 +3430,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       precipitationIntensityPerceived,
       // Set chance to zero if clear
       chance: isClear ? 0 : validChance,
-      longDescription: dataWithMinutely.result.forecast_keypoint,
+      shortDescription: dataWithMinutely.result.forecast_keypoint,
       ...validDescriptionWithParameters,
     };
   });
@@ -3827,11 +3827,11 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         && checkWeatherStatus(minute) === checkWeatherStatus(validMinutesData[bound + 1])
       );
 
-      const longDescription = typeof minute.longDescription === 'string'
-      && minute.longDescription.length > 0 ? minute.longDescription : $.name;
-      const haveShortDescription = typeof minute.shortDescription === 'string'
-        && minute.shortDescription.length > 0;
-      const shortDescription = haveShortDescription ? minute.shortDescription : $.name;
+      const shortDescription = typeof minute.shortDescription === 'string'
+      && minute.shortDescription.length > 0 ? minute.shortDescription : $.name;
+      const haveLongDescription = typeof minute.longDescription === 'string'
+        && minute.longDescription.length > 0;
+      const longDescription = haveLongDescription ? minute.longDescription : $.name;
 
       switch (apiVersion) {
         case 1:
