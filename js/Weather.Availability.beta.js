@@ -40,7 +40,38 @@ const DataBase = {
 		if ($response.statusCode === 200 || $response.status === 200) {
 			$.log($response.statusCode || $response.status);
 			let data = JSON.parse($response.body);
-			data = Array.from(new Set([...data, ...Configs.Availability]));
+
+  		const url = (new URLs()).parse($request.url);
+  		const parameters = getParams(url.path);
+  		const appleApiVersionString = parameters?.ver;
+  		const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
+  		  ? parseInt(appleApiVersionString.slice(1), 10) : -1;
+
+			switch (appleApiVersion) {
+				case 1:
+				case 2:
+					data = Array.from(new Set([...data, ...Configs.Availability]));
+					break;
+				case 3:
+					data = Array.from(new Set([
+						...data,
+						...[
+							'currentWeather',
+							'forecastDaily',
+							'forecastHourly',
+							'weatherChange',
+							'forecastNextHour',
+							'news',
+							'weatherAlerts',
+							'weatherAlertNotifications',
+							'airQuality',
+						],
+					]));
+					break;
+				default:
+					$.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
+					break;
+			}
 			$.log(`🎉 ${$.name}, 功能列表`, JSON.stringify(data), "");
 			$response.body = JSON.stringify(data);
 		}
@@ -82,6 +113,29 @@ async function setENV(name, platform, database) {
 	Settings.Map.AQI = JSON.parse(Settings.Map.AQI) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
+};
+
+// https://github.com/VirgilClyne/VirgilClyne/blob/main/function/URL/URLs.embedded.min.js
+function URLs(s){return new class{constructor(s=[]){this.name="URL v1.0.0",this.opts=s,this.json={url:{scheme:"",host:"",path:""},params:{}}}parse(s){let t=s.match(/(?<scheme>.+):\/\/(?<host>[^/]+)\/?(?<path>[^?]+)?\??(?<params>.*)?/)?.groups??null;return t?.params&&(t.params=Object.fromEntries(t.params.split("&").map((s=>s.split("="))))),t}stringify(s=this.json){return s?.params?s.scheme+"://"+s.host+"/"+s.path+"?"+Object.entries(s.params).map((s=>s.join("="))).join("&"):s.scheme+"://"+s.host+"/"+s.path}}(s)}
+
+/**
+ * Get Origin Parameters
+ * @author VirgilClyne
+ * @author WordlessEcho <wordless@echo.moe>
+ * @param {String} path - Path of URL
+ * @return {Object.<'ver'|'language'|'lat'|'lng'|'countryCode', string>|{}} -
+ * `version`, `language`, `latitude`, `longitude` and `regionCode` from path.
+ * Empty object will be returned if type of path is invalid.
+ */
+const getParams = (path) => {
+  if (typeof path !== 'string') {
+    return {};
+  }
+
+  const regExp = /^(?<ver>v1|v2|v3)\/availability\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
+  const result = path.match(regExp);
+
+	return typeof result?.groups === 'object' ? result.groups : {};
 };
 
 /***************** Env *****************/
