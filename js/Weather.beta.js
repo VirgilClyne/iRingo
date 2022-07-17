@@ -3307,7 +3307,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
     const splitters = SPLITTERS[ccLanguage];
     const splitIndexes = splitters.map((splitter) => (
-      description.indexOf(splitter, startIndex)
+      description.indexOf(splitter, startIndex) + splitter.length
     )).filter((index) => index !== -1);
 
     return modifyDescription(description.slice(Math.min(...splitIndexes)));
