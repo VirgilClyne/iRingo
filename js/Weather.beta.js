@@ -3248,7 +3248,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       };
 
       const times = rawDescription
-        .match(/\d+/g).map((timeInString) => parseInt(timeInString, 10) - timeShift)
+        .match(/\d+/g).map((timeInString) => parseInt(timeInString, 10))
         .filter((time) => isNonNanNumber(time) && time > 0);
 
       const descriptionWithParameters = times.reduce(
@@ -3256,7 +3256,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
           const key = `${stringifyNumber(index + 1)}At`;
           return {
             longDescription: longDescription.replace(`${time}`, `{${key}}`),
-            parameters: { ...parameters, [key]: time },
+            parameters: { ...parameters, [key]: time - timeShift },
           };
         },
         { longDescription: rawDescription, parameters: {} },
