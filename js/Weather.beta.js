@@ -4598,6 +4598,8 @@ const toResponseBody = (envs, request, response) => {
   });
 };
 
+const setResponse = (response) => $.done(!$.isQuanX() ? response : { body: response?.body });
+
 const envs = getENV('iRingo', 'Weather', database);
 const settings = toSettings(envs);
 const caches = toCaches(envs);
@@ -4618,13 +4620,13 @@ if (settings.switch && typeof $request?.url === 'string') {
     // eslint-disable-next-line functional/no-expression-statement
     $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
     // eslint-disable-next-line functional/no-expression-statement,no-undef
-    $.done($response);
+    setResponse($response);
   // eslint-disable-next-line functional/no-conditional-statement,no-undef
   } else if ($response?.statusCode !== 200 && $response?.status !== 200) {
     // eslint-disable-next-line functional/no-expression-statement,no-undef
     $.log(`⚠️ ${$.name}：服务器返回HTTP状态码 statusCode = ${$response?.statusCode}, status = ${$response?.status}`, '');
     // eslint-disable-next-line functional/no-expression-statement,no-undef
-    $.done($response);
+    setResponse($response);
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
     const {
@@ -4667,11 +4669,11 @@ if (settings.switch && typeof $request?.url === 'string') {
       // eslint-disable-next-line functional/no-expression-statement
       $.log(`🚧 ${$.name}：nextHour summary = ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
       // eslint-disable-next-line functional/no-expression-statement,no-undef
-      $.done({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
+      setResponse({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
   }
 // eslint-disable-next-line functional/no-conditional-statement
 } else {
   // eslint-disable-next-line functional/no-expression-statement,no-undef
-  $.done($response);
+  setResponse($response);
 }
