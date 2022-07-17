@@ -4134,8 +4134,8 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
 };
 
 const toResponseBody = (envs, request, response) => {
-  const dataFromApple = parseJsonWithDefault(response?.body, {});
-  if (typeof request?.url !== 'string' || Object.keys(dataFromApple).length <= 0) {
+  const dataFromApple = parseJsonWithDefault(response?.body, null);
+  if (typeof request?.url !== 'string' || !dataFromApple) {
     return Promise.resolve(response?.body);
   }
 
