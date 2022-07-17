@@ -1268,7 +1268,9 @@ const getParams = (path) => {
   }
 
   const regExp = /^(?<ver>v1|v2|v3)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
-  return path.match(regExp).groups;
+  const result = path.match(regExp);
+
+	return typeof result?.groups === 'object' ? result.groups : {};
 };
 
 /**
