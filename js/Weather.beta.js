@@ -4620,6 +4620,12 @@ if (settings.switch && typeof $request?.url === 'string') {
     $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
     // eslint-disable-next-line functional/no-expression-statement,no-undef
     $.done($response);
+  // eslint-disable-next-line functional/no-conditional-statement,no-undef
+  } else if ($response?.statusCode !== 200 && $response?.status !== 200) {
+    // eslint-disable-next-line functional/no-expression-statement,no-undef
+    $.log(`⚠️ ${$.name}：服务器返回HTTP状态码 statusCode = ${$response?.statusCode}, status = ${$response?.status}`, '');
+    // eslint-disable-next-line functional/no-expression-statement,no-undef
+    $.done($response);
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
     const {
