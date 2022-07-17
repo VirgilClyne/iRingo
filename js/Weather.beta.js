@@ -3699,7 +3699,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         precipitation: isNonNanNumber(minute?.precipitation) && minute.precipitation >= 0
           ? minute.precipitation : 0,
         precipitationIntensityPerceived: pip,
-        chance,
+        chance: Math.round(chance),
         longDescription: validLongDescription,
         shortDescription: validShortDescription,
         ...(typeof minute?.parameters === 'object' && { parameters: minute.parameters }),
