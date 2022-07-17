@@ -4440,7 +4440,7 @@ const toResponseBody = (envs, request, response) => {
 
   const missionList = toMissions(
     needAqi ? settings.aqi.source : null,
-    cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
+    needCompareAqi && cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
     needNextHour ? settings.nextHour.source : null,
   );
 
