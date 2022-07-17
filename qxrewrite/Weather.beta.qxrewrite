@@ -6,10 +6,10 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🌤天气
 #!icon=https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp
 
-^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* url request-header If-None-Match:.+\r\n request-header \r\n
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.* url request-header If-None-Match:.+\r\n request-header \r\n
 
-^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js
-^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js
 ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.beta.js
 
 hostname = weather-data.apple.com, weather-map.apple.com, api.waqi.info, www.weatherol.cn, api.caiyunapp.com

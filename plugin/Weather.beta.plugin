@@ -10,11 +10,11 @@
 DOMAIN-SUFFIX,waqi.info
 
 [Rewrite]
-^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* header-del If-None-Match
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.* header-del If-None-Match
 
 [Script]
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js, requires-body=1, tag=Apple Weather Availability
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js, requires-body=1, timeout=20, tag=Apple Weather
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.beta.js, requires-body=1, tag=Apple Weather Availability
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.beta.js, requires-body=1, timeout=20, tag=Apple Weather
 http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.beta.js, requires-body=0, tag=Apple Weather Map
 
 [MITM]
