@@ -9,23 +9,36 @@
 			"Mode": "WAQI Public",
 			"Location": "Station",
 			"Auth": null,
-			"Scale": "EPA_NowCast.2204"
+			"Scale": "EPA_NowCast.2207"
 		},
 		"Map": {
 			"AQI": false
 		}
 	},
-	"Config": {
-		"Availability": [
-			"currentWeather",
-			"forecastDaily",
-			"forecastHourly",
-			"history",
-			"weatherChange",
-			"forecastNextHour",
-			"severeWeather",
-			"airQuality"
-		],
+	"Configs": {
+		"Availability": {
+			"v2": [
+				"currentWeather",
+				"forecastDaily",
+				"forecastHourly",
+				"history",
+				"weatherChange",
+				"forecastNextHour",
+				"severeWeather",
+				"airQuality"
+			],
+			"v3": [
+				"currentWeather",
+				"forecastDaily",
+				"forecastHourly",
+				"weatherChange",
+				"forecastNextHour",
+				"news",
+				"weatherAlerts",
+				"weatherAlertNotifications",
+				"airQuality"
+			]
+		},
 		"Pollutants": {
 			"co": "CO",
 			"no": "NO",
