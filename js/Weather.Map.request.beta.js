@@ -2,30 +2,34 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather Map v1.0.0-beta");
+const $ = new Env("Apple Weather Map v1.1.0-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
 	"Siri":{"Switch":true,"CountryCode":"TW","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
 };
-var { url, headers } = $request;
 
 /***************** Processing *****************/
 !(async () => {
 	const Settings = await setENV("iRingo", "Weather", DataBase);
 	if (Settings.Switch) {
 		if (Settings.Map.AQI) {
-			url = URL.parse(url);
-			if (url.path?.includes("airQuality") || url?.params?.country == "CN") {
-				let request = await WAQI("tiles", { aqi: "usepa-aqi", lat: url.params?.x, lng: url.params?.y, alt: url.params?.z });
-				url = request.url;
-				headers = request.headers;
-			} else url = URL.stringify(url);
+			let url = URL.parse($request.url);
+			if (url.path?.includes("airQuality") && url?.params?.country == "CN") {
+				url.host = "tiles.waqi.info"
+				url.path = `tiles/usepa-aqi/${url.params?.z}/${url.params?.x}/${url.params?.y}.png`
+				delete url.params
+				$request.url = URL.stringify(url);
+				$request.headers.Host = url.host;
+			}
 		}
 	}
 })()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done({ url, headers }))
+.catch((e) => $.logErr(e))
+.finally(() => {
+	if ($.isQuanX()) $.done({ url: $request.url, headers: $request.headers })
+	else $.done($request)
+})
 
 /***************** Async Function *****************/
 /**
