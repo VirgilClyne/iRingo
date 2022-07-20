@@ -3748,17 +3748,17 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
      * @return {string} token for Apple Weather
      */
     const toToken = (bound) => {
-      if (!isNonNanNumber(bound) || bound < 0) {
-        return 'precipitation';
+      if (!isNonNanNumber(bound) || bound < 0 || bound >= slicedMinutes.length) {
+        return 'clear';
       }
 
-      const firstStatus = checkWeatherStatus(slicedMinutes[bound]);
+      const firstStatus = slicedMinutes[bound].weatherStatus;
       const secondStatusRelatedIndex = slicedMinutes.slice(bound).findIndex((minute) => (
-        checkWeatherStatus(minute) !== firstStatus));
+        minute.weatherStatus !== firstStatus));
       const secondStatusIndex = secondStatusRelatedIndex === -1
         ? -1 : secondStatusRelatedIndex + bound;
       const secondStatus = secondStatusIndex === -1 ? null
-        : checkWeatherStatus(slicedMinutes[secondStatusIndex]);
+        : slicedMinutes[secondStatusIndex].weatherStatus;
 
       if (firstStatus === 'clear') {
         if (secondStatusIndex === -1) {
@@ -3766,7 +3766,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         }
 
         const nextClearIndex = slicedMinutes.slice(secondStatusIndex)
-          .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
+          .findIndex((minute) => minute.weatherStatus === 'clear');
         if (nextClearIndex === -1) {
           const maxChance = Math.max(...slicedMinutes
             .slice(secondStatusIndex).map((minute) => minute.chance));
@@ -3782,7 +3782,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       // if current weather is not clear
       if (secondStatus === 'clear') {
         const nextNotClearIndex = slicedMinutes.slice(secondStatusIndex)
-          .findIndex((minute) => checkWeatherStatus(minute) !== 'clear');
+          .findIndex((minute) => minute.weatherStatus !== 'clear');
         const maxChance = Math.max(...slicedMinutes
           .slice(bound, secondStatusIndex).map((minute) => minute.chance));
 
@@ -3847,8 +3847,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       const token = toToken(lastBound);
       const needEndTime = !(
-        index + 1 === array.length
-        && checkWeatherStatus(minute) === checkWeatherStatus(minutes[bound + 1])
+        index + 1 === array.length && minute.weatherStatus === minutes[bound + 1].weatherStatus
       );
 
       const shortDescription = typeof minute.shortDescription === 'string'
@@ -3917,8 +3916,8 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
       if (
         index === 0 || (
-          index + 1 !== array.length && weatherStatusToType(checkWeatherStatus(current))
-          === weatherStatusToType(checkWeatherStatus(previous))
+          index + 1 !== array.length && weatherStatusToType(current.weatherStatus)
+          === weatherStatusToType(previous.weatherStatus)
         )
       ) {
         return [];
@@ -3935,10 +3934,10 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
       const minutesInSummary = minutes.slice(lastBound, bound + 1);
 
       const needEndTime = !(
-        index + 1 === array.length && checkWeatherStatus(minutes[bound])
-        === checkWeatherStatus(minutes[bound + 1])
+        index + 1 === array.length
+        && minutes[bound].weatherStatus === minutes[bound + 1].weatherStatus
       );
-      const condition = weatherStatusToType(checkWeatherStatus(minutes[lastBound]));
+      const condition = weatherStatusToType(minutes[lastBound].weatherStatus);
 
       const isNotClear = condition !== 'clear';
       const maxChance = Math.max(...minutesInSummary.filter(({ chance }) => (
