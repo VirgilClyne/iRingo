@@ -3231,7 +3231,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
               ...splitDescriptions.slice(0, splitDescriptions.length - 1),
               splitDescriptions[splitDescriptions.length - 1]
                 // Append `after that` to description.
-                .replaceAll('} min later', `{$1} min later ${AFTER.en_GB}`),
+                .replaceAll('} min later', `} min later ${AFTER.en_GB}`),
             ].join(FIRST_AT);
           case 'zh_CN':
             return [
@@ -3253,13 +3253,13 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
             return [
               ...splitDescriptions.slice(0, splitDescriptions.length - 1),
               splitDescriptions[splitDescriptions.length - 1]
-                .replaceAll('{', `${AFTER.ja}{`),
+                .replaceAll('{', `${AFTER.ja} {`),
             ].join(FIRST_AT);
           case 'en_US':
             return [
               ...splitDescriptions.slice(0, splitDescriptions.length - 1),
               splitDescriptions[splitDescriptions.length - 1]
-                .replaceAll('} min later', `{$1} min later ${AFTER.en_US}`),
+                .replaceAll('} min later', `} min later ${AFTER.en_US}`),
             ].join(FIRST_AT);
           default:
             return modifiedDescription;
