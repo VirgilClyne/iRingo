@@ -4604,7 +4604,7 @@ const toResponseBody = (envs, request, response) => {
         ))),
     };
     const aqiLevels = scaleToAqiStandard[localConvertedAirQuality?.[AQI_SCALE]]?.AQI_LEVELS;
-    const modifiedComapreAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0 && cachedAqi.aqi >= 0
+    const modifiedCompareAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0 && cachedAqi.aqi >= 0
     && typeof aqiLevels === 'object'
       ? compareAqi(
         toAqiLevel(aqiLevels, localConvertedAirQuality[AQI_INDEX]),
@@ -4618,7 +4618,7 @@ const toResponseBody = (envs, request, response) => {
       ...(requireData.includes(AIR_QUALITY) && {
         [AIR_QUALITY]: {
           ...localConvertedAirQuality,
-          ...(needCompareAqi && { [AQI_COMPARISON]: modifiedComapreAqi }),
+          ...(needCompareAqi && { [AQI_COMPARISON]: modifiedCompareAqi }),
         },
       }),
       ...(requireData.includes(NEXT_HOUR) && {
