@@ -4434,9 +4434,7 @@ const toResponseBody = (envs, request, response) => {
       )));
 
   const needCompareAqi = requireData.includes(AIR_QUALITY) && settings.aqi.comparison.switch
-    && AQI_COMPARISON.length > 0 && ((needAqi
-      && !apiWithAqiComparison.includes(settings.aqi.source))
-      || airQuality?.[AQI_COMPARISON] === 'unknown');
+    && AQI_COMPARISON.length > 0 && (airQuality?.[AQI_COMPARISON] === 'unknown' || needAqi);
   const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
   const yesterdayHourTimestamp = nowHourTimestamp - 1000 * 60 * 60 * 24;
   const yesterdayReportTimestamp = needAqi ? yesterdayHourTimestamp : appleTimeToTimestamp(
