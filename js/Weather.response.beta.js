@@ -3397,7 +3397,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       end: validEnd,
       isDrizzleOrFlurries: isNonNanNumber(sum)
         && Math.max(...slicedPrecipitations) < levels.HEAVY.RANGE.LOWER
-        && average < levels.MODERATE.RANGE.UPPER,
+        && average < levels.MODERATE.RANGE.LOWER,
     }];
   });
 
