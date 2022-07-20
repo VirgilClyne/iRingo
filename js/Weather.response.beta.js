@@ -3604,7 +3604,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
   const comparisonValues = ['better', 'same', 'worse', 'unknown'];
   const sourceTypes = ['station', 'modeled'];
 
-  const validPollutants = Array.isArray(aqiObject.pollutants) ? aqiObject.pollutants.filter(
+  const validPollutants = Array.isArray(aqiObject?.pollutants) ? aqiObject.pollutants.filter(
     (pollutant) => (
       units.includes(pollutant?.unit) && typeof pollutant?.name === 'string' && pollutant.name.length > 0
       && isNonNanNumber(pollutant?.amount) && pollutant.amount >= 0
@@ -3633,7 +3633,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
           // TODO: find out all scale
           ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
             && { airQualityScale: aqiObj.scale }),
-          ...({
+          ...(validPollutants.length > 0 && {
             pollutants: Object.fromEntries(validPollutants.map((pollutant) => ([
               pollutant.name,
               { ...pollutant, unit: pollutant.unit === 'microgramsPerM3' ? 'µg/m3' : pollutant.unit },
@@ -3654,7 +3654,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
           ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
             && { scale: aqiObj.scale }),
           ...(sourceTypes.includes(aqiObj?.sourceType) && { sourceType: aqiObj.sourceType }),
-          ...({
+          ...(validPollutants.length > 0 && {
             pollutants: Object.fromEntries(validPollutants.map((pollutant) => ([
               pollutant.name, pollutant,
             ]))),
