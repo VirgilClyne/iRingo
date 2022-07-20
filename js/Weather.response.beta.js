@@ -4237,8 +4237,8 @@ const toResponseBody = (envs, request, response) => {
     switch (missions[0]) {
       case 'aqi':
         return 'realtime';
+      // We need hourly.skycons to detect rain or snow
       case 'nextHour':
-        return 'minutely';
       case 'aqiForComparison':
       default:
         return 'weather';
