@@ -1,5 +1,5 @@
 #!name= iRingo for Weather
-#!desc=(BETA) 1.解锁全部天气数据类型 2.替换空气质量数据:WAQI 3.添加下一小时降水:气象在线 4.替换空气质量地图数据:WAQI
+#!desc=(BETA) 1.解锁全部天气功能 2.替换空气质量数据 3.添加下一小时降水数据 4.替换空气质量地图
 #!openUrl=http://boxjs.com/#/app/iRingo.Weather.beta
 #!author=Wordless Echo
 #!homepage=https://github.com/WordlessEcho
