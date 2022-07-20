@@ -3870,7 +3870,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
                 key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-              ])) : toParameters(array, index, slicedMinutes, timestamp),
+              ])) : {},
           };
         case 2:
           return {
