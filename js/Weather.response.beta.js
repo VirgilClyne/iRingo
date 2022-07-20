@@ -4444,6 +4444,8 @@ const toResponseBody = (envs, request, response) => {
     needCompareAqi && cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
     needNextHour ? settings.nextHour.source : null,
   );
+  // eslint-disable-next-line functional/no-expression-statement
+  $.log(`🚧 ${$.name}：missionList: ${JSON.stringify(missionList)}`, '');
 
   const promises = Array.isArray(missionList) ? missionList
     .filter((missionObject) => (
@@ -4632,7 +4634,7 @@ if (settings.switch && typeof $request?.url === 'string') {
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
     const {
-      AIR_QUALITY, METADATA, REPORTED_TIME, PROVIDER_NAME, SOURCE, AQI_INDEX, AQI_SCALE,
+      AIR_QUALITY, NEXT_HOUR, METADATA, REPORTED_TIME, PROVIDER_NAME, SOURCE, AQI_INDEX, AQI_SCALE,
     } = getKeywords(appleApiVersion);
     // eslint-disable-next-line functional/no-expression-statement
     $.log(`🚧 ${$.name}：模块已启用`, '');
@@ -4667,9 +4669,11 @@ if (settings.switch && typeof $request?.url === 'string') {
         ), '@iRingo.Weather.Caches');
       }
       // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：nextHour condition = ${JSON.stringify(responseBody?.forecastNextHour?.condition)}`, '');
+      $.log(`🚧 ${$.name}：AQI scale = ${JSON.stringify(responseBody?.[AIR_QUALITY]?.[AQI_SCALE])}`, '');
       // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：nextHour summary = ${JSON.stringify(responseBody?.forecastNextHour?.summary)}`, '');
+      $.log(`🚧 ${$.name}：nextHour condition = ${JSON.stringify(responseBody?.[NEXT_HOUR]?.condition)}`, '');
+      // eslint-disable-next-line functional/no-expression-statement
+      $.log(`🚧 ${$.name}：nextHour summary = ${JSON.stringify(responseBody?.[NEXT_HOUR]?.summary)}`, '');
       // eslint-disable-next-line functional/no-expression-statement,no-undef
       setResponse({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
     });
