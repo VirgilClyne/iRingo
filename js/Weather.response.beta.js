@@ -3681,14 +3681,8 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
  * @return {Object} a `Promise` that returned edited Apple data
  */
 const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
-  const isMinuteArray = (minutes) => (
-    Array.isArray(minutes) && !minutes.some((minute) => (
-      typeof minute?.weatherStatus !== 'string' || minute.weatherStatus.length <= 0
-    ))
-  );
-
   if (
-    !isMinuteArray(nextHourObject?.minutes) || !isNonNanNumber(nextHourObject?.startTimestamp)
+    !Array.isArray(nextHourObject?.minutes) || !isNonNanNumber(nextHourObject?.startTimestamp)
     || nextHourObject.startTimestamp <= 0
   ) {
     return {};
@@ -3696,111 +3690,100 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
   /**
    * Check type of weather status of minute
-   * @param {minute} minuteData - data of minute
+   * @param {minute} minute - data of minute
    * @return {'precipitation'|'clear'|string} - weatherStatus if valid,
    * or `precipitation`/`clear` based on precipitation
    */
-  const checkWeatherStatus = (minuteData) => {
-    if (typeof minuteData?.weatherStatus !== 'string' || minuteData.weatherStatus.length <= 0) {
-      if (minuteData.precipitation > 0) {
+  const checkWeatherStatus = (weatherStatus, precipitation) => {
+    if (typeof weatherStatus !== 'string' || weatherStatus.length <= 0) {
+      if (isNonNanNumber(precipitation) && precipitation > 0) {
         return 'precipitation';
       }
 
       return 'clear';
     }
 
-    return minuteData.weatherStatus;
+    return weatherStatus;
   };
 
-  const toValidMinutes = (minutes) => {
-    if (!isMinuteArray(minutes)) {
-      return [];
-    }
+  const minutesData = nextHourObject.minutes.map((minute) => {
+    const precipitationIntensityPerceived = isNonNanNumber(minute?.precipitationIntensityPerceived)
+    && minute.precipitationIntensityPerceived >= 0 ? minute.precipitationIntensityPerceived : 0;
+    const fallbackChance = precipitationIntensityPerceived <= 0 ? 0 : 100;
+    const chance = isNonNanNumber(minute?.chance) && minute.chance >= 0
+      ? minute.chance : fallbackChance;
 
-    return minutes.map((minute) => {
-      const pip = isNonNanNumber(minute?.precipitationIntensityPerceived)
-      && minute.precipitationIntensityPerceived >= 0 ? minute.precipitationIntensityPerceived : 0;
-      const fallbackChance = pip <= 0 ? 0 : 100;
-      const chance = isNonNanNumber(minute?.chance) && minute.chance >= 0
-        ? minute.chance : fallbackChance;
+    const validShortDescription = typeof minute?.shortDescription === 'string'
+    && minute.shortDescription.length > 0 ? minute.shortDescription : $.name;
+    const validLongDescription = typeof minute?.longDescription === 'string'
+    && minute.longDescription.length > 0 ? minute.longDescription : validShortDescription;
 
-      const validLongDescription = typeof minute?.longDescription === 'string'
-      && minute.longDescription.length > 0 ? minute.longDescription : $.name;
-      const validShortDescription = typeof minute?.shortDescription === 'string'
-      && minute.shortDescription.length > 0 ? minute.shortDescription : validLongDescription;
-
-      return {
-        ...minute,
-        precipitation: isNonNanNumber(minute?.precipitation) && minute.precipitation >= 0
-          ? minute.precipitation : 0,
-        precipitationIntensityPerceived: pip,
-        chance: Math.round(chance),
-        longDescription: validLongDescription,
-        shortDescription: validShortDescription,
-        ...(typeof minute?.parameters === 'object' && { parameters: minute.parameters }),
-      };
-    });
-  };
+    return {
+      weatherStatus: checkWeatherStatus(minute?.weatherStatus, minute?.precipitation),
+      precipitation: isNonNanNumber(minute?.precipitation) && minute.precipitation >= 0
+        ? minute.precipitation : 0,
+      precipitationIntensityPerceived,
+      chance: Math.round(chance),
+      shortDescription: validShortDescription,
+      longDescription: validLongDescription,
+      ...(typeof minute?.parameters === 'object' && { parameters: minute.parameters }),
+    };
+  });
 
   /**
    * Output array of condition for `condition` in `NextHourForecast`
    * @author WordlessEcho <wordless@echo.moe>
    * @param {supportedIosApi} apiVersion - Apple Weather API Version
-   * @param {minute[]} minutesData - Array of minute precipitation data
+   * @param {minute[]} minutes - Array of minute precipitation data
    * @param {number} startTimestamp - UNIX timestamp when condition start
    * @return { nextHourConditionV1[] | nextHourConditionV2[] } - For `forecastNextHour.condition`
    */
-  const toConditions = (apiVersion, minutesData, startTimestamp) => {
-    const supportedApis = [1, 2, 3];
-    if (!supportedApis.includes(apiVersion) || !isMinuteArray(minutesData)) {
-      return [];
-    }
+  const toConditions = (apiVersion, minutes, startTimestamp) => {
+    const slicedMinutes = minutes.slice(0, 60);
 
     /**
      * Merge possibility, weather status and time status for `forecastNextHour.condition.token`
      * @author WordlessEcho <wordless@echo.moe>
-     * @param {minute[]} minuteArray - add `possible-` prefix to token
      * @param {number} bound
      * @return {string} token for Apple Weather
      */
-    const toToken = (minuteArray, bound) => {
-      if (!isMinuteArray(minuteArray) || !isNonNanNumber(bound) || bound < 0) {
+    const toToken = (bound) => {
+      if (!isNonNanNumber(bound) || bound < 0) {
         return 'precipitation';
       }
 
-      const validMinuteArray = toValidMinutes(minuteArray);
-      const firstStatus = checkWeatherStatus(validMinuteArray[bound]);
-      const secondStatusRelatedIndex = validMinuteArray.slice(bound).findIndex((minute) => (
+      const firstStatus = checkWeatherStatus(slicedMinutes[bound]);
+      const secondStatusRelatedIndex = slicedMinutes.slice(bound).findIndex((minute) => (
         checkWeatherStatus(minute) !== firstStatus));
       const secondStatusIndex = secondStatusRelatedIndex === -1
         ? -1 : secondStatusRelatedIndex + bound;
       const secondStatus = secondStatusIndex === -1 ? null
-        : checkWeatherStatus(validMinuteArray[secondStatusIndex]);
+        : checkWeatherStatus(slicedMinutes[secondStatusIndex]);
 
       if (firstStatus === 'clear') {
         if (secondStatusIndex === -1) {
           return firstStatus;
         }
 
-        const nextClearIndex = validMinuteArray.slice(secondStatusIndex)
+        const nextClearIndex = slicedMinutes.slice(secondStatusIndex)
           .findIndex((minute) => checkWeatherStatus(minute) === 'clear');
         if (nextClearIndex === -1) {
-          const maxChance = Math.max(...validMinuteArray
+          const maxChance = Math.max(...slicedMinutes
             .slice(secondStatusIndex).map((minute) => minute.chance));
           // https://developer.apple.com/documentation/weatherkitrestapi/certainty
           return `${maxChance < 50 ? 'possible-' : ''}${secondStatus}.start`;
         }
 
-        const maxChance = Math.max(...validMinuteArray
+        const maxChance = Math.max(...slicedMinutes
           .slice(secondStatusIndex, nextClearIndex).map((minute) => minute.chance));
         return `${maxChance < 50 ? 'possible-' : ''}${secondStatus}.start-stop`;
       }
 
       // if current weather is not clear
       if (secondStatus === 'clear') {
-        const nextNotClearIndex = validMinuteArray.slice(secondStatusIndex)
+        const nextNotClearIndex = slicedMinutes.slice(secondStatusIndex)
           .findIndex((minute) => checkWeatherStatus(minute) !== 'clear');
-        const maxChance = Math.max(...validMinuteArray
+        const maxChance = Math.max(...slicedMinutes
           .slice(bound, secondStatusIndex).map((minute) => minute.chance));
 
         if (nextNotClearIndex !== -1) {
@@ -3810,22 +3793,22 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         return `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.stop`;
       }
 
-      const maxChance = Math.max(...validMinuteArray.map((minute) => minute.chance));
+      const maxChance = Math.max(...slicedMinutes.map((minute) => minute.chance));
       return firstStatus.startsWith('heavy-') && secondStatusIndex !== -1
         ? `${maxChance < 50 ? 'possible-' : ''}${firstStatus}-to-${secondStatus}.constant`
         : `${maxChance < 50 ? 'possible-' : ''}${firstStatus}.constant`;
     };
 
-    const toParameters = (bounds, indexInBound, minutes, timestamp) => bounds
+    const toParameters = (bounds, indexInBound, timestamp) => bounds
       .slice(indexInBound).reduce((parameters, currentBound, index) => {
-        const lastStatus = minutes[
+        const lastStatus = slicedMinutes[
           indexInBound + index - 1 < 0 ? 0 : bounds[indexInBound + index - 1]
         ].weatherStatus;
-        const currentStatus = minutes[currentBound].weatherStatus;
+        const currentStatus = slicedMinutes[currentBound].weatherStatus;
 
         if (
-          currentBound + 1 === minutes.length && (currentBound <= 0
-          || currentStatus === minutes[currentBound - 1].weatherStatus)
+          currentBound + 1 === slicedMinutes.length && (currentBound <= 0
+          || currentStatus === slicedMinutes[currentBound - 1].weatherStatus)
         ) {
           return parameters;
         }
@@ -3841,9 +3824,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
         };
       }, {});
 
-    const validMinutesData = toValidMinutes(minutesData);
-    const slicedMinutesData = validMinutesData.slice(0, 60);
-    const bounds = slicedMinutesData.flatMap((current, index, array) => {
+    const bounds = slicedMinutes.flatMap((current, index, array) => {
       const previous = array[index - 1];
 
       if (
@@ -3861,13 +3842,13 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
     // TODO: (FIX) Infinite loop while length of minutesData is 1
     return bounds.map((bound, index, array) => {
-      const minute = slicedMinutesData[bound];
+      const minute = slicedMinutes[bound];
       const lastBound = index === 0 ? 0 : array[index - 1];
 
-      const token = toToken(slicedMinutesData, lastBound);
+      const token = toToken(lastBound);
       const needEndTime = !(
         index + 1 === array.length
-        && checkWeatherStatus(minute) === checkWeatherStatus(validMinutesData[bound + 1])
+        && checkWeatherStatus(minute) === checkWeatherStatus(minutes[bound + 1])
       );
 
       const shortDescription = typeof minute.shortDescription === 'string'
@@ -3889,7 +3870,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
                 key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-              ])) : toParameters(array, index, slicedMinutesData, timestamp),
+              ])) : toParameters(array, index, slicedMinutes, timestamp),
           };
         case 2:
           return {
@@ -3904,7 +3885,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
             && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
                 key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
-              ])) : toParameters(array, index, slicedMinutesData, timestamp),
+              ])) : toParameters(array, index, slicedMinutes, timestamp),
           };
         case 3:
           return {
@@ -3913,7 +3894,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
               endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
             token,
-            parameters: toParameters(array, index, slicedMinutesData, timestamp),
+            parameters: toParameters(array, index, slicedMinutes, timestamp),
           };
         default:
           return {};
@@ -3925,19 +3906,13 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
    * Output array of summary for `summary` in `NextHourForecast`
    * @author WordlessEcho <wordless@echo.moe>
    * @param {supportedIosApi} apiVersions - Apple Weather API Version
-   * @param {minute[]} minutesData - array of minute precipitation data
+   * @param {minute[]} minutes - array of minute precipitation data
    * @param {number} startTimestamp - UNIX timestamp when minutes start
    * @return {nextHourSummaryV1[] | nextHourSummaryV2[]} - value for `forecastNextHour.summary[]`
    */
-  const toSummaries = (apiVersions, minutesData, startTimestamp) => {
-    const supportedApis = [1, 2, 3];
-    if (!supportedApis.includes(apiVersions) || !isMinuteArray(minutesData)) {
-      return [];
-    }
-
-    const validMinutesData = toValidMinutes(minutesData);
+  const toSummaries = (apiVersions, minutes, startTimestamp) => {
     /** @type number[] */
-    const bounds = validMinutesData.slice(0, 59).flatMap((current, index, array) => {
+    const bounds = minutes.slice(0, 59).flatMap((current, index, array) => {
       const previous = array[index - 1];
 
       if (
@@ -3957,13 +3932,13 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
     return bounds.map((bound, index, array) => {
       const lastBound = index === 0 ? 0 : array[index - 1];
-      const minutesInSummary = validMinutesData.slice(lastBound, bound + 1);
+      const minutesInSummary = minutes.slice(lastBound, bound + 1);
 
       const needEndTime = !(
-        index + 1 === array.length && checkWeatherStatus(validMinutesData[bound])
-        === checkWeatherStatus(validMinutesData[bound + 1])
+        index + 1 === array.length && checkWeatherStatus(minutes[bound])
+        === checkWeatherStatus(minutes[bound + 1])
       );
-      const condition = weatherStatusToType(checkWeatherStatus(validMinutesData[lastBound]));
+      const condition = weatherStatusToType(checkWeatherStatus(minutes[lastBound]));
 
       const isNotClear = condition !== 'clear';
       const maxChance = Math.max(...minutesInSummary.filter(({ chance }) => (
@@ -4022,21 +3997,15 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
    * Output array of minutes for `minutes` in `NextHourForecast`
    * @author WordlessEcho <wordless@echo.moe>
    * @param {supportedIosApi} apiVersions - Apple Weather API Version
-   * @param {minute[]} minutesData - array of minute precipitation data
+   * @param {minute[]} minutes - array of minute precipitation data
    * @param {number} startTimestamp - UNIX timestamp when minutes start
    * @return {nextHourMinuteV1[] | nextHourMinuteV2[]} - For `forecastNextHour.minutes`
    */
-  const toMinutes = (apiVersions, minutesData, startTimestamp) => {
-    const supportedApis = [1, 2, 3];
-    if (!supportedApis.includes(apiVersions) || !isMinuteArray(minutesData)) {
-      return [];
-    }
-
-    const validMinutesData = toValidMinutes(minutesData);
+  const toMinutes = (apiVersions, minutes, startTimestamp) => {
     const timestamp = isNonNanNumber(startTimestamp) && startTimestamp > 0
       ? startTimestamp : (+(new Date()));
 
-    return validMinutesData.map(
+    return minutes.map(
       ({ precipitation, chance, precipitationIntensityPerceived }, index) => {
         const v1AndV2Minute = {
           precipIntensity: isNonNanNumber(precipitation) && precipitation > 0 ? precipitation : 0,
@@ -4103,9 +4072,9 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
   const nextHour = getNextHour(
     appleApiVersion,
-    toConditions(appleApiVersion, nextHourObject.minutes, nextHourObject.startTimestamp),
-    toSummaries(appleApiVersion, nextHourObject.minutes, nextHourObject.startTimestamp),
-    toMinutes(appleApiVersion, nextHourObject.minutes, nextHourObject.startTimestamp),
+    toConditions(appleApiVersion, minutesData, nextHourObject.startTimestamp),
+    toSummaries(appleApiVersion, minutesData, nextHourObject.startTimestamp),
+    toMinutes(appleApiVersion, minutesData, nextHourObject.startTimestamp),
     nextHourObject.startTimestamp,
   );
 
@@ -4176,7 +4145,6 @@ const toResponseBody = (envs, request, response) => {
   const caches = toCaches(envs);
 
   const supportedAppleApis = [1, 2, 3];
-  const apiWithAqiComparison = ['api.caiyunapp.com'];
   const settingsToAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
   const scaleToAqiStandard = { [EPA_454.APPLE_SCALE]: EPA_454, [HJ_633.APPLE_SCALE]: HJ_633 };
   const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
