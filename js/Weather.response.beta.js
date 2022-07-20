@@ -3042,7 +3042,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
    */
   const getPrecipitationType = (timestamp, dataWithHourlySkycons) => {
     const skycons = dataWithHourlySkycons?.result?.hourly?.skycon;
-    if (typeof dataWithHourlySkycons !== 'object' || !Array.isArray(skycons)) {
+    if (!Array.isArray(skycons)) {
       return '';
     }
 
@@ -3050,10 +3050,13 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const versionCode = typeof apiVersion === 'string' && parseFloat(apiVersion.slice(1));
     const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
-    const validTimestamp = isNonNanNumber(timestamp) && timestamp > 0 ? timestamp : (+(new Date()));
-    const nowHourTimestamp = (new Date(validTimestamp)).setMinutes(0, 0, 0);
+    const serverTime = parseInt(dataWithHourlySkycons?.server_time, 10);
+    const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
+      ? serverTime * 1000 : (+(new Date()));
+    const hourTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
+    const currentHourTimestamp = (new Date(timestamp)).setMinutes(0, 0, 0);
 
-    const skyCondition = skycons.find((skycon) => {
+    const skyConditions = skycons.filter((skycon) => {
       if (typeof skycon?.datetime !== 'string' || skycon.datetime.length <= 0) {
         return false;
       }
@@ -3071,8 +3074,22 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
       return isNonNanNumber(ts) && ts > 0
         // Limit to two hour since ColorfulClouds provide two hours report
-        && ts >= nowHourTimestamp && ts < nowHourTimestamp + 1000 * 60 * 60 * 2;
-    })?.value;
+        && ts >= hourTimestamp && ts <= hourTimestamp + 1000 * 60 * 60;
+    });
+
+    const skyCondition = skyConditions.concat().sort((a, b) => {
+      const aTimestamp = Date.parse(validVersionCode < 2.3
+        ? `${a.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(dataWithHourlySkycons.tzshift / 60))}`
+        : a.datetime.split('+').join(':00.000+'));
+      const bTimestamp = Date.parse(validVersionCode < 2.3
+        ? `${b.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(dataWithHourlySkycons.tzshift / 60))}`
+        : b.datetime.split('+').join(':00.000+'));
+
+      return currentHourTimestamp - aTimestamp - (currentHourTimestamp - bTimestamp);
+    }).find((skycon) => (
+      typeof skycon?.value === 'string' && (
+        skycon.value.includes('RAIN') || skycon.value.includes('SNOW')
+      )))?.value;
 
     if (typeof skyCondition !== 'string' || skyCondition.length <= 0) {
       return '';
@@ -3388,7 +3405,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const validPrecipitation = isNonNanNumber(precipitation) && precipitation >= 0
       ? precipitation : 0;
 
-    const timeInMinute = index + 1;
+    const timeInMinute = validStartIndex + index + 1;
 
     const hourlyPrecipitationType = getPrecipitationType(
       serverTimestamp + 1000 * 60 * timeInMinute,
