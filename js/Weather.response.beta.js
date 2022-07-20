@@ -4235,9 +4235,10 @@ const toResponseBody = (envs, request, response) => {
     }
 
     switch (missions[0]) {
+      case 'aqi':
+        return 'realtime';
       case 'nextHour':
         return 'minutely';
-      case 'aqi':
       case 'aqiForComparison':
       default:
         return 'weather';
@@ -4433,8 +4434,8 @@ const toResponseBody = (envs, request, response) => {
       )));
 
   const needCompareAqi = requireData.includes(AIR_QUALITY) && settings.aqi.comparison.switch
-    && AQI_COMPARISON.length > 0 && (
-    (needAqi && !apiWithAqiComparison.includes(settings.aqi.source))
+    && AQI_COMPARISON.length > 0 && ((needAqi
+      && !apiWithAqiComparison.includes(settings.aqi.source))
       || airQuality?.[AQI_COMPARISON] === 'unknown');
   const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
   const yesterdayHourTimestamp = nowHourTimestamp - 1000 * 60 * 60 * 24;
@@ -4501,7 +4502,7 @@ const toResponseBody = (envs, request, response) => {
           });
         case 'api.caiyunapp.com': {
           const path = missionsToCcPath(missions);
-          const needHistory = missions.includes('aqi') || missions.includes('forCompareAqi');
+          const needHistory = missions.includes('forCompareAqi');
 
           return [colorfulClouds(
             settings.apis.colorfulClouds.token,
