@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather Map v1.1.0-beta");
+const $ = new Env("Apple Weather Map v1.1.1-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Weather":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2201"},"Map":{"AQI":false}},
@@ -15,21 +15,26 @@ const DataBase = {
 	if (Settings.Switch) {
 		if (Settings.Map.AQI) {
 			let url = URL.parse($request.url);
-			if (url.path?.includes("airQuality") && url?.params?.country == "CN") {
-				url.host = "tiles.waqi.info"
-				url.path = `tiles/usepa-aqi/${url.params?.z}/${url.params?.x}/${url.params?.y}.png`
-				delete url.params
-				$request.url = URL.stringify(url);
-				$request.headers.Host = url.host;
+			$.log(url.path);
+			switch (url.path) {
+				case "v1/mapOverlay/airQuality":
+					url.host = "tiles.waqi.info"
+					url.path = `tiles/usepa-aqi/${url.params?.z}/${url.params?.x}/${url.params?.y}.png`
+					delete url.params
+					break;
+				default:
+					break;
 			}
+			$request.headers.Host = url.host;
+			$request.url = URL.stringify(url);
 		}
 	}
 })()
-.catch((e) => $.logErr(e))
-.finally(() => {
-	if ($.isQuanX()) $.done({ url: $request.url, headers: $request.headers })
-	else $.done($request)
-})
+	.catch((e) => $.logErr(e))
+	.finally(() => {
+		if ($.isQuanX()) $.done({ url: $request.url, headers: $request.headers })
+		else $.done($request)
+	})
 
 /***************** Async Function *****************/
 /**
