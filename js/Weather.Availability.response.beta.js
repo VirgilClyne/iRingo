@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Weather Availability v1.1.1-response-beta");
+const $ = new Env("Apple Weather Availability v1.1.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -9,7 +9,7 @@ const DataBase = {
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2207"},"Map":{"AQI":false}},
-		"Configs":{"Availability":{"v2":["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality"],"v3":["currentWeather","forecastDaily","forecastHourly","weatherChange","forecastNextHour","news","weatherAlerts","weatherAlertNotifications","airQuality"]},"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"},"Status":{"clear":"clear","sleet":"sleet","drizzle":"rain","rain":"rain","heavy_rain":"rain","flurries":"snow","snow":"snow","heavy_snow":"snow"},"Precipitation":{"Level":{"INVALID":-1,"NO":0,"LIGHT":1,"MODERATE":2,"HEAVY":3,"STORM":4},"Range":{"RADAR":{"NO":[0,0.031],"LIGHT":[0.031,0.25],"MODERATE":[0.25,0.35],"HEAVY":[0.35,0.48],"STORM":[0.48,1]},"MMPERHR":{"NO":[0,0.08],"LIGHT":[0.08,3.44],"MODERATE":[3.44,11.33],"HEAVY":[11.33,51.30],"STORM":[51.30,100]}}}}
+		"Configs":{"Availability":{"v2":["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality","appLocationConfig"],"v3":["currentWeather","forecastDaily","forecastHourly","weatherChange","forecastNextHour","news","weatherAlerts","weatherAlertNotifications","airQuality"]},"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"},"Status":{"clear":"clear","sleet":"sleet","drizzle":"rain","rain":"rain","heavy_rain":"rain","flurries":"snow","snow":"snow","heavy_snow":"snow"},"Precipitation":{"Level":{"INVALID":-1,"NO":0,"LIGHT":1,"MODERATE":2,"HEAVY":3,"STORM":4},"Range":{"RADAR":{"NO":[0,0.031],"LIGHT":[0.031,0.25],"MODERATE":[0.25,0.35],"HEAVY":[0.35,0.48],"STORM":[0.48,1]},"MMPERHR":{"NO":[0,0.08],"LIGHT":[0.08,3.44],"MODERATE":[3.44,11.33],"HEAVY":[11.33,51.30],"STORM":[51.30,100]}}}}
 	},
 	"Siri":{
 		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}

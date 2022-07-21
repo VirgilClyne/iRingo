@@ -25,7 +25,8 @@
 				"weatherChange",
 				"forecastNextHour",
 				"severeWeather",
-				"airQuality"
+				"airQuality",
+				"appLocationConfig"
 			],
 			"v3": [
 				"currentWeather",
