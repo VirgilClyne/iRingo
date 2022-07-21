@@ -1210,7 +1210,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
 
   if (
     isNonNanNumber(timestamp) && timestamp > cacheLimit && isLocation(location)
-    && typeof scaleName === 'string'
+    && typeof scaleName === 'string' && scaleName.length > 0
   ) {
     const cacheTimestampString = Object.keys(validAqis).find((timestampString) => {
       const cachedTimestamp = parseInt(timestampString, 10);
