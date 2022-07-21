@@ -1072,7 +1072,6 @@ const toSettings = (envs) => {
     map: {
       aqi: parseJsonWithDefault(envs?.Settings?.Map?.AQI, settings.Map.AQI),
     },
-    // TODO
     apis: {
       weatherOl: {
         httpHeaders: parseJsonWithDefault(
@@ -1096,7 +1095,6 @@ const toSettings = (envs) => {
         ),
       },
       waqi: {
-        // TODO
         httpHeaders: parseJsonWithDefault(
           envs?.Settings?.APIs?.WAQI?.HTTPHeaders,
           settings.APIs.WAQI.HTTPHeaders,
@@ -1206,7 +1204,6 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
 
   if (
     isNonNanNumber(timestamp) && timestamp > cacheLimit && isLocation(location)
-    // TODO: Find out all scale name in Apple Weather
     && typeof scaleName === 'string'
   ) {
     const cacheTimestampString = Object.keys(validAqis).find((timestampString) => {
@@ -3630,7 +3627,6 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { airQualityCategoryIndex: aqiObj.categoryIndex }),
           ...(isNonNanNumber(aqiObj?.aqi) && aqiObj.aqi >= 0
             && { airQualityIndex: aqiObj.aqi }),
-          // TODO: find out all scale
           ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
             && { airQualityScale: aqiObj.scale }),
           ...(validPollutants.length > 0 && {
@@ -3650,7 +3646,6 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { index: aqiObj.aqi }),
           ...(comparisonValues.includes(aqiObj?.previousDayComparison)
             && { previousDayComparison: aqiObj.previousDayComparison }),
-          // TODO: find out all scales
           ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
             && { scale: aqiObj.scale }),
           ...(sourceTypes.includes(aqiObj?.sourceType) && { sourceType: aqiObj.sourceType }),
@@ -4172,11 +4167,9 @@ const toResponseBody = (envs, request, response) => {
     }
   };
 
-  // TODO
   const getTargetScale = (projectSettings, appleScale) => {
     if (projectSettings.aqi.local.switch) {
       const scale = settingsToAqiStandard[projectSettings.aqi.local.standard]?.APPLE_SCALE;
-      // TODO
       if (typeof scale !== 'string' || scale.length <= 0) {
         return '';
       }
@@ -4185,7 +4178,6 @@ const toResponseBody = (envs, request, response) => {
     }
 
     if (!projectSettings.aqi.switch) {
-      // TODO
       return appleScale === 'string' && appleScale.length > 0 ? appleScale : '';
     }
 
