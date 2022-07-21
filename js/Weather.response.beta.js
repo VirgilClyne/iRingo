@@ -3932,7 +3932,7 @@ const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
 
     return bounds.map((bound, index, array) => {
       const lastBound = index === 0 ? 0 : array[index - 1];
-      const minutesInSummary = minutes.slice(lastBound, bound + 1);
+      const minutesInSummary = minutes.slice(lastBound, bound);
 
       const needEndTime = !(
         index + 1 === array.length
