@@ -3363,7 +3363,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       || (typeof dataWithMinutely.result.minutely?.description !== 'string'
         && typeof dataWithMinutely.result?.forecast_keypoint !== 'string')
   ) {
-    return [];
+    return {};
   }
 
   // the unit of server_time is second
