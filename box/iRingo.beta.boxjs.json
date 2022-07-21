@@ -363,20 +363,64 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.AQI.Targets",
-					"name": "[空气质量]修改目标",
+					"name": "[空气质量]需要修改的标准",
 					"val": [
 						"HJ6332012"
 					],
 					"type": "checkboxes",
-					"desc": "选中的空气质量标准会被替换",
+					"desc": "选中的空气质量标准会被替换。请注意各国监测的污染物种类可能有所不同，转换算法或API未必适合当地。",
 					"items": [
 						{
-							"key": "HJ6332012",
-							"label": "中国（HJ 633—2012）"
+							"key": "CA.AQHI",
+							"label": "加拿大（CA AQHI）"
+						},
+						{
+							"key": "FR.ATMO",
+							"label": "法国（FR ATMO）"
+						},
+						{
+							"key": "UBA",
+							"label": "德国（UBA）"
+						},
+						{
+							"key": "NAQI",
+							"label": "印度（NAQI）"
+						},
+						{
+							"key": "EU.EAQI",
+							"label": "意大利（EU EAQI）"
+						},
+						{
+							"key": "ICARS",
+							"label": "墨西哥（ICARS）"
+						},
+						{
+							"key": "NL.LKI",
+							"label": "荷兰（NL LKI）"
+						},
+						{
+							"key": "SG.NEA",
+							"label": "新加坡（SG NEA）"
+						},
+						{
+							"key": "KR.CAI",
+							"label": "韩国（KR CAI）"
+						},
+						{
+							"key": "ES.MITECO",
+							"label": "西班牙（ES MITECO）"
+						},
+						{
+							"key": "DAQI",
+							"label": "英国（DAQI）"
 						},
 						{
 							"key": "EPA_NowCast",
-							"label": "美国（EPA NowCast）"
+							"label": "美国（及日本）（EPA NowCast）"
+						},
+						{
+							"key": "HJ6332012",
+							"label": "中国（HJ 633—2012）"
 						}
 					]
 				},
