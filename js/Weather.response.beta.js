@@ -72,9 +72,15 @@ const database = {
 
 /** @typedef {1|2|3} supportedIosApi */
 /** @typedef {{ latitude: number, longitude: number }} coordinate */
-// TODO
-/** @typedef { "EPA_NowCast.2207" | "HJ6332012.2207" } iosAqiScale */
-/** @typedef { "EPA_NowCast" | "HJ6332012" } scaleName */
+/** @typedef {
+ * "CA.AQHI.2207" | "FR.ATMO.2207" | "UBA.2207" | "NAQI.2207" | "EU.EAQI.2207" | "ICARS.2207"
+ * | "NL.LKI.2207" | "SG.NEA.2207" | "KR.CAI.2207" | "ES.MITECO.2208" | "DAQI.2207"
+ * | "EPA_NowCast.2207" | "HJ6332012.2207"
+ * } appleAqiScale */
+/** @typedef {
+ * "CA.AQHI" | "FR.ATMO" | "UBA" | "NAQI" | "EU.EAQI" | "ICARS" | "NL.LKI" | "SG.NEA" | "KR.CAI"
+ * | "ES.MITECO" | "DAQI" | "EPA_NowCast" | "HJ6332012"
+ * } scaleName */
 /** @typedef { forV2: string, forV1: string } providerLogo */
 
 /**
@@ -327,7 +333,7 @@ const database = {
  * AQI standard
  *
  * @typedef {Object} aqiStandard
- * @property {iosAqiScale} APPLE_SCALE - value of `airQuality.scale`
+ * @property {appleAqiScale} APPLE_SCALE - value of `airQuality.scale`
  * @property {Object.<string, aqiLevel>} AQI_LEVELS - Value and ranges of AQI levels
  * @property {number} SIGNIFICANT_LEVEL - AQI will be pinned if `airQuality.categoryIndex` >= this
  * @property {Object.<string, concentration>} CONCENTRATIONS - Key should be the pollutant name.
@@ -1120,7 +1126,7 @@ const toCaches = (envs) => ({
  * @param {number} timestamp - UNIX timestamp of cached time
  * @param {coordinate} location - Coordinate of AQI info
  * @param {?string} stationName - `AirQuality.source` from QWeather
- * @param {iosAqiScale} scaleName - Part before the '.' in iOS `AirQuality.scale`
+ * @param {appleAqiScale} scaleName - Part before the '.' in iOS `AirQuality.scale`
  * @return {cachedAqi|{aqi: -1}} - Matched AQI info
  */
 const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) => {
