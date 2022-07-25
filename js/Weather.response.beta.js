@@ -4087,6 +4087,7 @@ const getKeywords = (apiVersion) => {
       return {
         METADATA: 'metadata',
         AIR_QUALITY: 'air_quality',
+        REQUIRE_NEXT_HOUR: 'next_hour_forecast',
         NEXT_HOUR: 'next_hour',
         PROVIDER_NAME: 'provider_name',
         REPORTED_TIME: 'reported_time',
@@ -4103,6 +4104,7 @@ const getKeywords = (apiVersion) => {
       return {
         METADATA: 'metadata',
         AIR_QUALITY: 'airQuality',
+        REQUIRE_NEXT_HOUR: 'forecastNextHour',
         NEXT_HOUR: 'forecastNextHour',
         PROVIDER_NAME: 'providerName',
         REPORTED_TIME: 'reportedTime',
@@ -4370,7 +4372,7 @@ const toResponseBody = (envs, request, response) => {
   }
 
   const {
-    AIR_QUALITY, NEXT_HOUR, PROVIDER_NAME, REPORTED_TIME, AQI_INDEX,
+    AIR_QUALITY, REQUIRE_NEXT_HOUR, NEXT_HOUR, PROVIDER_NAME, REPORTED_TIME, AQI_INDEX,
     AQI_SCALE, POLLUTANTS, UNIT, AMOUNT, SOURCE, AQI_COMPARISON,
   } = getKeywords(appleApiVersion);
 
@@ -4432,7 +4434,7 @@ const toResponseBody = (envs, request, response) => {
   ) : { aqi: -1 };
 
   const nextHourProvider = nextHour?.[METADATA]?.[PROVIDER_NAME];
-  const needNextHour = requireData.includes(NEXT_HOUR) && settings.nextHour.switch && (
+  const needNextHour = requireData.includes(REQUIRE_NEXT_HOUR) && settings.nextHour.switch && (
     typeof nextHourProvider !== 'string' || nextHourProvider.length <= 0
   );
 
@@ -4588,7 +4590,7 @@ const toResponseBody = (envs, request, response) => {
           ...(needCompareAqi && { [AQI_COMPARISON]: modifiedCompareAqi }),
         },
       }),
-      ...(requireData.includes(NEXT_HOUR) && {
+      ...(requireData.includes(REQUIRE_NEXT_HOUR) && {
         [NEXT_HOUR]: {
           ...nextHour,
           ...modifiedNextHour,
