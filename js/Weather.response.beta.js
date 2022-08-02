@@ -1711,6 +1711,8 @@ const toCaches = (envs) => ({
  * @return {cachedAqi | {aqi: -1}} - Matched AQI info
  */
 const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) => {
+  const pythagoreanTheorem = (a, b) => Math.sqrt(a * a + b * b);
+
   if (
     typeof cachedAqis === 'object' && isNonNanNumber(timestamp) && timestamp > 0
     && isLocation(location) && typeof scaleName === 'string'
@@ -1741,12 +1743,12 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
         ? caches[cacheTimestamp].find((aqiInfo) => (
           typeof stationName === 'string' && stationName.length > 0
             ? aqiInfo?.stationName === stationName && aqiInfo?.scaleName === scaleName
-            // TODO: rewrite distance check
             // Cannot get station name
-            // https://www.mee.gov.cn/gkml/hbb/bwj/201204/W020140904493567314967.pdf
-            : Math.abs(aqiInfo.location.longitude - location.longitude) < 0.045
-            && Math.abs(aqiInfo.location.latitude - location.latitude) < 0.045
-            && aqiInfo?.scaleName === scaleName
+            : pythagoreanTheorem(
+              Math.abs(aqiInfo.location.longitude - location.longitude),
+              Math.abs(aqiInfo.location.latitude - location.latitude),
+            // 0.085 is an approximation by observing air quality map from Apple Weather
+            ) < 0.085 && aqiInfo?.scaleName === scaleName
         ))
         : undefined;
 
@@ -5160,6 +5162,8 @@ const toResponseBody = (envs, request, response) => {
     qweatherNames.includes(aqiProvider) ? airQuality?.source : null,
     getTargetScale(settings, aqiScale),
   ) : { aqi: -1 };
+  // eslint-disable-next-line functional/no-expression-statement
+  $.log(`🚧 ${$.name}：cachedAqi = ${JSON.stringify(cachedAqi)}`, '');
 
   const nextHourProvider = nextHour?.[METADATA]?.[PROVIDER_NAME];
   const needNextHour = requireData.includes(REQUIRE_NEXT_HOUR) && settings.nextHour.switch && (
