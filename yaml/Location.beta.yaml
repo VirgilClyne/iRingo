@@ -1,0 +1,83 @@
+scriptings:
+  - http_request:
+      name: Location Services Defaults Configuration
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
+  - http_response:
+      name: Location Services Defaults Configuration
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js
+      match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
+      body_required: true
+  - http_response:
+      name: Location Services PEP Geo Country Code
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.response.beta.js
+      match: ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc
+      body_required: true
+  - http_request:
+      name: Location Services Announcements Configuration
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: >-
+        ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$
+  - http_request:
+      name: Location Services Dynamic Configuration
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: >-
+        ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$
+  - http_request:
+      name: Dispatcher Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$
+  - http_request:
+      name: Dispatcher Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher$
+  - http_request:
+      name: Directions Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$
+  - http_request:
+      name: Directions Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/direction2\.is\.autonavi\.com\/direction$
+  - http_request:
+      name: Traffic Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/gspe12-ssl\.ls\.apple\.com\/traffic(\?.*)?$
+  - http_request:
+      name: Traffic Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/gspe12-cn-ssl\.ls\.apple\.com\/traffic(\?.*)?$
+  - http_request:
+      name: Tiles Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/gspe19-ssl\.ls\.apple\.com\/tile\.vf(\?.*)?$
+  - http_request:
+      name: Tiles Services
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js
+      match: ^https?:\/\/gspe19-cn-ssl\.ls\.apple\.com\/tiles(\?.*)?$
+mitm:
+  - configuration.ls.apple.com
+  - gspe1-ssl.ls.apple.com
+  - gspe12-ssl.ls.apple.com
+  - gspe12-cn-ssl.ls.apple.com
+  - gspe19-ssl.ls.apple.com
+  - gspe19-cn-ssl.ls.apple.com
+  - gspe35-ssl.ls.apple.com
+  - gspe79-ssl.ls.apple.com
+  - gspe79-cn-ssl.ls.apple.com
+  - gsp-ssl.ls.apple.com
+  - direction2.is.autonavi.com
+  - dispatcher.is.autonavi.com

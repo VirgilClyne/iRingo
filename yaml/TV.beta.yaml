@@ -1,0 +1,15 @@
+scriptings:
+  - http_request:
+      name: TV Request
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.request.beta.js
+      match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
+      body_required: true
+  - http_response:
+      name: TV Response
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.response.beta.js
+      match: ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
+      body_required: true
+mitm:
+  - uts-api.itunes.apple.com
