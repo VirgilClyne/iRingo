@@ -4371,7 +4371,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
  * appleNextHourWithoutMetadataV1|appleNextHourWithoutMetadataV2|appleNextHourWithoutMetadataV3 | {}
  * } - Apple weather style data without metadata
  */
-const toNextHour = (appleApiVersion, nextHourObject, debugOptions) => {
+const toNextHour = (appleApiVersion, nextHourObject) => {
   if (
     !Array.isArray(nextHourObject?.minutes) || !isNonNanNumber(nextHourObject?.startTimestamp)
     || nextHourObject.startTimestamp <= 0
@@ -5068,10 +5068,7 @@ const toResponseBody = (envs, request, response) => {
             'https://www.weatherol.cn/',
             promiseData?.returnedData,
           )),
-          ...toNextHour(apiVersion, colorfulCloudsToNextHour(
-            '气象在线',
-            promiseData?.returnedData,
-          ), null),
+          ...toNextHour(apiVersion, colorfulCloudsToNextHour('气象在线', promiseData?.returnedData)),
         };
       case 'api.caiyunapp.com':
         return {
@@ -5083,7 +5080,7 @@ const toResponseBody = (envs, request, response) => {
           ...toNextHour(apiVersion, colorfulCloudsToNextHour(
             getColorfulCloudsName(appleLanguage),
             promiseData?.returnedData,
-          ), null),
+          )),
         };
       default:
         return {};
