@@ -3173,9 +3173,15 @@ const getCcAirQuality = (dataWithRealtime) => {
   return { aqi: { usa: -1, chn: -1 } };
 };
 
-const isoTimezoneOffset = (offset) => {
-  const validOffset = isNonNanNumber(offset) ? offset : (new Date()).getTimezoneOffset();
-  return `${validOffset < 0 ? '+' : '-'}`
+/**
+ * Convert seconds to timezone
+ * @author WordlessEcho <wordless@echo.moe>
+ * @param {number} minutes - Timezone in minutes
+ * @return {string} - Timezone in "+/-HH:MM" format
+ */
+const minutesToIsoTimezone = (minutes) => {
+  const validOffset = isNonNanNumber(minutes) ? minutes : (new Date()).getTimezoneOffset();
+  return `${validOffset < 0 ? '-' : '+'}`
     + `${Math.floor(Math.abs(validOffset / 60)).toString().padStart(2, '0')}`
     + `:${(Math.abs(validOffset % 60)).toString().padStart(2, '0')}`;
 };
@@ -3216,7 +3222,7 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
       return false;
     }
     const ts = Date.parse(validVersionCode < 2.3
-      ? `${aqi.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(historyData.tzshift / 60))}`
+      ? `${aqi.datetime.replace(' ', 'T')}:00.000${minutesToIsoTimezone(historyData.tzshift / 60)}`
       : aqi.datetime.split('+').join(':00.000+'));
 
     return isNonNanNumber(ts) && ts > 0
@@ -3735,7 +3741,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         return false;
       }
       const ts = Date.parse(validVersionCode < 2.3
-        ? `${skycon.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(dataWithHourlySkycons.tzshift / 60))}`
+        ? `${skycon.datetime.replace(' ', 'T')}:00.000${minutesToIsoTimezone(dataWithHourlySkycons.tzshift / 60)}`
         : skycon.datetime.split('+').join(':00.000+'));
 
       return isNonNanNumber(ts) && ts > 0
@@ -3745,10 +3751,10 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
     const skyCondition = skyConditions.concat().sort((a, b) => {
       const aTimestamp = Date.parse(validVersionCode < 2.3
-        ? `${a.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(dataWithHourlySkycons.tzshift / 60))}`
+        ? `${a.datetime.replace(' ', 'T')}:00.000${minutesToIsoTimezone(dataWithHourlySkycons.tzshift / 60)}`
         : a.datetime.split('+').join(':00.000+'));
       const bTimestamp = Date.parse(validVersionCode < 2.3
-        ? `${b.datetime.replace(' ', 'T')}:00.000${isoTimezoneOffset(-(dataWithHourlySkycons.tzshift / 60))}`
+        ? `${b.datetime.replace(' ', 'T')}:00.000${minutesToIsoTimezone(dataWithHourlySkycons.tzshift / 60)}`
         : b.datetime.split('+').join(':00.000+'));
 
       return currentHourTimestamp - aTimestamp - (currentHourTimestamp - bTimestamp);
