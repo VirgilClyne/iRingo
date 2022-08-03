@@ -2385,7 +2385,7 @@ const waqiNearestToFeed = (version, nearestData) => {
 /**
  * Convert data from {@link waqiV1} to feed format
  * @author WordlessEcho <wordless@echo.moe>
- * @param {waqiNowFeed|waqiAqiFeed} v1Data - Data from {@link waqiV1}
+ * @param {waqiNowFeed|waqiAqiFeed|waqiError} v1Data - Data from {@link waqiV1}
  * @return {(waqiFeed|waqiError)[]} - Data in feed format
  */
 // eslint-disable-next-line no-unused-vars
