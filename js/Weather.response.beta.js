@@ -2416,13 +2416,12 @@ const waqiV1ToFeed = (v1Data) => {
     return `${(new Date((new Date()).setMinutes(0, 0, 0))).toISOString().slice(0, -5)}+00:00`;
   };
 
-  // TODO: (fix) getDebug should return object
   /**
    * Try to convert debug time in YYYY-MM-DDTHH:MM:SS+/-timezone format
    * @author WordlessEcho <wordless@echo.moe>
    * @param {{msg: {xsync: {gen: number}}} | {msg: {debug: {sync: string}}}} data -
    * Data with `msg.xsync.gen` or `msg.debug.sync`
-   * @return {?string} - Return null if data is invalid.
+   * @return {string} - Return empty string if data is invalid.
    */
   const getDebug = (data) => {
     if (isNonNanNumber(data?.msg?.xsync?.gen) && data.msg.xsync.gen > 0) {
@@ -2433,7 +2432,7 @@ const waqiV1ToFeed = (v1Data) => {
       return data.msg.debug.sync;
     }
 
-    return null;
+    return '';
   };
 
   return v1Data.rxs.obs.map((station) => {
@@ -2453,9 +2452,8 @@ const waqiV1ToFeed = (v1Data) => {
       };
     }
 
-    const debug = getDebug(station);
+    const debugTime = getDebug(station);
     return {
-      // TODO: Check status is valid or not
       status: station.status,
       data: {
         ...station.msg,
@@ -2477,7 +2475,7 @@ const waqiV1ToFeed = (v1Data) => {
         },
         forecast: { ...station.msg?.forecast },
       },
-      debug: { ...debug },
+      debug: { ...(debugTime.length > 0 ? { sync: debugTime } : {}) },
     };
   });
 };
