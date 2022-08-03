@@ -3418,8 +3418,8 @@ const colorfulCloudsToAqi = (
       ? standard.SIGNIFICANT_LEVEL : Number.MAX_VALUE),
     url: typeof url === 'string' && url.length > 0 ? url : 'https://caiyunapp.com/weather/',
     pollutants,
-    // TODO: Primary pollutant must be included in pollutants
-    ...(typeof primaryPollutant === 'string' && { primaryPollutant }),
+    // Primary pollutant must be included in pollutants
+    ...(typeof primaryPollutant === 'string' && primaryPollutant.length > 0 && { primaryPollutant }),
     sourceName: typeof providerName === 'string' && providerName.length > 0
       ? providerName : 'ColorfulClouds',
     categoryIndex,
