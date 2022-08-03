@@ -3165,7 +3165,7 @@ const getCcAirQuality = (dataWithRealtime) => {
       : dataWithRealtime?.result;
 
     if (typeof airQuality === 'object') {
-      return Object.fromEntries(Object.keys(toColorfulCloudsNames).map((key) => {
+      const result = Object.fromEntries(Object.keys(toColorfulCloudsNames).map((key) => {
         const value = airQuality?.[toColorfulCloudsNames[key]];
 
         if (key === 'aqi') {
@@ -3183,6 +3183,10 @@ const getCcAirQuality = (dataWithRealtime) => {
           isNonNanNumber(value) && value >= 0 ? value : -1,
         ];
       }));
+
+      // Detect the support of air quality
+      return Object.values(result).filter((value) => value <= 0).length > 1
+        ? { aqi: { usa: -1, chn: -1 } } : result;
     }
   }
 
@@ -3225,7 +3229,7 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
     : historyData?.result?.hourly?.aqi;
 
   // An hour as range
-  const aqis = Array.isArray(historyAqis) && historyAqis?.find((aqi) => {
+  const aqis = historyAqis?.find((aqi) => {
     if (typeof aqi?.datetime !== 'string' || aqi.datetime.length <= 0) {
       return false;
     }
