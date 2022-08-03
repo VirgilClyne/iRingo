@@ -4824,6 +4824,7 @@ const getKeywords = (apiVersion) => {
         AMOUNT: 'amount',
         SOURCE: 'source',
         AQI_COMPARISON: '',
+        TEMPORARILY_UNAVAILABLE: 'temporarily_unavailable',
       };
     case 2:
     case 3:
@@ -4841,6 +4842,7 @@ const getKeywords = (apiVersion) => {
         AMOUNT: 'amount',
         SOURCE: 'source',
         AQI_COMPARISON: 'previousDayComparison',
+        TEMPORARILY_UNAVAILABLE: 'temporarilyUnavailable',
       };
     default:
       return {};
@@ -4931,6 +4933,7 @@ if (settings.switch && typeof $request?.url === 'string') {
           const {
             METADATA, AIR_QUALITY, REQUIRE_NEXT_HOUR, NEXT_HOUR, PROVIDER_NAME, REPORTED_TIME,
             AQI_INDEX, AQI_SCALE, POLLUTANTS, UNIT, AMOUNT, SOURCE, AQI_COMPARISON,
+            TEMPORARILY_UNAVAILABLE,
           } = getKeywords(appleApiVersion);
 
           const settingsToAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
@@ -5381,18 +5384,19 @@ if (settings.switch && typeof $request?.url === 'string') {
             const time = responseBody?.[AIR_QUALITY]?.[METADATA]?.[REPORTED_TIME];
             const timestamp = appleTimeToTimestamp(appleApiVersion, time, nowHourTimestamp);
 
-            const providerName = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
-            const scale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
+            const airQualityProvider = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
+            const airQualityScale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
 
             // eslint-disable-next-line functional/no-conditional-statement
-            if (typeof scale === 'string' && scale.length > 0) {
+            if (typeof airQualityScale === 'string' && airQualityScale.length > 0) {
               // eslint-disable-next-line functional/no-expression-statement
               $.setjson(cacheAqi(
                 caches,
                 timestamp,
                 location,
-                qweatherNames.includes(providerName) ? responseBody?.[AIR_QUALITY]?.[SOURCE] : null,
-                scale.slice(0, scale.indexOf('.')),
+                qweatherNames.includes(airQualityProvider)
+                  ? responseBody?.[AIR_QUALITY]?.[SOURCE] : null,
+                airQualityScale.slice(0, airQualityScale.indexOf('.')),
                 responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
               ), '@iRingo.Weather.Caches');
 
@@ -5400,8 +5404,44 @@ if (settings.switch && typeof $request?.url === 'string') {
               $.log(`🚧 ${$.name}：已缓存当前的AQI`, '');
             }
 
-            // eslint-disable-next-line functional/no-expression-statement,no-undef
-            setResponse({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
+            const nextHourProviderName = responseBody?.[NEXT_HOUR]?.[METADATA]?.[PROVIDER_NAME];
+
+            // eslint-disable-next-line functional/no-expression-statement
+            setResponse({
+              // eslint-disable-next-line no-undef
+              ...$response,
+              ...(typeof responseBody === 'object' && {
+                body: JSON.stringify({
+                  ...responseBody,
+                  ...(typeof airQualityProvider === 'string' && airQualityProvider.length > 0 && {
+                    [AIR_QUALITY]: {
+                      ...responseBody[AIR_QUALITY],
+                      [METADATA]: {
+                        ...responseBody[AIR_QUALITY][METADATA],
+                        ...(
+                          Object.keys(responseBody[AIR_QUALITY])
+                            .filter((key) => key !== METADATA).length <= 1
+                          && { [TEMPORARILY_UNAVAILABLE]: true }
+                        ),
+                      },
+                    },
+                  }),
+                  ...(typeof nextHourProviderName === 'string' && nextHourProviderName.length > 0 && {
+                    [NEXT_HOUR]: {
+                      ...responseBody[NEXT_HOUR],
+                      [METADATA]: {
+                        ...responseBody[NEXT_HOUR][METADATA],
+                        ...(
+                          Object.keys(responseBody[NEXT_HOUR])
+                            .filter((key) => key !== METADATA && key !== AQI_COMPARISON).length <= 0
+                          && { [TEMPORARILY_UNAVAILABLE]: true }
+                        ),
+                      },
+                    },
+                  }),
+                }),
+              }),
+            });
           });
         // eslint-disable-next-line functional/no-conditional-statement
         } else {
