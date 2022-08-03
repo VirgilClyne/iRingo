@@ -823,6 +823,19 @@ const database = {
  */
 
 /**
+ * Pollutants and AQI from ColorfulClouds handled by {@link getCcAirQuality}
+ * @typedef {Object} ccAirQuality
+ *
+ * @property {number | -1} "PM2.5" - Amount in micrograms/m3
+ * @property {number | -1} PM10 - Amount in micrograms/m3
+ * @property {number | -1} OZONE - Amount in micrograms/m3
+ * @property {number | -1} NO2 - Amount in micrograms/m3
+ * @property {number | -1} SO2 - Amount in micrograms/m3
+ * @property {number | -1} CO - Amount in milligrams/M3
+ * @property {{chn: number | -1, usa: number | -1}} aqi - Air quality index
+ */
+
+/**
  * Air quality descriptions (zh_CN) in ColorfulClouds
  * @typedef {"缺数据" | "优" | "良" | "轻度污染" | "中度污染" | "重度污染" | "严重污染"} ccAirQualityDescriptionsZhCn
  */
@@ -3133,8 +3146,7 @@ const appleToEpaAirQuality = (standard, pollutants) => {
  * Get air quality from ColorfulClouds
  * @author WordlessEcho <wordless@echo.moe>
  * @param {colorfulCloudsV2} dataWithRealtime - Data from ColorfulClouds with air quality info
- * @return {ccV2d4pRealtimeAirQuality | {aqi: {usa: -1, chn: -1}}} -
- * Air quality data in ColorfulClouds v2.4+ format
+ * @return {ccAirQuality | {aqi: {usa: -1, chn: -1}}} - Air quality data in v2.4+ format
  */
 const getCcAirQuality = (dataWithRealtime) => {
   const toColorfulCloudsNames = {
@@ -3153,7 +3165,6 @@ const getCcAirQuality = (dataWithRealtime) => {
       : dataWithRealtime?.result;
 
     if (typeof airQuality === 'object') {
-      // TODO: type check
       return Object.fromEntries(Object.keys(toColorfulCloudsNames).map((key) => {
         const value = airQuality?.[toColorfulCloudsNames[key]];
 
@@ -3370,7 +3381,7 @@ const colorfulCloudsToAqi = (
   /**
    * Convert data from {@link getCcAirQuality} to {@link pollutantV2} object for Apple Weather
    * @author WordlessEcho <wordless@echo.moe>
-   * @param {ccV2d4pRealtimeAirQuality} airQuality - Pollutants data from {@link getCcAirQuality}
+   * @param {ccAirQuality} airQuality - Pollutants data from {@link getCcAirQuality}
    * @return {pollutantV2[] | []} -
    * Object for `airQuality.pollutants` of Apple Weather
    */
