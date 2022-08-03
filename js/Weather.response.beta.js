@@ -668,7 +668,7 @@ const database = {
  *
  * @property {string} idx - Station ID
  * @property {string} aqi - Air quality index
- * @property {number} utime - Report time (in `YYYY-MM-DDTHH:MM:SS+/-timezone` format)
+ * @property {string} utime - Report time (in `YYYY-MM-DDTHH:MM:SS+/-timezone` format)
  * @property {[number, number]} geo - Station coordinate
  * @property {string} name - Station name in "English (local language)"
  * @property {string} country - Country code in ISO 3166-1 alpha-2
