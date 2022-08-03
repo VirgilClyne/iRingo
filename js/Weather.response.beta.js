@@ -4874,472 +4874,10 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
   }
 };
 
-// TODO: Put this to main function
-const toResponseBody = (envs, request, response) => {
-  const dataFromApple = parseJsonWithDefault(response?.body, null);
-  if (typeof request?.url !== 'string' || !dataFromApple) {
-    return Promise.resolve(response?.body);
-  }
-
-  const settings = toSettings(envs);
-  const caches = toCaches(envs);
-
-  const supportedAppleApis = [1, 2, 3];
-  const settingsToAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
-  const scaleToAqiStandard = { [EPA_454.APPLE_SCALE]: EPA_454, [HJ_633.APPLE_SCALE]: HJ_633 };
-  const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
-
-  const url = (new URLs()).parse(request.url);
-  const parameters = getParams(url.path);
-  const appleApiVersionString = parameters?.ver;
-  const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
-    ? parseInt(appleApiVersionString.slice(1), 10) : -1;
-
-  const getRequireData = (apiVersion, parsedUrl) => {
-    switch (apiVersion) {
-      case 1: {
-        const requirement = parsedUrl.params?.include;
-        return typeof requirement === 'string' && requirement.length > 0
-          ? requirement.split(',') : [];
-      }
-      case 2:
-      case 3: {
-        const requirement = parsedUrl.params?.dataSets;
-        return typeof requirement === 'string' && requirement.length > 0
-          ? requirement.split(',') : [];
-      }
-      default:
-        return [];
-    }
-  };
-
-  const getTargetScale = (projectSettings, appleScale) => {
-    if (projectSettings.aqi.local.switch) {
-      const scale = settingsToAqiStandard[projectSettings.aqi.local.standard]?.APPLE_SCALE;
-      if (typeof scale !== 'string' || scale.length <= 0) {
-        return '';
-      }
-
-      return settingsToAqiStandard[projectSettings.aqi.local.standard].APPLE_SCALE;
-    }
-
-    if (!projectSettings.aqi.switch) {
-      return appleScale === 'string' && appleScale.length > 0 ? appleScale : '';
-    }
-
-    switch (projectSettings.aqi.source) {
-      case 'www.weatherol.cn':
-        return HJ_633.APPLE_SCALE;
-      case 'api.caiyunapp.com':
-        return projectSettings.apis.colorfulClouds.forceCnForAqi
-          ? HJ_633.APPLE_SCALE : EPA_454.APPLE_SCALE;
-      case 'api.waqi.info':
-        return WAQI_INSTANT_CAST.APPLE_SCALE;
-      default:
-        return '';
-    }
-  };
-
-  const toMissions = (aqi, forCompareAqi, nextHour) => supportedApis
-    .map((api) => ({
-      api,
-      missions: [
-        ...(aqi === api ? ['aqi'] : []),
-        ...(forCompareAqi === api ? ['forCompareAqi'] : []),
-        ...(nextHour === api ? ['nextHour'] : []),
-      ],
-    }));
-
-  const missionsToCcPath = (missions) => {
-    if (!Array.isArray(missions) || missions.length <= 0 || missions.length > 1) {
-      return 'weather';
-    }
-
-    switch (missions[0]) {
-      case 'aqi':
-        return 'realtime';
-      // We need hourly.skycons to detect rain or snow
-      case 'nextHour':
-      case 'aqiForComparison':
-      default:
-        return 'weather';
-    }
-  };
-
-  const getColorfulCloudsName = (language) => {
-    // No official name for Japanese
-    if (typeof language === 'string') {
-      if (/zh-(Hans|CN)/.test(language)) {
-        return '彩云天气';
-      }
-      if (/zh-(Hant|HK|TW)/.test(language)) {
-        return '彩雲天氣';
-      }
-    }
-
-    return 'ColorfulClouds';
-  };
-
-  const { METADATA } = getKeywords(appleApiVersion);
-
-  const getAirQuality = (apiVersion, promiseData, appleLanguage) => {
-    if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('aqi')) {
-      return {};
-    }
-
-    switch (promiseData?.api) {
-      case 'www.weatherol.cn':
-        return {
-          [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
-            { forV1: 'https://www.weatherol.cn/images/logo.png' },
-            '气象在线',
-            'https://www.weatherol.cn/',
-            promiseData?.returnedData,
-          )),
-          ...toAirQuality(apiVersion, colorfulCloudsToAqi(
-            promiseData?.returnedData,
-            'https://www.weatherol.cn/',
-            '气象在线',
-            true,
-            true,
-          )),
-        };
-      case 'api.caiyunapp.com':
-        return {
-          [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
-            {
-              forV1: 'https://docs.caiyunapp.com/img/favicon.ico',
-              forV2: 'https://caiyunapp.com/imgs/logo/logo-website-white.png',
-            },
-            getColorfulCloudsName(appleLanguage),
-            'https://caiyunapp.com/weather/',
-            promiseData?.returnedData,
-          )),
-          ...toAirQuality(apiVersion, colorfulCloudsToAqi(
-            promiseData?.returnedData,
-            'https://caiyunapp.com/weather/',
-            getColorfulCloudsName(appleLanguage),
-            settings.apis.colorfulClouds.forceCnForAqi,
-            settings.apis.colorfulClouds.forceCnForComparison,
-          )),
-        };
-      case 'api.waqi.info':
-        if (Array.isArray(promiseData?.types)) {
-          if (promiseData.types.includes((type) => type === 'locationFeed')) {
-            return {
-              [METADATA]: toMetadata(apiVersion, waqiToAqiMetadata(promiseData?.returnedData)),
-              ...toAirQuality(apiVersion, waqiToAqi(promiseData?.returnedData)),
-            };
-          }
-
-          if (promiseData.types.includes((type) => type === 'mapq')) {
-            return {
-              [METADATA]: toMetadata(apiVersion, waqiToAqiMetadata(promiseData?.returnedData)),
-              ...toAirQuality(apiVersion, waqiToAqi(
-                waqiNearestToFeed('mapq', promiseData?.returnedData).find((data) => data.status === 'ok'),
-              )),
-            };
-          }
-        }
-
-        return {};
-      default:
-        return {};
-    }
-  };
-
-  const getAqiComparison = (promiseData) => {
-    if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('forCompareAqi')) {
-      return 'unknown';
-    }
-
-    switch (promiseData?.api) {
-      case 'api.caiyunapp.com':
-        return colorfulCloudsToAqiComparison(
-          promiseData?.returnedData,
-          settings.apis.colorfulClouds.forceCnForComparison,
-        );
-      default:
-        return 'unknown';
-    }
-  };
-
-  const getNextHour = (apiVersion, promiseData, appleLanguage) => {
-    if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('nextHour')) {
-      return {};
-    }
-
-    switch (promiseData?.api) {
-      case 'www.weatherol.cn':
-        return {
-          [METADATA]: toMetadata(apiVersion, colorfulCloudsToNextHourMetadata(
-            '气象在线',
-            'https://www.weatherol.cn/',
-            promiseData?.returnedData,
-          )),
-          ...toNextHour(apiVersion, colorfulCloudsToNextHour('气象在线', promiseData?.returnedData)),
-        };
-      case 'api.caiyunapp.com':
-        return {
-          [METADATA]: toMetadata(apiVersion, colorfulCloudsToNextHourMetadata(
-            getColorfulCloudsName(appleLanguage),
-            'https://caiyunapp.com/weather/',
-            promiseData?.returnedData,
-          )),
-          ...toNextHour(apiVersion, colorfulCloudsToNextHour(
-            getColorfulCloudsName(appleLanguage),
-            promiseData?.returnedData,
-          )),
-        };
-      default:
-        return {};
-    }
-  };
-
-  const latitude = parseFloat(parameters?.lat);
-  const longitude = parseFloat(parameters?.lng);
-  const languageWithRegion = parameters?.language;
-
-  if (
-    !supportedAppleApis.includes(appleApiVersion) || !isLatitude(latitude)
-    || !isLongitude(longitude) || typeof languageWithRegion !== 'string'
-    || languageWithRegion.length <= 0
-  ) {
-    return Promise.resolve(dataFromApple);
-  }
-
-  const {
-    AIR_QUALITY, REQUIRE_NEXT_HOUR, NEXT_HOUR, PROVIDER_NAME, REPORTED_TIME, AQI_INDEX,
-    AQI_SCALE, POLLUTANTS, UNIT, AMOUNT, SOURCE, AQI_COMPARISON,
-  } = getKeywords(appleApiVersion);
-
-  const location = { latitude, longitude };
-  const requireData = getRequireData(appleApiVersion, url);
-
-  const qweatherNames = ['和风天气', 'QWeather'];
-  const airQuality = {
-    ...dataFromApple?.[AIR_QUALITY],
-    ...(qweatherNames.includes(dataFromApple?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME])
-      && {
-        [METADATA]: {
-          ...dataFromApple[AIR_QUALITY][METADATA],
-          [PROVIDER_NAME]: appendQweatherSourceToProviderName(
-            dataFromApple[AIR_QUALITY][METADATA][PROVIDER_NAME],
-            dataFromApple[AIR_QUALITY]?.[SOURCE],
-          ),
-        },
-        ...(typeof dataFromApple[AIR_QUALITY]?.[POLLUTANTS] === 'object' && {
-          [POLLUTANTS]: Object.fromEntries(Object.entries(dataFromApple[AIR_QUALITY][POLLUTANTS])
-            .map(([key, value]) => {
-              if (key === 'CO') {
-                const fixedAmount = fixQweatherCo(value?.[UNIT], value?.[AMOUNT]);
-                return [key, {
-                  ...value,
-                  ...(fixedAmount >= 0 && { [AMOUNT]: fixedAmount }),
-                }];
-              }
-              return [key, value];
-            })),
-        }),
-      }),
-  };
-  const nextHour = dataFromApple?.[NEXT_HOUR];
-
-  const aqiProvider = airQuality?.[METADATA]?.[PROVIDER_NAME];
-  const aqiScale = airQuality?.[AQI_SCALE];
-  const needAqi = requireData.includes(AIR_QUALITY) && settings.aqi.switch
-    && (typeof aqiScale !== 'string'
-      || (!settings.aqi.local.switch && settings.aqi.targets.includes(
-        aqiScale.slice(0, aqiScale.lastIndexOf('.')),
-      )));
-
-  const needCompareAqi = requireData.includes(AIR_QUALITY) && settings.aqi.comparison.switch
-    && AQI_COMPARISON.length > 0 && (airQuality?.[AQI_COMPARISON] === 'unknown' || needAqi);
-  const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
-  const yesterdayHourTimestamp = nowHourTimestamp - 1000 * 60 * 60 * 24;
-  const yesterdayReportTimestamp = needAqi ? yesterdayHourTimestamp : appleTimeToTimestamp(
-    appleApiVersion,
-    airQuality?.[METADATA]?.[REPORTED_TIME],
-    nowHourTimestamp,
-  ) - 1000 * 60 * 60 * 24;
-  const cachedAqi = needCompareAqi ? getCachedAqi(
-    caches.aqis,
-    yesterdayReportTimestamp,
-    location,
-    qweatherNames.includes(aqiProvider) ? airQuality?.source : null,
-    getTargetScale(settings, aqiScale),
-  ) : { aqi: -1 };
-  // eslint-disable-next-line functional/no-expression-statement
-  $.log(`🚧 ${$.name}：cachedAqi = ${JSON.stringify(cachedAqi)}`, '');
-
-  const nextHourProvider = nextHour?.[METADATA]?.[PROVIDER_NAME];
-  const needNextHour = requireData.includes(REQUIRE_NEXT_HOUR) && settings.nextHour.switch && (
-    typeof nextHourProvider !== 'string' || nextHourProvider.length <= 0
-  );
-
-  const missionList = toMissions(
-    needAqi ? settings.aqi.source : null,
-    needCompareAqi && cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
-    needNextHour ? settings.nextHour.source : null,
-  );
-  // eslint-disable-next-line functional/no-expression-statement
-  $.log(`🚧 ${$.name}：missionList: ${JSON.stringify(missionList)}`, '');
-
-  const promises = Array.isArray(missionList) ? missionList
-    .filter((missionObject) => (
-      supportedApis.includes(missionObject?.api) && Array.isArray(missionObject?.missions)
-    ))
-    .flatMap(({ api, missions }) => {
-      if (missions.length <= 0) {
-        return [];
-      }
-
-      switch (api) {
-        case 'www.weatherol.cn':
-          return missions.flatMap((mission) => {
-            switch (mission) {
-              case 'aqi':
-                return [
-                  weatherOl('realtime', location, settings.apis.weatherOl.httpHeaders)
-                    .then((returnedData) => ({
-                      missions: [mission],
-                      api,
-                      types: ['realtime'],
-                      returnedData,
-                    })),
-                ];
-              case 'nextHour':
-                return [
-                  weatherOl('forecast', location, settings.apis.weatherOl.httpHeaders)
-                    .then((returnedData) => ({
-                      missions: [mission],
-                      api,
-                      types: ['forecast'],
-                      returnedData,
-                    })),
-                ];
-              default:
-                return [];
-            }
-          });
-        case 'api.caiyunapp.com': {
-          const path = missionsToCcPath(missions);
-          const needHistory = missions.includes('forCompareAqi');
-
-          return [colorfulClouds(
-            settings.apis.colorfulClouds.token,
-            location,
-            languageWithRegion,
-            settings.apis.colorfulClouds.httpHeaders,
-            path,
-            {
-              unit: 'metric:v2',
-              ...(needHistory && { begin: yesterdayHourTimestamp / 1000 }),
-            },
-          ).then((returnedData) => ({
-            missions,
-            api,
-            types: [path, ...(needHistory ? ['history'] : [])],
-            returnedData,
-          }))];
-        }
-        case 'api.waqi.info': {
-          if (!missions.includes('aqi')) {
-            return [];
-          }
-
-          const { token } = settings.apis.waqi;
-          if (typeof token === 'string' && token.length > 0) {
-            return [
-              waqiV2(location, null, token, settings.apis.waqi.httpHeaders)
-                .then((returnedData) => ({
-                  missions: ['aqi'],
-                  api,
-                  types: ['locationFeed'],
-                  returnedData,
-                })),
-            ];
-          }
-
-          return [
-            waqiNearest(location, 'mapq', settings.apis.waqi.httpHeaders)
-              .then((returnedData) => ({
-                missions: ['aqi'],
-                api,
-                types: ['mapq'],
-                returnedData,
-              })),
-          ];
-        }
-        default:
-          return [];
-      }
-    }) : [];
-
-  return Promise.all(promises).then((dataArray) => {
-    if (!Array.isArray(dataArray)) {
-      return dataFromApple;
-    }
-
-    const dataForAqi = dataArray.find((data) => (
-      Array.isArray(data?.missions) && data.missions.includes('aqi')
-    ));
-    const dataForAqiComparison = dataArray.find((data) => (
-      Array.isArray(data?.missions) && data.missions.includes('forCompareAqi')
-    ));
-    const dataForNextHour = dataArray.find((data) => (
-      Array.isArray(data?.missions) && data.missions.includes('nextHour')
-    ));
-
-    const modifiedAirQuality = getAirQuality(appleApiVersion, dataForAqi, languageWithRegion);
-    const mergedAirQuality = {
-      ...airQuality,
-      ...modifiedAirQuality,
-      metadata: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
-    };
-    const mergedScale = mergedAirQuality?.[AQI_SCALE];
-    const pollutants = typeof mergedAirQuality?.[POLLUTANTS] === 'object'
-      ? Object.values(mergedAirQuality[POLLUTANTS]) : [];
-    const localConvertedAirQuality = {
-      ...mergedAirQuality,
-      ...(settings.aqi.local.switch && typeof mergedAirQuality?.[POLLUTANTS] === 'object'
-        && settings.aqi.targets.includes(
-          mergedScale.slice(0, mergedScale.lastIndexOf('.')),
-        )
-        && toAirQuality(appleApiVersion, appleToEpaAirQuality(
-          settingsToAqiStandard[settings.aqi.local.standard],
-          appleApiVersion === 1 ? convertV1Pollutants(pollutants) : pollutants,
-        ))),
-    };
-    const aqiLevels = scaleToAqiStandard[localConvertedAirQuality?.[AQI_SCALE]]?.AQI_LEVELS;
-    const modifiedCompareAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0 && cachedAqi.aqi >= 0
-    && typeof aqiLevels === 'object'
-      ? compareAqi(
-        toAqiLevel(aqiLevels, localConvertedAirQuality[AQI_INDEX]),
-        toAqiLevel(aqiLevels, cachedAqi.aqi),
-      )
-      : getAqiComparison(dataForAqiComparison);
-    const modifiedNextHour = getNextHour(appleApiVersion, dataForNextHour, languageWithRegion);
-
-    return {
-      ...dataFromApple,
-      ...(requireData.includes(AIR_QUALITY) && {
-        [AIR_QUALITY]: {
-          ...localConvertedAirQuality,
-          ...(needCompareAqi && { [AQI_COMPARISON]: modifiedCompareAqi }),
-        },
-      }),
-      ...(requireData.includes(REQUIRE_NEXT_HOUR) && {
-        [NEXT_HOUR]: {
-          ...nextHour,
-          ...modifiedNextHour,
-          metadata: { ...nextHour?.[METADATA], ...modifiedNextHour?.[METADATA] },
-        },
-      }),
-    };
-  });
-};
-
+/**
+ * Set response
+ * @param {Object} response - Response to set
+ */
 const setResponse = (response) => $.done(!$.isQuanX() ? response : { body: response?.body });
 
 const envs = getENV('iRingo', 'Weather', database);
@@ -5352,69 +4890,544 @@ if (settings.switch && typeof $request?.url === 'string') {
 
   // eslint-disable-next-line no-undef
   const url = (new URLs()).parse($request.url);
-  const parameters = getParams(url.path);
-  const appleApiVersionString = parameters?.ver;
-  const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
-    ? parseInt(appleApiVersionString.slice(1), 10) : -1;
 
-  // eslint-disable-next-line functional/no-conditional-statement
-  if (!supportedAppleApis.includes(appleApiVersion)) {
-    // eslint-disable-next-line functional/no-expression-statement
-    $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
-    // eslint-disable-next-line functional/no-expression-statement,no-undef
-    setResponse($response);
-  // eslint-disable-next-line functional/no-conditional-statement,no-undef
-  } else if ($response?.statusCode !== 200 && $response?.status !== 200) {
-    // eslint-disable-next-line functional/no-expression-statement,no-undef
-    $.log(`⚠️ ${$.name}：服务器返回HTTP状态码 statusCode = ${$response?.statusCode}, status = ${$response?.status}`, '');
-    // eslint-disable-next-line functional/no-expression-statement,no-undef
-    setResponse($response);
+  if (url) {
+    const parameters = getParams(url.path);
+    const appleApiVersionString = parameters?.ver;
+    const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
+      ? parseInt(appleApiVersionString.slice(1), 10) : -1;
+
+    // eslint-disable-next-line functional/no-conditional-statement
+    if (!supportedAppleApis.includes(appleApiVersion)) {
+      // eslint-disable-next-line functional/no-expression-statement
+      $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
+      // eslint-disable-next-line functional/no-expression-statement,no-undef
+      setResponse($response);
+      // eslint-disable-next-line functional/no-conditional-statement,no-undef
+    } else if ($response?.statusCode !== 200 && $response?.status !== 200) {
+      // eslint-disable-next-line functional/no-expression-statement,no-undef
+      $.log(`⚠️ ${$.name}：服务器返回HTTP状态码 statusCode = ${$response?.statusCode}, status = ${$response?.status}`, '');
+      // eslint-disable-next-line functional/no-expression-statement,no-undef
+      setResponse($response);
+      // eslint-disable-next-line functional/no-conditional-statement
+    } else {
+      // eslint-disable-next-line functional/no-expression-statement
+      $.log(`🚧 ${$.name}：模块已启用`, '');
+
+      // eslint-disable-next-line no-undef
+      const dataFromApple = parseJsonWithDefault($response?.body, null);
+      // eslint-disable-next-line functional/no-conditional-statement
+      if (dataFromApple) {
+        const latitude = parseFloat(parameters?.lat);
+        const longitude = parseFloat(parameters?.lng);
+
+        // eslint-disable-next-line functional/no-conditional-statement
+        if (isLatitude(latitude) && isLongitude(longitude)) {
+          const languageWithRegion = parameters?.language;
+
+          // eslint-disable-next-line functional/no-conditional-statement
+          if (typeof languageWithRegion !== 'string' || languageWithRegion.length <= 0) {
+            // eslint-disable-next-line functional/no-expression-statement,no-undef
+            $.log(`⚠️ ${$.name}：无法获取语言信息，语言：${parameters?.language}`, '');
+          }
+
+          const {
+            METADATA, AIR_QUALITY, REQUIRE_NEXT_HOUR, NEXT_HOUR, PROVIDER_NAME, REPORTED_TIME,
+            AQI_INDEX, AQI_SCALE, POLLUTANTS, UNIT, AMOUNT, SOURCE, AQI_COMPARISON,
+          } = getKeywords(appleApiVersion);
+
+          const settingsToAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
+          const scaleToAqiStandard = {
+            [EPA_454.APPLE_SCALE]: EPA_454, [HJ_633.APPLE_SCALE]: HJ_633,
+          };
+          const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
+
+          const getRequireData = (apiVersion, parsedUrl) => {
+            switch (apiVersion) {
+              case 1: {
+                const requirement = parsedUrl.params?.include;
+                return typeof requirement === 'string' && requirement.length > 0
+                  ? requirement.split(',') : [];
+              }
+              case 2:
+              case 3: {
+                const requirement = parsedUrl.params?.dataSets;
+                return typeof requirement === 'string' && requirement.length > 0
+                  ? requirement.split(',') : [];
+              }
+              default:
+                return [];
+            }
+          };
+
+          const getTargetScale = (projectSettings, appleScale) => {
+            if (projectSettings.aqi.local.switch) {
+              const scale = settingsToAqiStandard[projectSettings.aqi.local.standard]?.APPLE_SCALE;
+              if (typeof scale !== 'string' || scale.length <= 0) {
+                return '';
+              }
+
+              return settingsToAqiStandard[projectSettings.aqi.local.standard].APPLE_SCALE;
+            }
+
+            if (!projectSettings.aqi.switch) {
+              return appleScale === 'string' && appleScale.length > 0 ? appleScale : '';
+            }
+
+            switch (projectSettings.aqi.source) {
+              case 'www.weatherol.cn':
+                return HJ_633.APPLE_SCALE;
+              case 'api.caiyunapp.com':
+                return projectSettings.apis.colorfulClouds.forceCnForAqi
+                  ? HJ_633.APPLE_SCALE : EPA_454.APPLE_SCALE;
+              case 'api.waqi.info':
+                return WAQI_INSTANT_CAST.APPLE_SCALE;
+              default:
+                return '';
+            }
+          };
+
+          const toMissions = (aqi, forCompareAqi, nextHour) => supportedApis
+            .map((api) => ({
+              api,
+              missions: [
+                ...(aqi === api ? ['aqi'] : []),
+                ...(forCompareAqi === api ? ['forCompareAqi'] : []),
+                ...(nextHour === api ? ['nextHour'] : []),
+              ],
+            }));
+
+          const missionsToCcPath = (missions) => {
+            if (!Array.isArray(missions) || missions.length <= 0 || missions.length > 1) {
+              return 'weather';
+            }
+
+            switch (missions[0]) {
+              case 'aqi':
+                return 'realtime';
+              // We need hourly.skycons to detect rain or snow
+              case 'nextHour':
+              case 'aqiForComparison':
+              default:
+                return 'weather';
+            }
+          };
+
+          const getColorfulCloudsName = (language) => {
+            // No official name for Japanese
+            if (typeof language === 'string') {
+              if (/zh-(Hans|CN)/.test(language)) {
+                return '彩云天气';
+              }
+              if (/zh-(Hant|HK|TW)/.test(language)) {
+                return '彩雲天氣';
+              }
+            }
+
+            return 'ColorfulClouds';
+          };
+
+          const getAirQuality = (apiVersion, promiseData, appleLanguage) => {
+            if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('aqi')) {
+              return {};
+            }
+
+            switch (promiseData?.api) {
+              case 'www.weatherol.cn':
+                return {
+                  [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
+                    { forV1: 'https://www.weatherol.cn/images/logo.png', forV2: '' },
+                    '气象在线',
+                    'https://www.weatherol.cn/',
+                    promiseData?.returnedData,
+                  )),
+                  ...toAirQuality(apiVersion, colorfulCloudsToAqi(
+                    promiseData?.returnedData,
+                    'https://www.weatherol.cn/',
+                    '气象在线',
+                    true,
+                    true,
+                  )),
+                };
+              case 'api.caiyunapp.com':
+                return {
+                  [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
+                    {
+                      forV1: 'https://docs.caiyunapp.com/img/favicon.ico',
+                      forV2: 'https://caiyunapp.com/imgs/logo/logo-website-white.png',
+                    },
+                    getColorfulCloudsName(appleLanguage),
+                    'https://caiyunapp.com/weather/',
+                    promiseData?.returnedData,
+                  )),
+                  ...toAirQuality(apiVersion, colorfulCloudsToAqi(
+                    promiseData?.returnedData,
+                    'https://caiyunapp.com/weather/',
+                    getColorfulCloudsName(appleLanguage),
+                    settings.apis.colorfulClouds.forceCnForAqi,
+                    settings.apis.colorfulClouds.forceCnForComparison,
+                  )),
+                };
+              case 'api.waqi.info':
+                if (Array.isArray(promiseData?.types)) {
+                  if (promiseData.types.includes((type) => type === 'locationFeed')) {
+                    return {
+                      [METADATA]: toMetadata(
+                        apiVersion,
+                        waqiToAqiMetadata(promiseData?.returnedData),
+                      ),
+                      ...toAirQuality(apiVersion, waqiToAqi(promiseData?.returnedData)),
+                    };
+                  }
+
+                  if (promiseData.types.includes((type) => type === 'mapq')) {
+                    return {
+                      [METADATA]: toMetadata(
+                        apiVersion,
+                        waqiToAqiMetadata(promiseData?.returnedData),
+                      ),
+                      ...toAirQuality(apiVersion, waqiToAqi(
+                        waqiNearestToFeed('mapq', promiseData?.returnedData).find((data) => data.status === 'ok'),
+                      )),
+                    };
+                  }
+                }
+
+                return {};
+              default:
+                return {};
+            }
+          };
+
+          const getAqiComparison = (promiseData) => {
+            if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('forCompareAqi')) {
+              return 'unknown';
+            }
+
+            switch (promiseData?.api) {
+              case 'api.caiyunapp.com':
+                return colorfulCloudsToAqiComparison(
+                  promiseData?.returnedData,
+                  settings.apis.colorfulClouds.forceCnForComparison,
+                );
+              default:
+                return 'unknown';
+            }
+          };
+
+          const getNextHour = (apiVersion, promiseData, appleLanguage) => {
+            if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('nextHour')) {
+              return {};
+            }
+
+            switch (promiseData?.api) {
+              case 'www.weatherol.cn':
+                return {
+                  [METADATA]: toMetadata(apiVersion, colorfulCloudsToNextHourMetadata(
+                    '气象在线',
+                    'https://www.weatherol.cn/',
+                    promiseData?.returnedData,
+                  )),
+                  ...toNextHour(apiVersion, colorfulCloudsToNextHour('气象在线', promiseData?.returnedData)),
+                };
+              case 'api.caiyunapp.com':
+                return {
+                  [METADATA]: toMetadata(apiVersion, colorfulCloudsToNextHourMetadata(
+                    getColorfulCloudsName(appleLanguage),
+                    'https://caiyunapp.com/weather/',
+                    promiseData?.returnedData,
+                  )),
+                  ...toNextHour(apiVersion, colorfulCloudsToNextHour(
+                    getColorfulCloudsName(appleLanguage),
+                    promiseData?.returnedData,
+                  )),
+                };
+              default:
+                return {};
+            }
+          };
+
+          const location = { latitude, longitude };
+          const requireData = getRequireData(appleApiVersion, url);
+
+          const qweatherNames = ['和风天气', 'QWeather'];
+          const airQuality = {
+            ...dataFromApple?.[AIR_QUALITY],
+            ...(qweatherNames.includes(dataFromApple?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME])
+              && {
+                [METADATA]: {
+                  ...dataFromApple[AIR_QUALITY][METADATA],
+                  [PROVIDER_NAME]: appendQweatherSourceToProviderName(
+                    dataFromApple[AIR_QUALITY][METADATA][PROVIDER_NAME],
+                    dataFromApple[AIR_QUALITY]?.[SOURCE],
+                  ),
+                },
+                ...(typeof dataFromApple[AIR_QUALITY]?.[POLLUTANTS] === 'object' && {
+                  [POLLUTANTS]: Object.fromEntries(
+                    Object.entries(dataFromApple[AIR_QUALITY][POLLUTANTS]).map(([key, value]) => {
+                      if (key === 'CO') {
+                        const fixedAmount = fixQweatherCo(value?.[UNIT], value?.[AMOUNT]);
+                        return [key, {
+                          ...value,
+                          ...(fixedAmount >= 0 && { [AMOUNT]: fixedAmount }),
+                        }];
+                      }
+                      return [key, value];
+                    }),
+                  ),
+                }),
+              }),
+          };
+          const nextHour = dataFromApple?.[NEXT_HOUR];
+
+          const aqiProvider = airQuality?.[METADATA]?.[PROVIDER_NAME];
+          const aqiScale = airQuality?.[AQI_SCALE];
+          const needAqi = requireData.includes(AIR_QUALITY) && settings.aqi.switch
+            && (typeof aqiScale !== 'string'
+              || (!settings.aqi.local.switch && settings.aqi.targets.includes(
+                aqiScale.slice(0, aqiScale.lastIndexOf('.')),
+              )));
+
+          const needCompareAqi = requireData.includes(AIR_QUALITY) && settings.aqi.comparison.switch
+            && AQI_COMPARISON.length > 0 && (airQuality?.[AQI_COMPARISON] === 'unknown' || needAqi);
+          const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
+          const yesterdayHourTimestamp = nowHourTimestamp - 1000 * 60 * 60 * 24;
+          const yesterdayReportTimestamp = needAqi ? yesterdayHourTimestamp : appleTimeToTimestamp(
+            appleApiVersion,
+            airQuality?.[METADATA]?.[REPORTED_TIME],
+            nowHourTimestamp,
+          ) - 1000 * 60 * 60 * 24;
+          const cachedAqi = needCompareAqi ? getCachedAqi(
+            caches.aqis,
+            yesterdayReportTimestamp,
+            location,
+            qweatherNames.includes(aqiProvider) ? airQuality?.source : null,
+            getTargetScale(settings, aqiScale),
+          ) : { aqi: -1 };
+          // eslint-disable-next-line functional/no-expression-statement
+          $.log(`🚧 ${$.name}：寻找已缓存的AQI信息：${JSON.stringify(cachedAqi)}`, '');
+
+          const nextHourProvider = nextHour?.[METADATA]?.[PROVIDER_NAME];
+          const needNextHour = requireData.includes(REQUIRE_NEXT_HOUR)
+            && settings.nextHour.switch
+            && (typeof nextHourProvider !== 'string' || nextHourProvider.length <= 0);
+
+          const missionList = toMissions(
+            needAqi ? settings.aqi.source : null,
+            needCompareAqi && cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
+            needNextHour ? settings.nextHour.source : null,
+          );
+          // eslint-disable-next-line functional/no-expression-statement
+          $.log(`🚧 ${$.name}：任务列表：${JSON.stringify(missionList)}`, '');
+
+          const promises = Array.isArray(missionList) ? missionList
+            .filter((missionObject) => (
+              supportedApis.includes(missionObject?.api) && Array.isArray(missionObject?.missions)
+            ))
+            .flatMap(({ api, missions }) => {
+              if (missions.length <= 0) {
+                return [];
+              }
+
+              switch (api) {
+                case 'www.weatherol.cn':
+                  return missions.flatMap((mission) => {
+                    switch (mission) {
+                      case 'aqi':
+                        return [
+                          weatherOl('realtime', location, settings.apis.weatherOl.httpHeaders)
+                            .then((returnedData) => ({
+                              missions: [mission],
+                              api,
+                              types: ['realtime'],
+                              returnedData,
+                            })),
+                        ];
+                      case 'nextHour':
+                        return [
+                          weatherOl('forecast', location, settings.apis.weatherOl.httpHeaders)
+                            .then((returnedData) => ({
+                              missions: [mission],
+                              api,
+                              types: ['forecast'],
+                              returnedData,
+                            })),
+                        ];
+                      default:
+                        return [];
+                    }
+                  });
+                case 'api.caiyunapp.com': {
+                  const path = missionsToCcPath(missions);
+                  const needHistory = missions.includes('forCompareAqi');
+
+                  return [colorfulClouds(
+                    settings.apis.colorfulClouds.token,
+                    location,
+                    languageWithRegion,
+                    settings.apis.colorfulClouds.httpHeaders,
+                    path,
+                    {
+                      unit: 'metric:v2',
+                      ...(needHistory && { begin: yesterdayHourTimestamp / 1000 }),
+                    },
+                  ).then((returnedData) => ({
+                    missions,
+                    api,
+                    types: [path, ...(needHistory ? ['history'] : [])],
+                    returnedData,
+                  }))];
+                }
+                case 'api.waqi.info': {
+                  if (!missions.includes('aqi')) {
+                    return [];
+                  }
+
+                  const { token } = settings.apis.waqi;
+                  if (typeof token === 'string' && token.length > 0) {
+                    return [
+                      waqiV2(location, null, token, settings.apis.waqi.httpHeaders)
+                        .then((returnedData) => ({
+                          missions: ['aqi'],
+                          api,
+                          types: ['locationFeed'],
+                          returnedData,
+                        })),
+                    ];
+                  }
+
+                  return [
+                    waqiNearest(location, 'mapq', settings.apis.waqi.httpHeaders)
+                      .then((returnedData) => ({
+                        missions: ['aqi'],
+                        api,
+                        types: ['mapq'],
+                        returnedData,
+                      })),
+                  ];
+                }
+                default:
+                  return [];
+              }
+            }) : [];
+
+          // eslint-disable-next-line functional/no-expression-statement
+          Promise.all(promises).then((dataArray) => {
+            if (!Array.isArray(dataArray)) {
+              return dataFromApple;
+            }
+
+            const dataForAqi = dataArray.find((data) => (
+              Array.isArray(data?.missions) && data.missions.includes('aqi')
+            ));
+            const dataForAqiComparison = dataArray.find((data) => (
+              Array.isArray(data?.missions) && data.missions.includes('forCompareAqi')
+            ));
+            const dataForNextHour = dataArray.find((data) => (
+              Array.isArray(data?.missions) && data.missions.includes('nextHour')
+            ));
+
+            const modifiedAirQuality = getAirQuality(
+              appleApiVersion,
+              dataForAqi,
+              languageWithRegion,
+            );
+            const mergedAirQuality = {
+              ...airQuality,
+              ...modifiedAirQuality,
+              metadata: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
+            };
+            const mergedScale = mergedAirQuality?.[AQI_SCALE];
+            const pollutants = typeof mergedAirQuality?.[POLLUTANTS] === 'object'
+              ? Object.values(mergedAirQuality[POLLUTANTS]) : [];
+            const localConvertedAirQuality = {
+              ...mergedAirQuality,
+              ...(settings.aqi.local.switch && typeof mergedAirQuality?.[POLLUTANTS] === 'object'
+                && settings.aqi.targets.includes(
+                  mergedScale.slice(0, mergedScale.lastIndexOf('.')),
+                )
+                && toAirQuality(appleApiVersion, appleToEpaAirQuality(
+                  settingsToAqiStandard[settings.aqi.local.standard],
+                  appleApiVersion === 1 ? convertV1Pollutants(pollutants) : pollutants,
+                ))),
+            };
+            const aqiLevels = scaleToAqiStandard[localConvertedAirQuality?.[AQI_SCALE]]?.AQI_LEVELS;
+            const modifiedCompareAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0
+            && cachedAqi.aqi >= 0 && typeof aqiLevels === 'object' ? compareAqi(
+                toAqiLevel(aqiLevels, localConvertedAirQuality[AQI_INDEX]),
+                toAqiLevel(aqiLevels, cachedAqi.aqi),
+              )
+              : getAqiComparison(dataForAqiComparison);
+            const modifiedNextHour = getNextHour(
+              appleApiVersion,
+              dataForNextHour,
+              languageWithRegion,
+            );
+
+            return {
+              ...dataFromApple,
+              ...(requireData.includes(AIR_QUALITY) && {
+                [AIR_QUALITY]: {
+                  ...localConvertedAirQuality,
+                  ...(needCompareAqi && { [AQI_COMPARISON]: modifiedCompareAqi }),
+                },
+              }),
+              ...(requireData.includes(REQUIRE_NEXT_HOUR) && {
+                [NEXT_HOUR]: {
+                  ...nextHour,
+                  ...modifiedNextHour,
+                  metadata: { ...nextHour?.[METADATA], ...modifiedNextHour?.[METADATA] },
+                },
+              }),
+            };
+          }).then((responseBody) => {
+            const time = responseBody?.[AIR_QUALITY]?.[METADATA]?.[REPORTED_TIME];
+            const timestamp = appleTimeToTimestamp(appleApiVersion, time, nowHourTimestamp);
+
+            const providerName = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
+            const scale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
+
+            // eslint-disable-next-line functional/no-conditional-statement
+            if (typeof scale === 'string' && scale.length > 0) {
+              // eslint-disable-next-line functional/no-expression-statement
+              $.setjson(cacheAqi(
+                caches,
+                timestamp,
+                location,
+                qweatherNames.includes(providerName) ? responseBody?.[AIR_QUALITY]?.[SOURCE] : null,
+                scale.slice(0, scale.indexOf('.')),
+                responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
+              ), '@iRingo.Weather.Caches');
+
+              // eslint-disable-next-line functional/no-expression-statement
+              $.log(`🚧 ${$.name}：已缓存当前的AQI`, '');
+            }
+
+            // eslint-disable-next-line functional/no-expression-statement,no-undef
+            setResponse({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
+          });
+        // eslint-disable-next-line functional/no-conditional-statement
+        } else {
+          // eslint-disable-next-line functional/no-expression-statement
+          $.log(`❗️ ${$.name}：缺失经纬度信息。经度：${parameters?.lng}，纬度：${parameters?.lat}`, '');
+          // eslint-disable-next-line functional/no-expression-statement,no-undef
+          setResponse($response);
+        }
+      // eslint-disable-next-line functional/no-conditional-statement
+      } else {
+        // eslint-disable-next-line functional/no-expression-statement,no-undef
+        $.log(`❗️ ${$.name}：数据解析失败，HTTP body = ${$response?.body}`, '');
+        // eslint-disable-next-line functional/no-expression-statement,no-undef
+        setResponse($response);
+        // eslint-disable-next-line functional/no-conditional-statement
+      }
+    }
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
-    const {
-      AIR_QUALITY, NEXT_HOUR, METADATA, REPORTED_TIME, PROVIDER_NAME, SOURCE, AQI_INDEX, AQI_SCALE,
-    } = getKeywords(appleApiVersion);
-    // eslint-disable-next-line functional/no-expression-statement
-    $.log(`🚧 ${$.name}：模块已启用`, '');
-    // eslint-disable-next-line functional/no-expression-statement
-    $.log(`🚧 ${$.name}：Latitude: ${parameters?.lat}`, '');
-    // eslint-disable-next-line functional/no-expression-statement
-    $.log(`🚧 ${$.name}：Longitude: ${parameters?.lng}`, '');
-    // eslint-disable-next-line no-undef,functional/no-expression-statement
-    toResponseBody(envs, $request, $response).then((responseBody) => {
-      const time = responseBody?.[AIR_QUALITY]?.[METADATA]?.[REPORTED_TIME];
-      const nowHourTimestamp = (new Date()).setMinutes(0, 0, 0);
-      const timestamp = appleTimeToTimestamp(appleApiVersion, time, nowHourTimestamp);
-
-      const latitude = parseFloat(parameters?.lat);
-      const longitude = parseFloat(parameters?.lng);
-      const location = { latitude, longitude };
-
-      const providerName = responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME];
-      const scale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
-
-      const qweatherNames = ['和风天气', 'QWeather'];
-      // eslint-disable-next-line functional/no-conditional-statement
-      if (isLocation(location) && typeof scale === 'string' && scale.length > 0) {
-        // eslint-disable-next-line functional/no-expression-statement
-        $.setjson(cacheAqi(
-          caches,
-          timestamp,
-          location,
-          qweatherNames.includes(providerName) ? responseBody?.[AIR_QUALITY]?.[SOURCE] : null,
-          scale.slice(0, scale.indexOf('.')),
-          responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
-        ), '@iRingo.Weather.Caches');
-      }
-      // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：AQI scale = ${JSON.stringify(responseBody?.[AIR_QUALITY]?.[AQI_SCALE])}`, '');
-      // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：nextHour condition = ${JSON.stringify(responseBody?.[NEXT_HOUR]?.condition)}`, '');
-      // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：nextHour summary = ${JSON.stringify(responseBody?.[NEXT_HOUR]?.summary)}`, '');
-      // eslint-disable-next-line functional/no-expression-statement,no-undef
-      setResponse({ ...$response, ...(typeof responseBody === 'object' && { body: JSON.stringify(responseBody) }) });
-    });
+    // eslint-disable-next-line functional/no-expression-statement,no-undef
+    $.log(`❗️ ${$.name}：无法获取URL信息，$response.url = ${$response.url}`, '');
+    // eslint-disable-next-line functional/no-expression-statement,no-undef
+    setResponse($response);
   }
 // eslint-disable-next-line functional/no-conditional-statement
 } else {
