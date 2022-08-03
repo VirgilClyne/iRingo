@@ -2183,22 +2183,26 @@ const waqiV1 = (
  * @return {(waqiFeed|waqiError)[]} - Data in feed format
  */
 const waqiNearestToFeed = (version, nearestData) => {
-  // TODO: type check of error message from WAQI
   /**
    * Get error message from WAQI
    * @author WordlessEcho <wordless@echo.moe>
    * @param {"mapq" | "mapq2"} mapqVersion - WAQI mapq version
-   * @param {waqiMapq|waqiMapq2} data - WAQI mapq data
-   * @return {string|*}
+   * @param {waqiError} data - WAQI mapq data
+   * @return {string} - Error message
    */
   const toErrorMessage = (mapqVersion, data) => {
     const forUnknown = `${waqiNearestToFeed.name}: Unknown error from WAQI.\n`
       + `Data: ${JSON.stringify(nearestData)}`;
+
+    if (typeof data?.data === 'string' && data.data.length > 0) {
+      return data.data;
+    }
+
     switch (mapqVersion) {
       case 'mapq2':
-        return data?.data ?? data?.reason ?? forUnknown;
+        return typeof data?.reason === 'string' && data.reason.length > 0 ? data.reason : forUnknown;
       case 'mapq':
-        return data?.data ?? data?.message ?? forUnknown;
+        return typeof data?.message === 'string' && data.message.length > 0 ? data.message : forUnknown;
       default:
         return forUnknown;
     }
