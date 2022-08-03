@@ -3547,16 +3547,10 @@ const toPerceived = (precipitationLevels, precipitation) => {
       isPositiveWithZeroRange(currentLevel?.RANGE) && isPositiveWithZeroRange(lastLevel?.RANGE)
       && isNonNanNumber(currentLevel?.VALUE) && isNonNanNumber(lastLevel?.VALUE)
     ) {
-      if (currentLevel.VALUE <= 0) {
-        return 0;
-      }
-      // TODO: remove this since we were filtered invalid values
-      if (currentLevel.VALUE > 3) {
-        return 3;
-      }
-
-      return lastLevel.VALUE + (((precipitation - lastLevel.RANGE.UPPER) * 1000)
-        / ((currentLevel.RANGE.UPPER - currentLevel.RANGE.LOWER) * 1000));
+      return currentLevel.VALUE > 0
+        ? lastLevel.VALUE + (((precipitation - lastLevel.RANGE.UPPER) * 1000)
+        / ((currentLevel.RANGE.UPPER - currentLevel.RANGE.LOWER) * 1000))
+        : 0;
     }
   }
 
