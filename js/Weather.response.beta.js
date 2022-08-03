@@ -5035,7 +5035,9 @@ const toResponseBody = (envs, request, response) => {
           if (promiseData.types.includes((type) => type === 'mapq')) {
             return {
               [METADATA]: toMetadata(apiVersion, waqiToAqiMetadata(promiseData?.returnedData)),
-              ...toAirQuality(apiVersion, waqiToAqi(waqiNearestToFeed('mapq', promiseData?.returnedData))),
+              ...toAirQuality(apiVersion, waqiToAqi(
+                waqiNearestToFeed('mapq', promiseData?.returnedData).find((data) => data.status === 'ok'),
+              )),
             };
           }
         }
