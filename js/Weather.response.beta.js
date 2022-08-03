@@ -2356,9 +2356,9 @@ const waqiNearestToFeed = (version, nearestData) => {
               name: 'The World Air Quality Project',
             }],
             city: {
-              geo: nearestData.geo,
-              ...(typeof nearestData?.name === 'string' && nearestData.name.length > 0
-                && { name: nearestData.name }),
+              geo: station.geo,
+              ...(typeof station?.name === 'string' && station.name.length > 0
+                && { name: station.name }),
               url: 'https://aqicn.org',
               location: '',
             },
