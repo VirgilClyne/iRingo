@@ -2179,7 +2179,7 @@ const waqiV1 = (
  * Convert data from {@link waqiNearest} to feed format
  * @author WordlessEcho <wordless@echo.moe>
  * @param {"mapq" | "mapq2"} version - Version of mapq
- * @param {waqiMapq|waqiMapq2} nearestData - Data from {@link waqiNearest}
+ * @param {waqiMapq|waqiMapq2|waqiError} nearestData - Data from {@link waqiNearest}
  * @return {(waqiFeed|waqiError)[]} - Data in feed format
  */
 const waqiNearestToFeed = (version, nearestData) => {
