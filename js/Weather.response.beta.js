@@ -4307,7 +4307,6 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
 
   const sharedAirQuality = {
     ...(typeof aqiObject?.isSignificant === 'boolean' && { isSignificant: aqiObject.isSignificant }),
-    // TODO: Check URL is valid or not?
     ...(typeof aqiObject?.url === 'string' && aqiObject.url.length > 0 && { learnMoreURL: aqiObject.url }),
     ...(
       applePollutantNames.includes(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }
