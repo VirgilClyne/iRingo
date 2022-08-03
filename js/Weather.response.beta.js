@@ -2268,6 +2268,8 @@ const waqiNearestToFeed = (version, nearestData) => {
           };
         }
 
+        const isoTime = serverTimeToIsoString(station);
+
         return {
           status: 'ok',
           data: {
@@ -2286,9 +2288,11 @@ const waqiNearestToFeed = (version, nearestData) => {
             ...(typeof station?.pol === 'string' && station.pol.length > 0
               && { dominentpol: station.pol }),
             iaqi: {},
-            // TODO
             time: {
-              iso: serverTimeToIsoString(station),
+              s: isoTime.slice(0, -6),
+              tz: isoTime.slice(-6),
+              v: Date.parse(isoTime) / 1000,
+              iso: isoTime,
             },
             forecast: {},
             debug: {},
@@ -2327,6 +2331,8 @@ const waqiNearestToFeed = (version, nearestData) => {
           };
         }
 
+        const isoTime = serverTimeToIsoString(station);
+
         return {
           status: 'ok',
           data: {
@@ -2345,7 +2351,10 @@ const waqiNearestToFeed = (version, nearestData) => {
             },
             iaqi: {},
             time: {
-              iso: serverTimeToIsoString(nearestData),
+              s: isoTime.slice(0, -6),
+              tz: isoTime.slice(-6),
+              v: Date.parse(isoTime) / 1000,
+              iso: isoTime,
             },
             forecast: {},
             debug: {},
