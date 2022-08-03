@@ -3294,7 +3294,7 @@ const colorfulCloudsToAqiComparison = (realtimeAndHistoryData, forceChn) => {
 /**
  * Convert data from ColorfulClouds to air quality metadata
  * @author WordlessEcho <wordless@echo.moe>
- * @param {string} providerLogo - URL to the provider logo
+ * @param {providerLogo} providerLogo - URL to the provider logo
  * @param {string} providerName - Name of the provider
  * @param {string} url - URL to the provider
  * @param {colorfulCloudsV2} data - Data from ColorfulClouds
