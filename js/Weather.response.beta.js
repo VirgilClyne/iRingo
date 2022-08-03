@@ -2106,13 +2106,12 @@ const waqiV2 = (
   });
 });
 
-// TODO: Let caller custom HTTP body
 /**
  * Get data from WAQI old API
  * @author WordlessEcho <wordless@echo.moe>
  * @param {"now" | "aqi"} type - Type of API
  * @param {number} stationId - ID of station
- * @param {?string} token - Token for WAQI API
+ * @param {?string} body - HTTP body
  * @param {Object} [headers] - HTTP headers
  * @return {Promise<waqiNowFeed|waqiAqiFeed|waqiError>} - Data from WAQI
  */
@@ -2120,7 +2119,7 @@ const waqiV2 = (
 const waqiV1 = (
   type,
   stationId,
-  token,
+  body,
   headers = { 'Content-Type': 'application/json' },
 ) => new Promise((resolve) => {
   if (!isNonNanNumber(stationId)) {
@@ -2133,20 +2132,14 @@ const waqiV1 = (
     return;
   }
 
-  const getBody = (id, tokenForWaqi) => [
-    ...(typeof tokenForWaqi === 'string' && tokenForWaqi.length > 0 ? [`token=${tokenForWaqi}`] : []),
-    ...(isNonNanNumber(id) ? [`id=${id}`] : []),
-  ].join('&');
-
   const baseUrl = 'https://api.waqi.info';
-  const body = getBody(stationId, token);
 
   // eslint-disable-next-line functional/no-expression-statement
   $.get(
     {
       headers,
       url: `${baseUrl}/api/feed/@${stationId}/${type}.json`,
-      ...(body.length > 0 && { body }),
+      ...(typeof body === 'string' && body.length > 0 && { body }),
     },
     (error, response, data) => {
       if (error) {
