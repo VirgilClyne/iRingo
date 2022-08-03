@@ -4416,7 +4416,7 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
     const precipitationIntensityPerceived = isNonNanNumber(minute?.precipitationIntensityPerceived)
     && minute.precipitationIntensityPerceived >= 0 ? minute.precipitationIntensityPerceived : 0;
     const fallbackChance = precipitationIntensityPerceived <= 0 ? 0 : 100;
-    const chance = isNonNanNumber(minute?.chance) && minute.chance >= 0
+    const chance = isNonNanNumber(minute?.chance) && minute.chance >= 0 && minute.chance <= 100
       ? minute.chance : fallbackChance;
 
     const validShortDescription = typeof minute?.shortDescription === 'string'
@@ -4649,12 +4649,8 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
       const condition = weatherStatusToType(minutes[lastBound].weatherStatus);
 
       const isNotClear = condition !== 'clear';
-      const maxChance = Math.max(...minutesInSummary.filter(({ chance }) => (
-        typeof chance === 'number' && !Number.isNaN(chance) && chance >= 0
-      )).map((minute) => minute.chance));
-      const precipitations = minutesInSummary.filter(({ precipitation }) => (
-        typeof precipitation === 'number' && !Number.isNaN(precipitation) && precipitation >= 0
-      )).map((minute) => minute.precipitation);
+      const maxChance = Math.max(...minutesInSummary.map(({ chance }) => chance));
+      const precipitations = minutesInSummary.map(({ precipitation }) => precipitation);
 
       switch (apiVersions) {
         case 1:
@@ -4689,10 +4685,8 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
               endTime: toAppleTime(apiVersions, timestamp + bound * 60 * 1000),
             }),
             condition,
-            ...(isNotClear && {
-              precipitationChance: maxChance,
-              precipitationIntensity: Math.max(...precipitations),
-            }),
+            precipitationChance: maxChance / 100,
+            precipitationIntensity: Math.max(...precipitations),
           };
         default:
           return {};
@@ -4715,30 +4709,29 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
 
     return minutes.map(
       ({ precipitation, chance, precipitationIntensityPerceived }, index) => {
-        const v1AndV2Minute = {
-          precipIntensity: isNonNanNumber(precipitation) && precipitation > 0 ? precipitation : 0,
-          precipChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
+        const sharedMinuteV2Below = {
+          precipIntensity: precipitation,
+          precipChance: chance,
         };
 
         switch (apiVersions) {
           case 1:
             return {
               startAt: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-              ...v1AndV2Minute,
+              ...sharedMinuteV2Below,
               perceivedIntensity: precipitationIntensityPerceived,
             };
           case 2:
             return {
               startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-              ...v1AndV2Minute,
+              ...sharedMinuteV2Below,
               precipIntensityPerceived: precipitationIntensityPerceived,
             };
           case 3:
             return {
               startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-              precipitationChance: isNonNanNumber(chance) && chance > 0 ? chance : 0,
-              precipitationIntensity: isNonNanNumber(precipitation) && precipitation > 0
-                ? precipitation : 0,
+              precipitationChance: chance / 100,
+              precipitationIntensity: precipitation,
               precipitationIntensityPerceived,
             };
           default:
