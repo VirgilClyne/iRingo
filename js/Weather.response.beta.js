@@ -4412,8 +4412,6 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
     return weatherStatus;
   };
 
-  // TODO: fallback parameters to empty object
-  /** @type {minute[]} */
   const minutesData = nextHourObject.minutes.map((minute) => {
     const precipitationIntensityPerceived = isNonNanNumber(minute?.precipitationIntensityPerceived)
     && minute.precipitationIntensityPerceived >= 0 ? minute.precipitationIntensityPerceived : 0;
@@ -4434,7 +4432,7 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
       chance: Math.round(chance),
       shortDescription: validShortDescription,
       longDescription: validLongDescription,
-      ...(typeof minute?.parameters === 'object' && { parameters: minute.parameters }),
+      ...({ parameters: typeof minute?.parameters === 'object' ? minute.parameters : {} }),
     };
   });
 
