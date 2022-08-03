@@ -2557,7 +2557,6 @@ const weatherOl = (
   });
 });
 
-// TODO: returned type of ColorfulClouds
 /**
  * Get data from ColorfulClouds. [简介 | 彩云天气 API]{@link https://docs.caiyunapp.com/docs/intro/}
  * @author WordlessEcho <wordless@echo.moe>
