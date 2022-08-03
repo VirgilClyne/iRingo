@@ -157,7 +157,7 @@ const database = {
  * @property {coordinate} [location] - Coordinate of location of data
  * @property {number} [expireTimestamp] - UNIX timestamp of expire time
  * @property {providerLogo} [providerLogo] - URL to the provider logo
- * @property {providerLogo} [providerName] - Name of the provider
+ * @property {string} [providerName] - Name of the provider
  * @property {number} [readTimestamp] - UNIX timestamp of read time
  * @property {number} [reportedTimestamp] - UNIX timestamp of reported time
  * @property {dataSource} [dataSource] - Type of data source
