@@ -72,7 +72,7 @@ const database = {
 
 /** @typedef {1 | 2 | 3} supportedAppleApi */
 /** @typedef {{latitude: number, longitude: number}} coordinate */
-/** @typedef {forV2: string, forV1: string} providerLogo */
+/** @typedef {{forV2: string, forV1: string}} providerLogo */
 
 /**
  * Scale names in 2207 version
@@ -3265,7 +3265,7 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
 const colorfulCloudsToAqiComparison = (realtimeAndHistoryData, forceChn) => {
   const airQuality = getCcAirQuality(realtimeAndHistoryData);
 
-  const serverTime = parseInt(realtimeAndHistoryData?.server_time, 10);
+  const serverTime = realtimeAndHistoryData?.server_time;
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
     ? serverTime * 1000 : (+new Date());
   const reportedTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
@@ -3304,7 +3304,7 @@ const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
   const language = data?.lang;
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
   // the unit of server_time is second
-  const serverTime = parseInt(data?.server_time, 10);
+  const serverTime = data?.server_time;
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
     ? serverTime * 1000 : (+(new Date()));
 
@@ -3655,7 +3655,7 @@ const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
   const location = { latitude: data?.location?.[0], longitude: data?.location?.[1] };
   const nowTimestamp = (+(new Date()));
   // the unit of server_time is second
-  const serverTime = parseInt(data?.server_time, 10);
+  const serverTime = data?.server_time;
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
     ? serverTime * 1000 : (+(new Date()));
   const expireTimestamp = serverTimestamp + 1000 * 60 * 15;
@@ -3732,7 +3732,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const versionCode = typeof apiVersion === 'string' && parseFloat(apiVersion.slice(1));
     const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
-    const serverTime = parseInt(dataWithHourlySkycons?.server_time, 10);
+    const serverTime = dataWithHourlySkycons?.server_time;
     const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
       ? serverTime * 1000 : (+(new Date()));
     const hourTimestamp = (new Date(serverTimestamp)).setMinutes(0, 0, 0);
@@ -4044,8 +4044,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     return {};
   }
 
-  // the unit of server_time is second
-  const serverTime = parseInt(dataWithMinutely?.server_time, 10);
+  // `server_time` is in seconds
+  const serverTime = dataWithMinutely?.server_time;
   const serverTimestamp = isNonNanNumber(serverTime) && serverTime > 0
     ? serverTime * 1000 : (+(new Date()));
   const startTimestamp = (new Date()).setSeconds(0, 0) + 1000 * 60;
