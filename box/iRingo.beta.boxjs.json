@@ -572,6 +572,38 @@
 					"desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
 				},
 				{
+					"id": "@iRingo.Weather.Settings.Log.Level",
+					"name": "日志级别",
+					"val": "info",
+					"type": "selects",
+					"desc": "越靠近debug，输出的日志越为详细",
+					"items": [
+						{
+							"key": "debug",
+							"label": "调试"
+						},
+						{
+							"key": "info",
+							"label": "信息"
+						},
+						{
+							"key": "warn",
+							"label": "警告"
+						},
+						{
+							"key": "error",
+							"label": "错误"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Weather.Settings.Log.Location",
+					"name": "显示坐标",
+					"val": false,
+					"type": "boolean",
+					"desc": "开启后会在特定日志中显示坐标，发送日志前请注意保护隐私"
+				},
+				{
 					"id": "@iRingo.Weather.Settings.NextHour.Debug.Switch",
 					"name": "[未来一小时降水强度]Debug开关",
 					"val": false,

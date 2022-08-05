@@ -53,6 +53,10 @@ const database = {
         },
         WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: '', Mode: 'Location' },
       },
+      Log: {
+        Level: 'info',
+        Location: false,
+      },
     },
     Configs: {
       Pollutants: {
@@ -602,6 +606,13 @@ const database = {
  * @property {waqiSettingsV1} waqi - API settings of WAQI
  */
 /**
+ * Version 1 of log settings
+ * @typedef {Object} logSettingsV1
+ *
+ * @property {"debug" | "info" | "warn" | "error"} level - Log level
+ * @property {boolean} location - Print location info to logs
+ */
+/**
  * Version 1 of settings
  * @typedef {Object} settingsV1
  *
@@ -609,6 +620,7 @@ const database = {
  * @property {nextHourSettingsV1} nextHour - Settings of next hour
  * @property {aqiSettingsV1} aqi - Settings of AQI
  * @property {apisSettingsV1} apis - Settings of APIs
+ * @property {logSettingsV1} log - Settings of log
  */
 
 /**
@@ -826,7 +838,7 @@ const database = {
  * Pollutants and AQI from ColorfulClouds handled by {@link getCcAirQuality}
  * @typedef {Object} ccAirQuality
  *
- * @property {number | -1} "PM2.5" - Amount in micrograms/m3
+ * @property {number | -1} PM2.5 - Amount in micrograms/m3
  * @property {number | -1} PM10 - Amount in micrograms/m3
  * @property {number | -1} OZONE - Amount in micrograms/m3
  * @property {number | -1} NO2 - Amount in micrograms/m3
@@ -1698,6 +1710,11 @@ const toSettings = (envs) => {
         mode: envs?.Settings?.APIs?.WAQI?.Mode,
       },
     },
+    log: {
+      level: typeof envs?.Settings?.Log?.Level === 'string' && envs.Settings.Log.Level.length > 0
+        ? envs.Settings.Log.Level : settings.Log.Level,
+      Location: parseJsonWithDefault(envs?.Settings?.Log?.Location, settings.Log.Location),
+    },
   };
 };
 
@@ -1712,6 +1729,61 @@ const toCaches = (envs) => ({
     ...envs?.Cache?.aqis,
   },
 });
+
+const envs = getENV('iRingo', 'Weather', database);
+const settings = toSettings(envs);
+
+/**
+ * Log helper
+ * @param {"debug" | "info" | "warn" | "error"} level - Log level
+ * @param {string} message - Log message
+ */
+const logger = (level, message) => {
+  /**
+   * Get emoji by log level
+   * @param {"debug" | "info" | "warn" | "error"} l - Log level
+   * @return {string} - Emoji for log level
+   */
+  const toEmoji = (l) => {
+    switch (l) {
+      case 'error':
+        return '❗️';
+      case 'warn':
+        return '⚠️';
+      case 'info':
+        return 'ℹ️';
+      case 'debug':
+      default:
+        return '🚧';
+    }
+  };
+
+  /**
+   * Get required tags
+   * @param {"debug" | "info" | "warn" | "error"} l - Log level
+   * @return {string[]} - Required tags
+   */
+  const matchedTags = (l) => {
+    const tags = ['debug', 'info', 'warn', 'error'];
+    switch (l) {
+      case 'debug':
+        return tags;
+      case 'warn':
+        return tags.slice(2);
+      case 'error':
+        return tags.slice(3);
+      case 'info':
+      default:
+        return tags.slice(1);
+    }
+  };
+
+  // eslint-disable-next-line functional/no-conditional-statement
+  if (matchedTags(settings.log.level).includes(level)) {
+    // eslint-disable-next-line functional/no-expression-statement
+    $.log(`${toEmoji(level)} ${message}`, '');
+  }
+};
 
 /**
  * Get AQI from cache
@@ -1766,6 +1838,7 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
         : undefined;
 
       if (isNonNanNumber(cache?.aqi) && cache.aqi >= 0) {
+        logger('info', `${getCachedAqi.name}：找到了已缓存的AQI信息：AQI值为${cache.aqi}`);
         return cache;
       }
     }
@@ -1828,6 +1901,15 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
       : undefined;
 
     if (!isNonNanNumber(existedCache?.aqi)) {
+      logger(
+        'debug',
+        `${cacheAqi.name}：已将当前AQI信息缓存，AQI信息：\n`
+        + `时间：${new Date(timestamp)}\n`
+        + `${settings.log.location ? `经度：${location.longitude}，纬度：${location.latitude}\n` : ''}`
+        + `${typeof stationName === 'string' && stationName.length > 0 ? `监测站：${stationName}\n` : ''}`
+        + `AQI标准：${scaleName}\nAQI：${aqi}`,
+      );
+
       return {
         ...(typeof caches === 'object' && caches),
         aqis: {
@@ -3053,12 +3135,18 @@ const fixQweatherCo = (unit, amount) => {
     );
 
     if (mgAmount < 0.1) {
-      return pollutantUnitConverterUs(
+      const fixedAmount = pollutantUnitConverterUs(
         HJ_633.CONCENTRATIONS.CO.UNIT,
         'microgramsPerM3',
         amount,
         'CO',
       );
+
+      logger(
+        'debug',
+        `${fixQweatherCo.name}：已修复一氧化碳含量，原始值：${amount}ug/m3，修复值：${fixedAmount}ug/m3`,
+      );
+      return fixedAmount;
     }
   }
 
@@ -3185,8 +3273,12 @@ const getCcAirQuality = (dataWithRealtime) => {
       }));
 
       // Detect the support of air quality
-      return Object.values(result).filter((value) => value <= 0).length > 1
-        ? { aqi: { usa: -1, chn: -1 } } : result;
+      if (Object.values(result).filter((value) => value <= 0).length <= 1) {
+        logger('debug', `${getCcAirQuality.name}：美标：${result.aqi.usa}，国标：${result.aqi.chn}`);
+        return result;
+      }
+
+      logger('warn', `${getCcAirQuality.name}：缺少此地的空气质量数据`);
     }
   }
 
@@ -4045,6 +4137,11 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       || (typeof dataWithMinutely.result.minutely?.description !== 'string'
         && typeof dataWithMinutely.result?.forecast_keypoint !== 'string')
   ) {
+    // eslint-disable-next-line functional/no-conditional-statement
+    if (dataWithMinutely?.result?.minutely?.datasource !== 'radar') {
+      logger('warn', `${colorfulCloudsToNextHour.name}：缺少此地的短临降水数据`);
+    }
+
     return {};
   }
 
@@ -4798,7 +4895,19 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
     nextHourObject.startTimestamp,
   );
 
-  return Object.keys(nextHour).length > 0 ? { name: 'NextHourForecast', ...nextHour } : {};
+  if (Object.keys(nextHour).length > 0) {
+    // eslint-disable-next-line functional/no-conditional-statement
+    if (nextHour.summary.some((s) => s.condition !== 'clear')) {
+      logger(
+        'info',
+        `${toNextHour.name}：API报告此地未来一小时无降水，Apple天气上将不会显示下小时降水强度信息`,
+      );
+    }
+
+    return { name: 'NextHourForecast', ...nextHour };
+  }
+
+  return {};
 };
 
 /**
@@ -4815,6 +4924,8 @@ const getKeywords = (apiVersion) => {
         AIR_QUALITY: 'air_quality',
         REQUIRE_NEXT_HOUR: 'next_hour_forecast',
         NEXT_HOUR: 'next_hour',
+        NEXT_HOUR_SUMMARY: 'summary',
+        NEXT_HOUR_SUMMARY_CONDITION: 'condition',
         PROVIDER_NAME: 'provider_name',
         REPORTED_TIME: 'reported_time',
         AQI_INDEX: 'airQualityIndex',
@@ -4833,6 +4944,8 @@ const getKeywords = (apiVersion) => {
         AIR_QUALITY: 'airQuality',
         REQUIRE_NEXT_HOUR: 'forecastNextHour',
         NEXT_HOUR: 'forecastNextHour',
+        NEXT_HOUR_SUMMARY: 'summary',
+        NEXT_HOUR_SUMMARY_CONDITION: 'condition',
         PROVIDER_NAME: 'providerName',
         REPORTED_TIME: 'reportedTime',
         AQI_INDEX: 'index',
@@ -4879,8 +4992,6 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
  */
 const setResponse = (response) => $.done(!$.isQuanX() ? response : { body: response?.body });
 
-const envs = getENV('iRingo', 'Weather', database);
-const settings = toSettings(envs);
 const caches = toCaches(envs);
 
 // eslint-disable-next-line functional/no-conditional-statement,no-undef
@@ -4898,20 +5009,21 @@ if (settings.switch && typeof $request?.url === 'string') {
 
     // eslint-disable-next-line functional/no-conditional-statement
     if (!supportedAppleApis.includes(appleApiVersion)) {
-      // eslint-disable-next-line functional/no-expression-statement
-      $.log(`❗️ ${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`, '');
+      logger('error', `${$.name}：不支持${appleApiVersionString}版本的Apple API，您可能需要更新模块`);
       // eslint-disable-next-line functional/no-expression-statement,no-undef
       setResponse($response);
       // eslint-disable-next-line functional/no-conditional-statement,no-undef
     } else if ($response?.statusCode !== 200 && $response?.status !== 200) {
-      // eslint-disable-next-line functional/no-expression-statement,no-undef
-      $.log(`⚠️ ${$.name}：服务器返回HTTP状态码 statusCode = ${$response?.statusCode}, status = ${$response?.status}`, '');
+      logger(
+        'warn',
+        // eslint-disable-next-line no-undef
+        `${$.name}：服务器返回非200状态码，statusCode = ${$response?.statusCode}, status = ${$response?.status}`,
+      );
       // eslint-disable-next-line functional/no-expression-statement,no-undef
       setResponse($response);
       // eslint-disable-next-line functional/no-conditional-statement
     } else {
-      // eslint-disable-next-line functional/no-expression-statement
-      $.log(`🚧 ${$.name}：模块已启用`, '');
+      logger('info', `${$.name}：模块已启用`);
 
       // eslint-disable-next-line no-undef
       const dataFromApple = parseJsonWithDefault($response?.body, null);
@@ -4926,8 +5038,7 @@ if (settings.switch && typeof $request?.url === 'string') {
 
           // eslint-disable-next-line functional/no-conditional-statement
           if (typeof languageWithRegion !== 'string' || languageWithRegion.length <= 0) {
-            // eslint-disable-next-line functional/no-expression-statement,no-undef
-            $.log(`⚠️ ${$.name}：无法获取语言信息，语言：${parameters?.language}`, '');
+            logger('warn', `${$.name}：无法获取语言信息，语言：${parameters?.language}`);
           }
 
           const {
@@ -5148,6 +5259,10 @@ if (settings.switch && typeof $request?.url === 'string') {
           };
 
           const location = { latitude, longitude };
+          // eslint-disable-next-line functional/no-conditional-statement
+          if (settings.log.location) {
+            logger('debug', `${$.name}：经度：${longitude}，纬度：${latitude}`);
+          }
           const requireData = getRequireData(appleApiVersion, url);
 
           const qweatherNames = ['和风天气', 'QWeather'];
@@ -5204,8 +5319,6 @@ if (settings.switch && typeof $request?.url === 'string') {
             qweatherNames.includes(aqiProvider) ? airQuality?.source : null,
             getTargetScale(settings, aqiScale),
           ) : { aqi: -1 };
-          // eslint-disable-next-line functional/no-expression-statement
-          $.log(`🚧 ${$.name}：寻找已缓存的AQI信息：${JSON.stringify(cachedAqi)}`, '');
 
           const nextHourProvider = nextHour?.[METADATA]?.[PROVIDER_NAME];
           const needNextHour = requireData.includes(REQUIRE_NEXT_HOUR)
@@ -5217,8 +5330,7 @@ if (settings.switch && typeof $request?.url === 'string') {
             needCompareAqi && cachedAqi.aqi < 0 ? settings.aqi.comparison.source : null,
             needNextHour ? settings.nextHour.source : null,
           );
-          // eslint-disable-next-line functional/no-expression-statement
-          $.log(`🚧 ${$.name}：任务列表：${JSON.stringify(missionList)}`, '');
+          logger('info', `${$.name}：任务列表：${JSON.stringify(missionList)}`);
 
           const promises = Array.isArray(missionList) ? missionList
             .filter((missionObject) => (
@@ -5332,6 +5444,14 @@ if (settings.switch && typeof $request?.url === 'string') {
               dataForAqi,
               languageWithRegion,
             );
+            if (
+              dataForAqi && Object.keys(modifiedAirQuality)
+                .filter((key) => key !== METADATA && key !== AQI_COMPARISON).length <= 0
+            // eslint-disable-next-line functional/no-conditional-statement
+            ) {
+              logger('error', `${$.name}：无法处理${dataForAqi.api}的空气质量数据`);
+              logger('debug', `API返回数据：${JSON.stringify(dataForAqi.returnedData)}`);
+            }
             const mergedAirQuality = {
               ...airQuality,
               ...modifiedAirQuality,
@@ -5346,6 +5466,12 @@ if (settings.switch && typeof $request?.url === 'string') {
                 && settings.aqi.targets.includes(
                   mergedScale.slice(0, mergedScale.lastIndexOf('.')),
                 )
+                // Little trick for logging
+                && !logger(
+                  'info',
+                  `${$.name}：已转换AQI，原始标准：${mergedAirQuality[AQI_SCALE]}，`
+                  + `原始AQI：${mergedAirQuality[AQI_INDEX]}`,
+                )
                 && toAirQuality(appleApiVersion, appleToEpaAirQuality(
                   settingsToAqiStandard[settings.aqi.local.standard],
                   appleApiVersion === 1 ? convertV1Pollutants(pollutants) : pollutants,
@@ -5358,11 +5484,26 @@ if (settings.switch && typeof $request?.url === 'string') {
                 toAqiLevel(aqiLevels, cachedAqi.aqi),
               )
               : getAqiComparison(dataForAqiComparison);
+            if (
+              dataForAqiComparison && modifiedCompareAqi === 'unknown'
+            // eslint-disable-next-line functional/no-conditional-statement
+            ) {
+              logger('error', `${$.name}：无法处理${dataForAqiComparison.api}的对比昨日空气质量数据`);
+              logger('debug', `API返回数据：${JSON.stringify(dataForAqiComparison.returnedData)}`);
+            }
             const modifiedNextHour = getNextHour(
               appleApiVersion,
               dataForNextHour,
               languageWithRegion,
             );
+            if (
+              dataForNextHour && Object.keys(modifiedNextHour)
+                .filter((key) => key !== METADATA).length <= 0
+            // eslint-disable-next-line functional/no-conditional-statement
+            ) {
+              logger('error', `${$.name}：无法处理${dataForNextHour.api}的下小时降水强度数据`);
+              logger('debug', `API返回数据：${JSON.stringify(dataForAqiComparison.returnedData)}`);
+            }
 
             return {
               ...dataFromApple,
@@ -5399,61 +5540,77 @@ if (settings.switch && typeof $request?.url === 'string') {
                 airQualityScale.slice(0, airQualityScale.indexOf('.')),
                 responseBody?.[AIR_QUALITY]?.[AQI_INDEX],
               ), '@iRingo.Weather.Caches');
-
-              // eslint-disable-next-line functional/no-expression-statement
-              $.log(`🚧 ${$.name}：已缓存当前的AQI`, '');
             }
 
             const nextHourProviderName = responseBody?.[NEXT_HOUR]?.[METADATA]?.[PROVIDER_NAME];
 
-            // eslint-disable-next-line functional/no-expression-statement
-            setResponse({
-              // eslint-disable-next-line no-undef
-              ...$response,
-              ...(typeof responseBody === 'object' && {
-                body: JSON.stringify({
-                  ...responseBody,
-                  ...(typeof airQualityProvider === 'string' && airQualityProvider.length > 0 && {
-                    [AIR_QUALITY]: {
-                      ...responseBody[AIR_QUALITY],
-                      [METADATA]: {
-                        ...responseBody[AIR_QUALITY][METADATA],
-                        ...(
-                          Object.keys(responseBody[AIR_QUALITY])
-                            .filter((key) => key !== METADATA).length <= 1
-                          && { [TEMPORARILY_UNAVAILABLE]: true }
-                        ),
-                      },
-                    },
-                  }),
-                  ...(typeof nextHourProviderName === 'string' && nextHourProviderName.length > 0 && {
-                    [NEXT_HOUR]: {
-                      ...responseBody[NEXT_HOUR],
-                      [METADATA]: {
-                        ...responseBody[NEXT_HOUR][METADATA],
-                        ...(
-                          Object.keys(responseBody[NEXT_HOUR])
-                            .filter((key) => key !== METADATA && key !== AQI_COMPARISON).length <= 0
-                          && { [TEMPORARILY_UNAVAILABLE]: true }
-                        ),
-                      },
-                    },
-                  }),
-                }),
+            return {
+              ...responseBody,
+              ...(typeof airQualityProvider === 'string' && airQualityProvider.length > 0 && {
+                [AIR_QUALITY]: {
+                  ...responseBody[AIR_QUALITY],
+                  [METADATA]: {
+                    ...responseBody[AIR_QUALITY][METADATA],
+                    ...(
+                      Object.keys(responseBody[AIR_QUALITY])
+                        .filter((key) => key !== METADATA).length <= 1
+                      && { [TEMPORARILY_UNAVAILABLE]: true }
+                    ),
+                  },
+                },
               }),
-            });
+              ...(typeof nextHourProviderName === 'string' && nextHourProviderName.length > 0 && {
+                [NEXT_HOUR]: {
+                  ...responseBody[NEXT_HOUR],
+                  [METADATA]: {
+                    ...responseBody[NEXT_HOUR][METADATA],
+                    ...(
+                      Object.keys(responseBody[NEXT_HOUR])
+                        .filter((key) => key !== METADATA && key !== AQI_COMPARISON).length <= 0
+                      && { [TEMPORARILY_UNAVAILABLE]: true }
+                    ),
+                  },
+                },
+              }),
+            };
+          }).then((responseBody) => {
+            // eslint-disable-next-line functional/no-conditional-statement
+            if (responseBody?.[AIR_QUALITY]?.[METADATA]?.[TEMPORARILY_UNAVAILABLE]) {
+              logger(
+                'warn',
+                `${$.name}：检测到未能成功获取空气质量数据，`
+                + `数据源：${responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME]}`
+                + `${settings.log.location ? `，经度：${longitude}，纬度：${latitude}` : ''}`,
+              );
+            }
+            // eslint-disable-next-line functional/no-conditional-statement
+            if (responseBody?.[NEXT_HOUR]?.[METADATA]?.[TEMPORARILY_UNAVAILABLE]) {
+              logger(
+                'warn',
+                `${$.name}：检测到未能成功获取下小时降水数据`
+                + `数据源：${responseBody?.[NEXT_HOUR]?.[METADATA]?.[PROVIDER_NAME]}`
+                + `${settings.log.location ? `，经度：${longitude}，纬度：${latitude}` : ''}`,
+              );
+            }
+
+            // eslint-disable-next-line functional/no-expression-statement,no-undef
+            setResponse({ ...$response, body: JSON.stringify(responseBody) });
           });
         // eslint-disable-next-line functional/no-conditional-statement
         } else {
           // eslint-disable-next-line functional/no-expression-statement
-          $.log(`❗️ ${$.name}：缺失经纬度信息。经度：${parameters?.lng}，纬度：${parameters?.lat}`, '');
+          logger('error', `${$.name}：缺失经纬度信息。经度：${parameters?.lng}，纬度：${parameters?.lat}`);
+          // eslint-disable-next-line functional/no-expression-statement
+          logger('debug', `${$.name}：URL参数：${JSON.stringify(parameters)}`);
           // eslint-disable-next-line functional/no-expression-statement,no-undef
           setResponse($response);
         }
       // eslint-disable-next-line functional/no-conditional-statement
       } else {
         // eslint-disable-next-line functional/no-expression-statement,no-undef
-        $.log(`❗️ ${$.name}：数据解析失败，HTTP body = ${$response?.body}`, '');
+        logger('error', `${$.name}：数据解析失败，HTTP body = ${$response?.body}`);
+        // eslint-disable-next-line functional/no-expression-statement,no-undef
+        logger('debug', `${$.name}：响应信息：${JSON.stringify($response)}`);
         // eslint-disable-next-line functional/no-expression-statement,no-undef
         setResponse($response);
         // eslint-disable-next-line functional/no-conditional-statement
@@ -5462,12 +5619,16 @@ if (settings.switch && typeof $request?.url === 'string') {
   // eslint-disable-next-line functional/no-conditional-statement
   } else {
     // eslint-disable-next-line functional/no-expression-statement,no-undef
-    $.log(`❗️ ${$.name}：无法获取URL信息，$response.url = ${$response.url}`, '');
+    logger('error', `${$.name}：无法获取URL信息，$response.url = ${$request.url}`);
+    // eslint-disable-next-line functional/no-expression-statement,no-undef
+    logger('debug', `${$.name}：请求信息：${JSON.stringify($request)}`);
     // eslint-disable-next-line functional/no-expression-statement,no-undef
     setResponse($response);
   }
 // eslint-disable-next-line functional/no-conditional-statement
 } else {
+  // eslint-disable-next-line functional/no-expression-statement
+  logger('warn', `${$.name}：Box.js设置内或参数内已禁用模块`);
   // eslint-disable-next-line functional/no-expression-statement,no-undef
   setResponse($response);
 }
