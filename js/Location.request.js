@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.10.2-request");
+const $ = new Env("Apple Location Services v2.10.4-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -114,7 +114,8 @@ const DataBase = {
 				}
 				break;
 		}
-		$request.headers.Host = url.host;
+		if ($request?.headers?.host) $request.headers.host = url.host;
+		else if ($request?.headers?.Host) $request.headers.Host = url.host;
 		$request.url = URL.stringify(url);
 	}
 })()
