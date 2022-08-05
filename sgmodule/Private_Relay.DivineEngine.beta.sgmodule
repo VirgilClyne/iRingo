@@ -26,8 +26,8 @@ AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-h2.icloud.com)),🌑Proxy
 AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-t.apple-dns.net)),🌑Proxy
 
 [Script]
-iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Private_Relay.request.beta.js, argument=
-iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Private_Relay.response.beta.js, argument=
+iCloud ACSE Gateway = type=http-request, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Private_Relay.request.beta.js, argument=
+iCloud ACSE Gateway = type=http-response, pattern=^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Private_Relay.response.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% mask-api.icloud.com, mask-api.fe.apple-dns.net, mask.icloud.com, mask.apple-dns.net, -mask-h2.icloud.com, -mask-t.apple-dns.net, p*-acsegateway.icloud.com, p*-acsegateway.icloud.com.cn
