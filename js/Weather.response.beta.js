@@ -2576,6 +2576,37 @@ const waqiV1ToFeed = (v1Data) => {
 };
 
 /**
+ * Get history AQI data from WAQI
+ * @param {Object} obsData - `rxs.obs[].msg.obs` data from WAQI AQI feed
+ * @return {Object.<string, {timestamp: number, aqi: number}[]>}
+ */
+// eslint-disable-next-line no-unused-vars
+const waqiV1AqiToHistory = (obsData) => Object.fromEntries(
+  Object.entries(obsData).map(([pollutantName, value]) => {
+    const isoTime = value.s.replace(' ', 'T');
+    const timeShift = value.d * 1000;
+    const baseTime = (+(new Date(isoTime))) - timeShift;
+
+    const decimal = value.m;
+    const getValue = (array, index) => {
+      const relative = array[index];
+      const relativeValidValue = isNonNanNumber(relative) ? relative : relative[0];
+      if (index === 0) {
+        return relativeValidValue / decimal;
+      }
+
+      return array.slice(0, index + 1).map((v) => (isNonNanNumber(v) ? v : v[0]))
+        .reduce((previous, current) => previous + current) / decimal;
+    };
+
+    return [pollutantName, value.v.map((v, index, array) => ({
+      timestamp: (+(new Date(baseTime + (isNonNanNumber(v) ? timeShift : v[1] * 1000)))),
+      aqi: getValue(array, index),
+    }))];
+  }),
+);
+
+/**
  * Get data from "气象在线". This API could be considered as unconfigurable ColorfulClouds API.
  * [简介 | 彩云天气 API]{@link https://docs.caiyunapp.com/docs/v2.2/intro}
  * [通用预报接口/v2.2 - CaiyunWiki]{@link https://open.caiyunapp.com/%E9%80%9A%E7%94%A8%E9%A2%84%E6%8A%A5%E6%8E%A5%E5%8F%A3/v2.2}
