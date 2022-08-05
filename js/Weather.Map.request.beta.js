@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather Map v1.2.0-beta");
+const $ = new Env("Apple Weather Map v1.2.2-beta");
 const URL = new URLSearch();
 const DataBase = {
 	"Location":{
@@ -49,7 +49,8 @@ const DataBase = {
 				default:
 					break;
 			}
-			$request.headers.Host = url.host;
+			if ($request?.headers?.host) $request.headers.host = url.host;
+			else if ($request?.headers?.Host) $request.headers.Host = url.host;
 			$request.url = URL.stringify(url);
 		}
 	}
