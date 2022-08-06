@@ -1988,6 +1988,7 @@ const waqiNearest = (
   $.get(
     {
       headers,
+      // n is stations to return
       url: `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${location.latitude}/${location.longitude}`,
     },
     (error, _response, data) => {
@@ -2027,15 +2028,16 @@ const waqiNearest = (
 /**
  * Get token for public from WAQI
  * @author WordlessEcho <wordless@echo.moe>
+ * @param {number} [stationId] - ID of station
  * @param {Object} [headers] - HTTP headers
  * @return {Promise<{status: "ok" | "error", data: string}>} -
  * Token in `data` if ok. Error message in `data` if failed.
  */
 // eslint-disable-next-line no-unused-vars
-const waqiToken = (headers = { 'Content-Type': 'application/json' }) => new Promise((resolve) => {
+const waqiToken = (stationId, headers = { 'Content-Type': 'application/json' }) => new Promise((resolve) => {
   // eslint-disable-next-line functional/no-expression-statement
   $.get(
-    { headers, url: 'https://api.waqi.info/api/token/' },
+    { headers, url: `https://api.waqi.info/api/token/${isNonNanNumber(stationId) ? stationId : ''}` },
     (error, _response, data) => {
       if (error) {
         // eslint-disable-next-line functional/no-expression-statement
