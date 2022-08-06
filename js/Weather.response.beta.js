@@ -5589,8 +5589,8 @@ if (settings.switch) {
                   .filter((key) => key !== METADATA && key !== AQI_COMPARISON).length <= 0
               // eslint-disable-next-line functional/no-conditional-statement
               ) {
-                logger('error', `${$.name}：无法处理${dataForAqi.api}的空气质量数据`);
-                logger('debug', `API返回数据：${JSON.stringify(dataForAqi.returnedData)}`);
+                logger('error', `${$.name}：无法处理${dataForAqi?.api}的空气质量数据`);
+                logger('debug', `API返回数据：${JSON.stringify(dataForAqi)}`);
               }
               const mergedAirQuality = {
                 ...airQuality,
@@ -5629,8 +5629,8 @@ if (settings.switch) {
                 dataForAqiComparison && modifiedCompareAqi === 'unknown'
               // eslint-disable-next-line functional/no-conditional-statement
               ) {
-                logger('error', `${$.name}：无法处理${dataForAqiComparison.api}的对比昨日空气质量数据`);
-                logger('debug', `API返回数据：${JSON.stringify(dataForAqiComparison.returnedData)}`);
+                logger('error', `${$.name}：无法处理${dataForAqiComparison?.api}的对比昨日空气质量数据`);
+                logger('debug', `API返回数据：${JSON.stringify(dataForAqiComparison)}`);
               }
               const modifiedNextHour = getNextHour(
                 appleApiVersion,
@@ -5642,8 +5642,8 @@ if (settings.switch) {
                   .filter((key) => key !== METADATA).length <= 0
               // eslint-disable-next-line functional/no-conditional-statement
               ) {
-                logger('error', `${$.name}：无法处理${dataForNextHour.api}的下小时降水强度数据`);
-                logger('debug', `API返回数据：${JSON.stringify(dataForAqiComparison.returnedData)}`);
+                logger('error', `${$.name}：无法处理${dataForNextHour?.api}的下小时降水强度数据`);
+                logger('debug', `API返回数据：${JSON.stringify(dataForNextHour)}`);
               }
 
               const primaryPollutant = localConvertedAirQuality?.[PRIMARY_POLLUTANT];
