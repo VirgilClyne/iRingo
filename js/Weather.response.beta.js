@@ -5618,7 +5618,10 @@ if (settings.switch) {
                                 const stationId = parseInt(station?.x, 10);
 
                                 if (isNonNanNumber(stationId)) {
+                                  // TODO: Get cached token
+                                  // eslint-disable-next-line arrow-body-style
                                   return waqiToken(stationId).then((tokenData) => {
+                                    // TODO: Cache token
                                     return tokenData.status === 'ok'
                                       ? waqiV1('aqi', stationId, `token=${tokenData.data}&id=${stationId}`)
                                         .then((returnedData) => ({
