@@ -4383,7 +4383,7 @@ const toMetadata = (appleApiVersion, metadataObject) => {
   };
 
   const metadata = getMetadata(appleApiVersion, metadataObject);
-  return Object.keys(sharedMetadata).length > 0 || Object.keys(metadata)
+  return Object.keys(sharedMetadata).length > 0 || Object.keys(metadata).length > 0
     ? {
       ...(isNonNanNumber(appleApiVersion) && appleApiVersion > 0
         && { version: appleApiVersion > 2 ? appleApiVersion - 2 : appleApiVersion }),
