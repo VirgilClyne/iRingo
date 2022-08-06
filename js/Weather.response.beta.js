@@ -5741,7 +5741,7 @@ if (settings.switch) {
               if (responseBody?.[NEXT_HOUR]?.[METADATA]?.[TEMPORARILY_UNAVAILABLE]) {
                 logger(
                   'warn',
-                  `${$.name}：检测到未能成功获取下小时降水数据`
+                  `${$.name}：检测到未能成功获取下小时降水数据，`
                   + `数据源：${responseBody?.[NEXT_HOUR]?.[METADATA]?.[PROVIDER_NAME]}`
                   + `${settings.log.location ? `，经度：${longitude}，纬度：${latitude}` : ''}`,
                 );
