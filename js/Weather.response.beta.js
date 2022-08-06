@@ -2559,37 +2559,6 @@ const waqiV1ToFeed = (v1Data) => {
 };
 
 /**
- * Get history AQI data from WAQI
- * @param {Object} obsData - `rxs.obs[].msg.obs` data from WAQI AQI feed
- * @return {Object.<string, {timestamp: number, aqi: number}[]>}
- */
-// eslint-disable-next-line no-unused-vars
-const waqiV1AqiToHistory = (obsData) => Object.fromEntries(
-  Object.entries(obsData).map(([pollutantName, value]) => {
-    const isoTime = value.s.replace(' ', 'T');
-    const timeShift = value.d * 1000;
-    const baseTime = (+(new Date(isoTime))) - timeShift;
-
-    const decimal = value.m;
-    const getValue = (array, index) => {
-      const relative = array[index];
-      const relativeValidValue = isNonNanNumber(relative) ? relative : relative[0];
-      if (index === 0) {
-        return relativeValidValue / decimal;
-      }
-
-      return array.slice(0, index + 1).map((v) => (isNonNanNumber(v) ? v : v[0]))
-        .reduce((previous, current) => previous + current) / decimal;
-    };
-
-    return [pollutantName, value.v.map((v, index, array) => ({
-      timestamp: (+(new Date(baseTime + (isNonNanNumber(v) ? timeShift : v[1] * 1000)))),
-      aqi: getValue(array, index),
-    }))];
-  }),
-);
-
-/**
  * Get data from "气象在线". This API could be considered as unconfigurable ColorfulClouds API.
  * [简介 | 彩云天气 API]{@link https://docs.caiyunapp.com/docs/v2.2/intro}
  * [通用预报接口/v2.2 - CaiyunWiki]{@link https://open.caiyunapp.com/%E9%80%9A%E7%94%A8%E9%A2%84%E6%8A%A5%E6%8E%A5%E5%8F%A3/v2.2}
@@ -3400,6 +3369,90 @@ const colorfulCloudsToAqiComparison = (realtimeAndHistoryData, forceChn) => {
   }
 
   return 'unknown';
+};
+
+/**
+ * Get AQI comparison from WAQI AQI feed
+ * @param {waqiAqiFeedRxsObsMsg} aqiFeedMsg
+ * @return {aqiComparison}
+ */
+const waqiV1AqiToAqiComparison = (aqiFeedMsg) => {
+  const obsData = aqiFeedMsg?.obs;
+  if (!obsData) {
+    return 'unknown';
+  }
+
+  const pollutantNames = ['co', 'no2', 'o3', 'pm10', 'pm25', 'so2'];
+
+  const parsedHistoryData = Object.fromEntries(
+    Object.entries(obsData).map(([pollutantName, value]) => {
+      const getTimestamp = (array, index) => {
+        const isoTime = value.s.replace(' ', 'T');
+        const baseTime = (+(new Date(isoTime)));
+        if (index === 0) {
+          return baseTime;
+        }
+
+        return array.slice(0, index + 1).map((v) => (isNonNanNumber(v) ? baseTime : v[1] * 1000))
+          .reduce((previous, current) => previous + current);
+      };
+
+      const getAqi = (array, index) => {
+        const relative = array[index];
+        const relativeValidValue = isNonNanNumber(relative) ? relative : relative[0];
+        const decimal = value.m;
+        if (index === 0) {
+          return relativeValidValue / decimal;
+        }
+
+        return array.slice(0, index + 1).map((v) => (isNonNanNumber(v) ? v : v[0]))
+          .reduce((previous, current) => previous + current) / decimal;
+      };
+
+      return [pollutantName, value.v.map((v, index, array) => ({
+        timestamp: getTimestamp(array, index),
+        aqi: getAqi(array, index),
+      }))];
+    }),
+  );
+
+  const isoTime = aqiFeedMsg?.time?.iso;
+  const timestamp = isNonEmptyString(isoTime)
+    ? Date.parse(`${isoTime.slice(0, -6)}.000${isoTime.slice(-6)}`) : (+(new Date()));
+  const nowHourTimestamp = isNonNanNumber(timestamp) ? (new Date(timestamp)).setMinutes(0, 0, 0)
+    : (new Date()).setMinutes(0, 0, 0);
+  const yesterdayTimestamp = nowHourTimestamp - 1000 * 60 * 60 * 24;
+  const yesterdayAqis = pollutantNames.map((name) => {
+    const historyData = parsedHistoryData?.[name];
+    if (Array.isArray(historyData)) {
+      const aqi = historyData.find((history) => (
+        isNonNanNumber(history?.timestamp) && history.timestamp >= yesterdayTimestamp
+        && history.timestamp < yesterdayTimestamp + 1000 * 60 * 59
+      ))?.aqi;
+
+      if (isNonNanNumber(aqi)) {
+        return aqi;
+      }
+    }
+
+    logger('warn', `${waqiV1AqiToAqiComparison.name}：缺失${name}的历史数据`);
+    return -1;
+  });
+  const yesterdayAqi = Math.max(...yesterdayAqis);
+  const todayAqi = aqiFeedMsg?.aqi;
+
+  if (
+    !isNonNanNumber(yesterdayAqi) || yesterdayAqi < 0 || !isNonNanNumber(todayAqi) || todayAqi < 0
+  ) {
+    logger('warn', `${waqiV1AqiToAqiComparison.name}：缺少部分AQI，今日AQI = ${todayAqi}，昨日AQI = ${yesterdayAqi}`);
+
+    return 'unknown';
+  }
+
+  return compareAqi(
+    toAqiLevel(Object.values(WAQI_INSTANT_CAST.AQI_LEVELS), todayAqi),
+    toAqiLevel(Object.values(WAQI_INSTANT_CAST.AQI_LEVELS), yesterdayAqi),
+  );
 };
 
 /**
@@ -5230,6 +5283,17 @@ if (settings.switch) {
                         ...toAirQuality(apiVersion, waqiToAqi(dataInFeed)),
                       } : {};
                     }
+
+                    if (promiseData.types.includes('v1Aqi')) {
+                      const dataInFeed = waqiV1ToFeed(promiseData?.returnedData).find((data) => data.status === 'ok');
+                      return dataInFeed ? {
+                        [METADATA]: toMetadata(
+                          apiVersion,
+                          waqiToAqiMetadata(dataInFeed),
+                        ),
+                        ...toAirQuality(apiVersion, waqiToAqi(dataInFeed)),
+                      } : {};
+                    }
                   }
 
                   return {};
@@ -5249,6 +5313,16 @@ if (settings.switch) {
                     promiseData?.returnedData,
                     settings.apis.colorfulClouds.forceCnForComparison,
                   );
+                case 'api.waqi.info': {
+                  if (Array.isArray(promiseData?.returnedData?.rxs?.obs)) {
+                    const aqiFeedObs = promiseData?.returnedData.rxs.obs.find((station) => station?.status === 'ok');
+                    if (aqiFeedObs?.msg) {
+                      return waqiV1AqiToAqiComparison(aqiFeedObs.msg);
+                    }
+                  }
+
+                  return 'unknown';
+                }
                 default:
                   return 'unknown';
               }
@@ -5421,10 +5495,6 @@ if (settings.switch) {
                     }))];
                   }
                   case 'api.waqi.info': {
-                    if (!missions.includes('aqi')) {
-                      return [];
-                    }
-
                     const { token } = settings.apis.waqi;
                     if (isNonEmptyString(token) && missions.length === 1 && missions.includes('aqi')) {
                       return [
@@ -5438,15 +5508,55 @@ if (settings.switch) {
                       ];
                     }
 
-                    return [
-                      waqiNearest(location, 'mapq', settings.apis.waqi.httpHeaders)
-                        .then((returnedData) => ({
-                          missions: ['aqi'],
-                          api,
-                          types: ['mapq'],
-                          returnedData,
-                        })),
-                    ];
+                    if (missions.includes('aqi') || missions.includes('forCompareAqi')) {
+                      return [
+                        waqiNearest(location, 'mapq', settings.apis.waqi.httpHeaders)
+                          .then((nearestData) => {
+                            if (missions.includes('forCompareAqi')) {
+                              if (Array.isArray(nearestData?.d)) {
+                                const station = nearestData.d.find((s) => (
+                                  isNonNanNumber(parseInt(s?.x, 10))
+                                ));
+                                const stationId = parseInt(station?.x, 10);
+
+                                if (isNonNanNumber(stationId)) {
+                                  return waqiToken(stationId).then((tokenData) => {
+                                    return tokenData.status === 'ok'
+                                      ? waqiV1('aqi', stationId, `token=${tokenData.data}&id=${stationId}`)
+                                        .then((returnedData) => ({
+                                          missions: ['aqi', 'forCompareAqi'],
+                                          api,
+                                          types: ['v1Aqi'],
+                                          returnedData,
+                                        }))
+                                      : !logger('warn', `${$.name}：无法获取WAQI token`) && {
+                                        missions: ['aqi'],
+                                        api,
+                                        types: ['mapq'],
+                                        returnedData: nearestData,
+                                      };
+                                  });
+                                }
+
+                                logger('warn', `${$.name}：无法获取WAQI监测站ID`);
+                                logger('debug', `WAQI监测站列表：${JSON.stringify(nearestData.d)}`);
+                              // eslint-disable-next-line functional/no-conditional-statement
+                              } else {
+                                logger('warn', `${$.name}：无法获取WAQI监测站列表`);
+                              }
+                            }
+
+                            return {
+                              missions: ['aqi'],
+                              api,
+                              types: ['mapq'],
+                              returnedData: nearestData,
+                            };
+                          }),
+                      ];
+                    }
+
+                    return [];
                   }
                   default:
                     return [];

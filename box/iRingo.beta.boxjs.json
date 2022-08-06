@@ -489,6 +489,10 @@
 						{
 							"key": "api.caiyunapp.com",
 							"label": "彩云天气"
+						},
+						{
+							"key": "api.waqi.info",
+							"label": "The World Air Quality Project (非常慢)"
 						}
 					],
 					"desc": "对比昨日空气质量数据源"
@@ -553,23 +557,6 @@
 					"type": "text",
 					"placeholder": "123456789123456789abcdefghijklmnopqrstuv",
 					"desc": "WAQI API令牌"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.APIs.WAQI.Mode",
-					"name": "[WAQI]定位模式",
-					"val": "Location",
-					"type": "radios",
-					"items": [
-						{
-							"key": "Location",
-							"label": "直接通过坐标获取AQI"
-						},
-						{
-							"key": "Station",
-							"label": "先搜索附近的监测站再获取AQI"
-						}
-					],
-					"desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
 				},
 				{
 					"id": "@iRingo.Weather.Settings.Log.Level",
