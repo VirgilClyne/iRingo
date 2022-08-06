@@ -5471,7 +5471,7 @@ if (settings.switch) {
               const mergedAirQuality = {
                 ...airQuality,
                 ...modifiedAirQuality,
-                metadata: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
+                [METADATA]: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
               };
               const mergedScale = mergedAirQuality?.[AQI_SCALE];
               const pollutants = typeof mergedAirQuality?.[POLLUTANTS] === 'object'
@@ -5534,7 +5534,7 @@ if (settings.switch) {
                   [NEXT_HOUR]: {
                     ...nextHour,
                     ...modifiedNextHour,
-                    metadata: { ...nextHour?.[METADATA], ...modifiedNextHour?.[METADATA] },
+                    [METADATA]: { ...nextHour?.[METADATA], ...modifiedNextHour?.[METADATA] },
                   },
                 }),
               };
