@@ -4386,6 +4386,38 @@ const toMetadata = (appleApiVersion, metadataObject) => {
 };
 
 /**
+ * Output pollutant info
+ * @param {supportedAppleApi} appleApiVersion - Apple Weather API version
+ * @param {applePollutantNames} name - Name of the pollutant
+ * @param {number} amount - Amount of pollutant
+ * @param {pollutantUnitsV2} unit - Unit of pollutant in Apple Weather types
+ * @return {pollutantV1|pollutantV2 | {}} - Pollutant info for Apple Weather
+ */
+const toPollutant = (appleApiVersion, name, amount, unit) => {
+  if (!isNonEmptyString(name) || !['ppb', 'microgramsPerM3'].includes(unit) || !isNonNanNumber(amount)) {
+    return {};
+  }
+
+  switch (appleApiVersion) {
+    case 1:
+      return {
+        name,
+        amount: amount > 0 ? amount : -1,
+        unit: unit === 'microgramsPerM3' ? 'µg/m3' : unit,
+      };
+    case 2:
+    case 3:
+      return {
+        name,
+        amount: amount > 0 ? amount : -1,
+        unit,
+      };
+    default:
+      return {};
+  }
+};
+
+/**
  * Output Air Quality Data
  * @author VirgilClyne
  * @author WordlessEcho <wordless@echo.moe>
@@ -4416,6 +4448,11 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
     ...(
       applePollutantNames.includes(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }
     ),
+    ...(validPollutants.length > 0 && {
+      pollutants: Object.fromEntries(validPollutants.map(({ name, amount, unit }) => ([
+        name, toPollutant(appleApiVersion, name, amount, unit),
+      ]))),
+    }),
     // Source was removed in APIv3
     ...(isNonEmptyString(aqiObject?.sourceName) && { source: aqiObject.sourceName }),
   };
@@ -4437,12 +4474,6 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
           ...(isNonNanNumber(aqiObj?.aqi) && aqiObj.aqi >= 0
             && { airQualityIndex: aqiObj.aqi }),
           ...(isNonEmptyString(aqiObj?.scale) && { airQualityScale: aqiObj.scale }),
-          ...(validPollutants.length > 0 && {
-            pollutants: Object.fromEntries(validPollutants.map((pollutant) => ([
-              pollutant.name,
-              { ...pollutant, unit: pollutant.unit === 'microgramsPerM3' ? 'µg/m3' : pollutant.unit },
-            ]))),
-          }),
         };
       case 2:
       case 3:
@@ -4456,11 +4487,6 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { previousDayComparison: aqiObj.previousDayComparison }),
           ...(isNonEmptyString(aqiObj?.scale) && { scale: aqiObj.scale }),
           ...(sourceTypes.includes(aqiObj?.sourceType) && { sourceType: aqiObj.sourceType }),
-          ...(validPollutants.length > 0 && {
-            pollutants: Object.fromEntries(validPollutants.map((pollutant) => ([
-              pollutant.name, pollutant,
-            ]))),
-          }),
         };
       default:
         return {};
