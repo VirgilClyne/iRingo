@@ -5205,16 +5205,15 @@ if (settings.switch) {
                       };
                     }
 
-                    if (promiseData.types.includes((type) => type === 'mapq')) {
-                      return {
+                    if (promiseData.types.includes('mapq')) {
+                      const dataInFeed = waqiNearestToFeed('mapq', promiseData?.returnedData).find((data) => data.status === 'ok');
+                      return dataInFeed ? {
                         [METADATA]: toMetadata(
                           apiVersion,
-                          waqiToAqiMetadata(promiseData?.returnedData),
+                          waqiToAqiMetadata(dataInFeed),
                         ),
-                        ...toAirQuality(apiVersion, waqiToAqi(
-                          waqiNearestToFeed('mapq', promiseData?.returnedData).find((data) => data.status === 'ok'),
-                        )),
-                      };
+                        ...toAirQuality(apiVersion, waqiToAqi(dataInFeed)),
+                      } : {};
                     }
                   }
 
