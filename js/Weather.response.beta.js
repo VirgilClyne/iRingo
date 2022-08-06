@@ -2009,7 +2009,7 @@ const waqiNearest = (
           + `Data: ${data}`,
       }));
 
-      if (result.status !== 'ok') {
+      if (isNonEmptyString(result.status) && result.status !== 'ok') {
         // eslint-disable-next-line functional/no-expression-statement
         resolve({
           status: 'error',
