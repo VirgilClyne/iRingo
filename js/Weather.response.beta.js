@@ -303,6 +303,24 @@ const database = {
  *
  * @property {string} [source] - Station name if provider is QWeather
  */
+/**
+ * Air quality object for Apple Weather APIv1
+ * @typedef {appleAqiWithoutMetadataV1} appleAqiV1
+ *
+ * @property {appleAirQualityMetadataV1} metadata - Metadata of air quality
+ */
+/**
+ * Air quality object for Apple Weather APIv2
+ * @typedef {appleAqiWithoutMetadataV2} appleAqiV2
+ *
+ * @property {appleAirQualityMetadataV2} metadata - Metadata of air quality
+ */
+/**
+ * Air quality object for Apple Weather APIv3
+ * @typedef {appleAqiWithoutMetadataV3} appleAqiV3
+ *
+ * @property {appleAirQualityMetadataV3} metadata - Metadata of air quality
+ */
 
 /**
  * Precipitation types for `nextHour.summary[].condition`.
@@ -484,6 +502,24 @@ const database = {
  * @property {string} [forecastStart] - Time in "YYYY-MM-DDTHH:MM:SSZ" format
  * @property {string} [forecastEnd] - Time in "YYYY-MM-DDTHH:MM:SSZ" format
  * @property {nextHourMinuteV3[]} [minutes]
+ */
+/**
+ * Next hour object for Apple Weather APIv1
+ * @typedef {appleNextHourWithoutMetadataV1} appleNextHourV1
+ *
+ * @property {appleNextHourMetadataV1} metadata - Metadata of air quality
+ */
+/**
+ * Next hour object for Apple Weather APIv2
+ * @typedef {appleNextHourWithoutMetadataV2} appleNextHourV2
+ *
+ * @property {appleNextHourMetadataV2} metadata - Metadata of air quality
+ */
+/**
+ * Next hour object for Apple Weather APIv3
+ * @typedef {appleNextHourWithoutMetadataV3} appleNextHourV3
+ *
+ * @property {appleNextHourMetadataV3} metadata - Metadata of air quality
  */
 
 /**
@@ -5136,6 +5172,12 @@ if (settings.switch) {
             };
             const supportedApis = ['www.weatherol.cn', 'api.caiyunapp.com', 'api.waqi.info'];
 
+            /**
+             * Get data requirements from Apple Weather
+             * @param {supportedAppleApis} apiVersion - Apple Weather API version
+             * @param {Object} parsedUrl - URL parsed by {@link URLs}
+             * @return {string[]} - Data requirements
+             */
             const getRequireData = (apiVersion, parsedUrl) => {
               switch (apiVersion) {
                 case 1: {
@@ -5152,6 +5194,12 @@ if (settings.switch) {
               }
             };
 
+            /**
+             * Get scale of modified air quality before network requesting
+             * @param {settingsV1} projectSettings - Settings of module
+             * @param {appleAqiScales} appleScale - Current Apple Weather scale
+             * @return {string} - Target scale of modified air quality
+             */
             const getTargetScale = (projectSettings, appleScale) => {
               if (projectSettings.aqi.local.switch) {
                 const scale = settingsToAqiStandard[projectSettings.aqi.local.standard]
@@ -5180,6 +5228,18 @@ if (settings.switch) {
               }
             };
 
+            /**
+             * Missions for APIs from {@link toMissions}
+             * @typedef {"aqi" | "forCompareAqi" | "nextHour"} missions
+             */
+            /**
+             * Get missions for creating promises
+             * @param {string} aqi - AQI source
+             * @param {string} forCompareAqi - AQI comparison source
+             * @param {string} nextHour - Next hour source
+             * @return {{api: string, missions: missions[]}[]} -
+             * Missions for APIs
+             */
             const toMissions = (aqi, forCompareAqi, nextHour) => supportedApis
               .map((api) => ({
                 api,
@@ -5190,6 +5250,12 @@ if (settings.switch) {
                 ],
               }));
 
+            /**
+             * Get path by missions for ColorfulClouds
+             * @param {missions[]} missions - Mission list
+             * @return {"weather" | "realtime" | "minutely" | "hourly" | "daily"} -
+             * URL Path for ColofulClouds
+             */
             const missionsToCcPath = (missions) => {
               if (!Array.isArray(missions) || missions.length <= 0 || missions.length > 1) {
                 return 'weather';
@@ -5206,6 +5272,11 @@ if (settings.switch) {
               }
             };
 
+            /**
+             * Get ColorfulClouds by language
+             * @param {string} language - Language from Apple Weather
+             * @return {string} - Name of the ColorfulClouds
+             */
             const getColorfulCloudsName = (language) => {
               // No official name for Japanese
               if (isNonEmptyString(language)) {
@@ -5220,6 +5291,16 @@ if (settings.switch) {
               return 'ColorfulClouds';
             };
 
+            /**
+             * Handle data from API to air quality
+             * @param {supportedAppleApi} apiVersion - Apple Weather API version
+             * @param {{
+             * api: string, missions: missions[], returnedData: Object, types: string[]
+             * }} promiseData - Data from promises
+             * @param {string} appleLanguage - Language from Apple Weather
+             * @return {appleAqiV1|appleAqiV2|appleAqiV3 | {}} -
+             * Air quality object for Apple Weather
+             */
             const getAirQuality = (apiVersion, promiseData, appleLanguage) => {
               if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('aqi')) {
                 return {};
@@ -5302,6 +5383,13 @@ if (settings.switch) {
               }
             };
 
+            /**
+             * Handle data from API to air quality
+             * @param {{
+             * api: string, missions: missions[], returnedData: Object, types: string[]
+             * }} promiseData - Data from promises
+             * @return {aqiComparison} - AQI comparison for Apple Weather
+             */
             const getAqiComparison = (promiseData) => {
               if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('forCompareAqi')) {
                 return 'unknown';
@@ -5328,6 +5416,16 @@ if (settings.switch) {
               }
             };
 
+            /**
+             * Handle data from API to air quality
+             * @param {supportedAppleApi} apiVersion - Apple Weather API version
+             * @param {{
+             * api: string, missions: missions[], returnedData: Object, types: string[]
+             * }} promiseData - Data from promises
+             * @param {string} appleLanguage - Language from Apple Weather
+             * @return {appleNextHourV1|appleNextHourV2|appleNextHourV3 | {}} -
+             * Air quality object for Apple Weather
+             */
             const getNextHour = (apiVersion, promiseData, appleLanguage) => {
               if (!Array.isArray(promiseData?.missions) || !promiseData.missions.includes('nextHour')) {
                 return {};
