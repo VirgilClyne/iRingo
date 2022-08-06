@@ -2339,16 +2339,6 @@ const waqiNearestToFeed = (version, nearestData) => {
       }
 
       return nearestData.d.map((station) => {
-        if (!isLatitude(station?.geo?.[1]) || !isLongitude(station?.geo?.[0])) {
-          return {
-            status: 'error',
-            data: `${waqiNearestToFeed.name}: Invalid location\n`
-              + `Latitude: ${station?.geo?.[1]}\n`
-              + `Longitude: ${station?.geo?.[0]}\n`
-              + `Station data: ${JSON.stringify(station)}`,
-          };
-        }
-
         const aqi = parseInt(station?.v, 10);
         const stationId = parseInt(station?.x, 10);
         // nna: Local language. nlo: English.
@@ -2404,16 +2394,6 @@ const waqiNearestToFeed = (version, nearestData) => {
       }
 
       return nearestData.data.stations.map((station) => {
-        if (!isLatitude(station?.geo?.[1]) || !isLongitude(station?.geo?.[0])) {
-          return {
-            status: 'error',
-            data: `${waqiNearestToFeed.name}: Invalid location\n`
-              + `Latitude: ${station?.geo?.[1]}\n`
-              + `Longitude: ${station?.geo?.[0]}`
-              + `Station data: ${JSON.stringify(station)}`,
-          };
-        }
-
         const aqi = parseInt(station?.aqi, 10);
         const stationId = parseInt(station?.idx, 10);
 
