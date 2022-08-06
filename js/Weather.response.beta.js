@@ -1543,6 +1543,14 @@ const WAQI_INSTANT_CAST = {
 };
 
 /**
+ * Check passed parameter is or not a non-empty string
+ * @author WordlessEcho <wordless@echo.moe>
+ * @param {any} string - Value you wish to check
+ * @return {boolean} - Return `true` if passed parameter is a non-empty string
+ */
+const isNonEmptyString = (string) => typeof string === 'string' && string.length > 0;
+
+/**
  * Check passed parameter is or not a non-NaN number
  * @author WordlessEcho <wordless@echo.moe>
  * @param {any} number - Value you wish to check
@@ -1647,8 +1655,8 @@ const toSettings = (envs) => {
         envs?.Settings?.NextHour?.Switch,
         settings.NextHour.Switch,
       ),
-      source: typeof envs?.Settings?.NextHour?.Source === 'string' && envs.Settings.NextHour.Source.length > 0
-        ? envs.Settings.NextHour.Source : settings.NextHour.Source,
+      source: isNonEmptyString(envs?.Settings?.NextHour?.Source) ? envs.Settings.NextHour.Source
+        : settings.NextHour.Source,
     },
     aqi: {
       switch: parseJsonWithDefault(envs?.Settings?.AQI?.Switch, settings.AQI.Switch),
@@ -1658,21 +1666,18 @@ const toSettings = (envs) => {
           envs?.Settings?.AQI?.Local?.Switch,
           settings.AQI.Local.Switch,
         ),
-        standard: typeof envs?.Settings?.AQI?.Local?.Standard === 'string'
-        && envs.Settings.AQI.Local.Standard.length > 0 ? envs.Settings.AQI.Local.Standard
-          : settings.AQI.Local.Standard,
+        standard: isNonEmptyString(envs?.Settings?.AQI?.Local?.Standard)
+          ? envs.Settings.AQI.Local.Standard : settings.AQI.Local.Standard,
       },
-      source: typeof envs?.Settings?.AQI?.Source === 'string' && envs.Settings.AQI.Source.length > 0
-        ? envs.Settings.AQI.Source : settings.AQI.Source,
+      source: isNonEmptyString(envs?.Settings?.AQI?.Source) ? envs.Settings.AQI.Source
+        : settings.AQI.Source,
       comparison: {
         switch: parseJsonWithDefault(
           envs?.Settings?.AQI?.Comparison.Switch,
           settings.AQI.Comparison.Switch,
         ),
-        source: typeof envs?.Settings?.AQI?.Comparison?.Source === 'string'
-        && envs.Settings.AQI.Comparison.Source.length > 0
-          ? envs.Settings.AQI.Comparison.Source
-          : settings.AQI.Comparison.Source,
+        source: isNonEmptyString(envs?.Settings?.AQI?.Comparison?.Source)
+          ? envs.Settings.AQI.Comparison.Source : settings.AQI.Comparison.Source,
       },
     },
     map: {
@@ -1711,8 +1716,8 @@ const toSettings = (envs) => {
       },
     },
     log: {
-      level: typeof envs?.Settings?.Log?.Level === 'string' && envs.Settings.Log.Level.length > 0
-        ? envs.Settings.Log.Level : settings.Log.Level,
+      level: isNonEmptyString(envs?.Settings?.Log?.Level) ? envs.Settings.Log.Level
+        : settings.Log.Level,
       Location: parseJsonWithDefault(envs?.Settings?.Log?.Location, settings.Log.Location),
     },
   };
@@ -1800,7 +1805,7 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
 
   if (
     typeof cachedAqis === 'object' && isNonNanNumber(timestamp) && timestamp > 0
-    && isLocation(location) && typeof scaleName === 'string'
+    && isLocation(location) && isNonEmptyString(scaleName)
   ) {
     const caches = Object.fromEntries(Object.entries(cachedAqis)
       .filter(([timestampString, aqisInfo]) => {
@@ -1812,7 +1817,7 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
         timestampString,
         aqisInfo.filter((aqiInfo) => (
           isNonNanNumber(aqiInfo?.aqi) && aqiInfo.aqi >= 0 && isLocation(aqiInfo?.location)
-          && typeof aqiInfo?.scaleName === 'string'
+          && isNonEmptyString(aqiInfo?.scaleName)
         )),
       ]));
 
@@ -1826,7 +1831,7 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
 
       const cache = isNonNanNumber(cacheTimestamp)
         ? caches[cacheTimestamp].find((aqiInfo) => (
-          typeof stationName === 'string' && stationName.length > 0
+          isNonEmptyString(stationName)
             ? aqiInfo?.stationName === stationName && aqiInfo?.scaleName === scaleName
             // Cannot get station name
             : pythagoreanTheorem(
@@ -1873,13 +1878,13 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
         timestampString,
         aqisInfo.filter((aqiInfo) => (
           isNonNanNumber(aqiInfo?.aqi) && aqiInfo.aqi >= 0 && isLocation(aqiInfo?.location)
-          && typeof aqiInfo?.scaleName === 'string'
+          && isNonEmptyString(typeof aqiInfo?.scaleName)
         )),
       ])) : {};
 
   if (
     isNonNanNumber(timestamp) && timestamp > cacheLimit && isLocation(location)
-    && typeof scaleName === 'string' && scaleName.length > 0
+    && isNonEmptyString(scaleName)
   ) {
     const cacheTimestampString = Object.keys(validAqis).find((timestampString) => {
       const cachedTimestamp = parseInt(timestampString, 10);
@@ -1890,7 +1895,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
 
     const existedCache = isNonNanNumber(cacheTimestamp)
       ? validAqis[cacheTimestamp].find((aqiInfo) => (
-        typeof stationName === 'string'
+        isNonEmptyString(stationName)
           ? aqiInfo?.stationName === stationName && aqiInfo?.scaleName === scaleName
           // Cannot get station name
           // https://www.mee.gov.cn/gkml/hbb/bwj/201204/W020140904493567314967.pdf
@@ -1906,7 +1911,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
         `${cacheAqi.name}：已将当前AQI信息缓存，AQI信息：\n`
         + `时间：${new Date(timestamp)}\n`
         + `${settings.log.location ? `经度：${location.longitude}，纬度：${location.latitude}\n` : ''}`
-        + `${typeof stationName === 'string' && stationName.length > 0 ? `监测站：${stationName}\n` : ''}`
+        + `${isNonEmptyString(stationName) ? `监测站：${stationName}\n` : ''}`
         + `AQI标准：${scaleName}\nAQI：${aqi}`,
       );
 
@@ -1918,7 +1923,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
             ...(Array.isArray(validAqis?.[cacheTimestamp]) ? validAqis[cacheTimestamp] : []),
             {
               location,
-              ...(typeof stationName === 'string' && { stationName }),
+              ...(isNonEmptyString(stationName) && { stationName }),
               scaleName,
               aqi,
             },
@@ -2003,7 +2008,7 @@ const waqiNearest = (
           + `Data: ${data}`,
       }));
 
-      if (typeof result?.status === 'string' && result.status !== 'ok') {
+      if (result.status !== 'ok') {
         // eslint-disable-next-line functional/no-expression-statement
         resolve({
           status: 'error',
@@ -2077,10 +2082,8 @@ const waqiToken = (headers = { 'Content-Type': 'application/json' }) => new Prom
         return;
       }
 
-      const token = result.rxs.obs.find((obs) => (
-        typeof obs?.msg?.token === 'string' && obs?.msg?.token.length > 0
-      ))?.msg?.token;
-      if (typeof token !== 'string' || token.length <= 0) {
+      const token = result.rxs.obs.find((obs) => (isNonEmptyString(obs?.msg?.token)))?.msg?.token;
+      if (!isNonEmptyString(token)) {
         // eslint-disable-next-line functional/no-expression-statement
         resolve({
           status: 'error',
@@ -2234,7 +2237,7 @@ const waqiV1 = (
     {
       headers,
       url: `${baseUrl}/api/feed/@${stationId}/${type}.json`,
-      ...(typeof body === 'string' && body.length > 0 && { body }),
+      ...(isNonEmptyString(body) && { body }),
     },
     (error, response, data) => {
       if (error) {
@@ -2289,15 +2292,15 @@ const waqiNearestToFeed = (version, nearestData) => {
     const forUnknown = `${waqiNearestToFeed.name}: Unknown error from WAQI.\n`
       + `Data: ${JSON.stringify(nearestData)}`;
 
-    if (typeof data?.data === 'string' && data.data.length > 0) {
+    if (isNonEmptyString(data?.data)) {
       return data.data;
     }
 
     switch (mapqVersion) {
       case 'mapq2':
-        return typeof data?.reason === 'string' && data.reason.length > 0 ? data.reason : forUnknown;
+        return isNonEmptyString(data?.reason) ? data.reason : forUnknown;
       case 'mapq':
-        return typeof data?.message === 'string' && data.message.length > 0 ? data.message : forUnknown;
+        return isNonEmptyString(data?.message) ? data.message : forUnknown;
       default:
         return forUnknown;
     }
@@ -2366,12 +2369,11 @@ const waqiNearestToFeed = (version, nearestData) => {
             }],
             city: {
               geo: station.geo,
-              ...(typeof stationName === 'string' && stationName.length > 0 && { name: stationName }),
+              ...(isNonEmptyString(stationName) && { name: stationName }),
               url: 'https://aqicn.org',
               location: '',
             },
-            ...(typeof station?.pol === 'string' && station.pol.length > 0
-              && { dominentpol: station.pol }),
+            ...(isNonEmptyString(station?.pol) && { dominentpol: station.pol }),
             iaqi: {},
             time: {
               s: isoTime.slice(0, -6),
@@ -2419,8 +2421,7 @@ const waqiNearestToFeed = (version, nearestData) => {
             }],
             city: {
               geo: station.geo,
-              ...(typeof station?.name === 'string' && station.name.length > 0
-                && { name: station.name }),
+              ...(isNonEmptyString(station?.name) && { name: station.name }),
               url: 'https://aqicn.org',
               location: '',
             },
@@ -2643,7 +2644,7 @@ const weatherOl = (
       const version = isNonNanNumber(result?.api_version) ? `v${result.api_version}` : apiVersion;
 
       // eslint-disable-next-line functional/no-expression-statement
-      resolve(typeof result?.status === 'string'
+      resolve(isNonEmptyString(result?.status)
         // The type of api_version during error will be number
         ? {
           ...result,
@@ -2694,7 +2695,7 @@ const colorfulClouds = (
    * @returns {string} - `en_US` will be returned if language is not supported
    */
   const toColorfulCloudsLang = (languageWithReigon) => {
-    if (typeof languageWithReigon === 'string') {
+    if (isNonEmptyString(languageWithReigon)) {
       if (/zh-(Hans|CN)/.test(languageWithReigon)) {
         return 'zh_CN';
       }
@@ -2720,7 +2721,7 @@ const colorfulClouds = (
    * `v2.6` will be returned if passed version is invalid.
    */
   const checkCcApiVersion = (version) => {
-    if (typeof version === 'string' && version.startsWith('v')) {
+    if (isNonEmptyString(version) && version.startsWith('v')) {
       const versionCode = parseFloat(version.slice(1));
 
       if (!Number.isNaN(versionCode)) {
@@ -2803,7 +2804,7 @@ const colorfulClouds = (
         const version = isNonNanNumber(result?.api_version) ? `v${result.api_version}` : apiVersion;
 
         // eslint-disable-next-line functional/no-expression-statement
-        resolve(typeof result?.status === 'string'
+        resolve(isNonEmptyString(result?.status)
           // The type of api_version during error will be number
           ? {
             ...result,
@@ -3029,8 +3030,7 @@ const toEpaAqis = (concentrationsInfo, pollutants) => {
 
   const concentrations = Object.fromEntries(Object.entries(concentrationsInfo)
     .filter(([key, value]) => (
-      typeof key === 'string' && key.length > 0 && typeof value?.UNIT === 'string'
-      && value.UNIT.length > 0 && typeof value?.RANGES === 'object'
+      isNonEmptyString(key) && isNonEmptyString(value?.UNIT) && typeof value?.RANGES === 'object'
       && !Object.values(value.RANGES).some((rangesForLevel) => (
         !isPositiveWithZeroRange(rangesForLevel?.AMOUNT)
         || !isPositiveWithZeroRange(rangesForLevel?.AQI)
@@ -3038,11 +3038,11 @@ const toEpaAqis = (concentrationsInfo, pollutants) => {
     )));
 
   const pollutantAqis = pollutants
-    .filter((pollutant) => typeof pollutant?.name === 'string' && pollutant.name.length > 0)
+    .filter((pollutant) => isNonEmptyString(pollutant?.name))
     .map((pollutant) => {
       if (
-        Object.keys(concentrations).includes(pollutant.name) && typeof pollutant?.unit === 'string'
-        && pollutant.unit.length > 0 && isNonNanNumber(pollutant?.amount) && pollutant.amount >= 0
+        Object.keys(concentrations).includes(pollutant.name) && isNonEmptyString(pollutant?.unit)
+        && isNonNanNumber(pollutant?.amount) && pollutant.amount >= 0
       ) {
         const { name, unit, amount } = pollutant;
         const concentration = concentrations[name];
@@ -3062,7 +3062,7 @@ const toEpaAqis = (concentrationsInfo, pollutants) => {
 
   return {
     index: primary.aqi,
-    ...(typeof primary?.name === 'string' && primary.name.length > 0 && { primary: primary.name }),
+    ...(isNonEmptyString(primary?.name) && { primary: primary.name }),
     pollutants: pollutantAqis,
   };
 };
@@ -3174,7 +3174,7 @@ const convertV1Pollutants = (pollutants) => {
   const units = ['ppb', 'µg/m3'];
   const validPollutants = Array.isArray(pollutants) ? pollutants.filter(
     (pollutant) => (
-      units.includes(pollutant?.unit) && typeof pollutant?.name === 'string' && pollutant.name.length > 0
+      units.includes(pollutant?.unit) && isNonEmptyString(pollutant?.name)
       && isNonNanNumber(pollutant?.amount) && pollutant.amount >= 0
     ),
   ) : [];
@@ -3201,7 +3201,7 @@ const appleToEpaAirQuality = (standard, pollutants) => {
 
   const validConcentrations = Object.fromEntries(Object.entries(standard.CONCENTRATIONS).filter(
     ([, value]) => (
-      typeof value?.UNIT === 'string' && value.UNIT.length > 0 && typeof value?.RANGES === 'object'
+      isNonEmptyString(value?.UNIT) && typeof value?.RANGES === 'object'
       && !Object.values(value.RANGES).includes((v) => (
         !isPositiveRange(v?.AMOUNT) || !isPositiveWithZeroRange(v?.AQI)
       ))
@@ -3234,7 +3234,7 @@ const appleToEpaAirQuality = (standard, pollutants) => {
 
   return {
     isSignificant: categoryIndex >= standard.SIGNIFICANT_LEVEL,
-    ...(typeof aqis?.primary === 'string' && { primary: aqis.primary }),
+    ...(isNonEmptyString(aqis?.primary) && { primary: aqis.primary }),
     categoryIndex,
     aqi: aqis.index,
     scale: standard.APPLE_SCALE,
@@ -3253,7 +3253,8 @@ const getCcAirQuality = (dataWithRealtime) => {
   };
 
   const apiVersion = dataWithRealtime?.api_version;
-  const versionCode = typeof dataWithRealtime?.api_version === 'string' && parseFloat(apiVersion.slice(1));
+  const versionCode = isNonEmptyString(apiVersion) && apiVersion.startsWith('v')
+    && parseFloat(apiVersion.slice(1));
   const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
   // https://open.caiyunapp.com/%E5%BD%A9%E4%BA%91%E5%A4%A9%E6%B0%94_API/v2.5#.E6.A0.BC.E5.BC.8F.E5.8F.98.E6.9B.B4
@@ -3322,7 +3323,8 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
   }
 
   const apiVersion = historyData?.api_version;
-  const versionCode = typeof apiVersion === 'string' && parseFloat(apiVersion.slice(1));
+  const versionCode = isNonEmptyString(apiVersion) && apiVersion.startsWith('v')
+    && parseFloat(apiVersion.slice(1));
   const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
   const hourTimestamp = (new Date(timestamp)).setMinutes(0, 0, 0);
@@ -3421,18 +3423,15 @@ const colorfulCloudsToAqiMetadata = (providerLogo, providerName, url, data) => {
     ? expireTimestamp : (+(new Date())) + 1000 * 60 * 15;
 
   const validProviderLogo = {
-    ...(typeof providerLogo?.forV1 === 'string' && providerLogo.forV1.length > 0
-      && { forV1: providerLogo.forV1 }),
-    ...(typeof providerLogo?.forV2 === 'string' && providerLogo.forV2.length > 0
-      && { forV2: providerLogo.forV2 }),
+    ...(isNonEmptyString(providerLogo?.forV1) && { forV1: providerLogo.forV1 }),
+    ...(isNonEmptyString(providerLogo?.forV2) && { forV2: providerLogo.forV2 }),
   };
 
   const variableMetadata = {
-    ...(typeof language === 'string' && language.length > 0
-      && { language: language.replace('_', '-') }),
+    ...(isNonEmptyString(language) && { language: language.replace('_', '-') }),
     ...(isLocation(location) && { location }),
     ...(Object.keys(validProviderLogo).length > 0 && { providerLogo: validProviderLogo }),
-    ...(typeof providerName === 'string' && providerName.length > 0 && { providerName }),
+    ...(isNonEmptyString(providerName) && { providerName }),
     url,
   };
 
@@ -3523,12 +3522,11 @@ const colorfulCloudsToAqi = (
   return {
     isSignificant: categoryIndex >= (isNonNanNumber(standard.SIGNIFICANT_LEVEL)
       ? standard.SIGNIFICANT_LEVEL : Number.MAX_VALUE),
-    url: typeof url === 'string' && url.length > 0 ? url : 'https://caiyunapp.com/weather/',
+    url: isNonEmptyString(url) ? url : 'https://caiyunapp.com/weather/',
     pollutants,
     // Primary pollutant must be included in pollutants
-    ...(typeof primaryPollutant === 'string' && primaryPollutant.length > 0 && { primaryPollutant }),
-    sourceName: typeof providerName === 'string' && providerName.length > 0
-      ? providerName : 'ColorfulClouds',
+    ...(isNonEmptyString(primaryPollutant) && { primaryPollutant }),
+    sourceName: isNonEmptyString(providerName) ? providerName : 'ColorfulClouds',
     categoryIndex,
     aqi,
     scale: standard.APPLE_SCALE,
@@ -3570,9 +3568,9 @@ const waqiToAqiMetadata = (feedData) => {
       forV1: 'https://waqi.info/images/logo.png',
       forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png',
     },
-    providerName: `${typeof feedData?.data?.city?.name === 'string'
-      && feedData.data.city.name.length > 0 ? feedData.data.city.name : ''}`
-      + ' (The World Air Quality Project)',
+    providerName: isNonEmptyString(feedData?.data?.city?.name)
+      ? `${feedData.data.city.name} (The World Air Quality Project)`
+      : 'The World Air Quality Project',
     readTimestamp: serverTimestamp,
     reportedTimestamp,
     dataSource: 0,
@@ -3604,14 +3602,12 @@ const waqiToAqi = (feedData) => {
   return isNonNanNumber(aqi) && aqi >= 0 ? {
     isSignificant: categoryIndex >= (isNonNanNumber(WAQI_INSTANT_CAST.SIGNIFICANT_LEVEL)
       ? WAQI_INSTANT_CAST.SIGNIFICANT_LEVEL : Number.MAX_VALUE),
-    url: typeof feedData?.data?.city?.url === 'string' && feedData.data.city.url.length > 0
-      ? feedData.data.city.url : 'https://aqicn.org/',
+    url: isNonEmptyString(feedData?.data?.city?.url) ? feedData.data.city.url : 'https://aqicn.org/',
     // Pollutant data from WAQI is AQI not amount
     pollutants: [],
     ...(Object.keys(toApplePollutantName).includes(feedData?.data?.dominentpol)
       && { primary: toApplePollutantName[feedData.data.dominentpol] }),
-    sourceName: typeof feedData?.data?.city?.name === 'string' && feedData.data.city.name.length > 0
-      ? feedData.data.city.name : 'The World Air Quality Project',
+    sourceName: isNonEmptyString(feedData?.data?.city?.name) ? feedData.data.city.name : '',
     categoryIndex,
     aqi: validAqi,
     scale: WAQI_INSTANT_CAST.APPLE_SCALE,
@@ -3768,13 +3764,11 @@ const colorfulCloudsToNextHourMetadata = (providerName, url, data) => {
   const expireTimestamp = serverTimestamp + 1000 * 60 * 15;
 
   return {
-    language: typeof language === 'string' && language.length > 0
-      ? language.replace('_', '-') : 'zh-CN',
+    language: isNonNanNumber(language) ? language.replace('_', '-') : 'zh-CN',
     ...(isLocation(location) && { location }),
     expireTimestamp: expireTimestamp < nowTimestamp
       ? nowTimestamp + 1000 * 60 * 5 : expireTimestamp,
-    providerName: typeof providerName === 'string' && providerName.length > 0
-      ? providerName : 'ColorfulClouds',
+    providerName: isNonEmptyString(providerName) ? providerName : 'ColorfulClouds',
     readTimestamp: serverTimestamp,
     dataSource: 1,
     // https://developer.apple.com/documentation/weatherkitrestapi/unitssystem
@@ -3836,7 +3830,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     }
 
     const apiVersion = dataWithHourlySkycons?.api_version;
-    const versionCode = typeof apiVersion === 'string' && parseFloat(apiVersion.slice(1));
+    const versionCode = isNonEmptyString(apiVersion) && apiVersion.startsWith('v') && parseFloat(apiVersion.slice(1));
     const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
 
     const serverTime = dataWithHourlySkycons?.server_time;
@@ -3876,11 +3870,11 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
 
       return currentHourTimestamp - aTimestamp - (currentHourTimestamp - bTimestamp);
     }).find((skycon) => (
-      typeof skycon?.value === 'string' && (
+      isNonEmptyString(skycon?.value) && (
         skycon.value.includes('RAIN') || skycon.value.includes('SNOW')
       )))?.value;
 
-    if (typeof skyCondition !== 'string' || skyCondition.length <= 0) {
+    if (!isNonEmptyString(skyCondition)) {
       return '';
     }
 
@@ -4132,11 +4126,12 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     return modifyDescription(description.slice(Math.min(...splitIndexes)));
   };
 
-  const provider = typeof providerName === 'string' && providerName.length > 0
-    ? providerName : $.name;
+  const provider = isNonEmptyString(providerName) ? providerName : $.name;
 
-  // Version from API is beginning with `v`
-  const majorVersion = parseInt(dataWithMinutely?.api_version?.slice(1), 10);
+  const apiVersion = dataWithMinutely?.api_version;
+  const versionCode = isNonEmptyString(apiVersion) && apiVersion.startsWith('v') && parseFloat(apiVersion.slice(1));
+  const validVersionCode = isNonNanNumber(versionCode) ? versionCode : -1;
+  const majorVersion = Math.trunc(validVersionCode);
   if (
     dataWithMinutely?.status !== 'ok'
       || !supportedCcApis.includes(majorVersion)
@@ -4275,7 +4270,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
  */
 const appendQweatherSourceToProviderName = (providerName, source) => {
   if (typeof source !== 'string' || source.length <= 0) {
-    return typeof providerName === 'string' && providerName.length > 0 ? providerName : '';
+    return isNonEmptyString(providerName) ? providerName : '';
   }
 
   switch (providerName) {
@@ -4306,8 +4301,7 @@ const toMetadata = (appleApiVersion, metadataObject) => {
   }
 
   const sharedMetadata = {
-    ...(typeof metadataObject?.language === 'string' && metadataObject.language.length > 0
-      && { language: metadataObject.language }),
+    ...(isNonEmptyString(metadataObject?.language) && { language: metadataObject.language }),
     ...(isLatitude(metadataObject?.location?.latitude)
       && { latitude: metadataObject.location.latitude }),
     ...(isLongitude(metadataObject?.location?.longitude)
@@ -4331,9 +4325,9 @@ const toMetadata = (appleApiVersion, metadataObject) => {
           ...sharedMetadata,
           ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
             && { expire_time: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
-          ...(typeof metadataObj?.providerLogo?.forV1 === 'string' && metadataObj.providerLogo.forV1.length > 0
+          ...(isNonEmptyString(metadataObj?.providerLogo?.forV1)
             && { provider_logo: metadataObj.providerLogo.forV1 }),
-          ...(typeof metadataObj?.providerName === 'string' && metadataObj.providerName.length > 0
+          ...(isNonEmptyString(metadataObj?.providerName)
             && { provider_name: metadataObj.providerName }),
           ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
             && { read_time: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
@@ -4348,34 +4342,31 @@ const toMetadata = (appleApiVersion, metadataObject) => {
           ...sharedMetadata,
           ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
             && { expireTime: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
-          ...(typeof metadataObj?.providerLogo?.forV2 === 'string' && metadataObj.providerLogo.forV2.length > 0
+          ...(isNonEmptyString(metadataObj?.providerLogo?.forV2)
             && { providerLogo: metadataObj.providerLogo.forV2 }),
-          ...(typeof metadataObj?.providerName === 'string' && metadataObj.providerName.length > 0
+          ...(isNonEmptyString(metadataObj?.providerName)
             && { providerName: metadataObj.providerName }),
           ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
             && { readTime: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
           ...(isNonNanNumber(metadataObj?.reportedTimestamp) && metadataObj.reportedTimestamp > 0
             && { reportedTime: toAppleTime(apiVersion, metadataObj.reportedTimestamp) }),
-          ...(typeof metadataObj?.unit === 'string' && metadataObj.unit.length > 0
-            && { units: metadataObj.unit }),
+          ...(isNonEmptyString(metadataObj?.unit) && { units: metadataObj.unit }),
         };
       case 3:
         return {
           ...sharedMetadata,
-          ...(typeof metadataObj?.url === 'string' && metadataObj.url.length > 0
-            && { attributionURL: metadataObj.url }),
+          ...(isNonEmptyString(metadataObj?.url) && { attributionURL: metadataObj.url }),
           ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
             && { expireTime: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
-          ...(typeof metadataObj?.providerLogo?.forV2 === 'string' && metadataObj.providerLogo.forV2.length > 0
+          ...(isNonEmptyString(metadataObj?.providerLogo?.forV2)
             && { providerLogo: metadataObj.providerLogo.forV2 }),
-          ...(typeof metadataObj?.providerName === 'string' && metadataObj.providerName.length > 0
+          ...(isNonEmptyString(metadataObj?.providerName)
             && { providerName: metadataObj.providerName }),
           ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
             && { readTime: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
           ...(isNonNanNumber(metadataObj?.reportedTimestamp) && metadataObj.reportedTimestamp > 0
             && { reportedTime: toAppleTime(apiVersion, metadataObj.reportedTimestamp) }),
-          ...(typeof metadataObj?.unit === 'string' && metadataObj.unit.length > 0
-            && { units: metadataObj.unit }),
+          ...(isNonEmptyString(metadataObj?.unit) && { units: metadataObj.unit }),
         };
       default:
         return {};
@@ -4412,20 +4403,19 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
 
   const validPollutants = Array.isArray(aqiObject?.pollutants) ? aqiObject.pollutants.filter(
     (pollutant) => (
-      units.includes(pollutant?.unit) && typeof pollutant?.name === 'string' && pollutant.name.length > 0
+      units.includes(pollutant?.unit) && isNonEmptyString(pollutant?.name)
       && isNonNanNumber(pollutant?.amount) && pollutant.amount >= 0
     ),
   ) : [];
 
   const sharedAirQuality = {
     ...(typeof aqiObject?.isSignificant === 'boolean' && { isSignificant: aqiObject.isSignificant }),
-    ...(typeof aqiObject?.url === 'string' && aqiObject.url.length > 0 && { learnMoreURL: aqiObject.url }),
+    ...(isNonEmptyString(aqiObject?.url) && { learnMoreURL: aqiObject.url }),
     ...(
       applePollutantNames.includes(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }
     ),
     // Source was removed in APIv3
-    ...(typeof aqiObject?.sourceName === 'string' && aqiObject.sourceName.length > 0
-      && { source: aqiObject.sourceName }),
+    ...(isNonEmptyString(aqiObject?.sourceName) && { source: aqiObject.sourceName }),
   };
 
   /**
@@ -4444,8 +4434,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { airQualityCategoryIndex: aqiObj.categoryIndex }),
           ...(isNonNanNumber(aqiObj?.aqi) && aqiObj.aqi >= 0
             && { airQualityIndex: aqiObj.aqi }),
-          ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
-            && { airQualityScale: aqiObj.scale }),
+          ...(isNonEmptyString(aqiObj?.scale) && { airQualityScale: aqiObj.scale }),
           ...(validPollutants.length > 0 && {
             pollutants: Object.fromEntries(validPollutants.map((pollutant) => ([
               pollutant.name,
@@ -4463,8 +4452,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
             && { index: aqiObj.aqi }),
           ...(comparisonValues.includes(aqiObj?.previousDayComparison)
             && { previousDayComparison: aqiObj.previousDayComparison }),
-          ...(typeof aqiObj?.scale === 'string' && aqiObj.scale.length > 0
-            && { scale: aqiObj.scale }),
+          ...(isNonEmptyString(aqiObj?.scale) && { scale: aqiObj.scale }),
           ...(sourceTypes.includes(aqiObj?.sourceType) && { sourceType: aqiObj.sourceType }),
           ...(validPollutants.length > 0 && {
             pollutants: Object.fromEntries(validPollutants.map((pollutant) => ([
@@ -4531,10 +4519,10 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
     const chance = isNonNanNumber(minute?.chance) && minute.chance >= 0 && minute.chance <= 100
       ? minute.chance : fallbackChance;
 
-    const validShortDescription = typeof minute?.shortDescription === 'string'
-    && minute.shortDescription.length > 0 ? minute.shortDescription : $.name;
-    const validLongDescription = typeof minute?.longDescription === 'string'
-    && minute.longDescription.length > 0 ? minute.longDescription : validShortDescription;
+    const validShortDescription = isNonEmptyString(minute?.shortDescription)
+      ? minute.shortDescription : $.name;
+    const validLongDescription = isNonEmptyString(minute?.longDescription)
+      ? minute.longDescription : '';
 
     return {
       weatherStatus: checkWeatherStatus(minute?.weatherStatus, minute?.precipitation),
@@ -4670,10 +4658,7 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
         index + 1 === array.length && minute.weatherStatus === minutes[bound + 1].weatherStatus
       );
 
-      const shortDescription = typeof minute.shortDescription === 'string'
-      && minute.shortDescription.length > 0 ? minute.shortDescription : $.name;
-      const haveLongDescription = typeof minute.longDescription === 'string'
-        && minute.longDescription.length > 0;
+      const haveLongDescription = isNonEmptyString(minute.longDescription);
       const longDescription = haveLongDescription ? minute.longDescription : $.name;
 
       switch (apiVersion) {
@@ -4683,8 +4668,9 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
               validUntil: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
             token,
-            longTemplate: longDescription,
-            shortTemplate: shortDescription,
+            longTemplate: !haveLongDescription && isNonEmptyString(minute.shortDescription)
+              ? minute.shortDescription : longDescription,
+            shortTemplate: minute.shortDescription,
             parameters: haveLongDescription && typeof minute.parameters === 'object'
             && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
@@ -4698,8 +4684,9 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
               endTime: toAppleTime(apiVersion, timestamp + bound * 60 * 1000),
             }),
             token,
-            longTemplate: longDescription,
-            shortTemplate: shortDescription,
+            longTemplate: !haveLongDescription && isNonEmptyString(minute.shortDescription)
+              ? minute.shortDescription : longDescription,
+            shortTemplate: minute.shortDescription,
             parameters: haveLongDescription && typeof minute.parameters === 'object'
             && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
@@ -5010,14 +4997,14 @@ if (settings.switch) {
   const supportedAppleApis = [1, 2, 3];
 
   // eslint-disable-next-line no-undef
-  if (typeof $request?.url === 'string') {
+  if (isNonEmptyString($request?.url)) {
     // eslint-disable-next-line no-undef
     const url = (new URLs()).parse($request.url);
 
     if (url) {
       const parameters = getParams(url.path);
       const appleApiVersionString = parameters?.ver;
-      const appleApiVersion = typeof appleApiVersionString === 'string' && appleApiVersionString.length > 0
+      const appleApiVersion = isNonEmptyString(appleApiVersionString)
         ? parseInt(appleApiVersionString.slice(1), 10) : -1;
 
       // eslint-disable-next-line functional/no-conditional-statement
@@ -5070,14 +5057,12 @@ if (settings.switch) {
               switch (apiVersion) {
                 case 1: {
                   const requirement = parsedUrl.params?.include;
-                  return typeof requirement === 'string' && requirement.length > 0
-                    ? requirement.split(',') : [];
+                  return isNonEmptyString(requirement) ? requirement.split(',') : [];
                 }
                 case 2:
                 case 3: {
                   const requirement = parsedUrl.params?.dataSets;
-                  return typeof requirement === 'string' && requirement.length > 0
-                    ? requirement.split(',') : [];
+                  return isNonEmptyString(requirement) ? requirement.split(',') : [];
                 }
                 default:
                   return [];
@@ -5096,7 +5081,7 @@ if (settings.switch) {
               }
 
               if (!projectSettings.aqi.switch) {
-                return appleScale === 'string' && appleScale.length > 0 ? appleScale : '';
+                return isNonEmptyString(appleScale) ? appleScale : '';
               }
 
               switch (projectSettings.aqi.source) {
@@ -5140,7 +5125,7 @@ if (settings.switch) {
 
             const getColorfulCloudsName = (language) => {
               // No official name for Japanese
-              if (typeof language === 'string') {
+              if (isNonEmptyString(language)) {
                 if (/zh-(Hans|CN)/.test(language)) {
                   return '彩云天气';
                 }
@@ -5409,9 +5394,9 @@ if (settings.switch) {
                     if (!missions.includes('aqi')) {
                       return [];
                     }
-  
+
                     const { token } = settings.apis.waqi;
-                    if (typeof token === 'string' && token.length > 0) {
+                    if (isNonEmptyString(token) && missions.length === 1 && missions.includes('aqi')) {
                       return [
                         waqiV2(location, null, token, settings.apis.waqi.httpHeaders)
                           .then((returnedData) => ({
@@ -5422,7 +5407,7 @@ if (settings.switch) {
                           })),
                       ];
                     }
-  
+
                     return [
                       waqiNearest(location, 'mapq', settings.apis.waqi.httpHeaders)
                         .then((returnedData) => ({
@@ -5545,7 +5530,7 @@ if (settings.switch) {
               const airQualityScale = responseBody?.[AIR_QUALITY]?.[AQI_SCALE];
 
               // eslint-disable-next-line functional/no-conditional-statement
-              if (typeof airQualityScale === 'string' && airQualityScale.length > 0) {
+              if (isNonEmptyString(airQualityScale)) {
                 // eslint-disable-next-line functional/no-expression-statement
                 $.setjson(cacheAqi(
                   caches,
@@ -5562,7 +5547,7 @@ if (settings.switch) {
 
               return {
                 ...responseBody,
-                ...(typeof airQualityProvider === 'string' && airQualityProvider.length > 0 && {
+                ...(isNonEmptyString(airQualityProvider) && {
                   [AIR_QUALITY]: {
                     ...responseBody[AIR_QUALITY],
                     [METADATA]: {
@@ -5575,7 +5560,7 @@ if (settings.switch) {
                     },
                   },
                 }),
-                ...(typeof nextHourProviderName === 'string' && nextHourProviderName.length > 0 && {
+                ...(isNonEmptyString(nextHourProviderName) && {
                   [NEXT_HOUR]: {
                     ...responseBody[NEXT_HOUR],
                     [METADATA]: {
