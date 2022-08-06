@@ -4957,6 +4957,7 @@ const getKeywords = (apiVersion) => {
         AQI_INDEX: 'airQualityIndex',
         AQI_SCALE: 'airQualityScale',
         POLLUTANTS: 'pollutants',
+        PRIMARY_POLLUTANT: 'primaryPollutant',
         UNIT: 'unit',
         AMOUNT: 'amount',
         SOURCE: 'source',
@@ -4977,6 +4978,7 @@ const getKeywords = (apiVersion) => {
         AQI_INDEX: 'index',
         AQI_SCALE: 'scale',
         POLLUTANTS: 'pollutants',
+        PRIMARY_POLLUTANT: 'primaryPollutant',
         UNIT: 'unit',
         AMOUNT: 'amount',
         SOURCE: 'source',
@@ -5071,8 +5073,8 @@ if (settings.switch) {
 
             const {
               METADATA, AIR_QUALITY, REQUIRE_NEXT_HOUR, NEXT_HOUR, PROVIDER_NAME, REPORTED_TIME,
-              AQI_INDEX, AQI_SCALE, POLLUTANTS, UNIT, AMOUNT, SOURCE, AQI_COMPARISON,
-              TEMPORARILY_UNAVAILABLE,
+              AQI_INDEX, AQI_SCALE, POLLUTANTS, PRIMARY_POLLUTANT, UNIT, AMOUNT, SOURCE,
+              AQI_COMPARISON, TEMPORARILY_UNAVAILABLE,
             } = getKeywords(appleApiVersion);
 
             const settingsToAqiStandard = { WAQI_InstantCast: WAQI_INSTANT_CAST };
@@ -5534,12 +5536,25 @@ if (settings.switch) {
                 logger('debug', `API返回数据：${JSON.stringify(dataForAqiComparison.returnedData)}`);
               }
 
+              const primaryPollutant = localConvertedAirQuality?.[PRIMARY_POLLUTANT];
+
               return {
                 ...dataFromApple,
                 ...(requireData.includes(AIR_QUALITY) && {
                   [AIR_QUALITY]: {
                     ...localConvertedAirQuality,
                     ...(needCompareAqi && { [AQI_COMPARISON]: modifiedCompareAqi }),
+                    ...(
+                      isNonEmptyString(primaryPollutant) && (typeof localConvertedAirQuality?.[POLLUTANTS] !== 'object'
+                        || !Object.keys(localConvertedAirQuality[POLLUTANTS])
+                          .some((key) => key === primaryPollutant))
+                      && {
+                        [POLLUTANTS]: {
+                          ...localConvertedAirQuality?.[POLLUTANTS],
+                          [primaryPollutant]: toPollutant(appleApiVersion, primaryPollutant, -1, 'microgramsPerM3'),
+                        },
+                      }
+                    ),
                   },
                 }),
                 ...(requireData.includes(REQUIRE_NEXT_HOUR) && {
