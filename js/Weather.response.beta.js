@@ -5651,20 +5651,71 @@ if (settings.switch) {
                     }))];
                   }
                   case 'api.waqi.info': {
-                    const tokenFromUser = settings.apis.waqi.token;
-                    if (isNonEmptyString(tokenFromUser) && missions.length === 1 && missions.includes('aqi')) {
-                      return [
-                        waqiV2(location, null, tokenFromUser, settings.apis.waqi.httpHeaders)
-                          .then((returnedData) => ({
+                    const getHistoryAqis = (stationId, fallbackData) => {
+                      const getAqiData = (id, token) => waqiV1('aqi', id, `token=${token}&id=${id}`)
+                        .then((returnedData) => ({
+                          missions: ['aqi', 'forCompareAqi'],
+                          api,
+                          types: ['v1Aqi'],
+                          returnedData,
+                        }));
+                      const cachedToken = getCachedWaqiToken(
+                        toCaches(getENV('iRingo', 'Weather', database)).waqi.tokens,
+                        stationId,
+                      );
+
+                      return isNonEmptyString(cachedToken)
+                        ? getAqiData(stationId, cachedToken)
+                        : waqiToken(stationId).then((tokenData) => {
+                          if (tokenData.status === 'ok') {
+                            const newCaches = cacheWaqiToken(
+                              toCaches(getENV('iRingo', 'Weather', database)),
+                              stationId,
+                              tokenData.data,
+                            );
+                            // eslint-disable-next-line
+                            $.setjson(
+                              newCaches,
+                              '@iRingo.Weather.Caches',
+                            );
+                            return getAqiData(stationId, tokenData.data);
+                          }
+
+                          logger('warn', `${$.name}：无法获取WAQI token`);
+                          return Promise.resolve({
                             missions: ['aqi'],
                             api,
-                            types: ['locationFeed'],
-                            returnedData,
-                          })),
-                      ];
-                    }
+                            types: ['mapq'],
+                            returnedData: fallbackData,
+                          });
+                        });
+                    };
 
                     if (missions.includes('aqi') || missions.includes('forCompareAqi')) {
+                      const tokenFromUser = settings.apis.waqi.token;
+
+                      if (isNonEmptyString(tokenFromUser)) {
+                        return [
+                          waqiV2(location, null, tokenFromUser, settings.apis.waqi.httpHeaders)
+                            .then((v2Data) => {
+                              if (missions.includes('forCompareAqi')) {
+                                if (isNonNanNumber(v2Data?.data?.idx)) {
+                                  return getHistoryAqis(v2Data.data.idx, v2Data);
+                                }
+
+                                logger('warn', `${$.name}：无法获取WAQI监测站ID`);
+                              }
+
+                              return {
+                                missions: ['aqi'],
+                                api,
+                                types: ['locationFeed'],
+                                returnedData: v2Data,
+                              };
+                            }),
+                        ];
+                      }
+
                       return [
                         waqiNearest(location, 'mapq', settings.apis.waqi.httpHeaders)
                           .then((nearestData) => {
@@ -5676,47 +5727,10 @@ if (settings.switch) {
                                 const stationId = parseInt(station?.x, 10);
 
                                 if (isNonNanNumber(stationId)) {
-                                  const getAqiData = (id, token) => waqiV1('aqi', id, `token=${token}&id=${id}`)
-                                    .then((returnedData) => ({
-                                      missions: ['aqi', 'forCompareAqi'],
-                                      api,
-                                      types: ['v1Aqi'],
-                                      returnedData,
-                                    }));
-                                  const cachedToken = getCachedWaqiToken(
-                                    toCaches(getENV('iRingo', 'Weather', database)).waqi.tokens,
-                                    stationId,
-                                  );
-
-                                  return isNonEmptyString(cachedToken)
-                                    ? getAqiData(stationId, cachedToken)
-                                    : waqiToken(stationId).then((tokenData) => {
-                                      if (tokenData.status === 'ok') {
-                                        const newCaches = cacheWaqiToken(
-                                          toCaches(getENV('iRingo', 'Weather', database)),
-                                          stationId,
-                                          tokenData.data,
-                                        );
-                                        // eslint-disable-next-line
-                                        $.setjson(
-                                          newCaches,
-                                          '@iRingo.Weather.Caches',
-                                        );
-                                        return getAqiData(stationId, tokenData.data);
-                                      }
-
-                                      logger('warn', `${$.name}：无法获取WAQI token`);
-                                      return {
-                                        missions: ['aqi'],
-                                        api,
-                                        types: ['mapq'],
-                                        returnedData: nearestData,
-                                      };
-                                    });
+                                  return getHistoryAqis(stationId, nearestData);
                                 }
 
                                 logger('warn', `${$.name}：无法获取WAQI监测站ID`);
-                                logger('debug', `WAQI监测站列表：${JSON.stringify(nearestData.d)}`);
                               // eslint-disable-next-line functional/no-conditional-statement
                               } else {
                                 logger('warn', `${$.name}：无法获取WAQI监测站列表`);
