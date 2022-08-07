@@ -4414,6 +4414,20 @@ const toMetadata = (appleApiVersion, metadataObject) => {
       && { longitude: metadataObject.location.longitude }),
   };
 
+  const getSharedMetadataV2Plus = (apiVersion, metadataObj) => ({
+    ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
+      && { expireTime: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
+    ...(isNonEmptyString(metadataObj?.providerLogo?.forV2)
+      && { providerLogo: metadataObj.providerLogo.forV2 }),
+    ...(isNonEmptyString(metadataObj?.providerName)
+      && { providerName: metadataObj.providerName }),
+    ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
+      && { readTime: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
+    ...(isNonNanNumber(metadataObj?.reportedTimestamp) && metadataObj.reportedTimestamp > 0
+      && { reportedTime: toAppleTime(apiVersion, metadataObj.reportedTimestamp) }),
+    ...(isNonEmptyString(metadataObj?.unit) && { units: metadataObj.unit }),
+  });
+
   /**
    * Merge metadata for Apple Weather by API version
    * @param {supportedAppleApi} apiVersion - Apple API version
@@ -4446,33 +4460,13 @@ const toMetadata = (appleApiVersion, metadataObject) => {
         // no data source for APIv2
         return {
           ...sharedMetadata,
-          ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
-            && { expireTime: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
-          ...(isNonEmptyString(metadataObj?.providerLogo?.forV2)
-            && { providerLogo: metadataObj.providerLogo.forV2 }),
-          ...(isNonEmptyString(metadataObj?.providerName)
-            && { providerName: metadataObj.providerName }),
-          ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
-            && { readTime: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
-          ...(isNonNanNumber(metadataObj?.reportedTimestamp) && metadataObj.reportedTimestamp > 0
-            && { reportedTime: toAppleTime(apiVersion, metadataObj.reportedTimestamp) }),
-          ...(isNonEmptyString(metadataObj?.unit) && { units: metadataObj.unit }),
+          ...getSharedMetadataV2Plus(apiVersion, metadataObj),
         };
       case 3:
         return {
-          ...sharedMetadata,
           ...(isNonEmptyString(metadataObj?.url) && { attributionURL: metadataObj.url }),
-          ...(isNonNanNumber(metadataObj?.expireTimestamp) && metadataObj.expireTimestamp > 0
-            && { expireTime: toAppleTime(apiVersion, metadataObj.expireTimestamp) }),
-          ...(isNonEmptyString(metadataObj?.providerLogo?.forV2)
-            && { providerLogo: metadataObj.providerLogo.forV2 }),
-          ...(isNonEmptyString(metadataObj?.providerName)
-            && { providerName: metadataObj.providerName }),
-          ...(isNonNanNumber(metadataObj?.readTimestamp) && metadataObj.readTimestamp > 0
-            && { readTime: toAppleTime(apiVersion, metadataObj.readTimestamp) }),
-          ...(isNonNanNumber(metadataObj?.reportedTimestamp) && metadataObj.reportedTimestamp > 0
-            && { reportedTime: toAppleTime(apiVersion, metadataObj.reportedTimestamp) }),
-          ...(isNonEmptyString(metadataObj?.unit) && { units: metadataObj.unit }),
+          ...sharedMetadata,
+          ...getSharedMetadataV2Plus(apiVersion, metadataObj),
         };
       default:
         return {};
