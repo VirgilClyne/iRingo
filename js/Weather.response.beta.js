@@ -3534,7 +3534,7 @@ const waqiV1AqiToAqiComparison = (aqiFeedMsg) => {
     if (Array.isArray(historyData)) {
       const aqi = historyData.find((history) => (
         isNonNanNumber(history?.timestamp) && history.timestamp >= yesterdayTimestamp
-        && history.timestamp < yesterdayTimestamp + 1000 * 60 * 59
+        && history.timestamp < yesterdayTimestamp + 1000 * 60 * 60
       ))?.aqi;
 
       if (isNonNanNumber(aqi)) {
