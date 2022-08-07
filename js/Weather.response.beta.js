@@ -3292,7 +3292,9 @@ const getCcAirQuality = (dataWithRealtime) => {
       }));
 
       // Detect the support of air quality
-      if (Object.values(result).filter((value) => value <= 0).length <= 1) {
+      if (
+        Object.values(result).filter((value) => isNonNanNumber(value) && value <= 0).length <= 1
+      ) {
         logger('debug', `${getCcAirQuality.name}：美标：${result.aqi.usa}，国标：${result.aqi.chn}`);
         return result;
       }
