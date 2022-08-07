@@ -4532,9 +4532,6 @@ const toPollutant = (appleApiVersion, name, amount, unit) => {
  * } - Air quality data in Apple Weather style without metadata
  */
 const toAirQuality = (appleApiVersion, aqiObject) => {
-  const applePollutantNames = [
-    'NO2', 'NO', 'NOX', 'PM2.5', 'SO2', 'OZONE', 'PM10', 'CO',
-  ];
   const units = ['ppb', 'microgramsPerM3'];
   const comparisonValues = ['better', 'same', 'worse', 'unknown'];
   const sourceTypes = ['station', 'modeled'];
@@ -4549,9 +4546,7 @@ const toAirQuality = (appleApiVersion, aqiObject) => {
   const sharedAirQuality = {
     ...(typeof aqiObject?.isSignificant === 'boolean' && { isSignificant: aqiObject.isSignificant }),
     ...(isNonEmptyString(aqiObject?.url) && { learnMoreURL: aqiObject.url }),
-    ...(
-      applePollutantNames.includes(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }
-    ),
+    ...(isNonEmptyString(aqiObject?.primary) && { primaryPollutant: aqiObject.primary }),
     ...(validPollutants.length > 0 && {
       pollutants: Object.fromEntries(validPollutants.map(({ name, amount, unit }) => ([
         name, toPollutant(appleApiVersion, name, amount, unit),
