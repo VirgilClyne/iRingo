@@ -19,7 +19,7 @@ function URLs(s){return new class{constructor(s=[]){this.name="URL v1.0.0",this.
  * @param {String} t - Persistent Store Key
  * @param {String} e - Platform Name
  * @param {Object} n - Default DataBase
- * @return {Promise<*>}
+ * @return {{Settings: Object, Caches: Object, Configs: Object}}
  */
 // noinspection
 // eslint-disable-next-line
@@ -672,6 +672,7 @@ const database = {
  * @typedef {Object} cachesV1
  *
  * @property {Object.<number, aqiCacheV1[]>} aqis - AQI caches
+ * @property {{tokens: Object.<number, {timestamp: number, token: string}>}} waqi - WAQI caches
  */
 
 /**
@@ -1686,7 +1687,7 @@ const isPositiveRange = (range) => (
  * Get settings from Box.js
  * @author WordlessEcho <wordless@echo.moe>
  * @author VirgilClyne
- * @param {string} envs - `envs` from {@link getENV}
+ * @param {Object} envs - `envs` from {@link getENV}
  * @return {settingsV1} - Valid settings
  */
 const toSettings = (envs) => {
@@ -1769,12 +1770,18 @@ const toSettings = (envs) => {
 /**
  * Get caches from Box.js
  * @author WordlessEcho <wordless@echo.moe>
- * @param {string} envs - `envs` from {@link getENV}
+ * @param {Object} envs - `envs` from {@link getENV}
  * @return {cachesV1} - Valid caches
  */
 const toCaches = (envs) => ({
   aqis: {
-    ...(isObject(envs?.Cache?.aqis) && envs.Cache.aqis),
+    ...(isObject(envs?.Caches?.aqis) && envs.Caches.aqis),
+  },
+  waqi: {
+    ...(isObject(envs?.Caches?.waqi) && envs.Caches.waqi),
+    tokens: {
+      ...(isObject(envs.Caches.waqi?.tokens) && envs.Caches.waqi.tokens),
+    },
   },
 });
 
@@ -1895,6 +1902,29 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
 };
 
 /**
+ * Get token from cache
+ * @author WordlessEcho <wordless@echo.moe>
+ * @param {Object.<number, {timestamp: number, token: string}>} cachedTokens - Caches of WAQI tokens
+ * @param {number} stationId - Station ID
+ * @return {string} - Matched token
+ */
+const getCachedWaqiToken = (cachedTokens, stationId) => {
+  if (isObject(cachedTokens) && isNonNanNumber(stationId)) {
+    // 1 hour
+    const cacheLimit = (+(new Date())) - 1000 * 60 * 60;
+    const cachedToken = cachedTokens?.[stationId];
+
+    if (isNonNanNumber(cachedToken?.timestamp) && cachedToken.timestamp > cacheLimit
+      && isNonEmptyString(cachedToken?.token)) {
+      logger('info', `${getCachedWaqiToken.name}：找到了监测站ID ${stationId}的token缓存`);
+      return cachedToken.token;
+    }
+  }
+
+  return '';
+};
+
+/**
  * Return caches for `setjson`
  * @author WordlessEcho <wordless@echo.moe>
  * @param {cachesV1} caches - Caches of iRingo.Weather.Caches
@@ -1977,6 +2007,40 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
   return {
     ...(isObject(caches) && caches),
     aqis: { ...validAqis },
+  };
+};
+
+/**
+ * Return caches for `setjson`
+ * @author WordlessEcho <wordless@echo.moe>
+ * @param {cachesV1} caches - Caches of iRingo.Weather.Caches
+ * @param {number} stationId - Station ID
+ * @param {string} token - Token of station
+ * @return {cachesV1} - Cache will not be edited if any parameter is invalid.
+ */
+const cacheWaqiToken = (caches, stationId, token) => {
+  // Remove caches before 1 hour ago
+  const cacheLimit = (+(new Date())) - 1000 * 60 * 60;
+
+  const validTokens = isObject(caches?.waqi?.tokens)
+    ? Object.fromEntries(Object.entries(caches.waqi.tokens)
+      .filter(([stationIdString, tokenInfo]) => (
+        isNonNanNumber(parseInt(stationIdString, 10)) && isNonNanNumber(tokenInfo?.timestamp)
+        && tokenInfo.timestamp > cacheLimit && isNonEmptyString(tokenInfo?.token)
+      ))) : {};
+
+  return {
+    ...(isObject(caches) && caches),
+    waqi: {
+      ...(isObject(caches?.waqi) && caches?.waqi),
+      tokens: {
+        ...validTokens,
+        ...(isNonNanNumber(stationId) && isNonEmptyString(token)
+          && !logger('info', `${cacheWaqiToken.name}：已缓存监测站ID ${stationId}的token`) && {
+          [stationId]: { timestamp: (+(new Date())), token },
+        }),
+      },
+    },
   };
 };
 
@@ -5601,10 +5665,10 @@ if (settings.switch) {
                     }))];
                   }
                   case 'api.waqi.info': {
-                    const { token } = settings.apis.waqi;
-                    if (isNonEmptyString(token) && missions.length === 1 && missions.includes('aqi')) {
+                    const tokenFromUser = settings.apis.waqi.token;
+                    if (isNonEmptyString(tokenFromUser) && missions.length === 1 && missions.includes('aqi')) {
                       return [
-                        waqiV2(location, null, token, settings.apis.waqi.httpHeaders)
+                        waqiV2(location, null, tokenFromUser, settings.apis.waqi.httpHeaders)
                           .then((returnedData) => ({
                             missions: ['aqi'],
                             api,
@@ -5626,25 +5690,43 @@ if (settings.switch) {
                                 const stationId = parseInt(station?.x, 10);
 
                                 if (isNonNanNumber(stationId)) {
-                                  // TODO: Get cached token
-                                  // eslint-disable-next-line arrow-body-style
-                                  return waqiToken(stationId).then((tokenData) => {
-                                    // TODO: Cache token
-                                    return tokenData.status === 'ok'
-                                      ? waqiV1('aqi', stationId, `token=${tokenData.data}&id=${stationId}`)
-                                        .then((returnedData) => ({
-                                          missions: ['aqi', 'forCompareAqi'],
-                                          api,
-                                          types: ['v1Aqi'],
-                                          returnedData,
-                                        }))
-                                      : !logger('warn', `${$.name}：无法获取WAQI token`) && {
+                                  const getAqiData = (id, token) => waqiV1('aqi', id, `token=${token}&id=${id}`)
+                                    .then((returnedData) => ({
+                                      missions: ['aqi', 'forCompareAqi'],
+                                      api,
+                                      types: ['v1Aqi'],
+                                      returnedData,
+                                    }));
+                                  const cachedToken = getCachedWaqiToken(
+                                    toCaches(getENV('iRingo', 'Weather', database)).waqi.tokens,
+                                    stationId,
+                                  );
+
+                                  return isNonEmptyString(cachedToken)
+                                    ? getAqiData(stationId, cachedToken)
+                                    : waqiToken(stationId).then((tokenData) => {
+                                      if (tokenData.status === 'ok') {
+                                        const newCaches = cacheWaqiToken(
+                                          toCaches(getENV('iRingo', 'Weather', database)),
+                                          stationId,
+                                          tokenData.data,
+                                        );
+                                        // eslint-disable-next-line
+                                        $.setjson(
+                                          newCaches,
+                                          '@iRingo.Weather.Caches',
+                                        );
+                                        return getAqiData(stationId, tokenData.data);
+                                      }
+
+                                      logger('warn', `${$.name}：无法获取WAQI token`);
+                                      return {
                                         missions: ['aqi'],
                                         api,
                                         types: ['mapq'],
                                         returnedData: nearestData,
                                       };
-                                  });
+                                    });
                                 }
 
                                 logger('warn', `${$.name}：无法获取WAQI监测站ID`);
