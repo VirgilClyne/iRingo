@@ -1933,7 +1933,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
       timestampString,
       aqisInfo.filter((aqiInfo) => (
         isNonNanNumber(aqiInfo?.aqi) && aqiInfo.aqi >= 0 && isLocation(aqiInfo?.location)
-        && isNonEmptyString(typeof aqiInfo?.scaleName)
+        && isNonEmptyString(aqiInfo?.scaleName)
       )),
     ])) : {};
 
