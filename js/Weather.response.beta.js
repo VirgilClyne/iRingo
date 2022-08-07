@@ -51,7 +51,7 @@ const database = {
           ForceCNForAQI: true,
           ForceCNForComparison: false,
         },
-        WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: '', Mode: 'Location' },
+        WAQI: { HTTPHeaders: { 'Content-Type': 'application/json' }, Token: '' },
       },
       Log: {
         Level: 'info',
@@ -630,8 +630,6 @@ const database = {
 /**
  * Version 1 of The World Air Quality Project API settings
  * @typedef {baseApiTokenSettingsV1} waqiSettingsV1
- *
- * @property {string} mode - Mode of fetching WAQI data
  */
 /**
  * Version 1 of APIs settings
@@ -1755,8 +1753,6 @@ const toSettings = (envs) => {
           settings.APIs.WAQI.HTTPHeaders,
         ),
         token: envs?.Settings?.APIs?.WAQI?.Token,
-        // TODO
-        mode: envs?.Settings?.APIs?.WAQI?.Mode,
       },
     },
     log: {
