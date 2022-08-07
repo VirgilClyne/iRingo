@@ -1579,6 +1579,13 @@ const WAQI_INSTANT_CAST = {
 };
 
 /**
+ * Check passed parameter is or not an object
+ * @param {any} object - Value you wish to check
+ * @return {boolean} - Return `true` if passed parameter is an object
+ */
+const isObject = (object) => typeof object === 'object' && !Array.isArray(object) && object !== null;
+
+/**
  * Check passed parameter is or not a non-empty string
  * @author WordlessEcho <wordless@echo.moe>
  * @param {any} string - Value you wish to check
@@ -1767,7 +1774,7 @@ const toSettings = (envs) => {
  */
 const toCaches = (envs) => ({
   aqis: {
-    ...envs?.Cache?.aqis,
+    ...(isObject(envs?.Cache?.aqis) && envs.Cache.aqis),
   },
 });
 
@@ -1840,7 +1847,7 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
   const pythagoreanTheorem = (a, b) => Math.sqrt(a * a + b * b);
 
   if (
-    typeof cachedAqis === 'object' && isNonNanNumber(timestamp) && timestamp > 0
+    isObject(cachedAqis) && isNonNanNumber(timestamp) && timestamp > 0
     && isLocation(location) && isNonEmptyString(scaleName)
   ) {
     const caches = Object.fromEntries(Object.entries(cachedAqis)
@@ -1903,20 +1910,19 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
   // Remove caches before 36 hours ago
   const cacheLimit = (+new Date()) - 1000 * 60 * 60 * 36;
 
-  const validAqis = typeof caches?.aqis === 'object'
-    ? Object.fromEntries(Object.entries(caches.aqis)
-      .filter(([timestampString, aqisInfo]) => {
-        const cachedTimestamp = parseInt(timestampString, 10);
-        return isNonNanNumber(cachedTimestamp) && cachedTimestamp > cacheLimit
-          && Array.isArray(aqisInfo);
-      })
-      .map(([timestampString, aqisInfo]) => [
-        timestampString,
-        aqisInfo.filter((aqiInfo) => (
-          isNonNanNumber(aqiInfo?.aqi) && aqiInfo.aqi >= 0 && isLocation(aqiInfo?.location)
-          && isNonEmptyString(typeof aqiInfo?.scaleName)
-        )),
-      ])) : {};
+  const validAqis = isObject(caches?.aqis) ? Object.fromEntries(Object.entries(caches.aqis)
+    .filter(([timestampString, aqisInfo]) => {
+      const cachedTimestamp = parseInt(timestampString, 10);
+      return isNonNanNumber(cachedTimestamp) && cachedTimestamp > cacheLimit
+        && Array.isArray(aqisInfo);
+    })
+    .map(([timestampString, aqisInfo]) => [
+      timestampString,
+      aqisInfo.filter((aqiInfo) => (
+        isNonNanNumber(aqiInfo?.aqi) && aqiInfo.aqi >= 0 && isLocation(aqiInfo?.location)
+        && isNonEmptyString(typeof aqiInfo?.scaleName)
+      )),
+    ])) : {};
 
   if (
     isNonNanNumber(timestamp) && timestamp > cacheLimit && isLocation(location)
@@ -1952,7 +1958,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
       );
 
       return {
-        ...(typeof caches === 'object' && caches),
+        ...(isObject(caches) && caches),
         aqis: {
           ...validAqis,
           [isNonNanNumber(cacheTimestamp) ? cacheTimestamp : timestamp]: [
@@ -1970,7 +1976,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
   }
 
   return {
-    ...(typeof caches === 'object' && caches),
+    ...(isObject(caches) && caches),
     aqis: { ...validAqis },
   };
 };
@@ -1993,7 +1999,7 @@ const getParams = (path) => {
   const regExp = /^(?<ver>v1|v2|v3)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
   const result = path.match(regExp);
 
-  return typeof result?.groups === 'object' ? result.groups : {};
+  return isObject(result?.groups) ? result.groups : {};
 };
 
 /**
@@ -2774,7 +2780,7 @@ const colorfulClouds = (
       return;
     }
 
-    const parametersString = typeof parameters === 'object'
+    const parametersString = isObject(parameters)
       ? Object.entries({ lang: toColorfulCloudsLang(language), ...parameters })
         .map(([key, value]) => `${key}=${value}`).join('&')
       : '';
@@ -3031,13 +3037,13 @@ const toEpaAqi = (concentrationRanges, amount) => {
  * @returns {aqiInfo}
  */
 const toEpaAqis = (concentrationsInfo, pollutants) => {
-  if (typeof concentrationsInfo !== 'object' || !Array.isArray(pollutants)) {
+  if (!isObject(concentrationsInfo) || !Array.isArray(pollutants)) {
     return { index: -1, pollutants: [] };
   }
 
   const concentrations = Object.fromEntries(Object.entries(concentrationsInfo)
     .filter(([key, value]) => (
-      isNonEmptyString(key) && isNonEmptyString(value?.UNIT) && typeof value?.RANGES === 'object'
+      isNonEmptyString(key) && isNonEmptyString(value?.UNIT) && isObject(value?.RANGES)
       && !Object.values(value.RANGES).some((rangesForLevel) => (
         !isPositiveWithZeroRange(rangesForLevel?.AMOUNT)
         || !isPositiveWithZeroRange(rangesForLevel?.AQI)
@@ -3200,15 +3206,15 @@ const convertV1Pollutants = (pollutants) => {
  */
 const appleToEpaAirQuality = (standard, pollutants) => {
   if (
-    typeof standard !== 'object' || !Array.isArray(pollutants)
-    || typeof standard?.CONCENTRATIONS !== 'object' || typeof standard?.AQI_LEVELS !== 'object'
+    !isObject(standard) || !Array.isArray(pollutants) || !isObject(standard?.CONCENTRATIONS)
+    || !isObject(standard?.AQI_LEVELS)
   ) {
     return {};
   }
 
   const validConcentrations = Object.fromEntries(Object.entries(standard.CONCENTRATIONS).filter(
     ([, value]) => (
-      isNonEmptyString(value?.UNIT) && typeof value?.RANGES === 'object'
+      isNonEmptyString(value?.UNIT) && isObject(value?.RANGES)
       && !Object.values(value.RANGES).includes((v) => (
         !isPositiveRange(v?.AMOUNT) || !isPositiveWithZeroRange(v?.AQI)
       ))
@@ -3271,7 +3277,7 @@ const getCcAirQuality = (dataWithRealtime) => {
       ? dataWithRealtime?.result?.realtime?.air_quality
       : dataWithRealtime?.result;
 
-    if (typeof airQuality === 'object') {
+    if (isObject(airQuality)) {
       const result = Object.fromEntries(Object.keys(toColorfulCloudsNames).map((key) => {
         const value = airQuality?.[toColorfulCloudsNames[key]];
 
@@ -3584,7 +3590,7 @@ const colorfulCloudsToAqi = (
    * @return {pollutantV2[] | []} -
    * Object for `airQuality.pollutants` of Apple Weather
    */
-  const toPollutants = (airQuality) => (typeof airQuality === 'object'
+  const toPollutants = (airQuality) => (isObject(airQuality)
     ? Object.entries(airQuality)
       .filter(([key]) => key !== 'aqi')
       .map(([pollutantName, amount]) => ({
@@ -3718,7 +3724,7 @@ const waqiToAqi = (feedData) => {
  * 0 will be returned if precipitation levels or precipitation is invalid.
  */
 const toPerceived = (precipitationLevels, precipitation) => {
-  const levels = typeof precipitationLevels === 'object'
+  const levels = isObject(precipitationLevels)
     ? Object.values(precipitationLevels).filter((level) => (
       isPositiveWithZeroRange(level.RANGE) && isNonNanNumber(level.VALUE)
       && level.VALUE >= 0 && level.VALUE <= 3
@@ -4651,7 +4657,7 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
       chance: Math.round(chance),
       shortDescription: validShortDescription,
       longDescription: validLongDescription,
-      ...({ parameters: typeof minute?.parameters === 'object' ? minute.parameters : {} }),
+      ...({ parameters: isObject(minute?.parameters) ? minute.parameters : {} }),
     };
   });
 
@@ -4790,8 +4796,7 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
             longTemplate: !haveLongDescription && isNonEmptyString(minute.shortDescription)
               ? minute.shortDescription : longDescription,
             shortTemplate: minute.shortDescription,
-            parameters: haveLongDescription && typeof minute.parameters === 'object'
-            && Object.keys(minute.parameters).length > 0
+            parameters: haveLongDescription && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
                 key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
               ])) : toParameters(array, index, slicedMinutes, timestamp),
@@ -4806,8 +4811,7 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
             longTemplate: !haveLongDescription && isNonEmptyString(minute.shortDescription)
               ? minute.shortDescription : longDescription,
             shortTemplate: minute.shortDescription,
-            parameters: haveLongDescription && typeof minute.parameters === 'object'
-            && Object.keys(minute.parameters).length > 0
+            parameters: haveLongDescription && Object.keys(minute.parameters).length > 0
               ? Object.fromEntries(Object.entries(minute.parameters).map(([key, value]) => [
                 key, toAppleTime(apiVersion, timestamp + value * 60 * 1000),
               ])) : toParameters(array, index, timestamp),
@@ -5109,7 +5113,17 @@ const appleTimeToTimestamp = (apiVersion, time, fallbackTimestamp) => {
  * Set response
  * @param {Object} response - Response to set
  */
-const setResponse = (response) => $.done(!$.isQuanX() ? response : { body: response?.body });
+const setResponse = (response) => {
+  // eslint-disable-next-line functional/no-conditional-statement
+  if (isObject(response)) {
+    // eslint-disable-next-line functional/no-expression-statement
+    $.done(!$.isQuanX() ? response : { body: isNonEmptyString(response?.body) ? response?.body : '' });
+  // eslint-disable-next-line functional/no-conditional-statement
+  } else {
+    // eslint-disable-next-line functional/no-expression-statement
+    $.done({ body: '' });
+  }
+};
 
 const caches = toCaches(envs);
 
@@ -5149,7 +5163,7 @@ if (settings.switch) {
         // eslint-disable-next-line no-undef
         const dataFromApple = parseJsonWithDefault($response?.body, null);
         // eslint-disable-next-line functional/no-conditional-statement
-        if (dataFromApple) {
+        if (isObject(dataFromApple)) {
           const latitude = parseFloat(parameters?.lat);
           const longitude = parseFloat(parameters?.lng);
 
@@ -5479,7 +5493,7 @@ if (settings.switch) {
                       dataFromApple[AIR_QUALITY]?.[SOURCE],
                     ),
                   },
-                  ...(typeof dataFromApple[AIR_QUALITY]?.[POLLUTANTS] === 'object' && {
+                  ...(isObject(dataFromApple[AIR_QUALITY]?.[POLLUTANTS]) && {
                     [POLLUTANTS]: Object.fromEntries(
                       Object.entries(dataFromApple[AIR_QUALITY][POLLUTANTS]).map(([key, value]) => {
                         if (key === 'CO') {
@@ -5701,7 +5715,7 @@ if (settings.switch) {
                 [METADATA]: { ...airQuality?.[METADATA], ...modifiedAirQuality?.[METADATA] },
               };
               const mergedScale = mergedAirQuality?.[AQI_SCALE];
-              const pollutants = typeof mergedAirQuality?.[POLLUTANTS] === 'object'
+              const pollutants = isObject(mergedAirQuality?.[POLLUTANTS])
                 ? Object.values(mergedAirQuality[POLLUTANTS]) : [];
               const localConvertedAirQuality = {
                 ...mergedAirQuality,
@@ -5723,7 +5737,7 @@ if (settings.switch) {
               const aqiLevels = scaleToAqiStandard[localConvertedAirQuality?.[AQI_SCALE]]
                 ?.AQI_LEVELS;
               const modifiedCompareAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0
-              && cachedAqi.aqi >= 0 && typeof aqiLevels === 'object' ? compareAqi(
+              && cachedAqi.aqi >= 0 && isObject(aqiLevels) ? compareAqi(
                   toAqiLevel(aqiLevels, localConvertedAirQuality[AQI_INDEX]),
                   toAqiLevel(aqiLevels, cachedAqi.aqi),
                 )
@@ -5758,7 +5772,8 @@ if (settings.switch) {
                     ...localConvertedAirQuality,
                     ...(needCompareAqi && { [AQI_COMPARISON]: modifiedCompareAqi }),
                     ...(
-                      isNonEmptyString(primaryPollutant) && (typeof localConvertedAirQuality?.[POLLUTANTS] !== 'object'
+                      isNonEmptyString(primaryPollutant) && (
+                        !isObject(localConvertedAirQuality?.[POLLUTANTS])
                         || !Object.keys(localConvertedAirQuality[POLLUTANTS])
                           .some((key) => key === primaryPollutant))
                       && {
