@@ -1958,9 +1958,9 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
           && Math.abs(aqiInfo.location.latitude - location.latitude) < 0.045
           && aqiInfo?.scaleName === scaleName
       ))
-      : undefined;
+      : { aqi: -1 };
 
-    if (!isNonNanNumber(existedCache?.aqi)) {
+    if (!isNonNanNumber(existedCache?.aqi) || existedCache.aqi < 0) {
       logger(
         'debug',
         `${cacheAqi.name}：已将当前AQI信息缓存，AQI信息：\n`
