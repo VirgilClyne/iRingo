@@ -2340,7 +2340,7 @@ const waqiV1 = (
   const baseUrl = 'https://api.waqi.info';
 
   // eslint-disable-next-line functional/no-expression-statement
-  $.get(
+  $.post(
     {
       headers,
       url: `${baseUrl}/api/feed/@${stationId}/${type}.json`,
