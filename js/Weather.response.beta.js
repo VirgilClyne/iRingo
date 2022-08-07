@@ -3686,6 +3686,7 @@ const waqiToAqiMetadata = (feedData) => {
  * @return {airQualityObject | {}} - Object for {@link toAirQuality}
  */
 const waqiToAqi = (feedData) => {
+  // TODO: Find other pollutant names for WAQI
   const toApplePollutantName = {
     no2: 'NO2', no: 'NO', nox: 'NOX', pm25: 'PM2.5', so2: 'SO2', o3: 'OZONE', pm10: 'PM10', co: 'CO', other: 'OTHER',
   };
