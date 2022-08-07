@@ -1992,7 +1992,7 @@ const cacheAqi = (caches, timestamp, location, stationName, scaleName, aqi) => {
  * Empty object will be returned if type of path is invalid.
  */
 const getParams = (path) => {
-  if (typeof path !== 'string') {
+  if (!isNonEmptyString(path)) {
     return {};
   }
 
@@ -2163,7 +2163,7 @@ const waqiV2 = (
   token,
   headers = { 'Content-Type': 'application/json' },
 ) => new Promise((resolve) => {
-  if (typeof token !== 'string' || token.length <= 0) {
+  if (!isNonEmptyString(token)) {
     // eslint-disable-next-line functional/no-expression-statement
     resolve({
       status: 'error',
@@ -2197,7 +2197,7 @@ const waqiV2 = (
         + `Data: ${d}`,
     }));
 
-    if (typeof result?.status !== 'string') {
+    if (!isNonEmptyString(result?.status)) {
       return {
         status: 'error',
         data: 'WAQI returned an unknown status\n'
@@ -2301,7 +2301,7 @@ const waqiV1 = (
           + `Data: ${data}`,
       }));
 
-      if (typeof result?.rxs?.status !== 'string') {
+      if (!isNonEmptyString(result?.rxs?.status)) {
         // eslint-disable-next-line functional/no-expression-statement
         resolve({
           status: 'error',
@@ -2556,7 +2556,7 @@ const waqiV1ToFeed = (v1Data) => {
   };
 
   return v1Data.rxs.obs.map((station) => {
-    if (typeof station?.status !== 'string' || (station.status !== 'ok' && station.status !== 'error')) {
+    if (!isNonEmptyString(station?.status) || (station.status !== 'ok' && station.status !== 'error')) {
       return {
         status: 'error',
         data: `${waqiV1ToFeed.name}: Unknown status from WAQI\n`
@@ -2754,7 +2754,7 @@ const colorfulClouds = (
    * Empty string will be returned if all types of parameter are correct.
    */
   const getError = (uncheckedToken, uncheckedLocation) => {
-    if (typeof uncheckedToken !== 'string' || uncheckedToken.length <= 0) {
+    if (!isNonEmptyString(uncheckedToken)) {
       return `${colorfulClouds.name}: Invalid token\n`
         + `Token type: ${typeof uncheckedToken}\n`
         + `Token length: ${uncheckedToken?.length}`;
@@ -3350,7 +3350,7 @@ const colorfulCloudsHistoryAqi = (historyData, timestamp) => {
 
   // An hour as range
   const aqis = historyAqis?.find((aqi) => {
-    if (typeof aqi?.datetime !== 'string' || aqi.datetime.length <= 0) {
+    if (!isNonEmptyString(aqi?.datetime)) {
       return false;
     }
 
@@ -3940,7 +3940,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const currentHourTimestamp = (new Date(timestamp)).setMinutes(0, 0, 0);
 
     const skyConditions = skycons.filter((skycon) => {
-      if (typeof skycon?.datetime !== 'string' || skycon.datetime.length <= 0) {
+      if (!isNonEmptyString(skycon?.datetime)) {
         return false;
       }
 
@@ -4066,7 +4066,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
    * Short description and parameters for Apple Weather
    */
   const toDescription = (description, ccLanguage, timeInMinute, timeShift) => {
-    if (typeof description !== 'string') {
+    if (!isNonEmptyString(description)) {
       return {
         longDescription: '',
         parameters: {},
@@ -4081,7 +4081,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
      * Short description and parameters for Apple Weather
      */
     const modifyDescription = (rawDescription) => {
-      if (typeof rawDescription !== 'string' || rawDescription.length <= 0) {
+      if (!isNonEmptyString(rawDescription)) {
         return {
           longDescription: '',
           parameters: {},
@@ -4098,7 +4098,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
        * Return empty string if description is invalid.
        */
       const insertAfterToDescription = (language, modifiedDescription) => {
-        if (typeof modifiedDescription !== 'string') {
+        if (!isNonEmptyString(modifiedDescription)) {
           return '';
         }
 
@@ -4240,8 +4240,6 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       || dataWithMinutely?.result?.minutely?.datasource !== 'radar'
       || !Array.isArray(dataWithMinutely.result.minutely?.precipitation_2h)
       || !Array.isArray(dataWithMinutely.result.minutely?.probability)
-      || (typeof dataWithMinutely.result.minutely?.description !== 'string'
-        && typeof dataWithMinutely.result?.forecast_keypoint !== 'string')
   ) {
     // eslint-disable-next-line functional/no-conditional-statement
     if (dataWithMinutely?.result?.minutely?.datasource !== 'radar') {
@@ -4322,9 +4320,10 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     const chance = getChance(dataWithMinutely.result.minutely.probability, timeInMinute);
     const validChance = chance >= 0 ? chance : 100;
 
-    const ccDescription = dataWithMinutely.result.minutely.description;
+    const ccDescription = dataWithMinutely.result.minutely?.description;
     // ColorfulClouds may report no rain even if precipitation > no rain
-    const descriptionWithParameters = ccDescription.includes(KM[dataWithMinutely?.lang])
+    const descriptionWithParameters = !isNonEmptyString(ccDescription)
+    || ccDescription.includes(KM[dataWithMinutely?.lang])
       ? {
         longDescription: provider,
         parameters: {},
@@ -4350,7 +4349,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       precipitationIntensityPerceived,
       // Set chance to zero if clear
       chance: isClear ? 0 : validChance,
-      shortDescription: dataWithMinutely.result.forecast_keypoint,
+      shortDescription: isNonEmptyString(dataWithMinutely.result?.forecast_keypoint)
+        ? dataWithMinutely.result?.forecast_keypoint : provider,
       ...validDescriptionWithParameters,
     };
   });
@@ -4369,8 +4369,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
  * @return {string | ""} - Appended string
  */
 const appendQweatherSourceToProviderName = (providerName, source) => {
-  if (typeof source !== 'string' || source.length <= 0) {
-    return isNonEmptyString(providerName) ? providerName : '';
+  if (!isNonEmptyString(source)) {
+    return isNonEmptyString(providerName) ? providerName : $.name;
   }
 
   switch (providerName) {
@@ -5173,7 +5173,7 @@ if (settings.switch) {
             const languageWithRegion = parameters?.language;
 
             // eslint-disable-next-line functional/no-conditional-statement
-            if (typeof languageWithRegion !== 'string' || languageWithRegion.length <= 0) {
+            if (!isNonEmptyString(languageWithRegion)) {
               logger('warn', `${$.name}：无法获取语言信息，语言：${parameters?.language}`);
             }
 
@@ -5221,7 +5221,7 @@ if (settings.switch) {
               if (projectSettings.aqi.local.switch) {
                 const scale = settingsToAqiStandard[projectSettings.aqi.local.standard]
                   ?.APPLE_SCALE;
-                if (typeof scale !== 'string' || scale.length <= 0) {
+                if (!isNonEmptyString(scale)) {
                   return '';
                 }
 
@@ -5515,8 +5515,8 @@ if (settings.switch) {
             const aqiProvider = airQuality?.[METADATA]?.[PROVIDER_NAME];
             const aqiScale = airQuality?.[AQI_SCALE];
             const needAqi = requireData.includes(AIR_QUALITY) && settings.aqi.switch
-              && (typeof aqiScale !== 'string'
-                || (!settings.aqi.local.switch && settings.aqi.targets.includes(
+              && (!isNonEmptyString(aqiScale) || (!settings.aqi.local.switch
+                && settings.aqi.targets.includes(
                   aqiScale.slice(0, aqiScale.lastIndexOf('.')),
                 )));
 
@@ -5541,8 +5541,7 @@ if (settings.switch) {
 
             const nextHourProvider = nextHour?.[METADATA]?.[PROVIDER_NAME];
             const needNextHour = requireData.includes(REQUIRE_NEXT_HOUR)
-              && settings.nextHour.switch
-              && (typeof nextHourProvider !== 'string' || nextHourProvider.length <= 0);
+              && settings.nextHour.switch && !isNonEmptyString(nextHourProvider);
 
             const missionList = toMissions(
               needAqi ? settings.aqi.source : null,
