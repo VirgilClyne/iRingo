@@ -5738,8 +5738,8 @@ if (settings.switch) {
                 ?.AQI_LEVELS;
               const modifiedCompareAqi = localConvertedAirQuality?.[AQI_INDEX] >= 0
               && cachedAqi.aqi >= 0 && isObject(aqiLevels) ? compareAqi(
-                  toAqiLevel(aqiLevels, localConvertedAirQuality[AQI_INDEX]),
-                  toAqiLevel(aqiLevels, cachedAqi.aqi),
+                  toAqiLevel(Object.values(aqiLevels), localConvertedAirQuality[AQI_INDEX]),
+                  toAqiLevel(Object.values(aqiLevels), cachedAqi.aqi),
                 )
                 : getAqiComparison(dataForAqiComparison);
               if (
