@@ -3429,9 +3429,12 @@ const getCcAirQuality = (dataWithRealtime) => {
         logger('debug', `${getCcAirQuality.name}：美标：${result.aqi.usa}，国标：${result.aqi.chn}`);
         return result;
       }
-
-      logger('warn', `${getCcAirQuality.name}：缺少此地的空气质量数据`);
     }
+
+    logger('error', `${getCcAirQuality.name}：缺少空气质量数据`);
+  // eslint-disable-next-line functional/no-conditional-statement
+  } else {
+    logger('error', `${getCcAirQuality.name}：不支持${apiVersion}版本的API`);
   }
 
   return { aqi: { usa: -1, chn: -1 } };
@@ -3537,6 +3540,11 @@ const colorfulCloudsToAqiComparison = (realtimeAndHistoryData, forceChn) => {
     return compareAqi(todayAqiLevel, yesterdayAqiLevel);
   }
 
+  logger(
+    'error',
+    `${colorfulCloudsToAqiComparison.name}：无法找到AQI，今日：${JSON.stringify(todayAqi)}`
+    + `，昨日：${JSON.stringify(yesterdayAqi)}`,
+  );
   return 'unknown';
 };
 
@@ -3613,7 +3621,7 @@ const waqiV1AqiToAqiComparison = (aqiFeedMsg) => {
   if (
     !isNonNanNumber(yesterdayAqi) || yesterdayAqi < 0 || !isNonNanNumber(todayAqi) || todayAqi < 0
   ) {
-    logger('warn', `${waqiV1AqiToAqiComparison.name}：缺少部分AQI，今日AQI = ${todayAqi}，昨日AQI = ${yesterdayAqi}`);
+    logger('error', `${waqiV1AqiToAqiComparison.name}：无法找到AQI，今日AQI = ${todayAqi}，昨日AQI = ${yesterdayAqi}`);
 
     return 'unknown';
   }
@@ -4370,7 +4378,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
   ) {
     // eslint-disable-next-line functional/no-conditional-statement
     if (dataWithMinutely?.result?.minutely?.datasource !== 'radar') {
-      logger('warn', `${colorfulCloudsToNextHour.name}：缺少此地的短临降水数据`);
+      logger('error', `${colorfulCloudsToNextHour.name}：缺少此地的短临降水数据`);
       logger(
         'debug',
         `${colorfulCloudsToNextHour.name}：数据源：${dataWithMinutely?.result?.minutely?.datasource}`,
@@ -5759,7 +5767,7 @@ if (settings.switch) {
                             return getAqiData(stationId, tokenData.data);
                           }
 
-                          logger('warn', `${$.name}：无法获取WAQI token`);
+                          logger('error', `${$.name}：无法获取WAQI token`);
                           return Promise.resolve({
                             missions: ['aqi'],
                             api,
@@ -5781,7 +5789,7 @@ if (settings.switch) {
                                   return getHistoryAqis(v2Data.data.idx, v2Data);
                                 }
 
-                                logger('warn', `${$.name}：无法获取WAQI监测站ID`);
+                                logger('error', `${$.name}：无法获取WAQI监测站ID`);
                               }
 
                               return {
@@ -5808,10 +5816,10 @@ if (settings.switch) {
                                   return getHistoryAqis(stationId, nearestData);
                                 }
 
-                                logger('warn', `${$.name}：无法获取WAQI监测站ID`);
+                                logger('error', `${$.name}：无法获取WAQI监测站ID`);
                               // eslint-disable-next-line functional/no-conditional-statement
                               } else {
-                                logger('warn', `${$.name}：无法获取WAQI监测站列表`);
+                                logger('error', `${$.name}：无法获取WAQI监测站列表`);
                               }
                             }
 
@@ -6001,7 +6009,7 @@ if (settings.switch) {
               // eslint-disable-next-line functional/no-conditional-statement
               if (responseBody?.[AIR_QUALITY]?.[METADATA]?.[TEMPORARILY_UNAVAILABLE]) {
                 logger(
-                  'warn',
+                  'error',
                   `${$.name}：检测到未能成功获取空气质量数据，`
                   + `数据源：${responseBody?.[AIR_QUALITY]?.[METADATA]?.[PROVIDER_NAME]}`
                   + `${settings.log.location ? `，经度：${longitude}，纬度：${latitude}` : ''}`,
@@ -6010,7 +6018,7 @@ if (settings.switch) {
               // eslint-disable-next-line functional/no-conditional-statement
               if (responseBody?.[NEXT_HOUR]?.[METADATA]?.[TEMPORARILY_UNAVAILABLE]) {
                 logger(
-                  'warn',
+                  'error',
                   `${$.name}：检测到未能成功获取下小时降水数据，`
                   + `数据源：${responseBody?.[NEXT_HOUR]?.[METADATA]?.[PROVIDER_NAME]}`
                   + `${settings.log.location ? `，经度：${longitude}，纬度：${latitude}` : ''}`,
