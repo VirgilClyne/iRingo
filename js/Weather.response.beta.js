@@ -5158,7 +5158,7 @@ if (settings.switch) {
         setResponse($response);
         // eslint-disable-next-line functional/no-conditional-statement
       } else {
-        logger('info', `${$.name}：模块已启用`);
+        logger('info', `${$.name}：模块开始运行`);
 
         // eslint-disable-next-line no-undef
         const dataFromApple = parseJsonWithDefault($response?.body, null);
