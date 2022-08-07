@@ -1856,45 +1856,29 @@ const getCachedAqi = (cachedAqis, timestamp, location, stationName, scaleName) =
     isObject(cachedAqis) && isNonNanNumber(timestamp) && timestamp > 0
     && isLocation(location) && isNonEmptyString(scaleName)
   ) {
-    const caches = Object.fromEntries(Object.entries(cachedAqis)
-      .filter(([timestampString, aqisInfo]) => {
-        const cachedTimestamp = parseInt(timestampString, 10);
-        return isNonNanNumber(cachedTimestamp) && cachedTimestamp > 0
-          && Array.isArray(aqisInfo);
-      })
-      .map(([timestampString, aqisInfo]) => [
-        timestampString,
-        aqisInfo.filter((aqiInfo) => (
-          isNonNanNumber(aqiInfo?.aqi) && aqiInfo.aqi >= 0 && isLocation(aqiInfo?.location)
-          && isNonEmptyString(aqiInfo?.scaleName)
-        )),
-      ]));
+    const cacheTimestampString = Object.keys(cachedAqis).find((timestampString) => {
+      const cachedTimestamp = parseInt(timestampString, 10);
+      return isNonNanNumber(cachedTimestamp) && cachedTimestamp >= timestamp
+        && cachedTimestamp < timestamp + 1000 * 60 * 60;
+    });
+    const cacheTimestamp = parseInt(cacheTimestampString, 10);
 
-    if (Object.keys(caches).length > 0) {
-      const cacheTimestampString = Object.keys(caches).find((timestampString) => {
-        const cachedTimestamp = parseInt(timestampString, 10);
-        return isNonNanNumber(cachedTimestamp) && cachedTimestamp >= timestamp
-          && cachedTimestamp < timestamp + 1000 * 60 * 60;
-      });
-      const cacheTimestamp = parseInt(cacheTimestampString, 10);
+    const cache = isNonNanNumber(cacheTimestamp)
+      ? cachedAqis[cacheTimestamp].find((aqiInfo) => (
+        isNonEmptyString(stationName)
+          ? aqiInfo?.stationName === stationName && aqiInfo?.scaleName === scaleName
+          // Cannot get station name
+          : pythagoreanTheorem(
+            Math.abs(aqiInfo.location.longitude - location.longitude),
+            Math.abs(aqiInfo.location.latitude - location.latitude),
+          // 0.085 is an approximation by observing air quality map from Apple Weather
+          ) < 0.085 && aqiInfo?.scaleName === scaleName
+      ))
+      : { aqi: -1 };
 
-      const cache = isNonNanNumber(cacheTimestamp)
-        ? caches[cacheTimestamp].find((aqiInfo) => (
-          isNonEmptyString(stationName)
-            ? aqiInfo?.stationName === stationName && aqiInfo?.scaleName === scaleName
-            // Cannot get station name
-            : pythagoreanTheorem(
-              Math.abs(aqiInfo.location.longitude - location.longitude),
-              Math.abs(aqiInfo.location.latitude - location.latitude),
-            // 0.085 is an approximation by observing air quality map from Apple Weather
-            ) < 0.085 && aqiInfo?.scaleName === scaleName
-        ))
-        : undefined;
-
-      if (isNonNanNumber(cache?.aqi) && cache.aqi >= 0) {
-        logger('info', `${getCachedAqi.name}：找到了已缓存的AQI信息：AQI值为${cache.aqi}`);
-        return cache;
-      }
+    if (isNonNanNumber(cache?.aqi) && cache.aqi >= 0) {
+      logger('info', `${getCachedAqi.name}：找到了已缓存的AQI信息：AQI值为${cache.aqi}`);
+      return cache;
     }
   }
 
