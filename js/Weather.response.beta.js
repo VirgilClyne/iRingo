@@ -1778,8 +1778,7 @@ const toCaches = (envs) => ({
   },
 });
 
-const envs = getENV('iRingo', 'Weather', database);
-const settings = toSettings(envs);
+const settings = toSettings(getENV('iRingo', 'Weather', database));
 
 /**
  * Log helper
@@ -5121,8 +5120,6 @@ const setResponse = (response) => {
   }
 };
 
-const caches = toCaches(envs);
-
 // eslint-disable-next-line functional/no-conditional-statement
 if (settings.switch) {
   const supportedAppleApis = [1, 2, 3];
@@ -5527,7 +5524,7 @@ if (settings.switch) {
                 nowHourTimestamp,
               ) - 1000 * 60 * 60 * 24;
             const cachedAqi = needCompareAqi ? getCachedAqi(
-              caches.aqis,
+              toCaches(getENV('iRingo', 'Weather', database)).aqis,
               yesterdayReportTimestamp,
               location,
               qweatherNames.includes(aqiProvider) ? airQuality?.source : null,
@@ -5799,7 +5796,7 @@ if (settings.switch) {
               if (isNonEmptyString(airQualityScale)) {
                 // eslint-disable-next-line functional/no-expression-statement
                 $.setjson(cacheAqi(
-                  caches,
+                  toCaches(getENV('iRingo', 'Weather', database)),
                   timestamp,
                   location,
                   qweatherNames.includes(airQualityProvider)
