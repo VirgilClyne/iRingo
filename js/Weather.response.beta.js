@@ -4925,24 +4925,24 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
     const timestamp = isNonNanNumber(startTimestamp) && startTimestamp > 0
       ? startTimestamp : (+(new Date()));
 
+    const getSharedMinuteV2Below = (precipIntensity, precipChance) => ({
+      precipIntensity,
+      precipChance,
+    });
+
     return minutes.map(
       ({ precipitation, chance, precipitationIntensityPerceived }, index) => {
-        const sharedMinuteV2Below = {
-          precipIntensity: precipitation,
-          precipChance: chance,
-        };
-
         switch (apiVersions) {
           case 1:
             return {
               startAt: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-              ...sharedMinuteV2Below,
+              ...getSharedMinuteV2Below(precipitation, chance),
               perceivedIntensity: precipitationIntensityPerceived,
             };
           case 2:
             return {
               startTime: toAppleTime(apiVersions, timestamp + index * 60 * 1000),
-              ...sharedMinuteV2Below,
+              ...getSharedMinuteV2Below(precipitation, chance),
               precipIntensityPerceived: precipitationIntensityPerceived,
             };
           case 3:
