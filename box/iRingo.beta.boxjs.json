@@ -349,10 +349,10 @@
 						},
 						{
 							"key": "api.caiyunapp.com",
-							"label": "彩云天气"
+							"label": "彩云天气（专业套餐及以上）"
 						}
 					],
-					"desc": "气象在线与彩云天气的数据源相同，但不支持简体中文以外的语言。彩云天气需申请token且只有收费套餐才能获取分钟级降水数据。"
+					"desc": "气象在线与彩云天气的数据源相同，但不支持简体中文以外的语言。"
 				},
 				{
 					"id": "@iRingo.Weather.Settings.AQI.Switch",
@@ -488,7 +488,7 @@
 						},
 						{
 							"key": "api.caiyunapp.com",
-							"label": "彩云天气"
+							"label": "彩云天气（个人套餐及以上）"
 						},
 						{
 							"key": "api.waqi.info",
@@ -585,7 +585,7 @@
 				},
 				{
 					"id": "@iRingo.Weather.Settings.Log.Location",
-					"name": "显示坐标",
+					"name": "在日志中显示坐标",
 					"val": false,
 					"type": "boolean",
 					"desc": "开启后会在特定日志中显示坐标，发送日志前请注意保护隐私"
