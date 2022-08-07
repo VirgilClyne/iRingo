@@ -4234,16 +4234,22 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
   const majorVersion = Math.trunc(validVersionCode);
   if (
     dataWithMinutely?.status !== 'ok'
-      || !supportedCcApis.includes(majorVersion)
-      || !supportedUnits.includes(dataWithMinutely?.unit)
-      // ColorfulClouds: This might be deprecated in future
-      || dataWithMinutely?.result?.minutely?.datasource !== 'radar'
-      || !Array.isArray(dataWithMinutely.result.minutely?.precipitation_2h)
-      || !Array.isArray(dataWithMinutely.result.minutely?.probability)
+    || !supportedCcApis.includes(majorVersion)
+    || !supportedUnits.includes(dataWithMinutely?.unit)
+    // ColorfulClouds: This might be deprecated in future
+    || dataWithMinutely?.result?.minutely?.datasource !== 'radar'
+    || !Array.isArray(dataWithMinutely.result.minutely?.precipitation_2h)
+    || dataWithMinutely.result.minutely.precipitation_2h.some((p) => !isNonNanNumber(p))
+    || !Array.isArray(dataWithMinutely.result.minutely?.probability)
+    || dataWithMinutely.result.minutely.probability.some((p) => !isNonNanNumber(p))
   ) {
     // eslint-disable-next-line functional/no-conditional-statement
     if (dataWithMinutely?.result?.minutely?.datasource !== 'radar') {
       logger('warn', `${colorfulCloudsToNextHour.name}：缺少此地的短临降水数据`);
+      logger(
+        'debug',
+        `${colorfulCloudsToNextHour.name}：数据源：${dataWithMinutely?.result?.minutely?.datasource}`,
+      );
     }
 
     return {};
