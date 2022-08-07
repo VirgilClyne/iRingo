@@ -3968,12 +3968,12 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
    * @author WordlessEcho <wordless@echo.moe>
    * @param {number} timestamp - UNIX timestamp of server time
    * @param {colorfulCloudsV2} dataWithHourlySkycons - Date with hourly.skycon[] from ColorfulClouds
-   * @return {precipitationTypes | ""} - Weather type or empty string if no valid sky condition
+   * @return {precipitationTypes} - Weather type or empty string if no valid sky condition
    */
   const getPrecipitationType = (timestamp, dataWithHourlySkycons) => {
     const skycons = dataWithHourlySkycons?.result?.hourly?.skycon;
     if (!Array.isArray(skycons)) {
-      return '';
+      return 'clear';
     }
 
     const apiVersion = dataWithHourlySkycons?.api_version;
@@ -4003,8 +4003,8 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
         : skycon.datetime.split('+').join(':00.000+'));
 
       return isNonNanNumber(ts) && ts > 0
-        // Limit to two hour since ColorfulClouds provide two hours report
-        && ts >= hourTimestamp && ts <= hourTimestamp + 1000 * 60 * 60;
+        // Limit to 3 hours since ColorfulClouds provide two hours report
+        && ts >= hourTimestamp && ts <= hourTimestamp + 1000 * 60 * 60 * 2;
     });
 
     const skyCondition = skyConditions.concat().sort((a, b) => {
@@ -4022,7 +4022,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       )))?.value;
 
     if (!isNonEmptyString(skyCondition)) {
-      return '';
+      return 'precipitation';
     }
 
     if (skyCondition.includes('SNOW')) {
@@ -4033,7 +4033,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       return 'rain';
     }
 
-    return 'clear';
+    return 'precipitation';
   };
 
   /**
@@ -4362,10 +4362,12 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       serverTimestamp + 1000 * 60 * timeInMinute,
       dataWithMinutely,
     );
-    const hourlyType = hourlyPrecipitationType === 'clear' || hourlyPrecipitationType.length <= 0
-      ? 'precipitation' : hourlyPrecipitationType;
     const precipitationType = maxPrecipitation >= Object.values(levels)
-      .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyType : 'clear';
+      .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyPrecipitationType : 'clear';
+    // eslint-disable-next-line functional/no-conditional-statement
+    if (precipitationType === 'precipitation') {
+      logger('warn', `${colorfulCloudsToNextHour.name}：无法获取雨雪类型`);
+    }
 
     const precipitationIntensityPerceived = toPerceived(levels, validPrecipitation);
 
