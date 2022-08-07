@@ -4450,10 +4450,6 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
     );
     const precipitationType = maxPrecipitation >= Object.values(levels)
       .find(({ VALUE }) => VALUE === 0).RANGE.UPPER ? hourlyPrecipitationType : 'clear';
-    // eslint-disable-next-line functional/no-conditional-statement
-    if (precipitationType === 'precipitation') {
-      logger('warn', `${colorfulCloudsToNextHour.name}：无法获取雨雪类型`);
-    }
 
     const precipitationIntensityPerceived = toPerceived(levels, validPrecipitation);
 
@@ -5149,11 +5145,15 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
 
   if (Object.keys(nextHour).length > 0) {
     // eslint-disable-next-line functional/no-conditional-statement
-    if (nextHour.summary.some((s) => s.condition !== 'clear')) {
+    if (!nextHour.summary.some((s) => s.condition !== 'clear')) {
       logger(
         'info',
         `${toNextHour.name}：API报告此地未来一小时无降水，Apple天气上将不会显示下小时降水强度信息`,
       );
+    // eslint-disable-next-line functional/no-conditional-statement
+    } else if (nextHour.summary.some((s) => s.condition === 'precipitation')) {
+      logger('warn', `${toNextHour.name}：缺失部分雨雪类型信息`);
+      logger('debug', `${toNextHour.name}：condition = ${JSON.stringify(nextHour.condition)}`);
     }
 
     return { name: 'NextHourForecast', ...nextHour };
