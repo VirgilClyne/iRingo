@@ -1776,7 +1776,7 @@ const toCaches = (envs) => ({
   waqi: {
     ...(isObject(envs?.Caches?.waqi) && envs.Caches.waqi),
     tokens: {
-      ...(isObject(envs.Caches.waqi?.tokens) && envs.Caches.waqi.tokens),
+      ...(isObject(envs.Caches?.waqi?.tokens) && envs.Caches.waqi.tokens),
     },
   },
 });
