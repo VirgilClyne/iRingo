@@ -4441,7 +4441,7 @@ const colorfulCloudsToNextHour = (providerName, dataWithMinutely) => {
       dataWithMinutely,
     );
     const precipitationType = maxPrecipitation >= Object.values(levels)
-      .find(({ VALUE }) => VALUE === 0).RANGE.LOWER ? hourlyPrecipitationType : 'clear';
+      .find(({ VALUE }) => VALUE === 0).RANGE.UPPER ? hourlyPrecipitationType : 'clear';
     // eslint-disable-next-line functional/no-conditional-statement
     if (precipitationType === 'precipitation') {
       logger('warn', `${colorfulCloudsToNextHour.name}：无法获取雨雪类型`);
