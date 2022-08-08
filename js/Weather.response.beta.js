@@ -5153,8 +5153,10 @@ const toNextHour = (appleApiVersion, nextHourObject) => {
     // eslint-disable-next-line functional/no-conditional-statement
     } else if (nextHour.summary.some((s) => s.condition === 'precipitation')) {
       logger('warn', `${toNextHour.name}：缺失部分雨雪类型信息`);
-      logger('debug', `${toNextHour.name}：condition = ${JSON.stringify(nextHour.condition)}`);
     }
+
+    logger('debug', `${toNextHour.name}：condition = ${JSON.stringify(nextHour.condition)}`);
+    logger('debug', `${toNextHour.name}：summary = ${JSON.stringify(nextHour.summary)}`);
 
     return { name: 'NextHourForecast', ...nextHour };
   }
