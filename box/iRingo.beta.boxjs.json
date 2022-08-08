@@ -563,7 +563,7 @@
 					"name": "日志级别",
 					"val": "info",
 					"type": "selects",
-					"desc": "越靠近debug，输出的日志越为详细",
+					"desc": "越靠近调试，输出的日志越为详细",
 					"items": [
 						{
 							"key": "debug",
