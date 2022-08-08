@@ -22,10 +22,11 @@ scriptings:
       script_url: >-
         https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.request.beta.js
       match: >-
-        ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*)
+        ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$
 mitm:
   - weather-data.apple.com
   - weather-map.apple.com
+  - weather-map2.apple.com
   - api.waqi.info
   - tiles.waqi.info
   - www.weatherol.cn

@@ -13,7 +13,7 @@ DOMAIN-SUFFIX,waqi.info
 http-request ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.request.beta.js, requires-body=0, tag=Weather Availability Request
 http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.response.beta.js, requires-body=1, tag=Weather Availability Response
 http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.response.beta.js, requires-body=1, timeout=20, tag=Weather Response
-http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.request.beta.js, requires-body=0, tag=Weather Map Request
+http-request ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.request.beta.js, requires-body=0, tag=Weather Map Request
 
 [MITM]
-hostname = weather-data.apple.com, weather-map.apple.com, api.waqi.info, www.weatherol.cn, api.caiyunapp.com
+hostname = weather-data.apple.com, weather-map.apple.com, weather-map2.apple.com, api.waqi.info, www.weatherol.cn, api.caiyunapp.com

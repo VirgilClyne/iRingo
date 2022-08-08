@@ -10,6 +10,7 @@ http:
   mitm:
     - "weather-data.apple.com"
     - "weather-map.apple.com"
+    - "weather-map2.apple.com"
     - "api.waqi.info"
     - "tiles.waqi.info"
     - "www.weatherol.cn"
@@ -31,7 +32,7 @@ http:
       require-body: true
       timeout: 20
       argument:
-    - match: ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*)
+    - match: ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$
       name: Weather.Map.request
       type: request
       require-body: false
