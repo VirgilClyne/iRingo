@@ -5419,7 +5419,7 @@ if (settings.switch) {
                   };
                 case 'api.waqi.info':
                   if (Array.isArray(promiseData?.types)) {
-                    if (promiseData.types.includes((type) => type === 'locationFeed')) {
+                    if (promiseData.types.includes('locationFeed')) {
                       return {
                         [METADATA]: toMetadata(
                           apiVersion,
