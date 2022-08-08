@@ -13,4 +13,4 @@ Weather Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.
 Weather Map Request = type=http-request, pattern=^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*), requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.request.beta.js, argument=
 
 [MITM]
-hostname = %APPEND% weather-data.apple.com, weather-map.apple.com, api.waqi.info, tiles.waqi.info, www.weatherol.cn, api.caiyunapp.com
+hostname = %APPEND% weather-data.apple.com, weather-map.apple.com, weather-map2.apple.com, api.waqi.info, tiles.waqi.info, www.weatherol.cn, api.caiyunapp.com
