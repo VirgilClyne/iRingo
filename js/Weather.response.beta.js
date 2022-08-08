@@ -1690,6 +1690,13 @@ const isPositiveRange = (range) => (
  */
 const toSettings = (envs) => {
   const settings = database.Weather.Settings;
+  // eslint-disable-next-line functional/no-conditional-statement
+  if (parseJsonWithDefault(envs?.Switch, false)) {
+    const wikiLink = 'https://github.com/VirgilClyne/iRingo/wiki/%F0%9F%8C%A4%E5%A4%A9%E6%B0%94#%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E';
+    // eslint-disable-next-line functional/no-expression-statement
+    $.log(`⚠️${toSettings.name}：您好像刚刚升级到${$.name}，不妨看看新功能并重新设置一次模块？ ${wikiLink}`, '');
+  }
+
   return {
     switch: parseJsonWithDefault(envs?.Settings?.Switch, settings.Switch),
     nextHour: {
