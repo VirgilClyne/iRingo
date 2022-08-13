@@ -325,21 +325,21 @@
 			"settings": [
 				{
 					"id": "@iRingo.Weather.Settings.Switch",
-					"name": "总开关",
+					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "启用模块"
+					"desc": "是否启用此APP修改"
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Switch",
-					"name": "[下小时降水强度]修改开关",
+					"name": "[未来一小时降水强度]修改开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "修改下小时降水强度"
+					"desc": "修改未来一小时降水强度"
 				},
 				{
 					"id": "@iRingo.Weather.Settings.NextHour.Source",
-					"name": "[下小时降水强度]数据源",
+					"name": "[未来一小时降水强度]数据源",
 					"val": "www.weatherol.cn",
 					"type": "radios",
 					"items": [

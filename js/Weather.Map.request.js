@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather Map v1.2.2-request-beta");
+const $ = new Env("Apple Weather Map v1.2.2-request");
 const URL = new URLSearch();
 const DataBase = {
 	"Location":{

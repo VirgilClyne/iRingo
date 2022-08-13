@@ -290,140 +290,30 @@
 			],
 			"keys": [
 				"@iRingo.Weather.Settings",
-				"@iRingo.Weather.Caches"
+				"@iRingo.Weather.Caches",
+				"@iRingo.Weather"
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Weather.Settings.Switch",
+					"id": "@iRingo.Weather.Switch",
 					"name": "总功能开关",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否启用此APP修改"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.NextHour.Switch",
+					"id": "@iRingo.Weather.NextHour.Switch",
 					"name": "[未来一小时降水强度]修改开关",
 					"val": true,
 					"type": "boolean",
-					"desc": "修改未来一小时降水强度"
+					"desc": "是否启用此功能修改"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.NextHour.Source",
-					"name": "[未来一小时降水强度]数据源",
+					"id": "@iRingo.Weather.NextHour.Mode",
+					"name": "[未来一小时降水强度]切换API",
 					"val": "www.weatherol.cn",
 					"type": "radios",
 					"items": [
-						{
-							"key": "www.weatherol.cn",
-							"label": "气象在线"
-						},
-						{
-							"key": "api.caiyunapp.com",
-							"label": "彩云天气（专业套餐及以上）"
-						}
-					],
-					"desc": "气象在线与彩云天气的数据源相同，但不支持简体中文以外的语言。"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.AQI.Switch",
-					"name": "[空气质量]修改开关",
-					"val": true,
-					"type": "boolean",
-					"desc": "修改空气质量"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.AQI.Targets",
-					"name": "[空气质量]需要修改的标准",
-					"val": [
-						"HJ6332012"
-					],
-					"type": "checkboxes",
-					"desc": "选中的空气质量标准会被替换。请注意各国监测的污染物种类可能有所不同，转换算法或API未必适合当地。",
-					"items": [
-						{
-							"key": "CA.AQHI",
-							"label": "加拿大（CA AQHI）"
-						},
-						{
-							"key": "FR.ATMO",
-							"label": "法国（FR ATMO）"
-						},
-						{
-							"key": "UBA",
-							"label": "德国（UBA）"
-						},
-						{
-							"key": "NAQI",
-							"label": "印度（NAQI）"
-						},
-						{
-							"key": "EU.EAQI",
-							"label": "意大利（EU EAQI）"
-						},
-						{
-							"key": "ICARS",
-							"label": "墨西哥（ICARS）"
-						},
-						{
-							"key": "NL.LKI",
-							"label": "荷兰（NL LKI）"
-						},
-						{
-							"key": "SG.NEA",
-							"label": "新加坡（SG NEA）"
-						},
-						{
-							"key": "KR.CAI",
-							"label": "韩国（KR CAI）"
-						},
-						{
-							"key": "ES.MITECO",
-							"label": "西班牙（ES MITECO）"
-						},
-						{
-							"key": "DAQI",
-							"label": "英国（DAQI）"
-						},
-						{
-							"key": "EPA_NowCast",
-							"label": "美国（及日本）（EPA NowCast）"
-						},
-						{
-							"key": "HJ6332012",
-							"label": "中国（HJ 633—2012）"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Weather.Settings.AQI.Local.Switch",
-					"name": "[空气质量]本地替换",
-					"val": true,
-					"type": "boolean",
-					"desc": "使用本地替换算法，将Apple数据转换为特定标准"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.AQI.Local.Standard",
-					"name": "[空气质量]本地替换算法",
-					"val": "WAQI_InstantCast",
-					"type": "selects",
-					"desc": "本地替换时使用的算法",
-					"items": [
-						{
-							"key": "WAQI_InstantCast",
-							"label": "WAQI InstantCast"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Weather.Settings.AQI.Source",
-					"name": "[空气质量]数据源",
-					"val": "www.weatherol.cn",
-					"type": "radios",
-					"items": [
-						{
-							"key": "Local",
-							"label": "仅使用Apple数据"
-						},
 						{
 							"key": "www.weatherol.cn",
 							"label": "气象在线"
@@ -431,102 +321,89 @@
 						{
 							"key": "api.caiyunapp.com",
 							"label": "彩云天气"
-						},
-						{
-							"key": "api.waqi.info",
-							"label": "The World Air Quality Project"
 						}
 					],
-					"desc": "空气质量数据源"
+					"desc": "气象在线使用的是彩云天气的数据，优点是无需付费，缺点是仅支持简体中文。彩云天气需要付费才能获取获取分钟级降水数据。"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.AQI.Comparison.Switch",
-					"name": "[空气质量]对比昨日空气质量",
-					"val": true,
-					"type": "boolean",
-					"desc": "与昨日空气质量指数进行对比"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.AQI.Comparison.Source",
-					"name": "[空气质量]对比昨日空气质量数据源",
-					"val": "Local",
-					"type": "radios",
-					"items": [
-						{
-							"key": "Local",
-							"label": "仅使用缓存数据"
-						},
-						{
-							"key": "api.caiyunapp.com",
-							"label": "彩云天气（个人套餐及以上）"
-						},
-						{
-							"key": "api.waqi.info",
-							"label": "The World Air Quality Project (非常慢)"
-						}
-					],
-					"desc": "对比昨日空气质量数据源"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.Map.AQI",
-					"name": "[开发中][空气质量地图]修改开关",
-					"val": false,
-					"type": "boolean",
-					"desc": "[开发中]修改空气质量地图"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.APIs.WeatherOL.HTTPHeaders",
-					"name": "[气象在线]HTTP请求头",
-					"val": "{ \"Content-Type\": \"application/json\" }",
+					"id": "@iRingo.Weather.NextHour.HTTPHeaders",
+					"name": "[未来一小时降水强度]HTTP请求头",
+					"val": "{ \"Content-Type\": \"application/x-www-form-urlencoded\", \"User-Agent\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1\" }",
 					"type": "text",
-					"placeholder": "{ \"Content-Type\": \"application/json\" }",
-					"desc": "请求气象在线API时使用的HTTP请求头"
+					"placeholder": "{ \"User-Agent\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1\" }",
+					"desc": "请求API时使用的HTTP请求头"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.APIs.ColorfulClouds.HTTPHeaders",
-					"name": "[彩云天气]HTTP请求头",
-					"val": "{ \"Content-Type\": \"application/json\" }",
-					"type": "text",
-					"placeholder": "{ \"Content-Type\": \"application/json\" }",
-					"desc": "请求彩云天气API时使用的HTTP请求头"
-				},
-				{
-					"id": "@iRingo.Weather.Settings.APIs.ColorfulClouds.Token",
-					"name": "[彩云天气]彩云天气令牌",
+					"id": "@iRingo.Weather.NextHour.ColorfulClouds.Auth",
+					"name": "[未来一小时降水强度]彩云天气令牌",
 					"val": "",
 					"type": "text",
 					"placeholder": "ABcdef1g2hiJklmN",
 					"desc": "彩云天气API令牌"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.APIs.ColorfulClouds.ForceCNForAQI",
-					"name": "[彩云天气]强制使用国标AQI（空气质量）",
-					"val": false,
+					"id": "@iRingo.Weather.AQI.Switch",
+					"name": "[空气质量]修改开关",
+					"val": true,
 					"type": "boolean",
-					"desc": "作为空气质量数据源时，强制使用国标AQI"
+					"desc": "是否启用此功能修改，数据来源：WAQI"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.APIs.ColorfulClouds.ForceCNForComparison",
-					"name": "[彩云天气]强制使用国标AQI（对比昨日空气质量）",
-					"val": false,
-					"type": "boolean",
-					"desc": "作为对比昨日空气质量数据源时，强制使用国标AQI"
+					"id": "@iRingo.Weather.AQI.Mode",
+					"name": "[空气质量]工作模式",
+					"val": "WAQI Public",
+					"type": "radios",
+					"items": [
+						{
+							"key": "WAQI Public",
+							"label": "waqi.info 公共API"
+						},
+						{
+							"key": "WAQI Private",
+							"label": "waqi.info 私有API"
+						}
+					],
+					"desc": "没有申请自己Token的只能使用\"公共API\""
 				},
 				{
-					"id": "@iRingo.Weather.Settings.APIs.WAQI.HTTPHeaders",
-					"name": "[WAQI]HTTP请求头",
-					"val": "{ \"Content-Type\": \"application/json\" }",
-					"type": "text",
-					"placeholder": "{ \"Content-Type\": \"application/json\" }",
-					"desc": "请求WAQI API时使用的HTTP请求头"
+					"id": "@iRingo.Weather.AQI.Location",
+					"name": "[空气质量]定位精度",
+					"val": "Station",
+					"type": "radios",
+					"items": [
+						{
+							"key": "City",
+							"label": "城市"
+						},
+						{
+							"key": "Station",
+							"label": "观测站"
+						}
+					],
+					"desc": "获取天气数据的精确度，\"观测站\"会获取距离你最近的观测站数据，\"城市\"只会获取所在地城市指定观测站的数据"
 				},
 				{
-					"id": "@iRingo.Weather.Settings.APIs.WAQI.Token",
-					"name": "[WAQI]WAQI令牌",
+					"id": "@iRingo.Weather.AQI.Auth",
+					"name": "[空气质量]WAQI令牌",
 					"val": "",
 					"type": "text",
-					"placeholder": "123456789123456789abcdefghijklmnopqrstuv",
-					"desc": "WAQI API令牌"
+					"placeholder": "1234567893feefc5f0q5000bfo0c38d90bbeb",
+					"desc": "私有API令牌"
+				},
+				{
+					"id": "@iRingo.Weather.AQI.Scale",
+					"name": "[空气质量]测量标准代码",
+					"val": "EPA_NowCast.2204",
+					"type": "text",
+					"placeholder": "EPA_NowCast.2204",
+					"desc": "空气质量标准代码，会随系统更新而更新"
+				},
+				{
+					"id": "@iRingo.Weather.Map.AQI",
+					"name": "[空气质量地图]修改开关",
+					"val": false,
+					"type": "boolean",
+					"desc": "是否启用此功能修改，数据来源：WAQI"
 				}
 			],
 			"author": "@VirgilClyne",
