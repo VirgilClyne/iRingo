@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.0.5-response");
+const $ = new Env("Apple TV v2.0.6-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -41,7 +41,7 @@ const DataBase = {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-					const locale = $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh"
+					const locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? $request?.headers?.["X-Apple-I-Locale"]?.split('_')?.[0] ?? "zh"
 					$.log(`locale: ${locale}`, "");
 					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params, locale, Configs);
 					const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
