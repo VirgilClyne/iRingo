@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.5-request-beta");
+const $ = new Env("🌐 Private Relay v1.0.6-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -38,6 +38,12 @@ const DataBase = {
 	}
 };
 
+// headers转小写
+for (const [key, value] of Object.entries($request.headers)) {
+	delete $request.headers[key]
+	$request.headers[key.toLowerCase()] = value
+};
+
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "Private_Relay", DataBase);
@@ -60,7 +66,7 @@ const DataBase = {
 		}
 		switch (url.path) {
 			case "v1/fetchAuthTokens":
-				$request.headers["X-Mask-User-Tier"] = "FREE";
+				$request.headers["x-mask-user-tier"] = "FREE";
 				break;
 			default:
 				if (/\/accounts\//i.test(url.path)) {
@@ -103,7 +109,6 @@ const DataBase = {
 				break;
 		};
 		if ($request?.headers?.host) $request.headers.host = url.host;
-		else if ($request?.headers?.Host) $request.headers.Host = url.host;
 		$request.url = URL.stringify(url);
 	}
 })()
