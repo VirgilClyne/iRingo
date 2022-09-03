@@ -1,4 +1,4 @@
-# iRingo
+#  iRingo
   * 解锁完整的Apple功能和集成服务
   * **Powered by [Chavy](https://github.com/chavyleung)‘s [Env.js](https://github.com/chavyleung/scripts/blob/master/Env.js) and [BoxJs](https://chavyleung.gitbook.io/boxjs/)**
   * 有问题请至[Issue页面](https://github.com/VirgilClyne/iRingo/issues)反馈
@@ -32,7 +32,7 @@
 | [使用说明](../../wiki/🌤-天气#使用说明) | [使用说明](../../wiki/📍-定位服务#使用说明) | [使用说明](../../wiki/🔍-Siri与搜索#使用说明) | [使用说明](../../wiki/🗺-地图#使用说明) | [使用说明](../../wiki/📺-TV-app#使用说明) | [使用说明](../../wiki/📰-News#使用说明) | [使用说明](../../wiki/🌐-专用代理#使用说明) | [使用说明](../../wiki/✈-TestFlight#使用说明) |
 | [功能列表](../../wiki/🌤-天气#功能列表) | [功能列表](../../wiki/📍-定位服务#功能列表) | [功能列表](../../wiki/🔍-Siri与搜索#功能列表) | [功能列表](../../wiki/🗺-地图#功能列表) | [功能列表](../../wiki/📺-TV-app#功能列表) | [功能列表](../../wiki/📰-News#功能列表) | [功能列表](../../wiki/🌐-专用代理#功能列表) | [功能列表](../../wiki/✈-TestFlight#功能列表) |
 | [安装链接](../../wiki/🌤-天气#安装链接) | [安装链接](../../wiki/📍-定位服务#安装链接) | [安装链接](../../wiki/🔍-Siri与搜索#安装链接) | [安装链接](../../wiki/🗺-地图#安装链接) | [安装链接](../../wiki/📺-TV-app#安装链接) | [安装链接](../../wiki/📰-News#安装链接) | [安装链接](../../wiki/🌐-专用代理#安装链接) | [安装链接](../../wiki/✈-TestFlight#安装链接) |
-| 🆕新版<br>v4.0.x | 🆕新版<br>v2.10.x<br>已合并<br>[`🗺️ 地图`](../../wiki/🗺-地图) | 🆕新版<br>v2.1.x | 🆕新版<br>v2.10.x<br>已并入<br>[`📍 定位服务`](../../wiki/📍-定位服务) | 🆕新版<br>v2.1.x | 🆕新版<br>v2.0.0 | v1.0.0 | 🆕新版<br>v1.3.x |
+| 🆕新版<br>v4.0.x | 🆕新版<br>v2.10.x<br>已合并<br>[`🗺️地图`](../../wiki/🗺-地图) | 🆕新版<br>v2.1.x | 🆕新版<br>v2.10.x<br>已并入<br>[`📍定位服务`](../../wiki/📍-定位服务) | 🆕新版<br>v2.1.x | 🆕新版<br>v2.0.0 | v1.0.0 | 🆕新版<br>v1.3.x |
 | [更新日志](../../wiki/🌤-天气#更新日志) | [更新日志](../../wiki/📍-定位服务#更新日志) | [更新日志](../../wiki/🔍-Siri与搜索#更新日志) | [更新日志](../../wiki/🗺-地图#更新日志) | [更新日志](../../wiki/📺-TV-app#更新日志) | [更新日志](../../wiki/📰-News#更新日志) | [更新日志](../../wiki/🌐-专用代理#更新日志) | [更新日志](../../wiki/✈-TestFlight#更新日志) |
 | [说明<br>讨论](https://t.me/GetSomeFriesChannel/108) | [说明<br>讨论](https://t.me/GetSomeFriesChannel/116) | [说明<br>讨论](https://t.me/GetSomeFriesChannel/64) | [说明<br>讨论](https://t.me/GetSomeFriesChannel/120) | [说明<br>讨论](https://t.me/GetSomeFriesChannel/118) | 说明<br>讨论 | 说明<br>讨论 | 说明<br>讨论 |
 
