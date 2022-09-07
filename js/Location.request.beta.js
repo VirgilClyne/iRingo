@@ -188,7 +188,7 @@ async function setETag(name, caches) {
 	$.log(`⚠ ${$.name}, Set ETag`, `caches.${name}.ETag = ${caches?.[name]?.ETag}`, "");
 	if ($request?.headers?.["if-none-match"] !== caches?.[name]?.ETag) {
 		let newCaches = caches;
-		newCaches[name] = { "etag": $request?.headers?.["if-none-match"] }
+		newCaches[name] = { "ETag": $request?.headers?.["if-none-match"] }
 		$.setjson(newCaches, "@iRingo.Location.Caches");
 		$request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
 	}

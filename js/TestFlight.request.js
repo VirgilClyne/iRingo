@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("TestFlight v1.3.12-request");
+const $ = new Env("✈ TestFlight v1.3.14-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -35,6 +35,12 @@ const DataBase = {
 	}
 };
 
+// headers转小写
+for (const [key, value] of Object.entries($request.headers)) {
+	delete $request.headers[key]
+	$request.headers[key.toLowerCase()] = value
+};
+
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches = {}, Configs } = await setENV("iRingo", "TestFlight", DataBase);
@@ -63,26 +69,26 @@ const DataBase = {
 						if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
 							$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
 							let newCaches = Caches;
-							newCaches.data["X-Request-Id"] = $request.headers["X-Request-Id"];
-							newCaches.data.sessionId = $request.headers["X-Session-Id"];
-							newCaches.data["X-Session-Digest"] = $request.headers["X-Session-Digest"];
+							newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
+							newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
+							newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
 							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
 						} else { // "accountId"不同
 							$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
 							url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
-							if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-							$request.headers["X-Request-Id"] = Caches.data["X-Request-Id"];
-							$request.headers["X-Session-Id"] = Caches.data.sessionId;
-							$request.headers["X-Session-Digest"] = Caches.data["X-Session-Digest"];
+							if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+							$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
+							$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
+							$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
 						}
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
 						let newCaches = {
 							"data": {
 								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
-								"X-Request-Id": $request.headers["X-Request-Id"],
-								"sessionId": $request.headers["X-Session-Id"],
-								"X-Session-Digest": $request.headers["X-Session-Digest"]
+								"X-Request-Id": $request.headers["x-request-id"],
+								"X-Session-Id": $request.headers["x-session-id"],
+								"X-Session-Digest": $request.headers["x-session-digest"]
 							}
 						};
 						$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");

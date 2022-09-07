@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.13-request-beta");
+const $ = new Env("✈ TestFlight v1.3.14-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -87,15 +87,15 @@ for (const [key, value] of Object.entries($request.headers)) {
 							$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
 							let newCaches = Caches;
 							newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
-							newCaches.data.sessionId = $request.headers["x-Session-id"];
-							newCaches.data["X-Session-Digest"] = $request.headers["x-Session-digest"];
+							newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
+							newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
 							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
 						} else { // "accountId"不同
 							$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
 							url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
 							if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
 							$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
-							$request.headers["x-session-id"] = Caches.data.sessionId;
+							$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
 							$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
 						}
 					} else { // Caches空
@@ -104,7 +104,7 @@ for (const [key, value] of Object.entries($request.headers)) {
 							"data": {
 								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
 								"X-Request-Id": $request.headers["x-request-id"],
-								"sessionId": $request.headers["x-session-id"],
+								"X-Session-Id": $request.headers["x-session-id"],
 								"X-Session-Digest": $request.headers["x-session-digest"]
 							}
 						};

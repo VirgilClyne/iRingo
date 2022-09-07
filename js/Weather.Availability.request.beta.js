@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("🌤 Apple Weather Availability v1.0.0-request-beta");
+const $ = new Env("🌤 Apple Weather Availability v1.0.1-request-beta");
 const DataBase = {
 	"Location":{
 		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}

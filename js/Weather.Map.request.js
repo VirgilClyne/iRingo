@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather Map v1.2.2-request");
+const $ = new Env("🌤 Apple Weather Map v1.2.3-request");
 const URL = new URLSearch();
 const DataBase = {
 	"Location":{
@@ -33,6 +33,12 @@ const DataBase = {
 	}
 };
 
+// headers转小写
+for (const [key, value] of Object.entries($request.headers)) {
+	delete $request.headers[key]
+	$request.headers[key.toLowerCase()] = value
+};
+
 /***************** Processing *****************/
 !(async () => {
 	const { Settings, Caches, Configs } = await setENV("iRingo", "Weather", DataBase);
@@ -50,7 +56,6 @@ const DataBase = {
 					break;
 			}
 			if ($request?.headers?.host) $request.headers.host = url.host;
-			else if ($request?.headers?.Host) $request.headers.Host = url.host;
 			$request.url = URL.stringify(url);
 		}
 	}
