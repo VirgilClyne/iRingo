@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.14-request-beta");
+const $ = new Env("✈ TestFlight v1.3.17-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -77,6 +77,9 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case "v1/devices/add":
 			case "v1/devices/remove":
 				break;
+			case `v1/messages/${Caches?.data?.accountId}`:
+			case `v1/messages/${Caches?.data?.accountId}/read`:
+				break;
 			default:
 				// headers auth mod
 				if (Settings.MultiAccount) { // MultiAccount
@@ -113,8 +116,12 @@ for (const [key, value] of Object.entries($request.headers)) {
 				};
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
-					// app info mod
-					if (/\/apps/i.test(url.path)) {
+					if (/\/settings\//i.test(url.path)) {
+						$.log(`🚧 ${$.name}, settings`, "");
+						if (/\/notifications\/apps\/\d+$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, notifications/apps`, "");
+						} else $.log(`🚧 ${$.name}, unknown`, "");
+					} else if (/\/apps/i.test(url.path)) { // app info mod
 						$.log(`🚧 ${$.name}, /apps`, "");
 						if (/\/apps$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /apps`, "");
@@ -129,6 +136,8 @@ for (const [key, value] of Object.entries($request.headers)) {
 							let install = JSON.parse($request.body);
 							if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
 							$request.body = JSON.stringify(install);
+						} else if (/\/apps\/\d+\/builds\/\d+\/install\/status$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids/install/status`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
 				} else if (/\/invites\//i.test(url.path)) {
@@ -137,6 +146,11 @@ for (const [key, value] of Object.entries($request.headers)) {
 						$.log(`🚧 ${$.name}, /app`, "");
 					} else if (/\/accept$/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /accept`, "");
+					} else $.log(`🚧 ${$.name}, unknown`, "");
+				} else if (/\/messages\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, messages`, "");
+					if (/\/read$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /read`, "");
 					} else $.log(`🚧 ${$.name}, unknown`, "");
 				};
 				break;
