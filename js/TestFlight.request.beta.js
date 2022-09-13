@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.18-request-beta");
+const $ = new Env("✈ TestFlight v1.3.19-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -92,20 +92,31 @@ for (const [key, value] of Object.entries($request.headers)) {
 					$.log(`🚧 ${$.name}, 启用多账号支持`, "");
 					if (Caches?.data) { // Caches.data存在`
 						$.log(`🚧 ${$.name}, data存在`, "");
-						if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
-							$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
-							let newCaches = Caches;
-							newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
-							newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
-							newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
-							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
-						} else { // "accountId"不同
-							$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
-							url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
-							if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
-							$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
-							$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
-							$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
+						switch (url.path.exec(/([0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})/)?.[0]) {
+							case Caches?.data?.accountId: // url.path有UUID且与"accountId"相同
+								$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
+								let newCaches = Caches;
+								newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
+								newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
+								newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
+								$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+								break;
+							case null: // url.path没有UUID
+								if ($request.headers["x-session-id"] !== newCaches.data["X-Session-Id"]) { // sessionId不同
+									$.log(`🚧 ${$.name}, "sessionId"不同，替换`, "");
+									$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
+									$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
+									$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
+								}
+								break;
+							default: // url.path有UUID但与"accountId"不同
+								$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
+								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+								if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+								$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
+								$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
+								$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
+								break;
 						}
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
