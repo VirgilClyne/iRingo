@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.19-request-beta");
+const $ = new Env("✈ TestFlight v1.3.20-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -157,15 +157,22 @@ for (const [key, value] of Object.entries($request.headers)) {
 							$.log(`🚧 ${$.name}, /app/bulids/install/status`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
+				} else if (/\/ru\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, /ru/`, "");
+					if (/\/app$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /app`, "");
+					} else if (/\/accept$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /accept`, "");
+					} else $.log(`🚧 ${$.name}, unknown`, "");
 				} else if (/\/invites\//i.test(url.path)) {
-					$.log(`🚧 ${$.name}, invites`, "");
+					$.log(`🚧 ${$.name}, /invites/`, "");
 					if (/\/app$/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /app`, "");
 					} else if (/\/accept$/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /accept`, "");
 					} else $.log(`🚧 ${$.name}, unknown`, "");
 				} else if (/\/messages\//i.test(url.path)) {
-					$.log(`🚧 ${$.name}, messages`, "");
+					$.log(`🚧 ${$.name}, /messages/`, "");
 					if (/\/read$/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /read`, "");
 					} else $.log(`🚧 ${$.name}, unknown`, "");
