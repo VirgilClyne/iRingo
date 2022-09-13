@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.17-request-beta");
+const $ = new Env("✈ TestFlight v1.3.18-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -79,6 +79,12 @@ for (const [key, value] of Object.entries($request.headers)) {
 				break;
 			case `v1/messages/${Caches?.data?.accountId}`:
 			case `v1/messages/${Caches?.data?.accountId}/read`:
+				$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
+				let newCaches = Caches;
+				newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
+				newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
+				newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
+				$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
 				break;
 			default:
 				// headers auth mod
