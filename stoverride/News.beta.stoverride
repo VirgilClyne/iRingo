@@ -2,11 +2,11 @@ name:  iRingo for News
 desc: (BETA for Stash 2.0) 1.自定义解锁News的地区 2.Coming Soon… 注：该覆写包含代理规则，使用过程中gateway.icloud.com会走与News相同的代理线路。
 
 rules:
-  - DOMAIN-SUFFIX,news-edge.apple.com,Proxy
-  - DOMAIN-SUFFIX,news-events.apple.com,Proxy
-  - DOMAIN-SUFFIX,apple.comscoreresearch.com,Proxy
+  - DOMAIN,news-edge.apple.com,Proxy
+  - DOMAIN,news-events.apple.com,Proxy
+  - DOMAIN,apple.comscoreresearch.com,Proxy
   - URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*,Proxy
-  
+
 http:
   mitm:
     - "news-client.apple.com"
