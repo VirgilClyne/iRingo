@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.14-request");
+const $ = new Env("✈ TestFlight v1.4.6-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -60,44 +60,73 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case "v1/devices/add":
 			case "v1/devices/remove":
 				break;
+			case `v1/messages/${Caches?.data?.accountId}`:
+			case `v1/messages/${Caches?.data?.accountId}/read`:
+				$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
+				Caches.headers = {
+					"X-Request-Id": $request.headers["x-request-id"],
+					"X-Session-Id": $request.headers["x-session-id"],
+					"X-Session-Digest": $request.headers["x-session-digest"]
+				};
+				$.setjson(Caches, "@iRingo.TestFlight.Caches");
+				break;
 			default:
 				// headers auth mod
 				if (Settings.MultiAccount) { // MultiAccount
 					$.log(`🚧 ${$.name}, 启用多账号支持`, "");
 					if (Caches?.data) { // Caches.data存在`
 						$.log(`🚧 ${$.name}, data存在`, "");
-						if (url.path.includes(Caches?.data?.accountId)) { // "accountId"相同
-							$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
-							let newCaches = Caches;
-							newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
-							newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
-							newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
-							$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
-						} else { // "accountId"不同
-							$.log(`🚧 ${$.name}, "accountId"不同，替换`, "");
-							url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
-							if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
-							$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
-							$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
-							$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
+						switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.exec(url.path)?.[0]) {
+							case Caches?.data?.accountId: // url.path有UUID且与accountId相同
+								$.log(`🚧 ${$.name}, accountId相同，更新`, "");
+								Caches.headers = {
+									"X-Request-Id": $request.headers["x-request-id"],
+									"X-Session-Id": $request.headers["x-session-id"],
+									"X-Session-Digest": $request.headers["x-session-digest"]
+								};
+								$.setjson(Caches, "@iRingo.TestFlight.Caches");
+								break;
+							case undefined: // url.path没有UUID
+							$.log(`🚧 ${$.name}, url.path没有UUID`, "");
+							if ($request.headers["x-session-id"] !== Caches.headers["X-Session-Id"]) { // sessionId不同
+									$.log(`🚧 ${$.name}, sessionId不同，替换`, "");
+									if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+									$request.headers["x-request-id"] = Caches.headers["X-Request-Id"];
+									$request.headers["x-session-id"] = Caches.headers["X-Session-Id"];
+									$request.headers["x-session-digest"] = Caches.headers["X-Session-Digest"];
+								}
+								break;
+							default: // url.path有UUID但与accountId不同
+								$.log(`🚧 ${$.name}, accountId不同，替换`, "");
+								url.path = url.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+								if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+								$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
+								$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
+								$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
+								break;
 						}
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
-						let newCaches = {
-							"data": {
-								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
-								"X-Request-Id": $request.headers["x-request-id"],
-								"X-Session-Id": $request.headers["x-session-id"],
-								"X-Session-Digest": $request.headers["x-session-digest"]
-							}
+						Caches.headers = {
+							"X-Request-Id": $request.headers["x-request-id"],
+							"X-Session-Id": $request.headers["x-session-id"],
+							"X-Session-Digest": $request.headers["x-session-digest"]
 						};
-						$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+						Caches.data = {
+							"accountId": /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.exec(url.path)?.[0],
+							"sessionId": $request.headers["x-session-id"]
+						};
+						$.setjson(Caches, "@iRingo.TestFlight.Caches");
 					}
 				};
 				if (/\/accounts\//i.test(url.path)) {
 					$.log(`🚧 ${$.name}, accounts`, "");
-					// app info mod
-					if (/\/apps/i.test(url.path)) {
+					if (/\/settings\//i.test(url.path)) {
+						$.log(`🚧 ${$.name}, settings`, "");
+						if (/\/notifications\/apps\/\d+$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, notifications/apps`, "");
+						} else $.log(`🚧 ${$.name}, unknown`, "");
+					} else if (/\/apps/i.test(url.path)) { // app info mod
 						$.log(`🚧 ${$.name}, /apps`, "");
 						if (/\/apps$/i.test(url.path)) {
 							$.log(`🚧 ${$.name}, /apps`, "");
@@ -112,14 +141,28 @@ for (const [key, value] of Object.entries($request.headers)) {
 							let install = JSON.parse($request.body);
 							if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode]);
 							$request.body = JSON.stringify(install);
+						} else if (/\/apps\/\d+\/builds\/\d+\/install\/status$/i.test(url.path)) {
+							$.log(`🚧 ${$.name}, /app/bulids/install/status`, "");
 						} else $.log(`🚧 ${$.name}, unknown`, "");
 					};
-				} else if (/\/invites\//i.test(url.path)) {
-					$.log(`🚧 ${$.name}, invites`, "");
+				} else if (/\/ru\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, /ru/`, "");
 					if (/\/app$/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /app`, "");
 					} else if (/\/accept$/i.test(url.path)) {
 						$.log(`🚧 ${$.name}, /accept`, "");
+					} else $.log(`🚧 ${$.name}, unknown`, "");
+				} else if (/\/invites\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, /invites/`, "");
+					if (/\/app$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /app`, "");
+					} else if (/\/accept$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /accept`, "");
+					} else $.log(`🚧 ${$.name}, unknown`, "");
+				} else if (/\/messages\//i.test(url.path)) {
+					$.log(`🚧 ${$.name}, /messages/`, "");
+					if (/\/read$/i.test(url.path)) {
+						$.log(`🚧 ${$.name}, /read`, "");
 					} else $.log(`🚧 ${$.name}, unknown`, "");
 				};
 				break;
