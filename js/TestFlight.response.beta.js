@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.2.0-response-beta");
+const $ = new Env("✈ TestFlight v1.2.3-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -58,20 +58,26 @@ for (const [key, value] of Object.entries($request.headers)) {
 						$.log(`🚧 ${$.name}, 有Caches.data`, "");
 						if (authenticate?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
 							$.log(`🚧 ${$.name}, Account ID相等，刷新缓存`, "");
-							authenticate.headers["X-Request-Id"] = $request.headers["x-request-id"];
-							authenticate.headers["X-Session-Id"] = $request.headers["x-session-id"];
-							authenticate.headers["X-Session-Digest"] = $request.headers["x-session-digest"];
-							$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
+							Caches.headers = {
+								"X-Request-Id": $request.headers["x-request-id"],
+								"X-Session-Id": $request.headers["x-session-id"],
+								"X-Session-Digest": $request.headers["x-session-digest"]
+							};
+							Caches.data = authenticate.data;
+							$.setjson(Caches, "@iRingo.TestFlight.Caches");
 						} else { // Account ID不相等，Rewrite
 							$.log(`🚧 ${$.name}, Account ID不相等，覆盖accountId和sessionId`, "");
 							//authenticate.data = Caches.data;
 						}
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
-						authenticate.headers["X-Request-Id"] = $request.headers["x-request-id"];
-						authenticate.headers["X-Session-Id"] = $request.headers["x-session-id"];
-						authenticate.headers["X-Session-Digest"] = $request.headers["x-session-digest"];
-						$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
+						Caches.headers = {
+							"X-Request-Id": $request.headers["x-request-id"],
+							"X-Session-Id": $request.headers["x-session-id"],
+							"X-Session-Digest": $request.headers["x-session-digest"]
+						};
+						Caches.data = authenticate.data;
+						$.setjson(Caches, "@iRingo.TestFlight.Caches");
 					}
 				}
 				//$response.body = JSON.stringify(authenticate);
