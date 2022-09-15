@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.3.20-request-beta");
+const $ = new Env("✈ TestFlight v1.4.0-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -81,9 +81,9 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case `v1/messages/${Caches?.data?.accountId}/read`:
 				$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
 				let newCaches = Caches;
-				newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
-				newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
-				newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
+				newCaches.headers["X-Request-Id"] = $request.headers["x-request-id"];
+				newCaches.headers["X-Session-Id"] = $request.headers["x-session-id"];
+				newCaches.headers["X-Session-Digest"] = $request.headers["x-session-digest"];
 				$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
 				break;
 			default:
@@ -96,17 +96,17 @@ for (const [key, value] of Object.entries($request.headers)) {
 							case Caches?.data?.accountId: // url.path有UUID且与"accountId"相同
 								$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
 								let newCaches = Caches;
-								newCaches.data["X-Request-Id"] = $request.headers["x-request-id"];
-								newCaches.data["X-Session-Id"] = $request.headers["x-session-id"];
-								newCaches.data["X-Session-Digest"] = $request.headers["x-session-digest"];
+								newCaches.headers["X-Request-Id"] = $request.headers["x-request-id"];
+								newCaches.headers["X-Session-Id"] = $request.headers["x-session-id"];
+								newCaches.headers["X-Session-Digest"] = $request.headers["x-session-digest"];
 								$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
 								break;
 							case null: // url.path没有UUID
-								if ($request.headers["x-session-id"] !== newCaches.data["X-Session-Id"]) { // sessionId不同
+								if ($request.headers["x-session-id"] !== newCaches.headers["X-Session-Id"]) { // sessionId不同
 									$.log(`🚧 ${$.name}, "sessionId"不同，替换`, "");
-									$request.headers["x-request-id"] = Caches.data["X-Request-Id"];
-									$request.headers["x-session-id"] = Caches.data["X-Session-Id"];
-									$request.headers["x-session-digest"] = Caches.data["X-Session-Digest"];
+									$request.headers["x-request-id"] = Caches.headers["X-Request-Id"];
+									$request.headers["x-session-id"] = Caches.headers["X-Session-Id"];
+									$request.headers["x-session-digest"] = Caches.headers["X-Session-Digest"];
 								}
 								break;
 							default: // url.path有UUID但与"accountId"不同
@@ -121,11 +121,13 @@ for (const [key, value] of Object.entries($request.headers)) {
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
 						let newCaches = {
-							"data": {
-								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0],
+							"headers": {
 								"X-Request-Id": $request.headers["x-request-id"],
 								"X-Session-Id": $request.headers["x-session-id"],
 								"X-Session-Digest": $request.headers["x-session-digest"]
+							},
+							"data": {
+								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0]
 							}
 						};
 						$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
