@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.1.8-response-beta");
+const $ = new Env("✈ TestFlight v1.1.9-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -59,7 +59,7 @@ for (const [key, value] of Object.entries($request.headers)) {
 						if (authenticate?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
 							$.log(`🚧 ${$.name}, Account ID相等，刷新缓存`, "");
 							authenticate.data["X-Request-Id"] = $request.headers["x-request-id"];
-							//authenticate.data.sessionId = $request.headers["x-session-id"];
+							authenticate.data["X-Session-Id"] = $request.headers["x-session-id"];
 							authenticate.data["X-Session-Digest"] = $request.headers["x-session-digest"];
 							$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
 						} else { // Account ID不相等，Rewrite
@@ -69,7 +69,7 @@ for (const [key, value] of Object.entries($request.headers)) {
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
 						authenticate.data["X-Request-Id"] = $request.headers["x-request-id"];
-						//authenticate.data.sessionId = $request.headers["x-session-id"];
+						authenticate.data["X-Session-Id"] = $request.headers["x-session-id"];
 						authenticate.data["X-Session-Digest"] = $request.headers["x-session-digest"];
 						$.setjson({ ...Caches, ...authenticate }, "@iRingo.TestFlight.Caches");
 					}
