@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("✈ TestFlight v1.4.5-request-beta");
+const $ = new Env("✈ TestFlight v1.4.6-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -80,11 +80,12 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case `v1/messages/${Caches?.data?.accountId}`:
 			case `v1/messages/${Caches?.data?.accountId}/read`:
 				$.log(`🚧 ${$.name}, "accountId"相同，更新`, "");
-				let newCaches = Caches;
-				newCaches.headers["X-Request-Id"] = $request.headers["x-request-id"];
-				newCaches.headers["X-Session-Id"] = $request.headers["x-session-id"];
-				newCaches.headers["X-Session-Digest"] = $request.headers["x-session-digest"];
-				$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+				Caches.headers = {
+					"X-Request-Id": $request.headers["x-request-id"],
+					"X-Session-Id": $request.headers["x-session-id"],
+					"X-Session-Digest": $request.headers["x-session-digest"]
+				};
+				$.setjson(Caches, "@iRingo.TestFlight.Caches");
 				break;
 			default:
 				// headers auth mod
@@ -92,20 +93,21 @@ for (const [key, value] of Object.entries($request.headers)) {
 					$.log(`🚧 ${$.name}, 启用多账号支持`, "");
 					if (Caches?.data) { // Caches.data存在`
 						$.log(`🚧 ${$.name}, data存在`, "");
-						$.log(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.exec(url.path)?.[0]);
 						switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.exec(url.path)?.[0]) {
 							case Caches?.data?.accountId: // url.path有UUID且与accountId相同
 								$.log(`🚧 ${$.name}, accountId相同，更新`, "");
-								let newCaches = Caches;
-								newCaches.headers["X-Request-Id"] = $request.headers["x-request-id"];
-								newCaches.headers["X-Session-Id"] = $request.headers["x-session-id"];
-								newCaches.headers["X-Session-Digest"] = $request.headers["x-session-digest"];
-								$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+								Caches.headers = {
+									"X-Request-Id": $request.headers["x-request-id"],
+									"X-Session-Id": $request.headers["x-session-id"],
+									"X-Session-Digest": $request.headers["x-session-digest"]
+								};
+								$.setjson(Caches, "@iRingo.TestFlight.Caches");
 								break;
 							case undefined: // url.path没有UUID
 							$.log(`🚧 ${$.name}, url.path没有UUID`, "");
 							if ($request.headers["x-session-id"] !== Caches.headers["X-Session-Id"]) { // sessionId不同
 									$.log(`🚧 ${$.name}, sessionId不同，替换`, "");
+									if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
 									$request.headers["x-request-id"] = Caches.headers["X-Request-Id"];
 									$request.headers["x-session-id"] = Caches.headers["X-Session-Id"];
 									$request.headers["x-session-digest"] = Caches.headers["X-Session-Digest"];
@@ -122,17 +124,16 @@ for (const [key, value] of Object.entries($request.headers)) {
 						}
 					} else { // Caches空
 						$.log(`🚧 ${$.name}, Caches空，写入`, "");
-						let newCaches = {
-							"headers": {
-								"X-Request-Id": $request.headers["x-request-id"],
-								"X-Session-Id": $request.headers["x-session-id"],
-								"X-Session-Digest": $request.headers["x-session-digest"]
-							},
-							"data": {
-								"accountId": url.path.match(/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i)?.[0]
-							}
+						Caches.headers = {
+							"X-Request-Id": $request.headers["x-request-id"],
+							"X-Session-Id": $request.headers["x-session-id"],
+							"X-Session-Digest": $request.headers["x-session-digest"]
 						};
-						$.setjson({ ...Caches, ...newCaches }, "@iRingo.TestFlight.Caches");
+						Caches.data = {
+							"accountId": /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.exec(url.path)?.[0],
+							"sessionId": $request.headers["x-session-id"]
+						};
+						$.setjson(Caches, "@iRingo.TestFlight.Caches");
 					}
 				};
 				if (/\/accounts\//i.test(url.path)) {
