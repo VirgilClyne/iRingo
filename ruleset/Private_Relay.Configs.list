@@ -8,5 +8,7 @@ DOMAIN,mask-api.icloud.com
 DOMAIN,mask-api.fe.apple-dns.net
 AND,((PROTOCOL,TCP),(DOMAIN,mask.icloud.com),(DEST-PORT,443))
 AND,((PROTOCOL,TCP),(DOMAIN,mask.apple-dns.net),(DEST-PORT,443))
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,mask-canary.icloud.com))
+AND,((PROTOCOL,TCP),(DEST-PORT,443),(DOMAIN,canary.mask.apple-dns.net))
 AND,((PROTOCOL,TCP),(DOMAIN,mask-h2.icloud.com),(DEST-PORT,443))
 AND,((PROTOCOL,TCP),(DOMAIN,mask-t.apple-dns.net),(DEST-PORT,443))

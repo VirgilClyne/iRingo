@@ -6,5 +6,7 @@ payload:
   # Optimize for Private Relay connections
   - DOMAIN,mask.icloud.com
   - DOMAIN,mask.apple-dns.net
+  - DOMAIN,mask-canary.icloud.com
+  - DOMAIN,canary.mask.apple-dns.net
   - DOMAIN,mask-h2.icloud.com
   - DOMAIN,mask-t.apple-dns.net
