@@ -19,7 +19,7 @@
 ---
 # 快速导航
   * 支持 🎈Loon(推荐), Surge, Stash, Shadowrocket, Quantumult X
-  * macOS 12.3, iOS 15.5, iOS 14.8 测试通过
+  * macOS 12.3, iOS 16.0, iOS 15.6, iOS 14.8, watchOS 9.0 测试通过
   * 如无特别声明，均适用于iOS/iPadOS/macOS/watchOS，模块间互无依赖，均可单独或搭配使用
   * 需要启用`重写`、`脚本`、`MitM`功能
   * 本项目可视化配置面板订阅及使用方法详见[🧰 BoxJs](../../wiki/🧰-BoxJs)
