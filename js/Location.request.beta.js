@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📍 Apple Location Services v2.10.5-request-beta");
+const $ = new Env("📍 Apple Location Services v2.11.1-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":"CN"}}},"Config":{"Announcements":{"Environment:":"prod-cn"},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"iOS":"prod-cn","iPadOS":"prod-cn","watchOS":"prod","macOS":"prod-cn"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -68,11 +68,43 @@ for (const [key, value] of Object.entries($request.headers)) {
 				await setETag("Defaults", Caches);
 				break;
 			case "config/announcements":
-				url.params.environment = Settings?.Config?.Announcements?.Environment ?? "prod-cn"
+				switch (url.params.os) {
+					case "ios":
+						url.params.environment = Settings?.Config?.Announcements?.Environment?.iOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
+						break;
+					case "ipados":
+						url.params.environment = Settings?.Config?.Announcements?.Environment?.iPadOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
+						break;
+					case "watchos":
+						url.params.environment = Settings?.Config?.Announcements?.Environment?.watchOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod"
+						break;
+					case "macos":
+						url.params.environment = Settings?.Config?.Announcements?.Environment?.macOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
+						break;
+					default:
+						url.params.environment = Settings?.Config?.Announcements?.Environment ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
+						break;
+				};
 				await setETag("Announcements", Caches);
 				break;
 			case "geo_manifest/dynamic/config":
-				url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? "CN"
+				switch (url.params.os) {
+					case "ios":
+						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.iOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+						break;
+					case "ipados":
+						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.iPadOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+						break;
+					case "watchos":
+						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "US"
+						break;
+					case "macos":
+						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.macOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+						break;
+					default:
+						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+						break;
+				};
 				await setETag("Dynamic", Caches);
 				break;
 			case "dispatcher.arpc":
