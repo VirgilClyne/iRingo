@@ -10,18 +10,30 @@
 			"Traffic": "AUTO",
 			"Tiles": "AUTO"
 		},
-		"Geo_manifest":{
-			"Dynamic":{
-				"Config":{
-					"Country_code": "CN"
+		"Geo_manifest": {
+			"Dynamic": {
+				"Config": {
+					"Country_code": {
+						"default": "CN",
+						"iOS": "CN",
+						"iPadOS": "CN",
+						"watchOS": "US",
+						"macOS": "CN"
+					}
 				}
 			}
 		},
 		"Config": {
-			"Announcements":{
-				"Environment:": "prod-cn"
+			"Announcements": {
+				"Environment:": {
+					"default": "prod-cn",
+					"iOS": "prod-cn",
+					"iPadOS": "prod-cn",
+					"watchOS": "prod",
+					"macOS": "prod-cn"
+				}
 			},
-			"Defaults":{
+			"Defaults": {
 				"LagunaBeach": true,
 				"DrivingMultiWaypointRoutesEnabled": true,
 				"GEOAddressCorrection": true,
