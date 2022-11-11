@@ -1,10 +1,18 @@
 name:  iRingo for Siri & Search
 desc: (BETA for Stash 2.0) 全面自定义「Siri与搜索」的功能。注：该覆写包含代理规则。
 
+proxy-groups:
+  - name: iRingo
+    icon: https://raw.githubusercontent.com/shindgewongxj/WHATSINStash/main/icon/iringo.png
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    include-all: true
+
 rules:
-  - DOMAIN,lookup-api.apple.com,Proxy
-  - DOMAIN,lookup-api.apple.com.edgekey.net,Proxy
-  - DOMAIN,e16991.b.akamaiedge.net,Proxy
+  - DOMAIN,lookup-api.apple.com,iRingo
+  - DOMAIN,lookup-api.apple.com.edgekey.net,iRingo
+  - DOMAIN,e16991.b.akamaiedge.net,iRingo
 
 http:
   mitm:

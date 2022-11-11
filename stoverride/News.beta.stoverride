@@ -1,11 +1,19 @@
 name:  iRingo for News
 desc: (BETA for Stash 2.0) 1.自定义解锁News的地区 2.Coming Soon… 注：该覆写包含代理规则，使用过程中gateway.icloud.com会走与News相同的代理线路。
 
+proxy-groups:
+  - name: iRingo
+    icon: https://raw.githubusercontent.com/shindgewongxj/WHATSINStash/main/icon/iringo.png
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    include-all: true
+
 rules:
-  - DOMAIN,news-edge.apple.com,Proxy
-  - DOMAIN,news-events.apple.com,Proxy
-  - DOMAIN,apple.comscoreresearch.com,Proxy
-  - URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*,Proxy
+  - DOMAIN,news-edge.apple.com,iRingo
+  - DOMAIN,news-events.apple.com,iRingo
+  - DOMAIN,apple.comscoreresearch.com,iRingo
+  - URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*,iRingo
 
 http:
   mitm:
