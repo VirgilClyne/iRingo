@@ -10,6 +10,9 @@ proxy-groups:
     include-all: true
 
 rules:
+  - PROCESS-NAME,NewsTag,iRingo
+  - PROCESS-NAME,NewsTodayIntents,iRingo
+  - PROCESS-NAME,NewsToday2,iRingo
   - DOMAIN,news-edge.apple.com,iRingo
   - DOMAIN,news-events.apple.com,iRingo
   - DOMAIN,apple.comscoreresearch.com,iRingo
