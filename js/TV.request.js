@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple TV v2.1.4-request");
+const $ = new Env("📺 TV app v2.1.5-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -78,6 +78,7 @@ const DataBase = {
 			case "uts/v2/sports/leagues":
 			case "uts/v2/sports/statsIdLookup":
 			case "uts/v2/sports/teamsNearMe":
+			case "uts/v3/canvases/Rooms/edt.item.633e0768-2135-43ac-a878-28965b853ec5": // FIFA World Cup 2022
 				Type = "Sports";
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
