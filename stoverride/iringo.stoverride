@@ -1,0 +1,273 @@
+name: iRingo
+desc: Unlock some regional features of Apple services.
+
+http:
+  mitm:
+    # iCloud
+    - "%APPEND% mask-api.icloud.com"
+    - "mask-api.fe.apple-dns.net"
+    - "mask.icloud.com"
+    - "mask.apple-dns.net"
+    - "mask-canary.icloud.com"
+    - "canary.mask.apple-dns.net"
+    - "-mask-h2.icloud.com"
+    - "-mask-t.apple-dns.net"
+    - "p*-acsegateway.icloud.com"
+    - "p*-acsegateway.icloud.com.cn"
+    # Maps
+    - "gspe1-ssl.ls.apple.com"
+    - "configuration.ls.apple.com"
+    - "gspe19-ssl.ls.apple.com"
+    - "gspe19-cn-ssl.ls.apple.com"
+    - "gspe12-ssl.ls.apple.com"
+    - "gspe12-cn-ssl.ls.apple.com"
+    - "gspe35-ssl.ls.apple.com"
+    - "gsp-ssl.ls.apple.com"
+    - "direction2.is.autonavi.com"
+    - "dispatcher.is.autonavi.com"
+    - "rap.is.autonavi.com"
+    # News
+    - "news-client.apple.com"
+    - "news-client-search.apple.com"
+    - "news-edge.apple.com"
+    - "news-events.apple.com"
+    - "news-assets.apple.com"
+    # Siri
+    - "api*.smoot.apple.com"
+    - "api*.smoot.apple.cn"
+    # TestFlight
+    - "testflight.apple.com"
+    # TV
+    - "uts-api.itunes.apple.com"
+    # Weather
+    - "weather-data.apple.com"
+    - "weather-map.apple.com"
+    - "weather-map2.apple.com"
+    - "api.waqi.info"
+    - "tiles.waqi.info"
+    - "www.weatherol.cn"
+    - "api.caiyunapp.com"
+  script:
+      # iCloud
+    - match: ^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features
+      name: Private Relay Request
+      type: request
+      require-body: false
+      timeout: 10
+      argument:
+    - match: ^https?:\/\/p(\d+)-acsegateway\.icloud\.com(\.cn)?\/(v2|v3)\/(accounts|devices)\/(.+)\/subscriptions\/features
+      name: Private Relay Response
+      type: response
+      require-body: true
+      timeout: 10
+      argument:
+      # Maps
+    - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
+      name: Maps Response
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc
+      name: Maps Response
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/direction2\.is\.autonavi\.com\/direction$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gspe12-ssl\.ls\.apple\.com\/traffic(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gspe12-cn-ssl\.ls\.apple\.com\/traffic(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gspe19-ssl\.ls\.apple\.com\/tile\.vf(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/gspe19-cn-ssl\.ls\.apple\.com\/tiles(\?.*)?$
+      name: Maps Request
+      type: request
+      require-body: false
+      timeout: 10
+      # News
+    - match: ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?$
+      name: News Request
+      type: request
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?$
+      name: News Request
+      type: request
+      require-body: false
+      timeout: 10
+    # Siri
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
+      name: Siri Request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
+      name: Siri Response
+      type: response
+      require-body: true
+      timeout: 10
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
+      name: Siri Request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
+      name: Siri Response
+      type: response
+      require-body: true
+      timeout: 10
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
+      name: Siri Request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
+      name: Siri Response
+      type: request
+      require-body: true
+      timeout: 10
+      argument:
+      # TestFlight
+    - match: ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$
+      name: TestFlight Request
+      type: request
+      require-body: true
+      timeout: 10
+      argument:
+    - match: ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$
+      name: TestFlight Response
+      type: response
+      require-body: true
+      timeout: 10
+      argument:
+      # TV
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
+      name: TV Request
+      type: request
+      require-body: true
+      timeout: 10
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
+      name: TV Response
+      type: response
+      require-body: true
+      timeout: 10
+      # Weather
+    - match: ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.*
+      name: Weather Availability Request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.*
+      name: Weather Availability Response
+      type: response
+      require-body: true
+      timeout: 10
+    - match: ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.*
+      name: Weather Response
+      type: response
+      require-body: true
+      timeout: 20
+      argument:
+    - match: ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$
+      name: Weather Map Request
+      type: request
+      require-body: false
+      timeout: 10
+      argument:
+
+script-providers:
+  # iCloud
+  Private Relay Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Private_Relay.request.js
+    interval: 86400
+  Private Relay Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Private_Relay.response.js
+    interval: 86400
+  # Maps
+  Maps Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js
+    interval: 86400
+  Maps Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js
+    interval: 86400
+  # News
+  News Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+    interval: 86400
+  # Siri
+  Siri Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+    interval: 86400
+  Siri Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+    interval: 86400
+  # TestFlight
+  TestFlight Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js
+    interval: 86400
+  TestFlight Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js
+    interval: 86400
+  # TV
+  TV Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+    interval: 86400
+  TV Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+    interval: 86400
+  # Weather
+  Weather Availability Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.request.beta.js
+    interval: 86400
+  Weather Availability Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.response.beta.js
+    interval: 86400
+  Weather Response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.response.beta.js
+    interval: 86400
+  Weather Map Request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.request.beta.js
+    interval: 86400

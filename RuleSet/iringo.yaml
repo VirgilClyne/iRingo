@@ -1,0 +1,23 @@
+payload:
+# iCloud
+- DOMAIN-SUFFIX,gateway.icloud.com
+# Private Relay
+- DOMAIN,mask-api.fe.apple-dns.net
+- DOMAIN,mask-api.icloud.com
+# News
+- DOMAIN-SUFFIX,apple.comscoreresearch.com
+- DOMAIN-SUFFIX,news-edge.apple.com
+- DOMAIN-SUFFIX,news-events.apple.com
+# News Widget Topic
+- PROCESS-NAME,NewsTag
+# News Widget Today
+- PROCESS-NAME,NewsTodayIntents
+- PROCESS-NAME,NewsToday2
+# New+ Audio
+- URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*
+# Look Up
+- PROCESS-NAME,LookupViewService
+- PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService
+- DOMAIN-SUFFIX,e16991.b.akamaiedge.net
+- DOMAIN-SUFFIX,lookup-api.apple.com
+- DOMAIN-SUFFIX,lookup-api.apple.com.edgekey.net
