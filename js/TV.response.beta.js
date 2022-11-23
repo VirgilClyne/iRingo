@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📺 TV app v2.0.8-response-beta");
+const $ = new Env("📺 TV app v2.1.0-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -47,19 +47,29 @@ for (const [key, value] of Object.entries($request.headers)) {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-					const locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
-					$.log(`locale: ${locale}`, "");
-					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params, locale, Configs);
-					const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
+					//const locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
+					//$.log(`locale: ${locale}`, "");
+					//let { tabs, tabsSplitScreen } = await createTabsGroup(url.params, locale, Configs);
+					//const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
+					/*
 					AllTabs.forEach(tab => {
 						if (!Settings.Configs.Tabs.includes(tab)) {
 							delete tabs[tab]
 							delete tabsSplitScreen[tab]
 						}
 					})
+					*/
 					//$.log(JSON.stringify(tabs));
 					//$.log(JSON.stringify(tabsSplitScreen));
-					$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
+					//$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
+					let configurations = JSON.parse($response.body);
+					configurations.data.applicationProps.tvAppEnabledInStorefront = true;
+					configurations.data.applicationProps.featureEnablers["topShelf"] = true;
+					configurations.data.applicationProps.featureEnablers["sports"] = true
+					configurations.data.applicationProps.featureEnablers["sportsFavorites"] = true
+					configurations.data.applicationProps.featureEnablers["kids"] = true
+					configurations.data.applicationProps.featureEnablers["unw"] = true
+					$response.body = JSON.stringify(configurations);
 				}
 				break;
 			case "uts/v3/user/settings":
@@ -158,17 +168,17 @@ async function outputConfigs(Params, body, tabs, tabsSplitScreen) {
 	if (Params.v > 53) configurations.data.applicationProps.tabsSplitScreen = tabsSplitScreen;
 	//configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
 	configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-	configurations.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
-		: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
+	//configurations.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
+	//	: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
 	//configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 	//configurations.data.applicationProps.storefront.storefrontId = 143470;
-	configurations.data.applicationProps.featureEnablers = {
-		"topShelf": true,
-		"unw": true,
-		//"imageBasedSubtitles": true,
-		"ageVerification": false,
-		"seasonTitles": false
-	};
+	configurations.data.applicationProps.featureEnablers["topShelf"] = true;
+	configurations.data.applicationProps.featureEnablers["sports"] = true
+	configurations.data.applicationProps.featureEnablers["sportsFavorites"] = true
+	configurations.data.applicationProps.featureEnablers["unw"] = true
+	//configurations.data.applicationProps.featureEnablers["imageBasedSubtitles"] = true
+	//configurations.data.applicationProps.featureEnablers["ageVerification"] = false
+	//configurations.data.applicationProps.featureEnablers["seasonTitles"] = false
 	//configurations.data.userProps.activeUser = true;
 	//configurations.data.userProps.utsc = "1:18943";
 	//configurations.data.userProps.country = country;
