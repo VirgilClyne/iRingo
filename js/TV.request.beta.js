@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📺 TV app v2.1.5-request-beta");
+const $ = new Env("📺 TV app v2.1.6-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -48,6 +48,10 @@ const DataBase = {
 				}
 				if (url.params.sfh) url.params.sfh = (Configs.Storefront?.[Settings[Type].CountryCode]) ? url.params.sfh.replace(/\d{6}/, Configs.Storefront[Settings[Type].CountryCode]) : url.params.sfh
 				$.log(`🚧 ${$.name}, 调试信息`, `region = ${url.params.region}, country = ${url.params.country}, sfh = ${url.params.sfh}`, "")
+				break;
+			case "uts/v3/user/settings":
+				Type = "Settings";
+				$.log(`🚧 ${$.name}, 调试信息`, `caller = ${url.params.caller}, pfm = ${url.params.pfm}, sf = ${url.params.sf}`, "")
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
 			case "uts/v3/canvases/roots/tahoma_watchnow":

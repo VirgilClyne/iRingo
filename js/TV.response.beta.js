@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📺 TV app v2.0.7-response-beta");
+const $ = new Env("📺 TV app v2.0.8-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -61,6 +61,8 @@ for (const [key, value] of Object.entries($request.headers)) {
 					//$.log(JSON.stringify(tabsSplitScreen));
 					$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
 				}
+				break;
+			case "uts/v3/user/settings":
 				break;
 			default:
 				//if (url.path.includes("uts/v3/canvases/Channels/")) $response.body = await getData("View", Settings, Configs);
