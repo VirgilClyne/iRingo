@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📺 TV app v2.1.5-request");
+const $ = new Env("📺 TV app v2.1.7-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -32,6 +32,12 @@ const DataBase = {
 	}
 };
 
+// headers转小写
+for (const [key, value] of Object.entries($request.headers)) {
+	delete $request.headers[key]
+	$request.headers[key.toLowerCase()] = value
+};
+
 /***************** Async *****************/
 !(async () => {
 	const { Settings, Caches, Configs } = await setENV("iRingo", "TV", DataBase);
@@ -47,6 +53,9 @@ const DataBase = {
 					if (url.params.country) url.params.country = Settings[Type].CountryCode || url.params.country
 				}
 				if (url.params.sfh) url.params.sfh = (Configs.Storefront?.[Settings[Type].CountryCode]) ? url.params.sfh.replace(/\d{6}/, Configs.Storefront[Settings[Type].CountryCode]) : url.params.sfh
+				break;
+			case "uts/v3/user/settings":
+				Type = "Settings";
 				break;
 			case "uts/v3/canvases/Roots/watchNow":
 			case "uts/v3/canvases/roots/tahoma_watchnow":
@@ -121,6 +130,7 @@ const DataBase = {
 		if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings[Type].CountryCode] || url.params.sf
 		if (url.params.locale) url.params.locale = Configs.Locale[Settings[Type].CountryCode] || url.params.locale
 		$request.url = URL.stringify(url);
+		if ($request?.headers?.["x-apple-store-front"]) $request.headers["x-apple-store-front"] = (Configs.Storefront?.[Settings[Type].CountryCode]) ? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront[Settings[Type].CountryCode]) : $request.headers["x-apple-store-front"];
 	}
 })()
 	.catch((e) => $.logErr(e))

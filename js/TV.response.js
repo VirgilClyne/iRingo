@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📺 TV app v2.0.7-response");
+const $ = new Env("📺 TV app v2.2.1-response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -47,18 +47,15 @@ for (const [key, value] of Object.entries($request.headers)) {
 		switch (url.path) {
 			case "uts/v3/configurations":
 				if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-					const locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
-					$.log(`locale: ${locale}`, "");
-					let { tabs, tabsSplitScreen } = await createTabsGroup(url.params, locale, Configs);
-					const AllTabs = ["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"];
-					AllTabs.forEach(tab => {
-						if (!Settings.Configs.Tabs.includes(tab)) {
-							delete tabs[tab]
-							delete tabsSplitScreen[tab]
-						}
-					})
-					$response.body = await outputConfigs(url.params, $response.body, tabs, tabsSplitScreen);
+					const Locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
+					$.log(`Locale: ${Locale}`, "");
+					let tabs = await createTabsGroup(Configs, Locale, url.params.v);
+					["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"].forEach(tab => { if (!Settings.Configs.Tabs.includes(tab)) delete tabs[tab] })
+					$.log(JSON.stringify(tabs));
+					$response.body = await outputConfigs($response.body, tabs);
 				}
+				break;
+			case "uts/v3/user/settings":
 				break;
 			default:
 				break;
@@ -103,39 +100,38 @@ async function setENV(name, platform, database) {
 };
 
 // Create Tabs Group
-async function createTabsGroup(Params, locale, database) {
+async function createTabsGroup(Configs, Locale, Version) {
 	$.log(`⚠ ${$.name}, Create Tabs Group`, "");
 
 	//构建Tab内容
-	const WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": database.Tabs[locale].WatchNow, "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
-	const Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": database.Tabs[locale].Originals, "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
-	const Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": database.Tabs[locale].Movies, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
-	const TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": database.Tabs[locale].TV, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
+	const WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": Configs.Tabs[Locale].WatchNow, "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
+	const Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": Configs.Tabs[Locale].Originals, "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
+	const Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": Configs.Tabs[Locale].Movies, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
+	const TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": Configs.Tabs[Locale].TV, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
 	const Store = {
 		"destinationType": "SubTabs",
 		"subTabs": [
-			{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": database.Tabs[locale].Movies, "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] },
-			{ "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": database.Tabs[locale].TV, "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }
+			{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": Configs.Tabs[Locale].Movies, "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] },
+			{ "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": Configs.Tabs[Locale].TV, "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }
 		],
-		"title": database.Tabs[locale].Store,
+		"title": Configs.Tabs[Locale].Store,
 		"type": "Store",
 		"universalLinks": ["https://tv.apple.com/store"]
 	};
-	const Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": database.Tabs[locale].Sports, "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
-	const Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": database.Tabs[locale].Kids, "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
-	const Library = { "destinationType": "Client", "title": database.Tabs[locale].Library, "type": "Library" };
-	const Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": database.Tabs[locale].Search, "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
+	const Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": Configs.Tabs[Locale].Sports, "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
+	const Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": Configs.Tabs[Locale].Kids, "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
+	const Library = { "destinationType": "Client", "title": Configs.Tabs[Locale].Library, "type": "Library" };
+	const Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": Configs.Tabs[Locale].Search, "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
 
 	// 创建分组
-	var tabs = (Params.v > 53) ? [WatchNow, Originals, Store, Sports, Kids, Library, Search]
-		: [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search];
-	var tabsSplitScreen =  [WatchNow, Originals, Store, Library, Search];
+	var tabs = (Version < 54) ? [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search]
+		: [WatchNow, Originals, Store, Sports, Kids, Library, Search];
 	// 输出
-	return { tabs, tabsSplitScreen }
+	return tabs;
 };
 
 // Output Configurations
-async function outputConfigs(Params, body, tabs, tabsSplitScreen) {
+async function outputConfigs(body, tabs) {
 	$.log(`⚠ ${$.name}, Create Configurations`, "");
 	// Input Data
 	let configurations = JSON.parse(body);
@@ -145,20 +141,18 @@ async function outputConfigs(Params, body, tabs, tabsSplitScreen) {
 	//configurations.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
 	configurations.data.applicationProps.tabs = tabs;
 	//configurations.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
-	if (Params.v > 53) configurations.data.applicationProps.tabsSplitScreen = tabsSplitScreen;
-	//configurations.data.applicationProps.tabsSplitScreen = createTabsGroup("TabsGroup", caller, platform, locale, region);
 	configurations.data.applicationProps.tvAppEnabledInStorefront = true;
-	configurations.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
-		: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
+	//configurations.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
+	//	: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
 	//configurations.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 	//configurations.data.applicationProps.storefront.storefrontId = 143470;
-	configurations.data.applicationProps.featureEnablers = {
-		"topShelf": true,
-		"unw": true,
-		//"imageBasedSubtitles": true,
-		"ageVerification": false,
-		"seasonTitles": false
-	};
+	configurations.data.applicationProps.featureEnablers["topShelf"] = true;
+	configurations.data.applicationProps.featureEnablers["sports"] = true;
+	configurations.data.applicationProps.featureEnablers["sportsFavorites"] = true;
+	configurations.data.applicationProps.featureEnablers["unw"] = true;
+	//configurations.data.applicationProps.featureEnablers["imageBasedSubtitles"] = true;
+	//configurations.data.applicationProps.featureEnablers["ageVerification"] = false;
+	//configurations.data.applicationProps.featureEnablers["seasonTitles"] = false;
 	//configurations.data.userProps.activeUser = true;
 	//configurations.data.userProps.utsc = "1:18943";
 	//configurations.data.userProps.country = country;
