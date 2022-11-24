@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📺 TV app v2.1.7-request");
+const $ = new Env("📺 TV app v2.1.8-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -88,6 +88,7 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case "uts/v2/sports/statsIdLookup":
 			case "uts/v2/sports/teamsNearMe":
 			case "uts/v3/canvases/Rooms/edt.item.633e0768-2135-43ac-a878-28965b853ec5": // FIFA World Cup 2022
+			case "uts/v3/canvases/Rooms/edt.item.635968ac-89d7-4619-8f5d-8c7890aef813": // NFL THANKSGIVING 2022
 				Type = "Sports";
 				if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 				break;
