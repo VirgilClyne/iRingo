@@ -11,6 +11,12 @@ http:
     - "api*.smoot.apple.com"
     - "api*.smoot.apple.cn"
   script:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
     - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
       name: Siri.request
       type: request

@@ -3,6 +3,12 @@ scriptings:
       name: Siri Suggestions Service
       script_url: >-
         https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
+      timeout: 5
+  - http_request:
+      name: Siri Suggestions Service
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
       match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
       timeout: 5
   - http_response:
