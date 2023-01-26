@@ -7,6 +7,8 @@
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 
 [Script]
+# iMessage Flight (iOS/macOS)
+Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=
 # Bag (iOS/macOS)
 Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=
 Siri Suggestions Service = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js, argument=
