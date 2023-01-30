@@ -3,47 +3,47 @@ scriptings:
       name: Siri Suggestions Service
       script_url: >-
         https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
+      timeout: 5
+  - http_response:
+      name: Siri Suggestions Service
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
+      body_required: true
+      timeout: 10
+  - http_request:
+      name: Spotlight & Look Up Search
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
+      timeout: 5
+  - http_response:
+      name: Spotlight & Look Up Search
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
+      body_required: true
+      timeout: 10
+  - http_request:
+      name: Siri Infomation Card
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
+      timeout: 5
+  - http_response:
+      name: Siri Infomation Card
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
+      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
+      body_required: true
+      timeout: 10
+  - http_request:
+      name: Flight Search
+      script_url: >-
+        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
       match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
       timeout: 5
-  - http_request:
-      name: Siri Suggestions Service
-      script_url: >-
-        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
-      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
-      timeout: 5
-  - http_response:
-      name: Siri Suggestions Service
-      script_url: >-
-        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
-      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
-      body_required: true
-      timeout: 10
-  - http_request:
-      name: Spotlight & Look Up Search
-      script_url: >-
-        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
-      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
-      timeout: 5
-  - http_response:
-      name: Spotlight & Look Up Search
-      script_url: >-
-        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
-      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
-      body_required: true
-      timeout: 10
-  - http_request:
-      name: Siri Infomation Card
-      script_url: >-
-        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
-      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
-      timeout: 5
-  - http_response:
-      name: Siri Infomation Card
-      script_url: >-
-        https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
-      match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
-      body_required: true
-      timeout: 10
 mitm:
   - api*.smoot.apple.com
   - api*.smoot.apple.cn

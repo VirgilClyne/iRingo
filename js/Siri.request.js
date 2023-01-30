@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.7-request");
+const $ = new Env("Apple Siri v2.1.8-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -43,6 +43,7 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "bag":
+			case "flight":
 				break;
 			case "search": //Search
 				if (url?.params?.card_locale) url.params.card_locale = locale;

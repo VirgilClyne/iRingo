@@ -16,5 +16,7 @@
 # Siri Infomation Card (macOS)
 ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
 ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+# Flight Search(iOS/macOS)
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
 
 hostname = api*.smoot.apple.com, api*.smoot.apple.cn

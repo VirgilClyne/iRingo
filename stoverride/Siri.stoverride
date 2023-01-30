@@ -42,6 +42,12 @@ http:
       require-body: true
       timeout: 10
       argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
 
 script-providers:
   Siri.request:

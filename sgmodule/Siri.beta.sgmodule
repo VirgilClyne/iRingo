@@ -7,8 +7,6 @@
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 
 [Script]
-# iMessage Flight (iOS/macOS)
-Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=
 # Bag (iOS/macOS)
 Siri Suggestions Service = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=
 Siri Suggestions Service = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js, argument=
@@ -18,6 +16,8 @@ Spotlight & Look Up Search = type=http-response, pattern=^https?:\/\/api(.*)\.sm
 # Siri Infomation Card (macOS)
 Siri Infomation Card = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=
 Siri Infomation Card = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js, argument=
+# Flight Search(iOS/macOS)
+Flight Search = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% api*.smoot.apple.com, api*.smoot.apple.cn
