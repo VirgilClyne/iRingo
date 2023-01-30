@@ -1,4 +1,4 @@
-name:  iRingo for Siri & Search
+name:  iRingo for 🔍 Siri & Search
 desc: (BETA) 全面自定义「Siri与搜索」的功能。注：该覆写包含代理规则。
 
 rules:
@@ -35,6 +35,24 @@ http:
       require-body: true
       timeout: 10
       argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm(\?.*)?$
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render(\?.*)?$
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
+      name: Siri.request
+      type: request
+      require-body: false
+      timeout: 5
+      argument:
     - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
       name: Siri.request
       type: request
@@ -46,12 +64,6 @@ http:
       type: request
       require-body: true
       timeout: 10
-      argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
-      name: Siri.request
-      type: request
-      require-body: false
-      timeout: 5
       argument:
 
 script-providers:
