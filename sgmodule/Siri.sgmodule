@@ -1,4 +1,4 @@
-#!name= iRingo for Siri & Search
+#!name= iRingo for 🔍 Siri & Search
 #!desc=(V2) 全面自定义「Siri与搜索」的功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri
 #!author=VirgilClyne
@@ -13,11 +13,15 @@ Siri Suggestions Service = type=http-response, pattern=^https?:\/\/api(.*)\.smoo
 # Spotlight & Look Up Search (iOS/macOS)
 Spotlight & Look Up Search = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$, requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
 Spotlight & Look Up Search = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$, requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
+# warm(unknown)
+warm(unknown) = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
+# render(unknown)
+render(unknown) = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
+# Flight Search(iOS/macOS)
+Flight Search = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
 # Siri Infomation Card (macOS)
 Siri Infomation Card = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$, requires-body=0, timeout=5, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
 Siri Infomation Card = type=http-response, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$, requires-body=1, timeout=10, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=
-# Flight Search(iOS/macOS)
-Flight Search = type=http-request, pattern=^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=
 
 [MITM]
 hostname = %APPEND% api*.smoot.apple.com, api*.smoot.apple.cn
