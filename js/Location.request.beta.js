@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📍 Apple Location Services v2.11.1-request-beta");
+const $ = new Env("📍 Apple Location Services v2.12.2-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"iOS":"prod-cn","iPadOS":"prod-cn","watchOS":"prod","macOS":"prod-cn"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","RAP":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"iOS":"prod-cn","iPadOS":"prod-cn","watchOS":"prod","macOS":"prod-cn"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -149,6 +149,38 @@ for (const [key, value] of Object.entries($request.headers)) {
 						break;
 					case "XX":
 						url.host = "gspe12-ssl.ls.apple.com"
+						break;
+				}
+				break;
+			case "v1/feedback/submission.arpc":
+			case "rap":
+				switch (Settings?.Services?.RAP) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "rap.is.autonavi.com"
+						url.path = "rap"
+						break;
+					case "XX":
+						url.host = "sundew.ls.apple.com"
+						url.path = "v1/feedback/submission.arpc"
+						break;
+				}
+				break;
+			case "grp/st":
+			case "rapstatus":
+				switch (Settings?.Services?.RAP) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						url.host = "rap.is.autonavi.com"
+						url.path = "rapstatus"
+						break;
+					case "XX":
+						url.host = "sundew.ls.apple.com"
+						url.path = "grp/st"
 						break;
 				}
 				break;

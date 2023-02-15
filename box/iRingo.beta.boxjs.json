@@ -187,6 +187,27 @@
 					]
 				},
 				{
+					"id": "@iRingo.Location.Settings.Services.RAP",
+					"name": "[评分和照片]数据源",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "评分和照片服务的数据源，此选项影响评分和照片服务以及照片使用",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆版(国内:高德+国外:无)"
+						},
+						{
+							"key": "XX",
+							"label": "国际版(国内:无+国外:未知)"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.Location.Settings.Services.Tiles",
 					"name": "[瓦片地图]服务版本",
 					"val": "AUTO",

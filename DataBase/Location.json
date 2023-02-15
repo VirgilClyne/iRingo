@@ -8,6 +8,7 @@
 			"Dispatcher": "AUTO",
 			"Directions": "AUTO",
 			"Traffic": "AUTO",
+			"RAP": "AUTO",
 			"Tiles": "AUTO"
 		},
 		"Geo_manifest": {
