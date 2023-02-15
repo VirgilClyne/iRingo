@@ -124,11 +124,11 @@
 					]
 				},
 				{
-					"id": "@iRingo.Location.Settings.Services.Dispatcher",
-					"name": "[调度程序]数据源",
-					"val": "AUTO",
+					"id": "@iRingo.Location.Settings.Services.PlaceData",
+					"name": "[地点数据]数据源",
+					"val": "CN",
 					"type": "selects",
-					"desc": "调度程序的数据源，此选项影响公共指南，兴趣点(POI)与位置信息等功能",
+					"desc": "地点数据的数据源，此选项影响公共指南，兴趣点(POI)与位置信息等功能",
 					"items": [
 						{
 							"key": "AUTO",
@@ -136,7 +136,7 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(兴趣点:大众点评,位置信息:高德)"
+							"label": "中国大陆版(兴趣点:大众点评/Yelp,位置信息:高德/TomTom)"
 						},
 						{
 							"key": "XX",
@@ -189,7 +189,7 @@
 				{
 					"id": "@iRingo.Location.Settings.Services.RAP",
 					"name": "[评分和照片]数据源",
-					"val": "AUTO",
+					"val": "XX",
 					"type": "selects",
 					"desc": "评分和照片服务的数据源，此选项影响评分和照片服务以及照片使用",
 					"items": [
@@ -199,11 +199,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(国内:高德+国外:无)"
+							"label": "中国大陆版(国内:无+国外:苹果)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:无+国外:未知)"
+							"label": "国际版(国内:苹果+国外:苹果)"
 						}
 					]
 				},

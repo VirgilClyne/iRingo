@@ -5,10 +5,10 @@
 			"GCC": "US"
 		},
 		"Services": {
-			"Dispatcher": "AUTO",
+			"PlaceData": "CN",
 			"Directions": "AUTO",
 			"Traffic": "AUTO",
-			"RAP": "AUTO",
+			"RAP": "XX",
 			"Tiles": "AUTO"
 		},
 		"Geo_manifest": {
