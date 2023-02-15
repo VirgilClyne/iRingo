@@ -33,6 +33,10 @@
 					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
 					"items": [
 						{
+							"key": "AUTO",
+							"label": "自动（跟随地区检测结果）"
+						},
+						{
 							"key": "CN",
 							"label": "中国大陆"
 						},
@@ -76,11 +80,15 @@
 				},
 				{
 					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code.default",
-					"name": "[动态配置]地理服务清单的国家或地区代码",
-					"val": "CN",
+					"name": "[动态配置]资源清单的国家或地区代码",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "要更改为的地区或国家，此选项影响“地图”整体配置内容，包括以下的地图功能与服务",
 					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（跟随地区检测结果）"
+						},
 						{
 							"key": "CN",
 							"label": "中国大陆"
@@ -136,20 +144,20 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(兴趣点:大众点评/Yelp,位置信息:高德/TomTom)"
+							"label": "中国大陆版(国内:互动百科/大众点评/携程/高德+国外:Yelp等/TomTom)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(兴趣点:Yelp,位置信息:TomTom)"
+							"label": "国际版(国内:维基百科+国外:Yelp等/TomTom)"
 						}
 					]
 				},
 				{
 					"id": "@iRingo.Location.Settings.Services.Directions",
-					"name": "[导航]数据源",
+					"name": "[导航与ETA]数据源",
 					"val": "AUTO",
 					"type": "selects",
-					"desc": "导航服务的数据源，此选项影响导航服务",
+					"desc": "导航服务的数据源，此选项影响导航与ETA（到达时间）等功能",
 					"items": [
 						{
 							"key": "AUTO",
@@ -157,11 +165,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版（高德）"
+							"label": "中国大陆版(国内:高德+国外:无)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版"
+							"label": "国际版(国内:无+国外:Apple)"
 						}
 					]
 				},
@@ -182,7 +190,7 @@
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:无+国外:未知)"
+							"label": "国际版(国内:无+国外:Apple)"
 						}
 					]
 				},
@@ -199,11 +207,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(国内:无+国外:苹果)"
+							"label": "中国大陆版(无法启用，国内:高德+国外:无)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:苹果+国外:苹果)"
+							"label": "国际版(国内:Apple+国外:Apple)"
 						}
 					]
 				},
@@ -231,16 +239,20 @@
 				{
 					"id": "@iRingo.Location.Settings.Config.Announcements.Environment.default",
 					"name": "[通告配置]环境代码",
-					"val": "prod-cn",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "通告的配置文件的环境代码，此选项影响功能未知",
 					"items": [
 						{
-							"key": "prod-cn",
+							"key": "AUTO",
+							"label": "自动（跟随地区检测结果）"
+						},
+						{
+							"key": "CN",
 							"label": "中国大陆版"
 						},
 						{
-							"key": "prod",
+							"key": "XX",
 							"label": "国际版"
 						}
 					]
@@ -1880,18 +1892,22 @@
 					]
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.Announcements.Environment.watchOS",
+					"id": "@iRingo.Location.Settings.Config.Announcements.watchOS",
 					"name": "[通告配置]环境代码",
-					"val": "prod",
+					"val": "XX",
 					"type": "selects",
 					"desc": "通告的配置文件的环境代码，此选项影响功能未知",
 					"items": [
 						{
-							"key": "prod-cn",
+							"key": "AUTO",
+							"label": "自动（跟随地区检测结果）"
+						},
+						{
+							"key": "CN",
 							"label": "中国大陆版"
 						},
 						{
-							"key": "prod",
+							"key": "XX",
 							"label": "国际版"
 						}
 					]

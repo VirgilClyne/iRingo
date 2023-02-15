@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.6.3-response-beta");
+const $ = new Env("Apple Location Services v2.6.4-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"Dispatcher":"AUTO","Directions":"AUTO","Traffic":"AUTO","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"iOS":"prod-cn","iPadOS":"prod-cn","watchOS":"prod","macOS":"prod-cn"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"PlaceData":"CN","Directions":"AUTO","Traffic":"AUTO","RAP":"XX","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"XX","macOS":"CN"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -40,7 +40,13 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "pep/gcc":
-				$response.body = Settings.PEP.GCC;
+				switch (Settings.PEP.GCC) {
+					case "AUTO":
+						break;
+					default:
+						$response.body = Settings.PEP.GCC;
+						break;
+				};
 				break;
 			case "config/defaults":
 				if ($response.status === 200 || $response.statusCode === 200) {

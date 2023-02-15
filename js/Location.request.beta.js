@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📍 Apple Location Services v2.12.3-request-beta");
+const $ = new Env("📍 Apple Location Services v2.12.5-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"PlaceData":"CN","Directions":"AUTO","Traffic":"AUTO","RAP":"XX","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"iOS":"prod-cn","iPadOS":"prod-cn","watchOS":"prod","macOS":"prod-cn"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"PlaceData":"CN","Directions":"AUTO","Traffic":"AUTO","RAP":"XX","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"XX","macOS":"CN"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -70,19 +70,37 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case "config/announcements":
 				switch (url.params.os) {
 					case "ios":
-						url.params.environment = Settings?.Config?.Announcements?.Environment?.iOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
-						break;
 					case "ipados":
-						url.params.environment = Settings?.Config?.Announcements?.Environment?.iPadOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
+					case "macos":
+					default:
+						switch (Settings?.Config?.Announcements?.Environment?.default) {
+							case "AUTO":
+								break;
+							default:
+								url.params.environment = "prod-cn"
+								break;
+							case "CN":
+								url.params.environment = "prod-cn"
+								break;
+							case "XX":
+								url.params.environment = "prod"
+								break;
+						};
 						break;
 					case "watchos":
-						url.params.environment = Settings?.Config?.Announcements?.Environment?.watchOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod"
-						break;
-					case "macos":
-						url.params.environment = Settings?.Config?.Announcements?.Environment?.macOS ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
-						break;
-					default:
-						url.params.environment = Settings?.Config?.Announcements?.Environment ?? Settings?.Config?.Announcements?.Environment?.default ?? "prod-cn"
+						switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
+							case "AUTO":
+								break;
+							default:
+								url.params.environment = "prod"
+								break;
+							case "CN":
+								url.params.environment = "prod-cn"
+								break;
+							case "XX":
+								url.params.environment = "prod"
+								break;
+							};
 						break;
 				};
 				await setETag("Announcements", Caches);
@@ -90,19 +108,25 @@ for (const [key, value] of Object.entries($request.headers)) {
 			case "geo_manifest/dynamic/config":
 				switch (url.params.os) {
 					case "ios":
-						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.iOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
-						break;
 					case "ipados":
-						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.iPadOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+					case "macos":
+					default:
+						switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default) {
+							case "AUTO":
+								break;
+							default:
+								url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+								break;
+						};
 						break;
 					case "watchos":
-						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "US"
-						break;
-					case "macos":
-						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.macOS ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
-						break;
-					default:
-						url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code ?? Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+						switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
+							case "AUTO":
+								break;
+							default:
+								url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US"
+								break;
+							};
 						break;
 				};
 				await setETag("Dynamic", Caches);

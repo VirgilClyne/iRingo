@@ -15,7 +15,7 @@
 			"Dynamic": {
 				"Config": {
 					"Country_code": {
-						"default": "CN",
+						"default": "AUTO",
 						"iOS": "CN",
 						"iPadOS": "CN",
 						"watchOS": "US",
@@ -27,11 +27,11 @@
 		"Config": {
 			"Announcements": {
 				"Environment:": {
-					"default": "prod-cn",
-					"iOS": "prod-cn",
-					"iPadOS": "prod-cn",
-					"watchOS": "prod",
-					"macOS": "prod-cn"
+					"default": "AUTO",
+					"iOS": "CN",
+					"iPadOS": "CN",
+					"watchOS": "XX",
+					"macOS": "CN"
 				}
 			},
 			"Defaults": {
