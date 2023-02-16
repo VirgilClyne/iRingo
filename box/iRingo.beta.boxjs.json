@@ -144,11 +144,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(国内:互动百科/大众点评/携程/高德+国外:Yelp等/TomTom)"
+							"label": "高德(国内:互动百科/大众点评/携程+国外:Yelp等/TomTom)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:维基百科+国外:Yelp等/TomTom)"
+							"label": "Apple(国内:维基百科+国外:Yelp等/TomTom)"
 						}
 					]
 				},
@@ -157,7 +157,7 @@
 					"name": "[导航与ETA]数据源",
 					"val": "AUTO",
 					"type": "selects",
-					"desc": "导航服务的数据源，此选项影响导航与ETA（到达时间）等功能",
+					"desc": "导航与ETA服务的数据源，此选项影响导航与ETA(到达时间)等功能",
 					"items": [
 						{
 							"key": "AUTO",
@@ -165,11 +165,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(国内:高德+国外:无)"
+							"label": "高德(无国外数据)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:无+国外:Apple)"
+							"label": "Apple(无国内数据)"
 						}
 					]
 				},
@@ -186,11 +186,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(国内:高德+国外:无)"
+							"label": "Apple中国(无国外数据)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:无+国外:Apple)"
+							"label": "Apple国际(无国内数据)"
 						}
 					]
 				},
@@ -207,11 +207,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(无法启用，国内:高德+国外:无)"
+							"label": "高德(暂不可用)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:Apple+国外:Apple)"
+							"label": "Apple"
 						}
 					]
 				},
@@ -228,11 +228,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版(国内:高德+国外:TomTom)"
+							"label": "Apple中国(国内:高德+国外:TomTom)"
 						},
 						{
 							"key": "XX",
-							"label": "国际版(国内:OpenStreet+国外:TomTom)"
+							"label": "Apple国际(国内:OpenStreet+国外:TomTom)"
 						}
 					]
 				},
@@ -249,11 +249,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "中国大陆版"
+							"label": "中国大陆"
 						},
 						{
 							"key": "XX",
-							"label": "国际版"
+							"label": "国际"
 						}
 					]
 				},
@@ -262,14 +262,14 @@
 					"name": "[默认配置]为“地图”提供助力",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用“评分与照片”，可让您将图像、评分或其他内容发布到所选的兴趣点。(“设置” >“地图”>“评分与照片”)"
+					"desc": "是否启用“为‘地图’提供助力”，可让您将图像、评分或其他内容发布到所选的兴趣点。(“设置”>“地图”>“为‘地图’提供助力”)"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.DrivingMultiWaypointRoutesEnabled",
-					"name": "[默认配置]多途经点路线规划",
+					"name": "[默认配置]多途经点路线规划(iOS 16)",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用“多途经点路线规划”，可在一条路线中添加多个途经点。（iOS 16）"
+					"desc": "是否启用“多途经点路线规划”，可在一条路线中添加多个途经点"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.GEOAddressCorrection",
@@ -293,11 +293,25 @@
 					"desc": "是否启用景点与地标支持"
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.PedestrianAR",
-					"name": "[默认配置]现实世界中的路线",
+					"id": "@iRingo.Location.Settings.Config.Defaults.POIBusyness",
+					"name": "[默认配置]兴趣点(POI)繁忙度支持",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用在增强现实中查看导航(“设置” >“地图”>“步行”>“举起以查看”)"
+					"desc": "是否启用在地图内查询及上报兴趣点(POI)繁忙度"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.Defaults.PedestrianAR",
+					"name": "[默认配置]现实世界中的路线(iOS 15)",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用在增强现实中查看导航(“设置”>“地图”>“步行”>“举起以查看”)"
+				},
+				{
+					"id": "@iRingo.Location.Settings.Config.Defaults.TransitPayEnabled",
+					"name": "[默认配置]启用公交支付集成(iOS 16)",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用在地图内显示公交卡余额与公交线路费用"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.6694982d2b14e95815e44e970235e230",
@@ -311,11 +325,11 @@
 					"name": "[默认配置]导航准确性",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置” >“地图”>“步行”>“增强”)"
+					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置”>“地图”>“步行”>“增强”)"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.UseCLPedestrianMapMatchedLocations",
-					"name": "[默认配置]使用AR地图匹配地点",
+					"name": "[默认配置]使用AR地图匹配地点(iOS 15)",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否使用AR地图匹配地点"

@@ -1,11 +1,11 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.6.4-response-beta");
+const $ = new Env("Apple Location Services v2.7.0-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
-		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"PlaceData":"CN","Directions":"AUTO","Traffic":"AUTO","RAP":"XX","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"XX","macOS":"CN"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
+		"Settings":{"Switch":true,"PEP":{"GCC":"US"},"Services":{"PlaceData":"CN","Directions":"AUTO","Traffic":"AUTO","RAP":"XX","Tiles":"AUTO"},"Geo_manifest":{"Dynamic":{"Config":{"Country_code":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"US","macOS":"CN"}}}},"Config":{"Announcements":{"Environment:":{"default":"AUTO","iOS":"CN","iPadOS":"CN","watchOS":"XX","macOS":"CN"}},"Defaults":{"LagunaBeach":true,"DrivingMultiWaypointRoutesEnabled":true,"GEOAddressCorrection":true,"LookupMaxParametersCount":true,"LocalitiesAndLandmarks":true,"POIBusyness":true,"PedestrianAR":true,"6694982d2b14e95815e44e970235e230":true,"OpticalHeading":true,"UseCLPedestrianMapMatchedLocations":true,"TransitPayEnabled":true,"WiFiQualityNetworkDisabled":false,"WiFiQualityTileDisabled":false}}}
 	},
 	"Weather":{
 		"Settings":{"Switch":true,"NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
@@ -64,11 +64,10 @@ const DataBase = {
 						delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
 					}
 					data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks; // CN
-					if (Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks) {
-						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy // CN
-						delete data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime // CN
-					}
+					data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
+					data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
 					data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.Defaults?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.Defaults?.PedestrianAR; // CN
+					data["com.apple.GEO"].CountryProviders.CN.TransitPayEnabled = Settings?.Config?.Defaults?.TransitPayEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.TransitPayEnabled; // CN
 					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled; // CN
 					data["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.Defaults?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityTileDisabled; // CN
 					//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW

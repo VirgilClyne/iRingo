@@ -40,10 +40,12 @@
 				"GEOAddressCorrection": true,
 				"LookupMaxParametersCount": true,
 				"LocalitiesAndLandmarks": true,
+				"POIBusyness": true,
 				"PedestrianAR": true,
 				"6694982d2b14e95815e44e970235e230": true,
 				"OpticalHeading": true,
 				"UseCLPedestrianMapMatchedLocations": true,
+				"TransitPayEnabled": true,
 				"WiFiQualityNetworkDisabled": false,
 				"WiFiQualityTileDisabled": false
 			}
