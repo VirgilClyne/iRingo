@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📍 Apple Location Services v2.13.0-request");
+const $ = new Env("📍 Apple Location Services v2.14.0-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -58,6 +58,15 @@ for (const [key, value] of Object.entries($request.headers)) {
 					default:
 						switch (Settings?.Config?.Announcements?.Environment?.default) {
 							case "AUTO":
+								switch (Caches?.pep?.gcc) {
+									default:
+										url.params.environment = "prod"
+										break;
+									case "CN":
+									case undefined:
+										url.params.environment = "prod-cn"
+										break;
+								};
 								break;
 							default:
 								url.params.environment = "prod-cn"
@@ -73,6 +82,15 @@ for (const [key, value] of Object.entries($request.headers)) {
 					case "watchos":
 						switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
 							case "AUTO":
+								switch (Caches?.pep?.gcc) {
+									default:
+										url.params.environment = "prod"
+										break;
+									case "CN":
+									case undefined:
+										url.params.environment = "prod-cn"
+										break;
+								};
 								break;
 							default:
 								url.params.environment = "prod"
@@ -96,6 +114,15 @@ for (const [key, value] of Object.entries($request.headers)) {
 					default:
 						switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default) {
 							case "AUTO":
+								switch (Caches?.pep?.gcc) {
+									default:
+										url.params.country_code = Caches?.pep?.gcc ?? "US"
+										break;
+									case "CN":
+									case undefined:
+										url.params.country_code = "CN"
+										break;
+								};
 								break;
 							default:
 								url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
@@ -105,6 +132,15 @@ for (const [key, value] of Object.entries($request.headers)) {
 					case "watchos":
 						switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
 							case "AUTO":
+								switch (Caches?.pep?.gcc) {
+									default:
+										url.params.country_code = Caches?.pep?.gcc ?? "US"
+										break;
+									case "CN":
+									case undefined:
+										url.params.country_code = "CN"
+										break;
+								};
 								break;
 							default:
 								url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US"
