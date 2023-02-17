@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Location Services v2.7.0-response-beta");
+const $ = new Env("Apple Location Services v2.8.0-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -40,6 +40,7 @@ const DataBase = {
 		$.log(url.path);
 		switch (url.path) {
 			case "pep/gcc":
+				await setGCC("pep", Caches);
 				switch (Settings.PEP.GCC) {
 					case "AUTO":
 						break;
@@ -117,6 +118,23 @@ async function setENV(name, platform, database) {
 	if (Settings?.Config?.Defaults) for (let setting in Settings.Config.Defaults) Settings.Config.Defaults[setting] = JSON.parse(Settings.Config.Defaults[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches }
+};
+
+/**
+ * Set GCC
+ * @author VirgilClyne
+ * @param {String} name - Config Name
+ * @param {Object} caches - Caches
+ * @return {Promise<*>}
+ */
+async function setGCC(name, caches) {
+	$.log(`⚠ ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
+	if ($response.body !== caches?.[name]?.gcc) {
+		let newCaches = caches;
+		newCaches[name] = { "gcc": $response.body };
+		$.setjson(newCaches, "@iRingo.Location.Caches");
+	}
+	return $.log(`🎉 ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
 };
 
 /**
