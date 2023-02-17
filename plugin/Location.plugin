@@ -6,6 +6,10 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/📍定位服务
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 
+[Rule]
+# > Country Code
+DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
+
 [Script]
 # Rewrite Location Services Defaults Configuration
 http-request ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Location Services Defaults Configuration, argument=
