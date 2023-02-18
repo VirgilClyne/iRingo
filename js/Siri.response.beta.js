@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple Siri v2.1.3-response-beta");
+const $ = new Env("🔍 Siri v2.1.3-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{

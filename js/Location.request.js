@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("📍 Apple Location Services v2.14.0-request");
+const $ = new Env("📍 Location Services v2.14.0-request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{

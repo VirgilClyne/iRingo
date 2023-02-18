@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Apple News v2.0.2-request-beta");
+const $ = new Env("📰 News v2.0.2-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{

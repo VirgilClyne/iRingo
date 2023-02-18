@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env("Private Relay v1.0.2-response-beta");
+const $ = new Env("🌐 Private Relay v1.0.2-response-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{

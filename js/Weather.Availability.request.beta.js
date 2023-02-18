@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("🌤 Apple Weather Availability v1.0.1-request-beta");
+const $ = new Env("🌤 Weather Availability v1.0.1-request-beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{

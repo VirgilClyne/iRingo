@@ -1,6 +1,6 @@
 // README: https://github.com/VirgilClyne/iRingo
 
-const $ = new Env('🌤 Apple Weather v4.0.0-response');
+const $ = new Env('🌤 Weather v4.0.0-response');
 
 /**
  * Get Environment Variables
