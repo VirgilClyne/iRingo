@@ -1,4 +1,4 @@
-#!name= iRingo for Location Services
+#!name= iRingo for 📍 Location Services
 #!desc=(V2) 全面自定义「定位服务」与「地图」的功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Location
 #!author=VirgilClyne
@@ -11,27 +11,35 @@
 DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
 
 [Script]
-# Rewrite Location Services Defaults Configuration
-http-request ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Location Services Defaults Configuration, argument=
-http-response ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js, requires-body=1, tag=Location Services Defaults Configuration, argument=
-# Rewrite Location Services PEP Geo Country Code
-http-response ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js, requires-body=1, tag=Location Services PEP Geo Country Code, argument=
-# Redirect Location Services Announcements Configuration
-http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Location Services Announcements Configuration, argument=
-# Redirect Location Services Dynamic Configuration
-http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Location Services Dynamic Configuration, argument=
-# Redirect Dispatcher Services
-http-request ^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Dispatcher Services, argument=
-http-request ^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Dispatcher Services,  argument=
-# Redirect Directions Services
-http-request ^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Directions Services,  argument=
-http-request ^https?:\/\/direction2\.is\.autonavi\.com\/direction$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Directions Services,  argument=
-# Redirect Traffic Services
-http-request ^https?:\/\/gspe12-ssl\.ls\.apple\.com\/traffic(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Traffic Services,  argument=
-http-request ^https?:\/\/gspe12-cn-ssl\.ls\.apple\.com\/traffic(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Traffic Services,  argument=
-# Redirect Tiles Services
-http-request ^https?:\/\/gspe19-ssl\.ls\.apple\.com\/tile\.vf(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Tiles Services,  argument=
-http-request ^https?:\/\/gspe19-cn-ssl\.ls\.apple\.com\/tiles(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=Tiles Services,  argument=
+# Network Defaults
+http-request ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Network Defaults Request, argument=
+http-response ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js, requires-body=1, tag=📍 Network Defaults Response, argument=
+# Country Code
+http-response ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.response.js, requires-body=1, tag=📍 Country Code Response, argument=
+# Announcements
+http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Announcements Request, argument=
+# Resource Manifest
+http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Resource Manifest Request, argument=
+# PlaceData Dispatcher
+http-request ^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 PlaceData Dispatcher Request, argument=
+http-request ^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 PlaceData Dispatcher Request, argument=
+# Directions & ETA
+http-request ^https?:\/\/gsp-ssl\.ls\.apple\.com\/directions\.arpc$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Directions & ETA Request, argument=
+http-request ^https?:\/\/direction2\.is\.autonavi\.com\/direction$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Directions & ETA Request, argument=
+# Traffic
+http-request ^https?:\/\/gspe12-ssl\.ls\.apple\.com\/traffic(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Traffic Request, argument=
+http-request ^https?:\/\/gspe12-cn-ssl\.ls\.apple\.com\/traffic(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Traffic Request, argument=
+# RAP(Ratings and Photos) Submission
+http-request ^https?:\/\/sundew\.ls\.apple\.com\/v1\/feedback\/submission\.arpc$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 RAP Submission Request, argument=
+http-request ^https?:\/\/rap\.is\.autonavi\.com\/rap$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 RAP Submission Request, argument=
+# RAP(Ratings and Photos) Status
+http-request ^https?:\/\/sundew\.ls\.apple\.com\/grp\/st$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 RAP Status Request, argument=
+http-request ^https?:\/\/rap\.is\.autonavi\.com\/rapstatus$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 RAP Status Request, argument=
+# UGC Log Discard
+http-request ^https?:\/\/sundew\.ls\.apple\.com\/v1\/log_message$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 UGC Log Discard Request, argument=
+# Tiles
+http-request ^https?:\/\/gspe19-ssl\.ls\.apple\.com\/tile\.vf(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Tiles Request,  argument=
+http-request ^https?:\/\/gspe19-cn-ssl\.ls\.apple\.com\/tiles(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=📍 Tiles Request,  argument=
 
 [MITM]
-hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com, gspe19-ssl.ls.apple.com, gspe19-cn-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, gsp-ssl.ls.apple.com, direction2.is.autonavi.com, dispatcher.is.autonavi.com, rap.is.autonavi.com
+hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com, gspe12-ssl.ls.apple.com, gspe12-cn-ssl.ls.apple.com, gspe19-ssl.ls.apple.com, gspe19-cn-ssl.ls.apple.com, gspe35-ssl.ls.apple.com, gsp-ssl.ls.apple.com, direction2.is.autonavi.com, dispatcher.is.autonavi.com, rap.is.autonavi.com, sundew.ls.apple.com

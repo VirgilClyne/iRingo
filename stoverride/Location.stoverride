@@ -1,4 +1,4 @@
-name:  iRingo for Location Services
+name:  iRingo for 📍 Location Services
 desc: (V2) 全面自定义「定位服务」与「地图」的功能。
 openUrl: http://boxjs.com/#/app/iRingo.Location
 author: VirgilClyne
@@ -11,17 +11,18 @@ rules:
 
 http:
   mitm:
-    - "gspe1-ssl.ls.apple.com"
     - "configuration.ls.apple.com"
-    - "gspe19-ssl.ls.apple.com"
-    - "gspe19-cn-ssl.ls.apple.com"
+    - "gspe1-ssl.ls.apple.com"
     - "gspe12-ssl.ls.apple.com"
     - "gspe12-cn-ssl.ls.apple.com"
+    - "gspe19-ssl.ls.apple.com"
+    - "gspe19-cn-ssl.ls.apple.com"
     - "gspe35-ssl.ls.apple.com"
     - "gsp-ssl.ls.apple.com"
     - "direction2.is.autonavi.com"
     - "dispatcher.is.autonavi.com"
     - "rap.is.autonavi.com"
+    - "sundew.ls.apple.com"
 
   script:
     - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults(\?.*)?$
@@ -70,6 +71,31 @@ http:
       require-body: false
       timeout: 10
     - match: ^https?:\/\/gspe12-cn-ssl\.ls\.apple\.com\/traffic(\?.*)?$
+      name: Location.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/sundew\.ls\.apple\.com\/v1\/feedback\/submission\.arpc$
+      name: Location.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/rap\.is\.autonavi\.com\/rap$
+      name: Location.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/sundew\.ls\.apple\.com\/grp\/st$
+      name: Location.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/rap\.is\.autonavi\.com\/rapstatus$
+      name: Location.request
+      type: request
+      require-body: false
+      timeout: 10
+    - match: ^https?:\/\/sundew\.ls\.apple\.com\/v1\/log_message$
       name: Location.request
       type: request
       require-body: false
