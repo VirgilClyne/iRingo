@@ -1,4 +1,4 @@
-#!name= iRingo for 📰 News
+#!name= iRingo: 📰 News
 #!desc=(V2) 1.自定义解锁News的地区 2.Coming Soon… 注：该插件包含代理规则，安装过程中需要匹配代理策略组为🇺🇸线路，使用过程中gateway.icloud.com会走与News相同的代理线路。
 #!openUrl=http://boxjs.com/#/app/iRingo.News
 #!author=VirgilClyne
@@ -8,14 +8,14 @@
 
 [Rule]
 # > iCloud
-DOMAIN-SUFFIX,gateway.icloud.com
+DOMAIN-SUFFIX,gateway.icloud.com,PROXY
 
 # > News
-DOMAIN-SUFFIX,news-edge.apple.com
-DOMAIN-SUFFIX,news-events.apple.com
-DOMAIN-SUFFIX,apple.comscoreresearch.com
+DOMAIN-SUFFIX,news-edge.apple.com,PROXY
+DOMAIN-SUFFIX,news-events.apple.com,PROXY
+DOMAIN-SUFFIX,apple.comscoreresearch.com,PROXY
 # News+ Audio
-URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*
+URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*,PROXY
 
 [Script]
 http-request ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js, requires-body=true, tag=News
