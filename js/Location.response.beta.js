@@ -12,7 +12,10 @@ const DataBase = {
 		"Configs":{"Availability":["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality"],"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
 	},
 	"Siri":{
-		"Settings":{"Switch":"true","CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true}
+		"Settings":{"Switch":"true","CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
+		"Configs":{
+			"VisualIntelligence":{"enabled_domains":["pets","media","books","art","nature","landmarks"],"supported_domains":["OBJECT_2D","SCULPTURE","ART","CATS","DOGS","LANDMARK","ALBUM","SKYLINE","BIRDS","NATURE","ANIMALS","INSECTS","BOOK","MEDIA","NATURAL_LANDMARK"]}
+		}
 	},
 	"TV":{
 		"Settings":{"Switch":"true","Third-Party":true,"Configs":{"CountryCode":"AUTO","Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"]},"View":{"CountryCode":["SG","TW"]},"WatchNow":{"CountryCode":"AUTO"},"Channels":{"CountryCode":"AUTO"},"Originals":{"CountryCode":"TW"},"Movies":{"CountryCode":"AUTO"},"TV":{"CountryCode":"AUTO"},"Sports":{"CountryCode":"US"},"Kids":{"CountryCode":"US"},"Persons":{"CountryCode":"SG"},"Search":{"CountryCode":"TW"},"Others":{"CountryCode":"AUTO"}},
@@ -68,41 +71,6 @@ const DataBase = {
 									break;
 							};
 							break;
-							switch (PATH) {
-								case "config/defaults":
-									if ($response.status === 200 || $response.statusCode === 200) {
-										$.log($response.statusCode || $response.status);
-										let data = await PLIST("plist2json", $response.body);
-										//$.log(data);
-										data = JSON.parse(data);
-										// set settings
-										data["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.Defaults?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.Defaults?.LagunaBeach; // XX
-										data["com.apple.GEO"].CountryProviders.CN.DrivingMultiWaypointRoutesEnabled = Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled; // CN
-										//data["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
-										data["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.Defaults?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.Defaults?.GEOAddressCorrection; // CN
-										if (Settings?.Config?.Defaults?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.Defaults?.LookupMaxParametersCount) {
-											delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
-											delete data["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
-										}
-										data["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks; // CN
-										data["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
-										data["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
-										data["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.Defaults?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.Defaults?.PedestrianAR; // CN
-										data["com.apple.GEO"].CountryProviders.CN.TransitPayEnabled = Settings?.Config?.Defaults?.TransitPayEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.TransitPayEnabled; // CN
-										data["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled; // CN
-										data["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.Defaults?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityTileDisabled; // CN
-										//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
-										//data["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
-										data["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"] ?? DataBase?.Location?.Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"]; // US
-										data["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.Defaults?.OpticalHeading ?? DataBase?.Location?.Settings?.Config?.Defaults?.OpticalHeading; // US
-										data["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations; // US
-										data = JSON.stringify(data);
-										// json2plist
-										$response.body = await PLIST("json2plist", data);
-									}
-									break;
-							};
-							break;
 					};
 					break;
 				case "text/xml":
@@ -149,12 +117,14 @@ const DataBase = {
 					break;
 				case "application/json":
 				case "text/json":
-					body = JSON.parse($request.body);
+					body = JSON.parse($response.body);
 					$.log(body);
-					$request.body = JSON.stringify(body);
+					$response.body = JSON.stringify(body);
 					break;
 				case "application/x-protobuf":
 				case "application/grpc":
+				case "application/grpc+proto":
+				case "applecation/octet-stream":
 					break;
 			};
 			break;
