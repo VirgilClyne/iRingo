@@ -326,6 +326,7 @@ let $response = undefined;
 			};
 			if ($request?.headers?.Host) $request.headers.Host = url.host;
 			$request.url = URL.stringify(url);
+			//$.log(`🚧 ${$.name}, $request.url: ${$request.url}`, "");
 			break;
 		case "false":
 			break;
@@ -389,7 +390,7 @@ let $response = undefined;
 						case "application/json":
 						default:
 							// 返回普通数据
-							$.done({ headers: $request.headers, body: $request.body })
+							$.done({ url: $request.url, headers: $request.headers, body: $request.body })
 							break;
 						case "application/x-protobuf":
 						case "application/grpc":
@@ -397,11 +398,11 @@ let $response = undefined;
 						case "applecation/octet-stream":
 							// 返回二进制数据
 							//$.log(`${$request.bodyBytes.byteLength}---${$request.bodyBytes.buffer.byteLength}`);
-							$.done({ headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
+							$.done({ url: $request.url, headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
 							break;
 						case undefined: // 视为无body
 							// 返回普通数据
-							if ($.isQuanX()) $.done({ headers: $request.headers })
+							$.done({ url: $request.url, headers: $request.headers })
 							break;
 					};
 				} else $.done($request);
