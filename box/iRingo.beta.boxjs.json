@@ -911,13 +911,63 @@
 				},
 				{
 					"id": "@iRingo.TV.Settings.Third-Party",
-					"name": "为不兼容平台启用第三方影片库",
-					"val": true,
+					"name": "强制启用第三方影片库集成",
+					"val": false,
 					"type": "boolean",
-					"desc": "是否为桌面版/macOS版/androidTV版等不兼容平台的TV app启用第三方影片库(如: Disney+,Prime Video等)"
+					"desc": "是否将桌面版/macOS版/app版等平台的TV app转换至iPad版，以启用第三方影片库集成(如: Disney+,Prime Video等)"
 				},
 				{
-					"id": "@iRingo.TV.Settings.Configs.CountryCode",
+					"id": "@iRingo.TV.Settings.Tabs",
+					"name": "启用的标签与栏目",
+					"val": [
+						"WatchNow",
+						"Originals",
+						"Movies",
+						"TV",
+						"Sports",
+						"Kids",
+						"Library",
+						"Search"
+					],
+					"type": "checkboxes",
+					"desc": "启用的标签与栏目，未选择的标签与栏目入口将被隐藏，启用的入口由国家和地区决定，此选项仅代表功能入口上的开启，不代表对应地区一定有数据和服务",
+					"items": [
+						{
+							"key": "WatchNow",
+							"label": "立即观看"
+						},
+						{
+							"key": "Originals",
+							"label": "原创内容(TV+)"
+						},
+						{
+							"key": "Movies",
+							"label": "电影"
+						},
+						{
+							"key": "TV",
+							"label": "电视节目"
+						},
+						{
+							"key": "Sports",
+							"label": "体育节目"
+						},
+						{
+							"key": "Kids",
+							"label": "儿童"
+						},
+						{
+							"key": "Library",
+							"label": "资料库"
+						},
+						{
+							"key": "Search",
+							"label": "搜索"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.CountryCode.Configs",
 					"name": "[配置文件]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -970,57 +1020,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Configs.Tabs",
-					"name": "启用的标签与栏目",
-					"val": [
-						"WatchNow",
-						"Originals",
-						"Movies",
-						"TV",
-						"Sports",
-						"Kids",
-						"Library",
-						"Search"
-					],
-					"type": "checkboxes",
-					"desc": "启用的标签与栏目，未选择的标签与栏目入口将被隐藏，启用的入口由国家和地区决定，此选项仅代表功能入口上的开启，不代表对应地区一定有数据和服务",
-					"items": [
-						{
-							"key": "WatchNow",
-							"label": "立即观看"
-						},
-						{
-							"key": "Originals",
-							"label": "原创内容(TV+)"
-						},
-						{
-							"key": "Movies",
-							"label": "电影"
-						},
-						{
-							"key": "TV",
-							"label": "电视节目"
-						},
-						{
-							"key": "Sports",
-							"label": "体育节目"
-						},
-						{
-							"key": "Kids",
-							"label": "儿童"
-						},
-						{
-							"key": "Library",
-							"label": "资料库"
-						},
-						{
-							"key": "Search",
-							"label": "搜索"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.TV.Settings.View.CountryCode[0]",
+					"id": "@iRingo.TV.Settings.CountryCode.View[0]",
 					"name": "[内容详情]首选语言",
 					"val": "SG",
 					"type": "selects",
@@ -1073,7 +1073,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.View.CountryCode[1]",
+					"id": "@iRingo.TV.Settings.CountryCode.View[1]",
 					"name": "[内容详情]第二语言",
 					"val": "TW",
 					"type": "selects",
@@ -1126,7 +1126,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.WatchNow.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.WatchNow",
 					"name": "[立即观看]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1179,7 +1179,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Originals.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Originals",
 					"name": "[原创内容](TV+)国家或地区代码",
 					"val": "TW",
 					"type": "selects",
@@ -1232,7 +1232,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Channels.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Channels",
 					"name": "[TV频道]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1285,7 +1285,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Movies.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Movies",
 					"name": "[电影]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1338,7 +1338,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.TV.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.TV",
 					"name": "[电视节目]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1391,7 +1391,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Sports.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Sports",
 					"name": "[体育节目]国家或地区代码",
 					"val": "US",
 					"type": "selects",
@@ -1444,7 +1444,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Kids.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Kids",
 					"name": "[儿童]国家或地区代码",
 					"val": "US",
 					"type": "selects",
@@ -1497,7 +1497,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Persons.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Persons",
 					"name": "[人物]国家或地区代码",
 					"val": "SG",
 					"type": "selects",
@@ -1550,7 +1550,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Search.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Search",
 					"name": "[搜索]国家或地区代码",
 					"val": "TW",
 					"type": "selects",
@@ -1603,7 +1603,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Others.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Others",
 					"name": "[其他]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1906,7 +1906,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.Announcements.watchOS",
+					"id": "@iRingo.Location.Settings.Config.Announcements.Environment.watchOS",
 					"name": "[通告配置]环境代码",
 					"val": "XX",
 					"type": "selects",

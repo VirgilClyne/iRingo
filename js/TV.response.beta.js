@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(1) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.0.0(18) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -18,13 +18,42 @@ const DataBase = {
 		}
 	},
 	"TV":{
-		"Settings":{"Switch":"true","Third-Party":true,"Configs":{"CountryCode":"AUTO","Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"]},"View":{"CountryCode":["SG","TW"]},"WatchNow":{"CountryCode":"AUTO"},"Channels":{"CountryCode":"AUTO"},"Originals":{"CountryCode":"TW"},"Movies":{"CountryCode":"AUTO"},"TV":{"CountryCode":"AUTO"},"Sports":{"CountryCode":"US"},"Kids":{"CountryCode":"US"},"Persons":{"CountryCode":"SG"},"Search":{"CountryCode":"TW"},"Others":{"CountryCode":"AUTO"}},
+		"Settings": {
+			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"],
+			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
+		},
 		"Configs":{
-			"Locale":{"AU":"en-AU","CA":"en-CA","GB":"en-GB","KR":"ko-KR","HK":"yue-Hant","JP":"ja-JP","MO":"zh-Hant","TW":"zh-Hant","US":"en-US","SG":"zh-Hans"},
-			"Tabs":{"zh":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hans":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hant":{"WatchNow":"立即觀看","Originals":"原創內容","Movies":"電影","TV":"電視節目","Store":"商店","Sports":"體育節目","Kids":"兒童","Library":"資料庫","Search":"蒐索"},"en":{"WatchNow":"Watch Now","Originals":"Originals","Movies":"Movies","TV":"TV Shows","Store":"Store","Sports":"Sports","Kids":"Kids","Library":"Library","Search":"Search"}}
+			"Locale":[["AU","en-AU"],["CA","en-CA"],["GB","en-GB"],["KR","ko-KR"],["HK","yue-Hant"],["JP","ja-JP"],["MO","zh-Hant"],["TW","zh-Hant"],["US","en-US"],["SG","zh-Hans"]],
+			"Tabs": [
+				{ "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"], "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" } },
+				{ "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"], "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" } },
+				{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
+				{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } },
+				{ "title": "商店", "type": "Store", "universalLinks": ["https://tv.apple.com/store"], "destinationType": "SubTabs", 
+					"subTabs": [
+						{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
+						{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
+					]
+				},
+				{ "title": "体育节目", "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"], "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" } },
+				{ "title": "儿童", "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"], "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" } },
+				{ "title": "资料库", "type": "Library", "destinationType": "Client" },
+				{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
+			],
+			"i18n": {
+				"WatchNow": [["en", "Watch Now"], ["zh", "立即观看"], ["zh-Hans", "立即观看"], ["zh-Hant", "立即觀看"]],
+				"Originals": [["en", "Originals"], ["zh", "原创内容"], ["zh-Hans", "原创内容"], ["zh-Hant", "原創內容"]],
+				"Movies": [["en", "Movies"], ["zh", "电影"], ["zh-Hans", "电影"], ["zh-Hant", "電影"]],
+				"TV": [["en", "TV"], ["zh", "电视节目"], ["zh-Hans", "电视节目"], ["zh-Hant", "電視節目"]],
+				"Store": [["en", "Store"], ["zh", "商店"], ["zh-Hans", "商店"], ["zh-Hant", "商店"]],
+				"Sports": [["en", "Sports"], ["zh", "体育节目"], ["zh-Hans", "体育节目"], ["zh-Hant", "體育節目"]],
+				"Kids": [["en", "Kids"], ["zh", "儿童"], ["zh-Hans", "儿童"], ["zh-Hant", "兒童"]],
+				"Library": [["en", "Library"], ["zh", "资料库"], ["zh-Hans", "资料库"], ["zh-Hant", "資料庫"]],
+				"Search": [["en", "Search"], ["zh", "搜索"], ["zh-Hans", "搜索"], ["zh-Hant", "蒐索"]]
+			}
 		}
 	},
-    "News":{
+	"News":{
 		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"AUTO"}
 	},
 	"Default": {
@@ -61,11 +90,6 @@ const DataBase = {
 				case "text/plist":
 				case "application/plist":
 				case "application/x-plist":
-					if ($response.status === 200 || $response.statusCode === 200) {
-						body = await PLIST("plist2json", $response.body);
-						$.log(body);
-						$response.body = await PLIST("json2plist", body);
-					};
 					break;
 				case "application/json":
 				case "text/json":
@@ -77,31 +101,73 @@ const DataBase = {
 							switch (PATH) {
 								case "uts/v3/configurations":
 									if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-										const Locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
-										$.log(`Locale: ${Locale}`, "");
-										let tabs = await createTabsGroup(Configs, Locale, url.params.v);
-										["WatchNow", "Originals", "Movies", "TV", "Sports", "Kids", "Library", "Search"].forEach(tab => { if (!Settings.Configs.Tabs.includes(tab)) delete tabs[tab] })
-										$.log(JSON.stringify(tabs));
-										//body.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
-										//body.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
-										body.data.applicationProps.tabs = tabs;
-										//body.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
-										body.data.applicationProps.tvAppEnabledInStorefront = true;
-										//body.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
-										//	: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
-										//body.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
-										//body.data.applicationProps.storefront.storefrontId = 143470;
-										body.data.applicationProps.featureEnablers["topShelf"] = true;
-										body.data.applicationProps.featureEnablers["sports"] = true;
-										body.data.applicationProps.featureEnablers["sportsFavorites"] = true;
-										body.data.applicationProps.featureEnablers["unw"] = true;
-										//body.data.applicationProps.featureEnablers["imageBasedSubtitles"] = true;
-										//body.data.applicationProps.featureEnablers["ageVerification"] = false;
-										//body.data.applicationProps.featureEnablers["seasonTitles"] = false;
-										//body.data.userProps.activeUser = true;
-										//body.data.userProps.utsc = "1:18943";
-										//body.data.userProps.country = country;
-										//body.data.userProps.gac = true;
+										const Version = parseInt(url?.params?.v, 10), Platform = url?.params?.pfm, Locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
+										$.log(`⚠ ${$.name}`, `Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
+										if (body?.data?.applicationProps) {
+											//body.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
+											//body.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
+											body.data.applicationProps.tabs = Configs.Tabs.map(tab => {
+												if (Settings.Tabs.includes(tab?.type)) {
+													switch (tab?.destinationType) {
+														case "SubTabs":
+															tab.subTabs = tab.subTabs.map(subTab => {
+																subTab.title = Configs.i18n[subTab.type].get(Locale);
+																return subTab;
+															});
+														case "Target":
+														case "Client":
+															tab.title = Configs.i18n[tab.type].get(Locale);
+															break;
+													};
+													switch (tab?.type) {
+														case "WatchNow":
+														case "Originals":
+															return tab;
+														case "Store":
+															if (Version >= 54) return tab;
+															else return;
+														case "Movies":
+														case "TV":
+															if (Version < 54) return tab;
+															else return;
+														case "Sports":
+														case "Kids":
+															if (Version < 54) tab.secondaryEnabled = true;
+															switch (Platform) {
+																case "atv":
+																case "ipad":
+																case "appletv":
+																default:
+																	return tab;
+																case "iphone":
+																	return;
+															};
+														case "Library":
+														case "Search":
+														default:
+															return tab;
+													};
+												};
+											}).filter(Boolean);
+											$.log(JSON.stringify(body.data.applicationProps.tabs));
+											//body.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
+											body.data.applicationProps.tvAppEnabledInStorefront = true;
+											//body.data.applicationProps.enabledClientFeatures = (Params.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
+											//	: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
+											//body.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
+											//body.data.applicationProps.storefront.storefrontId = 143470;
+											body.data.applicationProps.featureEnablers["topShelf"] = true;
+											body.data.applicationProps.featureEnablers["sports"] = true;
+											body.data.applicationProps.featureEnablers["sportsFavorites"] = true;
+											body.data.applicationProps.featureEnablers["unw"] = true;
+											body.data.applicationProps.featureEnablers["imageBasedSubtitles"] = false;
+											//body.data.applicationProps.featureEnablers["ageVerification"] = false;
+											//body.data.applicationProps.featureEnablers["seasonTitles"] = false;
+											//body.data.userProps.activeUser = true;
+											//body.data.userProps.utsc = "1:18943";
+											//body.data.userProps.country = country;
+											//body.data.userProps.gac = true;
+										};
 									};
 									break;
 								case "uts/v3/user/settings":
@@ -116,6 +182,17 @@ const DataBase = {
 									break;
 							};
 							break;
+						case "umc-tempo-api.apple.com":
+								// 路径判断
+								switch (PATH) {
+									case "v3/channels/scoreboard":
+									case "v3/channels/scoreboard/":
+										$.log(JSON.stringify(body));
+										//body.channels.storeFront = "USA";
+										//body.channels.storeFront = "TAIWAN";
+										break;
+								};
+								break;
 					};
 					$response.body = JSON.stringify(body);
 					break;
@@ -195,44 +272,15 @@ function setENV(name, platform, database) {
 	if (typeof Settings?.Configs?.Tabs == "string") Settings.Configs.Tabs = Settings.Configs.Tabs.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
+	/***************** Configs *****************/
+	Configs.Locale = new Map(Configs.Locale);
+	for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
 	return { Settings, Caches, Configs };
 };
 
-// Create Tabs Group
-async function createTabsGroup(Configs, Locale, Version) {
-	$.log(`⚠ ${$.name}, Create Tabs Group`, "");
-
-	//构建Tab内容
-	const WatchNow = { "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "title": Configs.Tabs[Locale].WatchNow, "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"] };
-	const Originals = { "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" }, "title": Configs.Tabs[Locale].Originals, "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"] };
-	const Movies = { "universalLinks": ["https://tv.apple.com/movies"], "title": Configs.Tabs[Locale].Movies, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "type": "Movies" };
-	const TV = { "universalLinks": ["https://tv.apple.com/tv-shows"], "title": Configs.Tabs[Locale].TV, "destinationType": "Target", "secondaryEnabled": true, "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "type": "TV" };
-	const Store = {
-		"destinationType": "SubTabs",
-		"subTabs": [
-			{ "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" }, "title": Configs.Tabs[Locale].Movies, "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"] },
-			{ "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" }, "title": Configs.Tabs[Locale].TV, "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"] }
-		],
-		"title": Configs.Tabs[Locale].Store,
-		"type": "Store",
-		"universalLinks": ["https://tv.apple.com/store"]
-	};
-	const Sports = { "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" }, "title": Configs.Tabs[Locale].Sports, "secondaryEnabled": true, "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"] };
-	const Kids = { "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" }, "title": Configs.Tabs[Locale].Kids, "secondaryEnabled": true, "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"] };
-	const Library = { "destinationType": "Client", "title": Configs.Tabs[Locale].Library, "type": "Library" };
-	const Search = { "destinationType": "Target", "target": { "id": "tahoma_searchlanding", "type": "Root", "url": "https://tv.apple.com/search" }, "title": Configs.Tabs[Locale].Search, "type": "Search", "universalLinks": ["https://tv.apple.com/search"] };
-
-	// 创建分组
-	var tabs = (Version < 54) ? [WatchNow, Originals, Movies, TV, Sports, Kids, Library, Search]
-		: [WatchNow, Originals, Store, Sports, Kids, Library, Search];
-	// 输出
-	return tabs;
-};
-
-
 async function getData(type, settings, database) {
 	$.log(`⚠ ${$.name}, Get View Data`, "");
-	let CCs = [settings[type].CountryCode, "US", "GB"].flat(Infinity);
+	let CCs = [settings.CountryCode[type], "US", "GB"].flat(Infinity);
 	$.log(`CCs=${CCs}`)
 	//查询是否有符合语言的字幕
 	let data = [];

@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(3) request.beta");
+const $ = new Env(" iRingo: 📺 TV v3.0.0(8) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -18,13 +18,42 @@ const DataBase = {
 		}
 	},
 	"TV":{
-		"Settings":{"Switch":"true","Third-Party":true,"Configs":{"CountryCode":"AUTO","Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"]},"View":{"CountryCode":["SG","TW"]},"WatchNow":{"CountryCode":"AUTO"},"Channels":{"CountryCode":"AUTO"},"Originals":{"CountryCode":"TW"},"Movies":{"CountryCode":"AUTO"},"TV":{"CountryCode":"AUTO"},"Sports":{"CountryCode":"US"},"Kids":{"CountryCode":"US"},"Persons":{"CountryCode":"SG"},"Search":{"CountryCode":"TW"},"Others":{"CountryCode":"AUTO"}},
+		"Settings": {
+			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"],
+			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
+		},
 		"Configs":{
-			"Locale":{"AU":"en-AU","CA":"en-CA","GB":"en-GB","KR":"ko-KR","HK":"yue-Hant","JP":"ja-JP","MO":"zh-Hant","TW":"zh-Hant","US":"en-US","SG":"zh-Hans"},
-			"Tabs":{"zh":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hans":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hant":{"WatchNow":"立即觀看","Originals":"原創內容","Movies":"電影","TV":"電視節目","Store":"商店","Sports":"體育節目","Kids":"兒童","Library":"資料庫","Search":"蒐索"},"en":{"WatchNow":"Watch Now","Originals":"Originals","Movies":"Movies","TV":"TV Shows","Store":"Store","Sports":"Sports","Kids":"Kids","Library":"Library","Search":"Search"}}
+			"Locale":[["AU","en-AU"],["CA","en-CA"],["GB","en-GB"],["KR","ko-KR"],["HK","yue-Hant"],["JP","ja-JP"],["MO","zh-Hant"],["TW","zh-Hant"],["US","en-US"],["SG","zh-Hans"]],
+			"Tabs": [
+				{ "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"], "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" } },
+				{ "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"], "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" } },
+				{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
+				{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } },
+				{ "title": "商店", "type": "Store", "universalLinks": ["https://tv.apple.com/store"], "destinationType": "SubTabs", 
+					"subTabs": [
+						{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
+						{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
+					]
+				},
+				{ "title": "体育节目", "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"], "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" } },
+				{ "title": "儿童", "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"], "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" } },
+				{ "title": "资料库", "type": "Library", "destinationType": "Client" },
+				{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
+			],
+			"i18n": {
+				"WatchNow": [["en", "Watch Now"], ["zh", "立即观看"], ["zh-Hans", "立即观看"], ["zh-Hant", "立即觀看"]],
+				"Originals": [["en", "Originals"], ["zh", "原创内容"], ["zh-Hans", "原创内容"], ["zh-Hant", "原創內容"]],
+				"Movies": [["en", "Movies"], ["zh", "电影"], ["zh-Hans", "电影"], ["zh-Hant", "電影"]],
+				"TV": [["en", "TV"], ["zh", "电视节目"], ["zh-Hans", "电视节目"], ["zh-Hant", "電視節目"]],
+				"Store": [["en", "Store"], ["zh", "商店"], ["zh-Hans", "商店"], ["zh-Hant", "商店"]],
+				"Sports": [["en", "Sports"], ["zh", "体育节目"], ["zh-Hans", "体育节目"], ["zh-Hant", "體育節目"]],
+				"Kids": [["en", "Kids"], ["zh", "儿童"], ["zh-Hans", "儿童"], ["zh-Hant", "兒童"]],
+				"Library": [["en", "Library"], ["zh", "资料库"], ["zh-Hans", "资料库"], ["zh-Hant", "資料庫"]],
+				"Search": [["en", "Search"], ["zh", "搜索"], ["zh-Hans", "搜索"], ["zh-Hant", "蒐索"]]
+			}
 		}
 	},
-    "News":{
+	"News":{
 		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"AUTO"}
 	},
 	"Default": {
@@ -54,7 +83,6 @@ let $response = undefined;
 			let body = {};
 			// 设置默认类型
 			let Type = "Other";
-			$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings[Type].CountryCode}`);
 			// 方法判断
 			switch (METHOD) {
 				case "POST":
@@ -79,7 +107,7 @@ let $response = undefined;
 										case "uts/v2/favorites/add":
 										case "uts/v2/favorites/remove":
 											Type = "Sports";
-											if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
+											if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.CountryCode[Type]]}`);
 											break;
 									};
 									break;
@@ -89,9 +117,6 @@ let $response = undefined;
 						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
-							body = await PLIST("plist2json", $request.body);
-							$.log(body);
-							$request.body = await PLIST("json2plist", body);
 							break;
 						case "application/json":
 						case "text/json":
@@ -103,11 +128,11 @@ let $response = undefined;
 									switch (PATH) {
 										case "uts/v3/configurations":
 											Type = "Configs";
-											if (Settings[Type].CountryCode !== "AUTO") {
-												if (url.params.region) url.params.region = Settings[Type].CountryCode || url.params.region
-												if (url.params.country) url.params.country = Settings[Type].CountryCode || url.params.country
+											if (Settings.CountryCode[Type] !== "AUTO") {
+												if (url.params.region) url.params.region = Settings.CountryCode[Type] || url.params.region
+												if (url.params.country) url.params.country = Settings.CountryCode[Type] || url.params.country
 											}
-											if (url.params.sfh) url.params.sfh = (Configs.Storefront?.[Settings[Type].CountryCode]) ? url.params.sfh.replace(/\d{6}/, Configs.Storefront[Settings[Type].CountryCode]) : url.params.sfh
+											if (url.params.sfh) url.params.sfh = (Configs.Storefront?.[Settings.CountryCode[Type]]) ? url.params.sfh.replace(/\d{6}/, Configs.Storefront[Settings.CountryCode[Type]]) : url.params.sfh
 											$.log(`🚧 ${$.name}, 调试信息`, `region = ${url.params.region}, country = ${url.params.country}, sfh = ${url.params.sfh}`, "")
 											break;
 										case "uts/v3/user/settings":
@@ -118,6 +143,15 @@ let $response = undefined;
 										case "uts/v2/watchlist/contains":
 										case "uts/v2/watchlist/search":
 											if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
+											break;
+									};
+									break;
+								case "umc-tempo-api.apple.com":
+									// 路径判断
+									switch (PATH) {
+										case "v3/channels/scoreboard":
+										case "v3/channels/scoreboard/":
+											Type = "Sports";
 											break;
 									};
 									break;
@@ -167,6 +201,8 @@ let $response = undefined;
 									if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
 									break;
 								case "uts/v3/canvases/Roots/sports":
+								case "uts/v3/clock-scores":
+								case "uts/v3/leagues":
 								case "uts/v2/sports/clockscore":
 								case "uts/v2/sports/competitors":
 								case "uts/v2/sports/league":
@@ -187,7 +223,7 @@ let $response = undefined;
 								case "uts/v2/favorites/add":
 								case "uts/v2/favorites/remove":
 									Type = "Sports";
-									if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.Sports.CountryCode]}`);
+									if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront[Settings.CountryCode[Type]]}`);
 									break;
 								case "uts/v3/search":
 								case "uts/v3/search/landing":
@@ -223,13 +259,18 @@ let $response = undefined;
 				case "TRACE":
 					break;
 			};
+			$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
 			if ($request?.headers?.Host) $request.headers.Host = url.host;
-			if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings[Type].CountryCode] || url.params.sf
-			if (url.params.locale) url.params.locale = Configs.Locale[Settings[Type].CountryCode] || url.params.locale
+			if ($request?.headers?.["x-apple-store-front"]) {
+				$request.headers["x-apple-store-front"] = (Configs.Storefront?.[Settings.CountryCode[Type]])
+					? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront[Settings.CountryCode[Type]])
+					: $request.headers["x-apple-store-front"];
+			};
+			if (url?.params?.sf) url.params.sf = Configs.Storefront[Settings.CountryCode[Type]] ?? url.params.sf
+			if (url.params.locale) url.params.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.params.locale
 			$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url.params.sf}, locale = ${url.params.locale}`, "")
 			$request.url = URL.stringify(url);
 			$.log(`🚧 ${$.name}, $request.url: ${$request.url}`, "");
-			if ($request?.headers?.["x-apple-store-front"]) $request.headers["x-apple-store-front"] = (Configs.Storefront?.[Settings[Type].CountryCode]) ? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront[Settings[Type].CountryCode]) : $request.headers["x-apple-store-front"];
 			break;
 		case "false":
 			break;
@@ -328,9 +369,12 @@ function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	//Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings["Third-Party"] = JSON.parse(Settings["Third-Party"]) // BoxJs字符串转Boolean
-	if (typeof Settings?.Configs?.Tabs == "string") Settings.Configs.Tabs = Settings.Configs.Tabs.split(",") // BoxJs字符串转数组
+	if (typeof Settings?.Tabs == "string") Settings.Tabs = Settings.Tabs.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
+	/***************** Configs *****************/
+	Configs.Locale = new Map(Configs.Locale);
+	for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
 	return { Settings, Caches, Configs };
 };
 
