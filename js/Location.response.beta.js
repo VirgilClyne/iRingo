@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(2) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(3) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -40,10 +40,10 @@ const DataBase = {
 		case "true":
 		default:
 			let url = URL.parse($request?.url);
-			const HOST = url?.host, PATH = url?.path, PATHs = PATH.split("/");
+			const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = PATH.split("/");
 			// 解析格式
 			const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
-			$.log(`⚠ ${$.name}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, `FORMAT: ${FORMAT}`, "");
+			$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, `FORMAT: ${FORMAT}`, "");
 			// 创建空数据
 			let body = {};
 			// 格式判断
@@ -68,7 +68,6 @@ const DataBase = {
 									break;
 							};
 							break;
-						case "configuration.ls.apple.com":
 							switch (PATH) {
 								case "config/defaults":
 									if ($response.status === 200 || $response.statusCode === 200) {
@@ -106,48 +105,53 @@ const DataBase = {
 							break;
 					};
 					break;
+				case "text/xml":
+				case "text/plist":
 				case "application/plist":
 				case "application/x-plist":
-				case "text/plist":
-					body = await PLIST("plist2json", $response.body);
-					//$.log(body);
-					switch (HOST) {
-						case "configuration.ls.apple.com":
-							switch (PATH) {
-								case "config/defaults":
-									body = JSON.parse(body);
-									// set settings
-									body["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.Defaults?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.Defaults?.LagunaBeach; // XX
-									body["com.apple.GEO"].CountryProviders.CN.DrivingMultiWaypointRoutesEnabled = Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled; // CN
-									//body["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
-									body["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.Defaults?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.Defaults?.GEOAddressCorrection; // CN
-									if (Settings?.Config?.Defaults?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.Defaults?.LookupMaxParametersCount) {
-										delete body["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
-										delete body["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
-									}
-									body["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks; // CN
-									body["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
-									body["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
-									body["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.Defaults?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.Defaults?.PedestrianAR; // CN
-									body["com.apple.GEO"].CountryProviders.CN.TransitPayEnabled = Settings?.Config?.Defaults?.TransitPayEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.TransitPayEnabled; // CN
-									body["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled; // CN
-									body["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.Defaults?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityTileDisabled; // CN
-									//body["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
-									//body["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
-									body["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"] ?? DataBase?.Location?.Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"]; // US
-									body["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.Defaults?.OpticalHeading ?? DataBase?.Location?.Settings?.Config?.Defaults?.OpticalHeading; // US
-									body["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations; // US
-									body = JSON.stringify(body);
-									break;
-							};
-							break;
+					if ($response.status === 200 || $response.statusCode === 200) {
+						body = await PLIST("plist2json", $response.body);
+						//$.log(body);
+						switch (HOST) {
+							case "configuration.ls.apple.com":
+								switch (PATH) {
+									case "config/defaults":
+										body = JSON.parse(body);
+										// set settings
+										body["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.Defaults?.LagunaBeach ?? DataBase?.Location?.Settings?.Config?.Defaults?.LagunaBeach; // XX
+										body["com.apple.GEO"].CountryProviders.CN.DrivingMultiWaypointRoutesEnabled = Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled; // CN
+										//body["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
+										body["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.Defaults?.GEOAddressCorrection ?? DataBase?.Location?.Settings?.Config?.Defaults?.GEOAddressCorrection; // CN
+										if (Settings?.Config?.Defaults?.LookupMaxParametersCount ?? DataBase?.Location?.Settings?.Config?.Defaults?.LookupMaxParametersCount) {
+											delete body["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount // CN
+											delete body["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount // CN
+										}
+										body["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? DataBase?.Location?.Settings?.Config?.Defaults?.LocalitiesAndLandmarks; // CN
+										body["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
+										body["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = Settings?.Config?.Defaults?.POIBusyness ?? DataBase?.Location?.Settings?.Config?.Defaults?.POIBusyness; // CN
+										body["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.Defaults?.PedestrianAR ?? DataBase?.Location?.Settings?.Config?.Defaults?.PedestrianAR; // CN
+										body["com.apple.GEO"].CountryProviders.CN.TransitPayEnabled = Settings?.Config?.Defaults?.TransitPayEnabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.TransitPayEnabled; // CN
+										body["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled; // CN
+										body["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.Defaults?.WiFiQualityTileDisabled ?? DataBase?.Location?.Settings?.Config?.Defaults?.WiFiQualityTileDisabled; // CN
+										//body["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
+										//body["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
+										body["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"] ?? DataBase?.Location?.Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"]; // US
+										body["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.Defaults?.OpticalHeading ?? DataBase?.Location?.Settings?.Config?.Defaults?.OpticalHeading; // US
+										body["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? DataBase?.Location?.Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations; // US
+										body = JSON.stringify(body);
+										break;
+								};
+								break;
+						};
+						// json2plist
+						$response.body = await PLIST("json2plist", body);
 					};
-					// json2plist
-					$response.body = await PLIST("json2plist", body);
-					break;
-				case "text/xml":
 					break;
 				case "application/json":
+				case "text/json":
+					body = JSON.parse($request.body);
+					$.log(body);
+					$request.body = JSON.stringify(body);
 					break;
 				case "application/x-protobuf":
 				case "application/grpc":
@@ -174,10 +178,10 @@ const DataBase = {
 					switch (FORMAT) {
 						case "application/x-www-form-urlencoded":
 						case "text/html":
+						case "text/xml":
+						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
-						case "text/plist":
-						case "text/xml":
 						case "application/json":
 						default:
 							// 返回普通数据

@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(2) request.beta");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(3) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -43,270 +43,288 @@ let $response = undefined;
 		case "true":
 		default:
 			let url = URL.parse($request?.url);
-			const HOST = url?.host, PATH = url?.path, PATHs = PATH.split("/");
+			const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = PATH.split("/");
 			// 解析格式
 			const FORMAT = ($request?.headers?.["Content-Type"] ?? $request?.headers?.["content-type"])?.split(";")?.[0];
-			$.log(`⚠ ${$.name}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, `FORMAT: ${FORMAT}`, "");
+			$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, `FORMAT: ${FORMAT}`, "");
 			// 创建空数据
 			let body = {};
-			// 主机判断
-			switch (HOST) {
-				case "gspe1-ssl.ls.apple.com":
-					switch (PATH) {
-						case "pep/gcc":
-							$response = {
-								"headers": {
-									"Content-Type": "text/html",
-									"Date": new Date().toUTCString(),
-									"Connection": "keep-alive",
-									"Content-Encoding": "identity"
-								},
-								"body": Settings.PEP.GCC
-							};
-							switch ($.getEnv()) {
-								case "Surge":
-								case "Loon":
-								case "Stash":
-								case "Shadowrocket":
-								default:
-									$response.status = 200;
-									break;
-								case "Quantumult X":
-									$response.status = "HTTP/1.1 200 OK";
+			// 方法判断
+			switch (METHOD) {
+				case "POST":
+				case "PUT":
+				case "PATCH":
+				case "DELETE":
+					// 主机判断
+					switch (HOST) {
+						case "configuration.ls.apple.com":
+							switch (PATH) {
+								case "config/defaults":
+									await setETag("Defaults", Caches);
 									break;
 							};
-							$.log(JSON.stringify($response));
 							break;
-					};
-					break;
-				case "configuration.ls.apple.com":
-					switch (PATH) {
-						case "config/defaults":
-							await setETag("Defaults", Caches);
-							break;
-					};
-					break;
-				case "gspe35-ssl.ls.apple.com":
-				case "gspe35-ssl.ls.apple.cn":
-					switch (PATH) {
-						case "config/announcements":
-							switch (url.params.os) {
-								case "ios":
-								case "ipados":
-								case "macos":
-								default:
-									switch (Settings?.Config?.Announcements?.Environment?.default) {
+						case "gsp-ssl.ls.apple.com":
+						case "dispatcher.is.autonavi.com":
+						case "direction2.is.autonavi.com":
+							switch (PATH) {
+								case "dispatcher.arpc":
+								case "dispatcher":
+									switch (Settings?.Services?.PlaceData) {
 										case "AUTO":
-											switch (Caches?.pep?.gcc) {
+										default:
+											break;
+										case "CN":
+											url.host = "dispatcher.is.autonavi.com"
+											url.path = "dispatcher"
+											break;
+										case "XX":
+											url.host = "gsp-ssl.ls.apple.com"
+											url.path = "dispatcher.arpc"
+											break;
+									}
+									break;
+								case "directions.arpc":
+								case "direction":
+									switch (Settings?.Services?.Directions) {
+										case "AUTO":
+										default:
+											break;
+										case "CN":
+											url.host = "direction2.is.autonavi.com"
+											url.path = "direction"
+											break;
+										case "XX":
+											url.host = "gsp-ssl.ls.apple.com"
+											url.path = "directions.arpc"
+											break;
+									}
+									break;
+							};
+							break;
+						case "gspe12-ssl.ls.apple.com":
+						case "gspe12-cn-ssl.ls.apple.com":
+							switch (PATH) {
+								case "traffic":
+									switch (Settings?.Services?.Traffic) {
+										case "AUTO":
+										default:
+											break;
+										case "CN":
+											url.host = "gspe12-cn-ssl.ls.apple.com"
+											break;
+										case "XX":
+											url.host = "gspe12-ssl.ls.apple.com"
+											break;
+									}
+									break;
+							};
+							break;
+						case "sundew.ls.apple.com":
+						case "rap.is.autonavi.com":
+							switch (PATH) {
+								case "v1/feedback/submission.arpc":
+								case "rap":
+									switch (Settings?.Services?.RAP) {
+										case "AUTO":
+										default:
+											break;
+										case "CN":
+											url.host = "rap.is.autonavi.com"
+											url.path = "rap"
+											break;
+										case "XX":
+											url.host = "sundew.ls.apple.com"
+											url.path = "v1/feedback/submission.arpc"
+											break;
+									}
+									break;
+								case "grp/st":
+								case "rapstatus":
+									switch (Settings?.Services?.RAP) {
+										case "AUTO":
+										default:
+											break;
+										case "CN":
+											url.host = "rap.is.autonavi.com"
+											url.path = "rapstatus"
+											break;
+										case "XX":
+											url.host = "sundew.ls.apple.com"
+											url.path = "grp/st"
+											break;
+									}
+									break;
+							};
+							break;
+					};
+					break;
+				case "GET":
+				case "HEAD":
+				case "OPTIONS":
+					// 主机判断
+					switch (HOST) {
+						case "gspe1-ssl.ls.apple.com":
+							switch (PATH) {
+								case "pep/gcc":
+									$response = {
+										"headers": {
+											"Content-Type": "text/html",
+											"Date": new Date().toUTCString(),
+											"Connection": "keep-alive",
+											"Content-Encoding": "identity"
+										},
+										"body": Settings.PEP.GCC
+									};
+									switch ($.getEnv()) {
+										case "Surge":
+										case "Loon":
+										case "Stash":
+										case "Shadowrocket":
+										default:
+											$response.status = 200;
+											break;
+										case "Quantumult X":
+											$response.status = "HTTP/1.1 200 OK";
+											break;
+									};
+									$.log(JSON.stringify($response));
+									break;
+							};
+							break;
+						case "gspe35-ssl.ls.apple.com":
+						case "gspe35-ssl.ls.apple.cn":
+							switch (PATH) {
+								case "config/announcements":
+									switch (url.params.os) {
+										case "ios":
+										case "ipados":
+										case "macos":
+										default:
+											switch (Settings?.Config?.Announcements?.Environment?.default) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															url.params.environment = "prod"
+															break;
+														case "CN":
+														case undefined:
+															url.params.environment = "prod-cn"
+															break;
+													};
+													break;
+												default:
+													url.params.environment = "prod-cn"
+													break;
+												case "CN":
+													url.params.environment = "prod-cn"
+													break;
+												case "XX":
+													url.params.environment = "prod"
+													break;
+											};
+											break;
+										case "watchos":
+											switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															url.params.environment = "prod"
+															break;
+														case "CN":
+														case undefined:
+															url.params.environment = "prod-cn"
+															break;
+													};
+													break;
 												default:
 													url.params.environment = "prod"
 													break;
 												case "CN":
-												case undefined:
 													url.params.environment = "prod-cn"
 													break;
-											};
-											break;
-										default:
-											url.params.environment = "prod-cn"
-											break;
-										case "CN":
-											url.params.environment = "prod-cn"
-											break;
-										case "XX":
-											url.params.environment = "prod"
-											break;
-									};
-									break;
-								case "watchos":
-									switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
-										case "AUTO":
-											switch (Caches?.pep?.gcc) {
-												default:
+												case "XX":
 													url.params.environment = "prod"
 													break;
-												case "CN":
-												case undefined:
-													url.params.environment = "prod-cn"
+											};
+											break;
+									};
+									await setETag("Announcements", Caches);
+									break;
+								case "geo_manifest/dynamic/config":
+									switch (url.params.os) {
+										case "ios":
+										case "ipados":
+										case "macos":
+										default:
+											switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															url.params.country_code = Caches?.pep?.gcc ?? "US"
+															break;
+														case "CN":
+														case undefined:
+															url.params.country_code = "CN"
+															break;
+													};
+													break;
+												default:
+													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
 													break;
 											};
 											break;
+										case "watchos":
+											switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															url.params.country_code = Caches?.pep?.gcc ?? "US"
+															break;
+														case "CN":
+														case undefined:
+															url.params.country_code = "CN"
+															break;
+													};
+													break;
+												default:
+													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US"
+													break;
+											};
+											break;
+									};
+									await setETag("Dynamic", Caches);
+									break;
+							};
+							break;
+						case "gspe19-ssl.ls.apple.com":
+						case "gspe19-cn-ssl.ls.apple.com":
+							switch (PATH) {
+								case "tile.vf":
+								case "tiles":
+									switch (Settings?.Services?.Tiles) {
+										case "AUTO":
 										default:
-											url.params.environment = "prod"
 											break;
 										case "CN":
-											url.params.environment = "prod-cn"
+											url.host = "gspe19-cn-ssl.ls.apple.com"
+											url.path = "tiles"
 											break;
 										case "XX":
-											url.params.environment = "prod"
+											url.host = "gspe19-ssl.ls.apple.com"
+											url.path = "tile.vf"
 											break;
-									};
+									}
 									break;
 							};
-							await setETag("Announcements", Caches);
-							break;
-						case "geo_manifest/dynamic/config":
-							switch (url.params.os) {
-								case "ios":
-								case "ipados":
-								case "macos":
-								default:
-									switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default) {
-										case "AUTO":
-											switch (Caches?.pep?.gcc) {
-												default:
-													url.params.country_code = Caches?.pep?.gcc ?? "US"
-													break;
-												case "CN":
-												case undefined:
-													url.params.country_code = "CN"
-													break;
-											};
-											break;
-										default:
-											url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
-											break;
-									};
-									break;
-								case "watchos":
-									switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
-										case "AUTO":
-											switch (Caches?.pep?.gcc) {
-												default:
-													url.params.country_code = Caches?.pep?.gcc ?? "US"
-													break;
-												case "CN":
-												case undefined:
-													url.params.country_code = "CN"
-													break;
-											};
-											break;
-										default:
-											url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US"
-											break;
-									};
-									break;
-							};
-							await setETag("Dynamic", Caches);
 							break;
 					};
 					break;
-				case "gsp-ssl.ls.apple.com":
-				case "dispatcher.is.autonavi.com":
-				case "direction2.is.autonavi.com":
-					switch (PATH) {
-						case "dispatcher.arpc":
-						case "dispatcher":
-							switch (Settings?.Services?.PlaceData) {
-								case "AUTO":
-								default:
-									break;
-								case "CN":
-									url.host = "dispatcher.is.autonavi.com"
-									url.path = "dispatcher"
-									break;
-								case "XX":
-									url.host = "gsp-ssl.ls.apple.com"
-									url.path = "dispatcher.arpc"
-									break;
-							}
-							break;
-						case "directions.arpc":
-						case "direction":
-							switch (Settings?.Services?.Directions) {
-								case "AUTO":
-								default:
-									break;
-								case "CN":
-									url.host = "direction2.is.autonavi.com"
-									url.path = "direction"
-									break;
-								case "XX":
-									url.host = "gsp-ssl.ls.apple.com"
-									url.path = "directions.arpc"
-									break;
-							}
-							break;
-					};
-					break;
-				case "gspe12-ssl.ls.apple.com":
-				case "gspe12-cn-ssl.ls.apple.com":
-					switch (PATH) {
-						case "traffic":
-							switch (Settings?.Services?.Traffic) {
-								case "AUTO":
-								default:
-									break;
-								case "CN":
-									url.host = "gspe12-cn-ssl.ls.apple.com"
-									break;
-								case "XX":
-									url.host = "gspe12-ssl.ls.apple.com"
-									break;
-							}
-							break;
-					};
-					break;
-				case "sundew.ls.apple.com":
-				case "rap.is.autonavi.com":
-					switch (PATH) {
-						case "v1/feedback/submission.arpc":
-						case "rap":
-							switch (Settings?.Services?.RAP) {
-								case "AUTO":
-								default:
-									break;
-								case "CN":
-									url.host = "rap.is.autonavi.com"
-									url.path = "rap"
-									break;
-								case "XX":
-									url.host = "sundew.ls.apple.com"
-									url.path = "v1/feedback/submission.arpc"
-									break;
-							}
-							break;
-						case "grp/st":
-						case "rapstatus":
-							switch (Settings?.Services?.RAP) {
-								case "AUTO":
-								default:
-									break;
-								case "CN":
-									url.host = "rap.is.autonavi.com"
-									url.path = "rapstatus"
-									break;
-								case "XX":
-									url.host = "sundew.ls.apple.com"
-									url.path = "grp/st"
-									break;
-							}
-							break;
-					};
-					break;
-				case "gspe19-ssl.ls.apple.com":
-				case "gspe19-cn-ssl.ls.apple.com":
-					switch (PATH) {
-						case "tile.vf":
-						case "tiles":
-							switch (Settings?.Services?.Tiles) {
-								case "AUTO":
-								default:
-									break;
-								case "CN":
-									url.host = "gspe19-cn-ssl.ls.apple.com"
-									url.path = "tiles"
-									break;
-								case "XX":
-									url.host = "gspe19-ssl.ls.apple.com"
-									url.path = "tile.vf"
-									break;
-							}
-							break;
-					};
+				case "CONNECT":
+				case "TRACE":
 					break;
 			};
-			if ($request?.headers?.Host) $request.headers.Host = HOST;
+			if ($request?.headers?.Host) $request.headers.Host = url.host;
 			$request.url = URL.stringify(url);
 			break;
 		case "false":
@@ -330,10 +348,10 @@ let $response = undefined;
 					switch (FORMAT) {
 						case "application/x-www-form-urlencoded":
 						case "text/html":
+						case "text/xml":
+						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
-						case "text/plist":
-						case "text/xml":
 						case "application/json":
 						default:
 							// 返回普通数据
@@ -352,7 +370,6 @@ let $response = undefined;
 							// 返回普通数据
 							$.done({ status: $response.status, headers: $response.headers });
 							break;
-
 					};
 				} else $.done({ response: $response });
 				break;
@@ -361,35 +378,33 @@ let $response = undefined;
 				const FORMAT = ($request?.headers?.["Content-Type"] ?? $request?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `$request`, `FORMAT: ${FORMAT}`, "");
 				//$.log(`🚧 ${$.name}, finally`, `$request:${JSON.stringify($request)}`, "");
-				switch (FORMAT) {
-					case "application/x-www-form-urlencoded":
-					case "text/html":
-					case "application/plist":
-					case "application/x-plist":
-					case "text/plist":
-					case "text/xml":
-					case "application/json":
-					default:
-						// 返回普通数据
-						if ($.isQuanX()) $.done({ headers: $request.headers, body: $request.body })
-						else $.done($request)
-						break;
-					case "application/x-protobuf":
-					case "application/grpc":
-					case "application/grpc+proto":
-					case "applecation/octet-stream":
-						// 返回二进制数据
-						//if ($.isQuanX()) $.log(`${$request.bodyBytes.byteLength}---${$request.bodyBytes.buffer.byteLength}`);
-						//else $.log(`${$request.body.byteLength}---${$request.body.buffer.byteLength}`);
-						if ($.isQuanX()) $.done({ headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
-						else $.done($request);
-						break;
-					case undefined: // 视为无body
-						// 返回普通数据
-						if ($.isQuanX()) $.done({ headers: $request.headers })
-						else $.done($request)
-						break;
-				};
+				if ($.isQuanX()) {
+					switch (FORMAT) {
+						case "application/x-www-form-urlencoded":
+						case "text/html":
+						case "text/xml":
+						case "text/plist":
+						case "application/plist":
+						case "application/x-plist":
+						case "application/json":
+						default:
+							// 返回普通数据
+							$.done({ headers: $request.headers, body: $request.body })
+							break;
+						case "application/x-protobuf":
+						case "application/grpc":
+						case "application/grpc+proto":
+						case "applecation/octet-stream":
+							// 返回二进制数据
+							//$.log(`${$request.bodyBytes.byteLength}---${$request.bodyBytes.buffer.byteLength}`);
+							$.done({ headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
+							break;
+						case undefined: // 视为无body
+							// 返回普通数据
+							if ($.isQuanX()) $.done({ headers: $request.headers })
+							break;
+					};
+				} else $.done($request);
 				break;
 			};
 		};
