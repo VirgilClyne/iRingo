@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(3) request");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(4) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -171,6 +171,7 @@ let $response = undefined;
 							switch (PATH) {
 								case "pep/gcc":
 									$response = {
+										"status": 200,
 										"headers": {
 											"Content-Type": "text/html",
 											"Date": new Date().toUTCString(),
@@ -178,18 +179,6 @@ let $response = undefined;
 											"Content-Encoding": "identity"
 										},
 										"body": Settings.PEP.GCC
-									};
-									switch ($.getEnv()) {
-										case "Surge":
-										case "Loon":
-										case "Stash":
-										case "Shadowrocket":
-										default:
-											$response.status = 200;
-											break;
-										case "Quantumult X":
-											$response.status = "HTTP/1.1 200 OK";
-											break;
 									};
 									$.log(JSON.stringify($response));
 									break;
@@ -365,9 +354,8 @@ let $response = undefined;
 						case "application/grpc":
 						case "application/grpc+proto":
 						case "applecation/octet-stream":
-							//$.log("$response.bodyBytes instanceof ArrayBuffer: " + ($response.bodyBytes instanceof ArrayBuffer));
-							//$.log("ArrayBuffer.isView($response.bodyBytes): " + ArrayBuffer.isView($response.bodyBytes));
 							// 返回二进制数据
+							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
 							$.done({ status: $response.status, headers: $response.headers, bodyBytes: $response.bodyBytes });
 							break;
 						case undefined: // 视为无body

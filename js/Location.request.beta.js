@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(3) request.beta");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(4) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -171,6 +171,7 @@ let $response = undefined;
 							switch (PATH) {
 								case "pep/gcc":
 									$response = {
+										"status": 200,
 										"headers": {
 											"Content-Type": "text/html",
 											"Date": new Date().toUTCString(),
@@ -178,18 +179,6 @@ let $response = undefined;
 											"Content-Encoding": "identity"
 										},
 										"body": Settings.PEP.GCC
-									};
-									switch ($.getEnv()) {
-										case "Surge":
-										case "Loon":
-										case "Stash":
-										case "Shadowrocket":
-										default:
-											$response.status = 200;
-											break;
-										case "Quantumult X":
-											$response.status = "HTTP/1.1 200 OK";
-											break;
 									};
 									$.log(JSON.stringify($response));
 									break;
