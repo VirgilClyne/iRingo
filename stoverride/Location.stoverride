@@ -1,10 +1,10 @@
-name:  iRingo for 📍 Location Services
-desc: (V2) 全面自定义「定位服务」与「地图」的功能。
-openUrl: http://boxjs.com/#/app/iRingo.Location
-author: VirgilClyne
-homepage: https://github.com/VirgilClyne
-manual: https://github.com/VirgilClyne/iRingo/wiki/📍定位服务
-icon: https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
+name: " iRingo: 📍 Location & 🗺️ Map"
+desc: "(V2) 全面自定义「定位服务」与「地图」的功能。"
+openUrl: "http://boxjs.com/#/app/iRingo.Location"
+author: "VirgilClyne"
+homepage: "https://github.com/VirgilClyne"
+manual: "https://github.com/VirgilClyne/iRingo/wiki/📍定位服务"
+icon: "https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg"
 
 rules:
   - DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
