@@ -8,7 +8,7 @@
 	"apps": [
 		{
 			"id": "iRingo.Location.beta",
-			"name": "定位服务 β",
+			"name": "📍 定位 & 🗺️ 地图 β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
@@ -358,7 +358,7 @@
 		},
 		{
 			"id": "iRingo.Weather.beta",
-			"name": "天气 β",
+			"name": "🌤 天气 β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🌤-天气\">🌤 天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
@@ -710,7 +710,7 @@
 		},
 		{
 			"id": "iRingo.Siri.beta",
-			"name": "Siri与搜索 β",
+			"name": "🔍 Siri与搜索 β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索\">🔍 Siri与搜索</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
@@ -892,7 +892,7 @@
 		},
 		{
 			"id": "iRingo.TV.beta",
-			"name": "TV β",
+			"name": "📺 TV β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📺-TV\">📺 TV</a>的使用说明进行配置",
 				"自定义TV app的配置文件及各个栏目"
@@ -1670,7 +1670,7 @@
 		},
 		{
 			"id": "iRingo.News.beta",
-			"name": "News β",
+			"name": "📰 News β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📰-News\">📰 News</a>的使用说明进行配置",
 				"影响功能范围……等"
@@ -1757,7 +1757,7 @@
 		},
 		{
 			"id": "iRingo.TestFlight.beta",
-			"name": "TestFlight β",
+			"name": "✈ TestFlight β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/✈️-TestFlight\">✈️ TestFlight</a>的使用说明进行配置",
 				"影响功能范围……等"
@@ -1851,7 +1851,7 @@
 		},
 		{
 			"id": "iRingo.Watch.beta",
-			"name": "WATCH β",
+			"name": "⌚️ WATCH β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/⌚️-WATCH\">⌚️ WATCH</a>的使用说明进行配置",
 				"影响功能范围WATCH上的“指南针”、“地图”、“News”等"
