@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
 		},
 		"Configs":{

@@ -922,6 +922,7 @@
 					"val": [
 						"WatchNow",
 						"Originals",
+						"Store",
 						"Movies",
 						"TV",
 						"Sports",
@@ -939,6 +940,10 @@
 						{
 							"key": "Originals",
 							"label": "原创内容(TV+)"
+						},
+						{
+							"key": "Store",
+							"label": "商店"
 						},
 						{
 							"key": "Movies",
