@@ -1,5 +1,10 @@
-name:  iRingo for 📺 TV app
-desc: (V2) 全面自定义「TV app」功能
+name: " iRingo: 📺 TV app"
+desc: "全面自定义「TV app」功能"
+openUrl: "http://boxjs.com/#/app/iRingo.TV"
+author: "VirgilClyne"
+homepage: "https://github.com/VirgilClyne"
+manual: "https://github.com/VirgilClyne/iRingo/wiki/📺TV-app"
+icon: "https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5y3uwaibjm_large.png"
 
 http:
   mitm:
