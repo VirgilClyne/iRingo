@@ -8,7 +8,7 @@
 	"apps": [
 		{
 			"id": "iRingo.Location",
-			"name": "定位服务",
+			"name": "📍 定位 & 🗺️ 地图",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
@@ -285,10 +285,10 @@
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.PedestrianAR",
-					"name": "[默认配置]现实世界中的路线",
+					"name": "[默认配置]现实世界中的路线(iOS 15)",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否启用在增强现实中查看导航(“设置” >“地图”>“步行”>“举起以查看”)"
+					"desc": "是否启用在增强现实中查看导航(“设置”>“地图”>“步行”>“举起以查看”)"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.TransitPayEnabled",
@@ -309,11 +309,11 @@
 					"name": "[默认配置]导航准确性",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置” >“地图”>“步行”>“增强”)"
+					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置”>“地图”>“步行”>“增强”)"
 				},
 				{
 					"id": "@iRingo.Location.Settings.Config.Defaults.UseCLPedestrianMapMatchedLocations",
-					"name": "[默认配置]使用AR地图匹配地点",
+					"name": "[默认配置]使用AR地图匹配地点(iOS 15)",
 					"val": true,
 					"type": "boolean",
 					"desc": "是否使用AR地图匹配地点"
@@ -328,7 +328,7 @@
 		},
 		{
 			"id": "iRingo.Weather",
-			"name": "天气",
+			"name": "🌤 天气",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🌤-天气\">🌤 天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
@@ -585,7 +585,7 @@
 		},
 		{
 			"id": "iRingo.Siri",
-			"name": "Siri与搜索",
+			"name": "🔍 Siri与搜索",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索\">🔍 Siri与搜索</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
@@ -767,7 +767,7 @@
 		},
 		{
 			"id": "iRingo.TV",
-			"name": "TV",
+			"name": "📺 TV",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📺-TV\">📺 TV</a>的使用说明进行配置",
 				"自定义TV app的配置文件及各个栏目"
@@ -786,13 +786,68 @@
 				},
 				{
 					"id": "@iRingo.TV.Settings.Third-Party",
-					"name": "为不兼容平台启用第三方影片库",
-					"val": true,
+					"name": "强制启用第三方影片库集成",
+					"val": false,
 					"type": "boolean",
-					"desc": "是否为桌面版/macOS版/androidTV版等不兼容平台的TV app启用第三方影片库(如: Disney+,Prime Video等)"
+					"desc": "是否将桌面版/macOS版/app版等平台的TV app转换至iPad版，以启用第三方影片库集成(如: Disney+,Prime Video等)"
 				},
 				{
-					"id": "@iRingo.TV.Settings.Configs.CountryCode",
+					"id": "@iRingo.TV.Settings.Tabs",
+					"name": "启用的标签与栏目",
+					"val": [
+						"WatchNow",
+						"Originals",
+						"Store",
+						"Movies",
+						"TV",
+						"Sports",
+						"Kids",
+						"Library",
+						"Search"
+					],
+					"type": "checkboxes",
+					"desc": "启用的标签与栏目，未选择的标签与栏目入口将被隐藏，启用的入口由国家和地区决定，此选项仅代表功能入口上的开启，不代表对应地区一定有数据和服务",
+					"items": [
+						{
+							"key": "WatchNow",
+							"label": "立即观看"
+						},
+						{
+							"key": "Originals",
+							"label": "原创内容(TV+)"
+						},
+						{
+							"key": "Store",
+							"label": "商店"
+						},
+						{
+							"key": "Movies",
+							"label": "电影"
+						},
+						{
+							"key": "TV",
+							"label": "电视节目"
+						},
+						{
+							"key": "Sports",
+							"label": "体育节目"
+						},
+						{
+							"key": "Kids",
+							"label": "儿童"
+						},
+						{
+							"key": "Library",
+							"label": "资料库"
+						},
+						{
+							"key": "Search",
+							"label": "搜索"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.CountryCode.Configs",
 					"name": "[配置文件]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -845,57 +900,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Configs.Tabs",
-					"name": "启用的标签与栏目",
-					"val": [
-						"WatchNow",
-						"Originals",
-						"Movies",
-						"TV",
-						"Sports",
-						"Kids",
-						"Library",
-						"Search"
-					],
-					"type": "checkboxes",
-					"desc": "启用的标签与栏目，未选择的标签与栏目入口将被隐藏，启用的入口由国家和地区决定，此选项仅代表功能入口上的开启，不代表对应地区一定有数据和服务",
-					"items": [
-						{
-							"key": "WatchNow",
-							"label": "立即观看"
-						},
-						{
-							"key": "Originals",
-							"label": "原创内容(TV+)"
-						},
-						{
-							"key": "Movies",
-							"label": "电影"
-						},
-						{
-							"key": "TV",
-							"label": "电视节目"
-						},
-						{
-							"key": "Sports",
-							"label": "体育节目"
-						},
-						{
-							"key": "Kids",
-							"label": "儿童"
-						},
-						{
-							"key": "Library",
-							"label": "资料库"
-						},
-						{
-							"key": "Search",
-							"label": "搜索"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.TV.Settings.View.CountryCode[0]",
+					"id": "@iRingo.TV.Settings.CountryCode.View[0]",
 					"name": "[内容详情]首选语言",
 					"val": "SG",
 					"type": "selects",
@@ -948,7 +953,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.View.CountryCode[1]",
+					"id": "@iRingo.TV.Settings.CountryCode.View[1]",
 					"name": "[内容详情]第二语言",
 					"val": "TW",
 					"type": "selects",
@@ -1001,7 +1006,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.WatchNow.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.WatchNow",
 					"name": "[立即观看]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1054,7 +1059,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Originals.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Originals",
 					"name": "[原创内容](TV+)国家或地区代码",
 					"val": "TW",
 					"type": "selects",
@@ -1107,7 +1112,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Channels.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Channels",
 					"name": "[TV频道]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1160,7 +1165,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Movies.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Movies",
 					"name": "[电影]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1213,7 +1218,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.TV.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.TV",
 					"name": "[电视节目]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1266,7 +1271,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Sports.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Sports",
 					"name": "[体育节目]国家或地区代码",
 					"val": "US",
 					"type": "selects",
@@ -1319,7 +1324,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Kids.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Kids",
 					"name": "[儿童]国家或地区代码",
 					"val": "US",
 					"type": "selects",
@@ -1372,7 +1377,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Persons.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Persons",
 					"name": "[人物]国家或地区代码",
 					"val": "SG",
 					"type": "selects",
@@ -1425,7 +1430,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Search.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Search",
 					"name": "[搜索]国家或地区代码",
 					"val": "TW",
 					"type": "selects",
@@ -1478,7 +1483,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.TV.Settings.Others.CountryCode",
+					"id": "@iRingo.TV.Settings.CountryCode.Others",
 					"name": "[其他]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
@@ -1540,7 +1545,7 @@
 		},
 		{
 			"id": "iRingo.News",
-			"name": "News",
+			"name": "📰 News",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📰-News\">📰 News</a>的使用说明进行配置",
 				"影响功能范围……等"
@@ -1620,7 +1625,7 @@
 		},
 		{
 			"id": "iRingo.TestFlight",
-			"name": "TestFlight",
+			"name": "✈ TestFlight",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/✈️-TestFlight\">✈️ TestFlight</a>的使用说明进行配置",
 				"影响功能范围……等"
@@ -1714,7 +1719,7 @@
 		},
 		{
 			"id": "iRingo.Watch",
-			"name": "WATCH",
+			"name": "⌚️ WATCH",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/⌚️-WATCH\">⌚️ WATCH</a>的使用说明进行配置",
 				"影响功能范围WATCH上的“指南针”、“地图”、“News”等"
@@ -1776,16 +1781,20 @@
 				{
 					"id": "@iRingo.Location.Settings.Config.Announcements.Environment.watchOS",
 					"name": "[通告配置]环境代码",
-					"val": "prod",
+					"val": "XX",
 					"type": "selects",
 					"desc": "通告的配置文件的环境代码，此选项影响功能未知",
 					"items": [
 						{
-							"key": "prod-cn",
+							"key": "AUTO",
+							"label": "自动（跟随地区检测结果）"
+						},
+						{
+							"key": "CN",
 							"label": "中国大陆版"
 						},
 						{
-							"key": "prod",
+							"key": "XX",
 							"label": "国际版"
 						}
 					]
