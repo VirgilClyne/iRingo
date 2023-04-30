@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(4) request");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(6) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -9,7 +9,10 @@ const DataBase = {
 	},
 	"Weather":{
 		"Settings":{"Switch":"true","NextHour":{"Switch":true},"AQI":{"Switch":true,"Mode":"WAQI Public","Location":"Station","Auth":null,"Scale":"EPA_NowCast.2204"},"Map":{"AQI":false}},
-		"Configs":{"Availability":["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality"],"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}}
+		"Configs":{
+			"Availability":["currentWeather","forecastDaily","forecastHourly","history","weatherChange","forecastNextHour","severeWeather","airQuality"],
+			"Pollutants":{"co":"CO","no":"NO","no2":"NO2","so2":"SO2","o3":"OZONE","nox":"NOX","pm25":"PM2.5","pm10":"PM10","other":"OTHER"}
+		}
 	},
 	"Siri":{
 		"Settings":{"Switch":"true","CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
@@ -18,19 +21,48 @@ const DataBase = {
 		}
 	},
 	"TV":{
-		"Settings":{"Switch":"true","Third-Party":true,"Configs":{"CountryCode":"AUTO","Tabs":["WatchNow","Originals","Movies","TV","Sports","Kids","Library","Search"]},"View":{"CountryCode":["SG","TW"]},"WatchNow":{"CountryCode":"AUTO"},"Channels":{"CountryCode":"AUTO"},"Originals":{"CountryCode":"TW"},"Movies":{"CountryCode":"AUTO"},"TV":{"CountryCode":"AUTO"},"Sports":{"CountryCode":"US"},"Kids":{"CountryCode":"US"},"Persons":{"CountryCode":"SG"},"Search":{"CountryCode":"TW"},"Others":{"CountryCode":"AUTO"}},
+		"Settings": {
+			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
+		},
 		"Configs":{
-			"Locale":{"AU":"en-AU","CA":"en-CA","GB":"en-GB","KR":"ko-KR","HK":"yue-Hant","JP":"ja-JP","MO":"zh-Hant","TW":"zh-Hant","US":"en-US","SG":"zh-Hans"},
-			"Tabs":{"zh":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hans":{"WatchNow":"立即观看","Originals":"原创内容","Movies":"电影","TV":"电视节目","Store":"商店","Sports":"体育节目","Kids":"儿童","Library":"资料库","Search":"搜索"},"zh-Hant":{"WatchNow":"立即觀看","Originals":"原創內容","Movies":"電影","TV":"電視節目","Store":"商店","Sports":"體育節目","Kids":"兒童","Library":"資料庫","Search":"蒐索"},"en":{"WatchNow":"Watch Now","Originals":"Originals","Movies":"Movies","TV":"TV Shows","Store":"Store","Sports":"Sports","Kids":"Kids","Library":"Library","Search":"Search"}}
+			"Locale":[["AU","en-AU"],["CA","en-CA"],["GB","en-GB"],["KR","ko-KR"],["HK","yue-Hant"],["JP","ja-JP"],["MO","zh-Hant"],["TW","zh-Hant"],["US","en-US"],["SG","zh-Hans"]],
+			"Tabs": [
+				{ "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"], "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" } },
+				{ "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"], "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" } },
+				{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
+				{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } },
+				{ "title": "商店", "type": "Store", "universalLinks": ["https://tv.apple.com/store"], "destinationType": "SubTabs", 
+					"subTabs": [
+						{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
+						{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
+					]
+				},
+				{ "title": "体育节目", "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"], "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" } },
+				{ "title": "儿童", "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"], "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" } },
+				{ "title": "资料库", "type": "Library", "destinationType": "Client" },
+				{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
+			],
+			"i18n": {
+				"WatchNow": [["en", "Watch Now"], ["zh", "立即观看"], ["zh-Hans", "立即观看"], ["zh-Hant", "立即觀看"]],
+				"Originals": [["en", "Originals"], ["zh", "原创内容"], ["zh-Hans", "原创内容"], ["zh-Hant", "原創內容"]],
+				"Movies": [["en", "Movies"], ["zh", "电影"], ["zh-Hans", "电影"], ["zh-Hant", "電影"]],
+				"TV": [["en", "TV"], ["zh", "电视节目"], ["zh-Hans", "电视节目"], ["zh-Hant", "電視節目"]],
+				"Store": [["en", "Store"], ["zh", "商店"], ["zh-Hans", "商店"], ["zh-Hant", "商店"]],
+				"Sports": [["en", "Sports"], ["zh", "体育节目"], ["zh-Hans", "体育节目"], ["zh-Hant", "體育節目"]],
+				"Kids": [["en", "Kids"], ["zh", "儿童"], ["zh-Hans", "儿童"], ["zh-Hant", "兒童"]],
+				"Library": [["en", "Library"], ["zh", "资料库"], ["zh-Hans", "资料库"], ["zh-Hant", "資料庫"]],
+				"Search": [["en", "Search"], ["zh", "搜索"], ["zh-Hans", "搜索"], ["zh-Hant", "蒐索"]]
+			}
 		}
 	},
-    "News":{
+	"News":{
 		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"AUTO"}
 	},
 	"Default": {
 		"Settings":{"Switch":"true"},
 		"Configs":{
-			"Storefront":{"AF":"143610","AL":"143575","AO":"143564","AI":"143538","AG":"143540","AR":"143505","AM":"143524","AU":"143460","AT":"143445","AZ":"143568","BA":"143612","BS":"143539","BH":"143559","BB":"143541","BD":"143490","BY":"143565","BE":"143446","BZ":"143555","BJ":"143576","BM":"143542","BT":"143577","BO":"143556","BW":"143525","BR":"143503","VG":"143543","BN":"143560","BG":"143526","BF":"143578","CA":"143455","CI":"143527","CM":"143574","CV":"143580","KY":"143544","TD":"143581","CL":"143483","CN":"143465","CO":"143501","CG":"143582","CR":"143495","HR":"143494","CY":"143557","CZ":"143489","DK":"143458","DM":"143545","DO":"143508","DZ":"143563","EC":"143509","EG":"143516","SV":"143506","EE":"143518","FJ":"143583","FI":"143447","FR":"143442","GM":"143584","DE":"143443","GH":"143573","GR":"143448","GD":"143546","GT":"143504","GW":"143585","GY":"143553","HN":"143510","HK":"143463","HU":"143482","IS":"143558","IN":"143467","ID":"143476","IE":"143449","IL":"143491","IT":"143450","JM":"143511","JP":"143462","JO":"143528","KH":"143579","KR":"143466","KZ":"143517","KE":"143529","KW":"143493","KG":"143586","LA":"143587","LV":"143519","LB":"143497","LR":"143588","LT":"143520","LI":"143522","LU":"143451","MO":"143515","MK":"143530","MG":"143531","MW":"143589","MY":"143473","MV":"143488","ML":"143532","MT":"143521","MR":"143590","MU":"143533","MX":"143468","FM":"143591","MD":"143523","MN":"143592","MS":"143547","MZ":"143593","NA":"143594","NP":"143484","NL":"143452","NZ":"143461","NI":"143512","NE":"143534","NG":"143561","NO":"143457","OM":"143562","PK":"143477","PW":"143595","PA":"143485","PG":"143597","PY":"143513","PE":"143507","PH":"143474","PL":"143478","PT":"143453","QA":"143498","RO":"143487","RU":"143469","ST":"143598","SA":"143479","SN":"143535","SC":"143599","SL":"143600","SG":"143464","SK":"143496","SI":"143499","SB":"143601","ZA":"143472","KP":"143466","ES":"143454","LK":"143486","KN":"143548","LC":"143549","VC":"143550","SR":"143554","SZ":"143602","SE":"143456","CH":"143459","TW":"143470","TJ":"143603","TZ":"143572","TH":"143475","TT":"143551","TN":"143536","TR":"143480","TM":"143604","TC":"143552","AE":"143481","UG":"143537","UA":"143492","GB":"143444","US":"143441","UY":"143514","UZ":"143566","VE":"143502","VN":"143471","YE":"143571","ZW":"143605","CD":"143613","GA":"143614","GF":"143615","IQ":"143617","XK":"143624","LY":"143567","ME":"143619","MA":"143620","MM":"143570","NR":"143606","RW":"143621","RS":"143500","TO":"143608","VU":"143609","ZM":"143622"}
+			"Storefront":[["AE","143481"],["AF","143610"],["AG","143540"],["AI","143538"],["AL","143575"],["AM","143524"],["AO","143564"],["AR","143505"],["AT","143445"],["AU","143460"],["AZ","143568"],["BA","143612"],["BB","143541"],["BD","143490"],["BE","143446"],["BF","143578"],["BG","143526"],["BH","143559"],["BJ","143576"],["BM","143542"],["BN","143560"],["BO","143556"],["BR","143503"],["BS","143539"],["BT","143577"],["BW","143525"],["BY","143565"],["BZ","143555"],["CA","143455"],["CD","143613"],["CG","143582"],["CH","143459"],["CI","143527"],["CL","143483"],["CM","143574"],["CN","143465"],["CO","143501"],["CR","143495"],["CV","143580"],["CY","143557"],["CZ","143489"],["DE","143443"],["DK","143458"],["DM","143545"],["DO","143508"],["DZ","143563"],["EC","143509"],["EE","143518"],["EG","143516"],["ES","143454"],["FI","143447"],["FJ","143583"],["FM","143591"],["FR","143442"],["GA","143614"],["GB","143444"],["GD","143546"],["GF","143615"],["GH","143573"],["GM","143584"],["GR","143448"],["GT","143504"],["GW","143585"],["GY","143553"],["HK","143463"],["HN","143510"],["HR","143494"],["HU","143482"],["ID","143476"],["IE","143449"],["IL","143491"],["IN","143467"],["IQ","143617"],["IS","143558"],["IT","143450"],["JM","143511"],["JO","143528"],["JP","143462"],["KE","143529"],["KG","143586"],["KH","143579"],["KN","143548"],["KP","143466"],["KR","143466"],["KW","143493"],["KY","143544"],["KZ","143517"],["TC","143552"],["TD","143581"],["TJ","143603"],["TH","143475"],["TM","143604"],["TN","143536"],["TO","143608"],["TR","143480"],["TT","143551"],["TW","143470"],["TZ","143572"],["LA","143587"],["LB","143497"],["LC","143549"],["LI","143522"],["LK","143486"],["LR","143588"],["LT","143520"],["LU","143451"],["LV","143519"],["LY","143567"],["MA","143620"],["MD","143523"],["ME","143619"],["MG","143531"],["MK","143530"],["ML","143532"],["MM","143570"],["MN","143592"],["MO","143515"],["MR","143590"],["MS","143547"],["MT","143521"],["MU","143533"],["MV","143488"],["MW","143589"],["MX","143468"],["MY","143473"],["MZ","143593"],["NA","143594"],["NE","143534"],["NG","143561"],["NI","143512"],["NL","143452"],["NO","143457"],["NP","143484"],["NR","143606"],["NZ","143461"],["OM","143562"],["PA","143485"],["PE","143507"],["PG","143597"],["PH","143474"],["PK","143477"],["PL","143478"],["PT","143453"],["PW","143595"],["PY","143513"],["QA","143498"],["RO","143487"],["RS","143500"],["RU","143469"],["RW","143621"],["SA","143479"],["SB","143601"],["SC","143599"],["SE","143456"],["SG","143464"],["SI","143499"],["SK","143496"],["SL","143600"],["SN","143535"],["SR","143554"],["ST","143598"],["SV","143506"],["SZ","143602"],["UA","143492"],["UG","143537"],["US","143441"],["UY","143514"],["UZ","143566"],["VC","143550"],["VE","143502"],["VG","143543"],["VN","143471"],["VU","143609"],["XK","143624"],["YE","143571"],["ZA","143472"],["ZM","143622"],["ZW","143605"]]
 		}
 	}
 };
@@ -58,6 +90,39 @@ let $response = undefined;
 				case "PUT":
 				case "PATCH":
 				case "DELETE":
+					// 格式判断
+					switch (FORMAT) {
+						case undefined: // 视为无body
+							break;
+						case "application/x-www-form-urlencoded":
+						case "text/plain":
+						case "text/html":
+						default:
+							break;
+						case "text/xml":
+						case "text/plist":
+						case "application/plist":
+						case "application/x-plist":
+							//body = await PLIST("plist2json", $request.body);
+							//$.log(body);
+							//$request.body = await PLIST("json2plist", body);
+							break;
+						case "application/json":
+						case "text/json":
+							//body = JSON.parse($request.body);
+							//$.log(body);
+							//$request.body = JSON.stringify(body);
+							break;
+						case "application/x-protobuf":
+						case "application/grpc":
+						case "application/grpc+proto":
+						case "applecation/octet-stream":
+							break;
+					};
+					//break; // 不中断，继续处理URL
+				case "GET":
+				case "HEAD":
+				case "OPTIONS":
 					// 主机判断
 					switch (HOST) {
 						case "configuration.ls.apple.com":
@@ -65,7 +130,26 @@ let $response = undefined;
 								case "config/defaults":
 									await setETag("Defaults", Caches);
 									break;
-							};
+							}
+							break;
+						case "gspe1-ssl.ls.apple.com":
+							switch (PATH) {
+								case "pep/gcc":
+									/* // 不使用 echo response
+									$response = {
+										status: 200,
+										headers: {
+											"Content-Type": "text/html",
+											Date: new Date().toUTCString(),
+											Connection: "keep-alive",
+											"Content-Encoding": "identity",
+										},
+										body: Settings.PEP.GCC,
+									};
+									$.log(JSON.stringify($response));
+									*/
+									break;
+							}
 							break;
 						case "gsp-ssl.ls.apple.com":
 						case "dispatcher.is.autonavi.com":
@@ -78,12 +162,12 @@ let $response = undefined;
 										default:
 											break;
 										case "CN":
-											url.host = "dispatcher.is.autonavi.com"
-											url.path = "dispatcher"
+											url.host = "dispatcher.is.autonavi.com";
+											url.path = "dispatcher";
 											break;
 										case "XX":
-											url.host = "gsp-ssl.ls.apple.com"
-											url.path = "dispatcher.arpc"
+											url.host = "gsp-ssl.ls.apple.com";
+											url.path = "dispatcher.arpc";
 											break;
 									}
 									break;
@@ -94,34 +178,16 @@ let $response = undefined;
 										default:
 											break;
 										case "CN":
-											url.host = "direction2.is.autonavi.com"
-											url.path = "direction"
+											url.host = "direction2.is.autonavi.com";
+											url.path = "direction";
 											break;
 										case "XX":
-											url.host = "gsp-ssl.ls.apple.com"
-											url.path = "directions.arpc"
+											url.host = "gsp-ssl.ls.apple.com";
+											url.path = "directions.arpc";
 											break;
 									}
 									break;
-							};
-							break;
-						case "gspe12-ssl.ls.apple.com":
-						case "gspe12-cn-ssl.ls.apple.com":
-							switch (PATH) {
-								case "traffic":
-									switch (Settings?.Services?.Traffic) {
-										case "AUTO":
-										default:
-											break;
-										case "CN":
-											url.host = "gspe12-cn-ssl.ls.apple.com"
-											break;
-										case "XX":
-											url.host = "gspe12-ssl.ls.apple.com"
-											break;
-									}
-									break;
-							};
+							}
 							break;
 						case "sundew.ls.apple.com":
 						case "rap.is.autonavi.com":
@@ -133,12 +199,12 @@ let $response = undefined;
 										default:
 											break;
 										case "CN":
-											url.host = "rap.is.autonavi.com"
-											url.path = "rap"
+											url.host = "rap.is.autonavi.com";
+											url.path = "rap";
 											break;
 										case "XX":
-											url.host = "sundew.ls.apple.com"
-											url.path = "v1/feedback/submission.arpc"
+											url.host = "sundew.ls.apple.com";
+											url.path = "v1/feedback/submission.arpc";
 											break;
 									}
 									break;
@@ -149,40 +215,55 @@ let $response = undefined;
 										default:
 											break;
 										case "CN":
-											url.host = "rap.is.autonavi.com"
-											url.path = "rapstatus"
+											url.host = "rap.is.autonavi.com";
+											url.path = "rapstatus";
 											break;
 										case "XX":
-											url.host = "sundew.ls.apple.com"
-											url.path = "grp/st"
+											url.host = "sundew.ls.apple.com";
+											url.path = "grp/st";
 											break;
 									}
 									break;
-							};
+							}
 							break;
-					};
-					break;
-				case "GET":
-				case "HEAD":
-				case "OPTIONS":
-					// 主机判断
-					switch (HOST) {
-						case "gspe1-ssl.ls.apple.com":
+						case "gspe12-ssl.ls.apple.com":
+						case "gspe12-cn-ssl.ls.apple.com":
 							switch (PATH) {
-								case "pep/gcc":
-									$response = {
-										"status": 200,
-										"headers": {
-											"Content-Type": "text/html",
-											"Date": new Date().toUTCString(),
-											"Connection": "keep-alive",
-											"Content-Encoding": "identity"
-										},
-										"body": Settings.PEP.GCC
-									};
-									$.log(JSON.stringify($response));
+								case "traffic":
+									switch (Settings?.Services?.Traffic) {
+										case "AUTO":
+										default:
+											break;
+										case "CN":
+											url.host = "gspe12-cn-ssl.ls.apple.com";
+											break;
+										case "XX":
+											url.host = "gspe12-ssl.ls.apple.com";
+											break;
+									}
 									break;
-							};
+							}
+							break;
+						case "gspe19-ssl.ls.apple.com":
+						case "gspe19-cn-ssl.ls.apple.com":
+							switch (PATH) {
+								case "tile.vf":
+								case "tiles":
+									switch (Settings?.Services?.Tiles) {
+										case "AUTO":
+										default:
+											break;
+										case "CN":
+											url.host = "gspe19-cn-ssl.ls.apple.com";
+											url.path = "tiles";
+											break;
+										case "XX":
+											url.host = "gspe19-ssl.ls.apple.com";
+											url.path = "tile.vf";
+											break;
+									}
+									break;
+							}
 							break;
 						case "gspe35-ssl.ls.apple.com":
 						case "gspe35-ssl.ls.apple.cn":
@@ -197,50 +278,50 @@ let $response = undefined;
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.environment = "prod"
+															url.params.environment = "prod";
 															break;
 														case "CN":
 														case undefined:
-															url.params.environment = "prod-cn"
+															url.params.environment = "prod-cn";
 															break;
-													};
+													}
 													break;
 												default:
-													url.params.environment = "prod-cn"
+													url.params.environment = "prod-cn";
 													break;
 												case "CN":
-													url.params.environment = "prod-cn"
+													url.params.environment = "prod-cn";
 													break;
 												case "XX":
-													url.params.environment = "prod"
+													url.params.environment = "prod";
 													break;
-											};
+											}
 											break;
 										case "watchos":
 											switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.environment = "prod"
+															url.params.environment = "prod";
 															break;
 														case "CN":
 														case undefined:
-															url.params.environment = "prod-cn"
+															url.params.environment = "prod-cn";
 															break;
-													};
+													}
 													break;
 												default:
-													url.params.environment = "prod"
+													url.params.environment = "prod";
 													break;
 												case "CN":
-													url.params.environment = "prod-cn"
+													url.params.environment = "prod-cn";
 													break;
 												case "XX":
-													url.params.environment = "prod"
+													url.params.environment = "prod";
 													break;
-											};
+											}
 											break;
-									};
+									}
 									await setETag("Announcements", Caches);
 									break;
 								case "geo_manifest/dynamic/config":
@@ -253,64 +334,43 @@ let $response = undefined;
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.country_code = Caches?.pep?.gcc ?? "US"
+															url.params.country_code = Caches?.pep?.gcc ?? "US";
 															break;
 														case "CN":
 														case undefined:
-															url.params.country_code = "CN"
+															url.params.country_code = "CN";
 															break;
-													};
+													}
 													break;
 												default:
-													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN"
+													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN";
 													break;
-											};
+											}
 											break;
 										case "watchos":
 											switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.country_code = Caches?.pep?.gcc ?? "US"
+															url.params.country_code = Caches?.pep?.gcc ?? "US";
 															break;
 														case "CN":
 														case undefined:
-															url.params.country_code = "CN"
+															url.params.country_code = "CN";
 															break;
-													};
+													}
 													break;
 												default:
-													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US"
+													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US";
 													break;
-											};
-											break;
-									};
-									await setETag("Dynamic", Caches);
-									break;
-							};
-							break;
-						case "gspe19-ssl.ls.apple.com":
-						case "gspe19-cn-ssl.ls.apple.com":
-							switch (PATH) {
-								case "tile.vf":
-								case "tiles":
-									switch (Settings?.Services?.Tiles) {
-										case "AUTO":
-										default:
-											break;
-										case "CN":
-											url.host = "gspe19-cn-ssl.ls.apple.com"
-											url.path = "tiles"
-											break;
-										case "XX":
-											url.host = "gspe19-ssl.ls.apple.com"
-											url.path = "tile.vf"
+											}
 											break;
 									}
+									await setETag("Dynamic", Caches);
 									break;
-							};
+							}
 							break;
-					};
+					}
 					break;
 				case "CONNECT":
 				case "TRACE":
@@ -339,7 +399,12 @@ let $response = undefined;
 				if ($.isQuanX()) {
 					$response.status = "HTTP/1.1 200 OK";
 					switch (FORMAT) {
+						case undefined: // 视为无body
+							// 返回普通数据
+							$.done({ status: $response.status, headers: $response.headers });
+							break;
 						case "application/x-www-form-urlencoded":
+						case "text/plain":
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
@@ -358,10 +423,6 @@ let $response = undefined;
 							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
 							$.done({ status: $response.status, headers: $response.headers, bodyBytes: $response.bodyBytes });
 							break;
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ status: $response.status, headers: $response.headers });
-							break;
 					};
 				} else $.done({ response: $response });
 				break;
@@ -372,7 +433,12 @@ let $response = undefined;
 				//$.log(`🚧 ${$.name}, finally`, `$request:${JSON.stringify($request)}`, "");
 				if ($.isQuanX()) {
 					switch (FORMAT) {
+						case undefined: // 视为无body
+							// 返回普通数据
+							$.done({ url: $request.url, headers: $request.headers })
+							break;
 						case "application/x-www-form-urlencoded":
+						case "text/plain":
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
@@ -390,10 +456,6 @@ let $response = undefined;
 							// 返回二进制数据
 							//$.log(`${$request.bodyBytes.byteLength}---${$request.bodyBytes.buffer.byteLength}`);
 							$.done({ url: $request.url, headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
-							break;
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ url: $request.url, headers: $request.headers })
 							break;
 					};
 				} else $.done($request);
@@ -415,10 +477,10 @@ function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platform, database);
 	/***************** Prase *****************/
-	//Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
-	if (Settings?.Config?.Defaults) for (let setting in Settings.Config.Defaults) Settings.Config.Defaults[setting] = JSON.parse(Settings.Config.Defaults[setting]) // BoxJs字符串转Boolean
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
+	/***************** Configs *****************/
+	Configs.Storefront = new Map(Configs.Storefront);
 	return { Settings, Caches, Configs };
 };
 
