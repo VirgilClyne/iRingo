@@ -101,11 +101,15 @@ let $response = undefined;
 							break;
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+							//body = await PLIST("plist2json", $request.body);
+							//$.log(body);
+							//$request.body = await PLIST("json2plist", body);
 							break;
-						case "application/json":
 						case "text/json":
+						case "application/json":
 							//body = JSON.parse($request.body);
 							//$.log(body);
 							//$request.body = JSON.stringify(body);
@@ -196,14 +200,14 @@ let $response = undefined;
 							};
 							break;
 					};
+					if ($request?.headers?.Host) $request.headers.Host = url.host;
+					$request.url = URL.stringify(url);
+					//$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
 					break;
 				case "CONNECT":
 				case "TRACE":
 					break;
 			};
-			if ($request?.headers?.Host) $request.headers.Host = url.host;
-			$request.url = URL.stringify(url);
-			$.log(`🚧 ${$.name}, $request.url: ${$request.url}`, "");
 			break;
 		case "false":
 			break;
@@ -233,8 +237,10 @@ let $response = undefined;
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据
@@ -267,8 +273,10 @@ let $response = undefined;
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据
@@ -302,7 +310,6 @@ function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platform, database);
 	/***************** Prase *****************/
-	//Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	if (typeof Settings?.Domains == "string") Settings.Domains = Settings.Domains.split(",") // BoxJs字符串转数组
 	if (typeof Settings?.Functions == "string") Settings.Functions = Settings.Functions.split(",") // BoxJs字符串转数组
 	if (Settings?.Safari_Smart_History) Settings.Safari_Smart_History = JSON.parse(Settings.Safari_Smart_History) // BoxJs字符串转Boolean

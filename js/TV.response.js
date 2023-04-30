@@ -92,11 +92,12 @@ const DataBase = {
 					break;
 				case "text/xml":
 				case "text/plist":
+				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
 					break;
-				case "application/json":
 				case "text/json":
+				case "application/json":
 					body = JSON.parse($response.body);
 					// 主机判断
 					switch (HOST) {
@@ -213,8 +214,10 @@ const DataBase = {
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据

@@ -108,6 +108,7 @@ const DataBase = {
 					break;
 				case "text/xml":
 				case "text/plist":
+				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
 					if ($response.status === 200 || $response.statusCode === 200) {
@@ -148,8 +149,8 @@ const DataBase = {
 						$response.body = await PLIST("json2plist", body);
 					};
 					break;
-				case "application/json":
 				case "text/json":
+				case "application/json":
 					//body = JSON.parse($response.body);
 					//$.log(body);
 					//$response.body = JSON.stringify(body);
@@ -188,8 +189,10 @@ const DataBase = {
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据

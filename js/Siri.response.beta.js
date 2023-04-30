@@ -92,16 +92,19 @@ const DataBase = {
 					break;
 				case "text/xml":
 				case "text/plist":
+				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
+					/*
 					if ($response.status === 200 || $response.statusCode === 200) {
 						body = await PLIST("plist2json", $response.body);
 						$.log(body);
 						$response.body = await PLIST("json2plist", body);
 					};
+					*/
 					break;
-				case "application/json":
 				case "text/json":
+				case "application/json":
 					body = JSON.parse($response.body);
 					// 主机判断
 					switch (HOST) {
@@ -242,8 +245,10 @@ const DataBase = {
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据
@@ -288,26 +293,6 @@ function setENV(name, platform, database) {
 	/***************** Configs *****************/
 	Configs.Storefront = new Map(Configs.Storefront);
 	return { Settings, Caches, Configs };
-};
-
-/**
- * Parse Plist
- * @author VirgilClyne
- * @typedef { "json2plist" | "plist2json" } opt
- * @param {opt} opt - do types
- * @param {String} string - string
- * @return {Promise<*>}
- */
-async function PLIST(opt, string) {
-	const request = {
-		"url": "https://json2plist.nanocat.me/convert.php",
-		"headers": {
-			"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-			"Accept": "text/javascript, text/html, application/xml, text/xml, */*",
-		},
-		"body": `do=${opt}&content=` + encodeURIComponent(string)
-	};
-	return await $.http.post(request).then(v => v.body);
 };
 
 /***************** Env *****************/

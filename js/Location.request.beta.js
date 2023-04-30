@@ -101,14 +101,15 @@ let $response = undefined;
 							break;
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
 							//body = await PLIST("plist2json", $request.body);
 							//$.log(body);
 							//$request.body = await PLIST("json2plist", body);
 							break;
-						case "application/json":
 						case "text/json":
+						case "application/json":
 							//body = JSON.parse($request.body);
 							//$.log(body);
 							//$request.body = JSON.stringify(body);
@@ -130,7 +131,7 @@ let $response = undefined;
 								case "config/defaults":
 									await setETag("Defaults", Caches);
 									break;
-							}
+							};
 							break;
 						case "gspe1-ssl.ls.apple.com":
 							switch (PATH) {
@@ -149,7 +150,7 @@ let $response = undefined;
 									$.log(JSON.stringify($response));
 									*/
 									break;
-							}
+							};
 							break;
 						case "gsp-ssl.ls.apple.com":
 						case "dispatcher.is.autonavi.com":
@@ -169,7 +170,7 @@ let $response = undefined;
 											url.host = "gsp-ssl.ls.apple.com";
 											url.path = "dispatcher.arpc";
 											break;
-									}
+									};
 									break;
 								case "directions.arpc":
 								case "direction":
@@ -185,9 +186,9 @@ let $response = undefined;
 											url.host = "gsp-ssl.ls.apple.com";
 											url.path = "directions.arpc";
 											break;
-									}
+									};
 									break;
-							}
+							};
 							break;
 						case "sundew.ls.apple.com":
 						case "rap.is.autonavi.com":
@@ -206,7 +207,7 @@ let $response = undefined;
 											url.host = "sundew.ls.apple.com";
 											url.path = "v1/feedback/submission.arpc";
 											break;
-									}
+									};
 									break;
 								case "grp/st":
 								case "rapstatus":
@@ -222,9 +223,9 @@ let $response = undefined;
 											url.host = "sundew.ls.apple.com";
 											url.path = "grp/st";
 											break;
-									}
+									};
 									break;
-							}
+							};
 							break;
 						case "gspe12-ssl.ls.apple.com":
 						case "gspe12-cn-ssl.ls.apple.com":
@@ -240,9 +241,9 @@ let $response = undefined;
 										case "XX":
 											url.host = "gspe12-ssl.ls.apple.com";
 											break;
-									}
+									};
 									break;
-							}
+							};
 							break;
 						case "gspe19-ssl.ls.apple.com":
 						case "gspe19-cn-ssl.ls.apple.com":
@@ -261,9 +262,9 @@ let $response = undefined;
 											url.host = "gspe19-ssl.ls.apple.com";
 											url.path = "tile.vf";
 											break;
-									}
+									};
 									break;
-							}
+							};
 							break;
 						case "gspe35-ssl.ls.apple.com":
 						case "gspe35-ssl.ls.apple.cn":
@@ -284,7 +285,7 @@ let $response = undefined;
 														case undefined:
 															url.params.environment = "prod-cn";
 															break;
-													}
+													};
 													break;
 												default:
 													url.params.environment = "prod-cn";
@@ -295,7 +296,7 @@ let $response = undefined;
 												case "XX":
 													url.params.environment = "prod";
 													break;
-											}
+											};
 											break;
 										case "watchos":
 											switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
@@ -308,7 +309,7 @@ let $response = undefined;
 														case undefined:
 															url.params.environment = "prod-cn";
 															break;
-													}
+													};
 													break;
 												default:
 													url.params.environment = "prod";
@@ -319,9 +320,9 @@ let $response = undefined;
 												case "XX":
 													url.params.environment = "prod";
 													break;
-											}
+											};
 											break;
-									}
+									};
 									await setETag("Announcements", Caches);
 									break;
 								case "geo_manifest/dynamic/config":
@@ -340,12 +341,12 @@ let $response = undefined;
 														case undefined:
 															url.params.country_code = "CN";
 															break;
-													}
+													};
 													break;
 												default:
 													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN";
 													break;
-											}
+											};
 											break;
 										case "watchos":
 											switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
@@ -358,27 +359,27 @@ let $response = undefined;
 														case undefined:
 															url.params.country_code = "CN";
 															break;
-													}
+													};
 													break;
 												default:
 													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US";
 													break;
-											}
+											};
 											break;
-									}
+									};
 									await setETag("Dynamic", Caches);
 									break;
-							}
+							};
 							break;
-					}
+					};
+					if ($request?.headers?.Host) $request.headers.Host = url.host;
+					$request.url = URL.stringify(url);
+					$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
 					break;
 				case "CONNECT":
 				case "TRACE":
 					break;
 			};
-			if ($request?.headers?.Host) $request.headers.Host = url.host;
-			$request.url = URL.stringify(url);
-			$.log(`🚧 ${$.name}, $request.url: ${$request.url}`, "");
 			break;
 		case "false":
 			break;
@@ -408,8 +409,10 @@ let $response = undefined;
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据
@@ -442,8 +445,10 @@ let $response = undefined;
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据

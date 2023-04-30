@@ -119,11 +119,15 @@ let $response = undefined;
 							break;
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+							//body = await PLIST("plist2json", $request.body);
+							//$.log(body);
+							//$request.body = await PLIST("json2plist", body);
 							break;
-						case "application/json":
 						case "text/json":
+						case "application/json":
 							body = JSON.parse($request.body);
 							// 主机判断
 							switch (HOST) {
@@ -253,23 +257,23 @@ let $response = undefined;
 							};
 							break;
 					};
+					$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
+					if ($request?.headers?.["x-apple-store-front"]) {
+						$request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type]))
+							? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]))
+							: $request.headers["x-apple-store-front"];
+					};
+					if (url?.params?.sf) url.params.sf = Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.params.sf
+					if (url.params.locale) url.params.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.params.locale
+					//$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url.params.sf}, locale = ${url.params.locale}`, "")
+					if ($request?.headers?.Host) $request.headers.Host = url.host;
+					$request.url = URL.stringify(url);
+					//$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
 					break;
 				case "CONNECT":
 				case "TRACE":
 					break;
 			};
-			$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
-			if ($request?.headers?.["x-apple-store-front"]) {
-				$request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type]))
-					? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]))
-					: $request.headers["x-apple-store-front"];
-			};
-			if (url?.params?.sf) url.params.sf = Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.params.sf
-			if (url.params.locale) url.params.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.params.locale
-			//$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url.params.sf}, locale = ${url.params.locale}`, "")
-			if ($request?.headers?.Host) $request.headers.Host = url.host;
-			$request.url = URL.stringify(url);
-			//$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case "false":
 			break;
@@ -299,8 +303,10 @@ let $response = undefined;
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据
@@ -333,8 +339,10 @@ let $response = undefined;
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/json":
 						case "application/json":
 						default:
 							// 返回普通数据
