@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(19) response");
+const $ = new Env(" iRingo: 📺 TV v3.0.0(20) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -86,6 +86,7 @@ const DataBase = {
 				case undefined: // 视为无body
 					break;
 				case "application/x-www-form-urlencoded":
+				case "text/plain":
 				case "text/html":
 				default:
 					break;
@@ -203,7 +204,12 @@ const DataBase = {
 				delete $response?.headers?.["Transfer-Encoding"];
 				if ($.isQuanX()) {
 					switch (FORMAT) {
+						case undefined: // 视为无body
+							// 返回普通数据
+							$.done({ headers: $response.headers });
+							break;
 						case "application/x-www-form-urlencoded":
+						case "text/plain":
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
@@ -221,10 +227,6 @@ const DataBase = {
 							// 返回二进制数据
 							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
 							$.done({ headers: $response.headers, bodyBytes: $response.bodyBytes.buffer.slice($response.bodyBytes.byteOffset, $response.bodyBytes.byteLength + $response.bodyBytes.byteOffset) });
-							break;
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ headers: $response.headers });
 							break;
 					};
 				} else $.done($response);
@@ -249,7 +251,6 @@ function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platform, database);
 	/***************** Prase *****************/
-	//Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings["Third-Party"] = JSON.parse(Settings["Third-Party"]) // BoxJs字符串转Boolean
 	if (typeof Settings?.Configs?.Tabs == "string") Settings.Configs.Tabs = Settings.Configs.Tabs.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");

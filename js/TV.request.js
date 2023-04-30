@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(10) request");
+const $ = new Env(" iRingo: 📺 TV v3.0.0(11) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -97,6 +97,7 @@ let $response = undefined;
 						case undefined: // 视为无body
 							break;
 						case "application/x-www-form-urlencoded":
+						case "text/plain":
 						case "text/html":
 						default:
 							// 主机判断
@@ -129,23 +130,9 @@ let $response = undefined;
 								case "uts-api.itunes.apple.com":
 									// 路径判断
 									switch (PATH) {
-										case "uts/v3/configurations":
-											Type = "Configs";
-											if (Settings.CountryCode[Type] !== "AUTO") {
-												if (url.params.region) url.params.region = Settings.CountryCode[Type] ?? url.params.region;
-												if (url.params.country) url.params.country = Settings.CountryCode[Type] ?? url.params.country;
-												if (url.params.sfh) url.params.sfh = url.params.sfh.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.params.sfh);
-											};
-											//$.log(`🚧 ${$.name}, 调试信息`, `region = ${url.params.region}, country = ${url.params.country}, sfh = ${url.params.sfh}`, "")
-											break;
 										case "uts/v3/user/settings":
 											Type = "Settings";
-											//$.log(`🚧 ${$.name}, 调试信息`, `caller = ${url.params.caller}, pfm = ${url.params.pfm}, sf = ${url.params.sf}`, "")
-											break;
-										case "uts/v3/watchlist":
-										case "uts/v2/watchlist/contains":
-										case "uts/v2/watchlist/search":
-											if (Settings["Third-Party"]) url.params.pfm = (url.params.pfm === "desktop") ? "ipad" : url.params.pfm;
+											//$.log(`🚧 ${$.name}, 调试信息`, JSON.stringify(body), "")
 											break;
 									};
 									break;
@@ -155,6 +142,7 @@ let $response = undefined;
 										case "v3/channels/scoreboard":
 										case "v3/channels/scoreboard/":
 											Type = "Sports";
+											//$.log(`🚧 ${$.name}, 调试信息`, JSON.stringify(body), "")
 											break;
 									};
 									break;
@@ -167,7 +155,7 @@ let $response = undefined;
 						case "applecation/octet-stream":
 							break;
 					};
-					break;
+					//break; // 不中断，继续处理URL
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
@@ -176,6 +164,15 @@ let $response = undefined;
 						case "uts-api.itunes.apple.com":
 							// 路径判断
 							switch (PATH) {
+								case "uts/v3/configurations":
+									Type = "Configs";
+									if (Settings.CountryCode[Type] !== "AUTO") {
+										if (url.params.region) url.params.region = Settings.CountryCode[Type] ?? url.params.region;
+										if (url.params.country) url.params.country = Settings.CountryCode[Type] ?? url.params.country;
+										if (url.params.sfh) url.params.sfh = url.params.sfh.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.params.sfh);
+									};
+									//$.log(`🚧 ${$.name}, 调试信息`, `region = ${url.params.region}, country = ${url.params.country}, sfh = ${url.params.sfh}`, "")
+									break;
 								case "uts/v3/user/settings":
 									Type = "Settings";
 									//$.log(`🚧 ${$.name}, 调试信息`, `caller = ${url.params.caller}, pfm = ${url.params.pfm}, sf = ${url.params.sf}`, "")
@@ -226,7 +223,6 @@ let $response = undefined;
 								case "uts/v2/favorites/add":
 								case "uts/v2/favorites/remove":
 									Type = "Sports";
-									if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront.get(Settings.CountryCode[Type])}`);
 									break;
 								case "uts/v3/search":
 								case "uts/v3/search/landing":
@@ -263,7 +259,6 @@ let $response = undefined;
 					break;
 			};
 			$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
-			if ($request?.headers?.Host) $request.headers.Host = url.host;
 			if ($request?.headers?.["x-apple-store-front"]) {
 				$request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type]))
 					? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]))
@@ -272,6 +267,7 @@ let $response = undefined;
 			if (url?.params?.sf) url.params.sf = Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.params.sf
 			if (url.params.locale) url.params.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.params.locale
 			//$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url.params.sf}, locale = ${url.params.locale}`, "")
+			if ($request?.headers?.Host) $request.headers.Host = url.host;
 			$request.url = URL.stringify(url);
 			//$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
@@ -294,7 +290,12 @@ let $response = undefined;
 				if ($.isQuanX()) {
 					$response.status = "HTTP/1.1 200 OK";
 					switch (FORMAT) {
+						case undefined: // 视为无body
+							// 返回普通数据
+							$.done({ status: $response.status, headers: $response.headers });
+							break;
 						case "application/x-www-form-urlencoded":
+						case "text/plain":
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
@@ -313,10 +314,6 @@ let $response = undefined;
 							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
 							$.done({ status: $response.status, headers: $response.headers, bodyBytes: $response.bodyBytes });
 							break;
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ status: $response.status, headers: $response.headers });
-							break;
 					};
 				} else $.done({ response: $response });
 				break;
@@ -327,7 +324,12 @@ let $response = undefined;
 				//$.log(`🚧 ${$.name}, finally`, `$request:${JSON.stringify($request)}`, "");
 				if ($.isQuanX()) {
 					switch (FORMAT) {
+						case undefined: // 视为无body
+							// 返回普通数据
+							$.done({ url: $request.url, headers: $request.headers })
+							break;
 						case "application/x-www-form-urlencoded":
+						case "text/plain":
 						case "text/html":
 						case "text/xml":
 						case "text/plist":
@@ -345,10 +347,6 @@ let $response = undefined;
 							// 返回二进制数据
 							//$.log(`${$request.bodyBytes.byteLength}---${$request.bodyBytes.buffer.byteLength}`);
 							$.done({ url: $request.url, headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
-							break;
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ url: $request.url, headers: $request.headers })
 							break;
 					};
 				} else $.done($request);
@@ -370,7 +368,6 @@ function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platform, database);
 	/***************** Prase *****************/
-	//Settings.Switch = JSON.parse(Settings.Switch) // BoxJs字符串转Boolean
 	Settings["Third-Party"] = JSON.parse(Settings["Third-Party"]) // BoxJs字符串转Boolean
 	if (typeof Settings?.Tabs == "string") Settings.Tabs = Settings.Tabs.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
