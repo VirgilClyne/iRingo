@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(6) request.beta");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(7) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -394,11 +394,11 @@ let $response = undefined;
 				//$.log(`🚧 ${$.name}, finally`, `echo $response: ${JSON.stringify($response)}`, "");
 				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response?.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				delete $response?.headers?.["Content-Length"];
-				delete $response?.headers?.["content-length"];
-				delete $response?.headers?.["Transfer-Encoding"];
 				if ($.isQuanX()) {
 					$response.status = "HTTP/1.1 200 OK";
+					delete $response?.headers?.["Content-Length"];
+					delete $response?.headers?.["content-length"];
+					delete $response?.headers?.["Transfer-Encoding"];
 					switch (FORMAT) {
 						case undefined: // 视为无body
 							// 返回普通数据
@@ -433,7 +433,7 @@ let $response = undefined;
 			case undefined: { // 无构造回复数据，发送修改的请求数据
 				const FORMAT = ($request?.headers?.["Content-Type"] ?? $request?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `$request`, `FORMAT: ${FORMAT}`, "");
-				//$.log(`🚧 ${$.name}, finally`, `$request:${JSON.stringify($request)}`, "");
+				//$.log(`🚧 ${$.name}, finally`, `$request: ${JSON.stringify($request)}`, "");
 				if ($.isQuanX()) {
 					switch (FORMAT) {
 						case undefined: // 视为无body
