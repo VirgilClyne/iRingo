@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.0(5) response");
+const $ = new Env(" iRingo: 📍 Location v3.0.0(6) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -175,9 +175,6 @@ const DataBase = {
 				//$.log(`🚧 ${$.name}, finally`, `$response: ${JSON.stringify($response)}`, "");
 				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response?.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				delete $response?.headers?.["Content-Length"];
-				delete $response?.headers?.["content-length"];
-				delete $response?.headers?.["Transfer-Encoding"];
 				if ($.isQuanX()) {
 					switch (FORMAT) {
 						case undefined: // 视为无body
