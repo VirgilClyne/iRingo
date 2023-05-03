@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v2.0.0(1) response.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.0.0(2) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -147,82 +147,199 @@ const DataBase = {
 								case "v1/devices/add":
 								case "v1/devices/remove":
 									break;
-								case `v1/messages/${Caches?.data?.accountId}`:
-								case `v1/messages/${Caches?.data?.accountId}/read`:
-									break;
 								default:
-									if (/\/accounts\//i.test(url.path)) {
-										$.log(`🚧 ${$.name}, accounts`, "");
-										if (/\/settings\//i.test(url.path)) {
-											$.log(`🚧 ${$.name}, settings`, "");
-											if (/\/notifications\/apps\/\d+$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, notifications/apps`, "");
-											} else $.log(`🚧 ${$.name}, unknown`, "");
-										} else if (/\/apps/i.test(url.path)) { // app info mod
-											$.log(`🚧 ${$.name}, /apps`, "");
-											if (/\/apps$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /apps`, "");
-												switch (Settings.Universal) { // 通用
-													case "true":
-														$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
-														if (body.error === null) { // 数据无错误
-															$.log(`🚧 ${$.name}, 数据无错误`, "");
-															body.data = body.data.map(app => {
-																if (app.previouslyTested !== false) { // 不是前测试人员
-																	$.log(`🚧 ${$.name}, 不是前测试人员`, "");
-																	app.platforms = app.platforms.map(platform => {
-																		platform.build = modBuild(platform.build);
-																		return platform
-																	});
-																}
-																return app
-															});
-														};
-														break;
-													case "false":
-													default:
-														break;
-												};
-											} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /app/bulids`, "");
-												switch (Settings.Universal) { // 通用
-													case "true":
-														$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
-														if (body.error === null) { // 数据无错误
-															$.log(`🚧 ${$.name}, 数据无错误`, "");
-															// 当前Bulid
-															body.data.currentBuild = modBuild(body.data.currentBuild);
-															// Build列表
-															body.data.builds = body.data.builds.map(build => modBuild(build));
-														};
-														break;
-													case "false":
-													default:
-														break;
-												};
-											} else if (/\/apps\/\d+\/platforms\/\w+\/trains$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /app/platforms/trains`, "");
-											} else if (/\/apps\/\d+\/platforms\/\w+\/trains\/[\d.]+\/builds$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /app/platforms/trains/builds`, "");
-												switch (Settings.Universal) { // 通用
-													case "true":
-														$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
-														if (body.error === null) { // 数据无错误
-															$.log(`🚧 ${$.name}, 数据无错误`, "");
-															// 当前Bulid
-															body.data = body.data.map(data => modBuild(data));
-														};
-														break;
-													case "false":
-													default:
-														break;
-												};
-											} else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /app/bulids/install`, "");
-											} else if (/\/apps\/\d+\/builds\/\d+\/install\/status$/i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /app/bulids/install/status`, "");
-											} else $.log(`🚧 ${$.name}, unknown`, "");
-										};
+									switch (PATHs?.[0]) {
+										case "v1":
+										case "v2":
+										case "v3":
+											switch (PATHs?.[1]) {
+												case "accounts":
+													switch (PATHs?.[2]) {
+														case "settings":
+															switch (PATHs?.[3]) {
+																case undefined:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings`, "");
+																	break;
+																case "notifications":
+																	switch (PATHs?.[4]) {
+																		case "apps":
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings/notifications/apps/`, "");
+																			break;
+																	};
+																	break;
+																default:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings/${PATHs?.[3]}/`, "");
+																	break;
+															};
+															break;
+														case Caches?.data?.accountId: // UUID
+														default:
+															switch (PATHs?.[3]) {
+																case undefined:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}`, "");
+																	break;
+																case "apps":
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/`, "");
+																	switch (PATHs?.[4]) {
+																		case undefined:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps`, "");
+																			switch (Settings.Universal) { // 通用
+																				case "true":
+																					$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+																					if (body.error === null) { // 数据无错误
+																						$.log(`🚧 ${$.name}, 数据无错误`, "");
+																						body.data = body.data.map(app => {
+																							if (app.previouslyTested !== false) { // 不是前测试人员
+																								$.log(`🚧 ${$.name}, 不是前测试人员`, "");
+																								app.platforms = app.platforms.map(platform => {
+																									platform.build = modBuild(platform.build);
+																									return platform
+																								});
+																							}
+																							return app
+																						});
+																					};
+																					break;
+																				case "false":
+																				default:
+																					break;
+																			};
+																			break;
+																		default:
+																			switch (PATHs?.[5]) {
+																				case undefined:
+																					$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}`, "");
+																					break;
+																				case "builds":
+																					switch (PATHs?.[7]) {
+																						case undefined:
+																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}`, "");
+																							switch (Settings.Universal) { // 通用
+																								case "true":
+																									$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+																									if (body.error === null) { // 数据无错误
+																										$.log(`🚧 ${$.name}, 数据无错误`, "");
+																										// 当前Bulid
+																										body.data.currentBuild = modBuild(body.data.currentBuild);
+																										// Build列表
+																										body.data.builds = body.data.builds.map(build => modBuild(build));
+																									};
+																									break;
+																								case "false":
+																								default:
+																									break;
+																							};
+																							break;
+																						case "install":
+																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}/install`, "");
+																							break;
+																						default:
+																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}/${PATHs?.[7]}`, "");
+																							break;
+																					};
+																					break;
+																				case "platforms":
+																					switch (PATHs?.[6]) {
+																						case "ios":
+																						case "osx":
+																						case "appletvos":
+																						default:
+																							switch (PATHs?.[7]) {
+																								case undefined:
+																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}`, "");
+																									break;
+																								case "trains":
+																									switch (PATHs?.[9]) {
+																										case undefined:
+																											$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}`, "");
+																											break;
+																										case "builds":
+																											switch (PATHs?.[10]) {
+																												case undefined:
+																													$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/builds`, "");
+																													switch (Settings.Universal) { // 通用
+																														case "true":
+																															$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+																															if (body.error === null) { // 数据无错误
+																																$.log(`🚧 ${$.name}, 数据无错误`, "");
+																																// 当前Bulid
+																																body.data = body.data.map(data => modBuild(data));
+																															};
+																															break;
+																														case "false":
+																														default:
+																															break;
+																													};
+																													break;
+																												default:
+																													$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/builds/${PATHs?.[10]}`, "");
+																													break;
+																											};
+																											break;
+																										default:
+																											$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/${PATHs?.[9]}`, "");
+																											break;
+																									};
+																									break;
+																								default:
+																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/${PATHs?.[7]}`, "");
+																									break;
+																							};
+																							break;
+																					};
+																					break;
+																				default:
+																					$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/${PATHs?.[5]}`, "");
+																					break;
+																			};
+																			break;
+																	};
+																	break;
+																default:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/${PATHs?.[3]}/`, "");
+																	break;
+															};
+															break;
+													};
+													break;
+												case "apps":
+													switch (PATHs?.[3]) {
+														case "install":
+															switch (PATHs?.[4]) {
+																case undefined:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install`, "");
+																	break;
+																case "status":
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install/status`, "");
+																	break;
+																default:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install/${PATHs?.[4]}`, "");
+																	break;
+															};
+															break;
+													};
+													break;
+												case "messages":
+													switch (PATHs?.[2]) {
+														case Caches?.data?.accountId: // UUID
+														default:
+															$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}`, "");
+															switch (PATHs?.[3]) {
+																case undefined:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}`, "");
+																	break;
+																case "read":
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}/read`, "");
+																	break;
+																default:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}/${PATHs?.[3]}`, "");
+																	break;
+															};
+															break;
+													};
+													break;
+											};
+											break;
 									};
 									break;
 							};

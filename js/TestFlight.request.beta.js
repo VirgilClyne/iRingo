@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v2.0.0(1) request.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.0.0(2) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -142,30 +142,150 @@ let $response = undefined;
 										case "v1/devices/remove":
 											break;
 										default:
-											if (/\/accounts\//i.test(url.path)) {
-												$.log(`🚧 ${$.name}, accounts`, "");
-												if (/\/settings\//i.test(url.path)) {
-													$.log(`🚧 ${$.name}, settings`, "");
-													if (/\/notifications\/apps\/\d+$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, notifications/apps`, "");
-													} else $.log(`🚧 ${$.name}, unknown`, "");
-												} else if (/\/apps/i.test(url.path)) { // app info mod
-													$.log(`🚧 ${$.name}, /apps`, "");
-													if (/\/apps$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /apps`, "");
-													} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/bulids`, "");
-													} else if (/\/apps\/\d+\/platforms\/\w+\/trains$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/platforms/trains`, "");
-													} else if (/\/apps\/\d+\/platforms\/\w+\/trains\/[\d.]+\/builds$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/platforms/trains/builds`, "");
-													} else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/bulids/install`, "");
-														if (Settings.CountryCode !== "AUTO") body.storefrontId = body.storefrontId.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
-													} else if (/\/apps\/\d+\/builds\/\d+\/install\/status$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/bulids/install/status`, "");
-													} else $.log(`🚧 ${$.name}, unknown`, "");
-												};
+											switch (PATHs?.[0]) {
+												case "v1":
+												case "v2":
+												case "v3":
+													switch (PATHs?.[1]) {
+														case "accounts":
+															switch (PATHs?.[2]) {
+																case "settings":
+																	switch (PATHs?.[3]) {
+																		case undefined:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings`, "");
+																			break;
+																		case "notifications":
+																			switch (PATHs?.[4]) {
+																				case "apps":
+																					$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings/notifications/apps/`, "");
+																					break;
+																			};
+																			break;
+																		default:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings/${PATHs?.[3]}/`, "");
+																			break;
+																	};
+																	break;
+																case Caches?.data?.accountId: // UUID
+																default:
+																	switch (PATHs?.[3]) {
+																		case undefined:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}`, "");
+																			break;
+																		case "apps":
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/`, "");
+																			switch (PATHs?.[4]) {
+																				case undefined:
+																					$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps`, "");
+																					break;
+																				default:
+																					switch (PATHs?.[5]) {
+																						case undefined:
+																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}`, "");
+																							break;
+																						case "builds":
+																							switch (PATHs?.[7]) {
+																								case undefined:
+																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}`, "");
+																									break;
+																								case "install":
+																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}/install`, "");
+																									if (Settings.CountryCode !== "AUTO") body.storefrontId = body.storefrontId.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
+																									break;
+																								default:
+																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}/${PATHs?.[7]}`, "");
+																									break;
+																							};
+																							break;
+																						case "platforms":
+																							switch (PATHs?.[6]) {
+																								case "ios":
+																								case "osx":
+																								case "appletvos":
+																								default:
+																									switch (PATHs?.[7]) {
+																										case undefined:
+																											$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}`, "");
+																											break;
+																										case "trains":
+																											switch (PATHs?.[9]) {
+																												case undefined:
+																													$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}`, "");
+																													break;
+																												case "builds":
+																													switch (PATHs?.[10]) {
+																														case undefined:
+																															$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/builds`, "");
+																															break;
+																														default:
+																															$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/builds/${PATHs?.[10]}`, "");
+																															break;
+																													};
+																													break;
+																												default:
+																													$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/${PATHs?.[9]}`, "");
+																													break;
+																											};
+																											break;
+																										default:
+																											$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/${PATHs?.[7]}`, "");
+																											break;
+																									};
+																									break;
+																							};
+																							break;
+																						default:
+																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/${PATHs?.[5]}`, "");
+																							break;
+																					};
+																					break;
+																			};
+																			break;
+																		default:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/${PATHs?.[3]}/`, "");
+																			break;
+																	};
+																	break;
+															};
+															break;
+														case "apps":
+															switch (PATHs?.[3]) {
+																case "install":
+																	switch (PATHs?.[4]) {
+																		case undefined:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install`, "");
+																			break;
+																		case "status":
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install/status`, "");
+																			break;
+																		default:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install/${PATHs?.[4]}`, "");
+																			break;
+																	};
+																	break;
+															};
+															break;
+														case "messages":
+															switch (PATHs?.[2]) {
+																case Caches?.data?.accountId: // UUID
+																default:
+																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}`, "");
+																	switch (PATHs?.[3]) {
+																		case undefined:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}`, "");
+																			break;
+																		case "read":
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}/read`, "");
+																			break;
+																		default:
+																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}/${PATHs?.[3]}`, "");
+																			break;
+																	};
+																	break;
+															};
+															break;
+													};
+													break;
 											};
 											break;
 									};
@@ -253,52 +373,6 @@ let $response = undefined;
 										//break; // 不中断，继续处理
 										case "false":
 										default:
-											if (/\/accounts\//i.test(url.path)) {
-												$.log(`🚧 ${$.name}, accounts`, "");
-												if (/\/settings\//i.test(url.path)) {
-													$.log(`🚧 ${$.name}, settings`, "");
-													if (/\/notifications\/apps\/\d+$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, notifications/apps`, "");
-													} else $.log(`🚧 ${$.name}, unknown`, "");
-												} else if (/\/apps/i.test(url.path)) { // app info mod
-													$.log(`🚧 ${$.name}, /apps`, "");
-													if (/\/apps$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /apps`, "");
-													} else if (/\/apps\/\d+\/builds\/\d+$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/bulids`, "");
-													} else if (/\/apps\/\d+\/platforms\/\w+\/trains$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/platforms/trains`, "");
-													} else if (/\/apps\/\d+\/platforms\/\w+\/trains\/[\d.]+\/builds$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/platforms/trains/builds`, "");
-													} else if (/\/apps\/\d+\/builds\/\d+\/install$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/bulids/install`, "");
-														//let install = JSON.parse($request.body);
-														//if (Settings.CountryCode !== "AUTO") install.storefrontId = install.storefrontId.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
-														//$request.body = JSON.stringify(install);
-													} else if (/\/apps\/\d+\/builds\/\d+\/install\/status$/i.test(url.path)) {
-														$.log(`🚧 ${$.name}, /app/bulids/install/status`, "");
-													} else $.log(`🚧 ${$.name}, unknown`, "");
-												};
-											} else if (/\/ru\//i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /ru/`, "");
-												if (/\/app$/i.test(url.path)) {
-													$.log(`🚧 ${$.name}, /app`, "");
-												} else if (/\/accept$/i.test(url.path)) {
-													$.log(`🚧 ${$.name}, /accept`, "");
-												} else $.log(`🚧 ${$.name}, unknown`, "");
-											} else if (/\/invites\//i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /invites/`, "");
-												if (/\/app$/i.test(url.path)) {
-													$.log(`🚧 ${$.name}, /app`, "");
-												} else if (/\/accept$/i.test(url.path)) {
-													$.log(`🚧 ${$.name}, /accept`, "");
-												} else $.log(`🚧 ${$.name}, unknown`, "");
-											} else if (/\/messages\//i.test(url.path)) {
-												$.log(`🚧 ${$.name}, /messages/`, "");
-												if (/\/read$/i.test(url.path)) {
-													$.log(`🚧 ${$.name}, /read`, "");
-												} else $.log(`🚧 ${$.name}, unknown`, "");
-											};
 											break;
 									};
 									break;
