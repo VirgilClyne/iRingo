@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.0.0(2) response.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.0.0(3) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -439,10 +439,10 @@ function modBuild(build) {
 			break;
 		case "osx":
 			$.log(`🚧 ${$.name}, osx`, "");
-			if (build.macBuildCompatibility.runsOnAppleSilicon === true) { // 是苹果芯片
+			if (build?.macBuildCompatibility?.runsOnAppleSilicon === true) { // 是苹果芯片
 				$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
 				build = Build(build);
-			}
+			};
 			break;
 		case "appletvos":
 			$.log(`🚧 ${$.name}, appletvos`, "");
@@ -454,7 +454,7 @@ function modBuild(build) {
 	return build
 
 	function Build(build) {
-		if (build.universal === true) {
+		//if (build.universal === true) {
 			build.compatible = true;
 			build.platformCompatible = true;
 			build.hardwareCompatible = true;
@@ -478,7 +478,7 @@ function modBuild(build) {
 						"iconUrl": "https://itunesconnect-mr.itunes.apple.com/itc/img/device-icons/device_family_icon_3.png"
 					}
 				];
-			}
+			};
 			if (build?.compatibilityData?.compatibleDeviceFamilies) {
 				build.compatibilityData.compatibleDeviceFamilies = [
 					{
@@ -502,8 +502,21 @@ function modBuild(build) {
 						"unsupportedDevices": []
 					}
 				];
-			}
-		};
+			};
+			if (build.macBuildCompatibility) {
+				build.macBuildCompatibility.runsOnIntel = true;
+				build.macBuildCompatibility.runsOnAppleSilicon = true;
+				/*
+				build.macBuildCompatibility = {
+					"macArchitectures": ["AppleSilicon", "Intel"],
+					"rosettaCompatible": true,
+					"runsOnIntel": true,
+					"runsOnAppleSilicon": true,
+					"requiresRosetta": false
+				};
+				*/
+			};
+		//};
 		return build
 	};
 };
