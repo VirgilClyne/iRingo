@@ -57,7 +57,10 @@ const DataBase = {
 		}
 	},
 	"News":{
-		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"AUTO"}
+		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"true"}
+	},
+	"TestFlight":{
+		"Settings":{"Switch":"true","CountryCode":"US","MultiAccount":"false","Universal":"true"}
 	},
 	"Default": {
 		"Settings":{"Switch":"true"},

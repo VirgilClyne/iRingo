@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(12) request.beta");
+const $ = new Env(" iRingo: 📺 TV v3.0.0(13) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -57,7 +57,10 @@ const DataBase = {
 		}
 	},
 	"News":{
-		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"AUTO"}
+		"Settings":{"Switch":"true","CountryCode":"US","newsPlusUser":"true"}
+	},
+	"TestFlight":{
+		"Settings":{"Switch":"true","CountryCode":"US","MultiAccount":"false","Universal":"true"}
 	},
 	"Default": {
 		"Settings":{"Switch":"true"},
@@ -173,7 +176,7 @@ let $response = undefined;
 									if (Settings.CountryCode[Type] !== "AUTO") {
 										if (url.params.region) url.params.region = Settings.CountryCode[Type] ?? url.params.region;
 										if (url.params.country) url.params.country = Settings.CountryCode[Type] ?? url.params.country;
-										if (url.params.sfh) url.params.sfh = url.params.sfh.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.params.sfh);
+										if (url.params.sfh) url.params.sfh = url.params.sfh.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]));
 									};
 									$.log(`🚧 ${$.name}, 调试信息`, `region = ${url.params.region}, country = ${url.params.country}, sfh = ${url.params.sfh}`, "")
 									break;
