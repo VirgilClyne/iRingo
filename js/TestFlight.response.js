@@ -1,7 +1,7 @@
 /*
 README:https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.0.0(3) response");
+const $ = new Env(" iRingo: ✈ TestFlight v3.0.0(4) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -94,10 +94,13 @@ const DataBase = {
 				default:
 					break;
 				case "text/xml":
-				case "text/plist":
 				case "application/xml":
+				case "text/plist":
 				case "application/plist":
 				case "application/x-plist":
+					break;
+				case "text/vtt":
+				case "application/vtt":
 					break;
 				case "text/json":
 				case "application/json":
@@ -111,14 +114,17 @@ const DataBase = {
 									switch (Settings.MultiAccount) { // MultiAccount
 										case "true":
 											$.log(`🚧 ${$.name}, 启用多账号支持`, "");
+											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
+											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
+											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches?.data) { //有data
 												//$.log(`🚧 ${$.name}, 有Caches.data`, "");
 												if (body?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
 													$.log(`🚧 ${$.name}, Account ID相等，刷新缓存`, "");
 													Caches.headers = {
-														"X-Request-Id": $request.headers["x-request-id"],
-														"X-Session-Id": $request.headers["x-session-id"],
-														"X-Session-Digest": $request.headers["x-session-digest"]
+														"X-Request-Id": XRequestId,
+														"X-Session-Id": XSessionId,
+														"X-Session-Digest": XSessionDigest
 													};
 													Caches.data = body.data;
 													$.setjson(Caches, "@iRingo.TestFlight.Caches");
@@ -129,14 +135,14 @@ const DataBase = {
 											} else { // Caches空
 												//$.log(`🚧 ${$.name}, Caches空，写入`, "");
 												Caches.headers = {
-													"X-Request-Id": $request.headers["x-request-id"],
-													"X-Session-Id": $request.headers["x-session-id"],
-													"X-Session-Digest": $request.headers["x-session-digest"]
+													"X-Request-Id": XRequestId,
+													"X-Session-Id": XSessionId,
+													"X-Session-Digest": XSessionDigest
 												};
 												Caches.data = body.data;
 												$.setjson(Caches, "@iRingo.TestFlight.Caches");
 											};
-										//break; // 不中断，继续处理
+											break;
 										case "false":
 										default:
 											break;
@@ -377,10 +383,12 @@ const DataBase = {
 						case "text/plain":
 						case "text/html":
 						case "text/xml":
-						case "text/plist":
 						case "application/xml":
+						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/vtt":
+						case "application/vtt":
 						case "text/json":
 						case "application/json":
 						default:
@@ -420,6 +428,7 @@ function setENV(name, platform, database) {
 	/***************** Prase *****************/
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
+	//$.log(`🎉 ${$.name}, Set Environment Variables`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
 	Configs.Storefront = new Map(Configs.Storefront);
 	return { Settings, Caches, Configs };
@@ -442,7 +451,7 @@ function modBuild(build) {
 			if (build?.macBuildCompatibility?.runsOnAppleSilicon === true) { // 是苹果芯片
 				$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
 				build = Build(build);
-			}
+			};
 			break;
 		case "appletvos":
 			$.log(`🚧 ${$.name}, appletvos`, "");
