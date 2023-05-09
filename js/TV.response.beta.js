@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(21) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.0.0(22) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -109,7 +109,7 @@ const DataBase = {
 							switch (PATH) {
 								case "uts/v3/configurations":
 									if (url.params.caller !== "wta") { // 不修改caller=wta的configurations数据
-										const Version = parseInt(url?.params?.v, 10), Platform = url?.params?.pfm, Locale = $request?.headers?.["x-apple-i-locale"]?.split('_')?.[0] ?? "zh"
+										const Version = parseInt(url?.params?.v, 10), Platform = url?.params?.pfm, Locale = ($request?.headers?.["X-Apple-I-Locale"] ?? $request?.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh"
 										$.log(`⚠ ${$.name}`, `Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
 										if (body?.data?.applicationProps) {
 											//body.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
