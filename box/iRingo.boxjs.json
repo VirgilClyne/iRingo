@@ -792,6 +792,27 @@
 					"desc": "是否将桌面版/macOS版/app版等平台的TV app转换至iPad版，以启用第三方影片库集成(如: Disney+,Prime Video等)"
 				},
 				{
+					"id": "@iRingo.TV.Settings.ServerUrl",
+					"name": "强制修改密钥服务器地址",
+					"val": "play.itunes.apple.com",
+					"type": "selects",
+					"desc": "因为密钥服务域名禁止MitM，修改密钥服务器地址可以分离m3u8与key的MitM域名，从而恢复如对DualSubs的双语字幕支持",
+					"items": [
+						{
+							"key": "",
+							"label": "OFF(不修改)"
+						},
+						{
+							"key": "play.itunes.apple.com",
+							"label": "play.itunes.apple.com (默认)"
+						},
+						{
+							"key": "play-edge.itunes.apple.com",
+							"label": "play-edge.itunes.apple.com (不推荐，与播放服务域名重叠)"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.TV.Settings.Tabs",
 					"name": "启用的标签与栏目",
 					"val": [

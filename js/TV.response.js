@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.0(22) response");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(4) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch":"true","Third-Party":true,"ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
 		},
 		"Configs":{
@@ -94,10 +94,14 @@ const DataBase = {
 				default:
 					break;
 				case "text/xml":
-				case "text/plist":
 				case "application/xml":
+					break;
+				case "text/plist":
 				case "application/plist":
 				case "application/x-plist":
+					break;
+				case "text/vtt":
+				case "application/vtt":
 					break;
 				case "text/json":
 				case "application/json":
@@ -167,7 +171,120 @@ const DataBase = {
 									break;
 								case "uts/v3/user/settings":
 									break;
+								case "uts/v3/canvases/Roots/watchNow":
+								case "uts/v3/shelves/uts.col.UpNext":
+								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000":
+									let shelves = body?.data?.shelf;
+									if (shelves?.items) {
+										shelves.items = shelves.items.map(item => {
+											let assets = item?.playable?.assets;
+											/*
+											if (assets?.hlsUrl) {
+												let hlsUrl = URL.parse(assets.hlsUrl);
+												hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+												assets.hlsUrl = URL.stringify(hlsUrl);
+											};
+											*/
+											if (assets?.fpsKeyServerUrl) {
+												let fpsKeyServerUrl = URL.parse(assets.fpsKeyServerUrl);
+												fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+												assets.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
+											};
+											if (assets?.fpsNonceServerUrl) {
+												let fpsNonceServerUrl = URL.parse(assets.fpsNonceServerUrl);
+												fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+												assets.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
+											};
+											return item;
+										});
+									};
+									break;
 								default:
+									switch (PATHs[0]) {
+										case "uts":
+											switch (PATHs[1]) {
+												case "v3":
+													switch (PATHs[2]) {
+														case "movies": // uts/v3/movies/
+														case "shows": // uts/v3/shows/
+															let playables = body?.data?.playables;
+															if (playables) {
+																Object.keys(playables).forEach(playable => {
+																	let assets = playables?.[playable]?.assets;
+																	if (assets) {
+																		/*
+																		if (assets?.hlsUrl) {
+																			let hlsUrl = URL.parse(assets.hlsUrl);
+																			hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+																			assets.hlsUrl = URL.stringify(hlsUrl);
+																		};
+																		*/
+																		if (assets?.fpsKeyServerUrl) {
+																			let fpsKeyServerUrl = URL.parse(assets.fpsKeyServerUrl);
+																			fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+																			assets.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
+																		};
+																		if (assets?.fpsNonceServerUrl) {
+																			let fpsNonceServerUrl = URL.parse(assets.fpsNonceServerUrl);
+																			fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+																			assets.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
+																		};
+																	};
+																	let itunesMediaApiData = playables?.[playable]?.itunesMediaApiData;
+																	if (itunesMediaApiData) {
+																		if (itunesMediaApiData?.offers) {
+																			itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => {
+																				/*
+																				if (offer?.hlsUrl) {
+																					let hlsUrl = URL.parse(offer.hlsUrl);
+																					hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+																					offer.hlsUrl = URL.stringify(hlsUrl);
+																				};
+																				*/
+																				if (offer?.fpsKeyServerUrl) {
+																					let fpsKeyServerUrl = URL.parse(offer.fpsKeyServerUrl);
+																					fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+																					offer.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
+																				};
+																				if (offer?.fpsNonceServerUrl) {
+																					let fpsNonceServerUrl = URL.parse(offer.fpsNonceServerUrl);
+																					fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+																					offer.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
+																				};
+																				return offer;
+																			});
+																		};
+																		if (itunesMediaApiData?.personalizedOffers) {
+																			itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => {
+																				/*
+																				if (personalizedOffer?.hlsUrl) {
+																					let hlsUrl = URL.parse(personalizedOffer.hlsUrl);
+																					hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+																					personalizedOffer.hlsUrl = URL.stringify(hlsUrl);
+																				};
+																				*/
+																				if (personalizedOffer?.fpsKeyServerUrl) {
+																					let fpsKeyServerUrl = URL.parse(personalizedOffer.fpsKeyServerUrl);
+																					fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+																					personalizedOffer.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
+																				};
+																				if (personalizedOffer?.fpsNonceServerUrl) {
+																					let fpsNonceServerUrl = URL.parse(personalizedOffer.fpsNonceServerUrl);
+																					fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
+																					personalizedOffer.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
+																				};
+																				return personalizedOffer;
+																			});
+																		}
+																	};
+																});
+															};
+															break;
+													};
+													break;
+											};
+											break;
+									};
 									break;
 							};
 							break;
@@ -213,10 +330,12 @@ const DataBase = {
 						case "text/plain":
 						case "text/html":
 						case "text/xml":
-						case "text/plist":
 						case "application/xml":
+						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
+						case "text/vtt":
+						case "application/vtt":
 						case "text/json":
 						case "application/json":
 						default:
@@ -258,6 +377,7 @@ function setENV(name, platform, database) {
 	if (typeof Settings?.Configs?.Tabs == "string") Settings.Configs.Tabs = Settings.Configs.Tabs.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
+	//$.log(`🎉 ${$.name}, Set Environment Variables`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
 	Configs.Locale = new Map(Configs.Locale);
 	for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
