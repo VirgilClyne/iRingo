@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(4) response");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(7) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch":"true","Third-Party":true,"ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch":"true","Third-Party":true,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
 		},
 		"Configs":{
@@ -171,20 +171,20 @@ const DataBase = {
 									break;
 								case "uts/v3/user/settings":
 									break;
-								case "uts/v3/canvases/Roots/watchNow":
-								case "uts/v3/shelves/uts.col.UpNext":
-								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000":
+								case "uts/v3/canvases/Roots/watchNow": // 立即观看
+								case "uts/v3/canvases/Channels/tvs.sbd.4000": // Apple TV+
+								case "uts/v3/shelves/uts.col.UpNext": // 待播清單
+								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000": // Apple TV+ 待播節目
+								case "uts/v3/shelves/edt.col.62d7229e-d9a1-4f00-98e5-458c11ed3938": // 精選推薦
 									let shelves = body?.data?.shelf;
 									if (shelves?.items) {
 										shelves.items = shelves.items.map(item => {
-											let assets = item?.playable?.assets;
-											/*
+											let assets = item?.playable?.assets || item?.videos?.shelfVideoTall?.assets;
 											if (assets?.hlsUrl) {
 												let hlsUrl = URL.parse(assets.hlsUrl);
-												hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+												hlsUrl.host = Settings?.HLSUrl || "play-edge.itunes.apple.com";
 												assets.hlsUrl = URL.stringify(hlsUrl);
 											};
-											*/
 											if (assets?.fpsKeyServerUrl) {
 												let fpsKeyServerUrl = URL.parse(assets.fpsKeyServerUrl);
 												fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
@@ -212,13 +212,11 @@ const DataBase = {
 																Object.keys(playables).forEach(playable => {
 																	let assets = playables?.[playable]?.assets;
 																	if (assets) {
-																		/*
 																		if (assets?.hlsUrl) {
 																			let hlsUrl = URL.parse(assets.hlsUrl);
-																			hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+																			hlsUrl.host = Settings?.HLSUrl || "play-edge.itunes.apple.com";
 																			assets.hlsUrl = URL.stringify(hlsUrl);
 																		};
-																		*/
 																		if (assets?.fpsKeyServerUrl) {
 																			let fpsKeyServerUrl = URL.parse(assets.fpsKeyServerUrl);
 																			fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
@@ -234,13 +232,11 @@ const DataBase = {
 																	if (itunesMediaApiData) {
 																		if (itunesMediaApiData?.offers) {
 																			itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => {
-																				/*
 																				if (offer?.hlsUrl) {
 																					let hlsUrl = URL.parse(offer.hlsUrl);
-																					hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+																					hlsUrl.host = Settings?.HLSUrl || "play-edge.itunes.apple.com";
 																					offer.hlsUrl = URL.stringify(hlsUrl);
 																				};
-																				*/
 																				if (offer?.fpsKeyServerUrl) {
 																					let fpsKeyServerUrl = URL.parse(offer.fpsKeyServerUrl);
 																					fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
@@ -256,13 +252,11 @@ const DataBase = {
 																		};
 																		if (itunesMediaApiData?.personalizedOffers) {
 																			itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => {
-																				/*
 																				if (personalizedOffer?.hlsUrl) {
 																					let hlsUrl = URL.parse(personalizedOffer.hlsUrl);
-																					hlsUrl.host = Settings?.HLSHost || "hls.itunes.apple.com";
+																					hlsUrl.host = Settings?.HLSUrl || "hls.itunes.apple.com";
 																					personalizedOffer.hlsUrl = URL.stringify(hlsUrl);
 																				};
-																				*/
 																				if (personalizedOffer?.fpsKeyServerUrl) {
 																					let fpsKeyServerUrl = URL.parse(personalizedOffer.fpsKeyServerUrl);
 																					fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
