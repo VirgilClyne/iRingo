@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(7) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(14) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -195,28 +195,33 @@ const DataBase = {
 									break;
 								case "uts/v3/canvases/Roots/watchNow": // 立即观看
 								case "uts/v3/canvases/Channels/tvs.sbd.4000": // Apple TV+
+									let shelves = body?.data?.canvas?.shelves;
+									if (shelves) {
+										shelves = shelves.map(shelf => {
+											if (shelf?.items) {
+												shelf.items = shelf.items.map(item => {
+													let playable = item?.playable || item?.videos?.shelfVideoTall;
+													let playables = item?.playables;
+													if (playable) playable = setPlayable(playable, Settings?.HLSUrl, Settings?.ServerUrl);
+													if (playables) Object.keys(playables).forEach(playable => playables[playable] = setPlayable(playables[playable], Settings?.HLSUrl, Settings?.ServerUrl));
+													return item;
+												});
+											};
+											return shelf;
+										});
+										body.data.canvas.shelves = shelves;
+									};
+									break;
 								case "uts/v3/shelves/uts.col.UpNext": // 待播清單
 								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000": // Apple TV+ 待播節目
 								case "uts/v3/shelves/edt.col.62d7229e-d9a1-4f00-98e5-458c11ed3938": // 精選推薦
-									let shelves = body?.data?.shelf;
-									if (shelves?.items) {
-										shelves.items = shelves.items.map(item => {
-											let assets = item?.playable?.assets || item?.videos?.shelfVideoTall?.assets;
-											if (assets?.hlsUrl) {
-												let hlsUrl = URL.parse(assets.hlsUrl);
-												hlsUrl.host = Settings?.HLSUrl || "play-edge.itunes.apple.com";
-												assets.hlsUrl = URL.stringify(hlsUrl);
-											};
-											if (assets?.fpsKeyServerUrl) {
-												let fpsKeyServerUrl = URL.parse(assets.fpsKeyServerUrl);
-												fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-												assets.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
-											};
-											if (assets?.fpsNonceServerUrl) {
-												let fpsNonceServerUrl = URL.parse(assets.fpsNonceServerUrl);
-												fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-												assets.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
-											};
+									let shelf = body?.data?.shelf;
+									if (shelf?.items) {
+										shelf.items = shelf.items.map(item => {
+											let playable = item?.playable || item?.videos?.shelfVideoTall;
+											let playables = item?.playables;
+											if (playable) playable = setPlayable(playable, Settings?.HLSUrl, Settings?.ServerUrl);
+											if (playables) Object.keys(playables).forEach(playable => playables[playable] = setPlayable(playables[playable], Settings?.HLSUrl, Settings?.ServerUrl));
 											return item;
 										});
 									};
@@ -229,72 +234,26 @@ const DataBase = {
 													switch (PATHs[2]) {
 														case "movies": // uts/v3/movies/
 														case "shows": // uts/v3/shows/
+															let shelves = body?.data?.canvas?.shelves;
+															let backgroundVideo = body?.data?.content?.backgroundVideo;
 															let playables = body?.data?.playables;
-															if (playables) {
-																Object.keys(playables).forEach(playable => {
-																	let assets = playables?.[playable]?.assets;
-																	if (assets) {
-																		if (assets?.hlsUrl) {
-																			let hlsUrl = URL.parse(assets.hlsUrl);
-																			hlsUrl.host = Settings?.HLSUrl || "play-edge.itunes.apple.com";
-																			assets.hlsUrl = URL.stringify(hlsUrl);
-																		};
-																		if (assets?.fpsKeyServerUrl) {
-																			let fpsKeyServerUrl = URL.parse(assets.fpsKeyServerUrl);
-																			fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-																			assets.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
-																		};
-																		if (assets?.fpsNonceServerUrl) {
-																			let fpsNonceServerUrl = URL.parse(assets.fpsNonceServerUrl);
-																			fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-																			assets.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
-																		};
+															if (shelves) {
+																shelves = shelves.map(shelf => {
+																	if (shelf?.items) {
+																		shelf.items = shelf.items.map(item => {
+																			let playable = item?.playable || item?.videos?.shelfVideoTall;
+																			let playables = item?.playables;
+																			if (playable) playable = setPlayable(playable, Settings?.HLSUrl, Settings?.ServerUrl);
+																			if (playables) Object.keys(playables).forEach(playable => playables[playable] = setPlayable(playables[playable], Settings?.HLSUrl, Settings?.ServerUrl));
+																			return item;
+																		});
 																	};
-																	let itunesMediaApiData = playables?.[playable]?.itunesMediaApiData;
-																	if (itunesMediaApiData) {
-																		if (itunesMediaApiData?.offers) {
-																			itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => {
-																				if (offer?.hlsUrl) {
-																					let hlsUrl = URL.parse(offer.hlsUrl);
-																					hlsUrl.host = Settings?.HLSUrl || "play-edge.itunes.apple.com";
-																					offer.hlsUrl = URL.stringify(hlsUrl);
-																				};
-																				if (offer?.fpsKeyServerUrl) {
-																					let fpsKeyServerUrl = URL.parse(offer.fpsKeyServerUrl);
-																					fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-																					offer.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
-																				};
-																				if (offer?.fpsNonceServerUrl) {
-																					let fpsNonceServerUrl = URL.parse(offer.fpsNonceServerUrl);
-																					fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-																					offer.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
-																				};
-																				return offer;
-																			});
-																		};
-																		if (itunesMediaApiData?.personalizedOffers) {
-																			itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => {
-																				if (personalizedOffer?.hlsUrl) {
-																					let hlsUrl = URL.parse(personalizedOffer.hlsUrl);
-																					hlsUrl.host = Settings?.HLSUrl || "hls.itunes.apple.com";
-																					personalizedOffer.hlsUrl = URL.stringify(hlsUrl);
-																				};
-																				if (personalizedOffer?.fpsKeyServerUrl) {
-																					let fpsKeyServerUrl = URL.parse(personalizedOffer.fpsKeyServerUrl);
-																					fpsKeyServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-																					personalizedOffer.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
-																				};
-																				if (personalizedOffer?.fpsNonceServerUrl) {
-																					let fpsNonceServerUrl = URL.parse(personalizedOffer.fpsNonceServerUrl);
-																					fpsNonceServerUrl.host = Settings?.ServerUrl || "play.itunes.apple.com";
-																					personalizedOffer.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
-																				};
-																				return personalizedOffer;
-																			});
-																		}
-																	};
+																	return shelf;
 																});
+																body.data.canvas.shelves = shelves;
 															};
+															if (backgroundVideo) backgroundVideo = setPlayable(backgroundVideo, Settings?.HLSUrl, Settings?.ServerUrl);
+															if (playables) Object.keys(playables).forEach(playable => playables[playable] = setPlayable(playables[playable], Settings?.HLSUrl, Settings?.ServerUrl));
 															break;
 													};
 													break;
@@ -407,6 +366,39 @@ function setENV(name, platform, database) {
 	for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
 	Configs.Storefront = new Map(Configs.Storefront);
 	return { Settings, Caches, Configs };
+};
+
+function setPlayable(playable, HLSUrl, ServerUrl) {
+	$.log(`☑️ ${$.name}, Set Playable Content`, "");
+	let assets = playable?.assets;
+	let itunesMediaApiData = playable?.itunesMediaApiData;
+	if (assets) assets = setUrl(assets, HLSUrl, ServerUrl);
+	if (itunesMediaApiData?.movieClips) itunesMediaApiData.offers = itunesMediaApiData.movieClips.map(movieClip => setUrl(movieClip, HLSUrl, ServerUrl));
+	if (itunesMediaApiData?.offers) itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => setUrl(offer, HLSUrl, ServerUrl));
+	if (itunesMediaApiData?.personalizedOffers) itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => setUrl(personalizedOffer, HLSUrl, ServerUrl));
+	$.log(`✅ ${$.name}, Set Playable Content`, "");
+	return playable;
+
+	function setUrl(asset, HLSUrl, ServerUrl) {
+		$.log(`☑️ ${$.name}, Set Url`, "");
+		if (asset?.hlsUrl) {
+			let hlsUrl = URL.parse(asset.hlsUrl);
+			hlsUrl.host = HLSUrl || "play-edge.itunes.apple.com";
+			asset.hlsUrl = URL.stringify(hlsUrl);
+		};
+		if (asset?.fpsKeyServerUrl) {
+			let fpsKeyServerUrl = URL.parse(asset.fpsKeyServerUrl);
+			fpsKeyServerUrl.host = ServerUrl || "play.itunes.apple.com";
+			asset.fpsKeyServerUrl = URL.stringify(fpsKeyServerUrl);
+		};
+		if (asset?.fpsNonceServerUrl) {
+			let fpsNonceServerUrl = URL.parse(asset.fpsNonceServerUrl);
+			fpsNonceServerUrl.host = ServerUrl || "play.itunes.apple.com";
+			asset.fpsNonceServerUrl = URL.stringify(fpsNonceServerUrl);
+		};
+		$.log(`✅ ${$.name}, Set Url`, "");
+		return asset;
+	};
 };
 
 async function getData(type, settings, database) {
