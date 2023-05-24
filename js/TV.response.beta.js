@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(14) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.1(1) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -75,7 +75,7 @@ const DataBase = {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TV", DataBase);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings?.Switch) {
-		case "true":
+		case true:
 		default:
 			let url = URL.parse($request?.url);
 			const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = PATH.split("/");
@@ -290,7 +290,7 @@ const DataBase = {
 					break;
 			};
 			break;
-		case "false":
+		case false:
 			break;
 	};
 })()
@@ -355,9 +355,14 @@ const DataBase = {
 function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platform, database);
-	/***************** Prase *****************/
-	Settings["Third-Party"] = JSON.parse(Settings["Third-Party"]) // BoxJs字符串转Boolean
-	if (typeof Settings?.Configs?.Tabs == "string") Settings.Configs.Tabs = Settings.Configs.Tabs.split(",") // BoxJs字符串转数组
+	/***************** Settings *****************/
+	traverseObject(Settings, (key, value) => {
+		if (value === "true" && value === "false") value = JSON.parse(value); // BoxJs字符串转Boolean
+		if (typeof value === "string") value = value?.includes(",") ? value?.split(",") : value; // BoxJs字符串转数组
+		return value;
+	});
+	//Settings["Third-Party"] = JSON.parse(Settings["Third-Party"]) // BoxJs字符串转Boolean
+	//if (typeof Settings?.Configs?.Tabs == "string") Settings.Configs.Tabs = Settings.Configs.Tabs.split(",") // BoxJs字符串转数组
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
@@ -366,6 +371,9 @@ function setENV(name, platform, database) {
 	for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
 	Configs.Storefront = new Map(Configs.Storefront);
 	return { Settings, Caches, Configs };
+
+	function traverseObject(o,c){for(var t in o){var n=o[t];o[t]="object"==typeof n&&null!==n?traverseObject(n,c):c(t,n)}return o}
+
 };
 
 function setPlayable(playable, HLSUrl, ServerUrl) {
