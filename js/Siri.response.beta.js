@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 🔍 Siri v3.0.1(1) response.beta");
+const $ = new Env(" iRingo: 🔍 Siri v3.0.1(2) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -17,7 +17,7 @@ const DataBase = {
 	"Siri":{
 		"Settings":{"Switch":true,"CountryCode":"SG","Domains":["web","itunes","app_store","movies","restaurants","maps"],"Functions":["flightutilities","lookup","mail","messages","news","safari","siri","spotlight","visualintelligence"],"Safari_Smart_History":true},
 		"Configs":{
-			"VisualIntelligence":{"enabled_domains":["pets","media","books","art","nature","landmarks"],"supported_domains":["OBJECT_2D","SCULPTURE","ART","CATS","DOGS","LANDMARK","ALBUM","SKYLINE","BIRDS","NATURE","ANIMALS","INSECTS","BOOK","MEDIA","NATURAL_LANDMARK"]}
+			"VisualIntelligence":{"enabled_domains":["pets","media","books","art","nature","landmarks"],"supported_domains":["ART","BOOK","MEDIA","LANDMARK","ANIMALS","BIRDS","FOOD","SIGN_SYMBOL","AUTO_SYMBOL","DOGS","NATURE","NATURAL_LANDMARK","INSECTS","REPTILES","ALBUM","STOREFRONT","LAUNDRY_CARE_SYMBOL","CATS","OBJECT_2D","SCULPTURE","SKYLINE","MAMMALS"]}
 		}
 	},
 	"TV":{
