@@ -2,54 +2,14 @@
 	"Settings": {
 		"Switch": true,
 		"CountryCode": "SG",
-		"Domains": [
-			"web",
-			"itunes",
-			"app_store",
-			"movies",
-			"restaurants",
-			"maps"
-		],
-		"Functions": [
-			"flightutilities",
-			"lookup",
-			"mail",
-			"messages",
-			"news",
-			"safari",
-			"siri",
-			"spotlight",
-			"visualintelligence"
-		],
+		"Domains": ["web", "itunes", "app_store", "movies", "restaurants", "maps"],
+		"Functions": ["flightutilities", "lookup", "mail", "messages", "news", "safari", "siri", "spotlight", "visualintelligence"],
 		"Safari_Smart_History": true
 	},
 	"Configs": {
 		"VisualIntelligence": {
-			"enabled_domains": [
-				"pets",
-				"media",
-				"books",
-				"art",
-				"nature",
-				"landmarks"
-			],
-			"supported_domains": [
-				"OBJECT_2D",
-				"SCULPTURE",
-				"ART",
-				"CATS",
-				"DOGS",
-				"LANDMARK",
-				"ALBUM",
-				"SKYLINE",
-				"BIRDS",
-				"NATURE",
-				"ANIMALS",
-				"INSECTS",
-				"BOOK",
-				"MEDIA",
-				"NATURAL_LANDMARK"
-			]
+			"enabled_domains": ["pets", "media", "books", "art", "nature", "landmarks"],
+			"supported_domains": ["ART", "BOOK", "MEDIA", "LANDMARK", "ANIMALS", "BIRDS", "FOOD", "SIGN_SYMBOL", "AUTO_SYMBOL", "DOGS", "NATURE", "NATURAL_LANDMARK", "INSECTS", "REPTILES", "ALBUM", "STOREFRONT", "LAUNDRY_CARE_SYMBOL", "CATS", "OBJECT_2D", "SCULPTURE", "SKYLINE", "MAMMALS"]
 		}
 	}
 }
