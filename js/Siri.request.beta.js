@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 🔍 Siri v3.0.1(2) request.beta");
+const $ = new Env(" iRingo: 🔍 Siri v3.0.1(3) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -348,12 +348,13 @@ let $response = undefined;
  * @return {Object} { Settings, Caches, Configs }
  */
 function setENV(name, platforms, database) {
-	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
+	$.log(`☑️ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platforms, database);
 	/***************** Settings *****************/
-	if (!Array.isArray(Settings?.Domains)) Settings.Domains = (Settings.Domains) ? [Settings.Domains] : []; // 只有一个选项时，无逗号分隔
-	if (!Array.isArray(Settings?.Functions)) Settings.Functions = (Settings.Functions) ? [Settings.Functions] : []; // 只有一个选项时，无逗号分隔
-	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+	// 单值或空值转换为数组
+	if (!Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (!Array.isArray(Settings?.Functions)) $.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	$.log(`✅ ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	//$.log(`✅ ${$.name}, Set Environment Variables`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
