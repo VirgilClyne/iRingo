@@ -14,22 +14,21 @@ DOMAIN,lookup-api.apple.com.edgekey.net
 DOMAIN,e16991.b.akamaiedge.net
 
 [Script]
-# Redirect Siri Suggestions Service 
 # Bag (iOS/macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=Siri Suggestions Service
-http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=Siri Suggestions Service
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.bag.request
+http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.bag.response
 # Spotlight & Look Up Search (iOS/macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=Spotlight & Look Up Search
-http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=Spotlight & Look Up Search
-# warm(unknown)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=warm(unknown)
-# render(unknown)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=render(unknown)
-# Flight Search(iOS/macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=Flight Search
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.search.request
+http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.search.response
+# warm (unknown)
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.warm.request
+# render (unknown)
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.render.request
+# Flight Search (iOS/macOS)
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.flight.request
 # Siri Infomation Card (macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=Siri Infomation Card
-http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=Siri Infomation Card
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.card.request
+http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.card.response
 
 [MITM]
 hostname = api*.smoot.apple.com, api*.smoot.apple.cn
