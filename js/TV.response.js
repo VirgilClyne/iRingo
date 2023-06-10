@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.1(4) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.1(7) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -183,6 +183,7 @@ const DataBase = {
 									break;
 								case "uts/v3/canvases/Roots/watchNow": // 立即观看
 								case "uts/v3/canvases/Channels/tvs.sbd.4000": // Apple TV+
+								case "uts/v3/canvases/Channels/tvs.sbd.7000": // MLS Season Pass
 									let shelves = body?.data?.canvas?.shelves;
 									if (shelves) {
 										shelves = shelves.map(shelf => {
@@ -202,6 +203,7 @@ const DataBase = {
 									break;
 								case "uts/v3/shelves/uts.col.UpNext": // 待播清單
 								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000": // Apple TV+ 待播節目
+								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.7000": // MLS Season Pass 待播節目
 								case "uts/v3/shelves/edt.col.62d7229e-d9a1-4f00-98e5-458c11ed3938": // 精選推薦
 									let shelf = body?.data?.shelf;
 									if (shelf?.items) {
@@ -254,9 +256,13 @@ const DataBase = {
 						case "umc-tempo-api.apple.com":
 							// 路径判断
 							switch (PATH) {
+								case "v3/register":
 								case "v3/channels/scoreboard":
 								case "v3/channels/scoreboard/":
 									$.log(JSON.stringify(body));
+									break;
+								default:
+									if (PATH.includes("v3/register/")) Type = "Sports";
 									break;
 							};
 							break;

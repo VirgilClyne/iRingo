@@ -9,17 +9,20 @@ icon: "https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5
 http:
   mitm:
     - "uts-api.itunes.apple.com"
+    - "umc-tempo-api.apple.com"
   script:
     - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
       name: TV.request
       type: request
       require-body: true
-      timeout: 10
     - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
       name: TV.response
       type: response
       require-body: true
-      timeout: 10
+    - match: ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/.*
+      name: TV.request
+      type: request
+      require-body: true
 
 script-providers:
   TV.request:

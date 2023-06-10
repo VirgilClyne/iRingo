@@ -8,5 +8,6 @@
 
 ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.* url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
 ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/.* url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
 
-hostname = uts-api.itunes.apple.com
+hostname = uts-api.itunes.apple.com, umc-tempo-api.apple.com
