@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 🔍 Siri v3.0.1(3) response");
+const $ = new Env(" iRingo: 🔍 Siri v3.0.1(4) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
 		},
 		"Configs":{
@@ -96,26 +96,22 @@ const DataBase = {
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 					break;
+				case "xml":
 				case "srv3":
 				case "text/xml":
 				case "application/xml":
 					break;
+				case "plist":
 				case "text/plist":
 				case "application/plist":
 				case "application/x-plist":
-					/*
-					if ($response.status === 200 || $response.statusCode === 200) {
-						body = await PLIST("plist2json", $response.body);
-						$.log(body);
-						$response.body = await PLIST("json2plist", body);
-					};
-					*/
 					break;
 				case "vtt":
 				case "webvtt":
 				case "text/vtt":
 				case "application/vtt":
 					break;
+				case "json":
 				case "json3":
 				case "text/json":
 				case "application/json":
@@ -129,8 +125,6 @@ const DataBase = {
 								case "bag": // 配置
 									body.enabled = true;
 									body.feedback_enabled = true;
-									//body.search_url = body?.search_url || "https:\/\/api-glb-apne1c.smoot.apple.com\/search";
-									//body.feedback_url = body?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
 									if (body?.enabled_domains) {
 										body.enabled_domains = [...new Set([...body?.enabled_domains ?? [], ...Settings.Domains])];
 										$.log(`🎉 ${$.name}, 领域列表`, `enabled_domains: ${JSON.stringify(body.enabled_domains)}`, "");
@@ -147,16 +141,10 @@ const DataBase = {
 											if (APP) {
 												APP.enabled = true;
 												APP.feedback_enabled = true;
-												//APP.min_query_len = 2;
-												//APP.search_render_timeout = 200;
-												//APP.first_use_description = "";
-												//APP.first_use_learn_more = "";
 											} else APP = { enabled: true, feedback_enabled: true };
 										});
 										let FlightUtilities = Overrides?.flightutilities;
 										if (FlightUtilities) {
-											//FlightUtilities.fallback_flight_url = "https:\/\/api-glb-aps1b.smoot.apple.com\/flight";
-											//FlightUtilities.flight_url = "https:\/\/api-glb-apse1c.smoot.apple.com\/flight";
 										};
 										let Lookup = Overrides?.lookup;
 										if (Lookup) {
@@ -186,22 +174,6 @@ const DataBase = {
 									// Safari Smart History
 									body.safari_smart_history_enabled = (Settings.Safari_Smart_History) ? true : false;
 									body.smart_history_feature_feedback_enabled = (Settings.Safari_Smart_History) ? true : false;
-									/*
-									if (body?.mescal_enabled) {
-										body.mescal_enabled = true;
-										body.mescal_version = 200;
-										body.mescal_cert_url = "https://init.itunes.apple.com/WebObjects/MZInit.woa/wa/signSapSetupCert";
-										body.mescal_setup_url = "https://play.itunes.apple.com/WebObjects/MZPlay.woa/wa/signSapSetup";
-									}
-									let smart_search_v2 = body?.smart_search_v2_parameters;
-									if (smart_search_v2) {
-										smart_search_v2.smart_history_score_v2_enabled = true;
-										smart_search_v2.smart_history_score_v2_enable_count = true;
-									};
-									body.session_experiment_metadata_enabled = true;
-									//body.sample_features = true;
-									//body.use_ledbelly = true;
-									*/
 									break;
 							};
 							break;
@@ -254,9 +226,14 @@ const DataBase = {
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
 						case "text/html":
+						case "m3u8":
+						case "application/x-mpegurl":
+						case "application/vnd.apple.mpegurl":
+						case "xml":
 						case "srv3":
 						case "text/xml":
 						case "application/xml":
+						case "plist":
 						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
@@ -264,12 +241,10 @@ const DataBase = {
 						case "webvtt":
 						case "text/vtt":
 						case "application/vtt":
+						case "json":
 						case "json3":
 						case "text/json":
 						case "application/json":
-						case "m3u8":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
 						default:
 							// 返回普通数据
 							$.done({ headers: $response.headers, body: $response.body });

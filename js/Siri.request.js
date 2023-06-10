@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 🔍 Siri v3.0.1(3) request");
+const $ = new Env(" iRingo: 🔍 Siri v3.0.1(4) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch": true,"Third-Party": true,"Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
 		},
 		"Configs":{
@@ -105,28 +105,25 @@ let $response = undefined;
 						case "application/x-mpegurl":
 						case "application/vnd.apple.mpegurl":
 							break;
+						case "xml":
 						case "srv3":
 						case "text/xml":
 						case "application/xml":
 							break;
+						case "plist":
 						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
-							//body = await PLIST("plist2json", $request.body);
-							//$.log(body);
-							//$request.body = await PLIST("json2plist", body);
 							break;
 						case "vtt":
 						case "webvtt":
 						case "text/vtt":
 						case "application/vtt":
 							break;
+						case "json":
 						case "json3":
 						case "text/json":
 						case "application/json":
-							//body = JSON.parse($request.body);
-							//$.log(body);
-							//$request.body = JSON.stringify(body);
 							break;
 						case "application/x-protobuf":
 						case "application/grpc":
@@ -248,9 +245,14 @@ let $response = undefined;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
 						case "text/html":
+						case "m3u8":
+						case "application/x-mpegurl":
+						case "application/vnd.apple.mpegurl":
+						case "xml":
 						case "srv3":
 						case "text/xml":
 						case "application/xml":
+						case "plist":
 						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
@@ -258,12 +260,10 @@ let $response = undefined;
 						case "webvtt":
 						case "text/vtt":
 						case "application/vtt":
+						case "json":
 						case "json3":
 						case "text/json":
 						case "application/json":
-						case "m3u8":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
 						default:
 							// 返回普通数据
 							$.done({ status: $response.status, headers: $response.headers, body: $response.body });
@@ -293,9 +293,14 @@ let $response = undefined;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
 						case "text/html":
+						case "m3u8":
+						case "application/x-mpegurl":
+						case "application/vnd.apple.mpegurl":
+						case "xml":
 						case "srv3":
 						case "text/xml":
 						case "application/xml":
+						case "plist":
 						case "text/plist":
 						case "application/plist":
 						case "application/x-plist":
@@ -303,12 +308,10 @@ let $response = undefined;
 						case "webvtt":
 						case "text/vtt":
 						case "application/vtt":
+						case "json":
 						case "json3":
 						case "text/json":
 						case "application/json":
-						case "m3u8":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
 						default:
 							// 返回普通数据
 							$.done({ url: $request.url, headers: $request.headers, body: $request.body })
