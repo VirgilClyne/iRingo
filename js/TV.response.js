@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(14) response");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(15) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -343,7 +343,7 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 	let assets = playable?.assets;
 	let itunesMediaApiData = playable?.itunesMediaApiData;
 	if (assets) assets = setUrl(assets, HLSUrl, ServerUrl);
-	if (itunesMediaApiData?.movieClips) itunesMediaApiData.offers = itunesMediaApiData.movieClips.map(movieClip => setUrl(movieClip, HLSUrl, ServerUrl));
+	if (itunesMediaApiData?.movieClips) itunesMediaApiData.movieClips = itunesMediaApiData.movieClips.map(movieClip => setUrl(movieClip, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.offers) itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => setUrl(offer, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.personalizedOffers) itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => setUrl(personalizedOffer, HLSUrl, ServerUrl));
 	$.log(`✅ ${$.name}, Set Playable Content`, "");
