@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.0.1(1) request.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(8) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -218,6 +218,11 @@ let $response = undefined;
 								case "uts/v2/brands/appleTvPlus":
 									Type = "Originals";
 									break;
+								case "uts/v3/canvases/Channels/tvs.sbd.7000":
+								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.7000":
+								case "uts/v3/shelves/edt.col.63bf2052-50b9-44c8-a67e-30e196e19c60":
+									Type = "Originals";
+									break;	
 								case "uts/v3/channels":
 								case "uts/v2/brands":
 									Type = "Channels";
@@ -231,6 +236,7 @@ let $response = undefined;
 									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
 									break;
 								case "uts/v3/canvases/Roots/sports":
+								case "uts/v3/shelves/uts.col.PersonalizedLiveSports":
 								case "uts/v3/clock-scores":
 								case "uts/v3/leagues":
 								case "uts/v2/sports/clockscore":
@@ -241,6 +247,7 @@ let $response = undefined;
 								case "uts/v2/sports/teamsNearMe":
 								case "uts/v3/canvases/Rooms/edt.item.633e0768-2135-43ac-a878-28965b853ec5": // FIFA World Cup 2022
 								case "uts/v3/canvases/Rooms/edt.item.635968ac-89d7-4619-8f5d-8c7890aef813": // NFL THANKSGIVING 2022
+								case "uts/v3/canvases/Rooms/edt.item.62327df1-6874-470e-98b2-a5bbeac509a2": // Friday Night Baseball - MLB - Apple TV+
 									Type = "Sports";
 									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
 									break;
@@ -268,29 +275,44 @@ let $response = undefined;
 								default:
 									//if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
 									if (url?.query?.ctx_brand === "tvs.sbd.4000") Type = "Originals";
-									else if (url.path.includes("uts/v3/canvases/Channels/")) Type = "Channels";
-									else if (url.path.includes("uts/v2/brands/")) Type = "Channels";
-									else if (url.path.includes("uts/v3/movies/")) Type = "Movies";
-									else if (url.path.includes("uts/v3/shows/")) Type = "TV";
-									else if (url.path.includes("uts/v3/sporting-events/")) Type = "Sports";
-									else if (url.path.includes("uts/v3/canvases/Sports/")) Type = "Sports";
-									else if (url.path.includes("uts/v3/canvases/Persons/")) Type = "Persons";
-									else if (url.path.includes("uts/v3/canvases/Rooms/")) Type = "Others";
-									//else if (url.path.includes("uts/v3/playables/")) Type = "Others";
-									//else if (url.path.includes("uts/v3/shelves/")) Type = "Others";
+									else if (PATH.includes("uts/v3/canvases/Channels/")) Type = "Channels";
+									else if (PATH.includes("uts/v2/brands/")) Type = "Channels";
+									else if (PATH.includes("uts/v3/movies/")) Type = "Movies";
+									else if (PATH.includes("uts/v3/shows/")) Type = "TV";
+									else if (PATH.includes("uts/v3/sporting-events/")) {
+										Type = "Sports";
+										if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+									}
+									else if (PATH.includes("uts/v3/canvases/Sports/")) {
+										Type = "Sports";
+										if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+									}
+									else if (PATH.includes("uts/v3/canvases/Persons/")) Type = "Persons";
+									else if (PATH.includes("uts/v3/canvases/Rooms/")) Type = "Others";
+									//else if (PATH.includes("uts/v3/playables/")) Type = "Others";
+									//else if (PATH.includes("uts/v3/shelves/")) Type = "Others";
 									else Type = "Others";
+									break;
+							};
+							break;
+						case "umc-tempo-api.apple.com":
+							switch (PATH) {
+								case "v3/register":
+								case "v3/channels/scoreboard":
+								case "v3/channels/scoreboard/":
+									Type = "Sports";
+									break;
+								default:
+									if (PATH.includes("v3/register/")) Type = "Sports";
 									break;
 							};
 							break;
 					};
 					$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
-					if ($request?.headers?.["x-apple-store-front"]) {
-						$request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type]))
-							? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]))
-							: $request.headers["x-apple-store-front"];
-					};
+					if ($request?.headers?.["X-Apple-Store-Front"]) $request.headers["X-Apple-Store-Front"] = (Configs.Storefront.get(Settings.CountryCode[Type])) ? $request.headers["X-Apple-Store-Front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type])) : $request.headers["X-Apple-Store-Front"];
+					if ($request?.headers?.["x-apple-store-front"]) $request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type])) ? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type])) : $request.headers["x-apple-store-front"];
 					if (url?.query?.sf) url.query.sf = Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.query.sf
-					if (url.query.locale) url.query.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.query.locale
+					if (url?.query?.locale) url.query.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.query.locale
 					$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url.query.sf}, locale = ${url.query.locale}`, "")
 					if ($request?.headers?.Host) $request.headers.Host = url.host;
 					$request.url = URL.stringify(url);
