@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(8) request.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(9) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -201,11 +201,11 @@ let $response = undefined;
 										if (url.query.country) url.query.country = Settings.CountryCode[Type] ?? url.query.country;
 										if (url.query.sfh) url.query.sfh = url.query.sfh.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]));
 									};
-									$.log(`🚧 ${$.name}, 调试信息`, `region = ${url.query.region}, country = ${url.query.country}, sfh = ${url.query.sfh}`, "")
+									$.log(`🚧 ${$.name}, 调试信息`, `region = ${url?.query?.region}, country = ${url?.query?.country}, sfh = ${url?.query?.sfh}`, "")
 									break;
 								case "uts/v3/user/settings":
 									Type = "Settings";
-									$.log(`🚧 ${$.name}, 调试信息`, `caller = ${url.query.caller}, pfm = ${url.query.pfm}, sf = ${url.query.sf}`, "")
+									$.log(`🚧 ${$.name}, 调试信息`, `caller = ${url?.query?.caller}, pfm = ${url?.query?.pfm}, sf = ${url?.query?.sf}`, "")
 									break;
 								case "uts/v3/canvases/Roots/watchNow":
 								case "uts/v3/canvases/roots/tahoma_watchnow":
@@ -313,7 +313,7 @@ let $response = undefined;
 					if ($request?.headers?.["x-apple-store-front"]) $request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type])) ? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type])) : $request.headers["x-apple-store-front"];
 					if (url?.query?.sf) url.query.sf = Configs.Storefront.get(Settings.CountryCode[Type]) ?? url.query.sf
 					if (url?.query?.locale) url.query.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? url.query.locale
-					$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url.query.sf}, locale = ${url.query.locale}`, "")
+					$.log(`🚧 ${$.name}, 调试信息`, `sf = ${url?.query?.sf}, locale = ${url?.query?.locale}`, "")
 					if ($request?.headers?.Host) $request.headers.Host = url.host;
 					$request.url = URL.stringify(url);
 					$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
