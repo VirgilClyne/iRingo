@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.1(1) request.beta");
+const $ = new Env(" iRingo: 📍 Location v3.0.1(2) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -297,7 +297,7 @@ let $response = undefined;
 						case "gspe35-ssl.ls.apple.cn":
 							switch (PATH) {
 								case "config/announcements":
-									switch (url.params.os) {
+									switch (url.query.os) {
 										case "ios":
 										case "ipados":
 										case "macos":
@@ -306,22 +306,22 @@ let $response = undefined;
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.environment = "prod";
+															url.query.environment = "prod";
 															break;
 														case "CN":
 														case undefined:
-															url.params.environment = "prod-cn";
+															url.query.environment = "prod-cn";
 															break;
 													};
 													break;
 												default:
-													url.params.environment = "prod-cn";
+													url.query.environment = "prod-cn";
 													break;
 												case "CN":
-													url.params.environment = "prod-cn";
+													url.query.environment = "prod-cn";
 													break;
 												case "XX":
-													url.params.environment = "prod";
+													url.query.environment = "prod";
 													break;
 											};
 											break;
@@ -330,22 +330,22 @@ let $response = undefined;
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.environment = "prod";
+															url.query.environment = "prod";
 															break;
 														case "CN":
 														case undefined:
-															url.params.environment = "prod-cn";
+															url.query.environment = "prod-cn";
 															break;
 													};
 													break;
 												default:
-													url.params.environment = "prod";
+													url.query.environment = "prod";
 													break;
 												case "CN":
-													url.params.environment = "prod-cn";
+													url.query.environment = "prod-cn";
 													break;
 												case "XX":
-													url.params.environment = "prod";
+													url.query.environment = "prod";
 													break;
 											};
 											break;
@@ -353,7 +353,7 @@ let $response = undefined;
 									await setETag("Announcements", Caches);
 									break;
 								case "geo_manifest/dynamic/config":
-									switch (url.params.os) {
+									switch (url.query.os) {
 										case "ios":
 										case "ipados":
 										case "macos":
@@ -362,16 +362,16 @@ let $response = undefined;
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.country_code = Caches?.pep?.gcc ?? "US";
+															url.query.country_code = Caches?.pep?.gcc ?? "US";
 															break;
 														case "CN":
 														case undefined:
-															url.params.country_code = "CN";
+															url.query.country_code = "CN";
 															break;
 													};
 													break;
 												default:
-													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN";
+													url.query.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN";
 													break;
 											};
 											break;
@@ -380,16 +380,16 @@ let $response = undefined;
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															url.params.country_code = Caches?.pep?.gcc ?? "US";
+															url.query.country_code = Caches?.pep?.gcc ?? "US";
 															break;
 														case "CN":
 														case undefined:
-															url.params.country_code = "CN";
+															url.query.country_code = "CN";
 															break;
 													};
 													break;
 												default:
-													url.params.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US";
+													url.query.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US";
 													break;
 											};
 											break;
