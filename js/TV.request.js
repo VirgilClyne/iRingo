@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(8) request");
+const $ = new Env(" iRingo: 📺 TV v3.1.0(10) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -233,7 +233,8 @@ let $response = undefined;
 								case "uts/v3/canvases/Rooms/edt.item.635968ac-89d7-4619-8f5d-8c7890aef813": // NFL THANKSGIVING 2022
 								case "uts/v3/canvases/Rooms/edt.item.62327df1-6874-470e-98b2-a5bbeac509a2": // Friday Night Baseball - MLB - Apple TV+
 									Type = "Sports";
-									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+									//if (Settings["Third-Party"])
+									url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
 									break;
 								case "uts/v3/canvases/Roots/kids":
 									Type = "Kids";
@@ -265,11 +266,13 @@ let $response = undefined;
 									else if (PATH.includes("uts/v3/shows/")) Type = "TV";
 									else if (PATH.includes("uts/v3/sporting-events/")) {
 										Type = "Sports";
-										if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+										//if (Settings["Third-Party"])
+										url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
 									}
 									else if (PATH.includes("uts/v3/canvases/Sports/")) {
 										Type = "Sports";
-										if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+										//if (Settings["Third-Party"])
+										url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
 									}
 									else if (PATH.includes("uts/v3/canvases/Persons/")) Type = "Persons";
 									else if (PATH.includes("uts/v3/canvases/Rooms/")) Type = "Others";

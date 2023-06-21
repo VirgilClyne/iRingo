@@ -1,7 +1,7 @@
 {
 	"Settings": {
 		"Switch": "true",
-		"Third-Party": true,
+		"Third-Party": false,
 		"HLSUrl": "play-edge.itunes.apple.com",
 		"ServerUrl": "play.itunes.apple.com",
 		"Tabs": [

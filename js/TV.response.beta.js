@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.1(7) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.1(8) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -194,7 +194,7 @@ const DataBase = {
 											body.data.applicationProps.featureEnablers["sports"] = true;
 											body.data.applicationProps.featureEnablers["sportsFavorites"] = true;
 											body.data.applicationProps.featureEnablers["unw"] = true;
-											body.data.applicationProps.featureEnablers["imageBasedSubtitles"] = false;
+											//body.data.applicationProps.featureEnablers["imageBasedSubtitles"] = false;
 											//body.data.applicationProps.featureEnablers["ageVerification"] = false;
 											//body.data.applicationProps.featureEnablers["seasonTitles"] = false;
 											//body.data.userProps.activeUser = true;
@@ -295,7 +295,7 @@ const DataBase = {
 									//body.channels.storeFront = "TAIWAN";
 									break;
 								default:
-									if (PATH.includes("v3/register/")) Type = "Sports";
+									//if (PATH.includes("v3/register/")) Type = "Sports";
 									break;
 							};
 							break;
