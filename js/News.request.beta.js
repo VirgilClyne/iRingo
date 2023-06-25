@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📰 News v3.0.1(6) request.beta");
+const $ = new Env(" iRingo: 📰 News v3.0.1(9) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -203,15 +203,16 @@ let $response = undefined;
 							switch (PATH) {
 								case "v1/search":
 									if (url?.query?.parsecParameters) {
-										$.log(`🚧 ${$.name}, 调试信息`, `url.query.parsecParameters: ${url.query.parsecParameters}`, "");
+										//$.log(`🚧 ${$.name}, 调试信息`, `url.query.parsecParameters: ${url.query.parsecParameters}`, "");
 										url.query.parsecParameters = decodeURIComponent(url.query.parsecParameters)
 										$.log(`🚧 ${$.name}, 调试信息`, `decodeURIComponent(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
 										url.query.parsecParameters = JSON.parse(url.query.parsecParameters);
-										$.log(`🚧 ${$.name}, 调试信息`, `JSON.parse(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										//$.log(`🚧 ${$.name}, 调试信息`, `JSON.parse(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										if (url.query.parsecParameters.storeFront) if (Settings.CountryCode !== "AUTO") url.query.parsecParameters.storeFront = url.query.parsecParameters.storeFront.replace(/[\d]{6}/, Configs.Storefront.get(Settings.CountryCode) ?? "143441");
 										url.query.parsecParameters = JSON.stringify(url.query.parsecParameters);
-										$.log(`🚧 ${$.name}, 调试信息`, `JSON.stringify(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										//$.log(`🚧 ${$.name}, 调试信息`, `JSON.stringify(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
 										url.query.parsecParameters = encodeURIComponent(url.query.parsecParameters);
-										$.log(`🚧 ${$.name}, 调试信息`, `encodeURIComponent(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										//$.log(`🚧 ${$.name}, 调试信息`, `encodeURIComponent(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
 									};
 									if (url?.query?.storefrontID) if (Settings.CountryCode !== "AUTO") url.query.storefrontID = Configs.Storefront.get(Settings.CountryCode) ?? "143441";
 									if (url?.query?.newsPlusUser) url.query.newsPlusUser = Settings?.newsPlusUser ?? true;		
