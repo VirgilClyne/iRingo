@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📰 News v3.0.0(4) request.beta");
+const $ = new Env(" iRingo: 📰 News v3.0.1(5) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -202,8 +202,19 @@ let $response = undefined;
 						case "news-client-search.apple.com":
 							switch (PATH) {
 								case "v1/search":
-									if (Settings.CountryCode !== "AUTO") url.query.storefrontID = Configs.Storefront.get(Settings.CountryCode) ?? "143441"
-									url.query.newsPlusUser = Settings?.newsPlusUser ?? true				
+									if (url?.query?.parsecParameters) {
+										$.log(`🚧 ${$.name}, 调试信息`, `url.query.parsecParameters: ${url.query.parsecParameters}`, "");
+										url.query.parsecParameters = decodeURIComponent(url.query.parsecParameters)
+										$.log(`🚧 ${$.name}, 调试信息`, `decodeURIComponent(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										url.query.parsecParameters = JSON.parse(url.query.parsecParameters);
+										$.log(`🚧 ${$.name}, 调试信息`, `JSON.parse(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										url.query.parsecParameters = JSON.stringify(url.query.parsecParameters);
+										$.log(`🚧 ${$.name}, 调试信息`, `JSON.stringify(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+										url.query.parsecParameters = encodeURIComponent(url.query.parsecParameters);
+										$.log(`🚧 ${$.name}, 调试信息`, `encodeURIComponent(url.query.parsecParameters): ${url.query.parsecParameters}`, "");
+									};
+									if (url?.query?.storefrontID) if (Settings.CountryCode !== "AUTO") url.query.storefrontID = Configs.Storefront.get(Settings.CountryCode) ?? "143441";
+									if (url?.query?.newsPlusUser) url.query.newsPlusUser = Settings?.newsPlusUser ?? true;		
 									break;
 							};
 							break;
