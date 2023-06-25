@@ -1,24 +1,36 @@
-name:  iRingo for 📰 News
-desc: (V2) 1.自定义解锁News的地区 2.Coming Soon…
+name: " iRingo: 📰 News"
+desc: |-
+  (BETA for Stash 2.0) 
+  1.自定义解锁News的地区
+  2.Coming Soon…
+  注：该覆写包含代理规则，使用过程中gateway.icloud.com会走与News相同的代理线路。
+openUrl: "http://boxjs.com/#/app/iRingo.News"
+author: "VirgilClyne"
+homepage: "https://github.com/VirgilClyne"
+manual: "https://github.com/VirgilClyne/iRingo/wiki/📰News"
+icon: "https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png"
 
 http:
   mitm:
+    - "news-edge.apple.com"
+    - "news-todayconfig-edge.apple.com"
+    - "news-sports-events.apple.com"
+    - "news-events.apple.com"
     - "news-client.apple.com"
     - "news-client-search.apple.com"
-    - "news-edge.apple.com"
-    - "news-events.apple.com"
-    - "news-assets.apple.com"
   script:
-    - match: ^https?:\/\/news-(edge|events)\.apple\.com\/(v1\/configs|analyticseventsv2\/async)(\?.*)?$
+    - match: ^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs(\?.*)?$
       name: News.request
       type: request
       require-body: true
-      timeout: 10
+    - match: ^https?:\/\/news(-sports)?-events\.apple\.com\/analyticseventsv2\/async(\?.*)?$
+      name: News.request
+      type: request
+      require-body: false
     - match: ^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?$
       name: News.request
       type: request
       require-body: false
-      timeout: 10
 
 script-providers:
   News.request:
