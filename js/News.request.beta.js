@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📰 News v3.0.1(9) request.beta");
+const $ = new Env(" iRingo: 📰 News v3.0.2(1) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -154,6 +154,7 @@ let $response = undefined;
 									};
 									break;
 								case "news-events.apple.com":
+								case "news-sports-events.apple.com":
 									switch (PATH) {
 										case "analyticseventsv2/async":
 											if (body?.data?.session?.mobileData) {
@@ -194,6 +195,7 @@ let $response = undefined;
 							};
 							break;
 						case "news-events.apple.com":
+						case "news-sports-events.apple.com":
 							switch (PATH) {
 								case "analyticseventsv2/async":
 									break;
