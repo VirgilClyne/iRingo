@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📰 News v3.0.0(3) request.beta");
+const $ = new Env(" iRingo: 📰 News v3.0.0(4) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -140,6 +140,7 @@ let $response = undefined;
 							// 主机判断
 							switch (HOST) {
 								case "news-edge.apple.com":
+								case "news-todayconfig-edge.apple.com":
 									// 路径判断
 									switch (PATH) {
 										case "v1/configs":
@@ -185,6 +186,7 @@ let $response = undefined;
 					// 主机判断
 					switch (HOST) {
 						case "news-edge.apple.com":
+						case "news-todayconfig-edge.apple.com":
 							// 路径判断
 							switch (PATH) {
 								case "v1/configs":
