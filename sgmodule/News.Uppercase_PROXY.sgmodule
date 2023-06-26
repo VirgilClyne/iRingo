@@ -7,6 +7,8 @@
 #!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
 
 [Rule]
+# > iCloud
+DOMAIN,gateway.icloud.com,PROXY
 # > News
 RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/News.list,PROXY
 
