@@ -6,8 +6,10 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/✈-TestFlight
 #!icon=https://github.com/Koolson/Qure/blob/master/IconSet/Color/TestFlight_2.png
 
+#[rewrite_local]
 # ✈ TestFlight
 ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js
 ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js
 
+#[mitm]
 hostname = testflight.apple.com

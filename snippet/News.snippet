@@ -7,11 +7,11 @@
 #!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
 
 #[rewrite_local]
-📰 News.v1.configs.request
+# 📰 News Configs
 ^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs(\?.*)?$ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
-📰 News.analyticseventsv2.async.request
+# 📰 News Event
 ^https?:\/\/news(-sports)?-events\.apple\.com\/analyticseventsv2\/async(\?.*)?$ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
-📰 News.v1.search.request
+# 📰 News Search
 ^https?:\/\/news-client-search\.apple\.com\/v1\/search(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
 
 #[mitm]

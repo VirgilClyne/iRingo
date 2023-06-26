@@ -6,8 +6,12 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/📺TV-app
 #!icon=https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5y3uwaibjm_large.png
 
+#[rewrite_local]
+# 📺 TV UTS
 ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.* url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
 ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+# 📺 TV UMC
 ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/.* url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
 
+#[mitm]
 hostname = uts-api.itunes.apple.com, umc-tempo-api.apple.com
