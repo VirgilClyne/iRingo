@@ -1784,10 +1784,10 @@
 				},
 				{
 					"id": "@iRingo.News.Settings.newsPlusUser",
-					"name": "是否News+用户",
+					"name": "[搜索]显示News+内容",
 					"val": true,
 					"type": "boolean",
-					"desc": "是否News+用户"
+					"desc": "是否显示News+搜索结果"
 				}
 			],
 			"author": "@VirgilClyne",
