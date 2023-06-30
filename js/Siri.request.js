@@ -140,6 +140,8 @@ let $response = undefined;
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
+				case undefined: // QX牛逼，script-echo-response不返回method
+				default:
 					const LOCALE = url.query.locale;
 					$.log(`🚧 ${$.name}, LOCALE: ${LOCALE}`, "");
 					if (url?.query?.card_locale) url.query.card_locale = LOCALE;

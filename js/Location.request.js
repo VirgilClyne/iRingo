@@ -135,6 +135,8 @@ let $response = undefined;
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
+				case undefined: // QX牛逼，script-echo-response不返回method
+				default:
 					// 主机判断
 					switch (HOST) {
 						case "configuration.ls.apple.com":
