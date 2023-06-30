@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ☁️ iCloud Private Relay v3.0.0(3) request.beta");
+const $ = new Env(" iRingo: ☁️ iCloud Private Relay v3.0.1(2) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -62,7 +62,7 @@ const DataBase = {
 	"TestFlight":{
 		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false,"Universal":true}
 	},
-	"Private_Relay":{
+	"PrivateRelay":{
 		"Settings":{"Switch":true,"CountryCode":"US","canUse":true}
 	},
 	"Default": {
@@ -78,7 +78,7 @@ let $response = undefined;
 
 /***************** Processing *****************/
 (async () => {
-	const { Settings, Caches, Configs } = await setENV("iRingo", "Private_Relay", DataBase);
+	const { Settings, Caches, Configs } = await setENV("iRingo", "PrivateRelay", DataBase);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
@@ -166,11 +166,13 @@ let $response = undefined;
 							// 路径判断
 							switch (PATH) {
 								case "v1/fetchAuthTokens":
-									await setETag("fetchAuthTokens", Caches);
+									$.lodash_set(Caches, "fetchAuthTokens.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
+									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
 									break;
 								case "v3_1/fetchConfigFile":
 								case "v3_2/fetchConfigFile":
-									await setETag("fetchConfigFile", Caches);
+									$.lodash_set(Caches, "fetchConfigFile.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
+									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
 							};
 							break;
 					};
@@ -319,20 +321,18 @@ function setENV(name, platforms, database) {
 /**
  * Set ETag
  * @author VirgilClyne
- * @param {String} name - Config Name
- * @param {Object} caches - Caches
- * @return {Promise<*>}
+ * @param {String} IfNoneMatch - If-None-Match
+ * @return {String} ETag - ETag
  */
-async function setETag(name, caches) {
-	$.log(`⚠ ${$.name}, Set ETag`, `caches.${name}.ETag = ${caches?.[name]?.ETag}`, "");
-	if (($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"]) !== caches?.[name]?.ETag) {
-		let newCaches = caches;
-		newCaches[name] = { "ETag": $request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"] }
-		$.setjson(newCaches, "@iRingo.Private_Relay.Caches");
-		if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-		if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+function setETag(IfNoneMatch, ETag) {
+	$.log(`☑️ ${$.name}, Set ETag`, `If-None-Match: ${IfNoneMatch}`, `ETag: ${ETag}`, "");
+	if (IfNoneMatch !== ETag) {
+		ETag = IfNoneMatch;
+		delete $request?.headers?.["If-None-Match"];
+		delete $request?.headers?.["if-none-match"];
 	}
-	return $.log(`🎉 ${$.name}, Set ETag`, `If-None-Match = ${$request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"]}`, "");
+	$.log(`✅ ${$.name}, Set ETag`, "");
+	return ETag;
 };
 
 /***************** Env *****************/

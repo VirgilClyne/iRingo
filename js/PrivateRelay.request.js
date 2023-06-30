@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ☁️ iCloud Private Relay v3.0.0(3) request");
+const $ = new Env(" iRingo: ☁️ iCloud Private Relay v3.0.1(2) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -62,7 +62,7 @@ const DataBase = {
 	"TestFlight":{
 		"Settings":{"Switch":true,"CountryCode":"US","MultiAccount":false,"Universal":true}
 	},
-	"Private_Relay":{
+	"PrivateRelay":{
 		"Settings":{"Switch":true,"CountryCode":"US","canUse":true}
 	},
 	"Default": {
@@ -78,7 +78,7 @@ let $response = undefined;
 
 /***************** Processing *****************/
 (async () => {
-	const { Settings, Caches, Configs } = await setENV("iRingo", "Private_Relay", DataBase);
+	const { Settings, Caches, Configs } = await setENV("iRingo", "PrivateRelay", DataBase);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
@@ -156,7 +156,6 @@ let $response = undefined;
 					// 主机判断
 					switch (HOST) {
 						case "mask-api.icloud.com":
-							//$.log(`🚧 ${$.name}`, `$request.headers: ${JSON.stringify($request.headers)}`, "");
 							//if ($request?.headers?.["X-Mask-User-Tier"]) $request.headers["X-Mask-User-Tier"] = "FREE"; //"SUBSCRIBER"
 							//if ($request?.headers?.["x-mask-user-tier"]) $request.headers["x-mask-user-tier"] = "FREE"; //"SUBSCRIBER"
 							if (Settings.CountryCode !== "AUTO") {
@@ -166,17 +165,18 @@ let $response = undefined;
 							// 路径判断
 							switch (PATH) {
 								case "v1/fetchAuthTokens":
-									await setETag("fetchAuthTokens", Caches);
+									$.lodash_set(Caches, "fetchAuthTokens.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
+									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
 									break;
 								case "v3_1/fetchConfigFile":
 								case "v3_2/fetchConfigFile":
-									await setETag("fetchConfigFile", Caches);
+									$.lodash_set(Caches, "fetchConfigFile.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
+									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
 							};
 							break;
 					};
 					if ($request?.headers?.Host) $request.headers.Host = url.host;
 					$request.url = URL.stringify(url);
-					//$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
 					break;
 				case "CONNECT":
 				case "TRACE":
@@ -193,7 +193,6 @@ let $response = undefined;
 			default: { // 有构造回复数据，返回构造的回复数据
 				const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `echo $response`, `FORMAT: ${FORMAT}`, "");
-				//$.log(`🚧 ${$.name}, finally`, `echo $response: ${JSON.stringify($response)}`, "");
 				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response?.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
 				if ($.isQuanX()) {
@@ -247,7 +246,6 @@ let $response = undefined;
 			case undefined: { // 无构造回复数据，发送修改的请求数据
 				const FORMAT = ($request?.headers?.["Content-Type"] ?? $request?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `$request`, `FORMAT: ${FORMAT}`, "");
-				//$.log(`🚧 ${$.name}, finally`, `$request: ${JSON.stringify($request)}`, "");
 				if ($.isQuanX()) {
 					switch (FORMAT) {
 						case undefined: // 视为无body
@@ -319,20 +317,18 @@ function setENV(name, platforms, database) {
 /**
  * Set ETag
  * @author VirgilClyne
- * @param {String} name - Config Name
- * @param {Object} caches - Caches
- * @return {Promise<*>}
+ * @param {String} IfNoneMatch - If-None-Match
+ * @return {String} ETag - ETag
  */
-async function setETag(name, caches) {
-	$.log(`⚠ ${$.name}, Set ETag`, `caches.${name}.ETag = ${caches?.[name]?.ETag}`, "");
-	if (($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"]) !== caches?.[name]?.ETag) {
-		let newCaches = caches;
-		newCaches[name] = { "ETag": $request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"] }
-		$.setjson(newCaches, "@iRingo.Private_Relay.Caches");
-		if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`
-		if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+function setETag(IfNoneMatch, ETag) {
+	$.log(`☑️ ${$.name}, Set ETag`, `If-None-Match: ${IfNoneMatch}`, `ETag: ${ETag}`, "");
+	if (IfNoneMatch !== ETag) {
+		ETag = IfNoneMatch;
+		delete $request?.headers?.["If-None-Match"];
+		delete $request?.headers?.["if-none-match"];
 	}
-	return $.log(`🎉 ${$.name}, Set ETag`, `If-None-Match = ${$request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"]}`, "");
+	$.log(`✅ ${$.name}, Set ETag`, "");
+	return ETag;
 };
 
 /***************** Env *****************/
