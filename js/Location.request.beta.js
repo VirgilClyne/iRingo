@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.0.1(2) request.beta");
+const $ = new Env(" iRingo: 📍 Location v3.0.2(4) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -156,7 +156,8 @@ let $response = undefined;
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
-									await setETag("Defaults", Caches);
+									$.lodash_set(Caches, "Defaults.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
+									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 							};
 							break;
@@ -350,7 +351,8 @@ let $response = undefined;
 											};
 											break;
 									};
-									await setETag("Announcements", Caches);
+									$.lodash_set(Caches, "Announcements.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Announcements?.ETag));
+									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 								case "geo_manifest/dynamic/config":
 									switch (url.query.os) {
@@ -394,7 +396,8 @@ let $response = undefined;
 											};
 											break;
 									};
-									await setETag("Dynamic", Caches);
+									$.lodash_set(Caches, "Dynamic.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
+									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 							};
 							break;
@@ -544,19 +547,18 @@ function setENV(name, platforms, database) {
 /**
  * Set ETag
  * @author VirgilClyne
- * @param {String} name - Config Name
- * @param {Object} caches - Caches
- * @return {Promise<*>}
+ * @param {String} IfNoneMatch - If-None-Match
+ * @return {String} ETag - ETag
  */
-async function setETag(name, caches) {
-	$.log(`⚠ ${$.name}, Set ETag`, `caches.${name}.ETag = ${caches?.[name]?.ETag}`, "");
-	if ($request?.headers?.["if-none-match"] !== caches?.[name]?.ETag) {
-		let newCaches = caches;
-		newCaches[name] = { "ETag": $request?.headers?.["if-none-match"] }
-		$.setjson(newCaches, "@iRingo.Location.Caches");
-		$request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`
+function setETag(IfNoneMatch, ETag) {
+	$.log(`☑️ ${$.name}, Set ETag`, `If-None-Match: ${IfNoneMatch}`, `ETag: ${ETag}`, "");
+	if (IfNoneMatch !== ETag) {
+		ETag = IfNoneMatch;
+		delete $request?.headers?.["If-None-Match"];
+		delete $request?.headers?.["if-none-match"];
 	}
-	return $.log(`🎉 ${$.name}, Set ETag`, `if-none-match = ${$request?.headers?.["if-none-match"]}`, "");
+	$.log(`✅ ${$.name}, Set ETag`, "");
+	return ETag;
 };
 
 /***************** Env *****************/
