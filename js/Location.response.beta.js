@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.0(2) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.0(3) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -341,7 +341,7 @@ function XMLs(opts) {
 		};
 		
 		constructor(opts) {
-			this.name = "XML v0.2.5";
+			this.name = "XML v0.2.6";
 			this.opts = opts;
 		};
 
@@ -403,8 +403,20 @@ function XMLs(opts) {
 							break;
 						case "!":
 							if (tag.substr(1, 7) === "[CDATA[" && tag.substr(-2) === "]]") {
+								$.log(`🚧 ${$.name}, parseXML`, `CDATA: ${tag.substr(8, tagLength - 10)}`, "");
 								// CDATA section
+								child.name = "!CDATA"; // CDATA
 								appendText(tag.substr(8, tagLength - 10));
+							/*
+							} else if (tag.substr(1, 7) === "DOCTYPE") {
+								const raws = tag.substr(1).split(" ");
+								$.log(`🚧 ${$.name}, parseXML`, `raws: ${JSON.stringify(raws)}`, "");
+								// DOCTYPE
+								child.name = "!DOCTYPE";
+								child.type = raws[1];
+								child.raw = raws[2];
+								appendChild(child);
+							*/
 							} else {
 								// comment
 								child.name = "!";
@@ -435,7 +447,8 @@ function XMLs(opts) {
 
 				function appendText(str) {
 					//str = removeSpaces(str);
-					str = str?.trim?.();
+					str = removeBreakLine(str);
+					//str = str?.trim?.();
 					if (str) appendChild(unescapeXML(str));
 				}
 
@@ -468,7 +481,7 @@ function XMLs(opts) {
 
 						if (raw) object = raw;
 						else if (tag) object = parseAttribute(tag, reviver);
-						else if (!children) object = elem.name;
+						else if (!children) object = { [elem.name]: undefined };
 						else object = {};
 						//$.log(`🚧 ${$.name}, toObject`, `object: ${JSON.stringify(object)}`, "");
 
@@ -499,8 +512,9 @@ function XMLs(opts) {
 					let attributes, val;
 
 					for (let i = 0; i < length; i++) {
-						//let str = removeSpaces(list[i]);
-						let str = list[i]?.trim?.();
+						let str = removeSpaces(list[i]);
+						//let str = removeBreakLine(list[i]);
+						//let str = list[i]?.trim?.();
 						if (!str) continue;
 
 						if (!attributes) {
@@ -546,11 +560,14 @@ function XMLs(opts) {
 				}
 			}
 
-			/*
-			function removeSpaces(str) {
-				return str && str.replace(/^\s+|\s+$/g, "");
+			function removeBreakLine(str) {
+				return str?.replace?.(/^(\r\n|\r|\n|\t)+|(\r\n|\r|\n|\t)+$/g, "");
 			}
-			*/
+
+			function removeSpaces(str) {
+				//return str && str.replace(/^\s+|\s+$/g, "");
+				return str?.trim?.();
+			}
 
 			function unescapeXML(str) {
 				return str.replace(/(&(?:lt|gt|amp|apos|quot|#(?:\d{1,6}|x[0-9a-fA-F]{1,5}));)/g, function (str) {
@@ -587,14 +604,15 @@ function XMLs(opts) {
 					let hasChild = false;
 					for (let name in Elem) {
 						if (name.charAt(0) === ATTRIBUTE_KEY) attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
-						//else if (Elem[name] === undefined) Name = name;
+						else if (Elem[name] === undefined) Name = name;
 						else hasChild = true;
 					}
 					xml += `${Ind}<${Name}${attribute}${(hasChild) ? "" : "/"}>`;
 					if (hasChild) {
 						for (let name in Elem) {
 							if (name == CHILD_NODE_KEY) xml += Elem[name];
-							else if (name == "#cdata") xml += `<![CDATA[${Elem[name]}]]>`;
+							else if (name == "!CDATA") xml += `<![CDATA[${Elem[name]}]]>`;
+							//else if (name == "!DOCTYPE") xml += `<!DOCTYPE ${Elem[name]}>`;
 							else if (name.charAt(0) != "@") xml += toXml(Elem[name], name, Ind + "\t");
 						}
 						xml += (xml.charAt(xml.length - 1) == "\n" ? Ind : "") + `</${Name}>`;
@@ -602,8 +620,7 @@ function XMLs(opts) {
 				} else if (typeof Elem === "string") {
 					if (Name === "?") xml += Ind + `<${Name}${Elem.toString()}${Name}>`;
 					else if (Name === "!") xml += Ind + `<!--${Elem.toString()}-->`;
-					//else xml += Ind + `<${Name}>${Elem.toString()}</${Name}>`;
-					else xml += Ind + `<${Name.toString()}/>`;
+					else xml += Ind + `<${Name}>${Elem.toString()}</${Name}>`;
 				} else if (typeof Elem === "undefined") xml += Ind + `<${Name.toString()}/>`;
 				return xml;
 			};
