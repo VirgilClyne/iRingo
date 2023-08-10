@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.0(3) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.0(28) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -341,7 +341,7 @@ function XMLs(opts) {
 		};
 		
 		constructor(opts) {
-			this.name = "XML v0.2.6";
+			this.name = "XML v0.3.0";
 			this.opts = opts;
 		};
 
@@ -439,10 +439,19 @@ function XMLs(opts) {
 							}
 							break;
 					}
-				}
 
-				function appendChild(child) {
-					elem.children.push(child);
+					function openTag(tag) {
+						const elem = { children: [] };
+						tag = tag.replace(/\s*\/?$/, "");
+						const pos = tag.search(/[\s='"\/]/);
+						if (pos < 0) {
+							elem.name = tag;
+						} else {
+							elem.name = tag.substr(0, pos);
+							elem.tag = tag.substr(pos);
+						}
+						return elem;
+					}
 				}
 
 				function appendText(str) {
@@ -450,20 +459,103 @@ function XMLs(opts) {
 					str = removeBreakLine(str);
 					//str = str?.trim?.();
 					if (str) appendChild(unescapeXML(str));
+
+					function removeBreakLine(str) {
+						return str?.replace?.(/^(\r\n|\r|\n|\t)+|(\r\n|\r|\n|\t)+$/g, "");
+					}
 				}
 
-				function openTag(tag) {
-					const elem = { children: [] };
-					tag = tag.replace(/\s*\/?$/, "");
-					const pos = tag.search(/[\s='"\/]/);
-					if (pos < 0) {
-						elem.name = tag;
-					} else {
-						elem.name = tag.substr(0, pos);
-						elem.tag = tag.substr(pos);
-					}
-					return elem;
+				function appendChild(child) {
+					elem.children.push(child);
 				}
+			}
+
+			function PlistToObject(elem, reviver) {
+				$.log(`🚧 ${$.name}, PlistToObject`, `elem: ${JSON.stringify(elem)}`, "");
+
+				let object;
+				switch (typeof elem) {
+					case "string":
+					case "undefined":
+						object = elem;
+						break;
+					case "object":
+						//default:
+						const raw = elem.raw;
+						const name = elem.name;
+						const tag = elem.tag;
+						const children = elem.children;
+
+						if (raw) object = raw;
+						else if (tag) object = parseAttribute(tag, reviver);
+						else if (!children) object = { [name]: undefined };
+						else object = {};
+						//object = {};
+						$.log(`🚧 ${$.name}, PlistToObject`, `object: ${JSON.stringify(object)}`, "");
+
+						switch (name) {
+							case "plist":
+								let plist = PlistToObject(children[0], reviver);
+								object = Object.assign(object, plist)
+								break;
+							case "dict":
+								let dict = children.map(child => PlistToObject(child, reviver));
+								$.log(`🚧 ${$.name}, PlistToObject`, `middle dict: ${JSON.stringify(dict)}`, "");								
+								dict = chunk(dict, 2);
+								object = Object.fromEntries(dict);
+								$.log(`🚧 ${$.name}, PlistToObject`, `after dict: ${JSON.stringify(dict)}`, "");
+								break;
+							case "array":
+								if (!Array.isArray(object)) object = [];
+								object = children.map(child => PlistToObject(child, reviver));
+								break;
+							case "key":
+								const key = children[0];
+								$.log(`🚧 ${$.name}, PlistToObject`, `key: ${key}`, "");
+								object = key;
+								break;
+							case "true":
+							case "false":
+								const boolean = name;
+								$.log(`🚧 ${$.name}, PlistToObject`, `boolean: ${boolean}`, "");
+								object = JSON.parse(name);
+								break;
+							case "integer":
+								const integer = children[0];
+								$.log(`🚧 ${$.name}, PlistToObject`, `integer: ${integer}`, "");
+								object = parseInt(children[0]);
+								break;
+							case "real":
+								const real = children[0];
+								$.log(`🚧 ${$.name}, PlistToObject`, `real: ${real}`, "");
+								object = parseFloat(children[0]);
+								break;
+							case "string":
+								const string = children[0];
+								$.log(`🚧 ${$.name}, PlistToObject`, `string: ${string}`, "");
+								object = children[0];
+								break;
+						};
+						if (reviver) object = reviver(name || "", object);
+						break;
+				}
+				$.log(`✅ ${$.name}, PlistToObject`, `object: ${JSON.stringify(object)}`, "");
+				return object;
+
+				/** 
+				 * Chunk Array
+				 * @author VirgilClyne
+				 * @param {Array} source - source
+				 * @param {Number} length - number
+				 * @return {Array<*>} target
+				 */
+				function chunk(source, length) {
+					$.log(`☑️ ${$.name}, Chunk Array`, "");
+					var index = 0, target = [];
+					while (index < source.length) target.push(source.slice(index, index += length));
+					$.log(`✅ ${$.name}, Chunk Array`, `target: ${JSON.stringify(target)}`, "");
+					return target;
+				};
 			}
 
 			function toObject(elem, reviver) {
@@ -476,17 +568,19 @@ function XMLs(opts) {
 					case "object":
 					//default:
 						const raw = elem.raw;
+						const name = elem.name;
 						const tag = elem.tag;
 						const children = elem.children;
 
 						if (raw) object = raw;
 						else if (tag) object = parseAttribute(tag, reviver);
-						else if (!children) object = { [elem.name]: undefined };
+						else if (!children) object = { [name]: undefined };
 						else object = {};
 						//$.log(`🚧 ${$.name}, toObject`, `object: ${JSON.stringify(object)}`, "");
 
 						if (children) children.forEach((child, i) => {
-							if (typeof child === "string") addObject(object, CHILD_NODE_KEY, toObject(child, reviver), undefined)
+							if (child.name === "plist") addObject(object, child.name, PlistToObject(child, reviver), undefined)
+							else if (typeof child === "string") addObject(object, CHILD_NODE_KEY, toObject(child, reviver), undefined)
 							else if (!child.tag && !child.children) addObject(object, child.name, toObject(child, reviver), children?.[i - 1]?.name)
 							else addObject(object, child.name, toObject(child, reviver), undefined)
 						});
@@ -500,7 +594,7 @@ function XMLs(opts) {
 						
 						//if (Object.keys(object).length === 0) addObject(object, elem.name, (elem.hasChild === false) ? null : "");
 						//if (Object.keys(object).length === 0) object = (elem.hasChild === false) ? undefined : "";
-						if (reviver) object = reviver(elem.name || "", object);
+						if (reviver) object = reviver(name || "", object);
 						break;
 				}
 				return object;
@@ -546,6 +640,11 @@ function XMLs(opts) {
 					}
 
 					return attributes;
+
+					function removeSpaces(str) {
+						//return str && str.replace(/^\s+|\s+$/g, "");
+						return str?.trim?.();
+					}
 				}
 
 				function addObject(object, key, val, prevKey = key) {
@@ -558,15 +657,6 @@ function XMLs(opts) {
 						else object[key] = val;
 					}
 				}
-			}
-
-			function removeBreakLine(str) {
-				return str?.replace?.(/^(\r\n|\r|\n|\t)+|(\r\n|\r|\n|\t)+$/g, "");
-			}
-
-			function removeSpaces(str) {
-				//return str && str.replace(/^\s+|\s+$/g, "");
-				return str?.trim?.();
 			}
 
 			function unescapeXML(str) {
