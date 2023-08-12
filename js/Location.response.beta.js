@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.1(7) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.1(10) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -345,7 +345,7 @@ function XMLs(opts) {
 		};
 		
 		constructor(opts) {
-			this.name = "XML v0.3.2";
+			this.name = "XML v0.3.3";
 			this.opts = opts;
 		};
 
@@ -387,7 +387,6 @@ function XMLs(opts) {
 				return root;
 
 				function parseNode(tag) {
-					const tagLength = tag.length;
 					let child = {};
 					switch (tag[0]) {
 						case "/":
@@ -400,37 +399,40 @@ function XMLs(opts) {
 							}
 							break;
 						case "?":
-							if (tag.substr(1, 3) === "xml") {
+							if (tag.slice(1, 4) === "xml") {
 								// XML declaration
 								child.name = "?xml";
-								child.raw = tag.substr(5, tagLength - 2);
+								child.raw = tag.slice(5, -1);
 								appendChild(child);
-								$.log(`🚧 ${$.name}, parseXML`, `XML declaration: ${tag.substr(1, tagLength - 2)}`, "");
+								$.log(`🚧 ${$.name}, parseXML`, `XML declaration raw: ${tag.slice(5, -1)}`, "");
 							};
 							break;
 						case "!":
-							if (tag.substr(1, 7) === "DOCTYPE") {
+							if (tag.slice(1, 8) === "DOCTYPE") {
 								// DOCTYPE section
 								child.name = "!DOCTYPE";
-								appendChild(tag.substr(8,-1));
-								$.log(`🚧 ${$.name}, parseXML`, `DOCTYPE: ${tag.substr(8)}`, "");
-							} else if (tag.substr(1, 7) === "[CDATA[" && tag.substr(-2) === "]]") {
+								child.raw = tag.slice(9);
+								appendChild(child);
+								$.log(`🚧 ${$.name}, parseXML`, `DOCTYPE raw: ${tag.slice(9)}`, "");
+							} else if (tag.slice(1, 8) === "[CDATA[" && tag.slice(-2) === "]]") {
 								// CDATA section
 								child.name = "!CDATA";
-								appendText(tag.substr(8, tagLength - 10));
-								$.log(`🚧 ${$.name}, parseXML`, `CDATA: ${tag.substr(8, tagLength - 10)}`, "");
-							} else {
-								// comment
-								child.name = "!";
-								child.raw = tag.substr(1);
+								child.raw = tag.slice(9, -2);
+								//appendText(tag.slice(9, -2));
 								appendChild(child);
-								$.log(`🚧 ${$.name}, parseXML`, `comment: ${tag.substr(1)}`, "");
+								$.log(`🚧 ${$.name}, parseXML`, `CDATA text: ${tag.slice(9, -2)}`, "");
+							} else {
+								// Comment section
+								child.name = "!";
+								child.raw = tag.slice(1);
+								appendChild(child);
+								$.log(`🚧 ${$.name}, parseXML`, `Comment raw: ${tag.slice(1)}`, "");
 							}
 							break;
 						default:
 							child = openTag(tag);
 							appendChild(child);
-							switch (tag[tagLength - 1]) {
+							switch (tag.slice(-1)) {
 								case "/":
 									//child.hasChild = false; // emptyTag
 									delete child.children; // emptyTag
@@ -570,12 +572,12 @@ function XMLs(opts) {
 						break;
 					case "object":
 					//default:
-						const type= elem.type;
 						const raw = elem.raw;
 						const name = elem.name;
 						const tag = elem.tag;
 						const children = elem.children;
 
+						//if (raw) object = raw;
 						if (raw) object = raw;
 						else if (tag) object = parseAttribute(tag, reviver);
 						else if (!children) object = { [name]: undefined };
@@ -585,7 +587,7 @@ function XMLs(opts) {
 						if (name === "plist") object = Object.assign(object, PlistToObject(children[0], reviver));
 						else if (children) children.forEach((child, i) => {
 							if (typeof child === "string") addObject(object, CHILD_NODE_KEY, toObject(child, reviver), undefined)
-							else if (!child.tag && !child.children) addObject(object, child.name, toObject(child, reviver), children?.[i - 1]?.name)
+							else if (!child.tag && !child.children && !child.raw) addObject(object, child.name, toObject(child, reviver), children?.[i - 1]?.name)
 							else addObject(object, child.name, toObject(child, reviver), undefined)
 						});
 
@@ -699,9 +701,6 @@ function XMLs(opts) {
 				*/
 				} else if (typeof Elem === "object") {
 					switch (Name) {
-						case "!DOCTYPE":
-							xml += `${Ind}<!DOCTYPE ${Elem.type} ${Elem.raw}>`;
-							break;
 						case "plist":
 							xml += `${Ind}${PlistToXml(Elem[Name], Name, `${Ind}\t`)}\n`;
 							break;
@@ -709,16 +708,26 @@ function XMLs(opts) {
 							let attribute = "";
 							let hasChild = false;
 							for (let name in Elem) {
-								if (name.charAt(0) === ATTRIBUTE_KEY) attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
+								if (name[0] === ATTRIBUTE_KEY) attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
 								else if (Elem[name] === undefined) Name = name;
 								else hasChild = true;
 							}
 							xml += `${Ind}<${Name}${attribute}${(hasChild) ? "" : "/"}>`;
 							if (hasChild) {
 								for (let name in Elem) {
-									if (name.charAt(0) != "@") xml += toXml(Elem[name], name, Ind + "\t");
+									switch (name) {
+										case CHILD_NODE_KEY:
+											xml += Elem[name];
+											break;
+										case "plist":
+											xml += `${Ind}${PlistToXml(Elem[name], name, `${Ind}\t`)}\n`;
+											break;
+										default:
+											if (name[0] != "@") xml += `${Ind}${toXml(Elem[name], name, `${Ind}\t`)}\n`;
+											break;
+									}
 								}
-								xml += (xml.charAt(xml.length - 1) == "\n" ? Ind : "") + `</${Name}>`;
+								xml += (xml.slice(-1) == "\n" ? Ind : "") + `</${Name}>`;
 							}
 							break;
 					}
@@ -732,6 +741,9 @@ function XMLs(opts) {
 							break;
 						case "!":
 							xml += Ind + `<!--${Elem.toString()}-->`;
+							break;
+						case "!DOCTYPE":
+							xml += Ind + `<!DOCTYPE ${Elem.toString()}>`;
 							break;
 						case "!CDATA":
 							xml += Ind + `<![CDATA[${Elem.toString()}]]>`;
