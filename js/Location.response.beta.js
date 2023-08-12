@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.1(5) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.1(7) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -345,7 +345,7 @@ function XMLs(opts) {
 		};
 		
 		constructor(opts) {
-			this.name = "XML v0.3.1";
+			this.name = "XML v0.3.2";
 			this.opts = opts;
 		};
 
@@ -400,32 +400,31 @@ function XMLs(opts) {
 							}
 							break;
 						case "?":
-							// XML declaration
-							child.name = "?";
-							child.raw = tag.substr(1, tagLength - 2);
-							appendChild(child);
+							if (tag.substr(1, 3) === "xml") {
+								// XML declaration
+								child.name = "?xml";
+								child.raw = tag.substr(5, tagLength - 2);
+								appendChild(child);
+								$.log(`🚧 ${$.name}, parseXML`, `XML declaration: ${tag.substr(1, tagLength - 2)}`, "");
+							};
 							break;
 						case "!":
-							if (tag.substr(1, 7) === "[CDATA[" && tag.substr(-2) === "]]") {
-								$.log(`🚧 ${$.name}, parseXML`, `CDATA: ${tag.substr(8, tagLength - 10)}`, "");
-								// CDATA section
-								child.name = "!CDATA"; // CDATA
-								appendText(tag.substr(8, tagLength - 10));
-							/*
-							} else if (tag.substr(1, 7) === "DOCTYPE") {
-								const raws = tag.substr(1).split(" ");
-								$.log(`🚧 ${$.name}, parseXML`, `raws: ${JSON.stringify(raws)}`, "");
-								// DOCTYPE
+							if (tag.substr(1, 7) === "DOCTYPE") {
+								// DOCTYPE section
 								child.name = "!DOCTYPE";
-								child.type = raws[1];
-								child.raw = raws[2];
-								appendChild(child);
-							*/
+								appendChild(tag.substr(8,-1));
+								$.log(`🚧 ${$.name}, parseXML`, `DOCTYPE: ${tag.substr(8)}`, "");
+							} else if (tag.substr(1, 7) === "[CDATA[" && tag.substr(-2) === "]]") {
+								// CDATA section
+								child.name = "!CDATA";
+								appendText(tag.substr(8, tagLength - 10));
+								$.log(`🚧 ${$.name}, parseXML`, `CDATA: ${tag.substr(8, tagLength - 10)}`, "");
 							} else {
 								// comment
 								child.name = "!";
 								child.raw = tag.substr(1);
 								appendChild(child);
+								$.log(`🚧 ${$.name}, parseXML`, `comment: ${tag.substr(1)}`, "");
 							}
 							break;
 						default:
@@ -571,6 +570,7 @@ function XMLs(opts) {
 						break;
 					case "object":
 					//default:
+						const type= elem.type;
 						const raw = elem.raw;
 						const name = elem.name;
 						const tag = elem.tag;
@@ -690,36 +690,62 @@ function XMLs(opts) {
 				let xml = "";
 				if (Array.isArray(Elem)) {
 					if (Name === "plist") xml += `${Ind}${PlistToXml(Elem[Name], Name, `${Ind}\t`)}\n`;
-					else for (var i=0, n=Elem.length; i<n; i++) xml += `${Ind}${toXml(Elem[i], Name, `${Ind}\t`)}\n`;
+					else for (var i = 0, n = Elem.length; i < n; i++) xml += `${Ind}${toXml(Elem[i], Name, `${Ind}\t`)}\n`;
 					/*
 					xml = Elem.reduce(
 						(prevXML, currXML) => prevXML += Ind + toXml(currXML, Name, `${Ind}\t`) + "\n",
 						""
-					)
-					*/
+					);
+				*/
 				} else if (typeof Elem === "object") {
-					let attribute = "";
-					let hasChild = false;
-					for (let name in Elem) {
-						if (name.charAt(0) === ATTRIBUTE_KEY) attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
-						else if (Elem[name] === undefined) Name = name;
-						else hasChild = true;
-					}
-					xml += `${Ind}<${Name}${attribute}${(hasChild) ? "" : "/"}>`;
-					if (hasChild) {
-						for (let name in Elem) {
-							if (name == CHILD_NODE_KEY) xml += Elem[name];
-							else if (name == "!CDATA") xml += `<![CDATA[${Elem[name]}]]>`;
-							//else if (name == "!DOCTYPE") xml += `<!DOCTYPE ${Elem[name]}>`;
-							else if (name === "plist") xml += PlistToXml(Elem[name], name, Ind + "\t");
-							else if (name.charAt(0) != "@") xml += toXml(Elem[name], name, Ind + "\t");
-						}
-						xml += (xml.charAt(xml.length - 1) == "\n" ? Ind : "") + `</${Name}>`;
+					switch (Name) {
+						case "!DOCTYPE":
+							xml += `${Ind}<!DOCTYPE ${Elem.type} ${Elem.raw}>`;
+							break;
+						case "plist":
+							xml += `${Ind}${PlistToXml(Elem[Name], Name, `${Ind}\t`)}\n`;
+							break;
+						default:
+							let attribute = "";
+							let hasChild = false;
+							for (let name in Elem) {
+								if (name.charAt(0) === ATTRIBUTE_KEY) attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
+								else if (Elem[name] === undefined) Name = name;
+								else hasChild = true;
+							}
+							xml += `${Ind}<${Name}${attribute}${(hasChild) ? "" : "/"}>`;
+							if (hasChild) {
+								for (let name in Elem) {
+									if (name.charAt(0) != "@") xml += toXml(Elem[name], name, Ind + "\t");
+								}
+								xml += (xml.charAt(xml.length - 1) == "\n" ? Ind : "") + `</${Name}>`;
+							}
+							break;
 					}
 				} else if (typeof Elem === "string") {
+					switch (Name) {
+						case "?xml":
+							xml += Ind + `<${Name} ${Elem.toString()}?>`;
+							break;
+						case "?":
+							xml += Ind + `<${Name}${Elem.toString()}${Name}>`;
+							break;
+						case "!":
+							xml += Ind + `<!--${Elem.toString()}-->`;
+							break;
+						case "!CDATA":
+							xml += Ind + `<![CDATA[${Elem.toString()}]]>`;
+						case CHILD_NODE_KEY:
+							xml += Elem;
+							break;
+						default:
+							xml += Ind + `<${Name}>${Elem.toString()}</${Name}>`;
+					};
+					/*
 					if (Name === "?") xml += Ind + `<${Name}${Elem.toString()}${Name}>`;
 					else if (Name === "!") xml += Ind + `<!--${Elem.toString()}-->`;
 					else xml += Ind + `<${Name}>${Elem.toString()}</${Name}>`;
+					*/
 				} else if (typeof Elem === "undefined") xml += Ind + `<${Name.toString()}/>`;
 				return xml;
 			};
@@ -739,7 +765,7 @@ function XMLs(opts) {
 					case "object":
 						if (Array.isArray(Elem)) {
 							xml += `${Ind}<array>\n`;
-							for (var i=0, n=Elem.length; i<n; i++) xml += `${Ind}${PlistToXml(Elem[i], Name, `${Ind}\t`)}\n`;
+							for (var i = 0, n = Elem.length; i < n; i++) xml += `${Ind}${PlistToXml(Elem[i], Name, `${Ind}\t`)}\n`;
 							xml += `${Ind}</array>\n`;
 						} else {
 							xml += `${Ind}<dict>\n`;
