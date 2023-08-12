@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.1(10) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.2(8) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -345,7 +345,7 @@ function XMLs(opts) {
 		};
 		
 		constructor(opts) {
-			this.name = "XML v0.3.3";
+			this.name = "XML v0.3.4";
 			this.opts = opts;
 		};
 
@@ -533,7 +533,8 @@ function XMLs(opts) {
 							case "real":
 								const real = children[0];
 								$.log(`🚧 ${$.name}, PlistToObject`, `real: ${real}`, "");
-								object = parseFloat(children[0]);
+								//const digits = real.split(".")[1]?.length || 0;
+								object = parseFloat(children[0])//.toFixed(digits);
 								break;
 							case "string":
 								const string = children[0];
@@ -691,67 +692,70 @@ function XMLs(opts) {
 			function toXml(Elem, Name, Ind) {
 				let xml = "";
 				if (Array.isArray(Elem)) {
-					if (Name === "plist") xml += `${Ind}${PlistToXml(Elem[Name], Name, `${Ind}\t`)}\n`;
+					/*
+					if (Name === "plist") xml += `${Ind}${toPlist(Elem[Name], Name, `${Ind}\t`)}\n`;
 					else for (var i = 0, n = Elem.length; i < n; i++) xml += `${Ind}${toXml(Elem[i], Name, `${Ind}\t`)}\n`;
+					*/
 					/*
 					xml = Elem.reduce(
 						(prevXML, currXML) => prevXML += Ind + toXml(currXML, Name, `${Ind}\t`) + "\n",
 						""
 					);
-				*/
+					*/
+					xml = Elem.reduce(
+						(prevXML, currXML) => prevXML += `${Ind}${toXml(currXML, Name, `${Ind}\t`)}\n`,
+						""
+					);
 				} else if (typeof Elem === "object") {
-					switch (Name) {
-						case "plist":
-							xml += `${Ind}${PlistToXml(Elem[Name], Name, `${Ind}\t`)}\n`;
-							break;
-						default:
-							let attribute = "";
-							let hasChild = false;
+					let attribute = "";
+					let hasChild = false;
+					for (let name in Elem) {
+						if (name[0] === ATTRIBUTE_KEY) {
+							attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
+							delete Elem[name];
+						} else if (Elem[name] === undefined) {
+							Name = name;
+						} else hasChild = true;
+					}
+					xml += `${Ind}<${Name}${attribute}${(hasChild) ? "" : "/"}>`;
+					if (hasChild) {
+						if (Name === "plist") xml += toPlist(Elem, Name, `${Ind}\t`);
+						else {
 							for (let name in Elem) {
-								if (name[0] === ATTRIBUTE_KEY) attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
-								else if (Elem[name] === undefined) Name = name;
-								else hasChild = true;
-							}
-							xml += `${Ind}<${Name}${attribute}${(hasChild) ? "" : "/"}>`;
-							if (hasChild) {
-								for (let name in Elem) {
-									switch (name) {
-										case CHILD_NODE_KEY:
-											xml += Elem[name];
-											break;
-										case "plist":
-											xml += `${Ind}${PlistToXml(Elem[name], name, `${Ind}\t`)}\n`;
-											break;
-										default:
-											if (name[0] != "@") xml += `${Ind}${toXml(Elem[name], name, `${Ind}\t`)}\n`;
-											break;
-									}
+								$.log(`🚧 ${$.name}, stringify XML`, `name: ${name}`, "")
+								switch (name) {
+									case CHILD_NODE_KEY:
+										xml += Elem[name];
+										break;
+									default:
+										xml += toXml(Elem[name], name, `${Ind}\t`);
+										break;
 								}
-								xml += (xml.slice(-1) == "\n" ? Ind : "") + `</${Name}>`;
 							}
-							break;
+						}
+						xml += (xml.slice(-1) === "\n" ? Ind : "") + `</${Name}>`;
 					}
 				} else if (typeof Elem === "string") {
 					switch (Name) {
 						case "?xml":
-							xml += Ind + `<${Name} ${Elem.toString()}?>`;
+							xml += `${Ind}<${Name} ${Elem.toString()}?>\n`;
 							break;
 						case "?":
-							xml += Ind + `<${Name}${Elem.toString()}${Name}>`;
+							xml += `${Ind}<${Name}${Elem.toString()}${Name}>`;
 							break;
 						case "!":
-							xml += Ind + `<!--${Elem.toString()}-->`;
+							xml += `${Ind}<!--${Elem.toString()}-->`;
 							break;
 						case "!DOCTYPE":
-							xml += Ind + `<!DOCTYPE ${Elem.toString()}>`;
+							xml += `${Ind}<!DOCTYPE ${Elem.toString()}>`;
 							break;
 						case "!CDATA":
-							xml += Ind + `<![CDATA[${Elem.toString()}]]>`;
+							xml += `${Ind}<![CDATA[${Elem.toString()}]]>`;
 						case CHILD_NODE_KEY:
 							xml += Elem;
 							break;
 						default:
-							xml += Ind + `<${Name}>${Elem.toString()}</${Name}>`;
+							xml += `${Ind}<${Name}>${Elem.toString()}</${Name}>`;
 					};
 					/*
 					if (Name === "?") xml += Ind + `<${Name}${Elem.toString()}${Name}>`;
@@ -761,35 +765,37 @@ function XMLs(opts) {
 				} else if (typeof Elem === "undefined") xml += Ind + `<${Name.toString()}/>`;
 				return xml;
 			};
-			function PlistToXml(Elem, Name, Ind) {
+			function toPlist(Elem, Name, Ind) {
+				$.log(`🚧 ${$.name}, toPlist`, `typeof Elem: ${typeof Elem}`, "");
+				$.log(`🚧 ${$.name}, toPlist`, `Elem: ${JSON.stringify(Elem)}`, "");
 				let xml = "";
 				switch (typeof Elem) {
 					case "boolean":
 						xml += `${Ind}<${Elem.toString()}/>`;
 						break;
 					case "number":
-						if (Elem.toString().includes(".")) xml += `${Ind}<real>${Elem.toString()}</real>\n`;
-						else xml += `${Ind}<integer>${Elem.toString()}</integer>\n`;
+						if (Elem.toString().includes(".")) xml += `${Ind}<real>${Elem.toString()}</real>`;
+						else xml += `${Ind}<integer>${Elem.toString()}</integer>`;
 						break;
 					case "string":
-						xml += `${Ind}<string>${Elem.toString()}</string>\n`;
+						xml += `${Ind}<string>${Elem.toString()}</string>`;
 						break;
 					case "object":
 						if (Array.isArray(Elem)) {
-							xml += `${Ind}<array>\n`;
-							for (var i = 0, n = Elem.length; i < n; i++) xml += `${Ind}${PlistToXml(Elem[i], Name, `${Ind}\t`)}\n`;
-							xml += `${Ind}</array>\n`;
+							xml += `${Ind}<array>`;
+							for (var i = 0, n = Elem.length; i < n; i++) xml += `${Ind}${toPlist(Elem[i], Name, `${Ind}\t`)}`;
+							xml += `${Ind}</array>`;
 						} else {
-							xml += `${Ind}<dict>\n`;
-							//for (let name in Elem) xml += PlistToXml(Elem[name], name, Ind + "\t");
+							let dict = ""
 							Object.entries(Elem).forEach(([key, value]) => {
-								xml += `${Ind}<key>${key}</key>\n`;
-								xml += PlistToXml(value, key, Ind);
+								dict += `${Ind}<key>${key}</key>`;
+								dict += toPlist(value, key, Ind);
 							});
-							xml += `${Ind}</dict>\n`;
+							xml += `${Ind}<dict>${dict}${Ind}</dict>`;
 						}
 						break;
 				}
+				$.log(`🚧 ${$.name}, toPlist`, `xml: ${xml}`, "");
 				return xml;
 			};
 		};
