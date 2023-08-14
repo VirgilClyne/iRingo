@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.2(9) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.2(12) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -343,26 +343,28 @@ function XMLs(opts) {
 		};
 		
 		constructor(opts) {
-			this.name = "XML v0.3.4";
+			this.name = "XML v0.3.5";
 			this.opts = opts;
+			BigInt.prototype.toJSON = () => this.toString();
 		};
 
 		parse(xml = new String, reviver = "") {
 			const UNESCAPE = this.#UNESCAPE;
 			const ATTRIBUTE_KEY = this.#ATTRIBUTE_KEY;
 			const CHILD_NODE_KEY = this.#CHILD_NODE_KEY;
-			$.log(`🚧 ${$.name}, parse XML`, "");
+			$.log(`☑️ ${$.name}, parse XML`, "");
 			let parsedXML = parseXML(xml);
-			$.log(`🚧 ${$.name}, parse XML`, `parseXML: ${JSON.stringify(parsedXML)}`, "");
+			//$.log(`🚧 ${$.name}, parse XML`, `parseXML: ${JSON.stringify(parsedXML)}`, "");
 			let json = toObject(parsedXML, reviver);
-			$.log(`🚧 ${$.name}, parse XML`, `json: ${JSON.stringify(json)}`, "");
+			//$.log(`🚧 ${$.name}, parse XML`, `json: ${JSON.stringify(json)}`, "");
 			return json;
 
 			/***************** Fuctions *****************/
 			function parseXML(text) {
+				$.log(`☑️ ${$.name}, parseXML`, "");
 				const list = text.split(/<([^!<>?](?:'[\S\s]*?'|"[\S\s]*?"|[^'"<>])*|!(?:--[\S\s]*?--|\[[^\[\]'"<>]+\[[\S\s]*?]]|DOCTYPE[^\[<>]*?\[[\S\s]*?]|(?:ENTITY[^"<>]*?"[\S\s]*?")?[\S\s]*?)|\?[\S\s]*?\?)>/);
+				//$.log(`🚧 ${$.name}, parseXML`, `list: ${JSON.stringify(list)}`, "");
 				const length = list.length;
-				$.log(`🚧 ${$.name}, parseXML`, `list: ${JSON.stringify(list)}`, "");
 
 				// root element
 				const root = { children: [] };
@@ -381,8 +383,9 @@ function XMLs(opts) {
 					const tag = list[i++];
 					if (tag) parseNode(tag);
 				}
-
+				//$.log(`✅ ${$.name}, parseXML`, `root: ${JSON.stringify(root)}`, "");
 				return root;
+				/********** function ***********/
 
 				function parseNode(tag) {
 					let child = {};
@@ -474,7 +477,8 @@ function XMLs(opts) {
 			}
 
 			function PlistToObject(elem, reviver) {
-				$.log(`🚧 ${$.name}, PlistToObject`, `elem: ${JSON.stringify(elem)}`, "");
+				//$.log(`☑️ ${$.name}, PlistToObject`, `typeof elem: ${typeof elem}`, "");
+				//$.log(`🚧 ${$.name}, PlistToObject`, `elem: ${JSON.stringify(elem)}`, "");
 
 				let object;
 				switch (typeof elem) {
@@ -494,7 +498,7 @@ function XMLs(opts) {
 						//else if (!children) object = { [name]: undefined };
 						//else object = {};
 						object = {};
-						$.log(`🚧 ${$.name}, PlistToObject`, `object: ${JSON.stringify(object)}`, "");
+						//$.log(`🚧 ${$.name}, PlistToObject`, `object: ${JSON.stringify(object)}`, "");
 
 						switch (name) {
 							case "plist":
@@ -503,10 +507,10 @@ function XMLs(opts) {
 								break;
 							case "dict":
 								let dict = children.map(child => PlistToObject(child, reviver));
-								$.log(`🚧 ${$.name}, PlistToObject`, `middle dict: ${JSON.stringify(dict)}`, "");
+								//$.log(`🚧 ${$.name}, PlistToObject`, `middle dict: ${JSON.stringify(dict)}`, "");
 								dict = chunk(dict, 2);
 								object = Object.fromEntries(dict);
-								$.log(`🚧 ${$.name}, PlistToObject`, `after dict: ${JSON.stringify(dict)}`, "");
+								//$.log(`🚧 ${$.name}, PlistToObject`, `after dict: ${JSON.stringify(dict)}`, "");
 								break;
 							case "array":
 								if (!Array.isArray(object)) object = [];
@@ -514,19 +518,20 @@ function XMLs(opts) {
 								break;
 							case "key":
 								const key = children[0];
-								$.log(`🚧 ${$.name}, PlistToObject`, `key: ${key}`, "");
+								//$.log(`🚧 ${$.name}, PlistToObject`, `key: ${key}`, "");
 								object = key;
 								break;
 							case "true":
 							case "false":
 								const boolean = name;
-								$.log(`🚧 ${$.name}, PlistToObject`, `boolean: ${boolean}`, "");
+								//$.log(`🚧 ${$.name}, PlistToObject`, `boolean: ${boolean}`, "");
 								object = JSON.parse(name);
 								break;
 							case "integer":
 								const integer = children[0];
 								$.log(`🚧 ${$.name}, PlistToObject`, `integer: ${integer}`, "");
-								object = parseInt(children[0]);
+								//object = parseInt(children[0]);
+								object = BigInt(children[0]);
 								break;
 							case "real":
 								const real = children[0];
@@ -536,14 +541,14 @@ function XMLs(opts) {
 								break;
 							case "string":
 								const string = children[0];
-								$.log(`🚧 ${$.name}, PlistToObject`, `string: ${string}`, "");
+								//$.log(`🚧 ${$.name}, PlistToObject`, `string: ${string}`, "");
 								object = children[0];
 								break;
 						};
 						if (reviver) object = reviver(name || "", object);
 						break;
 				}
-				$.log(`✅ ${$.name}, PlistToObject`, `object: ${JSON.stringify(object)}`, "");
+				//$.log(`✅ ${$.name}, PlistToObject`, `object: ${JSON.stringify(object)}`, "");
 				return object;
 
 				/** 
@@ -554,10 +559,10 @@ function XMLs(opts) {
 				 * @return {Array<*>} target
 				 */
 				function chunk(source, length) {
-					$.log(`☑️ ${$.name}, Chunk Array`, "");
+					//$.log(`☑️ ${$.name}, Chunk Array`, "");
 					var index = 0, target = [];
 					while (index < source.length) target.push(source.slice(index, index += length));
-					$.log(`✅ ${$.name}, Chunk Array`, `target: ${JSON.stringify(target)}`, "");
+					//$.log(`✅ ${$.name}, Chunk Array`, `target: ${JSON.stringify(target)}`, "");
 					return target;
 				};
 			}
@@ -680,11 +685,11 @@ function XMLs(opts) {
 			const ESCAPE = this.#ESCAPE;
 			const ATTRIBUTE_KEY = this.#ATTRIBUTE_KEY;
 			const CHILD_NODE_KEY = this.#CHILD_NODE_KEY;
-			$.log(`🚧 ${$.name}, stringify XML`, "");
+			$.log(`☑️ ${$.name}, stringify XML`, "");
 			let XML = "";
 			for (let elem in json) XML += toXml(json[elem], elem, "");
 			XML = tab ? XML.replace(/\t/g, tab) : XML.replace(/\t|\n/g, "");
-			$.log(`🚧 ${$.name}, stringify XML`, `XML: ${XML}`, "");
+			//$.log(`🚧 ${$.name}, stringify XML`, `XML: ${XML}`, "");
 			return XML;
 			/***************** Fuctions *****************/
 			function toXml(Elem, Name, Ind) {
@@ -764,16 +769,20 @@ function XMLs(opts) {
 				return xml;
 			};
 			function toPlist(Elem, Name, Ind) {
-				$.log(`🚧 ${$.name}, toPlist`, `typeof Elem: ${typeof Elem}`, "");
-				$.log(`🚧 ${$.name}, toPlist`, `Elem: ${JSON.stringify(Elem)}`, "");
+				$.log(`☑️ ${$.name}, toPlist`, `typeof Elem: ${typeof Elem}`, "");
+				//$.log(`🚧 ${$.name}, toPlist`, `Elem: ${JSON.stringify(Elem)}`, "");
 				let xml = "";
 				switch (typeof Elem) {
 					case "boolean":
 						xml += `${Ind}<${Elem.toString()}/>`;
 						break;
 					case "number":
-						if (Elem.toString().includes(".")) xml += `${Ind}<real>${Elem.toString()}</real>`;
-						else xml += `${Ind}<integer>${Elem.toString()}</integer>`;
+						xml += `${Ind}<real>${Elem.toString()}</real>`;
+						//if (Elem.toString().includes(".")) xml += `${Ind}<real>${Elem.toString()}</real>`;
+						//else xml += `${Ind}<integer>${Elem.toString()}</integer>`;
+						break;
+					case "bigint":
+						xml += `${Ind}<integer>${Elem.toString()}</integer>`;
 						break;
 					case "string":
 						xml += `${Ind}<string>${Elem.toString()}</string>`;
@@ -793,7 +802,7 @@ function XMLs(opts) {
 						}
 						break;
 				}
-				$.log(`🚧 ${$.name}, toPlist`, `xml: ${xml}`, "");
+				$.log(`✅ ${$.name}, toPlist`, `xml: ${xml}`, "");
 				return xml;
 			};
 		};
