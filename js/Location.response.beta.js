@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📍 Location v3.1.2(14) response.beta");
+const $ = new Env(" iRingo: 📍 Location v3.1.3(1) response.beta");
 const URL = new URLs();
 const XML = new XMLs();
 const DataBase = {
@@ -80,6 +80,7 @@ const DataBase = {
 		default:
 			let url = URL.parse($request?.url);
 			const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = url?.paths;
+			// 解析格式
 			const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
 			$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, `FORMAT: ${FORMAT}`, "");
 			// 创建空数据
@@ -109,6 +110,7 @@ const DataBase = {
 							break;
 					};
 					break;
+				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 					//body = M3U8.parse($response.body);
@@ -199,28 +201,6 @@ const DataBase = {
 							// 返回普通数据
 							$.done({ headers: $response.headers });
 							break;
-						case "application/x-www-form-urlencoded":
-						case "text/plain":
-						case "text/html":
-						case "m3u8":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
-						case "xml":
-						case "srv3":
-						case "text/xml":
-						case "application/xml":
-						case "plist":
-						case "text/plist":
-						case "application/plist":
-						case "application/x-plist":
-						case "vtt":
-						case "webvtt":
-						case "text/vtt":
-						case "application/vtt":
-						case "json":
-						case "json3":
-						case "text/json":
-						case "application/json":
 						default:
 							// 返回普通数据
 							$.done({ headers: $response.headers, body: $response.body });
@@ -228,7 +208,7 @@ const DataBase = {
 						case "application/x-protobuf":
 						case "application/grpc":
 						case "application/grpc+proto":
-						case "applecation/octet-stream":
+						//case "applecation/octet-stream":
 							// 返回二进制数据
 							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
 							$.done({ headers: $response.headers, bodyBytes: $response.bodyBytes.buffer.slice($response.bodyBytes.byteOffset, $response.bodyBytes.byteLength + $response.bodyBytes.byteOffset) });
@@ -248,7 +228,7 @@ const DataBase = {
  * Set Environment Variables
  * @author VirgilClyne
  * @param {String} name - Persistent Store Key
- * @param {Array} platforms - Platform Name
+ * @param {Array} platforms - Platform Names
  * @param {Object} database - Default DataBase
  * @return {Object} { Settings, Caches, Configs }
  */
