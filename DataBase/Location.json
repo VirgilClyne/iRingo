@@ -46,6 +46,8 @@
 				"OpticalHeading": true,
 				"UseCLPedestrianMapMatchedLocations": true,
 				"TransitPayEnabled": true,
+				"SupportsOffline": true,
+				"SupportsCarIntegration": true,
 				"WiFiQualityNetworkDisabled": false,
 				"WiFiQualityTileDisabled": false
 			}
