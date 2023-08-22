@@ -1,6 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
+
 const $ = new Env(" iRingo: 📍 Location v3.1.3(3) response");
 const URL = new URLs();
 const XML = new XMLs();
@@ -115,8 +116,8 @@ const DataBase = {
 				case "application/vnd.apple.mpegurl":
 					break;
 				case "text/xml":
-				case "application/xml":
 				case "text/plist":
+				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
 					body = XML.parse($response.body);
