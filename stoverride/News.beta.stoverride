@@ -14,6 +14,7 @@ rules:
   - DOMAIN,news-edge.apple.com,Proxy
   - DOMAIN,news-events.apple.com,Proxy
   - DOMAIN,apple.comscoreresearch.com,Proxy
+  - DOMAIN,gateway.icloud.com,Proxy
   - URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*,Proxy
 
 http:
