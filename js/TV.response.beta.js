@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.1(9) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.1.2(5) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -92,22 +92,19 @@ const DataBase = {
 				case "text/html":
 				default:
 					break;
-				case "m3u8":
+				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 					//body = M3U8.parse($response.body);
 					//$.log(`🚧 ${$.name}`, "M3U8.parse($response.body)", JSON.stringify(body), "");
 					//$response.body = M3U8.stringify(body);
 					break;
-				case "xml":
-				case "srv3":
 				case "text/xml":
 				case "application/xml":
 					//body = XML.parse($response.body);
 					//$.log(body);
 					//$response.body = XML.stringify(body);
 					break;
-				case "plist":
 				case "text/plist":
 				case "application/plist":
 				case "application/x-plist":
@@ -115,16 +112,12 @@ const DataBase = {
 					//$.log(body);
 					//$response.body = await PLIST("json2plist", body);
 					break;
-				case "vtt":
-				case "webvtt":
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
 					//$.log(body);
 					//$response.body = VTT.stringify(body);
 					break;
-				case "json":
-				case "json3":
 				case "text/json":
 				case "application/json":
 					body = JSON.parse($response.body);
@@ -328,28 +321,6 @@ const DataBase = {
 							// 返回普通数据
 							$.done({ headers: $response.headers });
 							break;
-						case "application/x-www-form-urlencoded":
-						case "text/plain":
-						case "text/html":
-						case "m3u8":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
-						case "xml":
-						case "srv3":
-						case "text/xml":
-						case "application/xml":
-						case "plist":
-						case "text/plist":
-						case "application/plist":
-						case "application/x-plist":
-						case "vtt":
-						case "webvtt":
-						case "text/vtt":
-						case "application/vtt":
-						case "json":
-						case "json3":
-						case "text/json":
-						case "application/json":
 						default:
 							// 返回普通数据
 							$.done({ headers: $response.headers, body: $response.body });
@@ -357,7 +328,7 @@ const DataBase = {
 						case "application/x-protobuf":
 						case "application/grpc":
 						case "application/grpc+proto":
-						case "applecation/octet-stream":
+						//case "applecation/octet-stream":
 							// 返回二进制数据
 							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
 							$.done({ headers: $response.headers, bodyBytes: $response.bodyBytes.buffer.slice($response.bodyBytes.byteOffset, $response.bodyBytes.byteLength + $response.bodyBytes.byteOffset) });
@@ -412,7 +383,17 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 		$.log(`☑️ ${$.name}, Set Url`, "");
 		if (asset?.hlsUrl) {
 			let hlsUrl = URL.parse(asset.hlsUrl);
-			hlsUrl.host = HLSUrl || "play-edge.itunes.apple.com";
+			switch (hlsUrl.path) {
+				case "WebObjects/MZPlay.woa/hls/playlist.m3u8":
+					//hlsUrl.host = HLSUrl || "play.itunes.apple.com";
+					break;
+				case "WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8":
+					hlsUrl.host = HLSUrl || "play-edge.itunes.apple.com";
+					break;
+				case "WebObjects/MZPlay.woa/hls/workout/playlist.m3u8":
+					//hlsUrl.host = HLSUrl || "play.itunes.apple.com";
+					break;
+			};
 			asset.hlsUrl = URL.stringify(hlsUrl);
 		};
 		if (asset?.fpsKeyServerUrl) {
