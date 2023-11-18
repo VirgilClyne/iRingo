@@ -7,7 +7,7 @@ openUrl: "http://boxjs.com/#/app/iRingo.TestFlight"
 author: "VirgilClyne"
 homepage: "https://github.com/VirgilClyne"
 manual: "https://github.com/VirgilClyne/iRingo/wiki/✈-TestFlight"
-icon: "https://github.com/Koolson/Qure/blob/master/IconSet/Color/TestFlight_2.png"
+icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TestFlight_2.png"
 
 http:
   mitm:
