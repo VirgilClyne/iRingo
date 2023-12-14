@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.1.0(12) request");
+const $ = new Env(" iRingo: 📺 TV v3.2.0(5) request");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,14 +22,17 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","Store","Movies","TV","Sports","Kids","Library","Search"],
-			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"TW","Movies":"AUTO","TV":"AUTO","Sports":"US","Kids":"US","Persons":"SG","Search":"TW","Others":"AUTO"}
+			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"AUTO","Sports":"US","Kids":"US","Store":"AUTO","Movies":"AUTO","TV":"US","Persons":"SG","Search":"AUTO","Others":"AUTO"}
 		},
 		"Configs":{
 			"Locale":[["AU","en-AU"],["CA","en-CA"],["GB","en-GB"],["KR","ko-KR"],["HK","yue-Hant"],["JP","ja-JP"],["MO","zh-Hant"],["TW","zh-Hant"],["US","en-US"],["SG","zh-Hans"]],
 			"Tabs": [
-				{ "title": "立即观看", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now"], "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" } },
-				{ "title": "原创内容", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"], "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" } },
+				{ "title": "主页", "type": "WatchNow", "universalLinks": ["https://tv.apple.com/watch-now", "https://tv.apple.com/home"], "destinationType": "Target", "target": { "id": "tahoma_watchnow", "type": "Root", "url": "https://tv.apple.com/watch-now" }, "isSelected": true },
+				{ "title": "Apple TV+", "type": "Originals", "universalLinks": ["https://tv.apple.com/channel/tvs.sbd.4000", "https://tv.apple.com/atv"], "destinationType": "Target", "target": { "id": "tvs.sbd.4000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.4000" } },
+				{ "title": "MLS Season Pass", "type": "MLS", "universalLinks": ["https://tv.apple.com/mls"], "destinationType": "Target", "target": { "id": "tvs.sbd.7000", "type": "Brand", "url": "https://tv.apple.com/us/channel/tvs.sbd.7000" } },
+				{ "title": "体育节目", "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"], "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" } },
+				{ "title": "儿童", "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"], "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" } },
 				{ "title": "电影", "type": "Movies", "universalLinks": ["https://tv.apple.com/movies"], "destinationType": "Target", "target": { "id": "tahoma_movies", "type": "Root", "url": "https://tv.apple.com/movies" } },
 				{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } },
 				{ "title": "商店", "type": "Store", "universalLinks": ["https://tv.apple.com/store"], "destinationType": "SubTabs", 
@@ -38,14 +41,12 @@ const DataBase = {
 						{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
 					]
 				},
-				{ "title": "体育节目", "type": "Sports", "universalLinks": ["https://tv.apple.com/sports"], "destinationType": "Target", "target": { "id": "tahoma_sports", "type": "Root", "url": "https://tv.apple.com/sports" } },
-				{ "title": "儿童", "type": "Kids", "universalLinks": ["https://tv.apple.com/kids"], "destinationType": "Target", "target": { "id": "tahoma_kids", "type": "Root", "url": "https://tv.apple.com/kids" } },
 				{ "title": "资料库", "type": "Library", "destinationType": "Client" },
 				{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
 			],
 			"i18n": {
-				"WatchNow": [["en", "Watch Now"], ["zh", "立即观看"], ["zh-Hans", "立即观看"], ["zh-Hant", "立即觀看"]],
-				"Originals": [["en", "Originals"], ["zh", "原创内容"], ["zh-Hans", "原创内容"], ["zh-Hant", "原創內容"]],
+				"WatchNow": [["en", "Home"], ["zh", "主页"], ["zh-Hans", "主頁"], ["zh-Hant", "主頁"]],
+				//"Originals": [["en", "Apple TV+"], ["zh", "Apple TV+"], ["zh-Hans", "Apple TV+"], ["zh-Hant", "Apple TV+"]],
 				"Movies": [["en", "Movies"], ["zh", "电影"], ["zh-Hans", "电影"], ["zh-Hant", "電影"]],
 				"TV": [["en", "TV"], ["zh", "电视节目"], ["zh-Hans", "电视节目"], ["zh-Hant", "電視節目"]],
 				"Store": [["en", "Store"], ["zh", "商店"], ["zh-Hans", "商店"], ["zh-Hant", "商店"]],
@@ -124,27 +125,20 @@ let $response = undefined;
 									break;
 							};
 							break;
-						case "m3u8":
+						case "application/x-mpegURL":
 						case "application/x-mpegurl":
 						case "application/vnd.apple.mpegurl":
+						case "audio/mpegurl":
 							break;
-						case "xml":
-						case "srv3":
 						case "text/xml":
-						case "application/xml":
-							break;
-						case "plist":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
 							break;
-						case "vtt":
-						case "webvtt":
 						case "text/vtt":
 						case "application/vtt":
 							break;
-						case "json":
-						case "json3":
 						case "text/json":
 						case "application/json":
 							body = JSON.parse($request.body);
@@ -185,6 +179,7 @@ let $response = undefined;
 					// 主机判断
 					switch (HOST) {
 						case "uts-api.itunes.apple.com":
+							const Version = parseInt(url?.query?.v, 10), Platform = url?.query?.pfm, Locale = ($request?.headers?.["X-Apple-I-Locale"] ?? $request?.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
 							// 路径判断
 							switch (PATH) {
 								case "uts/v3/configurations":
@@ -202,7 +197,7 @@ let $response = undefined;
 								case "uts/v3/canvases/roots/tahoma_watchnow":
 								case "uts/v3/shelves/uts.col.UpNext":
 									Type = "WatchNow";
-									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "appletv" : url.query.pfm;
+									if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "appletv" : Platform;
 									break;
 								case "uts/v3/canvases/Channels/tvs.sbd.4000":
 								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000":
@@ -218,14 +213,6 @@ let $response = undefined;
 								case "uts/v2/brands":
 									Type = "Channels";
 									break;
-								case "uts/v3/canvases/Roots/movies":
-									Type = "Movies";
-									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
-									break;
-								case "uts/v3/canvases/Roots/tv":
-									Type = "TV";
-									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
-									break;
 								case "uts/v3/canvases/Roots/sports":
 								case "uts/v3/shelves/uts.col.PersonalizedLiveSports":
 								case "uts/v3/clock-scores":
@@ -240,11 +227,22 @@ let $response = undefined;
 								case "uts/v3/canvases/Rooms/edt.item.635968ac-89d7-4619-8f5d-8c7890aef813": // NFL THANKSGIVING 2022
 								case "uts/v3/canvases/Rooms/edt.item.62327df1-6874-470e-98b2-a5bbeac509a2": // Friday Night Baseball - MLB - Apple TV+
 									Type = "Sports";
-									//if (Settings["Third-Party"])
-									url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+									if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									break;
 								case "uts/v3/canvases/Roots/kids":
 									Type = "Kids";
+									break;
+								case "uts/v3/canvases/Roots/store":
+								case "uts/v3/canvases/Roots/tahoma_store":
+									Type = "Store";
+									break;
+								case "uts/v3/canvases/Roots/movies":
+									Type = "Movies";
+									if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
+									break;
+								case "uts/v3/canvases/Roots/tv":
+									Type = "TV";
+									if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									break;
 								case "uts/v3/favorite-people":
 								case "uts/v3/favorite-teams":
@@ -253,6 +251,7 @@ let $response = undefined;
 								case "uts/v2/favorites/remove":
 									Type = "Sports";
 									break;
+								case "uts/v3/canvases/Roots/tahoma_searchlanding":
 								case "uts/v3/search":
 								case "uts/v3/search/landing":
 								case "uts/v2/search/incremental":
@@ -262,10 +261,10 @@ let $response = undefined;
 								case "uts/v3/watchlist":
 								case "uts/v2/watchlist/contains":
 								case "uts/v2/watchlist/search":
-									if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+									if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									break;
 								default:
-									//if (Settings["Third-Party"]) url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+									//if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									if (url?.query?.ctx_brand === "tvs.sbd.4000") Type = "Originals";
 									else if (PATH.includes("uts/v3/canvases/Channels/")) Type = "Channels";
 									else if (PATH.includes("uts/v2/brands/")) Type = "Channels";
@@ -274,12 +273,12 @@ let $response = undefined;
 									else if (PATH.includes("uts/v3/sporting-events/")) {
 										Type = "Sports";
 										//if (Settings["Third-Party"])
-										url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+										url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									}
 									else if (PATH.includes("uts/v3/canvases/Sports/")) {
 										Type = "Sports";
 										//if (Settings["Third-Party"])
-										url.query.pfm = (url.query.pfm === "desktop") ? "ipad" : url.query.pfm;
+										url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									}
 									else if (PATH.includes("uts/v3/canvases/Persons/")) Type = "Persons";
 									else if (PATH.includes("uts/v3/canvases/Rooms/")) Type = "Others";
