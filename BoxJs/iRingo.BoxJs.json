@@ -851,11 +851,12 @@
 					"val": [
 						"WatchNow",
 						"Originals",
+						"MLS",
+						"Sports",
+						"Kids",
 						"Store",
 						"Movies",
 						"TV",
-						"Sports",
-						"Kids",
 						"Library",
 						"Search"
 					],
@@ -864,11 +865,23 @@
 					"items": [
 						{
 							"key": "WatchNow",
-							"label": "立即观看"
+							"label": "主页(立即观看)"
 						},
 						{
 							"key": "Originals",
-							"label": "原创内容(TV+)"
+							"label": "Apple TV+/TV+(原创内容)"
+						},
+						{
+							"key": "MLS",
+							"label": "MLS Season Pass(旧版不支持)"
+						},
+						{
+							"key": "Sports",
+							"label": "体育节目(旧版为主页的二级菜单)"
+						},
+						{
+							"key": "Kids",
+							"label": "儿童(旧版为主页的二级菜单)"
 						},
 						{
 							"key": "Store",
@@ -876,19 +889,11 @@
 						},
 						{
 							"key": "Movies",
-							"label": "电影"
+							"label": "电影(旧版为主页的二级菜单)"
 						},
 						{
 							"key": "TV",
-							"label": "电视节目"
-						},
-						{
-							"key": "Sports",
-							"label": "体育节目"
-						},
-						{
-							"key": "Kids",
-							"label": "儿童"
+							"label": "电视节目(旧版为主页的二级菜单)"
 						},
 						{
 							"key": "Library",
@@ -1061,10 +1066,10 @@
 				},
 				{
 					"id": "@iRingo.TV.Settings.CountryCode.WatchNow",
-					"name": "[立即观看]国家或地区代码",
+					"name": "[主页(立即观看)]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
-					"desc": "“立即观看”栏目要更改为的地区或国家版本",
+					"desc": "“主页”栏目要更改为的地区或国家版本",
 					"items": [
 						{
 							"key": "AUTO",
@@ -1114,10 +1119,10 @@
 				},
 				{
 					"id": "@iRingo.TV.Settings.CountryCode.Originals",
-					"name": "[原创内容](TV+)国家或地区代码",
+					"name": "[Apple TV+/TV+(原创内容)]国家或地区代码",
 					"val": "TW",
 					"type": "selects",
-					"desc": "“原创内容”(TV+)栏目要更改为的地区或国家版本",
+					"desc": "“Apple TV+/TV+”栏目要更改为的地区或国家版本",
 					"items": [
 						{
 							"key": "AUTO",
@@ -1167,116 +1172,10 @@
 				},
 				{
 					"id": "@iRingo.TV.Settings.CountryCode.Channels",
-					"name": "[TV频道]国家或地区代码",
+					"name": "[频道 & Apps]国家或地区代码",
 					"val": "AUTO",
 					"type": "selects",
-					"desc": "“TV频道”栏目要更改为的地区或国家版本",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动(与当前登陆账号保持一致)"
-						},
-						{
-							"key": "CN",
-							"label": "中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "香港"
-						},
-						{
-							"key": "TW",
-							"label": "台湾"
-						},
-						{
-							"key": "SG",
-							"label": "新加坡"
-						},
-						{
-							"key": "US",
-							"label": "美国"
-						},
-						{
-							"key": "JP",
-							"label": "日本"
-						},
-						{
-							"key": "AU",
-							"label": "澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "英国"
-						},
-						{
-							"key": "KR",
-							"label": "韩国"
-						},
-						{
-							"key": "CA",
-							"label": "加拿大"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.TV.Settings.CountryCode.Movies",
-					"name": "[电影]国家或地区代码",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "“电影”栏目要更改为的地区或国家版本",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动(与当前登陆账号保持一致)"
-						},
-						{
-							"key": "CN",
-							"label": "中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "香港"
-						},
-						{
-							"key": "TW",
-							"label": "台湾"
-						},
-						{
-							"key": "SG",
-							"label": "新加坡"
-						},
-						{
-							"key": "US",
-							"label": "美国"
-						},
-						{
-							"key": "JP",
-							"label": "日本"
-						},
-						{
-							"key": "AU",
-							"label": "澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "英国"
-						},
-						{
-							"key": "KR",
-							"label": "韩国"
-						},
-						{
-							"key": "CA",
-							"label": "加拿大"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.TV.Settings.CountryCode.TV",
-					"name": "[电视节目]国家或地区代码",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "“电视节目”栏目要更改为的地区或国家版本",
+					"desc": "“频道 & Apps”栏目要更改为的地区或国家版本",
 					"items": [
 						{
 							"key": "AUTO",
@@ -1431,6 +1330,165 @@
 					]
 				},
 				{
+					"id": "@iRingo.TV.Settings.CountryCode.Store",
+					"name": "[商店]国家或地区代码",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "“商店”栏目要更改为的地区或国家版本",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.CountryCode.Movies",
+					"name": "[电影]国家或地区代码",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "“电影”栏目要更改为的地区或国家版本",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.CountryCode.TV",
+					"name": "[电视节目]国家或地区代码",
+					"val": "US",
+					"type": "selects",
+					"desc": "“电视节目”栏目要更改为的地区或国家版本",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动(与当前登陆账号保持一致)"
+						},
+						{
+							"key": "CN",
+							"label": "中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "香港"
+						},
+						{
+							"key": "TW",
+							"label": "台湾"
+						},
+						{
+							"key": "SG",
+							"label": "新加坡"
+						},
+						{
+							"key": "US",
+							"label": "美国"
+						},
+						{
+							"key": "JP",
+							"label": "日本"
+						},
+						{
+							"key": "AU",
+							"label": "澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "英国"
+						},
+						{
+							"key": "KR",
+							"label": "韩国"
+						},
+						{
+							"key": "CA",
+							"label": "加拿大"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.TV.Settings.CountryCode.Persons",
 					"name": "[人物]国家或地区代码",
 					"val": "SG",
@@ -1486,7 +1544,7 @@
 				{
 					"id": "@iRingo.TV.Settings.CountryCode.Search",
 					"name": "[搜索]国家或地区代码",
-					"val": "TW",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“搜索”栏目要更改为的地区或国家版本",
 					"items": [
