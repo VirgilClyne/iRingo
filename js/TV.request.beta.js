@@ -240,7 +240,8 @@ let $response = undefined;
 								case "uts/v3/canvases/Rooms/edt.item.635968ac-89d7-4619-8f5d-8c7890aef813": // NFL THANKSGIVING 2022
 								case "uts/v3/canvases/Rooms/edt.item.62327df1-6874-470e-98b2-a5bbeac509a2": // Friday Night Baseball - MLB - Apple TV+
 									Type = "Sports";
-									if (Settings["Third-Party"]) url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
+									//if (Settings["Third-Party"]) 
+									url.query.pfm = (Platform === "desktop") ? "ipad" : Platform;
 									break;
 								case "uts/v3/canvases/Roots/kids":
 									Type = "Kids";
