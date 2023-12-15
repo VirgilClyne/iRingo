@@ -1438,7 +1438,7 @@
 				{
 					"id": "@iRingo.TV.Settings.CountryCode.TV",
 					"name": "[电视节目]国家或地区代码",
-					"val": "US",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "“电视节目”栏目要更改为的地区或国家版本",
 					"items": [
