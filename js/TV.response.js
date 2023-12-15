@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.2.0(6) response");
+const $ = new Env(" iRingo: 📺 TV v3.2.0(7) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -249,6 +249,7 @@ const DataBase = {
 													switch (PATHs[2]) {
 														case "movies": // uts/v3/movies/
 														case "shows": // uts/v3/shows/
+														case "sporting-events": // uts/v3/sporting-events/
 															let shelves = body?.data?.canvas?.shelves;
 															let backgroundVideo = body?.data?.content?.backgroundVideo;
 															let playables = body?.data?.playables;
