@@ -38,6 +38,13 @@
 					{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
 				]
 			},
+			{
+				"title": "频道和 App",
+				"destinationType": "SubTabs",
+				"subTabsPlacementType": "ExpandedList",
+				"type": "ChannelsAndApps",
+				"subTabs": []
+			},
 			{ "title": "资料库", "type": "Library", "destinationType": "Client" },
 			{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
 		],
