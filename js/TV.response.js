@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.2.0(7) response");
+const $ = new Env(" iRingo: 📺 TV v3.2.1(3) response");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Store","Movies","TV","Sports","Kids","ChannelsAndApps","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"AUTO","Sports":"US","Kids":"US","Store":"AUTO","Movies":"AUTO","TV":"AUTO","Persons":"SG","Search":"AUTO","Others":"AUTO"}
 		},
 		"Configs":{
@@ -41,17 +41,21 @@ const DataBase = {
 						{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
 					]
 				},
+				{
+					"title": "频道和 App", "type": "ChannelsAndApps", "destinationType": "SubTabs", "subTabsPlacementType": "ExpandedList",
+					"subTabs": []
+				},
 				{ "title": "资料库", "type": "Library", "destinationType": "Client" },
 				{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
 			],
 			"i18n": {
 				"WatchNow": [["en", "Home"], ["zh", "主页"], ["zh-Hans", "主頁"], ["zh-Hant", "主頁"]],
-				//"Originals": [["en", "Apple TV+"], ["zh", "Apple TV+"], ["zh-Hans", "Apple TV+"], ["zh-Hant", "Apple TV+"]],
 				"Movies": [["en", "Movies"], ["zh", "电影"], ["zh-Hans", "电影"], ["zh-Hant", "電影"]],
 				"TV": [["en", "TV"], ["zh", "电视节目"], ["zh-Hans", "电视节目"], ["zh-Hant", "電視節目"]],
 				"Store": [["en", "Store"], ["zh", "商店"], ["zh-Hans", "商店"], ["zh-Hant", "商店"]],
 				"Sports": [["en", "Sports"], ["zh", "体育节目"], ["zh-Hans", "体育节目"], ["zh-Hant", "體育節目"]],
 				"Kids": [["en", "Kids"], ["zh", "儿童"], ["zh-Hans", "儿童"], ["zh-Hant", "兒童"]],
+				"ChannelsAndApps": [["en", "Channels & Apps"], ["zh", "频道和 App"], ["zh-Hans", "频道和 App"], ["zh-Hant", "頻道和 App"]],
 				"Library": [["en", "Library"], ["zh", "资料库"], ["zh-Hans", "资料库"], ["zh-Hant", "資料庫"]],
 				"Search": [["en", "Search"], ["zh", "搜索"], ["zh-Hans", "搜索"], ["zh-Hant", "蒐索"]]
 			}
@@ -125,8 +129,15 @@ const DataBase = {
 									if (url.query.caller !== "wta") { // 不修改caller=wta的configurations数据
 										$.log(`⚠ ${$.name}`, `Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
 										if (body?.data?.applicationProps) {
-											body.data.applicationProps.tabs = Configs.Tabs.map(tab => {
-												if (Settings.Tabs.includes(tab?.type)) {
+											let newTabs = [];
+											Settings.Tabs.forEach((type) => {
+												if (body.data.applicationProps.tabs.some(Tab => Tab?.type === type)) {
+													let tab = body.data.applicationProps.tabs.find(Tab => Tab?.type === type);
+													let index = body.data.applicationProps.tabs.findIndex(Tab => Tab?.type === type);
+													if (index === 0) newTabs.unshift(tab);
+													else newTabs.push(tab);
+												} else if (Configs.Tabs.some(Tab => Tab?.type === type)) {
+													let tab = Configs.Tabs.find(Tab => Tab?.type === type);
 													switch (tab?.destinationType) {
 														case "SubTabs":
 															tab.subTabs = tab.subTabs.map(subTab => {
@@ -141,22 +152,24 @@ const DataBase = {
 													switch (tab?.type) {
 														case "WatchNow":
 														case "Originals":
-															return tab;
+															newTabs.push(tab);
+															break;
 														case "Store":
 															if (Version >= 54) {
 																if (Version >= 74) {
-																tab.destinationType = "Target";
-																tab.target = { "id": "tahoma_store", "type": "Root", "url": "https://tv.apple.com/store" };
-																tab.universalLinks = ["https://tv.apple.com/store", "https://tv.apple.com/movies", "https://tv.apple.com/tv-shows"];
-																delete tab?.subTabs;
-															}
-															return tab;
-														} else return;
+																	tab.destinationType = "Target";
+																	tab.target = { "id": "tahoma_store", "type": "Root", "url": "https://tv.apple.com/store" };
+																	tab.universalLinks = ["https://tv.apple.com/store", "https://tv.apple.com/movies", "https://tv.apple.com/tv-shows"];
+																	delete tab?.subTabs;
+																}
+																newTabs.push(tab);
+															};
+															break;
 														case "Movies":
 														case "TV":
 															if (Version < 54) tab.secondaryEnabled = true;
-															if (Version < 54) return tab;
-															else return;
+															if (Version < 54) newTabs.push(tab);
+															break;
 														case "MLS":
 															if (Version >= 64) {
 																switch (Platform) {
@@ -165,15 +178,16 @@ const DataBase = {
 																	case "appletv":
 																	case "desktop":
 																	default:
-																		return tab;
+																		newTabs.push(tab);
 																	case "iphone":
 																		return;
 																};
-															} else return;
+															};
+															break;
 														case "Sports":
 														case "Kids":
 															if (Version < 54) tab.secondaryEnabled = true;
-															if (Version < 54) return tab;
+															if (Version < 54) newTabs.push(tab);
 															else {
 																switch (Platform) {
 																	case "atv":
@@ -181,26 +195,40 @@ const DataBase = {
 																	case "appletv":
 																	case "desktop":
 																	default:
-																		return tab;
+																		newTabs.push(tab);
+																		break;
 																	case "iphone":
-																		return;
+																		break;;
 																};
 															};
+															break;
 														case "Search":
 															if (Version >= 74) tab.target.id = "tahoma_searchlanding";
-															return tab;
+															newTabs.push(tab);
+															break;
+														case "ChannelsAndApps":
+															if (Version >= 74) {
+																switch (Platform) {
+																	case "atv":
+																	case "ipad":
+																	case "appletv":
+																		newTabs.push(tab);
+																		break;
+																	case "desktop":
+																	case "iphone":
+																	default:
+																		break;
+																};
+															};
+															break;
 														case "Library":
 														default:
-															return tab;
+															newTabs.push(tab);
+															break;
 													};
 												};
-											}).filter(Boolean);
-											$.log(JSON.stringify(body.data.applicationProps.tabs));
-											body.data.applicationProps.tvAppEnabledInStorefront = true;
-											body.data.applicationProps.featureEnablers["topShelf"] = true;
-											body.data.applicationProps.featureEnablers["sports"] = true;
-											body.data.applicationProps.featureEnablers["sportsFavorites"] = true;
-											body.data.applicationProps.featureEnablers["unw"] = true;
+											});
+											body.data.applicationProps.tabs = newTabs;
 										};
 									};
 									break;
