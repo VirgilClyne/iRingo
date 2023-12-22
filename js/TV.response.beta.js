@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.2.1(3) response.beta");
+const $ = new Env(" iRingo: 📺 TV v3.2.1(4) response.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Store","Movies","TV","Sports","Kids","ChannelsAndApps","Library","Search"],
+			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Sports","Kids","Store","Movies","TV","ChannelsAndApps","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"AUTO","Sports":"US","Kids":"US","Store":"AUTO","Movies":"AUTO","TV":"AUTO","Persons":"SG","Search":"AUTO","Others":"AUTO"}
 		},
 		"Configs":{

@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: 📺 TV v3.2.0(5) request.beta");
+const $ = new Env(" iRingo: 📺 TV v3.2.0(6) request.beta");
 const URL = new URLs();
 const DataBase = {
 	"Location":{
@@ -22,7 +22,7 @@ const DataBase = {
 	},
 	"TV":{
 		"Settings": {
-			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Store","Movies","TV","Sports","Kids","Library","Search"],
+			"Switch":true,"Third-Party":false,"HLSUrl":"play-edge.itunes.apple.com","ServerUrl":"play.itunes.apple.com","Tabs":["WatchNow","Originals","MLS","Sports","Kids","Store","Movies","TV","ChannelsAndApps","Library","Search"],
 			"CountryCode":{"Configs":"AUTO","Settings":"AUTO","View":["SG","TW"],"WatchNow":"AUTO","Channels":"AUTO","Originals":"AUTO","Sports":"US","Kids":"US","Store":"AUTO","Movies":"AUTO","TV":"AUTO","Persons":"SG","Search":"AUTO","Others":"AUTO"}
 		},
 		"Configs":{
@@ -41,6 +41,10 @@ const DataBase = {
 						{ "title": "电视节目", "type": "TV", "universalLinks": ["https://tv.apple.com/tv-shows"], "destinationType": "Target", "target": { "id": "tahoma_tvshows", "type": "Root", "url": "https://tv.apple.com/tv-shows" } }
 					]
 				},
+				{
+					"title": "频道和 App", "type": "ChannelsAndApps", "destinationType": "SubTabs", "subTabsPlacementType": "ExpandedList",
+					"subTabs": []
+				},
 				{ "title": "资料库", "type": "Library", "destinationType": "Client" },
 				{ "title": "搜索", "type": "Search", "universalLinks": ["https://tv.apple.com/search"], "destinationType": "Target", "target": { "id": "tahoma_search", "type": "Root", "url": "https://tv.apple.com/search" } }
 			],
@@ -52,6 +56,7 @@ const DataBase = {
 				"Store": [["en", "Store"], ["zh", "商店"], ["zh-Hans", "商店"], ["zh-Hant", "商店"]],
 				"Sports": [["en", "Sports"], ["zh", "体育节目"], ["zh-Hans", "体育节目"], ["zh-Hant", "體育節目"]],
 				"Kids": [["en", "Kids"], ["zh", "儿童"], ["zh-Hans", "儿童"], ["zh-Hant", "兒童"]],
+				"ChannelsAndApps": [["en", "Channels & Apps"], ["zh", "频道和 App"], ["zh-Hans", "频道和 App"], ["zh-Hant", "頻道和 App"]],
 				"Library": [["en", "Library"], ["zh", "资料库"], ["zh-Hans", "资料库"], ["zh-Hant", "資料庫"]],
 				"Search": [["en", "Search"], ["zh", "搜索"], ["zh-Hans", "搜索"], ["zh-Hant", "蒐索"]]
 			}
