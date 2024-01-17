@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(5) request");
+const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(6) request");
 const URI = new URIs();
 const DataBase = {
 	"Location":{
@@ -245,35 +245,34 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																	case undefined:
 																	default:
 																		switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.test(PATHs[2])) {
-																			case true: // URL.path有UUID但与accountId不同
-																				$.log(`⚠ ${$.name}, accountId不同，替换`, "");
-																				URL.path = URL.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+																			case true: // PATHs[2]是UUID
+																				$.log(`⚠ ${$.name}, PATHs[2]是UUID，替换URL.path`, "");
+																				URL.path = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
 																				//break; // 不中断，继续处理
-																			case false: // URL.path没有UUID
-																				$.log(`⚠ ${$.name}, URL.path没有UUID`, "");
+																				case false: // PATHs[2]不是UUID
 																				if (XSessionId !== Caches.headers["X-Session-Id"]) { // sessionId不同
-																					$.log(`⚠ ${$.name}, sessionId不同，替换`, "");
+																					$.log(`⚠ ${$.name}, sessionId不同，替换$request.headers`, "");
 																					if (IfNoneMatch) {
-																						if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`;
-																						if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`;
+																						delete $request.headers?.["If-None-Match"];
+																						delete $request.headers?.["if-none-match"];
 																					};
 																					if (XRequestId) {
-																						if ($request?.headers?.["X-Request-Id"]) $request.headers["X-Request-Id"] = Caches.headers["X-Request-Id"];
-																						if ($request?.headers?.["x-request-id"]) $request.headers["x-request-id"] = Caches.headers["X-Request-Id"];
+																						if ($request.headers?.["X-Request-Id"]) $request.headers["X-Request-Id"] = Caches.headers["X-Request-Id"];
+																						if ($request.headers?.["x-request-id"]) $request.headers["x-request-id"] = Caches.headers["X-Request-Id"];
 																					};
 																					if (XSessionId) {
-																						if ($request?.headers?.["X-Session-Id"]) $request.headers["X-Session-Id"] = Caches.headers["X-Session-Id"];
-																						if ($request?.headers?.["x-session-id"]) $request.headers["x-session-id"] = Caches.headers["X-Session-Id"];
+																						if ($request.headers?.["X-Session-Id"]) $request.headers["X-Session-Id"] = Caches.headers["X-Session-Id"];
+																						if ($request.headers?.["x-session-id"]) $request.headers["x-session-id"] = Caches.headers["X-Session-Id"];
 																					};
 																					if (XSessionDigest) {
-																						if ($request?.headers?.["X-Session-Digest"]) $request.headers["X-Session-Digest"] = Caches.headers["X-Session-Digest"];
-																						if ($request?.headers?.["x-session-digest"]) $request.headers["x-session-digest"] = Caches.headers["X-Session-Digest"];
+																						if ($request.headers?.["X-Session-Digest"]) $request.headers["X-Session-Digest"] = Caches.headers["X-Session-Digest"];
+																						if ($request.headers?.["x-session-digest"]) $request.headers["x-session-digest"] = Caches.headers["X-Session-Digest"];
 																					};
 																				};
 																		};
 																		break;
-																	case Caches?.data?.accountId: // URL.path有UUID且与accountId相同
-																		$.log(`⚠ ${$.name}, accountId相同，更新`, "");
+																		case Caches?.data?.accountId: // PATHs[2]有UUID且与accountId相同
+																		$.log(`⚠ ${$.name}, PATHs[2]与accountId相同，更新Caches`, "");
 																		Caches.headers = {
 																			"X-Request-Id": XRequestId,
 																			"X-Session-Id": XSessionId,
