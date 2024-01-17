@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(1) response.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(4) response.beta");
 const URI = new URIs();
 const DataBase = {
 	"Location":{
@@ -137,38 +137,45 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							switch (PATH) {
 								case "v1/session/authenticate":
 									switch (Settings.MultiAccount) { // MultiAccount
-										case "true":
-											$.log(`🚧 ${$.name}, 启用多账号支持`, "");
+										case true:
+											$.log(`⚠ ${$.name}, 启用多账号支持`, "");
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches?.data) { //有data
-												$.log(`🚧 ${$.name}, 有Caches.data`, "");
+												$.log(`⚠ ${$.name}, 有Caches.data`, "");
 												if (body?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
-													$.log(`🚧 ${$.name}, Account ID相等，刷新缓存`, "");
+													$.log(`⚠ ${$.name}, Account ID相等，刷新缓存`, "");
 													Caches.headers = {
 														"X-Request-Id": XRequestId,
 														"X-Session-Id": XSessionId,
 														"X-Session-Digest": XSessionDigest
 													};
 													Caches.data = body.data;
+													Caches.data.termsAndConditions = null;
+													Caches.data.hasNewTermsAndConditions = false;
 													$.setjson(Caches, "@iRingo.TestFlight.Caches");
-												} else { // Account ID不相等，覆盖
-													$.log(`🚧 ${$.name}, Account ID不相等，覆盖data(accountId和sessionId)`, "");
+												}
+												/*
+												else { // Account ID不相等，覆盖
+													$.log(`⚠ ${$.name}, Account ID不相等，覆盖data(accountId和sessionId)`, "");
 													body.data = Caches.data;
 												}
+												*/
 											} else { // Caches空
-												$.log(`🚧 ${$.name}, Caches空，写入`, "");
+												$.log(`⚠ ${$.name}, Caches空，写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,
 													"X-Session-Digest": XSessionDigest
 												};
 												Caches.data = body.data;
+												Caches.data.termsAndConditions = null;
+												Caches.data.hasNewTermsAndConditions = false;
 												$.setjson(Caches, "@iRingo.TestFlight.Caches");
 											};
 											break;
-										case "false":
+										case false:
 										default:
 											break;
 									};
@@ -215,7 +222,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																		case undefined:
 																			$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
 																			switch (Settings.Universal) { // 通用
-																				case "true":
+																				case true:
 																					$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
 																					if (body.error === null) { // 数据无错误
 																						$.log(`🚧 ${$.name}, 数据无错误`, "");
@@ -231,7 +238,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																						});
 																					};
 																					break;
-																				case "false":
+																				case false:
 																				default:
 																					break;
 																			};
@@ -246,7 +253,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																						case undefined:
 																							$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																							switch (Settings.Universal) { // 通用
-																								case "true":
+																								case true:
 																									$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
 																									if (body.error === null) { // 数据无错误
 																										$.log(`🚧 ${$.name}, 数据无错误`, "");
@@ -256,7 +263,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																										body.data.builds = body.data.builds.map(build => modBuild(build));
 																									};
 																									break;
-																								case "false":
+																								case false:
 																								default:
 																									break;
 																							};
@@ -289,7 +296,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																												case undefined:
 																													$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
 																													switch (Settings.Universal) { // 通用
-																														case "true":
+																														case true:
 																															$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
 																															if (body.error === null) { // 数据无错误
 																																$.log(`🚧 ${$.name}, 数据无错误`, "");
@@ -297,7 +304,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																																body.data = body.data.map(data => modBuild(data));
 																															};
 																															break;
-																														case "false":
+																														case false:
 																														default:
 																															break;
 																													};

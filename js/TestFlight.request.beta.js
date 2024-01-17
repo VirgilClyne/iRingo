@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(1) request.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(5) request.beta");
 const URI = new URIs();
 const DataBase = {
 	"Location":{
@@ -249,14 +249,14 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 								default:
 									// headers auth mod
 									switch (Settings.MultiAccount) { // MultiAccount
-										case "true":
-											$.log(`🚧 ${$.name}, 启用多账号支持`, "");
+										case true:
+											$.log(`⚠ ${$.name}, 启用多账号支持`, "");
 											const IfNoneMatch = $request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"];
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches.data) { // Caches.data存在
-												$.log(`🚧 ${$.name}, Caches.data存在，读取`, "");
+												$.log(`⚠ ${$.name}, Caches.data存在，读取`, "");
 												switch (PATHs[0]) {
 													case "v1":
 													case "v2":
@@ -272,13 +272,13 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																	default:
 																		switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.test(PATHs[2])) {
 																			case true: // URL.path有UUID但与accountId不同
-																				$.log(`🚧 ${$.name}, accountId不同，替换`, "");
+																				$.log(`⚠ ${$.name}, accountId不同，替换`, "");
 																				URL.path = URL.path.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
-																				//break; // 不中断，继续处理
+																			//break; // 不中断，继续处理
 																			case false: // URL.path没有UUID
-																				$.log(`🚧 ${$.name}, URL.path没有UUID`, "");
+																				$.log(`⚠ ${$.name}, URL.path没有UUID`, "");
 																				if (XSessionId !== Caches.headers["X-Session-Id"]) { // sessionId不同
-																					$.log(`🚧 ${$.name}, sessionId不同，替换`, "");
+																					$.log(`⚠ ${$.name}, sessionId不同，替换`, "");
 																					if (IfNoneMatch) {
 																						if ($request?.headers?.["If-None-Match"]) $request.headers["If-None-Match"] = `\"${$request.headers["If-None-Match"].replace(/\"/g, "")}_\"`;
 																						if ($request?.headers?.["if-none-match"]) $request.headers["if-none-match"] = `\"${$request.headers["if-none-match"].replace(/\"/g, "")}_\"`;
@@ -299,7 +299,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																		};
 																		break;
 																	case Caches?.data?.accountId: // URL.path有UUID且与accountId相同
-																		$.log(`🚧 ${$.name}, accountId相同，更新`, "");
+																		$.log(`⚠ ${$.name}, accountId相同，更新`, "");
 																		Caches.headers = {
 																			"X-Request-Id": XRequestId,
 																			"X-Session-Id": XSessionId,
@@ -309,13 +309,14 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																		break;
 																};
 																break;
-
+															case "tc": // termsAndConditions
+																break;
 														};
 														break;
 												};
 												break;
 											} else { // Caches空
-												$.log(`🚧 ${$.name}, Caches空，新写入`, "");
+												$.log(`⚠ ${$.name}, Caches空，新写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,
@@ -330,7 +331,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 												$.setjson(Caches, "@iRingo.TestFlight.Caches");
 											};
 											break;
-										case "false":
+										case false:
 										default:
 											break;
 									};
