@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.0.2(1) request.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(1) request.beta");
 const URI = new URIs();
 const DataBase = {
 	"Location":{
@@ -138,6 +138,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 						case "text/json":
 						case "application/json":
 							body = JSON.parse($request.body ?? "{}");
+							$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
 							switch (HOST) {
 								case "testflight.apple.com":
 									switch (PATH) {
@@ -254,8 +255,8 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
-											if (Caches?.data) { // Caches.data存在`
-												$.log(`🚧 ${$.name}, data存在`, "");
+											if (Caches.data) { // Caches.data存在
+												$.log(`🚧 ${$.name}, Caches.data存在，读取`, "");
 												switch (PATHs[0]) {
 													case "v1":
 													case "v2":
@@ -314,7 +315,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 												};
 												break;
 											} else { // Caches空
-												$.log(`🚧 ${$.name}, Caches空，写入`, "");
+												$.log(`🚧 ${$.name}, Caches空，新写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,

@@ -1,7 +1,7 @@
 /*
 README: https://github.com/VirgilClyne/iRingo
 */
-const $ = new Env(" iRingo: ✈ TestFlight v3.0.1(1) response.beta");
+const $ = new Env(" iRingo: ✈ TestFlight v3.1.0(1) response.beta");
 const URI = new URIs();
 const DataBase = {
 	"Location":{
@@ -129,6 +129,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				case "text/json":
 				case "application/json":
 					body = JSON.parse($response.body ?? "{}");
+					$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
 					// 主机判断
 					switch (HOST) {
 						case "testflight.apple.com":
@@ -152,9 +153,9 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 													};
 													Caches.data = body.data;
 													$.setjson(Caches, "@iRingo.TestFlight.Caches");
-												} else { // Account ID不相等，Rewrite
-													$.log(`🚧 ${$.name}, Account ID不相等，覆盖accountId和sessionId`, "");
-													//body.data = Caches.data;
+												} else { // Account ID不相等，覆盖
+													$.log(`🚧 ${$.name}, Account ID不相等，覆盖data(accountId和sessionId)`, "");
+													body.data = Caches.data;
 												}
 											} else { // Caches空
 												$.log(`🚧 ${$.name}, Caches空，写入`, "");
@@ -178,41 +179,41 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 								case "v1/devices/remove":
 									break;
 								default:
-									switch (PATHs?.[0]) {
+									switch (PATHs[0]) {
 										case "v1":
 										case "v2":
 										case "v3":
-											switch (PATHs?.[1]) {
+											switch (PATHs[1]) {
 												case "accounts":
-													switch (PATHs?.[2]) {
+													switch (PATHs[2]) {
 														case "settings":
-															switch (PATHs?.[3]) {
+															switch (PATHs[3]) {
 																case undefined:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/settings`, "");
 																	break;
 																case "notifications":
-																	switch (PATHs?.[4]) {
+																	switch (PATHs[4]) {
 																		case "apps":
-																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings/notifications/apps/`, "");
+																			$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/settings/notifications/apps/`, "");
 																			break;
 																	};
 																	break;
 																default:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/settings/${PATHs?.[3]}/`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/settings/${PATHs[3]}/`, "");
 																	break;
 															};
 															break;
 														case Caches?.data?.accountId: // UUID
 														default:
-															switch (PATHs?.[3]) {
+															switch (PATHs[3]) {
 																case undefined:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}`, "");
 																	break;
 																case "apps":
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/`, "");
-																	switch (PATHs?.[4]) {
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
+																	switch (PATHs[4]) {
 																		case undefined:
-																			$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps`, "");
+																			$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
 																			switch (Settings.Universal) { // 通用
 																				case "true":
 																					$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
@@ -236,14 +237,14 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																			};
 																			break;
 																		default:
-																			switch (PATHs?.[5]) {
+																			switch (PATHs[5]) {
 																				case undefined:
-																					$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}`, "");
+																					$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}`, "");
 																					break;
 																				case "builds":
-																					switch (PATHs?.[7]) {
+																					switch (PATHs[7]) {
 																						case undefined:
-																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}`, "");
+																							$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																							switch (Settings.Universal) { // 通用
 																								case "true":
 																									$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
@@ -261,32 +262,32 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																							};
 																							break;
 																						case "install":
-																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}/install`, "");
+																							$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
 																							break;
 																						default:
-																							$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/builds/${PATHs?.[6]}/${PATHs?.[7]}`, "");
+																							$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
 																							break;
 																					};
 																					break;
 																				case "platforms":
-																					switch (PATHs?.[6]) {
+																					switch (PATHs[6]) {
 																						case "ios":
 																						case "osx":
 																						case "appletvos":
 																						default:
-																							switch (PATHs?.[7]) {
+																							switch (PATHs[7]) {
 																								case undefined:
-																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}`, "");
+																									$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}`, "");
 																									break;
 																								case "trains":
-																									switch (PATHs?.[9]) {
+																									switch (PATHs[9]) {
 																										case undefined:
-																											$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}`, "");
+																											$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}`, "");
 																											break;
 																										case "builds":
-																											switch (PATHs?.[10]) {
+																											switch (PATHs[10]) {
 																												case undefined:
-																													$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/builds`, "");
+																													$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
 																													switch (Settings.Universal) { // 通用
 																														case "true":
 																															$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
@@ -302,67 +303,67 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																													};
 																													break;
 																												default:
-																													$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/builds/${PATHs?.[10]}`, "");
+																													$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds/${PATHs[10]}`, "");
 																													break;
 																											};
 																											break;
 																										default:
-																											$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/trains/${PATHs?.[8]}/${PATHs?.[9]}`, "");
+																											$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/${PATHs[9]}`, "");
 																											break;
 																									};
 																									break;
 																								default:
-																									$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/platforms/${PATHs?.[6]}/${PATHs?.[7]}`, "");
+																									$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/${PATHs[7]}`, "");
 																									break;
 																							};
 																							break;
 																					};
 																					break;
 																				default:
-																					$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/apps/${PATHs?.[4]}/${PATHs?.[5]}`, "");
+																					$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/${PATHs[5]}`, "");
 																					break;
 																			};
 																			break;
 																	};
 																	break;
 																default:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/accounts/${PATHs?.[2]}/${PATHs?.[3]}/`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/${PATHs[3]}/`, "");
 																	break;
 															};
 															break;
 													};
 													break;
 												case "apps":
-													switch (PATHs?.[3]) {
+													switch (PATHs[3]) {
 														case "install":
-															switch (PATHs?.[4]) {
+															switch (PATHs[4]) {
 																case undefined:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/apps/install`, "");
 																	break;
 																case "status":
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install/status`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/apps/install/status`, "");
 																	break;
 																default:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/apps/install/${PATHs?.[4]}`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/apps/install/${PATHs[4]}`, "");
 																	break;
 															};
 															break;
 													};
 													break;
 												case "messages":
-													switch (PATHs?.[2]) {
+													switch (PATHs[2]) {
 														case Caches?.data?.accountId: // UUID
 														default:
-															$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}`, "");
-															switch (PATHs?.[3]) {
+															$.log(`🚧 ${$.name}, ${PATHs[0]}/messages/${PATHs[2]}`, "");
+															switch (PATHs[3]) {
 																case undefined:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/messages/${PATHs[2]}`, "");
 																	break;
 																case "read":
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}/read`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/messages/${PATHs[2]}/read`, "");
 																	break;
 																default:
-																	$.log(`🚧 ${$.name}, ${PATHs?.[0]}/messages/${PATHs?.[2]}/${PATHs?.[3]}`, "");
+																	$.log(`🚧 ${$.name}, ${PATHs[0]}/messages/${PATHs[2]}/${PATHs[3]}`, "");
 																	break;
 															};
 															break;
