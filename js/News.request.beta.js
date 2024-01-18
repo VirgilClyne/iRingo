@@ -245,7 +245,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 	.finally(() => {
 		switch ($response) {
 			default: { // 有构造回复数据，返回构造的回复数据
-				//const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
+				const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `echo $response`, `FORMAT: ${FORMAT}`, "");
 				//$.log(`🚧 ${$.name}, finally`, `echo $response: ${JSON.stringify($response)}`, "");
 				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
