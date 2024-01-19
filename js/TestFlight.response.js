@@ -372,11 +372,11 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					switch (FORMAT) {
 						case undefined: // 视为无body
 							// 返回普通数据
-							$.done({ headers: $response.headers });
+							$.done({ status: $response.status, headers: $response.headers });
 							break;
 						default:
 							// 返回普通数据
-							$.done({ headers: $response.headers, body: $response.body });
+							$.done({ status: $response.status, headers: $response.headers, body: $response.body });
 							break;
 						case "application/protobuf":
 						case "application/x-protobuf":
@@ -386,7 +386,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 						//case "applecation/octet-stream":
 							// 返回二进制数据
 							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
-							$.done({ headers: $response.headers, bodyBytes: $response.bodyBytes.buffer.slice($response.bodyBytes.byteOffset, $response.bodyBytes.byteLength + $response.bodyBytes.byteOffset) });
+							$.done({ status: $response.status, headers: $response.headers, bodyBytes: $response.bodyBytes.buffer.slice($response.bodyBytes.byteOffset, $response.bodyBytes.byteLength + $response.bodyBytes.byteOffset) });
 							break;
 					};
 				} else $.done($response);
