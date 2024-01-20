@@ -8,6 +8,7 @@ author: "VirgilClyne"
 homepage: "https://github.com/VirgilClyne"
 manual: "https://github.com/VirgilClyne/iRingo/wiki/✈-TestFlight"
 icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TestFlight_2.png"
+category: " iRingo"
 
 http:
   mitm:

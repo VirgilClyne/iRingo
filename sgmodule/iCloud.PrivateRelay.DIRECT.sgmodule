@@ -5,6 +5,7 @@
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理
 #!icon=https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png
+#!category= iRingo
 
 [Rule]
 # > iCloud Private Relay

@@ -9,6 +9,7 @@ author: "VirgilClyne"
 homepage: "https://github.com/VirgilClyne"
 manual: "https://github.com/VirgilClyne/iRingo/wiki/📰News"
 icon: "https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png"
+category: " iRingo"
 
 http:
   mitm:
