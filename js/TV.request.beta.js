@@ -134,24 +134,24 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 						case "application/x-mpegurl":
 						case "application/vnd.apple.mpegurl":
 						case "audio/mpegurl":
-							//body = M3U8.parse($response.body);
+							//body = M3U8.parse($request.body);
 							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
-							//$response.body = M3U8.stringify(body);
+							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
 						case "text/plist":
 						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
-							//body = XML.parse($response.body);
+							//body = XML.parse($request.body);
 							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
-							//$response.body = XML.stringify(body);
+							//$request.body = XML.stringify(body);
 							break;
 						case "text/vtt":
 						case "application/vtt":
-							//body = VTT.parse($response.body);
+							//body = VTT.parse($request.body);
 							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
-							//$response.body = VTT.stringify(body);
+							//$request.body = VTT.stringify(body);
 							break;
 						case "text/json":
 						case "application/json":
