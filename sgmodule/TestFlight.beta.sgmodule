@@ -6,13 +6,15 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/✈-TestFlight
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TestFlight_2.png
 #!category= iRingo
+#!arguments=CountryCode:US,Universal:true
+#!arguments-desc=CountryCode: 国家或地区代码\nUniversal: 启用通用应用支持
 
 [General]
 skip-proxy = %APPEND% iosapps.itunes.apple.com
 
 [Script]
-✈ TestFlight.request = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=
-✈ TestFlight.response = type=http-response, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.response.beta.js, argument=
+✈ TestFlight.request = type=http-request, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.request.beta.js, argument=CountryCode={{{CountryCode}}}&Universal={{{Universal}}}
+✈ TestFlight.response = type=http-response, pattern=^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TestFlight.response.beta.js, argument=CountryCode={{{CountryCode}}}&Universal={{{Universal}}}
 
 [MITM]
 hostname = %APPEND% testflight.apple.com
