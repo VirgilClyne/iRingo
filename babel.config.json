@@ -1,0 +1,47 @@
+{
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"modules": false, //设置ES6 模块转译的模块格式 默认是 commonjs
+				"debug": false, // debug，编译的时候 console
+				"useBuiltIns": "usage", // 是否开启自动支持 polyfill
+				"corejs": 3,
+				"include": [], // 总是启用哪些 plugins
+				"exclude": [], // 强制不启用哪些 plugins，用来防止某些插件被启用
+			}
+		]
+	],
+	"sourceType": "module",
+	"targets": {
+		//"esmodules": false,
+		"ios": "15",
+		//"browsers": [ // 浏览器
+		//"last 2 versions",
+		//"safari >= 7"
+		//],
+		//"node": "current"
+	},
+	"plugins": [
+		//"@babel/plugin-proposal-dynamic-import",
+		//"@babel/plugin-transform-modules-commonjs",
+		[
+			"babel-plugin-relative-path-import",
+			{
+				"paths": [
+					{
+						"rootPathPrefix": "@",
+						"rootPathSuffix": "src"
+					},
+					{
+						"rootPathPrefix": "@submodule",
+						"rootPathSuffix": "../submodule"
+					}
+				]
+			}
+		]
+	],
+	"generatorOpts": {
+		"retainLines": true,
+	}
+}
