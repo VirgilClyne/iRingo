@@ -4,6 +4,7 @@ README: https://github.com/VirgilClyne/iRingo
 
 import ENVs from "./ENV/ENV.mjs";
 import URIs from "./URI/URI.mjs";
+import setENV from "./function/setENV.mjs";
 
 import * as Default from "./database/Default.json";
 import * as Location from "./database/Location.json";
@@ -387,26 +388,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 	})
 
 /***************** Function *****************/
-/**
- * Set Environment Variables
- * @author VirgilClyne
- * @param {String} name - Persistent Store Key
- * @param {Array} platforms - Platform Names
- * @param {Object} database - Default DataBase
- * @return {Object} { Settings, Caches, Configs }
- */
-function setENV(name, platforms, database) {
-	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let { Settings, Caches, Configs } = $.getENV(name, platforms, database);
-	/***************** Settings *****************/
-	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	/***************** Caches *****************/
-	//$.log(`🎉 ${$.name}, Set Environment Variables`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
-	/***************** Configs *****************/
-	Configs.Storefront = new Map(Configs.Storefront);
-	return { Settings, Caches, Configs };
-};
-
 /**
  * mod Build
  * @author VirgilClyne
