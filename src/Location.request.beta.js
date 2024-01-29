@@ -2,17 +2,17 @@
 README: https://github.com/VirgilClyne/iRingo
 */
 
-import ENVs from "../ENV/ENV.mjs";
-import URIs from "../URI/URI.mjs";
-import XMLs from "../XML/XML.mjs";
+import ENVs from "./ENV/ENV.mjs";
+import URIs from "./URI/URI.mjs";
+import XMLs from "./XML/XML.mjs";
 
-import * as Default from "../database/Default.json";
-import * as Location from "../database/Location.json";
-import * as News from "../database/News.json";
-import * as PrivateRelay from "../database/PrivateRelay.json";
-import * as Siri from "../database/Siri.json";
-import * as TestFlight from "../database/TestFlight.json";
-import * as TV from "../database/TV.json";
+import * as Default from "./database/Default.json";
+import * as Location from "./database/Location.json";
+import * as News from "./database/News.json";
+import * as PrivateRelay from "./database/PrivateRelay.json";
+import * as Siri from "./database/Siri.json";
+import * as TestFlight from "./database/TestFlight.json";
+import * as TV from "./database/TV.json";
 
 const $ = new ENVs(" iRingo: 📍 Location v3.0.5(1) request.beta");
 const URI = new URIs();
