@@ -4,27 +4,12 @@ README: https://github.com/VirgilClyne/iRingo
 
 import ENVs from "./ENV/ENV.mjs";
 import URIs from "./URI/URI.mjs";
+
+import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-import * as Default from "./database/Default.json";
-import * as Location from "./database/Location.json";
-import * as News from "./database/News.json";
-import * as PrivateRelay from "./database/PrivateRelay.json";
-import * as Siri from "./database/Siri.json";
-import * as TestFlight from "./database/TestFlight.json";
-import * as TV from "./database/TV.json";
-
-const $ = new ENVs(" iRingo: ✈ TestFlight v3.1.1(1) response");
+const $ = new ENVs(" iRingo: ✈ TestFlight v3.1.1(2) response");
 const URI = new URIs();
-const DataBase = {
-	"Default": Default,
-	"Location": Location,
-	"News": News,
-	"PrivateRelay": PrivateRelay,
-	"Siri": Siri,
-	"TestFlight": TestFlight,
-	"TV": TV,
-};
 
 /***************** Processing *****************/
 // 解构URL
@@ -37,7 +22,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", DataBase);
+	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:

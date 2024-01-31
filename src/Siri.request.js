@@ -4,27 +4,12 @@ README: https://github.com/VirgilClyne/iRingo
 
 import ENVs from "./ENV/ENV.mjs";
 import URIs from "./URI/URI.mjs";
+
+import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-import * as Default from "./database/Default.json";
-import * as Location from "./database/Location.json";
-import * as News from "./database/News.json";
-import * as PrivateRelay from "./database/PrivateRelay.json";
-import * as Siri from "./database/Siri.json";
-import * as TestFlight from "./database/TestFlight.json";
-import * as TV from "./database/TV.json";
-
-const $ = new ENVs(" iRingo: 🔍 Siri v3.0.3(1) request");
+const $ = new ENVs(" iRingo: 🔍 Siri v3.0.3(2) request");
 const URI = new URIs();
-const DataBase = {
-	"Default": Default,
-	"Location": Location,
-	"News": News,
-	"PrivateRelay": PrivateRelay,
-	"Siri": Siri,
-	"TestFlight": TestFlight,
-	"TV": TV,
-};
 
 // 构造回复数据
 let $response = undefined;
@@ -40,7 +25,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", DataBase);
+	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
