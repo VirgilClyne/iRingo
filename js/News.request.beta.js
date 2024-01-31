@@ -1,6 +1,7 @@
 class ENV {
 	constructor(name, opts) {
 		this.name = name;
+		this.version = '1.2.0';
 		this.http = new Http(this);
 		this.data = null;
 		this.dataFile = 'box.dat';
@@ -11,7 +12,7 @@ class ENV {
 		this.encoding = 'utf-8';
 		this.startTime = new Date().getTime();
 		Object.assign(this, opts);
-		this.log('', `🏁 ${this.name}, ENV v1.1.0, 开始!`);
+		this.log('', `🏁 开始! ENV v${this.version}, ${this.name}`, '');
 	}
 
 	platform() {
@@ -163,31 +164,29 @@ class ENV {
 		}
 	}
 
-	lodash_get(source, path, defaultValue = undefined) {
-		const paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
-		let result = source;
-		for (const p of paths) {
-			result = Object(result)[p];
-			if (result === undefined) {
-				return defaultValue
-			}
-		}
-		return result
+	lodash_get(object = {}, path = "", defaultValue = undefined) {
+		// translate array case to dot case, then split with .
+		// a[0].b -> a.0.b -> ['a', '0', 'b']
+		if (!Array.isArray(path)) path = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
+		
+		const result = path.reduce((previousValue, currentValue) => {
+			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object 
+		}, object);
+		return (result === undefined) ? defaultValue : result;
 	}
 
-	lodash_set(obj, path, value) {
-		if (Object(obj) !== obj) return obj
-		if (!Array.isArray(path)) path = path.toString().match(/[^.[\]]+/g) || [];
+	lodash_set(object = {}, path = "", value) {
+		if (!Array.isArray(path)) path = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
 		path
 			.slice(0, -1)
 			.reduce(
-				(a, c, i) =>
-					Object(a[c]) === a[c]
-						? a[c]
-						: (a[c] = Math.abs(path[i + 1]) >> 0 === +path[i + 1] ? [] : {}),
-				obj
+				(previousValue, currentValue, currentIndex) =>
+					(Object(previousValue[currentValue]) === previousValue[currentValue])
+						? previousValue[currentValue]
+						: previousValue[currentValue] = (/^\d+$/.test(path[currentIndex + 1]) ? [] : {}),
+				object
 			)[path[path.length - 1]] = value;
-		return obj
+		return object
 	}
 
 	getdata(key) {
@@ -663,7 +662,7 @@ class ENV {
 				//this.log(`🎉 ${this.name}, $Argument`);
 				let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
 				//this.log(JSON.stringify(arg));
-				for (let item in arg) this.setPath(Argument, item, arg[item]);
+				for (let item in arg) this.lodash_set(Argument, item, arg[item]);
 				//this.log(JSON.stringify(Argument));
 			}			//this.log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
 		}		/***************** Store *****************/
@@ -689,7 +688,6 @@ class ENV {
 	};
 
 	/***************** function *****************/
-	setPath(object, path, value) { path.split(".").reduce((o, p, i) => o[p] = path.split(".").length === ++i ? value : o[p] || {}, object); }
 	traverseObject(o, c) { for (var t in o) { var n = o[t]; o[t] = "object" == typeof n && null !== n ? this.traverseObject(n, c) : c(t, n); } return o }
 	string2number(string) { if (string && !isNaN(string)) string = parseInt(string, 10); return string }
 }
