@@ -2073,30 +2073,25 @@ var Database$1 = Database = {
 	"TV": TV$1,
 };
 
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-const $$1 = new ENV(" iRingo: Set Environment Variables");
-
 /**
  * Set Environment Variables
  * @author VirgilClyne
+ * @param {Object} $ - ENV
  * @param {String} name - Persistent Store Key
  * @param {Array} platforms - Platform Names
  * @param {Object} database - Default DataBase
  * @return {Object} { Settings, Caches, Configs }
  */
-function setENV(name, platforms, database) {
-	$$1.log(`☑️ ${$$1.name}`, "");
-	let { Settings, Caches, Configs } = $$1.getENV(name, platforms, database);
+function setENV($, name, platforms, database) {
+	console.log(`☑️ Set Environment Variables`, "");
+	let { Settings, Caches, Configs } = $.getENV(name, platforms, database);
 	/***************** Settings *****************/
-	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $$1.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $$1.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $$1.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
-	$$1.log(`✅ ${$$1.name}`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
-	//$.log(`✅ ${$.name}`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
+	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
 	Configs.Storefront = new Map(Configs.Storefront);
 	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);
@@ -2109,7 +2104,7 @@ README: https://github.com/VirgilClyne/iRingo
 */
 
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.1(2) request.beta");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.1(3) request.beta");
 const URI = new URI$1();
 
 // 构造回复数据
@@ -2126,7 +2121,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database$1);
+	const { Settings, Caches, Configs } = setENV($, "iRingo", "TestFlight", Database$1);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
