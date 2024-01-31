@@ -5,28 +5,13 @@ README: https://github.com/VirgilClyne/iRingo
 import ENVs from "./ENV/ENV.mjs";
 import URIs from "./URI/URI.mjs";
 import XMLs from "./XML/XML.mjs";
+
+import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-import * as Default from "./database/Default.json";
-import * as Location from "./database/Location.json";
-import * as News from "./database/News.json";
-import * as PrivateRelay from "./database/PrivateRelay.json";
-import * as Siri from "./database/Siri.json";
-import * as TestFlight from "./database/TestFlight.json";
-import * as TV from "./database/TV.json";
-
-const $ = new ENVs(" iRingo: 📍 Location v3.0.5(1) request.beta");
+const $ = new ENVs(" iRingo: 📍 Location v3.0.5(2) request.beta");
 const URI = new URIs();
 const XML = new XMLs();
-const DataBase = {
-	"Default": Default,
-	"Location": Location,
-	"News": News,
-	"PrivateRelay": PrivateRelay,
-	"Siri": Siri,
-	"TestFlight": TestFlight,
-	"TV": TV,
-};
 
 // 构造回复数据
 let $response = undefined;
@@ -42,7 +27,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Location", DataBase);
+	const { Settings, Caches, Configs } = setENV("iRingo", "Location", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:

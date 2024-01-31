@@ -754,37 +754,6 @@ let URI$1 = class URI {
 	};
 };
 
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-const $$1 = new ENV(" iRingo: Set Environment Variables");
-
-/**
- * Set Environment Variables
- * @author VirgilClyne
- * @param {String} name - Persistent Store Key
- * @param {Array} platforms - Platform Names
- * @param {Object} database - Default DataBase
- * @return {Object} { Settings, Caches, Configs }
- */
-function setENV(name, platforms, database) {
-	$$1.log(`☑️ ${$$1.name}`, "");
-	let { Settings, Caches, Configs } = $$1.getENV(name, platforms, database);
-	/***************** Settings *****************/
-	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $$1.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $$1.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $$1.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
-	$$1.log(`✅ ${$$1.name}`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	/***************** Caches *****************/
-	//$.log(`✅ ${$.name}`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
-	/***************** Configs *****************/
-	Configs.Storefront = new Map(Configs.Storefront);
-	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);
-	if (Configs.i18n) for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
-	return { Settings, Caches, Configs };
-}
-
 var Settings$6 = {
 	Switch: true
 };
@@ -2096,14 +2065,7 @@ var TV$1 = /*#__PURE__*/Object.freeze({
 	default: TV
 });
 
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.0(6) request.beta");
-const URI = new URI$1();
-const DataBase = {
+var Database$1 = Database = {
 	"Default": Default$1,
 	"Location": Location$1,
 	"News": News$1,
@@ -2112,6 +2074,45 @@ const DataBase = {
 	"TestFlight": TestFlight$1,
 	"TV": TV$1,
 };
+
+/*
+README: https://github.com/VirgilClyne/iRingo
+*/
+
+const $$1 = new ENV(" iRingo: Set Environment Variables");
+
+/**
+ * Set Environment Variables
+ * @author VirgilClyne
+ * @param {String} name - Persistent Store Key
+ * @param {Array} platforms - Platform Names
+ * @param {Object} database - Default DataBase
+ * @return {Object} { Settings, Caches, Configs }
+ */
+function setENV(name, platforms, database) {
+	$$1.log(`☑️ ${$$1.name}`, "");
+	let { Settings, Caches, Configs } = $$1.getENV(name, platforms, database);
+	/***************** Settings *****************/
+	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $$1.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $$1.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $$1.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	$$1.log(`✅ ${$$1.name}`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+	/***************** Caches *****************/
+	//$.log(`✅ ${$.name}`, `Caches: ${typeof Caches}`, `Caches内容: ${JSON.stringify(Caches)}`, "");
+	/***************** Configs *****************/
+	Configs.Storefront = new Map(Configs.Storefront);
+	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);
+	if (Configs.i18n) for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
+	return { Settings, Caches, Configs };
+}
+
+/*
+README: https://github.com/VirgilClyne/iRingo
+*/
+
+
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.1(2) request.beta");
+const URI = new URI$1();
 
 // 构造回复数据
 let $response = undefined;
@@ -2127,7 +2128,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", DataBase);
+	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database$1);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
