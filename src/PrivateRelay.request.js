@@ -8,7 +8,7 @@ import URIs from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v3.0.3(2) request");
+const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v3.0.3(3) request");
 const URI = new URIs();
 
 // 构造回复数据
@@ -16,7 +16,7 @@ let $response = undefined;
 
 /***************** Processing *****************/
 (async () => {
-	const { Settings, Caches, Configs } = await setENV("iRingo", "PrivateRelay", Database);
+	const { Settings, Caches, Configs } = await setENV($, "iRingo", "PrivateRelay", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:

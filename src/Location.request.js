@@ -9,7 +9,7 @@ import XMLs from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: 📍 Location v3.0.5(2) request");
+const $ = new ENVs(" iRingo: 📍 Location v3.0.5(3) request");
 const URI = new URIs();
 const XML = new XMLs();
 
@@ -27,7 +27,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Location", Database);
+	const { Settings, Caches, Configs } = setENV($, "iRingo", "Location", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:

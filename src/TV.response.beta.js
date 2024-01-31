@@ -8,7 +8,7 @@ import URIs from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: 📺 TV v3.2.3(2) response.beta");
+const $ = new ENVs(" iRingo: 📺 TV v3.2.3(3) response.beta");
 const URI = new URIs();
 
 /***************** Processing *****************/
@@ -22,7 +22,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
+	const { Settings, Caches, Configs } = setENV($, "iRingo", "TV", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
