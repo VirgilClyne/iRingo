@@ -1,7 +1,45 @@
+class Lodash {
+	constructor() {
+		this.name = "Lodash";
+		this.version = '1.0.0';
+		console.log(`\n${this.name} v${this.version}\n`);
+	}
+
+	get(object = {}, path = "", defaultValue = undefined) {
+		// translate array case to dot case, then split with .
+		// a[0].b -> a.0.b -> ['a', '0', 'b']
+		if (!Array.isArray(path)) path = this.toPath(path);
+
+		const result = path.reduce((previousValue, currentValue) => {
+			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object 
+		}, object);
+		return (result === undefined) ? defaultValue : result;
+	}
+
+	set(object = {}, path = "", value) {
+		if (!Array.isArray(path)) path = this.toPath(path);
+		path
+			.slice(0, -1)
+			.reduce(
+				(previousValue, currentValue, currentIndex) =>
+					(Object(previousValue[currentValue]) === previousValue[currentValue])
+						? previousValue[currentValue]
+						: previousValue[currentValue] = (/^\d+$/.test(path[currentIndex + 1]) ? [] : {}),
+				object
+			)[path[path.length - 1]] = value;
+		return object
+	}
+
+	toPath(value) {
+		return value.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
+	}
+
+}
+
 class ENV {
 	constructor(name, opts) {
 		this.name = name;
-		this.version = '1.3.4';
+		this.version = '1.4.0';
 		this.data = null;
 		this.dataFile = 'box.dat';
 		this.logs = [];
@@ -10,7 +48,9 @@ class ENV {
 		this.encoding = 'utf-8';
 		this.startTime = new Date().getTime();
 		Object.assign(this, opts);
-		this.log('', `🏁 开始! ENV v${this.version}, ${this.name}`, '');
+		this.log('', '🚩 开始!', `ENV v${this.version}`, '');
+		this.lodash = new Lodash(this.name);
+		this.log('', this.name, '');
 	}
 
 	platform() {
@@ -161,32 +201,6 @@ class ENV {
 			}
 		}
 	}
-
-	lodash_get(object = {}, path = "", defaultValue = undefined) {
-		// translate array case to dot case, then split with .
-		// a[0].b -> a.0.b -> ['a', '0', 'b']
-		if (!Array.isArray(path)) path = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
-
-		const result = path.reduce((previousValue, currentValue) => {
-			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object 
-		}, object);
-		return (result === undefined) ? defaultValue : result;
-	}
-
-	lodash_set(object = {}, path = "", value) {
-		if (!Array.isArray(path)) path = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
-		path
-			.slice(0, -1)
-			.reduce(
-				(previousValue, currentValue, currentIndex) =>
-					(Object(previousValue[currentValue]) === previousValue[currentValue])
-						? previousValue[currentValue]
-						: previousValue[currentValue] = (/^\d+$/.test(path[currentIndex + 1]) ? [] : {}),
-				object
-			)[path[path.length - 1]] = value;
-		return object
-	}
-
 	getdata(key) {
 		let val = this.getval(key);
 		// 如果以 @
@@ -196,7 +210,7 @@ class ENV {
 			if (objval) {
 				try {
 					const objedval = JSON.parse(objval);
-					val = objedval ? this.lodash_get(objedval, paths, '') : val;
+					val = objedval ? this.lodash.get(objedval, paths, '') : val;
 				} catch (e) {
 					val = '';
 				}
@@ -217,11 +231,11 @@ class ENV {
 				: '{}';
 			try {
 				const objedval = JSON.parse(objval);
-				this.lodash_set(objedval, paths, val);
+				this.lodash.set(objedval, paths, val);
 				issuc = this.setval(JSON.stringify(objedval), objkey);
 			} catch (e) {
 				const objedval = {};
-				this.lodash_set(objedval, paths, val);
+				this.lodash.set(objedval, paths, val);
 				issuc = this.setval(JSON.stringify(objedval), objkey);
 			}
 		} else {
@@ -303,8 +317,7 @@ class ENV {
 				// 添加策略组
 				if (request.policy) {
 					if (this.isLoon()) request.node = request.policy;
-					if (this.isSurge()) this.lodash_set(request, "headers.X-Surge-Policy", request.policy);
-					if (this.isStash()) this.lodash_set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
+					if (this.isStash()) this.lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
 				}				// 判断请求数据类型
 				if (ArrayBuffer.isView(request.body)) request["binary-mode"] = true;
 				// 发送请求
@@ -327,7 +340,7 @@ class ENV {
 				delete request.sessionIndex;
 				delete request.charset;
 				// 添加策略组
-				if (request.policy) this.lodash_set(request, "opts.policy", request.policy);
+				if (request.policy) this.lodash.set(request, "opts.policy", request.policy);
 				// 判断请求数据类型
 				switch ((request?.headers?.["Content-Type"] ?? request?.headers?.["content-type"])?.split(";")?.[0]) {
 					default:
@@ -589,7 +602,7 @@ class ENV {
 				//this.log(`🎉 ${this.name}, $Argument`);
 				let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
 				//this.log(JSON.stringify(arg));
-				for (let item in arg) this.lodash_set(Argument, item, arg[item]);
+				for (let item in arg) this.lodash.set(Argument, item, arg[item]);
 				//this.log(JSON.stringify(Argument));
 			}			//this.log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
 		}		/***************** Store *****************/
@@ -2430,7 +2443,7 @@ README: https://github.com/VirgilClyne/iRingo
 */
 
 
-const $ = new ENV(" iRingo: 📍 Location v3.0.5(3) request.beta");
+const $ = new ENV(" iRingo: 📍 Location v3.0.5(4) request.beta");
 const URI = new URI$1();
 const XML = new XML$1();
 
@@ -2518,7 +2531,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
-									$.lodash_set(Caches, "Defaults.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
+									$.lodash.set(Caches, "Defaults.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
 									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 							}							break;
@@ -2676,7 +2689,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 													URL.query.environment = "prod-cn";
 													break;
 											}											break;
-									}									$.lodash_set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
+									}									$.lodash.set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
 									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 								case "geo_manifest/dynamic/config":
@@ -2716,7 +2729,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 													URL.query.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US";
 													break;
 											}											break;
-									}									$.lodash_set(Caches, "Dynamic.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
+									}									$.lodash.set(Caches, "Dynamic.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
 									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 							}							break;

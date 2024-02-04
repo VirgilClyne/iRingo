@@ -9,7 +9,7 @@ import XMLs from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: 📍 Location v3.0.5(3) request.beta");
+const $ = new ENVs(" iRingo: 📍 Location v3.0.5(4) request.beta");
 const URI = new URIs();
 const XML = new XMLs();
 
@@ -98,7 +98,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
-									$.lodash_set(Caches, "Defaults.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
+									$.lodash.set(Caches, "Defaults.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
 									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 							};
@@ -289,7 +289,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 											};
 											break;
 									};
-									$.lodash_set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
+									$.lodash.set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
 									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 								case "geo_manifest/dynamic/config":
@@ -334,7 +334,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 											};
 											break;
 									};
-									$.lodash_set(Caches, "Dynamic.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
+									$.lodash.set(Caches, "Dynamic.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
 									$.setjson(Caches, "@iRingo.Location.Caches");
 									break;
 							};

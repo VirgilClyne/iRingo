@@ -8,7 +8,7 @@ import URIs from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v3.0.3(3) request");
+const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v3.0.3(4) request");
 const URI = new URIs();
 
 // 构造回复数据
@@ -110,12 +110,12 @@ let $response = undefined;
 							// 路径判断
 							switch (PATH) {
 								case "v1/fetchAuthTokens":
-									$.lodash_set(Caches, "fetchAuthTokens.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
+									$.lodash.set(Caches, "fetchAuthTokens.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
 									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
 									break;
 								case "v3_1/fetchConfigFile":
 								case "v3_2/fetchConfigFile":
-									$.lodash_set(Caches, "fetchConfigFile.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
+									$.lodash.set(Caches, "fetchConfigFile.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
 									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
 							};
 							break;
