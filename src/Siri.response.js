@@ -141,7 +141,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				case "application/vnd.google.protobuf":
 				case "application/grpc":
 				case "application/grpc+proto":
-				case "applecation/octet-stream":
+				case "application/octet-stream":
 					break;
 			};
 			break;
@@ -150,41 +150,4 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 	};
 })()
 	.catch((e) => $.logErr(e))
-	.finally(() => {
-		switch ($response) {
-			default: { // 有回复数据，返回回复数据
-				$.log(`🎉 ${$.name}, finally`, `$response`, `FORMAT: ${FORMAT}`, "");
-				//$.log(`🚧 ${$.name}, finally`, `$response: ${JSON.stringify($response)}`, "");
-				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
-				if ($response?.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					switch (FORMAT) {
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ status: $response.status, headers: $response.headers });
-							break;
-						default:
-							// 返回普通数据
-							$.done({ status: $response.status, headers: $response.headers, body: $response.body });
-							break;
-						case "application/protobuf":
-						case "application/x-protobuf":
-						case "application/vnd.google.protobuf":
-						case "application/grpc":
-						case "application/grpc+proto":
-						case "applecation/octet-stream":
-							// 返回二进制数据
-							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
-							$.done({ status: $response.status, headers: $response.headers, bodyBytes: $response.bodyBytes.buffer.slice($response.bodyBytes.byteOffset, $response.bodyBytes.byteLength + $response.bodyBytes.byteOffset) });
-							break;
-					};
-				} else $.done($response);
-				break;
-			};
-			case undefined: { // 无回复数据
-				break;
-			};
-		};
-	})
-
-/***************** Function *****************/
+	.finally(() => $.done($response))

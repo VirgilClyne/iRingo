@@ -343,66 +343,16 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 	.catch((e) => $.logErr(e))
 	.finally(() => {
 		switch ($response) {
-			default: { // 有构造回复数据，返回构造的回复数据
-				const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
-				$.log(`🎉 ${$.name}, finally`, `echo $response`, `FORMAT: ${FORMAT}`, "");
-				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
-				if ($response?.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
+			default: // 有构造回复数据，返回构造的回复数据
 				if ($.isQuanX()) {
-					$response.status = "HTTP/1.1 200 OK";
-					delete $response?.headers?.["Content-Length"];
-					delete $response?.headers?.["content-length"];
-					delete $response?.headers?.["Transfer-Encoding"];
-					switch (FORMAT) {
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ status: $response.status, headers: $response.headers });
-							break;
-						default:
-							// 返回普通数据
-							$.done({ status: $response.status, headers: $response.headers, body: $response.body });
-							break;
-						case "application/protobuf":
-						case "application/x-protobuf":
-						case "application/vnd.google.protobuf":
-						case "application/grpc":
-						case "application/grpc+proto":
-						case "applecation/octet-stream":
-							// 返回二进制数据
-							//$.log(`${$response.bodyBytes.byteLength}---${$response.bodyBytes.buffer.byteLength}`);
-							$.done({ status: $response.status, headers: $response.headers, bodyBytes: $response.bodyBytes });
-							break;
-					};
+					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+					delete $response.headers?.["Transfer-Encoding"];
+					$.done($response);
 				} else $.done({ response: $response });
 				break;
-			};
-			case undefined: { // 无构造回复数据，发送修改的请求数据
-				$.log(`🎉 ${$.name}, finally`, `$request`, `FORMAT: ${FORMAT}`, "");
-				//$.log(`🚧 ${$.name}, finally`, `$request: ${JSON.stringify($request)}`, "");
-				if ($.isQuanX()) {
-					switch (FORMAT) {
-						case undefined: // 视为无body
-							// 返回普通数据
-							$.done({ url: $request.url, headers: $request.headers })
-							break;
-						default:
-							// 返回普通数据
-							$.done({ url: $request.url, headers: $request.headers, body: $request.body })
-							break;
-						case "application/protobuf":
-						case "application/x-protobuf":
-						case "application/vnd.google.protobuf":
-						case "application/grpc":
-						case "application/grpc+proto":
-						case "applecation/octet-stream":
-							// 返回二进制数据
-							//$.log(`${$request.bodyBytes.byteLength}---${$request.bodyBytes.buffer.byteLength}`);
-							$.done({ url: $request.url, headers: $request.headers, bodyBytes: $request.bodyBytes.buffer.slice($request.bodyBytes.byteOffset, $request.bodyBytes.byteLength + $request.bodyBytes.byteOffset) });
-							break;
-					};
-				} else $.done($request);
+			case undefined: // 无构造回复数据，发送修改的请求数据
+				$.done($request);
 				break;
-			};
 		};
 	})
 
