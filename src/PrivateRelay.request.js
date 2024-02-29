@@ -138,6 +138,8 @@ let $response = undefined;
 			default: // 有构造回复数据，返回构造的回复数据
 				if ($.isQuanX()) {
 					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+					delete $response.headers?.["Content-Length"];
+					delete $response.headers?.["content-length"];
 					delete $response.headers?.["Transfer-Encoding"];
 					$.done($response);
 				} else $.done({ response: $response });
