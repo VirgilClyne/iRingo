@@ -73,7 +73,7 @@ class Lodash {
 class ENV {
 	constructor(name, opts) {
 		this.name = name;
-		this.version = '1.5.10';
+		this.version = '1.5.11';
 		this.data = null;
 		this.dataFile = 'box.dat';
 		this.logs = [];
@@ -611,8 +611,6 @@ class ENV {
 		const endTime = new Date().getTime();
 		const costTime = (endTime - this.startTime) / 1000;
 		this.log("", `🚩 ${this.name}, 结束! 🕛 ${costTime} 秒`, "");
-		if (object.headers?.["Content-Encoding"]) object.headers["Content-Encoding"] = "identity";
-		if (object.headers?.["content-encoding"]) object.headers["content-encoding"] = "identity";
 		switch (this.platform()) {
 			case 'Surge':
 			case 'Loon':
@@ -2824,6 +2822,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				} else $.done({ response: $response });
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
+				//$.log(`🚧 ${$.name}, finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
 				$.done($request);
 				break;
 		}	});
