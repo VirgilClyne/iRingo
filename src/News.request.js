@@ -1,15 +1,12 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: 📰 News v3.0.3(3) request");
-const URI = new URIs();
+const $ = new ENV(" iRingo: 📰 News v3.0.4(1) request");
 
 // 构造回复数据
 let $response = undefined;
@@ -44,7 +41,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							break;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
-						case "text/html":
 						default:
 							break;
 						case "application/x-mpegURL":
@@ -53,6 +49,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 						case "audio/mpegurl":
 							break;
 						case "text/xml":
+						case "text/html":
 						case "text/plist":
 						case "application/xml":
 						case "application/plist":

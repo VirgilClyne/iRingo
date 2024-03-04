@@ -1,15 +1,12 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v3.0.3(4) request.beta");
-const URI = new URIs();
+const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v3.0.4(1) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -44,7 +41,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							break;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
-						case "text/html":
 						default:
 							break;
 						case "application/x-mpegURL":
@@ -56,6 +52,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
+						case "text/html":
 						case "text/plist":
 						case "application/xml":
 						case "application/plist":
@@ -103,13 +100,13 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "v1/fetchAuthTokens":
-									$.lodash.set(Caches, "fetchAuthTokens.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
-									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
+									_.set(Caches, "fetchAuthTokens.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
+									$Storage.setItem("@iRingo.PrivateRelay.Caches", Caches);
 									break;
 								case "v3_1/fetchConfigFile":
 								case "v3_2/fetchConfigFile":
-									$.lodash.set(Caches, "fetchConfigFile.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
-									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
+									_.set(Caches, "fetchConfigFile.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
+									$Storage.setItem("@iRingo.PrivateRelay.Caches", Caches);
 							};
 							break;
 					};

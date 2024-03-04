@@ -1,15 +1,12 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ✈ TestFlight v3.1.1(3) request.beta");
-const URI = new URIs();
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(1) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -44,7 +41,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							break;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
-						case "text/html":
 						default:
 							break;
 						case "application/x-mpegURL":
@@ -56,6 +52,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
+						case "text/html":
 						case "text/plist":
 						case "application/xml":
 						case "application/plist":
@@ -90,8 +87,8 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 														body.storeCookies = Caches.storeCookies;
 														body.deviceVendorId = Caches.deviceVendorId;
 														body.deviceName = Caches.deviceName;
-													} else $.setjson({ ...Caches, ...body }, "@iRingo.TestFlight.Caches"); // DS ID相等，刷新缓存
-												} else $.setjson({ ...Caches, ...body }, "@iRingo.TestFlight.Caches"); // Caches空
+													} else $Storage.setItem("@iRingo.TestFlight.Caches", { ...Caches, ...body }); // DS ID相等，刷新缓存
+												} else $Storage.setItem("@iRingo.TestFlight.Caches", { ...Caches, ...body }); // Caches空
 											}
 											*/
 											if (Settings.CountryCode !== "AUTO") body.storeFrontIdentifier = body.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
@@ -239,7 +236,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																			"X-Session-Id": XSessionId,
 																			"X-Session-Digest": XSessionDigest
 																		};
-																		$.setjson(Caches, "@iRingo.TestFlight.Caches");
+																		$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 																		break;
 																};
 																break;
@@ -262,7 +259,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 														"sessionId": XSessionId
 													};
 												};
-												$.setjson(Caches, "@iRingo.TestFlight.Caches");
+												$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 											};
 											break;
 										case false:

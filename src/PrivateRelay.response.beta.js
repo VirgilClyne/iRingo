@@ -1,15 +1,12 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v1.0.3(3) response.beta");
-const URI = new URIs();
+const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v1.0.4(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -22,7 +19,7 @@ $.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 !(async () => {
-	const { Settings, Caches = {}, Configs } = await setENV($, "iRingo", "PrivateRelay", Database);
+	const { Settings, Caches = {}, Configs } = setENV($, "iRingo", "PrivateRelay", Database);
 	switch (Settings.Switch) {
 		case true:
 		default:

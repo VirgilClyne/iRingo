@@ -1,15 +1,12 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ✈ TestFlight v3.1.1(3) response.beta");
-const URI = new URIs();
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -35,7 +32,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					break;
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
-				case "text/html":
 				default:
 					break;
 				case "application/x-mpegURL":
@@ -47,6 +43,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
+				case "text/html":
 				case "text/plist":
 				case "application/xml":
 				case "application/plist":
@@ -89,7 +86,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 													Caches.data = body.data;
 													Caches.data.termsAndConditions = null;
 													Caches.data.hasNewTermsAndConditions = false;
-													$.setjson(Caches, "@iRingo.TestFlight.Caches");
+													$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 												}
 												/*
 												else { // Account ID不相等，覆盖
@@ -107,7 +104,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 												Caches.data = body.data;
 												Caches.data.termsAndConditions = null;
 												Caches.data.hasNewTermsAndConditions = false;
-												$.setjson(Caches, "@iRingo.TestFlight.Caches");
+												$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 											};
 											break;
 										case false:

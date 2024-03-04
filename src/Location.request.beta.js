@@ -1,17 +1,13 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
-import XMLs from "./XML/XML.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
+import XML from "./XML/XML.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: 📍 Location v3.0.5(4) request.beta");
-const URI = new URIs();
-const XML = new XMLs();
+const $ = new ENV(" iRingo: 📍 Location v3.0.6(1) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -46,7 +42,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							break;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
-						case "text/html":
 						default:
 							break;
 						case "application/x-mpegURL":
@@ -58,6 +53,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
+						case "text/html":
 						case "text/plist":
 						case "application/xml":
 						case "application/plist":
@@ -98,8 +94,8 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
-									$.lodash.set(Caches, "Defaults.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
-									$.setjson(Caches, "@iRingo.Location.Caches");
+									_.set(Caches, "Defaults.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
+									$Storage.setItem("@iRingo.Location.Caches", Caches);
 									break;
 							};
 							break;
@@ -289,8 +285,8 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 											};
 											break;
 									};
-									$.lodash.set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
-									$.setjson(Caches, "@iRingo.Location.Caches");
+									_.set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
+									$Storage.setItem("@iRingo.Location.Caches", Caches);
 									break;
 								case "geo_manifest/dynamic/config":
 									switch (URL.query?.os) {
@@ -334,8 +330,8 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 											};
 											break;
 									};
-									$.lodash.set(Caches, "Dynamic.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
-									$.setjson(Caches, "@iRingo.Location.Caches");
+									_.set(Caches, "Dynamic.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
+									$Storage.setItem("@iRingo.Location.Caches", Caches);
 									break;
 							};
 							break;
@@ -362,8 +358,8 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";			
 				if ($.isQuanX()) {
 					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response?.headers?.["Content-Length"];
-					delete $response?.headers?.["content-length"];
+					delete $response.headers?.["Content-Length"];
+					delete $response.headers?.["content-length"];
 					delete $response.headers?.["Transfer-Encoding"];
 					$.done($response);
 				} else $.done({ response: $response });

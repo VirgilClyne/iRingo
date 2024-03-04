@@ -1,17 +1,13 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
-import XMLs from "./XML/XML.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
+import XML from "./XML/XML.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: 📍 Location v3.1.5(3) response.beta");
-const URI = new URIs();
-const XML = new XMLs();
+const $ = new ENV(" iRingo: 📍 Location v3.1.6(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -37,7 +33,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					break;
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
-				case "text/html":
 				default:
 					switch (HOST) {
 						case "gspe1-ssl.ls.apple.com":
@@ -65,6 +60,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
+				case "text/html":
 				case "text/plist":
 				case "application/xml":
 				case "application/plist":
@@ -159,7 +155,7 @@ async function setGCC(name, caches) {
 	if ($response.body !== caches?.[name]?.gcc) {
 		let newCaches = caches;
 		newCaches[name] = { "gcc": $response.body };
-		$.setjson(newCaches, "@iRingo.Location.Caches");
+		$Storage.setItem("@iRingo.Location.Caches", newCaches);
 	}
 	return $.log(`🎉 ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
 };

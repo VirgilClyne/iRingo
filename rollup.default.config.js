@@ -7,7 +7,8 @@ export default [
 		input: 'src/Location.request.js',
 		output: {
 			file: 'js/Location.request.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -15,7 +16,8 @@ export default [
 		input: 'src/Location.response.js',
 		output: {
 			file: 'js/Location.response.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -23,7 +25,8 @@ export default [
 		input: 'src/News.request.js',
 		output: {
 			file: 'js/News.request.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -41,7 +44,8 @@ export default [
 		input: 'src/PrivateRelay.request.js',
 		output: {
 			file: 'js/PrivateRelay.request.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -49,7 +53,8 @@ export default [
 		input: 'src/PrivateRelay.response.js',
 		output: {
 			file: 'js/PrivateRelay.response.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -57,7 +62,8 @@ export default [
 		input: 'src/Siri.request.js',
 		output: {
 			file: 'js/Siri.request.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -65,7 +71,8 @@ export default [
 		input: 'src/Siri.response.js',
 		output: {
 			file: 'js/Siri.response.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -73,7 +80,8 @@ export default [
 		input: 'src/TestFlight.request.js',
 		output: {
 			file: 'js/TestFlight.request.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -81,7 +89,8 @@ export default [
 		input: 'src/TestFlight.response.js',
 		output: {
 			file: 'js/TestFlight.response.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -89,7 +98,8 @@ export default [
 		input: 'src/TV.request.js',
 		output: {
 			file: 'js/TV.request.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
@@ -97,7 +107,8 @@ export default [
 		input: 'src/TV.response.js',
 		output: {
 			file: 'js/TV.response.js',
-			format: 'es'
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},

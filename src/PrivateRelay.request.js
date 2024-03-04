@@ -1,35 +1,32 @@
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-import ENVs from "./ENV/ENV.mjs";
-import URIs from "./URI/URI.mjs";
+import _ from './ENV/Lodash.mjs'
+import $Storage from './ENV/$Storage.mjs'
+import ENV from "./ENV/ENV.mjs";
+import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENVs(" iRingo: ☁️ iCloud Private Relay v3.0.3(4) request");
-const URI = new URIs();
+const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v3.0.4(1) request");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
+// 解构URL
+const URL = URI.parse($request.url);
+$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+// 获取连接参数
+const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
+$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+// 解析格式
+const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
+$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = await setENV($, "iRingo", "PrivateRelay", Database);
+	const { Settings, Caches, Configs } = setENV($, "iRingo", "PrivateRelay", Database);
 	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
-			// 解构URL
-			let url = URL.parse($request?.url);
-			$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(url)}`, "");
-			// 获取连接参数
-			const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = url?.paths;
-			$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
-			// 解析格式
-			const FORMAT = ($request?.headers?.["Content-Type"] ?? $request?.headers?.["content-type"])?.split(";")?.[0];
-			$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 			// 创建空数据
 			let body = {};
 			// 方法判断
@@ -44,49 +41,41 @@ let $response = undefined;
 							break;
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
-						case "text/html":
 						default:
 							break;
-						case "m3u8":
+						case "application/x-mpegURL":
 						case "application/x-mpegurl":
 						case "application/vnd.apple.mpegurl":
-							//body = M3U8.parse($response.body);
-							//$.log(`🚧 ${$.name}`, "M3U8.parse($response.body)", JSON.stringify(body), "");
-							//$response.body = M3U8.stringify(body);
+						case "audio/mpegurl":
+							//body = M3U8.parse($request.body);
+							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+							//$request.body = M3U8.stringify(body);
 							break;
-						case "xml":
-						case "srv3":
 						case "text/xml":
-						case "application/xml":
-							//body = XML.parse($response.body);
-							//$.log(body);
-							//$response.body = XML.stringify(body);
-							break;
-						case "plist":
+						case "text/html":
 						case "text/plist":
+						case "application/xml":
 						case "application/plist":
 						case "application/x-plist":
-							//body = await PLIST("plist2json", $request.body);
-							//$.log(body);
-							//$request.body = await PLIST("json2plist", body);
+							//body = XML.parse($request.body);
+							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+							//$request.body = XML.stringify(body);
 							break;
-						case "vtt":
-						case "webvtt":
 						case "text/vtt":
 						case "application/vtt":
-							//body = VTT.parse($response.body);
-							//$.log(body);
-							//$response.body = VTT.stringify(body);
+							//body = VTT.parse($request.body);
+							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+							//$request.body = VTT.stringify(body);
 							break;
-						case "json":
-						case "json3":
 						case "text/json":
 						case "application/json":
 							//body = JSON.parse($request.body);
-							//$.log(body);
+							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
 							//$request.body = JSON.stringify(body);
 							break;
+						case "application/protobuf":
 						case "application/x-protobuf":
+						case "application/vnd.google.protobuf":
 						case "application/grpc":
 						case "application/grpc+proto":
 						case "applecation/octet-stream":
@@ -104,29 +93,29 @@ let $response = undefined;
 							//if ($request?.headers?.["X-Mask-User-Tier"]) $request.headers["X-Mask-User-Tier"] = "FREE"; //"SUBSCRIBER"
 							//if ($request?.headers?.["x-mask-user-tier"]) $request.headers["x-mask-user-tier"] = "FREE"; //"SUBSCRIBER"
 							if (Settings.CountryCode !== "AUTO") {
-								if ($request?.headers?.["Client-Region"]) $request.headers["Client-Region"] = `${Settings.CountryCode}-GMT+8`;
-								if ($request?.headers?.["client-region"]) $request.headers["client-region"] = `${Settings.CountryCode}-GMT+8`;
+								if ($request.headers?.["Client-Region"]) $request.headers["Client-Region"] = `${Settings.CountryCode}-GMT+8`;
+								if ($request.headers?.["client-region"]) $request.headers["client-region"] = `${Settings.CountryCode}-GMT+8`;
 							};
 							// 路径判断
 							switch (PATH) {
 								case "v1/fetchAuthTokens":
-									$.lodash.set(Caches, "fetchAuthTokens.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
-									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
+									_.set(Caches, "fetchAuthTokens.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
+									$Storage.setItem("@iRingo.PrivateRelay.Caches", Caches);
 									break;
 								case "v3_1/fetchConfigFile":
 								case "v3_2/fetchConfigFile":
-									$.lodash.set(Caches, "fetchConfigFile.ETag", setETag($request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
-									$.setjson(Caches, "@iRingo.PrivateRelay.Caches");
+									_.set(Caches, "fetchConfigFile.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
+									$Storage.setItem("@iRingo.PrivateRelay.Caches", Caches);
 							};
 							break;
 					};
-					if ($request?.headers?.Host) $request.headers.Host = url.host;
-					$request.url = URL.stringify(url);
 					break;
 				case "CONNECT":
 				case "TRACE":
 					break;
 			};
+			if ($request.headers?.Host) $request.headers.Host = URL.host;
+			$request.url = URI.stringify(URL);
 			break;
 		case false:
 			break;

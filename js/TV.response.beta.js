@@ -1,11 +1,11 @@
+/* README: https://github.com/VirgilClyne/iRingo */
+/* https://www.lodashjs.com */
 class Lodash {
-	constructor() {
-		this.name = "Lodash";
-		this.version = '1.2.0';
-		console.log(`\n${this.name} v${this.version}\n`);
-	}
+	static name = "Lodash";
+	static version = "1.2.2";
+	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
 
-	get(object = {}, path = "", defaultValue = undefined) {
+	static get(object = {}, path = "", defaultValue = undefined) {
 		// translate array case to dot case, then split with .
 		// a[0].b -> a.0.b -> ['a', '0', 'b']
 		if (!Array.isArray(path)) path = this.toPath(path);
@@ -16,7 +16,7 @@ class Lodash {
 		return (result === undefined) ? defaultValue : result;
 	}
 
-	set(object = {}, path = "", value) {
+	static set(object = {}, path = "", value) {
 		if (!Array.isArray(path)) path = this.toPath(path);
 		path
 			.slice(0, -1)
@@ -30,7 +30,7 @@ class Lodash {
 		return object
 	}
 
-	unset(object = {}, path = "") {
+	static unset(object = {}, path = "") {
 		if (!Array.isArray(path)) path = this.toPath(path);
 		let result = path.reduce((previousValue, currentValue, currentIndex) => {
 			if (currentIndex === path.length - 1) {
@@ -42,11 +42,11 @@ class Lodash {
 		return result
 	}
 
-	toPath(value) {
+	static toPath(value) {
 		return value.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
 	}
 
-	escape(string) {
+	static escape(string) {
 		const map = {
 			'&': '&amp;',
 			'<': '&lt;',
@@ -57,7 +57,7 @@ class Lodash {
 		return string.replace(/[&<>"']/g, m => map[m])
 	};
 
-	unescape(string) {
+	static unescape(string) {
 		const map = {
 			'&amp;': '&',
 			'&lt;': '<',
@@ -70,21 +70,243 @@ class Lodash {
 
 }
 
+/* https://developer.mozilla.org/zh-CN/docs/Web/API/Storage/setItem */
+class $Storage {
+	static name = "$Storage";
+	static version = "1.0.9";
+	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
+	static data = null
+	static dataFile = 'box.dat'
+	static #nameRegex = /^@(?<key>[^.]+)(?:\.(?<path>.*))?$/;
+
+	static #platform() {
+		if ('undefined' !== typeof $environment && $environment['surge-version'])
+			return 'Surge'
+		if ('undefined' !== typeof $environment && $environment['stash-version'])
+			return 'Stash'
+		if ('undefined' !== typeof module && !!module.exports) return 'Node.js'
+		if ('undefined' !== typeof $task) return 'Quantumult X'
+		if ('undefined' !== typeof $loon) return 'Loon'
+		if ('undefined' !== typeof $rocket) return 'Shadowrocket'
+		if ('undefined' !== typeof Egern) return 'Egern'
+	}
+
+    static getItem(keyName = new String, defaultValue = null) {
+        let keyValue = defaultValue;
+        // 如果以 @
+		switch (keyName.startsWith('@')) {
+			case true:
+				const { key, path } = keyName.match(this.#nameRegex)?.groups;
+				//console.log(`1: ${key}, ${path}`);
+				keyName = key;
+				let value = this.getItem(keyName, {});
+				//console.log(`2: ${JSON.stringify(value)}`)
+				if (typeof value !== "object") value = {};
+				//console.log(`3: ${JSON.stringify(value)}`)
+				keyValue = Lodash.get(value, path);
+				//console.log(`4: ${JSON.stringify(keyValue)}`)
+				try {
+					keyValue = JSON.parse(keyValue);
+				} catch (e) {
+					// do nothing
+				}				//console.log(`5: ${JSON.stringify(keyValue)}`)
+				break;
+			default:
+				switch (this.#platform()) {
+					case 'Surge':
+					case 'Loon':
+					case 'Stash':
+					case 'Egern':
+					case 'Shadowrocket':
+						keyValue = $persistentStore.read(keyName);
+						break;
+					case 'Quantumult X':
+						keyValue = $prefs.valueForKey(keyName);
+						break;
+					case 'Node.js':
+						this.data = this.#loaddata(this.dataFile);
+						keyValue = this.data?.[keyName];
+						break;
+					default:
+						keyValue = this.data?.[keyName] || null;
+						break;
+				}				try {
+					keyValue = JSON.parse(keyValue);
+				} catch (e) {
+					// do nothing
+				}				break;
+		}		return keyValue ?? defaultValue;
+    };
+
+	static setItem(keyName = new String, keyValue = new String) {
+		let result = false;
+		//console.log(`0: ${typeof keyValue}`);
+		switch (typeof keyValue) {
+			case "object":
+				keyValue = JSON.stringify(keyValue);
+				break;
+			default:
+				keyValue = String(keyValue);
+				break;
+		}		switch (keyName.startsWith('@')) {
+			case true:
+				const { key, path } = keyName.match(this.#nameRegex)?.groups;
+				//console.log(`1: ${key}, ${path}`);
+				keyName = key;
+				let value = this.getItem(keyName, {});
+				//console.log(`2: ${JSON.stringify(value)}`)
+				if (typeof value !== "object") value = {};
+				//console.log(`3: ${JSON.stringify(value)}`)
+				Lodash.set(value, path, keyValue);
+				//console.log(`4: ${JSON.stringify(value)}`)
+				result = this.setItem(keyName, value);
+				//console.log(`5: ${result}`)
+				break;
+			default:
+				switch (this.#platform()) {
+					case 'Surge':
+					case 'Loon':
+					case 'Stash':
+					case 'Egern':
+					case 'Shadowrocket':
+						result = $persistentStore.write(keyValue, keyName);
+						break;
+					case 'Quantumult X':
+						result =$prefs.setValueForKey(keyValue, keyName);
+						break;
+					case 'Node.js':
+						this.data = this.#loaddata(this.dataFile);
+						this.data[keyName] = keyValue;
+						this.#writedata(this.dataFile);
+						result = true;
+						break;
+					default:
+						result = this.data?.[keyName] || null;
+						break;
+				}				break;
+		}		return result;
+	};
+
+    static removeItem(keyName){
+		let result = false;
+		switch (keyName.startsWith('@')) {
+			case true:
+				const { key, path } = keyName.match(this.#nameRegex)?.groups;
+				keyName = key;
+				let value = this.getItem(keyName);
+				if (typeof value !== "object") value = {};
+				keyValue = Lodash.unset(value, path);
+				result = this.setItem(keyName, value);
+				break;
+			default:
+				switch (this.#platform()) {
+					case 'Surge':
+					case 'Loon':
+					case 'Stash':
+					case 'Egern':
+					case 'Shadowrocket':
+						result = false;
+						break;
+					case 'Quantumult X':
+						result = $prefs.removeValueForKey(keyName);
+						break;
+					case 'Node.js':
+						result = false;
+						break;
+					default:
+						result = false;
+						break;
+				}				break;
+		}		return result;
+    }
+
+    static clear() {
+		let result = false;
+		switch (this.#platform()) {
+			case 'Surge':
+			case 'Loon':
+			case 'Stash':
+			case 'Egern':
+			case 'Shadowrocket':
+				result = false;
+				break;
+			case 'Quantumult X':
+				result = $prefs.removeAllValues();
+				break;
+			case 'Node.js':
+				result = false;
+				break;
+			default:
+				result = false;
+				break;
+		}		return result;
+    }
+
+	static #loaddata(dataFile) {
+		if (this.isNode()) {
+			this.fs = this.fs ? this.fs : require('fs');
+			this.path = this.path ? this.path : require('path');
+			const curDirDataFilePath = this.path.resolve(dataFile);
+			const rootDirDataFilePath = this.path.resolve(
+				process.cwd(),
+				dataFile
+			);
+			const isCurDirDataFile = this.fs.existsSync(curDirDataFilePath);
+			const isRootDirDataFile =
+				!isCurDirDataFile && this.fs.existsSync(rootDirDataFilePath);
+			if (isCurDirDataFile || isRootDirDataFile) {
+				const datPath = isCurDirDataFile
+					? curDirDataFilePath
+					: rootDirDataFilePath;
+				try {
+					return JSON.parse(this.fs.readFileSync(datPath))
+				} catch (e) {
+					return {}
+				}
+			} else return {}
+		} else return {}
+	}
+
+	static #writedata(dataFile = this.dataFile) {
+		if (this.isNode()) {
+			this.fs = this.fs ? this.fs : require('fs');
+			this.path = this.path ? this.path : require('path');
+			const curDirDataFilePath = this.path.resolve(dataFile);
+			const rootDirDataFilePath = this.path.resolve(
+				process.cwd(),
+				dataFile
+			);
+			const isCurDirDataFile = this.fs.existsSync(curDirDataFilePath);
+			const isRootDirDataFile =
+				!isCurDirDataFile && this.fs.existsSync(rootDirDataFilePath);
+			const jsondata = JSON.stringify(this.data);
+			if (isCurDirDataFile) {
+				this.fs.writeFileSync(curDirDataFilePath, jsondata);
+			} else if (isRootDirDataFile) {
+				this.fs.writeFileSync(rootDirDataFilePath, jsondata);
+			} else {
+				this.fs.writeFileSync(curDirDataFilePath, jsondata);
+			}
+		}
+	};
+
+}
+
 class ENV {
+	static name = "ENV"
+	static version = '1.6.4'
+	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) }
+
 	constructor(name, opts) {
+		console.log(`\n🟧 ${ENV.name} v${ENV.version}\n`);
 		this.name = name;
-		this.version = '1.5.11';
-		this.data = null;
-		this.dataFile = 'box.dat';
 		this.logs = [];
 		this.isMute = false;
 		this.logSeparator = '\n';
 		this.encoding = 'utf-8';
 		this.startTime = new Date().getTime();
 		Object.assign(this, opts);
-		this.log('', '🚩 开始!', `ENV v${this.version}`, '');
-		this.lodash = new Lodash(this.name);
-		this.log('', this.name, '');
+		this.log(`\n🚩 开始!\n${name}\n`);
 	}
 
 	platform() {
@@ -127,41 +349,6 @@ class ENV {
 		return 'Egern' === this.platform()
 	}
 
-	toObj(str, defaultValue = null) {
-		try {
-			return JSON.parse(str)
-		} catch {
-			return defaultValue
-		}
-	}
-
-	toStr(obj, defaultValue = null) {
-		try {
-			return JSON.stringify(obj)
-		} catch {
-			return defaultValue
-		}
-	}
-
-	getjson(key, defaultValue) {
-		let json = defaultValue;
-		const val = this.getdata(key);
-		if (val) {
-			try {
-				json = JSON.parse(this.getdata(key));
-			} catch { }
-		}
-		return json
-	}
-
-	setjson(val, key) {
-		try {
-			return this.setdata(JSON.stringify(val), key)
-		} catch {
-			return false
-		}
-	}
-
 	getScript(url) {
 		return new Promise((resolve) => {
 			this.get({ url }, (error, response, body) => resolve(body));
@@ -170,11 +357,9 @@ class ENV {
 
 	runScript(script, runOpts) {
 		return new Promise((resolve) => {
-			let httpapi = this.getdata('@chavy_boxjs_userCfgs.httpapi');
+			let httpapi = this.Storage.getItem('@chavy_boxjs_userCfgs.httpapi');
 			httpapi = httpapi ? httpapi.replace(/\n/g, '').trim() : httpapi;
-			let httpapi_timeout = this.getdata(
-				'@chavy_boxjs_userCfgs.httpapi_timeout'
-			);
+			let httpapi_timeout = this.Storage.getItem('@chavy_boxjs_userCfgs.httpapi_timeout');
 			httpapi_timeout = httpapi_timeout ? httpapi_timeout * 1 : 20;
 			httpapi_timeout =
 				runOpts && runOpts.timeout ? runOpts.timeout : httpapi_timeout;
@@ -191,134 +376,6 @@ class ENV {
 			};
 			this.post(opts, (error, response, body) => resolve(body));
 		}).catch((e) => this.logErr(e))
-	}
-
-	loaddata() {
-		if (this.isNode()) {
-			this.fs = this.fs ? this.fs : require('fs');
-			this.path = this.path ? this.path : require('path');
-			const curDirDataFilePath = this.path.resolve(this.dataFile);
-			const rootDirDataFilePath = this.path.resolve(
-				process.cwd(),
-				this.dataFile
-			);
-			const isCurDirDataFile = this.fs.existsSync(curDirDataFilePath);
-			const isRootDirDataFile =
-				!isCurDirDataFile && this.fs.existsSync(rootDirDataFilePath);
-			if (isCurDirDataFile || isRootDirDataFile) {
-				const datPath = isCurDirDataFile
-					? curDirDataFilePath
-					: rootDirDataFilePath;
-				try {
-					return JSON.parse(this.fs.readFileSync(datPath))
-				} catch (e) {
-					return {}
-				}
-			} else return {}
-		} else return {}
-	}
-
-	writedata() {
-		if (this.isNode()) {
-			this.fs = this.fs ? this.fs : require('fs');
-			this.path = this.path ? this.path : require('path');
-			const curDirDataFilePath = this.path.resolve(this.dataFile);
-			const rootDirDataFilePath = this.path.resolve(
-				process.cwd(),
-				this.dataFile
-			);
-			const isCurDirDataFile = this.fs.existsSync(curDirDataFilePath);
-			const isRootDirDataFile =
-				!isCurDirDataFile && this.fs.existsSync(rootDirDataFilePath);
-			const jsondata = JSON.stringify(this.data);
-			if (isCurDirDataFile) {
-				this.fs.writeFileSync(curDirDataFilePath, jsondata);
-			} else if (isRootDirDataFile) {
-				this.fs.writeFileSync(rootDirDataFilePath, jsondata);
-			} else {
-				this.fs.writeFileSync(curDirDataFilePath, jsondata);
-			}
-		}
-	}
-	getdata(key) {
-		let val = this.getval(key);
-		// 如果以 @
-		if (/^@/.test(key)) {
-			const [, objkey, paths] = /^@(.*?)\.(.*?)$/.exec(key);
-			const objval = objkey ? this.getval(objkey) : '';
-			if (objval) {
-				try {
-					const objedval = JSON.parse(objval);
-					val = objedval ? this.lodash.get(objedval, paths, '') : val;
-				} catch (e) {
-					val = '';
-				}
-			}
-		}
-		return val
-	}
-
-	setdata(val, key) {
-		let issuc = false;
-		if (/^@/.test(key)) {
-			const [, objkey, paths] = /^@(.*?)\.(.*?)$/.exec(key);
-			const objdat = this.getval(objkey);
-			const objval = objkey
-				? objdat === 'null'
-					? null
-					: objdat || '{}'
-				: '{}';
-			try {
-				const objedval = JSON.parse(objval);
-				this.lodash.set(objedval, paths, val);
-				issuc = this.setval(JSON.stringify(objedval), objkey);
-			} catch (e) {
-				const objedval = {};
-				this.lodash.set(objedval, paths, val);
-				issuc = this.setval(JSON.stringify(objedval), objkey);
-			}
-		} else {
-			issuc = this.setval(val, key);
-		}
-		return issuc
-	}
-
-	getval(key) {
-		switch (this.platform()) {
-			case 'Surge':
-			case 'Loon':
-			case 'Stash':
-			case 'Egern':
-			case 'Shadowrocket':
-				return $persistentStore.read(key)
-			case 'Quantumult X':
-				return $prefs.valueForKey(key)
-			case 'Node.js':
-				this.data = this.loaddata();
-				return this.data[key]
-			default:
-				return (this.data && this.data[key]) || null
-		}
-	}
-
-	setval(val, key) {
-		switch (this.platform()) {
-			case 'Surge':
-			case 'Loon':
-			case 'Stash':
-			case 'Egern':
-			case 'Shadowrocket':
-				return $persistentStore.write(val, key)
-			case 'Quantumult X':
-				return $prefs.setValueForKey(val, key)
-			case 'Node.js':
-				this.data = this.loaddata();
-				this.data[key] = val;
-				this.writedata();
-				return true
-			default:
-				return (this.data && this.data[key]) || null
-		}
 	}
 
 	initGotEnv(opts) {
@@ -359,7 +416,7 @@ class ENV {
 				// 添加策略组
 				if (request.policy) {
 					if (this.isLoon()) request.node = request.policy;
-					if (this.isStash()) this.lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
+					if (this.isStash()) Lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
 				}				// 判断请求数据类型
 				if (ArrayBuffer.isView(request.body)) request["binary-mode"] = true;
 				// 发送请求
@@ -377,34 +434,25 @@ class ENV {
 					});
 				});
 			case 'Quantumult X':
+				// 添加策略组
+				if (request.policy) Lodash.set(request, "opts.policy", request.policy);
 				// 移除不可写字段
 				delete request.charset;
+				delete request.host;
 				delete request.path;
+				delete request.policy;
 				delete request.scheme;
 				delete request.sessionIndex;
 				delete request.statusCode;
-				// 添加策略组
-				if (request.policy) this.lodash.set(request, "opts.policy", request.policy);
 				// 判断请求数据类型
-				switch ((request?.headers?.["Content-Type"] ?? request?.headers?.["content-type"])?.split(";")?.[0]) {
-					default:
-						// 返回普通数据
-						delete request.bodyBytes;
-						break;
-					case "application/protobuf":
-					case "application/x-protobuf":
-					case "application/vnd.google.protobuf":
-					case "application/grpc":
-					case "application/grpc+proto":
-					case "application/octet-stream":
-						// 返回二进制数据
-						delete request.body;
-						if (ArrayBuffer.isView(request.bodyBytes)) request.bodyBytes = request.bodyBytes.buffer.slice(request.bodyBytes.byteOffset, request.bodyBytes.byteLength + request.bodyBytes.byteOffset);
-						break;
-					case undefined: // 视为构造请求或无body
-						// 返回普通数据
-						break;
-				}				// 发送请求
+				if (request.body instanceof ArrayBuffer) {
+					request.bodyBytes = request.body;
+					delete request.body;
+				} else if (ArrayBuffer.isView(request.body)) {
+					request.bodyBytes = request.body.buffer.slice(request.body.byteOffset, request.body.byteLength + request.body.byteOffset);
+					delete object.body;
+				} else if (request.body) delete request.bodyBytes;
+				// 发送请求
 				return await $task.fetch(request).then(
 					response => {
 						response.ok = /^2\d\d$/.test(response.statusCode);
@@ -613,19 +661,33 @@ class ENV {
 		this.log("", `🚩 ${this.name}, 结束! 🕛 ${costTime} 秒`, "");
 		switch (this.platform()) {
 			case 'Surge':
+				if (object.policy) Lodash.set(object, "headers.X-Surge-Policy", object.policy);
+				$done(object);
+				break;
 			case 'Loon':
+				if (object.policy) object.node = object.policy;
+				$done(object);
+				break;
 			case 'Stash':
+				if (object.policy) Lodash.set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy));
+				$done(object);
+				break;
 			case 'Egern':
+				$done(object);
+				break;
 			case 'Shadowrocket':
 			default:
 				$done(object);
 				break;
 			case 'Quantumult X':
+				if (object.policy) Lodash.set(object, "opts.policy", object.policy);
 				// 移除不可写字段
 				delete object.charset;
 				delete object.host;
 				delete object.method; // 1.4.x 不可写
-				delete object.path;
+				delete object.opt; // $task.fetch() 参数, 不可写
+				delete object.path; // 可写, 但会与 url 冲突
+				delete object.policy;
 				delete object.scheme;
 				delete object.sessionIndex;
 				delete object.statusCode;
@@ -658,7 +720,7 @@ class ENV {
 		/***************** BoxJs *****************/
 		// 包装为局部变量，用完释放内存
 		// BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
-		let BoxJs = this.getjson(key, database);
+		let BoxJs = $Storage.getItem(key, database);
 		//this.log(`🚧 ${this.name}, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
 		/***************** Argument *****************/
 		let Argument = {};
@@ -667,7 +729,7 @@ class ENV {
 				//this.log(`🎉 ${this.name}, $Argument`);
 				let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
 				//this.log(JSON.stringify(arg));
-				for (let item in arg) this.lodash.set(Argument, item, arg[item]);
+				for (let item in arg) Lodash.set(Argument, item, arg[item]);
 				//this.log(JSON.stringify(Argument));
 			}			//this.log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
 		}		/***************** Store *****************/
@@ -697,14 +759,13 @@ class ENV {
 	string2number(string) { if (string && !isNaN(string)) string = parseInt(string, 10); return string }
 }
 
-let URI$1 = class URI {
-	constructor(opts = []) {
-		this.name = "URI v1.2.6";
-		this.opts = opts;
-		this.json = { scheme: "", host: "", path: "", query: {} };
-	};
+class URI {
+	static name = "URI";
+	static version = "1.2.7";
+	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
+	static #json = { scheme: "", host: "", path: "", query: {} };
 
-	parse(url) {
+	static parse(url) {
 		const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/;
 		let json = url.match(URLRegex)?.groups ?? null;
 		if (json?.path) json.paths = json.path.split("/"); else json.path = "";
@@ -720,14 +781,14 @@ let URI$1 = class URI {
 		return json
 	};
 
-	stringify(json = this.json) {
+	static stringify(json = this.#json) {
 		let url = "";
 		if (json?.scheme && json?.host) url += json.scheme + "://" + json.host;
 		if (json?.path) url += (json?.host) ? "/" + json.path : json.path;
 		if (json?.query) url += "?" + Object.entries(json.query).map(param => param.join("=")).join("&");
 		return url
 	};
-};
+}
 
 var Settings$6 = {
 	Switch: true
@@ -2076,17 +2137,11 @@ function setENV($, name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-/*
-README: https://github.com/VirgilClyne/iRingo
-*/
-
-
-const $ = new ENV(" iRingo: 📺 TV v3.2.3(3) response.beta");
-const URI = new URI$1();
+const $ = new ENV(" iRingo: 📺 TV v3.2.4(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request?.url);
+const URL = URI.parse($request.url);
 $.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
@@ -2108,7 +2163,6 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					break;
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
-				case "text/html":
 				default:
 					break;
 				case "application/x-mpegURL":
@@ -2120,6 +2174,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
+				case "text/html":
 				case "text/plist":
 				case "application/xml":
 				case "application/plist":
