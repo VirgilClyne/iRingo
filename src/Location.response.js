@@ -7,21 +7,21 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 Location v3.1.6(1) response");
+const $ = new ENV(" iRingo: 📍 Location v3.1.6(2) response");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV($, "iRingo", "Location", Database);
-	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
+	const { Settings, Caches, Configs } = setENV("iRingo", "Location", Database);
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -129,11 +129,11 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
  * @return {Promise<*>}
  */
 async function setGCC(name, caches) {
-	$.log(`⚠ ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
+	$.log(`⚠ Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
 	if ($response.body !== caches?.[name]?.gcc) {
 		let newCaches = caches;
 		newCaches[name] = { "gcc": $response.body };
 		$Storage.setItem("@iRingo.Location.Caches", newCaches);
 	}
-	return $.log(`🎉 ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
+	return $.log(`🎉 Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
 };

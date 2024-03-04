@@ -6,7 +6,7 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(1) request");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) request");
 
 // 构造回复数据
 let $response = undefined;
@@ -14,16 +14,16 @@ let $response = undefined;
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV($, "iRingo", "TestFlight", Database);
-	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
+	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database);
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -88,21 +88,21 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																default:
 																	switch (PATHs[3]) {
 																		case "apps":
-																			$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
+																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
 																			switch (PATHs[4]) {
 																				default:
 																					switch (PATHs[5]) {
 																						case "builds":
 																							switch (PATHs[7]) {
 																								case undefined:
-																									$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
+																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																									break;
 																								case "install":
-																									$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
+																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
 																									if (Settings.CountryCode !== "AUTO") body.storefrontId = body.storefrontId.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
 																									break;
 																								default:
-																									$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
+																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
 																									break;
 																							};
 																							break;
@@ -156,13 +156,13 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 									// headers auth mod
 									switch (Settings.MultiAccount) { // MultiAccount
 										case true:
-											$.log(`⚠ ${$.name}, 启用多账号支持`, "");
+											$.log(`⚠ 启用多账号支持`, "");
 											const IfNoneMatch = $request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"];
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches.data) { // Caches.data存在
-												$.log(`⚠ ${$.name}, Caches.data存在，读取`, "");
+												$.log(`⚠ Caches.data存在，读取`, "");
 												switch (PATHs[0]) {
 													case "v1":
 													case "v2":
@@ -178,12 +178,12 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																	default:
 																		switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.test(PATHs[2])) {
 																			case true: // PATHs[2]是UUID
-																				$.log(`⚠ ${$.name}, PATHs[2]是UUID，替换URL.path`, "");
+																				$.log(`⚠ PATHs[2]是UUID，替换URL.path`, "");
 																				URL.path = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
 																				//break; // 不中断，继续处理
 																				case false: // PATHs[2]不是UUID
 																				if (XSessionId !== Caches.headers["X-Session-Id"]) { // sessionId不同
-																					$.log(`⚠ ${$.name}, sessionId不同，替换$request.headers`, "");
+																					$.log(`⚠ sessionId不同，替换$request.headers`, "");
 																					if (IfNoneMatch) {
 																						delete $request.headers?.["If-None-Match"];
 																						delete $request.headers?.["if-none-match"];
@@ -204,7 +204,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																		};
 																		break;
 																		case Caches?.data?.accountId: // PATHs[2]有UUID且与accountId相同
-																		$.log(`⚠ ${$.name}, PATHs[2]与accountId相同，更新Caches`, "");
+																		$.log(`⚠ PATHs[2]与accountId相同，更新Caches`, "");
 																		Caches.headers = {
 																			"X-Request-Id": XRequestId,
 																			"X-Session-Id": XSessionId,
@@ -221,7 +221,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 												};
 												break;
 											} else { // Caches空
-												$.log(`⚠ ${$.name}, Caches空，新写入`, "");
+												$.log(`⚠ Caches空，新写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,

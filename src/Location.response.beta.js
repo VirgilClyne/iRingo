@@ -7,21 +7,21 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 Location v3.1.6(1) response.beta");
+const $ = new ENV(" iRingo: 📍 Location v3.1.6(2) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV($, "iRingo", "Location", Database);
-	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
+	const { Settings, Caches, Configs } = setENV("iRingo", "Location", Database);
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -56,7 +56,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -65,10 +65,10 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
-					$.log(`🚧 ${$.name}`, `body: ${body}`, "");
+					$.log(`🚧 body: ${body}`, "");
 					//body = await PLISTs("plist2json", $response.body);
 					body = XML.parse($response.body);
-					$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					// 主机判断
 					switch (HOST) {
 						case "configuration.ls.apple.com":
@@ -110,20 +110,20 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							};
 							break;
 					};
-					$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = await PLISTs("json2plist", body); // json2plist
 					$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
 				case "application/json":
 					body = JSON.parse($response.body ?? "{}");
-					$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					$response.body = JSON.stringify(body);
 					break;
 				case "application/protobuf":
@@ -151,11 +151,11 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
  * @return {Promise<*>}
  */
 async function setGCC(name, caches) {
-	$.log(`⚠ ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
+	$.log(`⚠ Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
 	if ($response.body !== caches?.[name]?.gcc) {
 		let newCaches = caches;
 		newCaches[name] = { "gcc": $response.body };
 		$Storage.setItem("@iRingo.Location.Caches", newCaches);
 	}
-	return $.log(`🎉 ${$.name}, Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
+	return $.log(`🎉 Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
 };

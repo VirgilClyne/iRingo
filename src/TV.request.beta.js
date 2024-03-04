@@ -6,7 +6,7 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📺 TV v3.2.3(1) request.beta");
+const $ = new ENV(" iRingo: 📺 TV v3.2.3(2) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -14,16 +14,16 @@ let $response = undefined;
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV($, "iRingo", "TV", Database);
-	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
+	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -66,7 +66,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 						case "application/vnd.apple.mpegurl":
 						case "audio/mpegurl":
 							//body = M3U8.parse($request.body);
-							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
@@ -76,13 +76,13 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 						case "application/plist":
 						case "application/x-plist":
 							//body = XML.parse($request.body);
-							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = XML.stringify(body);
 							break;
 						case "text/vtt":
 						case "application/vtt":
 							//body = VTT.parse($request.body);
-							//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = VTT.stringify(body);
 							break;
 						case "text/json":
@@ -95,7 +95,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 									switch (PATH) {
 										case "uts/v3/user/settings":
 											Type = "Settings";
-											$.log(`🚧 ${$.name}, 调试信息`, JSON.stringify(body), "")
+											$.log(`🚧 调试信息`, JSON.stringify(body), "")
 											break;
 									};
 									break;
@@ -105,7 +105,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 										case "v3/channels/scoreboard":
 										case "v3/channels/scoreboard/":
 											Type = "Sports";
-											$.log(`🚧 ${$.name}, 调试信息`, JSON.stringify(body), "")
+											$.log(`🚧 调试信息`, JSON.stringify(body), "")
 											break;
 									};
 									break;
@@ -139,11 +139,11 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 										if (URL.query.country) URL.query.country = Settings.CountryCode[Type] ?? URL.query.country;
 										if (URL.query.sfh) URL.query.sfh = URL.query.sfh.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type]));
 									};
-									$.log(`🚧 ${$.name}, 调试信息`, `region = ${URL.query?.region}, country = ${URL.query?.country}, sfh = ${URL.query?.sfh}`, "")
+									$.log(`🚧 调试信息`, `region = ${URL.query?.region}, country = ${URL.query?.country}, sfh = ${URL.query?.sfh}`, "")
 									break;
 								case "uts/v3/user/settings":
 									Type = "Settings";
-									$.log(`🚧 ${$.name}, 调试信息`, `caller = ${URL.query?.caller}, pfm = ${URL.query?.pfm}, sf = ${URL.query?.sf}`, "")
+									$.log(`🚧 调试信息`, `caller = ${URL.query?.caller}, pfm = ${URL.query?.pfm}, sf = ${URL.query?.sf}`, "")
 									break;
 								case "uts/v3/canvases/Roots/watchNow":
 								case "uts/v3/canvases/roots/tahoma_watchnow":
@@ -254,7 +254,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 							};
 							break;
 					};
-					$.log(`⚠ ${$.name}, Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
+					$.log(`⚠ Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
 					break;
 				case "CONNECT":
 				case "TRACE":
@@ -264,10 +264,10 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 			if ($request.headers?.["x-apple-store-front"]) $request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type])) ? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type])) : $request.headers["x-apple-store-front"];
 			if (URL.query?.sf) URL.query.sf = Configs.Storefront.get(Settings.CountryCode[Type]) ?? URL.query.sf
 			if (URL.query?.locale) URL.query.locale = Configs.Locale.get(Settings.CountryCode[Type]) ?? URL.query.locale
-			$.log(`🚧 ${$.name}, 调试信息`, `sf = ${URL.query?.sf}, locale = ${URL.query?.locale}`, "")
+			$.log(`🚧 调试信息`, `sf = ${URL.query?.sf}, locale = ${URL.query?.locale}`, "")
 			if ($request.headers?.Host) $request.headers.Host = URL.host;
 			$request.url = URI.stringify(URL);
-			$.log(`🚧 ${$.name}, 调试信息`, `$request.url: ${$request.url}`, "");
+			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
@@ -277,7 +277,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
-				//$.log(`🚧 ${$.name}, finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
+				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
 				if ($.isQuanX()) {
@@ -289,7 +289,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				} else $.done({ response: $response });
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				//$.log(`🚧 ${$.name}, finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
+				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
 				$.done($request);
 				break;
 		};

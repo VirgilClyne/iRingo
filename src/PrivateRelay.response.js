@@ -6,20 +6,20 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v1.0.4(1) response");
+const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v1.0.4(2) response");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
-	const { Settings, Caches = {}, Configs } = setENV($, "iRingo", "PrivateRelay", Database);
+	const { Settings, Caches = {}, Configs } = setENV("iRingo", "PrivateRelay", Database);
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -29,45 +29,45 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 					break;
 				default:
 					if (/\/accounts\//i.test(PATH)) {
-						$.log(`🚧 ${$.name}, accounts`, "");
+						$.log(`🚧 accounts`, "");
 						// app info mod
 						if (/\/subscriptions\/features/i.test(PATH)) {
-							$.log(`🚧 ${$.name}, /subscriptions/features`, "");
+							$.log(`🚧 /subscriptions/features`, "");
 							$request.headers["X-MMe-Country"] = Settings.CountryCode;
 							if (/\/features$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /features`, "");
+								$.log(`🚧 /features`, "");
 							} else if (/\/networking\.privacy\.subscriber$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /networking.privacy.subscriber`, "");
+								$.log(`🚧 /networking.privacy.subscriber`, "");
 							} else if (/\/networking\.privacy\.attestation$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /networking.privacy.attestation`, "");
+								$.log(`🚧 /networking.privacy.attestation`, "");
 							} else if (/\/mail\.hide-my-email\.create$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /mail.hide-my-email.create`, "");
+								$.log(`🚧 /mail.hide-my-email.create`, "");
 							} else if (/\/mail\.custom-domains\.transfer$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
-							} else $.log(`🚧 ${$.name}, unknown`, "");
+								$.log(`🚧 /mail.custom-domains.transfer`, "");
+							} else $.log(`🚧 unknown`, "");
 						};
 					} else if (/\/devices\//i.test(PATH)) {
-						$.log(`🚧 ${$.name}, devices`, "");
+						$.log(`🚧 devices`, "");
 						// app info mod
 						if (/\/subscriptions\/features/i.test(PATH)) {
-							$.log(`🚧 ${$.name}, /subscriptions/features`, "");
+							$.log(`🚧 /subscriptions/features`, "");
 							$request.headers["X-MMe-Country"] = Settings.CountryCode;
 							if (/\/features$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /features`, "");
+								$.log(`🚧 /features`, "");
 							} else if (/\/networking\.privacy\.subscriber$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /networking.privacy.subscriber`, "");
+								$.log(`🚧 /networking.privacy.subscriber`, "");
 							} else if (/\/networking\.privacy\.attestation$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /networking.privacy.attestation`, "");
+								$.log(`🚧 /networking.privacy.attestation`, "");
 							} else if (/\/mail\.hide-my-email\.create$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /mail.hide-my-email.create`, "");
+								$.log(`🚧 /mail.hide-my-email.create`, "");
 							} else if (/\/mail\.custom-domains\.transfer$/i.test(PATH)) {
-								$.log(`🚧 ${$.name}, /mail.custom-domains.transfer`, "");
-							} else $.log(`🚧 ${$.name}, unknown`, "");
+								$.log(`🚧 /mail.custom-domains.transfer`, "");
+							} else $.log(`🚧 unknown`, "");
 						};
 					};
 					break;
 			};
-			$.log(`🚧 ${$.name}, Private Relay`, `$response.body = ${$response.body}`, "");
+			$.log(`🚧 Private Relay`, `$response.body = ${$response.body}`, "");
 			break;
 		case false:
 			break;

@@ -6,21 +6,21 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📺 TV v3.2.4(1) response.beta");
+const $ = new ENV(" iRingo: 📺 TV v3.2.4(2) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV($, "iRingo", "TV", Database);
-	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
+	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -39,7 +39,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -49,13 +49,13 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 				case "application/plist":
 				case "application/x-plist":
 					//body = XML.parse($response.body);
-					//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
@@ -69,7 +69,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 								case "uts/v3/configurations":
 									const Version = parseInt(URL.query?.v, 10), Platform = URL.query?.pfm, Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
 									if (URL.query.caller !== "wta") { // 不修改caller=wta的configurations数据
-										$.log(`⚠ ${$.name}`, `Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
+										$.log(`⚠ Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
 										if (body?.data?.applicationProps) {
 											//body.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
 											//body.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
@@ -77,14 +77,14 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 											Settings.Tabs.forEach((type) => {
 												if (body.data.applicationProps.tabs.some(Tab => Tab?.type === type)) {
 													let tab = body.data.applicationProps.tabs.find(Tab => Tab?.type === type);
-													$.log(`🚧 ${$.name}`, `oTab: ${JSON.stringify(tab)}`, "");
+													$.log(`🚧 oTab: ${JSON.stringify(tab)}`, "");
 													let index = body.data.applicationProps.tabs.findIndex(Tab => Tab?.type === type);
-													$.log(`🚧 ${$.name}`, `oIndex: ${index}`, "");
+													$.log(`🚧 oIndex: ${index}`, "");
 													if (index === 0) newTabs.unshift(tab);
 													else newTabs.push(tab);
 												} else if (Configs.Tabs.some(Tab => Tab?.type === type)) {
 													let tab = Configs.Tabs.find(Tab => Tab?.type === type);
-													$.log(`🚧 ${$.name}`, `aTab: ${JSON.stringify(tab)}`, "");
+													$.log(`🚧 aTab: ${JSON.stringify(tab)}`, "");
 													switch (tab?.destinationType) {
 														case "SubTabs":
 															tab.subTabs = tab.subTabs.map(subTab => {
@@ -175,7 +175,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 													};
 												};
 											});
-											$.log(`🚧 ${$.name}`, `newTabs: ${JSON.stringify(newTabs)}`, "");
+											$.log(`🚧 newTabs: ${JSON.stringify(newTabs)}`, "");
 											body.data.applicationProps.tabs = newTabs;
 											/*
 											body.data.applicationProps.tabs = Configs.Tabs.map((tab, index) => {
@@ -396,18 +396,18 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 
 /***************** Function *****************/
 function setPlayable(playable, HLSUrl, ServerUrl) {
-	$.log(`☑️ ${$.name}, Set Playable Content`, "");
+	$.log(`☑️ Set Playable Content`, "");
 	let assets = playable?.assets;
 	let itunesMediaApiData = playable?.itunesMediaApiData;
 	if (assets) assets = setUrl(assets, HLSUrl, ServerUrl);
 	if (itunesMediaApiData?.movieClips) itunesMediaApiData.movieClips = itunesMediaApiData.movieClips.map(movieClip => setUrl(movieClip, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.offers) itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => setUrl(offer, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.personalizedOffers) itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => setUrl(personalizedOffer, HLSUrl, ServerUrl));
-	$.log(`✅ ${$.name}, Set Playable Content`, "");
+	$.log(`✅ Set Playable Content`, "");
 	return playable;
 
 	function setUrl(asset, HLSUrl, ServerUrl) {
-		$.log(`☑️ ${$.name}, Set Url`, "");
+		$.log(`☑️ Set Url`, "");
 		if (asset?.hlsUrl) {
 			let hlsUrl = URI.parse(asset.hlsUrl);
 			switch (hlsUrl.path) {
@@ -433,13 +433,13 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 			fpsNonceServerUrl.host = ServerUrl || "play.itunes.apple.com";
 			asset.fpsNonceServerUrl = URI.stringify(fpsNonceServerUrl);
 		};
-		$.log(`✅ ${$.name}, Set Url`, "");
+		$.log(`✅ Set Url`, "");
 		return asset;
 	};
 };
 
 async function getData(type, settings, database) {
-	$.log(`⚠ ${$.name}, Get View Data`, "");
+	$.log(`⚠ Get View Data`, "");
 	let CCs = [settings.CountryCode[type], "US", "GB"].flat(Infinity);
 	$.log(`CCs=${CCs}`)
 	//查询是否有符合语言的字幕
@@ -461,6 +461,6 @@ async function getData(type, settings, database) {
 		$.log(`data=${JSON.stringify(data)}`)
 		if (data.statusCode === 200 || data.status === 200 ) break;
 	};
-	$.log(`🎉 ${$.name}, 调试信息`, "Get EXT-X-MEDIA Data", `datas: ${JSON.stringify(data.body)}`, "");
+	$.log(`🎉 调试信息`, "Get EXT-X-MEDIA Data", `datas: ${JSON.stringify(data.body)}`, "");
 	return data.body
 };

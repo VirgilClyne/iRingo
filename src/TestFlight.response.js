@@ -6,21 +6,21 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(1) response");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) response");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV($, "iRingo", "TestFlight", Database);
-	$.log(`⚠ ${$.name}`, `Settings.Switch: ${Settings?.Switch}`, "");
+	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database);
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -60,14 +60,14 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 								case "v1/session/authenticate":
 									switch (Settings.MultiAccount) { // MultiAccount
 										case true:
-											$.log(`⚠ ${$.name}, 启用多账号支持`, "");
+											$.log(`⚠ 启用多账号支持`, "");
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches?.data) { //有data
-												$.log(`⚠ ${$.name}, 有Caches.data`, "");
+												$.log(`⚠ 有Caches.data`, "");
 												if (body?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
-													$.log(`⚠ ${$.name}, Account ID相等，刷新缓存`, "");
+													$.log(`⚠ Account ID相等，刷新缓存`, "");
 													Caches.headers = {
 														"X-Request-Id": XRequestId,
 														"X-Session-Id": XSessionId,
@@ -79,7 +79,7 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 													$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 												}
 											} else { // Caches空
-												$.log(`⚠ ${$.name}, Caches空，写入`, "");
+												$.log(`⚠ Caches空，写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,
@@ -131,15 +131,15 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																case "apps":
 																	switch (PATHs[4]) {
 																		case undefined:
-																			$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
+																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
 																			switch (Settings.Universal) { // 通用
 																				case true:
-																					$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+																					$.log(`🚧 启用通用应用支持`, "");
 																					if (body.error === null) { // 数据无错误
-																						$.log(`🚧 ${$.name}, 数据无错误`, "");
+																						$.log(`🚧 数据无错误`, "");
 																						body.data = body.data.map(app => {
 																							if (app.previouslyTested !== false) { // 不是前测试人员
-																								$.log(`🚧 ${$.name}, 不是前测试人员`, "");
+																								$.log(`🚧 不是前测试人员`, "");
 																								app.platforms = app.platforms.map(platform => {
 																									platform.build = modBuild(platform.build);
 																									return platform
@@ -161,12 +161,12 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																				case "builds":
 																					switch (PATHs[7]) {
 																						case undefined:
-																							$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
+																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																							switch (Settings.Universal) { // 通用
 																								case true:
-																									$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+																									$.log(`🚧 启用通用应用支持`, "");
 																									if (body.error === null) { // 数据无错误
-																										$.log(`🚧 ${$.name}, 数据无错误`, "");
+																										$.log(`🚧 数据无错误`, "");
 																										// 当前Bulid
 																										body.data.currentBuild = modBuild(body.data.currentBuild);
 																										// Build列表
@@ -200,12 +200,12 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 																										case "builds":
 																											switch (PATHs[10]) {
 																												case undefined:
-																													$.log(`🚧 ${$.name}, ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
+																													$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
 																													switch (Settings.Universal) { // 通用
 																														case true:
-																															$.log(`🚧 ${$.name}, 启用通用应用支持`, "");
+																															$.log(`🚧 启用通用应用支持`, "");
 																															if (body.error === null) { // 数据无错误
-																																$.log(`🚧 ${$.name}, 数据无错误`, "");
+																																$.log(`🚧 数据无错误`, "");
 																																// 当前Bulid
 																																body.data = body.data.map(data => modBuild(data));
 																															};
@@ -305,21 +305,21 @@ $.log(`⚠ ${$.name}`, `FORMAT: ${FORMAT}`, "");
 function modBuild(build) {
 	switch (build.platform || build.name) {
 		case "ios":
-			$.log(`🚧 ${$.name}, ios`, "");
+			$.log(`🚧 ios`, "");
 			build = Build(build);
 			break;
 		case "osx":
-			$.log(`🚧 ${$.name}, osx`, "");
+			$.log(`🚧 osx`, "");
 			if (build?.macBuildCompatibility?.runsOnAppleSilicon === true) { // 是苹果芯片
-				$.log(`🚧 ${$.name}, runsOnAppleSilicon`, "");
+				$.log(`🚧 runsOnAppleSilicon`, "");
 				build = Build(build);
 			};
 			break;
 		case "appletvos":
-			$.log(`🚧 ${$.name}, appletvos`, "");
+			$.log(`🚧 appletvos`, "");
 			break;
 		default:
-			$.log(`🚧 ${$.name}, unknown platform: ${build.platform || build.name}`, "");
+			$.log(`🚧 unknown platform: ${build.platform || build.name}`, "");
 			break;
 	};
 	return build

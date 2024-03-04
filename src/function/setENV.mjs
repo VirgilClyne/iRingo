@@ -1,3 +1,6 @@
+import getStorage from '../ENV/getStorage.mjs'
+import _ from '../ENV/Lodash.mjs'
+
 /**
  * Set Environment Variables
  * @author VirgilClyne
@@ -7,9 +10,9 @@
  * @param {Object} database - Default DataBase
  * @return {Object} { Settings, Caches, Configs }
  */
-export default function setENV($, name, platforms, database) {
+export default function setENV(name, platforms, database) {
 	console.log(`☑️ Set Environment Variables`, "");
-	let { Settings, Caches, Configs } = $.getENV(name, platforms, database);
+	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
 	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
 	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
