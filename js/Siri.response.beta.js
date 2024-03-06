@@ -2120,9 +2120,9 @@ function setENV(name, platforms, database) {
 	console.log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
-	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
 	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
@@ -2133,21 +2133,21 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $$1 = new ENV(" iRingo: 🔍 Siri v3.0.4(2) response.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v3.0.4(2) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$$1.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path; URL.paths;
-$$1.log(`⚠ METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$$1.log(`⚠ FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", Database$1);
-	$$1.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -2200,11 +2200,11 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 									//body.feedback_url = body?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
 									if (body?.enabled_domains) {
 										body.enabled_domains = [...new Set([...body?.enabled_domains ?? [], ...Settings.Domains])];
-										$$1.log(`🎉 领域列表`, `enabled_domains: ${JSON.stringify(body.enabled_domains)}`, "");
+										$.log(`🎉 领域列表`, `enabled_domains: ${JSON.stringify(body.enabled_domains)}`, "");
 									}
 									if (body?.scene_aware_lookup_enabled_domains) {
 										body.scene_aware_lookup_enabled_domains = [...new Set([...body?.scene_aware_lookup_enabled_domains ?? [], ...Settings.Domains])];
-										$$1.log(`🎉 领域列表`, `scene_aware_lookup_enabled_domains: ${JSON.stringify(body.scene_aware_lookup_enabled_domains)}`, "");
+										$.log(`🎉 领域列表`, `scene_aware_lookup_enabled_domains: ${JSON.stringify(body.scene_aware_lookup_enabled_domains)}`, "");
 									}
 									body.min_query_len = 3;
 									let Overrides = body?.overrides;
@@ -2275,5 +2275,5 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 		case false:
 			break;
 	}})()
-	.catch((e) => $$1.logErr(e))
-	.finally(() => $$1.done($response));
+	.catch((e) => $.logErr(e))
+	.finally(() => $.done($response));

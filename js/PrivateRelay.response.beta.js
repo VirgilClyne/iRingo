@@ -2120,9 +2120,9 @@ function setENV(name, platforms, database) {
 	console.log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
-	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
 	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
@@ -2133,18 +2133,18 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $$1 = new ENV(" iRingo: ☁️ iCloud Private Relay v1.0.4(2) response.beta");
+const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v1.0.4(2) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$$1.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method; URL.host; const PATH = URL.path; URL.paths;
-$$1.log(`⚠ METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$$1.log(`⚠ FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches = {}, Configs } = setENV("iRingo", "PrivateRelay", Database$1);
 	switch (Settings.Switch) {
@@ -2156,44 +2156,44 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 				default:
 					if (/\/accounts\//i.test(PATH)) {
-						$$1.log(`🚧 accounts`, "");
+						$.log(`🚧 accounts`, "");
 						// app info mod
 						if (/\/subscriptions\/features/i.test(PATH)) {
-							$$1.log(`🚧 /subscriptions/features`, "");
+							$.log(`🚧 /subscriptions/features`, "");
 							$request.headers["X-MMe-Country"] = Settings.CountryCode;
 							if (/\/features$/i.test(PATH)) {
-								$$1.log(`🚧 /features`, "");
+								$.log(`🚧 /features`, "");
 							} else if (/\/networking\.privacy\.subscriber$/i.test(PATH)) {
-								$$1.log(`🚧 /networking.privacy.subscriber`, "");
+								$.log(`🚧 /networking.privacy.subscriber`, "");
 							} else if (/\/networking\.privacy\.attestation$/i.test(PATH)) {
-								$$1.log(`🚧 /networking.privacy.attestation`, "");
+								$.log(`🚧 /networking.privacy.attestation`, "");
 							} else if (/\/mail\.hide-my-email\.create$/i.test(PATH)) {
-								$$1.log(`🚧 /mail.hide-my-email.create`, "");
+								$.log(`🚧 /mail.hide-my-email.create`, "");
 							} else if (/\/mail\.custom-domains\.transfer$/i.test(PATH)) {
-								$$1.log(`🚧 /mail.custom-domains.transfer`, "");
-							} else $$1.log(`🚧 unknown`, "");
+								$.log(`🚧 /mail.custom-domains.transfer`, "");
+							} else $.log(`🚧 unknown`, "");
 						}					} else if (/\/devices\//i.test(PATH)) {
-						$$1.log(`🚧 devices`, "");
+						$.log(`🚧 devices`, "");
 						// app info mod
 						if (/\/subscriptions\/features/i.test(PATH)) {
-							$$1.log(`🚧 /subscriptions/features`, "");
+							$.log(`🚧 /subscriptions/features`, "");
 							$request.headers["X-MMe-Country"] = Settings.CountryCode;
 							if (/\/features$/i.test(PATH)) {
-								$$1.log(`🚧 /features`, "");
+								$.log(`🚧 /features`, "");
 							} else if (/\/networking\.privacy\.subscriber$/i.test(PATH)) {
-								$$1.log(`🚧 /networking.privacy.subscriber`, "");
+								$.log(`🚧 /networking.privacy.subscriber`, "");
 							} else if (/\/networking\.privacy\.attestation$/i.test(PATH)) {
-								$$1.log(`🚧 /networking.privacy.attestation`, "");
+								$.log(`🚧 /networking.privacy.attestation`, "");
 							} else if (/\/mail\.hide-my-email\.create$/i.test(PATH)) {
-								$$1.log(`🚧 /mail.hide-my-email.create`, "");
+								$.log(`🚧 /mail.hide-my-email.create`, "");
 							} else if (/\/mail\.custom-domains\.transfer$/i.test(PATH)) {
-								$$1.log(`🚧 /mail.custom-domains.transfer`, "");
-							} else $$1.log(`🚧 unknown`, "");
+								$.log(`🚧 /mail.custom-domains.transfer`, "");
+							} else $.log(`🚧 unknown`, "");
 						}					}					break;
-			}			$$1.log(`🚧 Private Relay`, `$response.body = ${$response.body}`, "");
+			}			$.log(`🚧 Private Relay`, `$response.body = ${$response.body}`, "");
 			break;
 		case false:
 			break;
 	}})()
-	.catch((e) => $$1.logErr(e))
-	.finally(() => $$1.done($response));
+	.catch((e) => $.logErr(e))
+	.finally(() => $.done($response));

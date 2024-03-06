@@ -2120,9 +2120,9 @@ function setENV(name, platforms, database) {
 	console.log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
-	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
 	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
@@ -2133,21 +2133,21 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $$1 = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) response.beta");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$$1.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$$1.log(`⚠ METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$$1.log(`⚠ FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database$1);
-	$$1.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -2188,7 +2188,7 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "text/json":
 				case "application/json":
 					body = JSON.parse($response.body ?? "{}");
-					$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					// 主机判断
 					switch (HOST) {
 						case "testflight.apple.com":
@@ -2197,14 +2197,14 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "v1/session/authenticate":
 									switch (Settings.MultiAccount) { // MultiAccount
 										case true:
-											$$1.log(`⚠ 启用多账号支持`, "");
+											$.log(`⚠ 启用多账号支持`, "");
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches?.data) { //有data
-												$$1.log(`⚠ 有Caches.data`, "");
+												$.log(`⚠ 有Caches.data`, "");
 												if (body?.data?.accountId === Caches?.data?.accountId) { // Account ID相等，刷新缓存
-													$$1.log(`⚠ Account ID相等，刷新缓存`, "");
+													$.log(`⚠ Account ID相等，刷新缓存`, "");
 													Caches.headers = {
 														"X-Request-Id": XRequestId,
 														"X-Session-Id": XSessionId,
@@ -2222,7 +2222,7 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 												}
 												*/
 											} else { // Caches空
-												$$1.log(`⚠ Caches空，写入`, "");
+												$.log(`⚠ Caches空，写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,
@@ -2250,37 +2250,37 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 														case "settings":
 															switch (PATHs[3]) {
 																case undefined:
-																	$$1.log(`🚧 ${PATHs[0]}/accounts/settings`, "");
+																	$.log(`🚧 ${PATHs[0]}/accounts/settings`, "");
 																	break;
 																case "notifications":
 																	switch (PATHs[4]) {
 																		case "apps":
-																			$$1.log(`🚧 ${PATHs[0]}/accounts/settings/notifications/apps/`, "");
+																			$.log(`🚧 ${PATHs[0]}/accounts/settings/notifications/apps/`, "");
 																			break;
 																	}																	break;
 																default:
-																	$$1.log(`🚧 ${PATHs[0]}/accounts/settings/${PATHs[3]}/`, "");
+																	$.log(`🚧 ${PATHs[0]}/accounts/settings/${PATHs[3]}/`, "");
 																	break;
 															}															break;
 														case Caches?.data?.accountId: // UUID
 														default:
 															switch (PATHs[3]) {
 																case undefined:
-																	$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}`, "");
+																	$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}`, "");
 																	break;
 																case "apps":
-																	$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
+																	$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
 																	switch (PATHs[4]) {
 																		case undefined:
-																			$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
+																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
 																			switch (Settings.Universal) { // 通用
 																				case true:
-																					$$1.log(`🚧 启用通用应用支持`, "");
+																					$.log(`🚧 启用通用应用支持`, "");
 																					if (body.error === null) { // 数据无错误
-																						$$1.log(`🚧 数据无错误`, "");
+																						$.log(`🚧 数据无错误`, "");
 																						body.data = body.data.map(app => {
 																							if (app.previouslyTested !== false) { // 不是前测试人员
-																								$$1.log(`🚧 不是前测试人员`, "");
+																								$.log(`🚧 不是前测试人员`, "");
 																								app.platforms = app.platforms.map(platform => {
 																									platform.build = modBuild(platform.build);
 																									return platform
@@ -2293,17 +2293,17 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 																		default:
 																			switch (PATHs[5]) {
 																				case undefined:
-																					$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}`, "");
+																					$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}`, "");
 																					break;
 																				case "builds":
 																					switch (PATHs[7]) {
 																						case undefined:
-																							$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
+																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																							switch (Settings.Universal) { // 通用
 																								case true:
-																									$$1.log(`🚧 启用通用应用支持`, "");
+																									$.log(`🚧 启用通用应用支持`, "");
 																									if (body.error === null) { // 数据无错误
-																										$$1.log(`🚧 数据无错误`, "");
+																										$.log(`🚧 数据无错误`, "");
 																										// 当前Bulid
 																										body.data.currentBuild = modBuild(body.data.currentBuild);
 																										// Build列表
@@ -2311,10 +2311,10 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 																									}																									break;
 																							}																							break;
 																						case "install":
-																							$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
+																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
 																							break;
 																						default:
-																							$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
+																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
 																							break;
 																					}																					break;
 																				case "platforms":
@@ -2325,46 +2325,46 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 																						default:
 																							switch (PATHs[7]) {
 																								case undefined:
-																									$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}`, "");
+																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}`, "");
 																									break;
 																								case "trains":
 																									switch (PATHs[9]) {
 																										case undefined:
-																											$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}`, "");
+																											$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}`, "");
 																											break;
 																										case "builds":
 																											switch (PATHs[10]) {
 																												case undefined:
-																													$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
+																													$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
 																													switch (Settings.Universal) { // 通用
 																														case true:
-																															$$1.log(`🚧 启用通用应用支持`, "");
+																															$.log(`🚧 启用通用应用支持`, "");
 																															if (body.error === null) { // 数据无错误
-																																$$1.log(`🚧 数据无错误`, "");
+																																$.log(`🚧 数据无错误`, "");
 																																// 当前Bulid
 																																body.data = body.data.map(data => modBuild(data));
 																															}																															break;
 																													}																													break;
 																												default:
-																													$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds/${PATHs[10]}`, "");
+																													$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds/${PATHs[10]}`, "");
 																													break;
 																											}																											break;
 																										default:
-																											$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/${PATHs[9]}`, "");
+																											$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/${PATHs[9]}`, "");
 																											break;
 																									}																									break;
 																								default:
-																									$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/${PATHs[7]}`, "");
+																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/${PATHs[7]}`, "");
 																									break;
 																							}																							break;
 																					}																					break;
 																				default:
-																					$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/${PATHs[5]}`, "");
+																					$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/${PATHs[5]}`, "");
 																					break;
 																			}																			break;
 																	}																	break;
 																default:
-																	$$1.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/${PATHs[3]}/`, "");
+																	$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/${PATHs[3]}/`, "");
 																	break;
 															}															break;
 													}													break;
@@ -2373,13 +2373,13 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 														case "install":
 															switch (PATHs[4]) {
 																case undefined:
-																	$$1.log(`🚧 ${PATHs[0]}/apps/install`, "");
+																	$.log(`🚧 ${PATHs[0]}/apps/install`, "");
 																	break;
 																case "status":
-																	$$1.log(`🚧 ${PATHs[0]}/apps/install/status`, "");
+																	$.log(`🚧 ${PATHs[0]}/apps/install/status`, "");
 																	break;
 																default:
-																	$$1.log(`🚧 ${PATHs[0]}/apps/install/${PATHs[4]}`, "");
+																	$.log(`🚧 ${PATHs[0]}/apps/install/${PATHs[4]}`, "");
 																	break;
 															}															break;
 													}													break;
@@ -2387,16 +2387,16 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 													switch (PATHs[2]) {
 														case Caches?.data?.accountId: // UUID
 														default:
-															$$1.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}`, "");
+															$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}`, "");
 															switch (PATHs[3]) {
 																case undefined:
-																	$$1.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}`, "");
+																	$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}`, "");
 																	break;
 																case "read":
-																	$$1.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}/read`, "");
+																	$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}/read`, "");
 																	break;
 																default:
-																	$$1.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}/${PATHs[3]}`, "");
+																	$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}/${PATHs[3]}`, "");
 																	break;
 															}															break;
 													}													break;
@@ -2416,8 +2416,8 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 		case false:
 			break;
 	}})()
-	.catch((e) => $$1.logErr(e))
-	.finally(() => $$1.done($response));
+	.catch((e) => $.logErr(e))
+	.finally(() => $.done($response));
 
 /***************** Function *****************/
 /**
@@ -2429,20 +2429,20 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 function modBuild(build) {
 	switch (build.platform || build.name) {
 		case "ios":
-			$$1.log(`🚧 ios`, "");
+			$.log(`🚧 ios`, "");
 			build = Build(build);
 			break;
 		case "osx":
-			$$1.log(`🚧 osx`, "");
+			$.log(`🚧 osx`, "");
 			if (build?.macBuildCompatibility?.runsOnAppleSilicon === true) { // 是苹果芯片
-				$$1.log(`🚧 runsOnAppleSilicon`, "");
+				$.log(`🚧 runsOnAppleSilicon`, "");
 				build = Build(build);
 			}			break;
 		case "appletvos":
-			$$1.log(`🚧 appletvos`, "");
+			$.log(`🚧 appletvos`, "");
 			break;
 		default:
-			$$1.log(`🚧 unknown platform: ${build.platform || build.name}`, "");
+			$.log(`🚧 unknown platform: ${build.platform || build.name}`, "");
 			break;
 	}	return build
 

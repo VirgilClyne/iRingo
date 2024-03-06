@@ -2545,9 +2545,9 @@ function setENV(name, platforms, database) {
 	console.log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
-	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) $.lodash_set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) $.lodash_set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) $.lodash_set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
 	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
@@ -2558,7 +2558,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $$1 = new ENV(" iRingo: 📍 Location v3.0.6(2) request.beta");
+const $ = new ENV(" iRingo: 📍 Location v3.0.6(2) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -2566,16 +2566,16 @@ let $response = undefined;
 /***************** Processing *****************/
 // 解构URL
 const URL = URI.parse($request.url);
-$$1.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path; URL.paths;
-$$1.log(`⚠ METHOD: ${METHOD}`, "");
+$.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$$1.log(`⚠ FORMAT: ${FORMAT}`, "");
+$.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "Location", Database$1);
-	$$1.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -2610,7 +2610,7 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/plist":
 						case "application/x-plist":
 							body = XML.parse($request.body);
-							$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							$request.body = XML.stringify(body);
 							break;
 						case "text/vtt":
@@ -2622,7 +2622,7 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "text/json":
 						case "application/json":
 							body = JSON.parse($request.body ?? "{}");
-							$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							$request.body = JSON.stringify(body);
 							break;
 						case "application/protobuf":
@@ -2852,26 +2852,26 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 			}			if ($request.headers?.Host) $request.headers.Host = URL.host;
 			$request.url = URI.stringify(URL);
-			$$1.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	}})()
-	.catch((e) => $$1.logErr(e))
+	.catch((e) => $.logErr(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
-				if ($$1.isQuanX()) {
+				if ($.isQuanX()) {
 					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
 					delete $response.headers?.["Content-Length"];
 					delete $response.headers?.["content-length"];
 					delete $response.headers?.["Transfer-Encoding"];
-					$$1.done($response);
-				} else $$1.done({ response: $response });
+					$.done($response);
+				} else $.done({ response: $response });
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
 				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
-				$$1.done($request);
+				$.done($request);
 				break;
 		}	});
 
@@ -2883,12 +2883,12 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
  * @return {String} ETag - ETag
  */
 function setETag(IfNoneMatch, ETag) {
-	$$1.log(`☑️ Set ETag`, `If-None-Match: ${IfNoneMatch}`, `ETag: ${ETag}`, "");
+	$.log(`☑️ Set ETag`, `If-None-Match: ${IfNoneMatch}`, `ETag: ${ETag}`, "");
 	if (IfNoneMatch !== ETag) {
 		ETag = IfNoneMatch;
 		delete $request?.headers?.["If-None-Match"];
 		delete $request?.headers?.["if-none-match"];
 	}
-	$$1.log(`✅ Set ETag`, "");
+	$.log(`✅ Set ETag`, "");
 	return ETag;
 }
