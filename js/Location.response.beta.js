@@ -2558,7 +2558,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $$1 = new ENV(" iRingo: 📍 Location v3.1.6(2) response.beta");
+const $$1 = new ENV(" iRingo: 📍 Location v3.1.6(3) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -2585,20 +2585,7 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
-					switch (HOST) {
-						case "gspe1-ssl.ls.apple.com":
-							switch (PATH) {
-								case "pep/gcc":
-									await setGCC("pep", Caches);
-									switch (Settings.PEP.GCC) {
-										case "AUTO":
-											break;
-										default:
-											$response.body = Settings.PEP.GCC;
-											break;
-									}									break;
-							}							break;
-					}					break;
+					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
@@ -2614,12 +2601,27 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/plist":
 				case "application/x-plist":
 					$$1.log(`🚧 body: ${body}`, "");
-					//body = await PLISTs("plist2json", $response.body);
-					body = XML.parse($response.body);
-					$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					// 主机判断
 					switch (HOST) {
+						case "gspe1-ssl.ls.apple.com":
+							//body = new DOMParser().parseFromString($response.body, FORMAT);
+							// 路径判断
+							switch (PATH) {
+								case "pep/gcc":
+									await setGCC("pep", Caches);
+									switch (Settings.PEP.GCC) {
+										case "AUTO":
+											break;
+										default:
+											$response.body = Settings.PEP.GCC;
+											break;
+									}									break;
+							}							//$repsonse.body = new XMLSerializer().serializeToString(body);
+							break;
 						case "configuration.ls.apple.com":
+							//body = await PLISTs("plist2json", $response.body);
+							body = XML.parse($response.body);
+							$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
@@ -2654,11 +2656,11 @@ $$1.log(`⚠ FORMAT: ${FORMAT}`, "");
 										PLIST["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.Defaults?.OpticalHeading ?? true; // 举起以查看
 										PLIST["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? true; // 导航准确性-增强
 									}									break;
-							}							break;
-					}					$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = await PLISTs("json2plist", body); // json2plist
-					$response.body = XML.stringify(body);
-					break;
+							}							$$1.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//$response.body = await PLISTs("json2plist", body); // json2plist
+							$response.body = XML.stringify(body);
+							break;
+					}					break;
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);

@@ -7,7 +7,7 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 Location v3.1.6(2) response");
+const $ = new ENV(" iRingo: 📍 Location v3.1.6(3) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -34,8 +34,22 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
+					break;
+				case "application/x-mpegURL":
+				case "application/x-mpegurl":
+				case "application/vnd.apple.mpegurl":
+				case "audio/mpegurl":
+					break;
+				case "text/xml":
+				case "text/html":
+				case "text/plist":
+				case "application/xml":
+				case "application/plist":
+				case "application/x-plist":
+					// 主机判断
 					switch (HOST) {
 						case "gspe1-ssl.ls.apple.com":
+							// 路径判断
 							switch (PATH) {
 								case "pep/gcc":
 									await setGCC("pep", Caches);
@@ -49,23 +63,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									break;
 							};
 							break;
-					};
-					break;
-				case "application/x-mpegURL":
-				case "application/x-mpegurl":
-				case "application/vnd.apple.mpegurl":
-				case "audio/mpegurl":
-					break;
-				case "text/xml":
-				case "text/html":
-				case "text/plist":
-				case "application/xml":
-				case "application/plist":
-				case "application/x-plist":
-					body = XML.parse($response.body);
-					// 主机判断
-					switch (HOST) {
 						case "configuration.ls.apple.com":
+							body = XML.parse($response.body);
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
@@ -94,9 +93,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									};
 									break;
 							};
+							$response.body = XML.stringify(body);
 							break;
 					};
-					$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":

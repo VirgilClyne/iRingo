@@ -7,7 +7,7 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 Location v3.1.6(2) response.beta");
+const $ = new ENV(" iRingo: 📍 Location v3.1.6(3) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -34,22 +34,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
-					switch (HOST) {
-						case "gspe1-ssl.ls.apple.com":
-							switch (PATH) {
-								case "pep/gcc":
-									await setGCC("pep", Caches);
-									switch (Settings.PEP.GCC) {
-										case "AUTO":
-											break;
-										default:
-											$response.body = Settings.PEP.GCC;
-											break;
-									};
-									break;
-							};
-							break;
-					};
 					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
@@ -66,12 +50,29 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/plist":
 				case "application/x-plist":
 					$.log(`🚧 body: ${body}`, "");
-					//body = await PLISTs("plist2json", $response.body);
-					body = XML.parse($response.body);
-					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 					// 主机判断
 					switch (HOST) {
+						case "gspe1-ssl.ls.apple.com":
+							//body = new DOMParser().parseFromString($response.body, FORMAT);
+							// 路径判断
+							switch (PATH) {
+								case "pep/gcc":
+									await setGCC("pep", Caches);
+									switch (Settings.PEP.GCC) {
+										case "AUTO":
+											break;
+										default:
+											$response.body = Settings.PEP.GCC;
+											break;
+									};
+									break;
+							};
+							//$repsonse.body = new XMLSerializer().serializeToString(body);
+							break;
 						case "configuration.ls.apple.com":
+							//body = await PLISTs("plist2json", $response.body);
+							body = XML.parse($response.body);
+							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
@@ -108,11 +109,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									};
 									break;
 							};
+							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//$response.body = await PLISTs("json2plist", body); // json2plist
+							$response.body = XML.stringify(body);
 							break;
 					};
-					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = await PLISTs("json2plist", body); // json2plist
-					$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
