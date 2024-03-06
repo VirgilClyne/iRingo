@@ -7,7 +7,7 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 Location v3.1.6(3) response");
+const $ = new ENV(" iRingo: 📍 Location v3.1.6(4) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -52,7 +52,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "pep/gcc":
-									await setGCC("pep", Caches);
+									_.set(Caches, "pep.gcc", $response.body);
+									$Storage.setItem("@iRingo.Location.Caches", Caches);
 									switch (Settings.PEP.GCC) {
 										case "AUTO":
 											break;
@@ -118,21 +119,3 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done($response))
-
-/***************** Function *****************/
-/**
- * Set GCC
- * @author VirgilClyne
- * @param {String} name - Config Name
- * @param {Object} caches - Caches
- * @return {Promise<*>}
- */
-async function setGCC(name, caches) {
-	$.log(`⚠ Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
-	if ($response.body !== caches?.[name]?.gcc) {
-		let newCaches = caches;
-		newCaches[name] = { "gcc": $response.body };
-		$Storage.setItem("@iRingo.Location.Caches", newCaches);
-	}
-	return $.log(`🎉 Set GCC`, `caches.${name}.gcc = ${caches?.[name]?.gcc}`, "");
-};
