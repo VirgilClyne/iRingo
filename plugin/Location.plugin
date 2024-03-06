@@ -8,8 +8,10 @@
 #!category= iRingo
 
 [Rule]
-# > Country Code
+# 📍 Country Code
 DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
+# 🗺️ Tiles
+DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
 
 [Script]
 # 🗺️ Network Defaults

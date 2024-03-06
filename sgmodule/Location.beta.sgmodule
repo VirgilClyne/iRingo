@@ -10,8 +10,10 @@
 #!arguments-desc=PEP.GCC: 国家或地区代码\nGeo_manifest.Dynamic.Config.Country_code.default: [动态配置]资源清单的国家或地区代码\nServices.PlaceData: [地点数据]数据源\nServices.Directions: [导航与ETA]数据源
 
 [Rule]
-# > Country Code
+# 📍 Country Code
 DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
+# 🗺️ Tiles
+DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
 
 [Script]
 # 🗺️ Network Defaults
