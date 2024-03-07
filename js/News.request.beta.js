@@ -294,7 +294,7 @@ class $Storage {
 
 class ENV {
 	static name = "ENV"
-	static version = '1.7.1'
+	static version = '1.7.4'
 	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) }
 
 	constructor(name, opts) {
@@ -387,6 +387,7 @@ class ENV {
 	}
 
 	async fetch(request = {} || "", option = {}) {
+		// 初始化参数
 		switch (request.constructor) {
 			case Object:
 				request = { ...request, ...option };
@@ -394,12 +395,18 @@ class ENV {
 			case String:
 				request = { "url": request, ...option };
 				break;
-		}		if (!request.method) {
+		}		// 自动判断请求方法
+		if (!request.method) {
 			request.method = "GET";
 			if (request.body ?? request.bodyBytes) request.method = "POST";
-		}		delete request.headers?.['Content-Length'];
+		}		// 移除请求头中的部分参数, 让其自动生成
+		delete request.headers?.Host;
+		delete request.headers?.[":authority"];
+		delete request.headers?.['Content-Length'];
 		delete request.headers?.['content-length'];
+		// 定义请求方法（小写）
 		const method = request.method.toLocaleLowerCase();
+		// 判断平台
 		switch (this.platform()) {
 			case 'Loon':
 			case 'Surge':
@@ -407,15 +414,16 @@ class ENV {
 			case 'Egern':
 			case 'Shadowrocket':
 			default:
-				// 移除不可写字段
-				delete request.id;
-				// 添加策略组
+				// 转换请求参数
 				if (request.policy) {
 					if (this.isLoon()) request.node = request.policy;
 					if (this.isStash()) Lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
-				}				// 判断请求数据类型
-				if (ArrayBuffer.isView(request.body)) request["binary-mode"] = true;
-				// 发送请求
+				}				if (typeof request.redirection === "boolean") request["auto-redirect"] = request.redirection;
+				// 转换请求体
+				if (request.bodyBytes && !request.body) {
+					request.body = request.bodyBytes;
+					delete request.bodyBytes;
+				}				// 发送请求
 				return await new Promise((resolve, reject) => {
 					$httpClient[method](request, (error, response, body) => {
 						if (error) reject(error);
@@ -430,17 +438,10 @@ class ENV {
 					});
 				});
 			case 'Quantumult X':
-				// 添加策略组
+				// 转换请求参数
 				if (request.policy) Lodash.set(request, "opts.policy", request.policy);
-				// 移除不可写字段
-				delete request.charset;
-				delete request.host;
-				delete request.path;
-				delete request.policy;
-				delete request.scheme;
-				delete request.sessionIndex;
-				delete request.statusCode;
-				// 判断请求数据类型
+				if (typeof request["auto-redirect"] === "boolean") Lodash.set(request, "opts.redirection", request["auto-redirect"]);
+				// 转换请求体
 				if (request.body instanceof ArrayBuffer) {
 					request.bodyBytes = request.body;
 					delete request.body;
@@ -678,15 +679,21 @@ class ENV {
 			case 'Quantumult X':
 				if (object.policy) Lodash.set(object, "opts.policy", object.policy);
 				// 移除不可写字段
+				delete object["auto-redirect"];
+				delete object["auto-cookie"];
+				delete object["binary-mode"];
 				delete object.charset;
 				delete object.host;
+				delete object.insecure;
 				delete object.method; // 1.4.x 不可写
 				delete object.opt; // $task.fetch() 参数, 不可写
 				delete object.path; // 可写, 但会与 url 冲突
 				delete object.policy;
+				delete object["policy-descriptor"];
 				delete object.scheme;
 				delete object.sessionIndex;
 				delete object.statusCode;
+				delete object.timeout;
 				if (object.body instanceof ArrayBuffer) {
 					object.bodyBytes = object.body;
 					delete object.body;
