@@ -6,7 +6,7 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📺 TV v3.2.4(2) response.beta");
+const $ = new ENV(" iRingo: 📺 TV v3.2.4(3) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -324,6 +324,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													switch (PATHs[2]) {
 														case "movies": // uts/v3/movies/
 														case "shows": // uts/v3/shows/
+														case "episodes": // uts/v3/episodes/
 														case "sporting-events": // uts/v3/sporting-events/
 															let shelves = body?.data?.canvas?.shelves;
 															let backgroundVideo = body?.data?.content?.backgroundVideo;
@@ -333,8 +334,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																	if (shelf?.items) {
 																		shelf.items = shelf.items.map(item => {
 																			let playable = item?.playable || item?.videos?.shelfVideoTall;
-																			let playables = item?.playables;
 																			if (playable) playable = setPlayable(playable, Settings?.HLSUrl, Settings?.ServerUrl);
+																			let playables = item?.playables;
 																			if (playables) Object.keys(playables).forEach(playable => playables[playable] = setPlayable(playables[playable], Settings?.HLSUrl, Settings?.ServerUrl));
 																			return item;
 																		});
