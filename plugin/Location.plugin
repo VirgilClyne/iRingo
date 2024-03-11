@@ -12,6 +12,10 @@
 DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
 # 🗺️ Tiles
 DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
+# 🗺️ Dispatcher
+DOMAIN,dispatcher.is.autonavi.com,DIRECT
+# 🗺️ Directions & ETA
+DOMAIN,direction2.is.autonavi.com,DIRECT
 
 [Script]
 # 🗺️ Network Defaults
@@ -23,7 +27,7 @@ http-response ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc script-path=https:
 http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=🗺️ Maps.config.announcements.request, argument=
 # 🗺️ Resource Manifest
 http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=🗺️ Maps.geo_manifest.dynamic.config.request, argument=
-# 🗺️ PlaceData Dispatcher
+# 🗺️ Dispatcher
 http-request ^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=🗺️ Maps.dispatcher.arpc.request, argument=
 http-request ^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Location.request.js, requires-body=0, tag=🗺️ Maps.dispatcher.request, argument=
 # 🗺️ Directions & ETA

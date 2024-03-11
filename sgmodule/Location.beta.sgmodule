@@ -14,6 +14,10 @@
 DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
 # 🗺️ Tiles
 DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
+# 🗺️ Dispatcher
+DOMAIN,dispatcher.is.autonavi.com,DIRECT
+# 🗺️ Directions & ETA
+DOMAIN,direction2.is.autonavi.com,DIRECT
 
 [Script]
 # 🗺️ Network Defaults
@@ -25,7 +29,7 @@ DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
 🗺️ Maps.config.announcements.request = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=PEP.GCC={{{PEP.GCC}}}&Dynamic.Config.Country_code.default={{{Geo_manifest.Dynamic.Config.Country_code.default}}}&Services.PlaceData={{{Services.PlaceData}}}&Services.Directions={{{Services.Directions}}}
 # 🗺️ Resource Manifest
 🗺️ Maps.geo_manifest.dynamic.config.request = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config(\?.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=PEP.GCC={{{PEP.GCC}}}&Dynamic.Config.Country_code.default={{{Geo_manifest.Dynamic.Config.Country_code.default}}}&Services.PlaceData={{{Services.PlaceData}}}&Services.Directions={{{Services.Directions}}}
-# 🗺️ PlaceData Dispatcher
+# 🗺️ Dispatcher
 🗺️ Maps.dispatcher.arpc.request = type=http-request, pattern=^https?:\/\/gsp-ssl\.ls\.apple\.com\/dispatcher\.arpc$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=PEP.GCC={{{PEP.GCC}}}&Dynamic.Config.Country_code.default={{{Geo_manifest.Dynamic.Config.Country_code.default}}}&Services.PlaceData={{{Services.PlaceData}}}&Services.Directions={{{Services.Directions}}}
 🗺️ Maps.dispatcher.request = type=http-request, pattern=^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Location.request.beta.js, argument=PEP.GCC={{{PEP.GCC}}}&Dynamic.Config.Country_code.default={{{Geo_manifest.Dynamic.Config.Country_code.default}}}&Services.PlaceData={{{Services.PlaceData}}}&Services.Directions={{{Services.Directions}}}
 # 🗺️ Directions & ETA
