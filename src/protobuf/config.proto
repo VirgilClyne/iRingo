@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+message configResponse {
+  N92 n92 = 92;
+  N94 n94 = 94;
+
+  message N92 {
+    Asset searchManifest = 3;
+    Asset directions = 4;
+    Asset ETA = 5;
+    Asset batchReverseGeocoder = 6;
+    Asset simpleETA = 7;
+    Asset addressCorrectionInit = 8;
+    Asset addressCorrectionUpdate = 9;
+    Asset locationShift = 10;
+    Asset RAPSubmission = 11;
+    Asset RAPStatus = 12;
+    Asset reverseGeocoderVersions = 13;
+    Asset RAPCategories = 14;
+    Asset announcements = 15;
+    Asset placeDataDispatcher = 16;
+    Asset RAPOptIns = 17;
+    Asset experiments = 18;
+    Asset unknownDirection = 35;
+    Asset limitRule = 42;
+  }
+
+  message N94 { LocalizedString localizedName = 1; }
+}
+
+message LocalizedString {
+  optional string locale = 1;
+  optional string stringValue = 3;
+}
+
+message Asset {
+  string url = 1;
+  bool b3 = 3;
+}
