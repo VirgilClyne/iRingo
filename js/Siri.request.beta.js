@@ -2140,7 +2140,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.0.4(2) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(3) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -2161,70 +2161,22 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
-			// 创建空数据
-			let body = {};
+			const LOCALE = URL.query?.locale;
+			$.log(`🚧 LOCALE: ${LOCALE}`, "");
+			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode : Settings.CountryCode;
+			Lodash.set(URL, "query.cc", Settings.CountryCode);
 			// 方法判断
 			switch (METHOD) {
 				case "POST":
 				case "PUT":
 				case "PATCH":
 				case "DELETE":
-					// 格式判断
-					switch (FORMAT) {
-						case undefined: // 视为无body
-							break;
-						case "application/x-www-form-urlencoded":
-						case "text/plain":
-						default:
-							break;
-						case "application/x-mpegURL":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
-						case "audio/mpegurl":
-							//body = M3U8.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = M3U8.stringify(body);
-							break;
-						case "text/xml":
-						case "text/html":
-						case "text/plist":
-						case "application/xml":
-						case "application/plist":
-						case "application/x-plist":
-							//body = XML.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = XML.stringify(body);
-							break;
-						case "text/vtt":
-						case "application/vtt":
-							//body = VTT.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = VTT.stringify(body);
-							break;
-						case "text/json":
-						case "application/json":
-							body = JSON.parse($request.body ?? "{}");
-							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							$request.body = JSON.stringify(body);
-							break;
-						case "application/protobuf":
-						case "application/x-protobuf":
-						case "application/vnd.google.protobuf":
-						case "application/grpc":
-						case "application/grpc+proto":
-						case "applecation/octet-stream":
-							break;
-					}					//break; // 不中断，继续处理URL
+					//break; // 不中断，继续处理URL
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
 				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
-					const LOCALE = URL.query?.locale;
-					$.log(`🚧 LOCALE: ${LOCALE}`, "");
-					if (URL.query?.card_locale) URL.query.card_locale = LOCALE;
-					if (Settings.CountryCode == "AUTO") Settings.CountryCode = LOCALE?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode;
-					if (URL.query?.cc) URL.query.cc = URL.query.cc.replace(/[A-Z]{2}/, Settings.CountryCode);
 					// 主机判断
 					switch (HOST) {
 						case "api.smoot.apple.com":
@@ -2244,22 +2196,37 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "search": // 搜索
 									switch (URL.query?.qtype) {
 										case "zkw": // 处理"新闻"小组件
-											["CN", "HK", "MO", "TW", "SG"].includes(Settings.CountryCode) ? URL.query.locale = `${URL.query.esl}_SG`
-												: ["US", "CA", "UK", "AU"].includes(Settings.CountryCode) ? URL.query.locale = URL.query.locale
-													: URL.query.locale = `${URL.query.esl}_US`;
-											break;
+											switch (Settings.CountryCode) {
+												case "CN":
+												case "HK":
+												case "MO":
+												case "TW":
+												case "SG":
+													Lodash.set(URL, "query.locale", `${Settings.CountryCode}_SG`);
+													break;
+												case "US":
+												case "CA":
+												case "UK":
+												case "AU":
+													// 不做修正
+													break;
+												default:
+													Lodash.set(URL, "query.locale", `${Settings.CountryCode}_US`);
+													break;
+											}											break;
 										default: // 其他搜索
-											if (/^%E5%A4%A9%E6%B0%94%20/.test(URL.query.q)) { // 处理"天气"搜索，搜索词"天气 "开头
-												console.log("Type A", ``);
+											if (URL.query?.q?.startsWith?.("%E5%A4%A9%E6%B0%94%20")) { // 处理"天气"搜索，搜索词"天气 "开头
+												console.log("'天气 '开头");
 												URL.query.q = URL.query.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
 												if (/^weather%20.*%E5%B8%82$/.test(URL.query.q)) URL.query.q = URL.query.q.replace(/$/, "%E5%B8%82");
-											} else if (/%20%E5%A4%A9%E6%B0%94$/.test(URL.query.q)) {// 处理"天气"搜索，搜索词" 天气"结尾
-												console.log("Type B", ``);
+											} else if (URL.query?.q?.endsWith?.("%20%E5%A4%A9%E6%B0%94")) {// 处理"天气"搜索，搜索词" 天气"结尾
+												console.log("' 天气'结尾");
 												URL.query.q = URL.query.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
 												if (/.*%E5%B8%82%20weather$/.test(URL.query.q)) URL.query.q = URL.query.q.replace(/%20weather$/, "%E5%B8%82%20weather");
 											}											break;
 									}									break;
 								case "card": // 卡片
+									Lodash.set(URL, "query.card_locale", LOCALE);
 									switch (URL.query?.include) {
 										case "tv":
 										case "movies":
