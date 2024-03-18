@@ -8,7 +8,7 @@
 	"apps": [
 		{
 			"id": "iRingo.Location.beta",
-			"name": "📍 定位 & 🗺️ 地图 β",
+			"name": "📍 定位服务 β",
 			"descs_html": [
 				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
 				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
@@ -81,280 +81,6 @@
 							"label": "🇮🇪爱尔兰"
 						}
 					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code.default",
-					"name": "[动态配置]资源清单的国家或地区代码",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "要更改为的地区或国家，此选项影响“地图”整体配置内容，包括以下的地图功能与服务",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "🇺🇳自动（跟随地区检测结果）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "🇭🇰香港"
-						},
-						{
-							"key": "TW",
-							"label": "🇹🇼台湾"
-						},
-						{
-							"key": "SG",
-							"label": "🇸🇬新加坡"
-						},
-						{
-							"key": "US",
-							"label": "🇺🇸美国"
-						},
-						{
-							"key": "JP",
-							"label": "🇯🇵日本"
-						},
-						{
-							"key": "AU",
-							"label": "🇦🇺澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "🇬🇧英国"
-						},
-						{
-							"key": "KR",
-							"label": "🇰🇷韩国"
-						},
-						{
-							"key": "CA",
-							"label": "🇨🇦加拿大"
-						},
-						{
-							"key": "IE",
-							"label": "🇮🇪爱尔兰"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Services.PlaceData",
-					"name": "[地点数据]数据源",
-					"val": "CN",
-					"type": "selects",
-					"desc": "地点数据的数据源，此选项影响公共指南，兴趣点(POI)与位置信息等功能",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "高德(国内:互动百科/大众点评/携程+国外:Yelp等/TomTom)"
-						},
-						{
-							"key": "XX",
-							"label": "Apple(国内:维基百科+国外:Yelp等/TomTom)"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Services.Directions",
-					"name": "[导航与ETA]数据源",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "导航与ETA服务的数据源，此选项影响导航与ETA(到达时间)等功能",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "高德(无国外数据)"
-						},
-						{
-							"key": "XX",
-							"label": "Apple(无国内数据)"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Services.Traffic",
-					"name": "[交通状况]数据源",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "交通状况服务的数据源，此选项影响交通状况与道路信息服务",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "Apple中国(无国外数据)"
-						},
-						{
-							"key": "XX",
-							"label": "Apple国际(无国内数据)"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Services.RAP",
-					"name": "[评分和照片]数据源",
-					"val": "XX",
-					"type": "selects",
-					"desc": "评分和照片服务的数据源，此选项影响评分和照片服务以及照片使用",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "高德(暂不可用)"
-						},
-						{
-							"key": "XX",
-							"label": "Apple"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Services.Tiles",
-					"name": "[瓦片地图]服务版本",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "瓦片地图的数据源，此选项影响使用的地图与图层",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "Apple中国(国内:高德+国外:TomTom)"
-						},
-						{
-							"key": "XX",
-							"label": "Apple国际(国内:OpenStreet+国外:TomTom)"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Announcements.Environment.default",
-					"name": "[通告配置]环境代码",
-					"val": "AUTO",
-					"type": "selects",
-					"desc": "通告的配置文件的环境代码，此选项影响功能未知",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（跟随地区检测结果）"
-						},
-						{
-							"key": "CN",
-							"label": "中国大陆"
-						},
-						{
-							"key": "XX",
-							"label": "国际"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.LagunaBeach",
-					"name": "[默认配置]为“地图”提供助力",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用“为‘地图’提供助力”，可让您将图像、评分或其他内容发布到所选的兴趣点。(“设置”>“地图”>“为‘地图’提供助力”)"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.DrivingMultiWaypointRoutesEnabled",
-					"name": "[默认配置]多途经点路线规划(iOS 16)",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用“多途经点路线规划”，可在一条路线中添加多个途经点"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.GEOAddressCorrection",
-					"name": "[默认配置]地址校正",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用定位地址矫正"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.LookupMaxParametersCount",
-					"name": "[默认配置]Spatial批量查询上限",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否移除Spatial批量查询上限"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.LocalitiesAndLandmarks",
-					"name": "[默认配置]景点与地标支持",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用景点与地标支持"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.POIBusyness",
-					"name": "[默认配置]兴趣点(POI)繁忙度支持",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用在地图内查询及上报兴趣点(POI)繁忙度"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.PedestrianAR",
-					"name": "[默认配置]现实世界中的路线(iOS 15)",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用在增强现实中查看导航(“设置”>“地图”>“步行”>“举起以查看”)"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.TransitPayEnabled",
-					"name": "[默认配置]启用公交支付集成(iOS 16)",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用在地图内显示公交卡余额与公交线路费用"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.6694982d2b14e95815e44e970235e230",
-					"name": "[默认配置]6694982d2b14e95815e44e970235e230",
-					"val": true,
-					"type": "boolean",
-					"desc": "6694982d2b14e95815e44e970235e230"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.OpticalHeading",
-					"name": "[默认配置]导航准确性",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否使用相机和运动传感器提高您位置和步行朝向的准确度(“设置”>“地图”>“步行”>“增强”)"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.UseCLPedestrianMapMatchedLocations",
-					"name": "[默认配置]使用AR地图匹配地点(iOS 15)",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否使用AR地图匹配地点"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.WiFiQualityNetworkDisabled",
-					"name": "[默认配置]禁用Wi-Fi网络数据",
-					"val": false,
-					"type": "boolean",
-					"desc": "是否禁用Wi-Fi下网络数据预加载"
-				},
-				{
-					"id": "@iRingo.Location.Settings.Config.Defaults.WiFiQualityTileDisabled",
-					"name": "[默认配置]禁用Wi-Fi瓦片地图",
-					"val": false,
-					"type": "boolean",
-					"desc": "是否禁用Wi-Fi下瓦片地图预加载"
 				}
 			],
 			"author": "@VirgilClyne",
@@ -714,6 +440,321 @@
 			"icons": [
 				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp",
 				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp"
+			]
+		},
+		{
+			"id": "iRingo.Maps.beta",
+			"name": "🗺️ 地图 β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🗺️-地图\">🗺️ 地图</a>的使用说明进行配置",
+				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
+			],
+			"keys": [
+				"@iRingo.Maps.Settings",
+				"@iRingo.Maps.Caches"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.Maps.Settings.Switch",
+					"name": "总功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此APP修改"
+				},
+				{
+					"id": "@iRingo.Maps.Settings.GeoManifest.Dynamic.Config.CountryCode.default",
+					"name": "[动态配置]资源清单的国家或地区代码",
+					"val": "CN",
+					"type": "selects",
+					"desc": "要更改为的地区或国家，此选项影响“地图”整体配置内容，包括以下的地图功能与服务",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "🇺🇳自动（跟随用户当前所在地区）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "🇭🇰中国香港"
+						},
+						{
+							"key": "TW",
+							"label": "🇹🇼中国台湾"
+						},
+						{
+							"key": "SG",
+							"label": "🇸🇬新加坡"
+						},
+						{
+							"key": "US",
+							"label": "🇺🇸美国"
+						},
+						{
+							"key": "JP",
+							"label": "🇯🇵日本"
+						},
+						{
+							"key": "AU",
+							"label": "🇦🇺澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "🇬🇧英国"
+						},
+						{
+							"key": "KR",
+							"label": "🇰🇷韩国"
+						},
+						{
+							"key": "CA",
+							"label": "🇨🇦加拿大"
+						},
+						{
+							"key": "IE",
+							"label": "🇮🇪爱尔兰"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.Config.Announcements.Environment.default",
+					"name": "[通告配置]环境代码",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "通告的配置文件的环境代码，此选项影响功能未知",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（跟随用户当前所在地区）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳中国大陆"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳国际"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.UrlInfoSet.Dispatcher",
+					"name": "[调度器]API",
+					"val": "AutoNavi",
+					"type": "selects",
+					"desc": "地点数据的API，此选项影响公共指南，兴趣点(POI)与位置信息等功能",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "AutoNavi",
+							"label": "🧭高德（🇨🇳:互动百科/大众点评/携程 | 🇺🇳:维基百科/Yelp/Booking）"
+						},
+						{
+							"key": "Apple",
+							"label": "Apple（维基百科/Yelp/Booking）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.UrlInfoSet.Directions",
+					"name": "[导航与ETA]API",
+					"val": "AutoNavi",
+					"type": "selects",
+					"desc": "导航与ETA服务的API，此选项影响导航与ETA(到达时间)等功能",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "AutoNavi",
+							"label": "🧭高德（🇨🇳:高德地图 | 🇺🇳:TomTom）"
+						},
+						{
+							"key": "Apple",
+							"label": "Apple（🇨🇳:🈚️ | 🇺🇳:TomTom）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.UrlInfoSet.RAP",
+					"name": "[评分和照片]API",
+					"val": "Apple",
+					"type": "selects",
+					"desc": "评分和照片服务的API，此选项影响评分和照片服务以及照片使用",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "AutoNavi",
+							"label": "🧭高德（🇨🇳:🈶️但未开放 | 🇺🇳:🈚️）"
+						},
+						{
+							"key": "Apple",
+							"label": "Apple（🇨🇳:🈚️ | 🇺🇳:🈶️）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.UrlInfoSet.LocationShift",
+					"name": "[定位漂移]API",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "定位漂移修正服务的API，控制定位漂移和🧭指南针与📍坐标的经纬度",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "AutoNavi",
+							"label": "🧭高德（🈚️坐标，但🇨🇳定位不漂移）"
+						},
+						{
+							"key": "Apple",
+							"label": "Apple（🈶️坐标，但🇨🇳定位漂移）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.TileSet.Map",
+					"name": "[地图]数据源",
+					"val": "CN",
+					"type": "selects",
+					"desc": "‘探索’、‘驾车’、‘公共交通’地图的数据源，此选项影响所列瓦片地图数据",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳Apple（🇨🇳:高德 | 🇺🇳:OpenStreetMap等）"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳Apple（OpenStreetMap等）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.TileSet.Satellite",
+					"name": "[卫星图像]数据源",
+					"val": "XX",
+					"type": "selects",
+					"desc": "‘卫星’地图的数据源，此选项影响所列位图、影像与模型数据",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳中国四维（🇨🇳:2D | 🇺🇳:🈚️）"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳DigitalGlobe（🇨🇳:2D | 🇺🇳:3D）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.TileSet.Traffic",
+					"name": "[交通状况]数据源",
+					"val": "CN",
+					"type": "selects",
+					"desc": "交通状况服务的数据源，此选项影响交通状况与道路信息服务",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳Apple（🇨🇳:🈶️ | 🇺🇳:🈚️）"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳Apple（🇨🇳:🈚️ | 🇺🇳:🈶️TomTom等）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.TileSet.POI",
+					"name": "[兴趣点]数据源",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "兴趣点(POI)的数据源，此选项影响景点店面建筑等地点数据",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳Apple（🇨🇳:🈶️ | 🇺🇳:🈶️）"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳Apple（🇨🇳:🈶️但极少 | 🇺🇳:🈶️）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.TileSet.Flyover",
+					"name": "[飞行俯瞰]数据源",
+					"val": "XX",
+					"type": "selects",
+					"desc": "‘飞行俯瞰’服务的数据源，此选项影响飞行俯瞰全球各地的主要地标和城市功能",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳Apple（🇨🇳:🈚️ | 🇺🇳:🈚️）"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳Apple（🇨🇳:🈚️ | 🇺🇳:🈶️）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.Maps.Settings.TileSet.Munin",
+					"name": "[四处看看]数据源",
+					"val": "XX",
+					"type": "selects",
+					"desc": "‘四处看看’服务的数据源，此选项影响 360 度全景视角在某些地点四处看看功能",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "自动（随[动态配置]版本自动选择）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳Apple（🇨🇳:🈚️ | 🇺🇳:🈚️）"
+						},
+						{
+							"key": "XX",
+							"label": "🇺🇳Apple（🇨🇳:🈚️ | 🇺🇳:🈶️）"
+						}
+					]
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/",
+			"icons": [
+				"https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg",
+				"https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg"
 			]
 		},
 		{
