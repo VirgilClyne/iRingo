@@ -21,6 +21,7 @@
 	"author": "VirgilClyne",
 	"license": "Apache-2.0",
 	"devDependencies": {
+		"@protobuf-ts/runtime": "^2.9.3",
 		"@rollup/plugin-commonjs": "^25.0.7",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-terser": "^0.4.4",

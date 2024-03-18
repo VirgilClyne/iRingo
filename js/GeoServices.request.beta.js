@@ -741,431 +741,6 @@ class URI {
 	};
 }
 
-// refer: https://github.com/Peng-YM/QuanX/blob/master/Tools/XMLParser/xml-parser.js
-// refer: https://goessner.net/download/prj/jsonxml/
-class XML {
-	static name = "XML";
-	static version = "0.4.1";
-	static about = () => console.log(`\n🟧 ${this.name} v${this.version}\n`);
-	
-	static #ATTRIBUTE_KEY = "@";
-	static #CHILD_NODE_KEY = "#";
-	static #UNESCAPE = {
-		"&amp;": "&",
-		"&lt;": "<",
-		"&gt;": ">",
-		"&apos;": "'",
-		"&quot;": '"'
-	};
-	static #ESCAPE = {
-		"&": "&amp;",
-		"<": "&lt;",
-		">": "&gt;",
-		"'": "&apos;",
-		'"': "&quot;"
-	};
-
-	static parse(xml = new String, reviver = "") {
-		const UNESCAPE = this.#UNESCAPE;
-		const ATTRIBUTE_KEY = this.#ATTRIBUTE_KEY;
-		const CHILD_NODE_KEY = this.#CHILD_NODE_KEY;
-		const DOM = toDOM(xml);
-		let json = fromXML(DOM, reviver);
-		return json;
-
-		/***************** Fuctions *****************/
-		function toDOM(text) {
-			const list = text.replace(/^[ \t]+/gm, "")
-				.split(/<([^!<>?](?:'[\S\s]*?'|"[\S\s]*?"|[^'"<>])*|!(?:--[\S\s]*?--|\[[^\[\]'"<>]+\[[\S\s]*?]]|DOCTYPE[^\[<>]*?\[[\S\s]*?]|(?:ENTITY[^"<>]*?"[\S\s]*?")?[\S\s]*?)|\?[\S\s]*?\?)>/);
-			const length = list.length;
-
-			// root element
-			const root = { children: [] };
-			let elem = root;
-
-			// dom tree stack
-			const stack = [];
-
-			// parse
-			for (let i = 0; i < length;) {
-				// text node
-				const str = list[i++];
-				if (str) appendText(str);
-
-				// child node
-				const tag = list[i++];
-				if (tag) parseNode(tag);
-			}
-			return root;
-			/***************** Fuctions *****************/
-			function parseNode(tag) {
-				const tags = tag.split(" ");
-				const name = tags.shift();
-				const length = tags.length;
-				let child = {};
-				switch (name[0]) {
-					case "/":
-						// close tag
-						const closed = tag.replace(/^\/|[\s\/].*$/g, "").toLowerCase();
-						while (stack.length) {
-							const tagName = elem?.name?.toLowerCase?.();
-							elem = stack.pop();
-							if (tagName === closed) break;
-						}
-						break;
-					case "?":
-						// XML declaration
-						child.name = name;
-						child.raw = tags.join(" ");
-						appendChild(child);
-						break;
-					case "!":
-						if (/!\[CDATA\[(.+)\]\]/.test(tag)) {
-							// CDATA section
-							child.name = "!CDATA";
-							//child.raw = tag.slice(9, -2);
-							child.raw = tag.match(/!\[CDATA\[(.+)\]\]/);
-							//appendText(tag.slice(9, -2));
-						} else {
-							// Comment section
-							child.name = name;
-							child.raw = tags.join(" ");
-						}						appendChild(child);
-						break;
-					default:
-						child = openTag(tag);
-						appendChild(child);
-						switch ((tags?.[length - 1] ?? name).slice(-1)) {
-							case "/":
-								//child.hasChild = false; // emptyTag
-								delete child.children; // emptyTag
-								break;
-							default:
-								switch (name) {
-									case "link":
-										//child.hasChild = false; // emptyTag
-										delete child.children; // emptyTag
-										break;
-									default:
-										stack.push(elem); // openTag
-										elem = child;
-										break;
-								}								break;
-						}						break;
-				}
-				function openTag(tag) {
-					const elem = { children: [] };
-					tag = tag.replace(/\s*\/?$/, "");
-					const pos = tag.search(/[\s='"\/]/);
-					if (pos < 0) {
-						elem.name = tag;
-					} else {
-						elem.name = tag.substr(0, pos);
-						elem.tag = tag.substr(pos);
-					}
-					return elem;
-				}			}
-			function appendText(str) {
-				//str = removeSpaces(str);
-				str = removeBreakLine(str);
-				//str = str?.trim?.();
-				if (str) appendChild(unescapeXML(str));
-
-				function removeBreakLine(str) {
-					return str?.replace?.(/^(\r\n|\r|\n|\t)+|(\r\n|\r|\n|\t)+$/g, "");
-				}
-			}
-
-			function appendChild(child) {
-				elem.children.push(child);
-			}
-		}		/***************** Fuctions *****************/
-		function fromPlist(elem, reviver) {
-			let object;
-			switch (typeof elem) {
-				case "string":
-				case "undefined":
-					object = elem;
-					break;
-				case "object":
-					//default:
-					const name = elem.name;
-					const children = elem.children;
-
-					object = {};
-
-					switch (name) {
-						case "plist":
-							let plist = fromPlist(children[0], reviver);
-							object = Object.assign(object, plist);
-							break;
-						case "dict":
-							let dict = children.map(child => fromPlist(child, reviver));
-							dict = chunk(dict, 2);
-							object = Object.fromEntries(dict);
-							break;
-						case "array":
-							if (!Array.isArray(object)) object = [];
-							object = children.map(child => fromPlist(child, reviver));
-							break;
-						case "key":
-							const key = children[0];
-							object = key;
-							break;
-						case "true":
-						case "false":
-							const boolean = name;
-							object = JSON.parse(boolean);
-							break;
-						case "integer":
-							const integer = children[0];
-							//object = parseInt(integer);
-							object = BigInt(integer);
-							break;
-						case "real":
-							const real = children[0];
-							//const digits = real.split(".")[1]?.length || 0;
-							object = parseFloat(real);//.toFixed(digits);
-							break;
-						case "string":
-							const string = children[0];
-							object = string;
-							break;
-					}					if (reviver) object = reviver(name || "", object);
-					break;
-			}
-			return object;
-
-			/** 
-			 * Chunk Array
-			 * @author VirgilClyne
-			 * @param {Array} source - source
-			 * @param {Number} length - number
-			 * @return {Array<*>} target
-			 */
-			function chunk(source, length) {
-				var index = 0, target = [];
-				while (index < source.length) target.push(source.slice(index, index += length));
-				return target;
-			}		}
-
-		function fromXML(elem, reviver) {
-			let object;
-			switch (typeof elem) {
-				case "string":
-				case "undefined":
-					object = elem;
-					break;
-				case "object":
-					//default:
-					const raw = elem.raw;
-					const name = elem.name;
-					const tag = elem.tag;
-					const children = elem.children;
-
-					if (raw) object = raw;
-					else if (tag) object = parseAttribute(tag, reviver);
-					else if (!children) object = { [name]: undefined };
-					else object = {};
-
-					if (name === "plist") object = Object.assign(object, fromPlist(children[0], reviver));
-					else children?.forEach?.((child, i) => {
-						if (typeof child === "string") addObject(object, CHILD_NODE_KEY, fromXML(child, reviver), undefined);
-						else if (!child.tag && !child.children && !child.raw) addObject(object, child.name, fromXML(child, reviver), children?.[i - 1]?.name);
-						else addObject(object, child.name, fromXML(child, reviver), undefined);
-					});
-					if (children && children.length === 0) addObject(object, CHILD_NODE_KEY, null, undefined);
-					/*
-					if (Object.keys(object).length === 0) {
-						if (elem.name) object[elem.name] = (elem.hasChild === false) ? null : "";
-						else object = (elem.hasChild === false) ? null : "";
-					}
-					*/
-
-					//if (Object.keys(object).length === 0) addObject(object, elem.name, (elem.hasChild === false) ? null : "");
-					//if (Object.keys(object).length === 0) object = (elem.hasChild === false) ? undefined : "";
-					if (reviver) object = reviver(name || "", object);
-					break;
-			}
-			return object;
-			/***************** Fuctions *****************/
-			function parseAttribute(tag, reviver) {
-				if (!tag) return;
-				const list = tag.split(/([^\s='"]+(?:\s*=\s*(?:'[\S\s]*?'|"[\S\s]*?"|[^\s'"]*))?)/);
-				const length = list.length;
-				let attributes, val;
-
-				for (let i = 0; i < length; i++) {
-					let str = removeSpaces(list[i]);
-					//let str = removeBreakLine(list[i]);
-					//let str = list[i]?.trim?.();
-					if (!str) continue;
-
-					if (!attributes) {
-						attributes = {};
-					}
-
-					const pos = str.indexOf("=");
-					if (pos < 0) {
-						// bare attribute
-						str = ATTRIBUTE_KEY + str;
-						val = null;
-					} else {
-						// attribute key/value pair
-						val = str.substr(pos + 1).replace(/^\s+/, "");
-						str = ATTRIBUTE_KEY + str.substr(0, pos).replace(/\s+$/, "");
-
-						// quote: foo="FOO" bar='BAR'
-						const firstChar = val[0];
-						const lastChar = val[val.length - 1];
-						if (firstChar === lastChar && (firstChar === "'" || firstChar === '"')) {
-							val = val.substr(1, val.length - 2);
-						}
-
-						val = unescapeXML(val);
-					}
-					if (reviver) val = reviver(str, val);
-
-					addObject(attributes, str, val);
-				}
-
-				return attributes;
-
-				function removeSpaces(str) {
-					//return str && str.replace(/^\s+|\s+$/g, "");
-					return str?.trim?.();
-				}
-			}
-
-			function addObject(object, key, val, prevKey = key) {
-				if (typeof val === "undefined") return;
-				else {
-					const prev = object[prevKey];
-					//const curr = object[key];
-					if (Array.isArray(prev)) prev.push(val);
-					else if (prev) object[prevKey] = [prev, val];
-					else object[key] = val;
-				}
-			}
-		}
-
-		function unescapeXML(str) {
-			return str.replace(/(&(?:lt|gt|amp|apos|quot|#(?:\d{1,6}|x[0-9a-fA-F]{1,5}));)/g, function (str) {
-				if (str[1] === "#") {
-					const code = (str[2] === "x") ? parseInt(str.substr(3), 16) : parseInt(str.substr(2), 10);
-					if (code > -1) return String.fromCharCode(code);
-				}
-				return UNESCAPE[str] || str;
-			});
-		}
-
-	};
-
-	static stringify(json = new Object, tab = "") {
-		this.#ESCAPE;
-		const ATTRIBUTE_KEY = this.#ATTRIBUTE_KEY;
-		const CHILD_NODE_KEY = this.#CHILD_NODE_KEY;
-		let XML = "";
-		for (let elem in json) XML += toXml(json[elem], elem, "");
-		XML = tab ? XML.replace(/\t/g, tab) : XML.replace(/\t|\n/g, "");
-		return XML;
-		/***************** Fuctions *****************/
-		function toXml(Elem, Name, Ind) {
-			let xml = "";
-			switch (typeof Elem) {
-				case "object":
-					if (Array.isArray(Elem)) {
-						xml = Elem.reduce(
-							(prevXML, currXML) => prevXML += `${Ind}${toXml(currXML, Name, `${Ind}\t`)}\n`,
-							""
-						);
-					} else {
-						let attribute = "";
-						let hasChild = false;
-						for (let name in Elem) {
-							if (name[0] === ATTRIBUTE_KEY) {
-								attribute += ` ${name.substring(1)}=\"${Elem[name].toString()}\"`;
-								delete Elem[name];
-							} else if (Elem[name] === undefined) Name = name;
-							else hasChild = true;
-						}
-						xml += `${Ind}<${Name}${attribute}${(hasChild || Name === "link") ? "" : "/"}>`;
-
-						if (hasChild) {
-							if (Name === "plist") xml += toPlist(Elem, Name, `${Ind}\t`);
-							else {
-								for (let name in Elem) {
-									switch (name) {
-										case CHILD_NODE_KEY:
-											xml += Elem[name] ?? "";
-											break;
-										default:
-											xml += toXml(Elem[name], name, `${Ind}\t`);
-											break;
-									}								}							}							xml += (xml.slice(-1) === "\n" ? Ind : "") + `</${Name}>`;
-						}					}					break;
-				case "string":
-					switch (Name) {
-						case "?xml":
-							xml += `${Ind}<${Name} ${Elem.toString()}>`;
-							break;
-						case "?":
-							xml += `${Ind}<${Name}${Elem.toString()}${Name}>`;
-							break;
-						case "!":
-							xml += `${Ind}<!--${Elem.toString()}-->`;
-							break;
-						case "!DOCTYPE":
-							xml += `${Ind}<${Name} ${Elem.toString()}>`;
-							break;
-						case "!CDATA":
-							xml += `${Ind}<![CDATA[${Elem.toString()}]]>`;
-							break;
-						case CHILD_NODE_KEY:
-							xml += Elem;
-							break;
-						default:
-							xml += `${Ind}<${Name}>${Elem.toString()}</${Name}>`;
-							break;
-					}					break;
-				case "undefined":
-					xml += Ind + `<${Name.toString()}/>`;
-					break;
-			}			return xml;
-		}
-		function toPlist(Elem, Name, Ind) {
-			let plist = "";
-			switch (typeof Elem) {
-				case "boolean":
-					plist = `${Ind}<${Elem.toString()}/>`;
-					break;
-				case "number":
-					plist = `${Ind}<real>${Elem.toString()}</real>`;
-					break;
-				case "bigint":
-					plist = `${Ind}<integer>${Elem.toString()}</integer>`;
-					break;
-				case "string":
-					plist = `${Ind}<string>${Elem.toString()}</string>`;
-					break;
-				case "object":
-					let array = "";
-					if (Array.isArray(Elem)) {
-						for (var i = 0, n = Elem.length; i < n; i++) array += `${Ind}${toPlist(Elem[i], Name, `${Ind}\t`)}`;
-						plist = `${Ind}<array>${array}${Ind}</array>`;
-					} else {
-						let dict = "";
-						Object.entries(Elem).forEach(([key, value]) => {
-							dict += `${Ind}<key>${key}</key>`;
-							dict += toPlist(value, key, Ind);
-						});
-						plist = `${Ind}<dict>${dict}${Ind}</dict>`;
-					}					break;
-			}
-			return plist;
-		}	};
-}
-
 var Settings$7 = {
 	Switch: true
 };
@@ -1915,17 +1490,22 @@ var Location$1 = /*#__PURE__*/Object.freeze({
 
 var Settings$5 = {
 	Switch: true,
-	Services: {
-		PlaceData: "CN",
-		Directions: "AUTO",
-		Traffic: "AUTO",
-		RAP: "XX",
-		Tiles: "AUTO"
+	UrlInfoSet: {
+		Dispatcher: "CN",
+		Directions: "CN",
+		RAP: "XX"
 	},
-	Geo_manifest: {
+	TileSet: {
+		Standard: "AUTO",
+		Traffic: "CN",
+		POI: "AUTO",
+		Flyover: "XX",
+		Munin: "XX"
+	},
+	GeoManifest: {
 		Dynamic: {
 			Config: {
-				Country_code: {
+				CountryCode: {
 					"default": "AUTO",
 					iOS: "CN",
 					iPadOS: "CN",
@@ -2579,7 +2159,239 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🗺️ Maps v3.0.0(1) response.beta");
+// lookup table from base64 character to byte
+let encTable = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
+// lookup table from base64 character *code* to byte because lookup by number is fast
+let decTable = [];
+for (let i = 0; i < encTable.length; i++)
+    decTable[encTable[i].charCodeAt(0)] = i;
+// support base64url variants
+decTable["-".charCodeAt(0)] = encTable.indexOf("+");
+decTable["_".charCodeAt(0)] = encTable.indexOf("/");
+
+/**
+ * This handler implements the default behaviour for unknown fields.
+ * When reading data, unknown fields are stored on the message, in a
+ * symbol property.
+ * When writing data, the symbol property is queried and unknown fields
+ * are serialized into the output again.
+ */
+var UnknownFieldHandler;
+(function (UnknownFieldHandler) {
+    /**
+     * The symbol used to store unknown fields for a message.
+     * The property must conform to `UnknownFieldContainer`.
+     */
+    UnknownFieldHandler.symbol = Symbol.for("protobuf-ts/unknown");
+    /**
+     * Store an unknown field during binary read directly on the message.
+     * This method is compatible with `BinaryReadOptions.readUnknownField`.
+     */
+    UnknownFieldHandler.onRead = (typeName, message, fieldNo, wireType, data) => {
+        let container = is(message) ? message[UnknownFieldHandler.symbol] : message[UnknownFieldHandler.symbol] = [];
+        container.push({ no: fieldNo, wireType, data });
+    };
+    /**
+     * Write unknown fields stored for the message to the writer.
+     * This method is compatible with `BinaryWriteOptions.writeUnknownFields`.
+     */
+    UnknownFieldHandler.onWrite = (typeName, message, writer) => {
+        for (let { no, wireType, data } of UnknownFieldHandler.list(message))
+            writer.tag(no, wireType).raw(data);
+    };
+    /**
+     * List unknown fields stored for the message.
+     * Note that there may be multiples fields with the same number.
+     */
+    UnknownFieldHandler.list = (message, fieldNo) => {
+        if (is(message)) {
+            let all = message[UnknownFieldHandler.symbol];
+            return fieldNo ? all.filter(uf => uf.no == fieldNo) : all;
+        }
+        return [];
+    };
+    /**
+     * Returns the last unknown field by field number.
+     */
+    UnknownFieldHandler.last = (message, fieldNo) => UnknownFieldHandler.list(message, fieldNo).slice(-1)[0];
+    const is = (message) => message && Array.isArray(message[UnknownFieldHandler.symbol]);
+})(UnknownFieldHandler || (UnknownFieldHandler = {}));
+/**
+ * Protobuf binary format wire types.
+ *
+ * A wire type provides just enough information to find the length of the
+ * following value.
+ *
+ * See https://developers.google.com/protocol-buffers/docs/encoding#structure
+ */
+var WireType;
+(function (WireType) {
+    /**
+     * Used for int32, int64, uint32, uint64, sint32, sint64, bool, enum
+     */
+    WireType[WireType["Varint"] = 0] = "Varint";
+    /**
+     * Used for fixed64, sfixed64, double.
+     * Always 8 bytes with little-endian byte order.
+     */
+    WireType[WireType["Bit64"] = 1] = "Bit64";
+    /**
+     * Used for string, bytes, embedded messages, packed repeated fields
+     *
+     * Only repeated numeric types (types which use the varint, 32-bit,
+     * or 64-bit wire types) can be packed. In proto3, such fields are
+     * packed by default.
+     */
+    WireType[WireType["LengthDelimited"] = 2] = "LengthDelimited";
+    /**
+     * Used for groups
+     * @deprecated
+     */
+    WireType[WireType["StartGroup"] = 3] = "StartGroup";
+    /**
+     * Used for groups
+     * @deprecated
+     */
+    WireType[WireType["EndGroup"] = 4] = "EndGroup";
+    /**
+     * Used for fixed32, sfixed32, float.
+     * Always 4 bytes with little-endian byte order.
+     */
+    WireType[WireType["Bit32"] = 5] = "Bit32";
+})(WireType || (WireType = {}));
+
+function detectBi() {
+    const dv = new DataView(new ArrayBuffer(8));
+    const ok = globalThis.BigInt !== undefined
+        && typeof dv.getBigInt64 === "function"
+        && typeof dv.getBigUint64 === "function"
+        && typeof dv.setBigInt64 === "function"
+        && typeof dv.setBigUint64 === "function";
+    ok ? {
+        MIN: BigInt("-9223372036854775808"),
+        MAX: BigInt("9223372036854775807"),
+        UMIN: BigInt("0"),
+        UMAX: BigInt("18446744073709551615"),
+        C: BigInt,
+        V: dv,
+    } : undefined;
+}
+detectBi();
+
+/**
+ * Scalar value types. This is a subset of field types declared by protobuf
+ * enum google.protobuf.FieldDescriptorProto.Type The types GROUP and MESSAGE
+ * are omitted, but the numerical values are identical.
+ */
+var ScalarType;
+(function (ScalarType) {
+    // 0 is reserved for errors.
+    // Order is weird for historical reasons.
+    ScalarType[ScalarType["DOUBLE"] = 1] = "DOUBLE";
+    ScalarType[ScalarType["FLOAT"] = 2] = "FLOAT";
+    // Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if
+    // negative values are likely.
+    ScalarType[ScalarType["INT64"] = 3] = "INT64";
+    ScalarType[ScalarType["UINT64"] = 4] = "UINT64";
+    // Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if
+    // negative values are likely.
+    ScalarType[ScalarType["INT32"] = 5] = "INT32";
+    ScalarType[ScalarType["FIXED64"] = 6] = "FIXED64";
+    ScalarType[ScalarType["FIXED32"] = 7] = "FIXED32";
+    ScalarType[ScalarType["BOOL"] = 8] = "BOOL";
+    ScalarType[ScalarType["STRING"] = 9] = "STRING";
+    // Tag-delimited aggregate.
+    // Group type is deprecated and not supported in proto3. However, Proto3
+    // implementations should still be able to parse the group wire format and
+    // treat group fields as unknown fields.
+    // TYPE_GROUP = 10,
+    // TYPE_MESSAGE = 11,  // Length-delimited aggregate.
+    // New in version 2.
+    ScalarType[ScalarType["BYTES"] = 12] = "BYTES";
+    ScalarType[ScalarType["UINT32"] = 13] = "UINT32";
+    // TYPE_ENUM = 14,
+    ScalarType[ScalarType["SFIXED32"] = 15] = "SFIXED32";
+    ScalarType[ScalarType["SFIXED64"] = 16] = "SFIXED64";
+    ScalarType[ScalarType["SINT32"] = 17] = "SINT32";
+    ScalarType[ScalarType["SINT64"] = 18] = "SINT64";
+})(ScalarType || (ScalarType = {}));
+/**
+ * JavaScript representation of 64 bit integral types. Equivalent to the
+ * field option "jstype".
+ *
+ * By default, protobuf-ts represents 64 bit types as `bigint`.
+ *
+ * You can change the default behaviour by enabling the plugin parameter
+ * `long_type_string`, which will represent 64 bit types as `string`.
+ *
+ * Alternatively, you can change the behaviour for individual fields
+ * with the field option "jstype":
+ *
+ * ```protobuf
+ * uint64 my_field = 1 [jstype = JS_STRING];
+ * uint64 other_field = 2 [jstype = JS_NUMBER];
+ * ```
+ */
+var LongType;
+(function (LongType) {
+    /**
+     * Use JavaScript `bigint`.
+     *
+     * Field option `[jstype = JS_NORMAL]`.
+     */
+    LongType[LongType["BIGINT"] = 0] = "BIGINT";
+    /**
+     * Use JavaScript `string`.
+     *
+     * Field option `[jstype = JS_STRING]`.
+     */
+    LongType[LongType["STRING"] = 1] = "STRING";
+    /**
+     * Use JavaScript `number`.
+     *
+     * Large values will loose precision.
+     *
+     * Field option `[jstype = JS_NUMBER]`.
+     */
+    LongType[LongType["NUMBER"] = 2] = "NUMBER";
+})(LongType || (LongType = {}));
+/**
+ * Protobuf 2.1.0 introduced packed repeated fields.
+ * Setting the field option `[packed = true]` enables packing.
+ *
+ * In proto3, all repeated fields are packed by default.
+ * Setting the field option `[packed = false]` disables packing.
+ *
+ * Packed repeated fields are encoded with a single tag,
+ * then a length-delimiter, then the element values.
+ *
+ * Unpacked repeated fields are encoded with a tag and
+ * value for each element.
+ *
+ * `bytes` and `string` cannot be packed.
+ */
+var RepeatType;
+(function (RepeatType) {
+    /**
+     * The field is not repeated.
+     */
+    RepeatType[RepeatType["NO"] = 0] = "NO";
+    /**
+     * The field is repeated and should be packed.
+     * Invalid for `bytes` and `string`, they cannot be packed.
+     */
+    RepeatType[RepeatType["PACKED"] = 1] = "PACKED";
+    /**
+     * The field is repeated but should not be packed.
+     * The only valid repeat type for repeated `bytes` and `string`.
+     */
+    RepeatType[RepeatType["UNPACKED"] = 2] = "UNPACKED";
+})(RepeatType || (RepeatType = {}));
+
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(4) request.beta");
+
+// 构造回复数据
+let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
@@ -2589,110 +2401,197 @@ $.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
 const METHOD = $request.method, HOST = URL.host, PATH = URL.path; URL.paths;
 $.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
-const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
+const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Maps", Database$1);
+	const { Settings, Caches, Configs } = setENV("iRingo", ["Location", "Maps"], Database$1);
 	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
-			// 创建空数据
-			let body = {};
-			// 格式判断
-			switch (FORMAT) {
-				case undefined: // 视为无body
-					break;
-				case "application/x-www-form-urlencoded":
-				case "text/plain":
+			// 方法判断
+			switch (METHOD) {
+				case "POST":
+				case "PUT":
+				case "PATCH":
+				case "DELETE":
+					// 格式判断
+					switch (FORMAT) {
+						case undefined: // 视为无body
+							break;
+						case "application/x-www-form-urlencoded":
+						case "text/plain":
+						default:
+							break;
+						case "application/x-mpegURL":
+						case "application/x-mpegurl":
+						case "application/vnd.apple.mpegurl":
+						case "audio/mpegurl":
+							//body = M3U8.parse($request.body);
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//$request.body = M3U8.stringify(body);
+							break;
+						case "text/xml":
+						case "text/html":
+						case "text/plist":
+						case "application/xml":
+						case "application/plist":
+						case "application/x-plist":
+							//body = XML.parse($request.body);
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//$request.body = XML.stringify(body);
+							break;
+						case "text/vtt":
+						case "application/vtt":
+							//body = VTT.parse($request.body);
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//$request.body = VTT.stringify(body);
+							break;
+						case "text/json":
+						case "application/json":
+							//body = JSON.parse($request.body ?? "{}");
+							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//$request.body = JSON.stringify(body);
+							break;
+						case "application/protobuf":
+						case "application/x-protobuf":
+						case "application/vnd.google.protobuf":
+						case "application/grpc":
+						case "application/grpc+proto":
+						case "application/octet-stream":
+							$.log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
+							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
+							$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
+							// 写入二进制数据
+							$request.body = rawBody;
+							break;
+					}					//break; // 不中断，继续处理URL
+				case "GET":
+				case "HEAD":
+				case "OPTIONS":
+				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
-					break;
-				case "application/x-mpegURL":
-				case "application/x-mpegurl":
-				case "application/vnd.apple.mpegurl":
-				case "audio/mpegurl":
-					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = M3U8.stringify(body);
-					break;
-				case "text/xml":
-				case "text/html":
-				case "text/plist":
-				case "application/xml":
-				case "application/plist":
-				case "application/x-plist":
-					$.log(`🚧 body: ${body}`, "");
+					delete $request?.headers?.["If-None-Match"];
+					delete $request?.headers?.["if-none-match"];
 					// 主机判断
 					switch (HOST) {
 						case "configuration.ls.apple.com":
-							//body = await PLISTs("plist2json", $response.body);
-							body = XML.parse($response.body);
-							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							// 路径判断
-							switch (PATH) {
-								case "config/defaults":
-									const PLIST = body.plist;
-									if (PLIST) {
-										// set settings
-										// CN
-										PLIST["com.apple.GEO"].CountryProviders.CN.ShouldEnableLagunaBeach = Settings?.Config?.Defaults?.LagunaBeach ?? true; // XX
-										PLIST["com.apple.GEO"].CountryProviders.CN.DrivingMultiWaypointRoutesEnabled = Settings?.Config?.Defaults?.DrivingMultiWaypointRoutesEnabled ?? true; // 驾驶导航途径点
-										//PLIST["com.apple.GEO"].CountryProviders.CN.EnableAlberta = false; // CN
-										//PLIST["com.apple.GEO"].CountryProviders.CN.EnableClientDrapedVectorPolygons = false; // CN
-										PLIST["com.apple.GEO"].CountryProviders.CN.GEOAddressCorrectionEnabled = Settings?.Config?.Defaults?.GEOAddressCorrection ?? true; // CN
-										if (Settings?.Config?.Defaults?.LookupMaxParametersCount ?? true) {
-											delete PLIST["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialEventLookupMaxParametersCount; // CN
-											delete PLIST["com.apple.GEO"].CountryProviders.CN.GEOBatchSpatialPlaceLookupMaxParametersCount; // CN
-										}
-										PLIST["com.apple.GEO"].CountryProviders.CN.LocalitiesAndLandmarksSupported = Settings?.Config?.Defaults?.LocalitiesAndLandmarks ?? true; // CN
-										//PLIST["com.apple.GEO"].CountryProviders.CN.NavigationShowHeadingKey = true;
-										PLIST["com.apple.GEO"].CountryProviders.CN.POIBusynessDifferentialPrivacy = Settings?.Config?.Defaults?.POIBusyness ?? true; // CN
-										PLIST["com.apple.GEO"].CountryProviders.CN.POIBusynessRealTime = Settings?.Config?.Defaults?.POIBusyness ?? true; // CN
-										PLIST["com.apple.GEO"].CountryProviders.CN.TransitPayEnabled = Settings?.Config?.Defaults?.TransitPayEnabled ?? true; // CN
-										//PLIST["com.apple.GEO"].CountryProviders.CN.WiFiQualityNetworkDisabled = Settings?.Config?.Defaults?.WiFiQualityNetworkDisabled ?? true; // CN
-										//PLIST["com.apple.GEO"].CountryProviders.CN.WiFiQualityTileDisabled = Settings?.Config?.Defaults?.WiFiQualityTileDisabled ?? true; // CN
-										PLIST["com.apple.GEO"].CountryProviders.CN.SupportsOffline = Settings?.Config?.Defaults?.SupportsOffline ?? true; // CN
-										PLIST["com.apple.GEO"].CountryProviders.CN.SupportsCarIntegration = Settings?.Config?.Defaults?.SupportsCarIntegration ?? true; // CN
-										// TW
-										//PLIST["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenAddresses = true; // TW
-										//PLIST["com.apple.GEO"].CountryProviders.CN.GEOShouldSpeakWrittenPlaceNames = true; // TW
-										// US
-										PLIST["com.apple.GEO"].CountryProviders.CN["6694982d2b14e95815e44e970235e230"] = Settings?.Config?.Defaults?.["6694982d2b14e95815e44e970235e230"] ?? true; // US
-										PLIST["com.apple.GEO"].CountryProviders.CN.PedestrianAREnabled = Settings?.Config?.Defaults?.PedestrianAR ?? true; // 现实世界中的线路
-										PLIST["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = Settings?.Config?.Defaults?.OpticalHeading ?? true; // 举起以查看
-										PLIST["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = Settings?.Config?.Defaults?.UseCLPedestrianMapMatchedLocations ?? true; // 导航准确性-增强
-									}									break;
-							}							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$response.body = await PLISTs("json2plist", body); // json2plist
-							$response.body = XML.stringify(body);
 							break;
+						case "gspe1-ssl.ls.apple.com":
+							break;
+						case "gspe35-ssl.ls.apple.com":
+						case "gspe35-ssl.ls.apple.cn":
+							switch (PATH) {
+								case "config/announcements":
+									switch (URL.query?.os) {
+										case "ios":
+										case "ipados":
+										case "macos":
+										default:
+											switch (Settings?.Config?.Announcements?.Environment?.default) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															URL.query.environment = "prod";
+															break;
+														case "CN":
+														case undefined:
+															URL.query.environment = "prod-cn";
+															break;
+													}													break;
+												case "CN":
+												default:
+													URL.query.environment = "prod-cn";
+													break;
+												case "XX":
+													URL.query.environment = "prod";
+													break;
+											}											break;
+										case "watchos":
+											switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															URL.query.environment = "prod";
+															break;
+														case "CN":
+														case undefined:
+															URL.query.environment = "prod-cn";
+															break;
+													}													break;
+												case "XX":
+												default:
+													URL.query.environment = "prod";
+													break;
+												case "CN":
+													URL.query.environment = "prod-cn";
+													break;
+											}											break;
+									}									break;
+								case "geo_manifest/dynamic/config":
+									switch (URL.query?.os) {
+										case "ios":
+										case "ipados":
+										case "macos":
+										default:
+											switch (Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															URL.query.country_code = Caches?.pep?.gcc ?? "US";
+															break;
+														case "CN":
+														case undefined:
+															URL.query.country_code = "CN";
+															break;
+													}													break;
+												default:
+													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default ?? "CN";
+													break;
+											}											break;
+										case "watchos":
+											switch (Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS) {
+												case "AUTO":
+													switch (Caches?.pep?.gcc) {
+														default:
+															URL.query.country_code = Caches?.pep?.gcc ?? "US";
+															break;
+														case "CN":
+														case undefined:
+															URL.query.country_code = "CN";
+															break;
+													}													break;
+												default:
+													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS ?? "US";
+													break;
+											}											break;
+									}									break;
+							}							break;
 					}					break;
-				case "text/vtt":
-				case "application/vtt":
-					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = VTT.stringify(body);
+				case "CONNECT":
+				case "TRACE":
 					break;
-				case "text/json":
-				case "application/json":
-					body = JSON.parse($response.body ?? "{}");
-					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					$response.body = JSON.stringify(body);
-					break;
-				case "application/protobuf":
-				case "application/x-protobuf":
-				case "application/vnd.google.protobuf":
-				case "application/grpc":
-				case "application/grpc+proto":
-				case "application/octet-stream":
-					//$.log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
-					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
-					// 写入二进制数据
-					$response.body = rawBody;
-					break;
-			}			break;
+			}			//if ($request.headers?.Host) $request.headers.Host = URL.host;
+			$request.url = URI.stringify(URL);
+			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			break;
 		case false:
 			break;
 	}})()
 	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response));
+	.finally(() => {
+		switch ($response) {
+			default: // 有构造回复数据，返回构造的回复数据
+				if ($.isQuanX()) {
+					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+					delete $response.headers?.["Content-Length"];
+					delete $response.headers?.["content-length"];
+					delete $response.headers?.["Transfer-Encoding"];
+					$.done($response);
+				} else $.done({ response: $response });
+				break;
+			case undefined: // 无构造回复数据，发送修改的请求数据
+				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
+				$.done($request);
+				break;
+		}	});

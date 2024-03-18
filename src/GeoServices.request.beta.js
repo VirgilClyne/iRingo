@@ -7,7 +7,9 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 🗺️ Maps v3.0.0(1) request.beta");
+import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
+
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(4) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -23,7 +25,7 @@ $.log(`⚠ METHOD: ${METHOD}`, "");
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
 (async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Maps", Database);
+	const { Settings, Caches, Configs } = setENV("iRingo", ["Location", "Maps"], Database);
 	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
@@ -79,7 +81,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/vnd.google.protobuf":
 						case "application/grpc":
 						case "application/grpc+proto":
-						case "applecation/octet-stream":
+						case "application/octet-stream":
+							$.log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
+							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
+							$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
+							// 写入二进制数据
+							$request.body = rawBody;
 							break;
 					};
 					//break; // 不中断，继续处理URL
@@ -88,14 +95,33 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "OPTIONS":
 				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
+					delete $request?.headers?.["If-None-Match"];
+					delete $request?.headers?.["if-none-match"];
 					// 主机判断
 					switch (HOST) {
 						case "configuration.ls.apple.com":
 							// 路径判断
 							switch (PATH) {
 								case "config/defaults":
-									_.set(Caches, "Defaults.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Defaults?.ETag));
-									$Storage.setItem("@iRingo.Maps.Caches", Caches);
+									break;
+							};
+							break;
+						case "gspe1-ssl.ls.apple.com":
+							switch (PATH) {
+								case "pep/gcc":
+									/* // 不使用 echo response
+									$response = {
+										status: 200,
+										headers: {
+											"Content-Type": "text/html",
+											Date: new Date().toUTCString(),
+											Connection: "keep-alive",
+											"Content-Encoding": "identity",
+										},
+										body: Settings.PEP.GCC,
+									};
+									$.log(JSON.stringify($response));
+									*/
 									break;
 							};
 							break;
@@ -152,8 +178,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											};
 											break;
 									};
-									_.set(Caches, "Announcements.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.Announcements?.ETag));
-									$Storage.setItem("@iRingo.Maps.Caches", Caches);
 									break;
 								case "geo_manifest/dynamic/config":
 									switch (URL.query?.os) {
@@ -161,7 +185,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "ipados":
 										case "macos":
 										default:
-											switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default) {
+											switch (Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default) {
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
@@ -174,12 +198,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													};
 													break;
 												default:
-													URL.query.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.default ?? "CN";
+													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default ?? "CN";
 													break;
 											};
 											break;
 										case "watchos":
-											switch (Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS) {
+											switch (Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS) {
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
@@ -192,13 +216,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													};
 													break;
 												default:
-													URL.query.country_code = Settings?.Geo_manifest?.Dynamic?.Config?.Country_code?.watchOS ?? "US";
+													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS ?? "US";
 													break;
 											};
 											break;
 									};
-									_.set(Caches, "Dynamic.ETag", setETag($request.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"], Caches?.Dynamic?.ETag));
-									$Storage.setItem("@iRingo.Maps.Caches", Caches);
 									break;
 							};
 							break;
@@ -237,21 +259,3 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				break;
 		};
 	})
-
-/***************** Function *****************/
-/**
- * Set ETag
- * @author VirgilClyne
- * @param {String} IfNoneMatch - If-None-Match
- * @return {String} ETag - ETag
- */
-function setETag(IfNoneMatch, ETag) {
-	$.log(`☑️ Set ETag`, `If-None-Match: ${IfNoneMatch}`, `ETag: ${ETag}`, "");
-	if (IfNoneMatch !== ETag) {
-		ETag = IfNoneMatch;
-		delete $request?.headers?.["If-None-Match"];
-		delete $request?.headers?.["if-none-match"];
-	}
-	$.log(`✅ Set ETag`, "");
-	return ETag;
-};

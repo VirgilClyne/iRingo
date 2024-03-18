@@ -3,36 +3,18 @@ import commonjs from "@rollup/plugin-commonjs";
 
 export default [
 	{
-		input: 'src/Location.request.beta.js',
+		input: 'src/GeoServices.request.beta.js',
 		output: {
-			file: 'js/Location.request.beta.js',
+			file: 'js/GeoServices.request.beta.js',
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs()]
 	},
 	{
-		input: 'src/Location.response.beta.js',
+		input: 'src/GeoServices.response.beta.js',
 		output: {
-			file: 'js/Location.response.beta.js',
-			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
-		},
-		plugins: [json(), commonjs()]
-	},
-	{
-		input: 'src/Maps.request.beta.js',
-		output: {
-			file: 'js/Maps.request.beta.js',
-			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
-		},
-		plugins: [json(), commonjs()]
-	},
-	{
-		input: 'src/Maps.response.beta.js',
-		output: {
-			file: 'js/Maps.response.beta.js',
+			file: 'js/GeoServices.response.beta.js',
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
