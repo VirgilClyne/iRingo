@@ -1166,7 +1166,7 @@ class XML {
 		}	};
 }
 
-var Settings$6 = {
+var Settings$7 = {
 	Switch: true
 };
 var Configs$2 = {
@@ -1886,33 +1886,46 @@ var Configs$2 = {
 	]
 };
 var Default = {
-	Settings: Settings$6,
+	Settings: Settings$7,
 	Configs: Configs$2
 };
 
 var Default$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	Configs: Configs$2,
-	Settings: Settings$6,
+	Settings: Settings$7,
 	default: Default
+});
+
+var Settings$6 = {
+	Switch: true,
+	PEP: {
+		GCC: "US"
+	}
+};
+var Location = {
+	Settings: Settings$6
+};
+
+var Location$1 = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	Settings: Settings$6,
+	default: Location
 });
 
 var Settings$5 = {
 	Switch: true,
-	PEP: {
-		GCC: "US"
-	},
 	Services: {
-		PlaceData: "CN",
+		Dispatcher: "CN",
 		Directions: "AUTO",
 		Traffic: "AUTO",
 		RAP: "XX",
 		Tiles: "AUTO"
 	},
-	Geo_manifest: {
+	GeoManifest: {
 		Dynamic: {
 			Config: {
-				Country_code: {
+				CountryCode: {
 					"default": "AUTO",
 					iOS: "CN",
 					iPadOS: "CN",
@@ -1951,14 +1964,14 @@ var Settings$5 = {
 		}
 	}
 };
-var Location = {
+var Maps = {
 	Settings: Settings$5
 };
 
-var Location$1 = /*#__PURE__*/Object.freeze({
+var Maps$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	Settings: Settings$5,
-	default: Location
+	default: Maps
 });
 
 var Settings$4 = {
@@ -2480,6 +2493,7 @@ var TV$1 = /*#__PURE__*/Object.freeze({
 var Database$1 = Database = {
 	"Default": Default$1,
 	"Location": Location$1,
+	"Maps": Maps$1,
 	"News": News$1,
 	"PrivateRelay": PrivateRelay$1,
 	"Siri": Siri$1,
