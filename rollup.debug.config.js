@@ -21,6 +21,24 @@ export default [
 		plugins: [json(), commonjs()]
 	},
 	{
+		input: 'src/Maps.request.beta.js',
+		output: {
+			file: 'js/Maps.request.beta.js',
+			//format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+		},
+		plugins: [json(), commonjs()]
+	},
+	{
+		input: 'src/Maps.response.beta.js',
+		output: {
+			file: 'js/Maps.response.beta.js',
+			//format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+		},
+		plugins: [json(), commonjs()]
+	},
+	{
 		input: 'src/News.request.beta.js',
 		output: {
 			file: 'js/News.request.beta.js',
