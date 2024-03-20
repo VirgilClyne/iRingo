@@ -280,19 +280,19 @@ export interface TileGroup {
      */
     tileSet: TileGroup_VersionedTileSet[];
     /**
-     * @generated from protobuf field: repeated uint32 styleSheetIndex = 3;
+     * @generated from protobuf field: repeated uint32 styleSheetIndex = 3 [packed = false];
      */
     styleSheetIndex: number[];
     /**
-     * @generated from protobuf field: repeated uint32 textureIndex = 4;
+     * @generated from protobuf field: repeated uint32 textureIndex = 4 [packed = false];
      */
     textureIndex: number[];
     /**
-     * @generated from protobuf field: repeated uint32 fontIndex = 5;
+     * @generated from protobuf field: repeated uint32 fontIndex = 5 [packed = false];
      */
     fontIndex: number[];
     /**
-     * @generated from protobuf field: repeated uint32 iconIndex = 6;
+     * @generated from protobuf field: repeated uint32 iconIndex = 6 [packed = false];
      */
     iconIndex: number[];
     /**
@@ -300,11 +300,11 @@ export interface TileGroup {
      */
     regionalResourceIndex: RegionalResourceIndex[];
     /**
-     * @generated from protobuf field: repeated uint32 xmlIndex = 8;
+     * @generated from protobuf field: repeated uint32 xmlIndex = 8 [packed = false];
      */
     xmlIndex: number[];
     /**
-     * @generated from protobuf field: repeated uint32 attributionIndex = 10;
+     * @generated from protobuf field: repeated uint32 attributionIndex = 10 [packed = false];
      */
     attributionIndex: number[];
     /**
@@ -312,7 +312,7 @@ export interface TileGroup {
      */
     hybridUnavailableRegion: TileSetRegion[];
     /**
-     * @generated from protobuf field: repeated uint32 resourceIndex = 12;
+     * @generated from protobuf field: repeated uint32 resourceIndex = 12 [packed = false];
      */
     resourceIndex: number[];
     /**

@@ -62,15 +62,15 @@ message TileGroup {
   }
   uint32 identifier = 1;
   repeated VersionedTileSet tileSet = 2;
-  repeated uint32 styleSheetIndex = 3;
-  repeated uint32 textureIndex = 4;
-  repeated uint32 fontIndex = 5;
-  repeated uint32 iconIndex = 6;
+  repeated uint32 styleSheetIndex = 3 [packed = false];
+  repeated uint32 textureIndex = 4 [packed = false];
+  repeated uint32 fontIndex = 5 [packed = false];
+  repeated uint32 iconIndex = 6 [packed = false];
   repeated RegionalResourceIndex regionalResourceIndex = 7;
-  repeated uint32 xmlIndex = 8;
-  repeated uint32 attributionIndex = 10;
+  repeated uint32 xmlIndex = 8 [packed = false];
+  repeated uint32 attributionIndex = 10 [packed = false];
   repeated TileSetRegion hybridUnavailableRegion = 11;
-  repeated uint32 resourceIndex = 12;
+  repeated uint32 resourceIndex = 12 [packed = false];
   uint32 muninVersion = 14;
   uint32 offlineMetadataIndex = 15;
 }

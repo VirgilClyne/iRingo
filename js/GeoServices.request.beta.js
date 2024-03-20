@@ -1491,12 +1491,12 @@ var Location$1 = /*#__PURE__*/Object.freeze({
 var Settings$5 = {
 	Switch: true,
 	UrlInfoSet: {
-		Dispatcher: "CN",
-		Directions: "CN",
-		RAP: "XX"
+		Dispatcher: "AutoNavi",
+		Directions: "AutoNavi",
+		RAP: "Apple"
 	},
 	TileSet: {
-		Standard: "AUTO",
+		"Map": "CN",
 		Traffic: "CN",
 		POI: "AUTO",
 		Flyover: "XX",
@@ -1507,10 +1507,10 @@ var Settings$5 = {
 			Config: {
 				CountryCode: {
 					"default": "AUTO",
-					iOS: "CN",
-					iPadOS: "CN",
+					iOS: "AUTO",
+					iPadOS: "AUTO",
 					watchOS: "US",
-					macOS: "CN"
+					macOS: "AUTO"
 				}
 			}
 		}
@@ -1519,28 +1519,11 @@ var Settings$5 = {
 		Announcements: {
 			"Environment:": {
 				"default": "AUTO",
-				iOS: "CN",
-				iPadOS: "CN",
+				iOS: "AUTO",
+				iPadOS: "AUTO",
 				watchOS: "XX",
-				macOS: "CN"
+				macOS: "AUTO"
 			}
-		},
-		Defaults: {
-			LagunaBeach: true,
-			DrivingMultiWaypointRoutesEnabled: true,
-			GEOAddressCorrection: true,
-			LookupMaxParametersCount: true,
-			LocalitiesAndLandmarks: true,
-			POIBusyness: true,
-			PedestrianAR: true,
-			"6694982d2b14e95815e44e970235e230": true,
-			OpticalHeading: true,
-			UseCLPedestrianMapMatchedLocations: true,
-			TransitPayEnabled: true,
-			SupportsOffline: true,
-			SupportsCarIntegration: true,
-			WiFiQualityNetworkDisabled: false,
-			WiFiQualityTileDisabled: false
 		}
 	}
 };
