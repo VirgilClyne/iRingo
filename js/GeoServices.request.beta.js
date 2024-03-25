@@ -744,7 +744,7 @@ class URI {
 var Settings$7 = {
 	Switch: true
 };
-var Configs$2 = {
+var Configs$3 = {
 	Storefront: [
 		[
 			"AE",
@@ -1462,12 +1462,12 @@ var Configs$2 = {
 };
 var Default = {
 	Settings: Settings$7,
-	Configs: Configs$2
+	Configs: Configs$3
 };
 
 var Default$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	Configs: Configs$2,
+	Configs: Configs$3,
 	Settings: Settings$7,
 	default: Default
 });
@@ -1493,10 +1493,12 @@ var Settings$5 = {
 	UrlInfoSet: {
 		Dispatcher: "AutoNavi",
 		Directions: "AutoNavi",
-		RAP: "Apple"
+		RAP: "Apple",
+		LocationShift: true
 	},
 	TileSet: {
 		"Map": "CN",
+		Satellite: "XX",
 		Traffic: "CN",
 		POI: "AUTO",
 		Flyover: "XX",
@@ -1527,12 +1529,16 @@ var Settings$5 = {
 		}
 	}
 };
+var Configs$2 = {
+};
 var Maps = {
-	Settings: Settings$5
+	Settings: Settings$5,
+	Configs: Configs$2
 };
 
 var Maps$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
+	Configs: Configs$2,
 	Settings: Settings$5,
 	default: Maps
 });

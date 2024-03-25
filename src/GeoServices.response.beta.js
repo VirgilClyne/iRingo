@@ -5,11 +5,13 @@ import URI from "./URI/URI.mjs";
 import XML from "./XML/XML.mjs";
 
 import Database from "./database/index.mjs";
+import * as Configs from "./database/Maps/Configs.json";
 import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.2.2(2) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.0(5) response.beta");
+Database.Maps.Configs = Configs;
 
 /***************** Processing *****************/
 // 解构URL
@@ -1363,7 +1365,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											const ResourceManifestDownload = new ResourceManifestDownload$Type();
 											/******************  initialization finish  *******************/
 											body = Resources.fromBinary(rawBody);
-											$.log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
+											//$.log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
 											/*
 											let UF = UnknownFieldHandler.list(body);
 											//$.log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
@@ -1380,30 +1382,41 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											*/
 											switch (URL.query.country_code) {
 												case "CN":
-													_.set(Caches, "tileSet.CN", body.tileSet);
-													$Storage.setItem("@iRingo.Maps.Caches", Caches);
+													if (Date.now() - (Caches?.CN?.timeStamp ?? 0) > 86400000) {
+														_.set(Caches, "CN.tileSet", body.tileSet);
+														_.set(Caches, "CN.urlInfoSet", body.urlInfoSet);
+														_.set(Caches, "CN.muninBucket", body.muninBucket);
+														_.set(Caches, "CN.timeStamp", Date.now());
+														$Storage.setItem("@iRingo.Maps.Caches", Caches);
+													};
+													Caches.XX = Caches.XX ?? Configs.XX;
 													// announcementsSupportedLanguage
 													//body.announcementsSupportedLanguage?.push?.("zh-CN");
 													//body.announcementsSupportedLanguage?.push?.("zh-TW");
 													break;
 												default:
-													_.set(Caches, "tileSet.XX", body.tileSet);
-													$Storage.setItem("@iRingo.Maps.Caches", Caches);
+													if (Date.now() - (Caches?.XX?.timeStamp ?? 0) > 86400000) {
+														_.set(Caches, "XX.tileSet", body.tileSet);
+														_.set(Caches, "XX.urlInfoSet", body.urlInfoSet);
+														_.set(Caches, "XX.muninBucket", body.muninBucket);
+														_.set(Caches, "XX.timeStamp", Date.now());
+														$Storage.setItem("@iRingo.Maps.Caches", Caches);
+													};
+													Caches.CN = Caches.CN ?? Configs.CN;
 													// resource
 													body.resource.push({ "resourceType": 7, "filename": "POITypeMapping-CN-1.json", "checksum": { "0": 242, "1": 10, "2": 179, "3": 107, "4": 214, "5": 41, "6": 50, "7": 223, "8": 62, "9": 204, "10": 134, "11": 7, "12": 103, "13": 206, "14": 96, "15": 242, "16": 24, "17": 42, "18": 79, "19": 223 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 });
 													body.resource.push({ "resourceType": 7, "filename": "China.cms-lpr", "checksum": { "0": 196, "1": 139, "2": 158, "3": 17, "4": 250, "5": 132, "6": 138, "7": 10, "8": 138, "9": 38, "10": 96, "11": 130, "12": 82, "13": 80, "14": 4, "15": 239, "16": 11, "17": 107, "18": 183, "19": 236 }, "region": [{ "minX": 1, "minY": 0, "maxX": 1, "maxY": 0, "minZ": 1, "maxZ": 25 }], "filter": [{ "scale": [], "scenario": [4] }], "connectionType": 0, "preferWiFiAllowedStaleThreshold": 0, "validationMethod": 1, "alternateResourceURLIndex": 1, "updateMethod": 1, "timeToLiveSeconds": 0 });
 													break;
 											};
-											body = setTileSet(body, Settings, Caches);
-											//$.log(`🚧 调试信息`, `body middle: ${JSON.stringify(body)}`, "");
-											body = setTileGroup(body, Settings, Configs);
-											//body = setDataSet(body, Settings, Configs);
-											body = setUrlInfoSet(body, Settings, Configs);
-											body = setMuninBucket(body, Settings, Configs);
+											body.tileSet = tileSets(body.tileSet, Settings, Caches);
+											//body.dataSet = dataSets(body.dataSet, Settings, Caches);
+											body.urlInfoSet = urlInfoSets(body.urlInfoSet, Settings, Caches);
+											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
 											// releaseInfo
 											body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
-											$.log(`releaseInfo: ${body.releaseInfo}`, "");
-											$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
+											$.log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
+											body = SetTileGroup(body, Settings, Caches);
+											//$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
 											rawBody = Resources.toBinary(body);
 											break;
 									};
@@ -1427,43 +1440,47 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => $.done($response))
 
 /***************** Function *****************/
-function setTileGroup(body = {}, settings = {}, caches = {}) {
-	$.log(`☑️ Set TileGroup`, "");
-	body.tileGroup[0].tileSet = body.tileSet.map((tileSet, index) => {
-		return {
-			"tileSetIndex": index,
-			"identifier": tileSet.validVersion?.[0]?.identifier
-		};
+function SetTileGroup(body = {}, settings = {}, caches = {}) {
+	$.log(`☑️ Set TileGroups`, "");
+	body.tileGroup = body.tileGroup.map(tileGroup => {
+		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		//tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
+		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		tileGroup.tileSet = body.tileSet.map((tileSet, index) => {
+			return {
+				"tileSetIndex": index,
+				"identifier": tileSet.validVersion?.[0]?.identifier
+			};
+		});
+		tileGroup.attributionIndex = body.attribution.map((attribution, index) => {
+			return index;
+		});
+		tileGroup.resourceIndex = body.resource.map((resource, index) => {
+			return index;
+		});
+		return tileGroup;
 	});
-	// tileGroup[0].attributionIndex
-	//if (!body.tileGroup?.[0]?.attributionIndex.includes(2)) body.tileGroup?.[0]?.attributionIndex?.push?.(2);
-	$.log(`✅ Set TileGroup`, "");
+	$.log(`✅ Set TileGroups`, "");
 	return body;
 };
 
-function setTileSet(body = {}, settings = {}, caches = {}) {
-	$.log(`☑️ Set TileSet`, "");
-	// 全部已知图源
-	const tileSet = {
-		"CN": caches?.tileSet?.CN ?? [],
-		"XX": caches?.tileSet?.XX ?? []
-	};
+function tileSets(tileSets = [], settings = {}, caches = {}) {
+	$.log(`☑️ Set TileSets`, "");
 	/*
 	// 填补数据组
-	tileSet.CN = tileSet.CN.map(tile => {
+	if (caches?.CN?.tileSet) caches.CN.tileSet = caches.CN.tileSet.map(tile => {
 		tile.dataSet = 2;
 		return tile;
 	});
 	*/
 	// 填补空缺图源
-	tileSet.XX.forEach(tile => {
-		if (!body.tileSet.some(i => i.style === tile.style)) body.tileSet.push(tile);
+	caches?.XX?.tileSet?.forEach(tile => {
+		if (!tileSets.some(i => i.style === tile.style)) tileSets.push(tile);
 	});
 	// 按需更改图源
-	body.tileSet = body.tileSet.map(tile => {
-		switch (tile.style) {
+	tileSets = tileSets.map((tileSet, index) => {
+		switch (tileSet.style) {
 			case 1: // VECTOR_STANDARD 标准地图
-			case 7: // RASTER_SATELLITE 卫星地图（2D）
 			case 8: // RASTER_TERRAIN 地貌与地势（绿地/城市/水体/山地不同颜色的区域）
 			case 11: // VECTOR_BUILDINGS 建筑模型（3D/白模）
 			case 20: // VECTOR_ROADS 道路（卫星地图:显示标签）
@@ -1477,10 +1494,31 @@ function setTileSet(body = {}, settings = {}, caches = {}) {
 					default:
 						break;
 					case "CN":
-						tile = tileSet.CN.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 					case "XX":
-						tile = tileSet.XX.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
+						break;
+				};
+				break;
+			case 7: // RASTER_SATELLITE 卫星地图（2D）
+			case 14: // SPUTNIK_METADATA 卫星地图（3D/俯瞰）元数据
+			case 15: // SPUTNIK_C3M 卫星地图（3D/俯瞰）C3模型
+			case 16: // SPUTNIK_DSM 卫星地图（3D/俯瞰）数字表面模型
+			case 17: // SPUTNIK_DSM_GLOBAL 卫星地图（3D/俯瞰）全球数字表面模型
+			case 33: // RASTER_SATELLITE_NIGHT 卫星地图（2D/夜间）
+			case 34: // SPUTNIK_VECTOR_BORDER 卫星地图（3D/俯瞰）边界
+			case 35: // RASTER_SATELLITE_DIGITIZE 卫星地图（2D/数字化）
+			case 45: // RASTER_SATELLITE_ASTC 卫星地图（2D/ASTC）
+				switch (settings.TileSet.Satellite) {
+					case "AUTO":
+					default:
+						break;
+					case "CN":
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
+						break;
+					case "XX":
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 				};
 				break;
@@ -1495,10 +1533,10 @@ function setTileSet(body = {}, settings = {}, caches = {}) {
 					default:
 						break;
 					case "CN":
-						tile = tileSet.CN.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 					case "XX":
-						tile = tileSet.XX.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 				};
 				break;
@@ -1511,27 +1549,29 @@ function setTileSet(body = {}, settings = {}, caches = {}) {
 					default:
 						break;
 					case "CN":
-						tile = tileSet.CN.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 					case "XX":
-						tile = tileSet.XX.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 				};
 				break;
-			case 14: // SPUTNIK_METADATA 卫星地图（3D/俯瞰）元数据
-			case 15: // SPUTNIK_C3M 卫星地图（3D/俯瞰）C3模型
-			case 16: // SPUTNIK_DSM 卫星地图（3D/俯瞰）数字表面模型
-			case 17: // SPUTNIK_DSM_GLOBAL 卫星地图（3D）全球数字表面模型
-			case 52: // FLYOVER_METADATA 俯瞰 元数据
+			case 42: // FLYOVER_C3M_MESH
+			case 43: // FLYOVER_C3M_JPEG_TEXTURE
+			case 44: // FLYOVER_C3M_ASTC_TEXTURE
+			case 49: // FLYOVER_VISIBILITY
+			case 50: // FLYOVER_SKYBOX
+			case 51: // FLYOVER_NAVGRAPH
+			case 52: // FLYOVER_METADATA 俯瞰元数据
 				switch (settings.TileSet.Flyover) {
 					case "AUTO":
 					default:
 						break;
 					case "CN":
-						tile = tileSet.CN.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 					case "XX":
-						tile = tileSet.XX.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 				};
 				break;
@@ -1549,10 +1589,10 @@ function setTileSet(body = {}, settings = {}, caches = {}) {
 					default:
 						break;
 					case "CN":
-						tile = tileSet.CN.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 					case "XX":
-						tile = tileSet.XX.find(i => i.style === tile.style) ?? tile;
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 				};
 				break;
@@ -1563,258 +1603,182 @@ function setTileSet(body = {}, settings = {}, caches = {}) {
 					default:
 						break;
 					case "CN":
-						tile = tileSet.CN.find(i => i.style === 68) ?? tile;
+						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 					case "XX":
-						tile = tileSet.XX.find(i => i.style === 68) ?? tile;
+						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
 						break;
 				};
 				break;
 				*/
 		};
-		return tile;
+		return tileSet;
+	}).filter(Boolean);
+	$.log(`✅ Set TileSets`, "");
+	return tileSets;
+};
+
+function dataSets(dataSets = [], settings = {}, caches = {}) {
+	$.log(`☑️ Set DataSets`, "");
+	dataSets = dataSets.map((dataSet, index) => {
+		switch (dataSet.identifier) {
+			case 0:
+				dataSet.dataSetDescription = "TomTom";
+				break;
+			case 1:
+				dataSet.dataSetDescription = "KittyHawk";
+				break;
+			case 2:
+				dataSet.dataSetDescription = "AutoNavi";
+				break;
+		};
+		return dataSet;
 	});
-	$.log(`✅ Set TileSet`, "");
+	$.log(`✅ Set DataSets`, "");
 	return body;
 };
 
-function setDataSet(body = {}, settings = {}, caches = {}) {
-	$.log(`☑️ Set DataSet`, "");
-	_.set(body, "dataSet[0].identifier", 0);
-	_.set(body, "dataSet[0].dataSetDescription", "TomTom");
-	_.set(body, "dataSet[1].identifier", 1);
-	_.set(body, "dataSet[1].dataSetDescription", "KittyHawk");
-	_.set(body, "dataSet[2].identifier", 2);
-	_.set(body, "dataSet[2].dataSetDescription", "AutoNavi");
-	$.log(`✅ Set DataSet`, "");
-	return body;
+function urlInfoSets(urlInfoSets = [], settings = {}, caches = {}) {
+	$.log(`☑️ Set UrlInfoSets`, "");
+	urlInfoSets = urlInfoSets.map((urlInfoSet, index) => {
+		switch (settings.GeoManifest.Dynamic.Config.CountryCode.default) {
+			case "AUTO":
+				// Alternate Resources
+				urlInfoSet.alternateResourcesURL = caches.CN.urlInfoSet[0].alternateResourcesURL;
+				break;
+			case "CN":
+				urlInfoSet = { ...caches.XX.urlInfoSet[0], ...caches.CN.urlInfoSet[0] };
+				break;
+			default:
+				urlInfoSet = { ...caches.CN.urlInfoSet[0], ...caches.XX.urlInfoSet[0] };
+				urlInfoSet.alternateResourcesURL = caches.CN.urlInfoSet[0].alternateResourcesURL;
+				break;
+		};
+		switch (settings.Config.Announcements.Environment.default) {
+			case "AUTO":
+			default:
+				break;
+			case "CN":
+				// Announcements
+				urlInfoSet.announcementsURL = caches.CN.urlInfoSet[0].announcementsURL;
+				break;
+			case "XX":
+				// Announcements
+				urlInfoSet.announcementsURL = caches.XX.urlInfoSet[0].announcementsURL;
+				break;
+		};
+		switch (settings.UrlInfoSet.Dispatcher) {
+			case "AUTO":
+			default:
+				break;
+			case "AutoNavi":
+				// PlaceData Dispatcher
+				urlInfoSet.directionsURL = caches.CN.urlInfoSet[0].dispatcherURL;
+				// Background Dispatcher
+				urlInfoSet.backgroundDispatcherURL = caches.CN.urlInfoSet[0].backgroundDispatcherURL;
+				// Background Reverse Geocoder
+				urlInfoSet.backgroundRevGeoURL = caches.CN.urlInfoSet[0].backgroundRevGeoURL;
+				// Batch Reverse Geocoder
+				urlInfoSet.batchReverseGeocoderPlaceRequestURL = caches.CN.urlInfoSet[0].batchReverseGeocoderPlaceRequestURL;
+				break;
+			case "Apple":
+				// PlaceData Dispatcher
+				urlInfoSet.dispatcherURL = caches.XX.urlInfoSet[0].dispatcherURL;
+				// Background Dispatcher
+				urlInfoSet.backgroundDispatcherURL = caches.XX.urlInfoSet[0].backgroundDispatcherURL;
+				// Background Reverse Geocoder
+				urlInfoSet.backgroundRevGeoURL = caches.XX.urlInfoSet[0].backgroundRevGeoURL;
+				// Batch Reverse Geocoder
+				urlInfoSet.batchReverseGeocoderPlaceRequestURL = caches.XX.urlInfoSet[0].batchReverseGeocoderPlaceRequestURL;
+				break;
+		};
+		switch (settings.UrlInfoSet.Directions) {
+			case "AUTO":
+			default:
+				break;
+			case "AutoNavi":
+				// Directions
+				urlInfoSet.directionsURL = caches.CN.urlInfoSet[0].directionsURL;
+				// ETA
+				urlInfoSet.etaURL = caches.CN.urlInfoSet[0].etaURL;
+				// Simple ETA
+				urlInfoSet.simpleETAURL = caches.CN.urlInfoSet[0].simpleETAURL;
+				break;
+			case "Apple":
+				// Directions
+				urlInfoSet.directionsURL = caches.XX.urlInfoSet[0].directionsURL;
+				// ETA
+				urlInfoSet.etaURL = caches.XX.urlInfoSet[0].etaURL;
+				// Simple ETA
+				urlInfoSet.simpleETAURL = caches.XX.urlInfoSet[0].simpleETAURL;
+				break;
+		};
+		switch (settings.UrlInfoSet.RAP) {
+			case "AUTO":
+			default:
+				// RAP Submission
+				urlInfoSet.problemSubmissionURL = caches.XX.urlInfoSet[0].problemSubmissionURL;
+				// RAP Status
+				urlInfoSet.problemStatusURL = caches.XX.urlInfoSet[0].problemStatusURL;
+				// RAP Opt-Ins
+				urlInfoSet.problemOptInURL = caches.XX.urlInfoSet[0].problemOptInURL;
+				// RAP V4 Submission
+				urlInfoSet.feedbackSubmissionURL = caches.XX.urlInfoSet[0].feedbackSubmissionURL;
+				// RAP V4 Lookup
+				urlInfoSet.feedbackLookupURL = caches.XX.urlInfoSet[0].feedbackLookupURL;
+				break;
+			case "AutoNavi":
+				// RAP Submission
+				urlInfoSet.problemSubmissionURL = caches.CN.urlInfoSet[0].problemSubmissionURL;
+				// RAP Status
+				urlInfoSet.problemStatusURL = caches.CN.urlInfoSet[0].problemStatusURL;
+				// RAP V4 Submission
+				urlInfoSet.feedbackSubmissionURL = caches.CN.urlInfoSet[0].feedbackSubmissionURL;
+				// RAP V4 Lookup
+				urlInfoSet.feedbackLookupURL = caches.CN.urlInfoSet[0].feedbackLookupURL;
+				break;
+			case "Apple":
+				// RAP Submission
+				urlInfoSet.problemSubmissionURL = caches.XX.urlInfoSet[0].problemSubmissionURL;
+				// RAP Status
+				urlInfoSet.problemStatusURL = caches.XX.urlInfoSet[0].problemStatusURL;
+				// RAP Opt-Ins
+				urlInfoSet.problemOptInURL = caches.XX.urlInfoSet[0].problemOptInURL;
+				// RAP V4 Submission
+				urlInfoSet.feedbackSubmissionURL = caches.XX.urlInfoSet[0].feedbackSubmissionURL;
+				// RAP V4 Lookup
+				urlInfoSet.feedbackLookupURL = caches.XX.urlInfoSet[0].feedbackLookupURL;
+				break;
+		};
+		switch (settings.UrlInfoSet.LocationShift) {
+			case true:
+			default:
+				urlInfoSet.locationShiftURL = caches.CN.urlInfoSet[0].locationShiftURL;
+				break;
+			case false:
+				// Location Shift (polynomial)
+				delete urlInfoSet.locationShiftURL;
+				break;
+		};
+		return urlInfoSet;
+	});
+	$.log(`✅ Set UrlInfoSets`, "");
+	return urlInfoSets;
 };
 
-function setUrlInfoSet(body = {}, settings = {}, caches = {}) {
-	$.log(`☑️ Set UrlInfoSet`, "");
-	switch (settings.GeoManifest.Dynamic.Config.CountryCode.default) {
-		case "AUTO":
-			// Alternate Resources
-			body.urlInfoSet[0].alternateResourcesURL.push({ url: "https://limit-rule.is.autonavi.com/lpr/rules/download", supportsMultipathTCP: false });
-			break;
-		case "CN":
-			// Address Correction Init
-			_.set(body, "urlInfoSet[0].addressCorrectionInitURL.url", "https://gsp47-ssl.ls.apple.com/ac");
-			_.set(body, "urlInfoSet[0].addressCorrectionInitURL.supportsMultipathTCP", false);
-			// Address Correction Update
-			_.set(body, "urlInfoSet[0].addressCorrectionUpdateURL.url", "https://gsp47-ssl.ls.apple.com/ac");
-			_.set(body, "urlInfoSet[0].addressCorrectionUpdateURL.supportsMultipathTCP", false);
-			// Business Portal Base URL
-			_.set(body, "urlInfoSet[0].businessPortalBaseURL.url", "https://mapsconnect.apple.com/business/ui/claimPlace");
-			_.set(body, "urlInfoSet[0].businessPortalBaseURL.supportsMultipathTCP", false);
-			// Proactive Routing
-			_.set(body, "urlInfoSet[0].proactiveRoutingURL.url", "https://gsp-ssl-commute.ls.apple.com/directions.arpc");
-			_.set(body, "urlInfoSet[0].proactiveRoutingURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].proactiveRoutingURL.alternativeMultipathTCPPort", 5228);
-			// Blue POI
-			_.set(body, "urlInfoSet[0].bluePOIDispatcherURL.url", "https://gsp57-ssl-locus.ls.apple.com/dispatcher.arpc");
-			_.set(body, "urlInfoSet[0].bluePOIDispatcherURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].bluePOIDispatcherURL.alternativeMultipathTCPPort", 5228);
-			// Address Correction Tagged Location
-			_.set(body, "urlInfoSet[0].addressCorrectionTaggedLocationURL.url", "https://gsp47-ssl.ls.apple.com/ac");
-			_.set(body, "urlInfoSet[0].addressCorrectionTaggedLocationURL.supportsMultipathTCP", false);
-			// Proactive App Clip
-			_.set(body, "urlInfoSet[0].proactiveAppClipURL.url", "https://gspe79-ssl.ls.apple.com/72/v2");
-			_.set(body, "urlInfoSet[0].proactiveAppClipURL.supportsMultipathTCP", false);
-			// Ratings and Photos Submission URL
-			_.set(body, "urlInfoSet[0].enrichmentSubmissionURL.url", "https://sundew.ls.apple.com/v1/feedback/submission.arpc");
-			_.set(body, "urlInfoSet[0].enrichmentSubmissionURL.supportsMultipathTCP", false);
-			// UGC Log Discard
-			_.set(body, "urlInfoSet[0].ugcLogDiscardURL.url", "https://sundew.ls.apple.com/v1/log_message");
-			_.set(body, "urlInfoSet[0].ugcLogDiscardURL.supportsMultipathTCP", false);
-			// Pressure Probe Data
-			_.set(body, "urlInfoSet[0].pressureProbeDataURL.url", "https://gsp10-ssl.ls.apple.com/hvr/cpr");
-			_.set(body, "urlInfoSet[0].pressureProbeDataURL.supportsMultipathTCP", false);
-			// Network Selection Harvest
-			_.set(body, "urlInfoSet[0].networkSelectionHarvestURL.url", "https://gsp10-ssl.ls.apple.com/hvr/strn");
-			_.set(body, "urlInfoSet[0].networkSelectionHarvestURL.supportsMultipathTCP", false);
-			// bcx Dispatcher
-			_.set(body, "urlInfoSet[0].bcxDispatcherURL.url", "https://gsp57-ssl-bcx.ls.apple.com/dispatcher.arpc");
-			_.set(body, "urlInfoSet[0].bcxDispatcherURL.supportsMultipathTCP", false);
-			break;
-		default:
-			// Location Shift (polynomial)
-			_.set(body, "urlInfoSet[0].polyLocationShiftURL.url", "https://shift.is.autonavi.com/localshift");
-			_.set(body, "urlInfoSet[0].polyLocationShiftURL.supportsMultipathTCP", false);
-			// Junction Image Service
-			_.set(body, "urlInfoSet[0].junctionImageServiceURL.url", "https://direction2.is.autonavi.com/direction");
-			_.set(body, "urlInfoSet[0].junctionImageServiceURL.supportsMultipathTCP", false);
-			body.urlInfoSet[0].alternateResourcesURL.push({ url: "https://limit-rule.is.autonavi.com/lpr/rules/download", supportsMultipathTCP: false });
-			break;
-	};
-	switch (settings.Config.Announcements.Environment.default) {
-		case "AUTO":
-		default:
-			break;
-		case "CN":
-			// Announcements
-			_.set(body, "urlInfoSet[0].announcementsURL.url", "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod-cn");
-			_.set(body, "urlInfoSet[0].announcementsURL.supportsMultipathTCP", false);
-			break;
-		case "XX":
-			// Announcements
-			_.set(body, "urlInfoSet[0].announcementsURL.url", "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod");
-			_.set(body, "urlInfoSet[0].announcementsURL.supportsMultipathTCP", false);
-			break;
-	};
-	switch (settings.UrlInfoSet.Dispatcher) {
-		case "AUTO":
-		default:
-			break;
-		case "AutoNavi":
-			// PlaceData Dispatcher
-			_.set(body, "urlInfoSet[0].dispatcherURL.url", "https://dispatcher.is.autonavi.com/dispatcher");
-			_.set(body, "urlInfoSet[0].dispatcherURL.supportsMultipathTCP", false);
-			// Background Dispatcher
-			_.set(body, "urlInfoSet[0].backgroundDispatcherURL.url", "https://dispatcher.is.autonavi.com/dispatcher");
-			_.set(body, "urlInfoSet[0].backgroundDispatcherURL.supportsMultipathTCP", false);
-			// Background Reverse Geocoder
-			_.set(body, "urlInfoSet[0].backgroundRevGeoURL.url", "https://dispatcher.is.autonavi.com/dispatcher");
-			_.set(body, "urlInfoSet[0].backgroundRevGeoURL.supportsMultipathTCP", false);
-			// Batch Reverse Geocoder
-			_.set(body, "urlInfoSet[0].batchReverseGeocoderPlaceRequestURL.url", "https://dispatcher.is.autonavi.com/dispatcher");
-			_.set(body, "urlInfoSet[0].batchReverseGeocoderPlaceRequestURL.supportsMultipathTCP", false);
-			break;
-		case "Apple":
-			// PlaceData Dispatcher
-			_.set(body, "urlInfoSet[0].dispatcherURL.url", "https://gsp-ssl.ls.apple.com/dispatcher.arpc");
-			_.set(body, "urlInfoSet[0].dispatcherURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].dispatcherURL.alternativeMultipathTCPPort", 5228);
-			// Background Dispatcher
-			_.set(body, "urlInfoSet[0].backgroundDispatcherURL.url", "https://gsp57-ssl-background.ls.apple.com/dispatcher.arpc");
-			_.set(body, "urlInfoSet[0].backgroundDispatcherURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].backgroundDispatcherURL.alternativeMultipathTCPPort", 5228);
-			// Background Reverse Geocoder
-			_.set(body, "urlInfoSet[0].backgroundRevGeoURL.url", "https://gsp57-ssl-revgeo.ls.apple.com/dispatcher.arpc");
-			_.set(body, "urlInfoSet[0].backgroundRevGeoURL.supportsMultipathTCP", false);
-			// Batch Reverse Geocoder
-			_.set(body, "urlInfoSet[0].batchReverseGeocoderPlaceRequestURL.url", "https://gsp36-ssl.ls.apple.com/revgeo_pr.arpc");
-			_.set(body, "urlInfoSet[0].batchReverseGeocoderPlaceRequestURL.supportsMultipathTCP", false);
-			break;
-	};
-	switch (settings.UrlInfoSet.Directions) {
-		case "AUTO":
-		default:
-			break;
-		case "AutoNavi":
-			// Directions
-			_.set(body, "urlInfoSet[0].directionsURL.url", "https://direction2.is.autonavi.com/direction");
-			_.set(body, "urlInfoSet[0].directionsURL.supportsMultipathTCP", false);
-			// ETA
-			_.set(body, "urlInfoSet[0].etaURL.url", "https://direction2.is.autonavi.com/direction");
-			_.set(body, "urlInfoSet[0].etaURL.supportsMultipathTCP", false);
-			// Simple ETA
-			_.set(body, "urlInfoSet[0].simpleETAURL.url", "https://direction2.is.autonavi.com/direction");
-			_.set(body, "urlInfoSet[0].simpleETAURL.supportsMultipathTCP", false);
-			break;
-		case "Apple":
-			// Directions
-			_.set(body, "urlInfoSet[0].directionsURL.url", "https://gsp-ssl.ls.apple.com/directions.arpc");
-			_.set(body, "urlInfoSet[0].directionsURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].directionsURL.alternativeMultipathTCPPort", 5228);
-			// ETA
-			_.set(body, "urlInfoSet[0].etaURL.url", "https://gsp-ssl.ls.apple.com/directions.arpc");
-			_.set(body, "urlInfoSet[0].etaURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].etaURL.alternativeMultipathTCPPort", 5228);
-			// Simple ETA
-			_.set(body, "urlInfoSet[0].simpleETAURL.url", "https://gsp-ssl.ls.apple.com/directions.arpc");
-			_.set(body, "urlInfoSet[0].simpleETAURL.supportsMultipathTCP", true);
-			_.set(body, "urlInfoSet[0].simpleETAURL.alternativeMultipathTCPPort", 5228);
-			break;
-	};
-	switch (settings.UrlInfoSet.RAP) {
-		case "AUTO":
-		default:
-			// RAP Submission
-			_.set(body, "urlInfoSet[0].problemSubmissionURL.url", "https://sundew.ls.apple.com/v1/feedback/submission.arpc");
-			_.set(body, "urlInfoSet[0].problemSubmissionURL.supportsMultipathTCP", false);
-			// RAP Status
-			_.set(body, "urlInfoSet[0].problemStatusURL.url", "https://gsp-ssl.ls.apple.com/feedback.arpc");
-			_.set(body, "urlInfoSet[0].problemStatusURL.supportsMultipathTCP", false);
-			// RAP Opt-Ins
-			_.set(body, "urlInfoSet[0].problemOptInURL.url", "https://jana-mpr.ls.apple.com/grp/oi");
-			_.set(body, "urlInfoSet[0].problemOptInURL.supportsMultipathTCP", false);
-			// RAP V4 Submission
-			_.set(body, "urlInfoSet[0].feedbackSubmissionURL.url", "https://sundew.ls.apple.com/v1/feedback/submission.arpc");
-			_.set(body, "urlInfoSet[0].feedbackSubmissionURL.supportsMultipathTCP", false);
-			// RAP V4 Lookup
-			_.set(body, "urlInfoSet[0].feedbackLookupURL.url", "https://gsp-ssl.ls.apple.com/feedback.arpc");
-			_.set(body, "urlInfoSet[0].feedbackLookupURL.supportsMultipathTCP", false);
-			break;
-		case "AutoNavi":
-			// RAP Submission
-			_.set(body, "urlInfoSet[0].problemSubmissionURL.url", "https://rap.is.autonavi.com/rap");
-			_.set(body, "urlInfoSet[0].problemSubmissionURL.supportsMultipathTCP", false);
-			// RAP Status
-			_.set(body, "urlInfoSet[0].problemStatusURL.url", "https://rap.is.autonavi.com/rapstatus");
-			_.set(body, "urlInfoSet[0].problemStatusURL.supportsMultipathTCP", false);
-			// RAP V4 Submission
-			_.set(body, "urlInfoSet[0].feedbackSubmissionURL.url", "https://rap.is.autonavi.com/rap");
-			_.set(body, "urlInfoSet[0].feedbackSubmissionURL.supportsMultipathTCP", false);
-			// RAP V4 Lookup
-			_.set(body, "urlInfoSet[0].feedbackLookupURL.url", "https://rap.is.autonavi.com/lookup");
-			_.set(body, "urlInfoSet[0].feedbackLookupURL.supportsMultipathTCP", false);
-			break;
-		case "Apple":
-			// RAP Submission
-			_.set(body, "urlInfoSet[0].problemSubmissionURL.url", "https://sundew.ls.apple.com/v1/feedback/submission.arpc");
-			_.set(body, "urlInfoSet[0].problemSubmissionURL.supportsMultipathTCP", false);
-			// RAP Status
-			_.set(body, "urlInfoSet[0].problemStatusURL.url", "https://gsp-ssl.ls.apple.com/feedback.arpc");
-			_.set(body, "urlInfoSet[0].problemStatusURL.supportsMultipathTCP", false);
-			// RAP Opt-Ins
-			_.set(body, "urlInfoSet[0].problemOptInURL.url", "https://jana-mpr.ls.apple.com/grp/oi");
-			_.set(body, "urlInfoSet[0].problemOptInURL.supportsMultipathTCP", false);
-			// RAP V4 Submission
-			_.set(body, "urlInfoSet[0].feedbackSubmissionURL.url", "https://sundew.ls.apple.com/v1/feedback/submission.arpc");
-			_.set(body, "urlInfoSet[0].feedbackSubmissionURL.supportsMultipathTCP", false);
-			// RAP V4 Lookup
-			_.set(body, "urlInfoSet[0].feedbackLookupURL.url", "https://gsp-ssl.ls.apple.com/feedback.arpc");
-			_.set(body, "urlInfoSet[0].feedbackLookupURL.supportsMultipathTCP", false);
-			break;
-	};
-	_.unset(body, "urlInfoSet[0].abExperimentURL");
-	/*
-	switch (settings.UrlInfoSet.Experiments) {
-		case "AUTO":
-		default:
-			break;
-		case true:
-			break;
-		case false:
-			// Experiments
-			_.unset(body, "urlInfoSet[0].abExperimentURL");
-			break;
-	};
-	*/
-	$.log(`✅ Set UrlInfoSet`, "");
-	return body;
-};
-
-function setMuninBucket(body = {}, settings = {}, configs = {}) {
-	$.log(`☑️ Set MuninBucket`, "");
+function muninBuckets(muninBuckets = [], settings = {}, caches = {}) {
+	$.log(`☑️ Set MuninBuckets`, "");
 	switch (settings.TileSet.Munin) {
 		case "AUTO":
 		default:
 			break;
 		case "CN":
-			_.set(body, "muninBucket[0].bucketID", 2);
-			_.set(body, "muninBucket[0].bucketURL", "https://gspe72-cn-ssl.ls.apple.com/mnn_us");
-			_.set(body, "muninBucket[1].bucketID", 6);
-			_.set(body, "muninBucket[1].bucketURL", "https://gspe72-cn-ssl.ls.apple.com/mnn_us");
+			muninBuckets = caches.CN.muninBucket;
 			break;
 		case "XX":
-			_.set(body, "muninBucket[0].bucketID", 2);
-			_.set(body, "muninBucket[0].bucketURL", "https://gspe72-ssl.ls.apple.com/mnn_us");
-			_.set(body, "muninBucket[1].bucketID", 6);
-			_.set(body, "muninBucket[1].bucketURL", "https://gspe72-ssl.ls.apple.com/mnn_us");
+			muninBuckets = caches.XX.muninBucket;
 			break;
 	};
-	$.log(`✅ Set MuninBucket`, "");
-	return body;
+	$.log(`✅ Set MuninBuckets`, "");
+	return muninBuckets;
 };
