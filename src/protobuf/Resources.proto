@@ -1,7 +1,42 @@
 syntax = "proto3";
 
-//package com.apple.geo.protobuf.geo;
+package com.apple.geo.protobuf.geo;
+option objc_class_prefix = "GeoServices";
+//option objc_framework = "GEO";
 
+message RegionalResource {
+  uint32 x = 1;
+  uint32 y = 2;
+  uint32 z = 3;
+  repeated string icon = 4;
+  repeated Attribution attribution = 6;
+  repeated string iconChecksum = 7;
+  repeated TileSetRegion tileRange = 29;
+  repeated uint32 validSubManifestVersion = 30;
+}
+message RegionalResourceIndex {}
+message RegionalResourceTile {}
+message RegionalResourceRegion {}
+
+message TileGroup {
+  message VersionedTileSet {
+    uint32 tileSetIndex = 1;
+    uint32 identifier = 2;
+  }
+  uint32 identifier = 1;
+  repeated VersionedTileSet tileSet = 2;
+  repeated uint32 styleSheetIndex = 3 [packed = false];
+  repeated uint32 textureIndex = 4 [packed = false];
+  repeated uint32 fontIndex = 5 [packed = false];
+  repeated uint32 iconIndex = 6 [packed = false];
+  repeated RegionalResourceIndex regionalResourceIndex = 7;
+  repeated uint32 xmlIndex = 8 [packed = false];
+  repeated uint32 attributionIndex = 10 [packed = false];
+  repeated TileSetRegion hybridUnavailableRegion = 11;
+  repeated uint32 resourceIndex = 12 [packed = false];
+  uint32 muninVersion = 14;
+  uint32 offlineMetadataIndex = 15;
+}
 enum TileSetStyle {
   option allow_alias = true;
   RASTER_STANDARD = 0;
@@ -201,39 +236,6 @@ message TileSet {
   }
 }
 
-message RegionalResource {
-  uint32 x = 1;
-  uint32 y = 2;
-  uint32 z = 3;
-  repeated string icon = 4;
-  repeated Attribution attribution = 6;
-  repeated string iconChecksum = 7;
-  repeated TileSetRegion tileRange = 29;
-  repeated uint32 validSubManifestVersion = 30;
-}
-message RegionalResourceIndex {}
-message RegionalResourceTile {}
-message RegionalResourceRegion {}
-
-message TileGroup {
-  message VersionedTileSet {
-    uint32 tileSetIndex = 1;
-    uint32 identifier = 2;
-  }
-  uint32 identifier = 1;
-  repeated VersionedTileSet tileSet = 2;
-  repeated uint32 styleSheetIndex = 3 [packed = false];
-  repeated uint32 textureIndex = 4 [packed = false];
-  repeated uint32 fontIndex = 5 [packed = false];
-  repeated uint32 iconIndex = 6 [packed = false];
-  repeated RegionalResourceIndex regionalResourceIndex = 7;
-  repeated uint32 xmlIndex = 8 [packed = false];
-  repeated uint32 attributionIndex = 10 [packed = false];
-  repeated TileSetRegion hybridUnavailableRegion = 11;
-  repeated uint32 resourceIndex = 12 [packed = false];
-  uint32 muninVersion = 14;
-  uint32 offlineMetadataIndex = 15;
-}
 message ResourceFilter {
   enum Scale {
     RESOURCE_FILTER_SCALE_UNKNOWN = 0;

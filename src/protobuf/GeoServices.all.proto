@@ -46,15 +46,6 @@ message RegionalResourceIndex {}
 message RegionalResourceTile {}
 message RegionalResourceRegion {}
 
-message TileSetRegion {
-  uint32 minX = 1;
-  uint32 minY = 2;
-  uint32 maxX = 3;
-  uint32 maxY = 4;
-  uint32 minZ = 5;
-  uint32 maxZ = 6;
-}
-
 message TileGroup {
   message VersionedTileSet {
     uint32 tileSetIndex = 1;
@@ -74,173 +65,203 @@ message TileGroup {
   uint32 muninVersion = 14;
   uint32 offlineMetadataIndex = 15;
 }
+enum TileSetStyle {
+  option allow_alias = true;
+  RASTER_STANDARD = 0;
+  VECTOR_STANDARD = 1;
+  VECTOR_TRAFFIC_SEGMENTS_FOR_RASTER = 2;
+  VECTOR_TRAFFIC_INCIDENTS_FOR_RASTER = 3;
+  VECTOR_TRAFFIC_SEGMENTS_AND_INCIDENTS_FOR_RASTER = 4;
+  RASTER_STANDARD_BACKGROUND = 5;
+  RASTER_HYBRID = 6;
+  RASTER_SATELLITE = 7;
+  RASTER_TERRAIN = 8;
+  VECTOR_BUILDINGS = 11;
+  VECTOR_TRAFFIC = 12;
+  VECTOR_POI = 13;
+  SPUTNIK_METADATA = 14;
+  SPUTNIK_C3M = 15;
+  SPUTNIK_DSM = 16;
+  SPUTNIK_DSM_GLOBAL = 17;
+  VECTOR_REALISTIC = 18;
+  VECTOR_LEGACY_REALISTIC = 19;
+  VECTOR_ROADS = 20;
+  RASTER_VEGETATION = 21;
+  VECTOR_TRAFFIC_SKELETON = 22;
+  RASTER_COASTLINE_MASK = 23;
+  RASTER_HILLSHADE = 24;
+  VECTOR_TRAFFIC_WITH_GREEN = 25;
+  VECTOR_TRAFFIC_STATIC = 26;
+  RASTER_COASTLINE_DROP_MASK = 27;
+  VECTOR_TRAFFIC_SKELETON_WITH_HISTORICAL = 28;
+  VECTOR_SPEED_PROFILES = 29;
+  VECTOR_VENUES = 30;
+  RASTER_DOWN_SAMPLED = 31;
+  RASTER_COLOR_BALANCED = 32;
+  RASTER_SATELLITE_NIGHT = 33;
+  SPUTNIK_VECTOR_BORDER = 34;
+  RASTER_SATELLITE_DIGITIZE = 35;
+  RASTER_HILLSHADE_PARKS = 36;
+  VECTOR_TRANSIT = 37;
+  RASTER_STANDARD_BASE = 38;
+  RASTER_STANDARD_LABELS = 39;
+  RASTER_HYBRID_ROADS = 40;
+  RASTER_HYBRID_LABELS = 41;
+  FLYOVER_C3M_MESH = 42;
+  FLYOVER_C3M_JPEG_TEXTURE = 43;
+  FLYOVER_C3M_ASTC_TEXTURE = 44;
+  RASTER_SATELLITE_ASTC = 45;
+  RASTER_HYBRID_ROADS_AND_LABELS = 46;
+  VECTOR_TRANSIT_SELECTION = 47;
+  VECTOR_COVERAGE = 48;
+  FLYOVER_VISIBILITY = 49;
+  FLYOVER_SKYBOX = 50;
+  FLYOVER_NAVGRAPH = 51;
+  FLYOVER_METADATA = 52;
+  VECTOR_ROAD_NETWORK = 53;
+  VECTOR_LAND_COVER = 54;
+  VECTOR_DEBUG = 55;
+  VECTOR_STREET_POI = 56;
+  MUNIN_METADATA = 57;
+  VECTOR_SPR_MERCATOR = 58;
+  VECTOR_SPR_MODELS = 59;
+  VECTOR_SPR_MATERIALS = 60;
+  VECTOR_SPR_METADATA = 61;
+  VECTOR_TRACKS = 62;
+  VECTOR_RESERVED_2 = 63;
+  VECTOR_STREET_LANDMARKS = 64;
+  COARSE_LOCATION_POLYGONS = 65;
+  VECTOR_SPR_ROADS = 66;
+  VECTOR_SPR_STANDARD = 67;
+  VECTOR_POI_V2 = 68;
+  VECTOR_POLYGON_SELECTION = 69;
+  VL_METADATA = 70;
+  VL_DATA = 71;
+  PROACTIVE_APP_CLIP = 72;
+  VECTOR_BUILDINGS_V2 = 73;
+  POI_BUSYNESS = 74;
+  POI_DP_BUSYNESS = 75;
+  SMART_INTERFACE_SELECTION = 76;
+  VECTOR_ASSETS = 77;
+  SPR_ASSET_METADATA = 78;
+  VECTOR_SPR_POLAR = 79;
+  SMART_DATA_MODE = 80;
+  CELLULAR_PERFORMANCE_SCORE = 81;
+  VECTOR_SPR_MODELS_OCCLUSION = 82;
+  VECTOR_TOPOGRAPHIC = 83;
+  VECTOR_POI_V2_UPDATE = 84;
+  VECTOR_LIVE_DATA_UPDATES = 85;
+  VECTOR_TRAFFIC_V2 = 86;
+  VECTOR_ROAD_SELECTION = 87;
+  VECTOR_REGION_METADATA = 88;
+  RAY_TRACING = 89;
+  VECTOR_CONTOURS = 90;
+  UNUSED_91 = 91;
+  UNUSED_92 = 92;
+  UNUSED_93 = 93;
+  UNUSED_94 = 94;
+  UNUSED_95 = 95;
+  UNUSED_96 = 96;
+  UNUSED_97 = 97;
+  UNUSED_98 = 98;
+  UNUSED_99 = 99;
+  DAVINCI_DEV1 = 58;
+  DAVINCI_DEV2 = 59;
+  DAVINCI_DEV3 = 60;
+  DAVINCI_DEV4 = 61;
+  DAVINCI_DEV6 = 63;
+  DAVINCI_DEV7 = 66;
+  DAVINCI_DEV8 = 67;
+  DAVINCI_DEV9 = 68;
+  DAVINCI_BUILDINGS = 73;
+  VECTOR_RESERVED_1 = 62;
+}
+
+enum TileScale {
+  NODPI = 0;
+  LODPI = 1;
+  HIDPI = 2;
+}
+
+enum TileSize {
+  PX128 = 0;
+  PX256 = 1;
+  PX512 = 2;
+}
+
+enum GenericTileType {
+  UNKNOWN = 0;
+  WATER = 1;
+  NO_TILE = 2;
+}
+
 message GenericTile {
-  enum TileType {
-    UNKNOWN = 0;
-    WATER = 1;
-    NO_TILE = 2;
-  }
-  TileType tileType = 1;
+  GenericTileType tileType = 1;
   uint32 textureIndex = 2;
   uint32 resourceIndex = 3;
 }
+
+message TileSetRegion {
+  uint32 minX = 1;
+  uint32 minY = 2;
+  uint32 maxX = 3;
+  uint32 maxY = 4;
+  uint32 minZ = 5;
+  uint32 maxZ = 6;
+}
+
 message TileSetVersion {
   uint32 identifier = 1;
-  repeated TileSetRegion availableTile = 2;
-  uint32 timeToLiveSeconds = 3;
+  repeated TileSetRegion availableTiles = 2;
+  optional uint32 timeToLiveSeconds = 3;
   repeated GenericTile genericTile = 4;
-  uint32 supportedLanguagesVersion = 5;
-}
-
-message Language {
-  uint32 identifier = 1;
-  repeated string language = 2;
-}
-
-message CountryRegionTuple {
-  string countryCode = 1;
-  string region = 2;
+  optional uint32 supportedLanguagesVersion = 5;
 }
 
 message TileSet {
-  enum Style {
-    RASTER_STANDARD = 0;
-    VECTOR_STANDARD = 1;
-    VECTOR_TRAFFIC_SEGMENTS_FOR_RASTER = 2;
-    VECTOR_TRAFFIC_INCIDENTS_FOR_RASTER = 3;
-    VECTOR_TRAFFIC_SEGMENTS_AND_INCIDENTS_FOR_RASTER = 4;
-    RASTER_STANDARD_BACKGROUND = 5;
-    RASTER_HYBRID = 6;
-    RASTER_SATELLITE = 7;
-    RASTER_TERRAIN = 8;
-    VECTOR_BUILDINGS = 11;
-    VECTOR_TRAFFIC = 12;
-    VECTOR_POI = 13;
-    SPUTNIK_METADATA = 14;
-    SPUTNIK_C3M = 15;
-    SPUTNIK_DSM = 16;
-    SPUTNIK_DSM_GLOBAL = 17;
-    VECTOR_REALISTIC = 18;
-    VECTOR_LEGACY_REALISTIC = 19;
-    VECTOR_ROADS = 20;
-    RASTER_VEGETATION = 21;
-    VECTOR_TRAFFIC_SKELETON = 22;
-    RASTER_COASTLINE_MASK = 23;
-    RASTER_HILLSHADE = 24;
-    VECTOR_TRAFFIC_WITH_GREEN = 25;
-    VECTOR_TRAFFIC_STATIC = 26;
-    RASTER_COASTLINE_DROP_MASK = 27;
-    VECTOR_TRAFFIC_SKELETON_WITH_HISTORICAL = 28;
-    VECTOR_SPEED_PROFILES = 29;
-    VECTOR_VENUES = 30;
-    RASTER_DOWN_SAMPLED = 31;
-    RASTER_COLOR_BALANCED = 32;
-    RASTER_SATELLITE_NIGHT = 33;
-    SPUTNIK_VECTOR_BORDER = 34;
-    RASTER_SATELLITE_DIGITIZE = 35;
-    RASTER_HILLSHADE_PARKS = 36;
-    VECTOR_TRANSIT = 37;
-    RASTER_STANDARD_BASE = 38;
-    RASTER_STANDARD_LABELS = 39;
-    RASTER_HYBRID_ROADS = 40;
-    RASTER_HYBRID_LABELS = 41;
-    FLYOVER_C3M_MESH = 42;
-    FLYOVER_C3M_JPEG_TEXTURE = 43;
-    FLYOVER_C3M_ASTC_TEXTURE = 44;
-    RASTER_SATELLITE_ASTC = 45;
-    RASTER_HYBRID_ROADS_AND_LABELS = 46;
-    VECTOR_TRANSIT_SELECTION = 47;
-    VECTOR_COVERAGE = 48;
-    FLYOVER_METADATA = 52;
-    VECTOR_ROAD_NETWORK = 53;
-    VECTOR_LAND_COVER = 54;
-    VECTOR_DEBUG = 55;
-    VECTOR_STREET_POI = 56;
-    MUNIN_METADATA = 57;
-    DAVINCI_DEV1 = 58;
-    DAVINCI_DEV2 = 59;
-    DAVINCI_DEV3 = 60;
-    DAVINCI_DEV4 = 61;
-    DAVINCI_DEV5 = 62;
-    DAVINCI_DEV6 = 63;
-    VECTOR_STREET_LANDMARKS = 64;
-    COARSE_LOCATION_POLYGONS = 65;
-    DAVINCI_DEV7 = 66;
-    DAVINCI_DEV8 = 67;
-    DAVINCI_DEV9 = 68;
-    VECTOR_POLYGON_SELECTION = 69;
-    VL_METADATA = 70;
-    VL_DATA = 71;
-    PROACTIVE_APP_CLIP = 72;
-    VECTOR_BUILDINGS_V2 = 73;
-    POI_BUSYNESS = 74;
-    POI_DP_BUSYNESS = 75;
-    SMART_INTERFACE_SELECTION = 76;
-    VECTOR_ASSETS = 77;
-    SPR_ASSET_METADATA = 78;
-    VECTOR_SPR_POLAR = 79;
-    SMART_DATA_MODE = 80;
-    CELLULAR_PERFORMANCE_SCORE = 81;
-    VECTOR_SPR_MODELS_OCCLUSION = 82;
-    VECTOR_TOPOGRAPHIC = 83;
-    VECTOR_POI_V2_UPDATE = 84;
-    VECTOR_LIVE_DATA_UPDATES = 85;
-    VECTOR_TRAFFIC_V2 = 86;
-    VECTOR_ROAD_SELECTION = 87;
-    VECTOR_REGION_METADATA = 88;
-    RAY_TRACING = 89;
-    VECTOR_CONTOURS = 90;
-    UNUSED_91 = 91;
-    UNUSED_92 = 92;
-    UNUSED_93 = 93;
-    UNUSED_94 = 94;
-    UNUSED_95 = 95;
-    UNUSED_96 = 96;
-    UNUSED_97 = 97;
-    UNUSED_98 = 98;
-    UNUSED_99 = 99;
-  }
-  enum Size {
-    PX128 = 0;
-    PX256 = 1;
-    PX512 = 2;
-  }
-  enum Scale {
-    NODPI = 0;
-    LODPI = 1;
-    HIDPI = 2;
-  }
-  enum RequestStyle {
-    REQUEST_STYLE_LEGACY = 0;
-    REQUEST_STYLE_HEADERS_PARAMS_VERSION_BASED_HMAC_AUTH = 1;
-  }
-  enum ChecksumType {
-    CHECKSUM_TYPE_NONE = 0;
-    CHECKSUM_TYPE_APPENDED_MD5 = 1;
-  }
-  enum UpdateBehavior {
-    TILE_UPDATE_BEHAVIOR_FLUSH = 0;
-    TILE_UPDATE_BEHAVIOR_ETAG = 1;
-  }
-
-  string baseURL = 1;
+  optional string baseURL = 1;
   optional string multiTileURL = 2;
-  Style style = 3;
+  TileSetStyle style = 3;
   repeated TileSetVersion validVersion = 5;
-  Scale scale = 6;
-  Size size = 7;
+  TileScale scale = 6;
+  TileSize size = 7;
   optional string localizationURL = 9;
   repeated Language supportedLanguage = 10;
   optional bool multiTileURLUsesStatusCodes = 11;
-  optional UpdateBehavior updateBehavior = 12;
+  optional TileSetVersionUpdateBehavior updateBehavior = 12;
   repeated CountryRegionTuple countryRegionWhitelist = 13;
-  ChecksumType checksumType = 14;
+  TileSetChecksumType checksumType = 14;
   optional uint32 dataSet = 15;
-  RequestStyle requestStyle = 16;
+  TileRequestStyle requestStyle = 16;
   optional bool useAuthProxy = 17;
-  bool supportsMultipathTCP = 18;
+  optional bool supportsMultipathTCP = 18;
   optional uint32 alternativeMultipathTCPPort = 19;
   repeated string deviceSKUWhitelist = 20;
+
+  message Language {
+    uint32 identifier = 1;
+    repeated string language = 2;
+  }
+ 
+  enum TileSetVersionUpdateBehavior {
+    TILE_UPDATE_BEHAVIOR_FLUSH = 0;
+    TILE_UPDATE_BEHAVIOR_ETAG = 1;
+  }
+ 
+  message CountryRegionTuple {
+    string countryCode = 1;
+    string region = 2;
+  }
+  
+  enum TileSetChecksumType {
+    CHECKSUM_TYPE_NONE = 0;
+    CHECKSUM_TYPE_APPENDED_MD5 = 1;
+  }
+
+  enum TileRequestStyle {
+    REQUEST_STYLE_LEGACY = 0;
+    REQUEST_STYLE_HEADER_PARAMS_VERSION_BASED_HMAC_AUTH = 1;
+  }
 }
 
 message ResourceFilter {
@@ -291,27 +312,27 @@ message Resource {
   bytes checksum = 3;
   repeated TileSetRegion region = 4;
   repeated ResourceFilter filter = 5;
-  ConnectionType connectionType = 6;
-  uint32 preferWiFiAllowedStaleThreshold = 7;
+  optional ConnectionType connectionType = 6;
+  optional uint32 preferWiFiAllowedStaleThreshold = 7;
   ValidationMethod validationMethod = 8;
-  uint32 alternateResourceURLIndex = 9;
+  optional uint32 alternateResourceURLIndex = 9;
   UpdateMethod updateMethod = 10;
-  uint32 timeToLiveSeconds = 11;
+  optional uint32 timeToLiveSeconds = 11;
 }
 
 message Attribution {
-  string badge = 1;
-  string logo = 2;
+  optional string badge = 1;
+  optional string logo = 2;
   string name = 3;
   string url = 4;
-  string badgeChecksum = 5;
-  string logoChecksum = 6;
+  optional string badgeChecksum = 5;
+  optional string logoChecksum = 6;
   repeated Resource resource = 7;
   repeated TileSetRegion region = 8;
-  uint32 dataSet = 9;
+  optional uint32 dataSet = 9;
   uint32 linkDisplayStringIndex = 10;
-  string plainTextURL = 11;
-  bytes plainTextURLSHA256Checksum = 12;
+  optional string plainTextURL = 11;
+  optional bytes plainTextURLSHA256Checksum = 12;
 }
 
 message ServiceVersion {
