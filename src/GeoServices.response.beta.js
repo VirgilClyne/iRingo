@@ -5,13 +5,11 @@ import URI from "./URI/URI.mjs";
 import XML from "./XML/XML.mjs";
 
 import Database from "./database/index.mjs";
-import * as Configs from "./database/Maps/Configs.json";
 import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.0(5) response.beta");
-Database.Maps.Configs = Configs;
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.1(9) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -23,7 +21,7 @@ $.log(`⚠ METHOD: ${METHOD}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
-(async () => {
+!(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", ["Location", "Maps"], Database);
 	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
@@ -1389,7 +1387,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														_.set(Caches, "CN.timeStamp", Date.now());
 														$Storage.setItem("@iRingo.Maps.Caches", Caches);
 													};
-													Caches.XX = Caches.XX ?? Configs.XX;
+													if (!Caches.XX) Caches.XX = Configs.XX;
 													// announcementsSupportedLanguage
 													//body.announcementsSupportedLanguage?.push?.("zh-CN");
 													//body.announcementsSupportedLanguage?.push?.("zh-TW");
@@ -1402,7 +1400,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														_.set(Caches, "XX.timeStamp", Date.now());
 														$Storage.setItem("@iRingo.Maps.Caches", Caches);
 													};
-													Caches.CN = Caches.CN ?? Configs.CN;
+													if (!Caches.CN) Caches.CN = Configs.CN;
 													// resource
 													body.resource.push({ "resourceType": 7, "filename": "POITypeMapping-CN-1.json", "checksum": { "0": 242, "1": 10, "2": 179, "3": 107, "4": 214, "5": 41, "6": 50, "7": 223, "8": 62, "9": 204, "10": 134, "11": 7, "12": 103, "13": 206, "14": 96, "15": 242, "16": 24, "17": 42, "18": 79, "19": 223 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 });
 													body.resource.push({ "resourceType": 7, "filename": "China.cms-lpr", "checksum": { "0": 196, "1": 139, "2": 158, "3": 17, "4": 250, "5": 132, "6": 138, "7": 10, "8": 138, "9": 38, "10": 96, "11": 130, "12": 82, "13": 80, "14": 4, "15": 239, "16": 11, "17": 107, "18": 183, "19": 236 }, "region": [{ "minX": 1, "minY": 0, "maxX": 1, "maxY": 0, "minZ": 1, "maxZ": 25 }], "filter": [{ "scale": [], "scenario": [4] }], "connectionType": 0, "preferWiFiAllowedStaleThreshold": 0, "validationMethod": 1, "alternateResourceURLIndex": 1, "updateMethod": 1, "timeToLiveSeconds": 0 });
@@ -1415,8 +1413,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											// releaseInfo
 											body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
 											$.log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
-											body = SetTileGroup(body, Settings, Caches);
-											//$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
+											body = SetTileGroup(body);
+											$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
 											rawBody = Resources.toBinary(body);
 											break;
 									};
@@ -1429,6 +1427,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					};
 					// 写入二进制数据
 					$response.body = rawBody;
+					if ($response.headers.ETag) $response.headers.ETag = String(Date.now());
+					if ($response.headers.Etag) $response.headers.Etag = String(Date.now());
 					break;
 			};
 			break;
@@ -1440,7 +1440,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => $.done($response))
 
 /***************** Function *****************/
-function SetTileGroup(body = {}, settings = {}, caches = {}) {
+function SetTileGroup(body = {}) {
 	$.log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {
 		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
@@ -1515,10 +1515,10 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 					default:
 						break;
 					case "CN":
-						tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
+						tileSet = caches?.CN?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
 						break;
 					case "XX":
-						tileSet = caches?.XX?.tileSet?.find(i => i.style === tileSet.style);
+						tileSet = caches?.XX?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
 						break;
 				};
 				break;
@@ -1613,9 +1613,41 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 				*/
 		};
 		return tileSet;
-	}).filter(Boolean);
+	}).flat(Infinity).filter(Boolean);
 	$.log(`✅ Set TileSets`, "");
 	return tileSets;
+};
+
+function attributions(attributions = [], settings = {}, caches = {}) {
+	$.log(`☑️ Set Attributions`, "");
+	caches?.CN?.attributions?.forEach(attribution => {
+		if (!attributions.some(i => i.name === attribution.name)) tileSets.push(attribution);
+	});
+	caches?.XX?.attributions?.forEach(attribution => {
+		if (!attributions.some(i => i.name === attribution.name)) tileSets.push(attribution);
+	});
+	attributions = attributions.map((attribution, index) => {
+		switch (attribution.name) {
+			case "AutoNavi":
+				attribution.region = [
+					//{ "minX": 0, "minY": 0, "maxX": 1, "maxY": 1, "minZ": 1, "maxZ": 7 },
+					{ "minX": 179, "minY": 80, "maxX": 224, "maxY": 128, "minZ": 8, "maxZ": 8 },
+					{ "minX": 359, "minY": 161, "maxX": 449, "maxY": 257, "minZ": 9, "maxZ": 9 },
+					{ "minX": 719, "minY": 323, "maxX": 898, "maxY": 915, "minZ": 10, "maxZ": 10 },
+					{ "minX": 1438, "minY": 646, "maxX": 1797, "maxY": 1031, "minZ": 11, "maxZ": 11 },
+					{ "minX": 2876, "minY": 1292, "maxX": 3594, "maxY": 2062, "minZ": 12, "maxZ": 12 },
+					{ "minX": 5752, "minY": 2584, "maxX": 7188, "maxY": 4124, "minZ": 13, "maxZ": 13 },
+					{ "minX": 11504, "minY": 5168, "maxX": 14376, "maxY": 8248, "minZ": 14, "maxZ": 14 },
+					{ "minX": 23008, "minY": 10336, "maxX": 28752, "maxY": 16496, "minZ": 15, "maxZ": 15 },
+					{ "minX": 46016, "minY": 20672, "maxX": 57504, "maxY": 32992, "minZ": 16, "maxZ": 16 },
+					{ "minX": 92032, "minY": 41344, "maxX": 115008, "maxY": 65984, "minZ": 17, "maxZ": 17 },
+					{ "minX": 184064, "minY": 82668, "maxX": 230016, "maxY": 131976, "minZ": 18, "maxZ": 18 }
+				];
+				break;
+		};
+	});
+	$.log(`✅ Set Attributions`, "");
+	return attributions;
 };
 
 function dataSets(dataSets = [], settings = {}, caches = {}) {
