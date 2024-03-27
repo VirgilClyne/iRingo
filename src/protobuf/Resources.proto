@@ -302,7 +302,7 @@ message Attribution {
   repeated Resource resource = 7;
   repeated TileSetRegion region = 8;
   optional uint32 dataSet = 9;
-  uint32 linkDisplayStringIndex = 10;
+  optional uint32 linkDisplayStringIndex = 10;
   optional string plainTextURL = 11;
   optional bytes plainTextURLSHA256Checksum = 12;
 }
