@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.1(9) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.2(28) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1057,7 +1057,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														{ no: 7, name: "resource", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Resource },
 														{ no: 8, name: "region", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => TileSetRegion },
 														{ no: 9, name: "dataSet", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
-														{ no: 10, name: "linkDisplayStringIndex", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+														{ no: 10, name: "linkDisplayStringIndex", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
 														{ no: 11, name: "plainTextURL", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
 														{ no: 12, name: "plainTextURLSHA256Checksum", kind: "scalar", opt: true, T: 12 /*ScalarType.BYTES*/ }
 													]);
@@ -1382,6 +1382,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case "CN":
 													if (Date.now() - (Caches?.CN?.timeStamp ?? 0) > 86400000) {
 														_.set(Caches, "CN.tileSet", body.tileSet);
+														_.set(Caches, "CN.attribution", body.attribution);
 														_.set(Caches, "CN.urlInfoSet", body.urlInfoSet);
 														_.set(Caches, "CN.muninBucket", body.muninBucket);
 														_.set(Caches, "CN.timeStamp", Date.now());
@@ -1395,6 +1396,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												default:
 													if (Date.now() - (Caches?.XX?.timeStamp ?? 0) > 86400000) {
 														_.set(Caches, "XX.tileSet", body.tileSet);
+														_.set(Caches, "XX.attribution", body.attribution);
 														_.set(Caches, "XX.urlInfoSet", body.urlInfoSet);
 														_.set(Caches, "XX.muninBucket", body.muninBucket);
 														_.set(Caches, "XX.timeStamp", Date.now());
@@ -1407,14 +1409,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 											};
 											body.tileSet = tileSets(body.tileSet, Settings, Caches);
+											body.attribution = attributions(body.attribution, Settings, Caches);
 											//body.dataSet = dataSets(body.dataSet, Settings, Caches);
 											body.urlInfoSet = urlInfoSets(body.urlInfoSet, Settings, Caches);
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
 											// releaseInfo
-											body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
+											//body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
 											$.log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
 											body = SetTileGroup(body);
-											$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
+											//$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
 											rawBody = Resources.toBinary(body);
 											break;
 									};
@@ -1620,32 +1623,88 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 
 function attributions(attributions = [], settings = {}, caches = {}) {
 	$.log(`☑️ Set Attributions`, "");
-	caches?.CN?.attributions?.forEach(attribution => {
-		if (!attributions.some(i => i.name === attribution.name)) tileSets.push(attribution);
-	});
-	caches?.XX?.attributions?.forEach(attribution => {
-		if (!attributions.some(i => i.name === attribution.name)) tileSets.push(attribution);
+	switch (settings.GeoManifest.Dynamic.Config.CountryCode.default) {
+		case "AUTO":
+			break;
+		case "CN":
+			caches?.XX?.attribution?.forEach(attribution => {
+				if (!attributions.some(i => i.name === attribution.name)) attributions.push(attribution);
+			});
+			break;
+		default:
+			caches?.CN?.attribution?.forEach(attribution => {
+				if (!attributions.some(i => i.name === attribution.name)) attributions.push(attribution);
+			});
+			break;
+	};
+	attributions.sort((a, b)=>{
+		switch (b.name) {
+			case "‎":
+				return 1;
+			case "AutoNavi":
+				return 0;
+			default:
+				return -1;
+		};
 	});
 	attributions = attributions.map((attribution, index) => {
 		switch (attribution.name) {
+			case "‎":
+				attribution.name = `${$.name}\n${new Date()}`;
+				delete attribution.plainTextURLSHA256Checksum;
+				break;
 			case "AutoNavi":
+				attribution.resource = attribution.resource.filter(i => i.resourceType !== 6);
 				attribution.region = [
-					//{ "minX": 0, "minY": 0, "maxX": 1, "maxY": 1, "minZ": 1, "maxZ": 7 },
-					{ "minX": 179, "minY": 80, "maxX": 224, "maxY": 128, "minZ": 8, "maxZ": 8 },
-					{ "minX": 359, "minY": 161, "maxX": 449, "maxY": 257, "minZ": 9, "maxZ": 9 },
-					{ "minX": 719, "minY": 323, "maxX": 898, "maxY": 915, "minZ": 10, "maxZ": 10 },
-					{ "minX": 1438, "minY": 646, "maxX": 1797, "maxY": 1031, "minZ": 11, "maxZ": 11 },
-					{ "minX": 2876, "minY": 1292, "maxX": 3594, "maxY": 2062, "minZ": 12, "maxZ": 12 },
-					{ "minX": 5752, "minY": 2584, "maxX": 7188, "maxY": 4124, "minZ": 13, "maxZ": 13 },
-					{ "minX": 11504, "minY": 5168, "maxX": 14376, "maxY": 8248, "minZ": 14, "maxZ": 14 },
-					{ "minX": 23008, "minY": 10336, "maxX": 28752, "maxY": 16496, "minZ": 15, "maxZ": 15 },
-					{ "minX": 46016, "minY": 20672, "maxX": 57504, "maxY": 32992, "minZ": 16, "maxZ": 16 },
-					{ "minX": 92032, "minY": 41344, "maxX": 115008, "maxY": 65984, "minZ": 17, "maxZ": 17 },
-					{ "minX": 184064, "minY": 82668, "maxX": 230016, "maxY": 131976, "minZ": 18, "maxZ": 18 }
+					{ "minX": 214, "minY": 82, "maxX": 216, "maxY": 82, "minZ": 8, "maxZ": 21 },
+					{ "minX": 213, "minY": 83, "maxX": 217, "maxY": 83, "minZ": 8, "maxZ": 21 },
+					{ "minX": 213, "minY": 84, "maxX": 218, "maxY": 84, "minZ": 8, "maxZ": 21 },
+					{ "minX": 213, "minY": 85, "maxX": 218, "maxY": 85, "minZ": 8, "maxZ": 21 },
+					{ "minX": 212, "minY": 86, "maxX": 218, "maxY": 86, "minZ": 8, "maxZ": 21 },
+					{ "minX": 189, "minY": 87, "maxX": 190, "maxY": 87, "minZ": 8, "maxZ": 21 },
+					{ "minX": 210, "minY": 87, "maxX": 220, "maxY": 87, "minZ": 8, "maxZ": 21 },
+					{ "minX": 188, "minY": 88, "maxX": 191, "maxY": 88, "minZ": 8, "maxZ": 21 },
+					{ "minX": 210, "minY": 88, "maxX": 223, "maxY": 88, "minZ": 8, "maxZ": 21 },
+					{ "minX": 188, "minY": 89, "maxX": 192, "maxY": 89, "minZ": 8, "maxZ": 21 },
+					{ "minX": 210, "minY": 89, "maxX": 223, "maxY": 89, "minZ": 8, "maxZ": 21 },
+					{ "minX": 186, "minY": 90, "maxX": 192, "maxY": 90, "minZ": 8, "maxZ": 21 },
+					{ "minX": 210, "minY": 90, "maxX": 223, "maxY": 90, "minZ": 8, "maxZ": 21 },
+					{ "minX": 209, "minY": 91, "maxX": 222, "maxY": 91, "minZ": 8, "maxZ": 21 },
+					{ "minX": 186, "minY": 91, "maxX": 192, "maxY": 91, "minZ": 8, "maxZ": 21 },
+					{ "minX": 184, "minY": 92, "maxX": 195, "maxY": 92, "minZ": 8, "maxZ": 21 },
+					{ "minX": 207, "minY": 92, "maxX": 221, "maxY": 92, "minZ": 8, "maxZ": 21 },
+					{ "minX": 185, "minY": 93, "maxX": 196, "maxY": 93, "minZ": 8, "maxZ": 21 },
+					{ "minX": 206, "minY": 93, "maxX": 221, "maxY": 93, "minZ": 8, "maxZ": 21 },
+					{ "minX": 185, "minY": 94, "maxX": 200, "maxY": 94, "minZ": 8, "maxZ": 21 },
+					{ "minX": 203, "minY": 94, "maxX": 221, "maxY": 94, "minZ": 8, "maxZ": 21 },
+					{ "minX": 182, "minY": 94, "maxX": 219, "maxY": 95, "minZ": 8, "maxZ": 21 },
+					{ "minX": 180, "minY": 96, "maxX": 217, "maxY": 96, "minZ": 8, "maxZ": 21 },
+					{ "minX": 180, "minY": 97, "maxX": 216, "maxY": 97, "minZ": 8, "maxZ": 21 },
+					{ "minX": 180, "minY": 98, "maxX": 214, "maxY": 98, "minZ": 8, "maxZ": 21 },
+					{ "minX": 180, "minY": 99, "maxX": 215, "maxY": 99, "minZ": 8, "maxZ": 21 },
+					{ "minX": 182, "minY": 100, "maxX": 214, "maxY": 100, "minZ": 8, "maxZ": 21 },
+					{ "minX": 183, "minY": 101, "maxX": 213, "maxY": 101, "minZ": 8, "maxZ": 21 },
+					{ "minX": 184, "minY": 102, "maxX": 214, "maxY": 102, "minZ": 8, "maxZ": 21 },
+					{ "minX": 183, "minY": 103, "maxX": 214, "maxY": 103, "minZ": 8, "maxZ": 21 },
+					{ "minX": 184, "minY": 104, "maxX": 215, "maxY": 104, "minZ": 8, "maxZ": 21 },
+					{ "minX": 185, "minY": 105, "maxX": 215, "maxY": 105, "minZ": 8, "maxZ": 21 },
+					{ "minX": 187, "minY": 106, "maxX": 215, "maxY": 106, "minZ": 8, "maxZ": 21 },
+					{ "minX": 189, "minY": 107, "maxX": 193, "maxY": 107, "minZ": 8, "maxZ": 21 },
+					{ "minX": 197, "minY": 107, "maxX": 214, "maxY": 107, "minZ": 8, "maxZ": 21 },
+					{ "minX": 198, "minY": 108, "maxX": 214, "maxY": 108, "minZ": 8, "maxZ": 21 },
+					{ "minX": 110, "minY": 109, "maxX": 214, "maxY": 109, "minZ": 8, "maxZ": 21 },
+					{ "minX": 197, "minY": 110, "maxX": 214, "maxY": 110, "minZ": 8, "maxZ": 21 },
+					{ "minX": 198, "minY": 111, "maxX": 214, "maxY": 111, "minZ": 8, "maxZ": 21 },
+					{ "minX": 204, "minY": 112, "maxX": 209, "maxY": 112, "minZ": 8, "maxZ": 21 },
+					{ "minX": 213, "minY": 112, "maxX": 214, "maxY": 112, "minZ": 8, "maxZ": 21 },
+					{ "minX": 205, "minY": 113, "maxX": 207, "maxY": 113, "minZ": 8, "maxZ": 21 },
+					{ "minX": 205, "minY": 114, "maxX": 206, "maxY": 114, "minZ": 8, "maxZ": 21 },
+					{ "minX": 204, "minY": 115, "maxX": 212, "maxY": 128, "minZ": 8, "maxZ": 21 },
 				];
 				break;
 		};
-	});
+		return attribution;
+	}).flat(Infinity).filter(Boolean);
 	$.log(`✅ Set Attributions`, "");
 	return attributions;
 };
