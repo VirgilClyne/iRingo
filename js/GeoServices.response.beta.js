@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(4) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(5) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18631,13 +18631,13 @@ function attributions(attributions = [], settings = {}, caches = {}) {
 			});
 			break;
 	}	attributions.sort((a, b)=>{
-		switch (b.name) {
+		switch (a.name) {
 			case "‎":
-				return 1;
+				return -1;
 			case "AutoNavi":
 				return 0;
 			default:
-				return -1;
+				return 1;
 		}	});
 	attributions = attributions.map((attribution, index) => {
 		switch (attribution.name) {
