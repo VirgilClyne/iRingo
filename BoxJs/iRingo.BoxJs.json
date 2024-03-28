@@ -573,7 +573,7 @@
 				{
 					"id": "@iRingo.Maps.Settings.TileSet.POI",
 					"name": "[兴趣点]数据源",
-					"val": "AUTO",
+					"val": "CN",
 					"type": "selects",
 					"desc": "兴趣点(POI)的数据源，此选项影响景点店面建筑等地点数据",
 					"items": [
@@ -583,11 +583,11 @@
 						},
 						{
 							"key": "CN",
-							"label": "🇨🇳Apple（🇨🇳:🈶️ | 🇺🇳:🈶️）"
+							"label": "🇨🇳Apple（🇨🇳:互动百科/大众点评/携程等 | 🇺🇳:维基百科/Yelp/Booking等）"
 						},
 						{
 							"key": "XX",
-							"label": "🇺🇳Apple（🇨🇳:🈶️但极少 | 🇺🇳:🈶️）"
+							"label": "🇺🇳Apple（维基百科/Yelp/Booking等）"
 						}
 					]
 				},
