@@ -4,18 +4,18 @@ import terser from '@rollup/plugin-terser';
 
 export default [
 	{
-		input: 'src/Location.request.js',
+		input: 'src/GeoServices.request.js',
 		output: {
-			file: 'js/Location.request.js',
+			file: 'js/GeoServices.request.js',
 			format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
 		plugins: [json(), commonjs(), terser()]
 	},
 	{
-		input: 'src/Location.response.js',
+		input: 'src/GeoServices.response.js',
 		output: {
-			file: 'js/Location.response.js',
+			file: 'js/GeoServices.response.js',
 			format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
