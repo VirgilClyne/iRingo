@@ -1500,7 +1500,7 @@ var Settings$5 = {
 		"Map": "CN",
 		Satellite: "XX",
 		Traffic: "CN",
-		POI: "AUTO",
+		POI: "CN",
 		Flyover: "XX",
 		Munin: "XX"
 	},
