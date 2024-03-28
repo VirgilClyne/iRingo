@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(5) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(6) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18714,7 +18714,7 @@ function urlInfoSets(urlInfoSets = [], settings = {}, caches = {}) {
 				urlInfoSet = { ...caches.CN.urlInfoSet[0], ...caches.XX.urlInfoSet[0] };
 				urlInfoSet.alternateResourcesURL = caches.CN.urlInfoSet[0].alternateResourcesURL;
 				break;
-		}		switch (settings.Config.Announcements.Environment.default) {
+		}		switch (settings.Config?.Announcements?.Environment?.default) {
 			case "AUTO":
 			default:
 				break;

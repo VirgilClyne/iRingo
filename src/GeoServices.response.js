@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(5) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(6) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1745,7 +1745,7 @@ function urlInfoSets(urlInfoSets = [], settings = {}, caches = {}) {
 				urlInfoSet.alternateResourcesURL = caches.CN.urlInfoSet[0].alternateResourcesURL;
 				break;
 		};
-		switch (settings.Config.Announcements.Environment.default) {
+		switch (settings.Config?.Announcements?.Environment?.default) {
 			case "AUTO":
 			default:
 				break;
