@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(4) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(5) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1638,13 +1638,13 @@ function attributions(attributions = [], settings = {}, caches = {}) {
 			break;
 	};
 	attributions.sort((a, b)=>{
-		switch (b.name) {
+		switch (a.name) {
 			case "‎":
-				return 1;
+				return -1;
 			case "AutoNavi":
 				return 0;
 			default:
-				return -1;
+				return 1;
 		};
 	});
 	attributions = attributions.map((attribution, index) => {
