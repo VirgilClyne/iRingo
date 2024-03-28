@@ -34,7 +34,7 @@
 					"default": "AUTO",
 					"iOS": "AUTO",
 					"iPadOS": "AUTO",
-					"watchOS": "XX",
+					"watchOS": "AUTO",
 					"macOS": "AUTO"
 				}
 			}
@@ -734,6 +734,33 @@
 					"deviceSKUWhitelist": [],
 					"baseURL": "https://gspe19-2-cn-ssl.ls.apple.com/poi_update",
 					"supportsMultipathTCP": false
+				}
+			],
+			"attribution": [
+				{
+					"name": "AutoNavi",
+					"url": "https://gspe21-ssl.ls.apple.com/html/attribution-cn2-66.html",
+					"resource": [
+						{ "resourceType": 6, "filename": "autonavi-4.png", "checksum": { "0": 61, "1": 130, "2": 126, "3": 203, "4": 170, "5": 234, "6": 91, "7": 182, "8": 191, "9": 120, "10": 72, "11": 19, "12": 46, "13": 58, "14": 235, "15": 55, "16": 221, "17": 53, "18": 252, "19": 219 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 6, "filename": "autonavi-4@2x.png", "checksum": { "0": 101, "1": 191, "2": 219, "3": 234, "4": 178, "5": 237, "6": 6, "7": 231, "8": 236, "9": 110, "10": 3, "11": 82, "12": 194, "13": 129, "14": 29, "15": 221, "16": 225, "17": 55, "18": 26, "19": 203 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 6, "filename": "autonavi-4@2x.png", "checksum": { "0": 101, "1": 191, "2": 219, "3": 234, "4": 178, "5": 237, "6": 6, "7": 231, "8": 236, "9": 110, "10": 3, "11": 82, "12": 194, "13": 129, "14": 29, "15": 221, "16": 225, "17": 55, "18": 26, "19": 203 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 5, "filename": "autonavi-logo-mask-1.png", "checksum": { "0": 247, "1": 152, "2": 81, "3": 90, "4": 135, "5": 206, "6": 171, "7": 138, "8": 151, "9": 37, "10": 167, "11": 77, "12": 112, "13": 223, "14": 89, "15": 164, "16": 242, "17": 201, "18": 164, "19": 74 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 5, "filename": "autonavi-logo-mask-1@2x.png", "checksum": { "0": 54, "1": 203, "2": 95, "3": 5, "4": 82, "5": 108, "6": 189, "7": 170, "8": 124, "9": 255, "10": 39, "11": 153, "12": 245, "13": 47, "14": 224, "15": 93, "16": 202, "17": 181, "18": 11, "19": 127 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 5, "filename": "autonavi-logo-mask-1@3x.png", "checksum": { "0": 131, "1": 225, "2": 158, "3": 241, "4": 69, "5": 218, "6": 172, "7": 162, "8": 166, "9": 241, "10": 48, "11": 174, "12": 31, "13": 104, "14": 225, "15": 155, "16": 97, "17": 143, "18": 15, "19": 99 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 }
+					],
+					"region": [],
+					"linkDisplayStringIndex": 0
+				},
+				{
+					"name": "© GeoTechnologies, Inc.",
+					"url": "https://gspe21-ssl.ls.apple.com/html/attribution-cn2-66.html",
+					"resource": [],
+					"region": [
+						{ "minX": 218, "minY": 102, "maxX": 225, "maxY": 104, "minZ": 8, "maxZ": 21 },
+						{ "minX": 221, "minY": 98, "maxX": 228, "maxY": 101, "minZ": 8, "maxZ": 21 },
+						{ "minX": 226, "minY": 91, "maxX": 231, "maxY": 97, "minZ": 8, "maxZ": 21 }
+					],
+					"linkDisplayStringIndex": 0
 				}
 			],
 			"urlInfoSet": [
@@ -2422,6 +2449,47 @@
 					"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
 					"dataSet": 1,
 					"supportsMultipathTCP": false
+				}
+			],
+			"attribution": [
+				{ "name": "‎", "url": "https://gspe21-ssl.ls.apple.com/html/attribution-275.html", "resource": [], "region": [], "linkDisplayStringIndex": 0, "plainTextURL": "https://gspe21-ssl.ls.apple.com/html/attribution-274.txt", "plainTextURLSHA256Checksum": { "0": 95, "1": 21, "2": 102, "3": 110, "4": 8, "5": 247, "6": 232, "7": 236, "8": 45, "9": 156, "10": 70, "11": 137, "12": 179, "13": 197, "14": 80, "15": 243, "16": 60, "17": 246, "18": 254, "19": 239, "20": 198, "21": 57, "22": 65, "23": 219, "24": 22, "25": 147, "26": 180, "27": 123, "28": 186, "29": 78, "30": 122, "31": 162 } },
+				{
+					"name": "MMI",
+					"url": "https://gspe21-ssl.ls.apple.com/html/attribution-275.html",
+					"resource": [
+						{ "resourceType": 5, "filename": "mmi-mask-2.png", "checksum": { "0": 35, "1": 54, "2": 2, "3": 219, "4": 218, "5": 184, "6": 124, "7": 50, "8": 35, "9": 32, "10": 86, "11": 20, "12": 147, "13": 223, "14": 7, "15": 41, "16": 209, "17": 238, "18": 32, "19": 41 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 5, "filename": "mmi-mask-2@2x.png", "checksum": { "0": 5, "1": 160, "2": 112, "3": 185, "4": 3, "5": 255, "6": 7, "7": 75, "8": 78, "9": 139, "10": 52, "11": 81, "12": 151, "13": 231, "14": 143, "15": 29, "16": 187, "17": 109, "18": 220, "19": 80 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 },
+						{ "resourceType": 5, "filename": "mmi-mask-2@3x.png", "checksum": { "0": 240, "1": 170, "2": 204, "3": 91, "4": 161, "5": 113, "6": 81, "7": 101, "8": 136, "9": 205, "10": 115, "11": 2, "12": 192, "13": 97, "14": 106, "15": 34, "16": 227, "17": 214, "18": 74, "19": 220 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 }
+					],
+					"region": [
+						{ "minX": 176, "minY": 110, "maxX": 183, "maxY": 122, "minZ": 8, "maxZ": 21 },
+						{ "minX": 178, "minY": 107, "maxX": 188, "maxY": 107, "minZ": 8, "maxZ": 21 },
+						{ "minX": 178, "minY": 108, "maxX": 183, "maxY": 109, "minZ": 8, "maxZ": 21 },
+						{ "minX": 180, "minY": 105, "maxX": 180, "maxY": 106, "minZ": 8, "maxZ": 21 },
+						{ "minX": 181, "minY": 104, "maxX": 183, "maxY": 106, "minZ": 8, "maxZ": 21 },
+						{ "minX": 182, "minY": 103, "maxX": 182, "maxY": 103, "minZ": 8, "maxZ": 21 },
+						{ "minX": 184, "minY": 104, "maxX": 184, "maxY": 106, "minZ": 8, "maxZ": 21 },
+						{ "minX": 184, "minY": 108, "maxX": 195, "maxY": 110, "minZ": 8, "maxZ": 21 },
+						{ "minX": 184, "minY": 111, "maxX": 194, "maxY": 111, "minZ": 8, "maxZ": 21 },
+						{ "minX": 184, "minY": 112, "maxX": 191, "maxY": 120, "minZ": 8, "maxZ": 21 },
+						{ "minX": 184, "minY": 121, "maxX": 184, "maxY": 121, "minZ": 8, "maxZ": 21 },
+						{ "minX": 185, "minY": 105, "maxX": 185, "maxY": 106, "minZ": 8, "maxZ": 21 },
+						{ "minX": 190, "minY": 107, "maxX": 190, "maxY": 107, "minZ": 8, "maxZ": 21 },
+						{ "minX": 193, "minY": 118, "maxX": 194, "maxY": 123, "minZ": 8, "maxZ": 21 },
+						{ "minX": 195, "minY": 118, "maxX": 195, "maxY": 118, "minZ": 8, "maxZ": 21 }
+					],
+					"linkDisplayStringIndex": 0
+				},
+				{
+					"name": "© GeoTechnologies, Inc.",
+					"url": "https://gspe21-ssl.ls.apple.com/html/attribution-275.html",
+					"resource": [],
+					"region": [
+						{ "minX": 218, "minY": 102, "maxX": 225, "maxY": 104, "minZ": 8, "maxZ": 21 },
+						{ "minX": 221, "minY": 98, "maxX": 228, "maxY": 101, "minZ": 8, "maxZ": 21 },
+						{ "minX": 226, "minY": 91, "maxX": 231, "maxY": 97, "minZ": 8, "maxZ": 21 }
+					],
+					"linkDisplayStringIndex": 0
 				}
 			],
 			"urlInfoSet": [
