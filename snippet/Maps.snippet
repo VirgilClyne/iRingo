@@ -1,0 +1,22 @@
+#!name= iRingo: 🗺️ Maps
+#!desc=全面自定义「地图」的功能。
+#!openUrl=http://boxjs.com/#/app/iRingo.Maps
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/🗺-地图
+#!icon=https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg
+#!category= iRingo
+
+#[rewrite_local]
+# 🗺️ Network Defaults
+^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
+^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+# 🗺️ Announcements
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+# 🗺️ Resource Manifest
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+
+#[mitm]
+hostname = configuration.ls.apple.com, gspe35-ssl.ls.apple.com

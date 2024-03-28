@@ -1,0 +1,63 @@
+name: " iRingo: 🗺️ Maps"
+desc: "全面自定义「地图」的功能。"
+openUrl: "http://boxjs.com/#/app/iRingo.Maps"
+author: "VirgilClyne"
+homepage: "https://github.com/VirgilClyne"
+manual: "https://github.com/VirgilClyne/iRingo/wiki/🗺-地图"
+icon: "https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg"
+category: " iRingo"
+
+rules:
+  # 🗺️ Tiles
+  - DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
+  # 🗺️ Dispatcher
+  - DOMAIN,dispatcher.is.autonavi.com,DIRECT
+  # 🗺️ Directions & ETA
+  - DOMAIN,direction2.is.autonavi.com,DIRECT
+
+http:
+  mitm:
+    - "configuration.ls.apple.com"
+    - "gspe35-ssl.ls.apple.com"
+
+  script:
+    - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults
+      name: GeoServices.request
+      type: request
+      require-body: false
+      argument:
+    - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults
+      name: GeoServices.response
+      type: response
+      require-body: true
+      argument:
+    - match: ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements
+      name: GeoServices.request
+      type: request
+      require-body: false
+      argument:
+    - match: ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements
+      name: GeoServices.response
+      type: response
+      require-body: true
+      binary-mode: true
+      argument:
+    - match: ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config
+      name: GeoServices.request
+      type: request
+      require-body: false
+      argument:
+    - match: ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config
+      name: GeoServices.response
+      type: response
+      require-body: true
+      binary-mode: true
+      argument:
+
+script-providers:
+  GeoServices.request:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
+    interval: 86400
+  GeoServices.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+    interval: 86400

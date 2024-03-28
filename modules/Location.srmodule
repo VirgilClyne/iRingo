@@ -7,8 +7,6 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 #!category= iRingo
-#!arguments=GeoCountryCode:US
-#!arguments-desc=GeoCountryCode: 国家或地区代码
 
 [Rule]
 # 📍 Country Code
@@ -16,7 +14,7 @@ DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
 
 [Script]
 # 📍 Country Code
-📍 Location.pep.gcc.response = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js, argument=PEP.GCC={{{GeoCountryCode}}}
+📍 Location.pep.gcc.response = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js, argument=
 
 [MITM]
 hostname = %APPEND% gspe1-ssl.ls.apple.com

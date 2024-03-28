@@ -1,0 +1,30 @@
+#!name= iRingo: 🗺️ Maps
+#!desc=全面自定义「地图」的功能。
+#!openUrl=http://boxjs.com/#/app/iRingo.Maps
+#!author=VirgilClyne
+#!homepage=https://github.com/VirgilClyne
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/🗺-地图
+#!icon=https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg
+#!category= iRingo
+
+[Rule]
+# 🗺️ Tiles
+DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
+# 🗺️ Dispatcher
+DOMAIN,dispatcher.is.autonavi.com,DIRECT
+# 🗺️ Directions & ETA
+DOMAIN,direction2.is.autonavi.com,DIRECT
+
+[Script]
+# 🗺️ Network Defaults
+http-request ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js, requires-body=0, tag=🗺️ Maps.config.defaults.request, argument=
+http-response ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js, requires-body=1, tag=🗺️ Maps.config.defaults.response, argument=
+# 🗺️ Announcements
+http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js, requires-body=0, tag=🗺️ Maps.config.announcements.request, argument=
+http-response ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js, requires-body=1, binary-body-mode=1, tag=🗺️ Maps.config.announcements.response, argument=
+# 🗺️ Resource Manifest
+http-request ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js, requires-body=0, tag=🗺️ Maps.config.announcements.request, argument=
+http-response ^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js, requires-body=1, binary-body-mode=1, tag=🗺️ Maps.geo_manifest.dynamic.config.response, argument=
+
+[MITM]
+hostname = configuration.ls.apple.com, gspe35-ssl.ls.apple.com
