@@ -6,7 +6,7 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(4) request.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(5) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -133,6 +133,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										default:
 											switch (Settings?.Config?.Announcements?.Environment?.default) {
 												case "AUTO":
+													/*
 													switch (Caches?.pep?.gcc) {
 														default:
 															URL.query.environment = "prod";
@@ -142,6 +143,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															URL.query.environment = "prod-cn";
 															break;
 													};
+													*/
 													break;
 												case "CN":
 												default:
@@ -155,6 +157,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "watchos":
 											switch (Settings?.Config?.Announcements?.Environment?.watchOS) {
 												case "AUTO":
+													/*
 													switch (Caches?.pep?.gcc) {
 														default:
 															URL.query.environment = "prod";
@@ -164,6 +167,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															URL.query.environment = "prod-cn";
 															break;
 													};
+													*/
 													break;
 												case "XX":
 												default:
