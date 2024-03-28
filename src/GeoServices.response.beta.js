@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.2(28) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(4) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1842,13 +1842,16 @@ function urlInfoSets(urlInfoSets = [], settings = {}, caches = {}) {
 				break;
 		};
 		switch (settings.UrlInfoSet.LocationShift) {
-			case true:
+			case "AUTO":
 			default:
-				urlInfoSet.locationShiftURL = caches.CN.urlInfoSet[0].locationShiftURL;
 				break;
-			case false:
+			case "AutoNavi":
 				// Location Shift (polynomial)
-				delete urlInfoSet.locationShiftURL;
+				urlInfoSet.polyLocationShiftURL = caches.CN.urlInfoSet[0].polyLocationShiftURL;
+				break;
+			case "Apple":
+				// Location Shift (polynomial)
+				urlInfoSet.polyLocationShiftURL = caches.XX.urlInfoSet[0].polyLocationShiftURL;
 				break;
 		};
 		return urlInfoSet;
