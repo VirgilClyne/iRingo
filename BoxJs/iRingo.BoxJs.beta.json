@@ -2107,58 +2107,66 @@
 			],
 			"settings": [
 				{
-					"id": "@iRingo.Location.Settings.Geo_manifest.Dynamic.Config.Country_code.watchOS",
+					"id": "@iRingo.Maps.Settings.GeoManifest.Dynamic.Config.CountryCode.watchOS",
 					"name": "[动态配置]地理服务清单的国家或地区代码",
 					"val": "US",
 					"type": "selects",
 					"desc": "要更改为的地区或国家，此选项影响“地图”整体配置内容，包括以下的地图功能与服务",
 					"items": [
 						{
+							"key": "AUTO",
+							"label": "🇺🇳自动（跟随地区检测结果）"
+						},
+						{
 							"key": "CN",
-							"label": "中国大陆"
+							"label": "🇨🇳中国大陆"
 						},
 						{
 							"key": "HK",
-							"label": "香港"
+							"label": "🇭🇰香港"
 						},
 						{
 							"key": "TW",
-							"label": "台湾"
+							"label": "🇹🇼台湾"
 						},
 						{
 							"key": "SG",
-							"label": "新加坡"
+							"label": "🇸🇬新加坡"
 						},
 						{
 							"key": "US",
-							"label": "美国"
+							"label": "🇺🇸美国"
 						},
 						{
 							"key": "JP",
-							"label": "日本"
+							"label": "🇯🇵日本"
 						},
 						{
 							"key": "AU",
-							"label": "澳大利亚"
+							"label": "🇦🇺澳大利亚"
 						},
 						{
 							"key": "GB",
-							"label": "英国"
+							"label": "🇬🇧英国"
 						},
 						{
 							"key": "KR",
-							"label": "韩国"
+							"label": "🇰🇷韩国"
 						},
 						{
 							"key": "CA",
-							"label": "加拿大"
+							"label": "🇨🇦加拿大"
+						},
+						{
+							"key": "IE",
+							"label": "🇮🇪爱尔兰"
 						}
 					]
 				},
 				{
-					"id": "@iRingo.Location.Settings.Config.Announcements.Environment.watchOS",
+					"id": "@iRingo.Maps.Settings.Config.Announcements.Environment.watchOS",
 					"name": "[通告配置]环境代码",
-					"val": "XX",
+					"val": "AUTO",
 					"type": "selects",
 					"desc": "通告的配置文件的环境代码，此选项影响功能未知",
 					"items": [
