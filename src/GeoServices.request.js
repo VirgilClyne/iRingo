@@ -6,7 +6,7 @@ import URI from "./URI/URI.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(5) request");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(6) request");
 
 // 构造回复数据
 let $response = undefined;
@@ -166,15 +166,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										default:
 											switch (Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default) {
 												case "AUTO":
-													switch (Caches?.pep?.gcc) {
-														default:
-															URL.query.country_code = Caches?.pep?.gcc ?? "US";
-															break;
-														case "CN":
-														case undefined:
-															URL.query.country_code = "CN";
-															break;
-													};
 													break;
 												default:
 													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default ?? "CN";
@@ -184,15 +175,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "watchos":
 											switch (Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS) {
 												case "AUTO":
-													switch (Caches?.pep?.gcc) {
-														default:
-															URL.query.country_code = Caches?.pep?.gcc ?? "US";
-															break;
-														case "CN":
-														case undefined:
-															URL.query.country_code = "CN";
-															break;
-													};
 													break;
 												default:
 													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS ?? "US";
