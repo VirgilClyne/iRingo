@@ -656,12 +656,16 @@
 							"label": "自动（随[动态配置]版本自动选择）"
 						},
 						{
+							"key": "HYBRID",
+							"label": "混合（🇨🇳:2D | 🇺🇳:3D）"
+						},
+						{
 							"key": "CN",
 							"label": "🇨🇳中国四维（🇨🇳:2D | 🇺🇳:🈚️）"
 						},
 						{
 							"key": "XX",
-							"label": "🇺🇳DigitalGlobe（🇨🇳:2D | 🇺🇳:3D）"
+							"label": "🇺🇳DigitalGlobe（🇨🇳:2D且陈旧 | 🇺🇳:3D）"
 						}
 					]
 				},
