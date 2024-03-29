@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(8) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18421,7 +18421,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													body.resource.push({ "resourceType": 7, "filename": "China.cms-lpr", "checksum": { "0": 196, "1": 139, "2": 158, "3": 17, "4": 250, "5": 132, "6": 138, "7": 10, "8": 138, "9": 38, "10": 96, "11": 130, "12": 82, "13": 80, "14": 4, "15": 239, "16": 11, "17": 107, "18": 183, "19": 236 }, "region": [{ "minX": 1, "minY": 0, "maxX": 1, "maxY": 0, "minZ": 1, "maxZ": 25 }], "filter": [{ "scale": [], "scenario": [4] }], "connectionType": 0, "preferWiFiAllowedStaleThreshold": 0, "validationMethod": 1, "alternateResourceURLIndex": 1, "updateMethod": 1, "timeToLiveSeconds": 0 });
 													break;
 											}											body.tileSet = tileSets(body.tileSet, Settings, Caches);
-											body.attribution = attributions(body.attribution, Settings, Caches);
+											body.attribution = attributions(body.attribution, URL, Caches);
 											//body.dataSet = dataSets(body.dataSet, Settings, Caches);
 											body.urlInfoSet = urlInfoSets(body.urlInfoSet, Settings, Caches);
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
@@ -18615,14 +18615,12 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 	$.log(`✅ Set TileSets`, "");
 	return tileSets;
 }
-function attributions(attributions = [], settings = {}, caches = {}) {
+function attributions(attributions = [], parsedURL = {}, caches = {}) {
 	$.log(`☑️ Set Attributions`, "");
-	switch (settings.GeoManifest.Dynamic.Config.CountryCode.default) {
-		case "AUTO":
-			break;
+	switch (parsedURL.query.country_code) {
 		case "CN":
 			caches?.XX?.attribution?.forEach(attribution => {
-				if (!attributions.some(i => i.name === attribution.name)) attributions.push(attribution);
+				if (!attributions.some(i => i.name === attribution.name)) attributions.unshift(attribution);
 			});
 			break;
 		default:
