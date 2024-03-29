@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(1) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(4) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18507,6 +18507,21 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 						break;
 				}				break;
 			case 7: // RASTER_SATELLITE 卫星地图（2D）
+				switch (settings.TileSet.Satellite) {
+					case "AUTO":
+						break;
+					case "HYBRID":
+						tileSet = caches?.CN?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
+						tileSet.validVersion[0].availableTiles = [{ "minX": 0, "minY": 0, "maxX": 1, "maxY": 1, "minZ": 1, "maxZ": 22 }];
+						break;
+					case "CN":
+						tileSet = caches?.CN?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
+						break;
+					case "XX":
+					default:
+						tileSet = caches?.XX?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
+						break;
+				}				break;
 			case 14: // SPUTNIK_METADATA 卫星地图（3D/俯瞰）元数据
 			case 15: // SPUTNIK_C3M 卫星地图（3D/俯瞰）C3模型
 			case 16: // SPUTNIK_DSM 卫星地图（3D/俯瞰）数字表面模型
@@ -18517,12 +18532,15 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 			case 45: // RASTER_SATELLITE_ASTC 卫星地图（2D/ASTC）
 				switch (settings.TileSet.Satellite) {
 					case "AUTO":
-					default:
+						break;
+					case "HYBRID":
+						tileSet = caches?.XX?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
 						break;
 					case "CN":
 						tileSet = caches?.CN?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
 						break;
 					case "XX":
+					default:
 						tileSet = caches?.XX?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
 						break;
 				}				break;
