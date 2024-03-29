@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(6) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(8) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1446,9 +1446,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 function SetTileGroup(body = {}) {
 	$.log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {
-		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
-		//tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
-		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
+		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
 		tileGroup.tileSet = body.tileSet.map((tileSet, index) => {
 			return {
 				"tileSetIndex": index,
