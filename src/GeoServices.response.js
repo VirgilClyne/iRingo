@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.3(6) response");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(1) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1409,7 +1409,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 											};
 											body.tileSet = tileSets(body.tileSet, Settings, Caches);
-											body.attribution = attributions(body.attribution, Settings, Caches);
+											body.attribution = attributions(body.attribution, URL, Caches);
 											//body.dataSet = dataSets(body.dataSet, Settings, Caches);
 											body.urlInfoSet = urlInfoSets(body.urlInfoSet, Settings, Caches);
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
@@ -1446,9 +1446,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 function SetTileGroup(body = {}) {
 	$.log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {
-		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
-		//tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
-		//$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
+		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
 		tileGroup.tileSet = body.tileSet.map((tileSet, index) => {
 			return {
 				"tileSetIndex": index,
@@ -1621,14 +1621,12 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 	return tileSets;
 };
 
-function attributions(attributions = [], settings = {}, caches = {}) {
+function attributions(attributions = [], parsedURL = {}, caches = {}) {
 	$.log(`☑️ Set Attributions`, "");
-	switch (settings.GeoManifest.Dynamic.Config.CountryCode.default) {
-		case "AUTO":
-			break;
+	switch (parsedURL.query.country_code) {
 		case "CN":
 			caches?.XX?.attribution?.forEach(attribution => {
-				if (!attributions.some(i => i.name === attribution.name)) attributions.push(attribution);
+				if (!attributions.some(i => i.name === attribution.name)) attributions.unshift(attribution);
 			});
 			break;
 		default:
