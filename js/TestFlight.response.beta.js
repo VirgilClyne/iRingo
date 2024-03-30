@@ -1498,7 +1498,7 @@ var Settings$5 = {
 	},
 	TileSet: {
 		"Map": "CN",
-		Satellite: "XX",
+		Satellite: "HYBRID",
 		Traffic: "CN",
 		POI: "CN",
 		Flyover: "XX",
