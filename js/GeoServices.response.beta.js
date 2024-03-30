@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(4) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(5) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18436,8 +18436,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							}							break;
 					}					// 写入二进制数据
 					$response.body = rawBody;
-					if ($response.headers.ETag) $response.headers.ETag = String(Date.now());
-					if ($response.headers.Etag) $response.headers.Etag = String(Date.now());
 					break;
 			}			break;
 		case false:

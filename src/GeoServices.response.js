@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(4) response");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(5) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1430,8 +1430,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					};
 					// 写入二进制数据
 					$response.body = rawBody;
-					if ($response.headers.ETag) $response.headers.ETag = String(Date.now());
-					if ($response.headers.Etag) $response.headers.Etag = String(Date.now());
 					break;
 			};
 			break;
