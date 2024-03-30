@@ -531,7 +531,7 @@
 				{
 					"id": "@iRingo.Maps.Settings.TileSet.Satellite",
 					"name": "[卫星图像]数据源",
-					"val": "XX",
+					"val": "HYBRID",
 					"type": "selects",
 					"desc": "‘卫星’地图的数据源，此选项影响所列位图、影像与模型数据",
 					"items": [
@@ -541,15 +541,15 @@
 						},
 						{
 							"key": "HYBRID",
-							"label": "混合（🇨🇳:2D | 🇺🇳:3D）"
+							"label": "混合（🇨🇳:2D较新 | 🇺🇳:主要城市3D）"
 						},
 						{
 							"key": "CN",
-							"label": "🇨🇳中国四维（🇨🇳:2D | 🇺🇳:🈚️）"
+							"label": "🇨🇳中国四维（🇨🇳:2D较新 | 🇺🇳:🈚️）"
 						},
 						{
 							"key": "XX",
-							"label": "🇺🇳DigitalGlobe（🇨🇳:2D且陈旧 | 🇺🇳:3D）"
+							"label": "🇺🇳DigitalGlobe（🇨🇳:2D较旧 | 🇺🇳:2D+主要城市3D）"
 						}
 					]
 				},
