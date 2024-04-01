@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(2) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(3) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1435,7 +1435,7 @@ function setCache(cache, path, body) {
 		_.set(cache, `${path}.urlInfoSet`, body.urlInfoSet);
 		_.set(cache, `${path}.muninBucket`, body.muninBucket);
 		_.set(cache, `${path}.timeStamp`, Date.now());
-		$Storage.setItem("@iRingo.Maps.Caches", caches);
+		$Storage.setItem("@iRingo.Maps.Caches", cache);
 		$.log(`✅ Set Cache`, "");
 	} else $.log(`❎ Set Cache`, "");
 };

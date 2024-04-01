@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(2) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(3) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18441,7 +18441,7 @@ function setCache(cache, path, body) {
 		Lodash.set(cache, `${path}.urlInfoSet`, body.urlInfoSet);
 		Lodash.set(cache, `${path}.muninBucket`, body.muninBucket);
 		Lodash.set(cache, `${path}.timeStamp`, Date.now());
-		$Storage.setItem("@iRingo.Maps.Caches", caches);
+		$Storage.setItem("@iRingo.Maps.Caches", cache);
 		$.log(`✅ Set Cache`, "");
 	} else $.log(`❎ Set Cache`, "");
 }
