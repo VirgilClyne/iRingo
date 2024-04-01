@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(5) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18395,27 +18395,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											*/
 											switch (URL.query.country_code) {
 												case "CN":
-													if (Date.now() - (Caches?.CN?.timeStamp ?? 0) > 86400000) {
-														Lodash.set(Caches, "CN.tileSet", body.tileSet);
-														Lodash.set(Caches, "CN.attribution", body.attribution);
-														Lodash.set(Caches, "CN.urlInfoSet", body.urlInfoSet);
-														Lodash.set(Caches, "CN.muninBucket", body.muninBucket);
-														Lodash.set(Caches, "CN.timeStamp", Date.now());
-														$Storage.setItem("@iRingo.Maps.Caches", Caches);
-													}													if (!Caches.XX) Caches.XX = Configs.XX;
+													setCache(Caches, "CN", body);
+													if (!Caches.XX) Caches.XX = Configs.XX;
 													// announcementsSupportedLanguage
 													//body.announcementsSupportedLanguage?.push?.("zh-CN");
 													//body.announcementsSupportedLanguage?.push?.("zh-TW");
 													break;
 												default:
-													if (Date.now() - (Caches?.XX?.timeStamp ?? 0) > 86400000) {
-														Lodash.set(Caches, "XX.tileSet", body.tileSet);
-														Lodash.set(Caches, "XX.attribution", body.attribution);
-														Lodash.set(Caches, "XX.urlInfoSet", body.urlInfoSet);
-														Lodash.set(Caches, "XX.muninBucket", body.muninBucket);
-														Lodash.set(Caches, "XX.timeStamp", Date.now());
-														$Storage.setItem("@iRingo.Maps.Caches", Caches);
-													}													if (!Caches.CN) Caches.CN = Configs.CN;
+													setCache(Caches, "XX", body);
+													if (!Caches.CN) Caches.CN = Configs.CN;
 													// resource
 													body.resource.push({ "resourceType": 7, "filename": "POITypeMapping-CN-1.json", "checksum": { "0": 242, "1": 10, "2": 179, "3": 107, "4": 214, "5": 41, "6": 50, "7": 223, "8": 62, "9": 204, "10": 134, "11": 7, "12": 103, "13": 206, "14": 96, "15": 242, "16": 24, "17": 42, "18": 79, "19": 223 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 });
 													body.resource.push({ "resourceType": 7, "filename": "China.cms-lpr", "checksum": { "0": 196, "1": 139, "2": 158, "3": 17, "4": 250, "5": 132, "6": 138, "7": 10, "8": 138, "9": 38, "10": 96, "11": 130, "12": 82, "13": 80, "14": 4, "15": 239, "16": 11, "17": 107, "18": 183, "19": 236 }, "region": [{ "minX": 1, "minY": 0, "maxX": 1, "maxY": 0, "minZ": 1, "maxZ": 25 }], "filter": [{ "scale": [], "scenario": [4] }], "connectionType": 0, "preferWiFiAllowedStaleThreshold": 0, "validationMethod": 1, "alternateResourceURLIndex": 1, "updateMethod": 1, "timeToLiveSeconds": 0 });
@@ -18445,6 +18433,18 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => $.done($response));
 
 /***************** Function *****************/
+function setCache(cache, path, body) {
+	$.log(`☑️ Set Cache, path: ${path}`, "");
+	if (Date.now() - Lodash.get(cache, `${path}.timeStamp`, 0) > 86400000) {
+		Lodash.set(cache, `${path}.tileSet`, body.tileSet);
+		Lodash.set(cache, `${path}.attribution`, body.attribution);
+		Lodash.set(cache, `${path}.urlInfoSet`, body.urlInfoSet);
+		Lodash.set(cache, `${path}.muninBucket`, body.muninBucket);
+		Lodash.set(cache, `${path}.timeStamp`, Date.now());
+		$Storage.setItem("@iRingo.Maps.Caches", caches);
+		$.log(`✅ Set Cache`, "");
+	} else $.log(`❎ Set Cache`, "");
+}
 function SetTileGroup(body = {}) {
 	$.log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {

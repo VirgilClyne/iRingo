@@ -9,7 +9,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.4(5) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1380,28 +1380,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											*/
 											switch (URL.query.country_code) {
 												case "CN":
-													if (Date.now() - (Caches?.CN?.timeStamp ?? 0) > 86400000) {
-														_.set(Caches, "CN.tileSet", body.tileSet);
-														_.set(Caches, "CN.attribution", body.attribution);
-														_.set(Caches, "CN.urlInfoSet", body.urlInfoSet);
-														_.set(Caches, "CN.muninBucket", body.muninBucket);
-														_.set(Caches, "CN.timeStamp", Date.now());
-														$Storage.setItem("@iRingo.Maps.Caches", Caches);
-													};
+													setCache(Caches, "CN", body);
 													if (!Caches.XX) Caches.XX = Configs.XX;
 													// announcementsSupportedLanguage
 													//body.announcementsSupportedLanguage?.push?.("zh-CN");
 													//body.announcementsSupportedLanguage?.push?.("zh-TW");
 													break;
 												default:
-													if (Date.now() - (Caches?.XX?.timeStamp ?? 0) > 86400000) {
-														_.set(Caches, "XX.tileSet", body.tileSet);
-														_.set(Caches, "XX.attribution", body.attribution);
-														_.set(Caches, "XX.urlInfoSet", body.urlInfoSet);
-														_.set(Caches, "XX.muninBucket", body.muninBucket);
-														_.set(Caches, "XX.timeStamp", Date.now());
-														$Storage.setItem("@iRingo.Maps.Caches", Caches);
-													};
+													setCache(Caches, "XX", body);
 													if (!Caches.CN) Caches.CN = Configs.CN;
 													// resource
 													body.resource.push({ "resourceType": 7, "filename": "POITypeMapping-CN-1.json", "checksum": { "0": 242, "1": 10, "2": 179, "3": 107, "4": 214, "5": 41, "6": 50, "7": 223, "8": 62, "9": 204, "10": 134, "11": 7, "12": 103, "13": 206, "14": 96, "15": 242, "16": 24, "17": 42, "18": 79, "19": 223 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 });
@@ -1441,6 +1427,19 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => $.done($response))
 
 /***************** Function *****************/
+function setCache(cache, path, body) {
+	$.log(`☑️ Set Cache, path: ${path}`, "");
+	if (Date.now() - _.get(cache, `${path}.timeStamp`, 0) > 86400000) {
+		_.set(cache, `${path}.tileSet`, body.tileSet);
+		_.set(cache, `${path}.attribution`, body.attribution);
+		_.set(cache, `${path}.urlInfoSet`, body.urlInfoSet);
+		_.set(cache, `${path}.muninBucket`, body.muninBucket);
+		_.set(cache, `${path}.timeStamp`, Date.now());
+		$Storage.setItem("@iRingo.Maps.Caches", caches);
+		$.log(`✅ Set Cache`, "");
+	} else $.log(`❎ Set Cache`, "");
+};
+
 function SetTileGroup(body = {}) {
 	$.log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {
