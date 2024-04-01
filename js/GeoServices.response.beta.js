@@ -17029,7 +17029,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(1) response.beta");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.4.5(2) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18411,7 +18411,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											}											body.tileSet = tileSets(body.tileSet, Settings, Caches);
 											body.attribution = attributions(body.attribution, URL, Caches);
 											//body.dataSet = dataSets(body.dataSet, Settings, Caches);
-											body.urlInfoSet = urlInfoSets(body.urlInfoSet, Settings, Caches);
+											body.urlInfoSet = urlInfoSets(body.urlInfoSet, URL, Settings, Caches);
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
 											// releaseInfo
 											//body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
@@ -18631,11 +18631,16 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 	$.log(`✅ Set TileSets`, "");
 	return tileSets;
 }
-function attributions(attributions = [], parsedURL = {}, caches = {}) {
+function attributions(attributions = [], url = {}, caches = {}) {
 	$.log(`☑️ Set Attributions`, "");
-	switch (parsedURL.query.country_code) {
+	switch (url.query.country_code) {
 		case "CN":
 			caches?.XX?.attribution?.forEach(attribution => {
+				if (!attributions.some(i => i.name === attribution.name)) attributions.unshift(attribution);
+			});
+			break;
+		case "KR":
+			caches?.KR?.attribution?.forEach(attribution => {
 				if (!attributions.some(i => i.name === attribution.name)) attributions.unshift(attribution);
 			});
 			break;
@@ -18713,20 +18718,20 @@ function attributions(attributions = [], parsedURL = {}, caches = {}) {
 	$.log(`✅ Set Attributions`, "");
 	return attributions;
 }
-function urlInfoSets(urlInfoSets = [], settings = {}, caches = {}) {
+function urlInfoSets(urlInfoSets = [], url = {}, settings = {}, caches = {}) {
 	$.log(`☑️ Set UrlInfoSets`, "");
 	urlInfoSets = urlInfoSets.map((urlInfoSet, index) => {
-		switch (settings.GeoManifest.Dynamic.Config.CountryCode.default) {
-			case "AUTO":
-				// Alternate Resources
-				urlInfoSet.alternateResourcesURL = caches.CN.urlInfoSet[0].alternateResourcesURL;
-				break;
+		switch (url.query?.country_code) {
 			case "CN":
 				urlInfoSet = { ...caches.XX.urlInfoSet[0], ...caches.CN.urlInfoSet[0] };
+				break;
+			case "KR":
+				urlInfoSet = { ...caches.KR.urlInfoSet[0], ...caches.CN.urlInfoSet[0] };
 				break;
 			default:
 				urlInfoSet = { ...caches.CN.urlInfoSet[0], ...caches.XX.urlInfoSet[0] };
 				urlInfoSet.alternateResourcesURL = caches.CN.urlInfoSet[0].alternateResourcesURL;
+				delete urlInfoSet.polyLocationShiftURL;
 				break;
 		}		switch (settings.Config?.Announcements?.Environment?.default) {
 			case "AUTO":
