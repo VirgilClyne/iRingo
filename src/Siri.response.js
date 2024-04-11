@@ -1,20 +1,19 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URI/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.0.4(2) response");
+const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(1) response");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -58,7 +57,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "api.smoot.apple.cn":
 							// 路径判断
 							switch (PATH) {
-								case "bag": // 配置
+								case "/bag": // 配置
 									body.enabled = true;
 									body.feedback_enabled = true;
 									if (body?.enabled_domains) {
@@ -120,13 +119,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						default: // 其他主机
 							// 路径判断
 							switch (PATH) {
-								case "warm":
-								case "render":
-								case "flight": // 航班
+								case "/warm":
+								case "/render":
+								case "/flight": // 航班
 									break;
-								case "search": // 搜索
+								case "/search": // 搜索
 									break;
-								case "card": // 卡片
+								case "/card": // 卡片
 									break;
 							};
 							break;
