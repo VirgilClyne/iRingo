@@ -294,7 +294,7 @@ class $Storage {
 
 class ENV {
 	static name = "ENV"
-	static version = '1.7.4'
+	static version = '1.8.3'
 	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) }
 
 	constructor(name, opts) {
@@ -308,6 +308,37 @@ class ENV {
 		this.startTime = new Date().getTime();
 		Object.assign(this, opts);
 		this.log(`\n🚩 开始!\n${name}\n`);
+	}
+	
+	environment() {
+		switch (this.platform()) {
+			case 'Surge':
+				$environment.app = 'Surge';
+				return $environment
+			case 'Stash':
+				$environment.app = 'Stash';
+				return $environment
+			case 'Egern':
+				$environment.app = 'Egern';
+				return $environment
+			case 'Loon':
+				let environment = $loon.split(' ');
+				return {
+					"device": environment[0],
+					"ios": environment[1],
+					"loon-version": environment[2],
+					"app": "Loon"
+				};
+			case 'Quantumult X':
+				return {
+					"app": "Quantumult X"
+				};
+			case 'Node.js':
+				process.env.app = 'Node.js';
+				return process.env
+			default:
+				return {}
+		}
 	}
 
 	platform() {
@@ -390,10 +421,10 @@ class ENV {
 		// 初始化参数
 		switch (request.constructor) {
 			case Object:
-				request = { ...request, ...option };
+				request = { ...option, ...request };
 				break;
 			case String:
-				request = { "url": request, ...option };
+				request = { ...option, "url": request };
 				break;
 		}		// 自动判断请求方法
 		if (!request.method) {
@@ -415,9 +446,13 @@ class ENV {
 			case 'Shadowrocket':
 			default:
 				// 转换请求参数
-				if (request.policy) {
+				if (request.timeout) {
+					request.timeout = parseInt(request.timeout, 10);
+					if (this.isSurge()) ; else request.timeout = request.timeout * 1000;
+				}				if (request.policy) {
 					if (this.isLoon()) request.node = request.policy;
 					if (this.isStash()) Lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
+					if (this.isShadowrocket()) Lodash.set(request, "headers.X-Surge-Proxy", request.policy);
 				}				if (typeof request.redirection === "boolean") request["auto-redirect"] = request.redirection;
 				// 转换请求体
 				if (request.bodyBytes && !request.body) {
