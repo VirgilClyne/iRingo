@@ -745,37 +745,6 @@ class ENV {
 	}
 }
 
-class URI {
-	static name = "URI";
-	static version = "1.2.7";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static #json = { scheme: "", host: "", path: "", query: {} };
-
-	static parse(url) {
-		const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/;
-		let json = url.match(URLRegex)?.groups ?? null;
-		if (json?.path) json.paths = json.path.split("/"); else json.path = "";
-		//if (json?.paths?.at(-1)?.includes(".")) json.format = json.paths.at(-1).split(".").at(-1);
-		if (json?.paths) {
-			const fileName = json.paths[json.paths.length - 1];
-			if (fileName?.includes(".")) {
-				const list = fileName.split(".");
-				json.format = list[list.length - 1];
-			}
-		}
-		if (json?.query) json.query = Object.fromEntries(json.query.split("&").map((param) => param.split("=")));
-		return json
-	};
-
-	static stringify(json = this.#json) {
-		let url = "";
-		if (json?.scheme && json?.host) url += json.scheme + "://" + json.host;
-		if (json?.path) url += (json?.host) ? "/" + json.path : json.path;
-		if (json?.query) url += "?" + Object.entries(json.query).map(param => param.join("=")).join("&");
-		return url
-	};
-}
-
 var Settings$7 = {
 	Switch: true
 };
@@ -13693,18 +13662,18 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(3) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(5) request.beta");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path; URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -13714,10 +13683,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
-			const LOCALE = URL.query?.locale;
+			const LOCALE = url.searchParams.get("locale");
 			$.log(`🚧 LOCALE: ${LOCALE}`, "");
 			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode : Settings.CountryCode;
-			Lodash.set(URL, "query.cc", Settings.CountryCode);
+			url.searchParams.set("cc", Settings.CountryCode);
 			// 方法判断
 			switch (METHOD) {
 				case "POST":
@@ -13728,7 +13697,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
-				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
 					// 主机判断
 					switch (HOST) {
@@ -13740,14 +13708,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "cdn.smoot.apple.com":
 							break;
 						default: // 其他主机
+							let q = url.searchParams.get("q");
 							// 路径判断
 							switch (PATH) {
-								case "warm":
-								case "render":
-								case "flight": // 航班
+								case "/warm":
+								case "/render":
+								case "/flight": // 航班
 									break;
-								case "search": // 搜索
-									switch (URL.query?.qtype) {
+								case "/search": // 搜索
+									switch (url.searchParams.get("qtype")) {
 										case "zkw": // 处理"新闻"小组件
 											switch (Settings.CountryCode) {
 												case "CN":
@@ -13755,7 +13724,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case "MO":
 												case "TW":
 												case "SG":
-													Lodash.set(URL, "query.locale", `${Settings.CountryCode}_SG`);
+													url.searchParams.set("locale", `${Settings.CountryCode}_SG`);
 													break;
 												case "US":
 												case "CA":
@@ -13764,34 +13733,34 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													// 不做修正
 													break;
 												default:
-													Lodash.set(URL, "query.locale", `${Settings.CountryCode}_US`);
+													url.searchParams.set("locale", `${Settings.CountryCode}_US`);
 													break;
 											}											break;
 										default: // 其他搜索
-											if (URL.query?.q?.startsWith?.("%E5%A4%A9%E6%B0%94%20")) { // 处理"天气"搜索，搜索词"天气 "开头
+											if (q?.startsWith?.("%E5%A4%A9%E6%B0%94%20")) { // 处理"天气"搜索，搜索词"天气 "开头
 												console.log("'天气 '开头");
-												URL.query.q = URL.query.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
-												if (/^weather%20.*%E5%B8%82$/.test(URL.query.q)) URL.query.q = URL.query.q.replace(/$/, "%E5%B8%82");
-											} else if (URL.query?.q?.endsWith?.("%20%E5%A4%A9%E6%B0%94")) {// 处理"天气"搜索，搜索词" 天气"结尾
+												url.searchParams.set("q", q.replace(/%E5%A4%A9%E6%B0%94/, "weather")); // "天气"替换为"weather"
+												if (/^weather%20.*%E5%B8%82$/.test(q)) url.searchParams.set("q", q.replace(/$/, "%E5%B8%82"));
+											} else if (q?.endsWith?.("%20%E5%A4%A9%E6%B0%94")) {// 处理"天气"搜索，搜索词" 天气"结尾
 												console.log("' 天气'结尾");
-												URL.query.q = URL.query.q.replace(/%E5%A4%A9%E6%B0%94/, "weather"); // "天气"替换为"weather"
-												if (/.*%E5%B8%82%20weather$/.test(URL.query.q)) URL.query.q = URL.query.q.replace(/%20weather$/, "%E5%B8%82%20weather");
+												url.searchParams.set("q", q.replace(/%E5%A4%A9%E6%B0%94/, "weather")); // "天气"替换为"weather"
+												if (/.*%E5%B8%82%20weather$/.test(q)) url.searchParams.set("q", q.replace(/%20weather$/, "%E5%B8%82%20weather"));
 											}											break;
 									}									break;
 								case "card": // 卡片
-									Lodash.set(URL, "query.card_locale", LOCALE);
-									switch (URL.query?.include) {
+									url.searchParams.set("card_locale", LOCALE);
+									switch (url.searchParams.get("include")) {
 										case "tv":
 										case "movies":
-											switch (URL.query?.storefront?.match(/[\d]{6}/g)) { //StoreFront ID, from App Store Region
+											switch (url.searchParams.get("storefront")?.match(/[\d]{6}/g)) { //StoreFront ID, from App Store Region
 												case "143463": // CN
-													URL.query.q = URL.query.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK");
+													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK"));
 													break;
 												case "143470": // TW
-													URL.query.q = URL.query.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW");
+													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW"));
 													break;
 												case "143464": // SG
-													URL.query.q = URL.query.q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG");
+													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG"));
 													break;
 											}											break;
 									}									break;
@@ -13800,8 +13769,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "CONNECT":
 				case "TRACE":
 					break;
-			}			if ($request.headers?.Host) $request.headers.Host = URL.host;
-			$request.url = URI.stringify(URL);
+			}			$request.url = url.toString();
 			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
