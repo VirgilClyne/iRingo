@@ -5,10 +5,15 @@
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
-#!system=ios
+#!system=mac
 #!category= iRingo
-#!arguments=CountryCode: SG
-#!arguments-desc=CountryCode: 国家或地区代码
+#!arguments=CountryCode: SG,Proxy: 🌑Proxy
+#!arguments-desc=CountryCode: 国家或地区代码\nProxy: macOS‘查询’代理策略
+
+
+[Rule]
+# > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Look_Up.Wikipedia.list,{{{Proxy}}}
 
 [Script]
 # Bag (iOS/macOS)
