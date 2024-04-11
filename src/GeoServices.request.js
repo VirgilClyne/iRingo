@@ -1,23 +1,23 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URL/URI.mjs";
+import URL from "./URL/URL.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.0.1(7) request");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.1.0(1) request");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -90,7 +90,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
-				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
 					delete $request?.headers?.["If-None-Match"];
 					delete $request?.headers?.["if-none-match"];
@@ -99,13 +98,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "configuration.ls.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "config/defaults":
+								case "/config/defaults":
 									break;
 							};
 							break;
 						case "gspe1-ssl.ls.apple.com":
 							switch (PATH) {
-								case "pep/gcc":
+								case "/pep/gcc":
 									/* // 不使用 echo response
 									$response = {
 										status: 200,
@@ -124,9 +123,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							break;
 						case "gspe35-ssl.ls.apple.com":
 						case "gspe35-ssl.ls.apple.cn":
+							const OS = url.searchParams.get("os");
 							switch (PATH) {
-								case "config/announcements":
-									switch (URL.query?.os) {
+								case "/config/announcements":
+									switch (OS) {
 										case "ios":
 										case "ipados":
 										case "macos":
@@ -136,10 +136,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 												case "CN":
 												default:
-													URL.query.environment = "prod-cn";
+													url.searchParams.set("environment", "prod-cn");
 													break;
 												case "XX":
-													URL.query.environment = "prod";
+													url.searchParams.set("environment", "prod");
 													break;
 											};
 											break;
@@ -149,17 +149,17 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 												case "XX":
 												default:
-													URL.query.environment = "prod";
+													url.searchParams.set("environment", "prod");
 													break;
 												case "CN":
-													URL.query.environment = "prod-cn";
+													url.searchParams.set("environment", "prod-cn");
 													break;
 											};
 											break;
 									};
 									break;
-								case "geo_manifest/dynamic/config":
-									switch (URL.query?.os) {
+								case "/geo_manifest/dynamic/config":
+									switch (OS) {
 										case "ios":
 										case "ipados":
 										case "macos":
@@ -168,16 +168,16 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															URL.query.country_code = Caches?.pep?.gcc ?? "US";
+															url.searchParams.set("country_code", Caches?.pep?.gcc ?? "US");
 															break;
 														case "CN":
 														case undefined:
-															URL.query.country_code = "CN";
+															url.searchParams.set("country_code", "CN");
 															break;
 													};
 													break;
 												default:
-													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default ?? "CN";
+													url.searchParams.set("country_code", Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.default ?? "CN");
 													break;
 											};
 											break;
@@ -186,16 +186,16 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case "AUTO":
 													switch (Caches?.pep?.gcc) {
 														default:
-															URL.query.country_code = Caches?.pep?.gcc ?? "US";
+															url.searchParams.set("country_code", Caches?.pep?.gcc ?? "US");
 															break;
 														case "CN":
 														case undefined:
-															URL.query.country_code = "CN";
+															url.searchParams.set("country_code", "CN");
 															break;
 													};
 													break;
 												default:
-													URL.query.country_code = Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS ?? "US";
+													url.searchParams.set("country_code", Settings?.GeoManifest?.Dynamic?.Config?.CountryCode?.watchOS ?? "US");
 													break;
 											};
 											break;
@@ -209,8 +209,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "TRACE":
 					break;
 			};
-			//if ($request.headers?.Host) $request.headers.Host = URL.host;
-			$request.url = URI.stringify(URL);
+			$request.url = url.toString();
 			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
