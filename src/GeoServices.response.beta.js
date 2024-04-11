@@ -1,7 +1,7 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URI/URI.mjs";
+import URI from "./URL/URI.mjs";
 import XML from "./XML/XML.mjs";
 
 import Database from "./database/index.mjs";
