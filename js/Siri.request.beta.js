@@ -13662,7 +13662,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(5) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(6) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -13685,7 +13685,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 		default:
 			const LOCALE = url.searchParams.get("locale");
 			$.log(`🚧 LOCALE: ${LOCALE}`, "");
-			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode : Settings.CountryCode;
+			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] : Settings.CountryCode;
 			url.searchParams.set("cc", Settings.CountryCode);
 			// 方法判断
 			switch (METHOD) {

@@ -5,7 +5,7 @@ import ENV from "./ENV/ENV.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(4) request");
+const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(6) request");
 
 // 构造回复数据
 let $response = undefined;
@@ -28,7 +28,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 		default:
 			const LOCALE = url.searchParams.get("locale");
 			$.log(`🚧 LOCALE: ${LOCALE}`, "");
-			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] ?? Settings.CountryCode : Settings.CountryCode;
+			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] : Settings.CountryCode;
 			url.searchParams.set("cc", Settings.CountryCode);
 			// 创建空数据
 			let body = {};
