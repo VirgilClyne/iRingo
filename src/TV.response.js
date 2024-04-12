@@ -1,20 +1,20 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URL/URI.mjs";
+import URL from "./URL/URL.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📺 TV v3.2.4(3) response");
+const $ = new ENV(" iRingo: 📺 TV v3.3.0(4) response");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -55,12 +55,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					// 主机判断
 					switch (HOST) {
 						case "uts-api.itunes.apple.com":
+							const Version = parseInt(url.searchParams.get("v"), 10), Platform = url.searchParams.get("pfm"), Caller = url.searchParams.get("caller");
+							const StoreFront = url.searchParams.get("sf");
+							const Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
 							// 路径判断
 							switch (PATH) {
-								case "uts/v3/configurations":
-									const Version = parseInt(URL.query?.v, 10), Platform = URL.query?.pfm, Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
-									if (URL.query.caller !== "wta") { // 不修改caller=wta的configurations数据
-										$.log(`⚠ Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
+								case "/uts/v3/configurations":
+									if (Caller !== "wta") { // 不修改caller=wta的configurations数据
 										if (body?.data?.applicationProps) {
 											let newTabs = [];
 											Settings.Tabs.forEach((type) => {
@@ -244,9 +245,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "umc-tempo-api.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v3/register":
-								case "v3/channels/scoreboard":
-								case "v3/channels/scoreboard/":
+								case "/v3/register":
+								case "/v3/channels/scoreboard":
+								case "/v3/channels/scoreboard/":
 									$.log(JSON.stringify(body));
 									break;
 								default:
@@ -287,27 +288,27 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 	function setUrl(asset, HLSUrl, ServerUrl) {
 		$.log(`☑️ Set Url`, "");
 		if (asset?.hlsUrl) {
-			let hlsUrl = URI.parse(asset.hlsUrl);
-			switch (hlsUrl.path) {
+			let hlsUrl = new URL(asset.hlsUrl);
+			switch (hlsUrl.pathname) {
 				case "WebObjects/MZPlay.woa/hls/playlist.m3u8":
 					break;
 				case "WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8":
-					hlsUrl.host = HLSUrl || "play-edge.itunes.apple.com";
+					hlsUrl.hostname = HLSUrl || "play-edge.itunes.apple.com";
 					break;
 				case "WebObjects/MZPlay.woa/hls/workout/playlist.m3u8":
 					break;
 			};
-			asset.hlsUrl = URI.stringify(hlsUrl);
+			asset.hlsUrl = hlsUrl.toString();
 		};
 		if (asset?.fpsKeyServerUrl) {
-			let fpsKeyServerUrl = URI.parse(asset.fpsKeyServerUrl);
-			fpsKeyServerUrl.host = ServerUrl || "play.itunes.apple.com";
-			asset.fpsKeyServerUrl = URI.stringify(fpsKeyServerUrl);
+			let fpsKeyServerUrl = new URL(asset.fpsKeyServerUrl);
+			fpsKeyServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			asset.fpsKeyServerUrl = fpsKeyServerUrl.toString();
 		};
 		if (asset?.fpsNonceServerUrl) {
-			let fpsNonceServerUrl = URI.parse(asset.fpsNonceServerUrl);
-			fpsNonceServerUrl.host = ServerUrl || "play.itunes.apple.com";
-			asset.fpsNonceServerUrl = URI.stringify(fpsNonceServerUrl);
+			let fpsNonceServerUrl = new URL(asset.fpsNonceServerUrl);
+			fpsNonceServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
 		};
 		$.log(`✅ Set Url`, "");
 		return asset;
