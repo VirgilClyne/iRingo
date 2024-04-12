@@ -745,37 +745,6 @@ class ENV {
 	}
 }
 
-class URI {
-	static name = "URI";
-	static version = "1.2.7";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static #json = { scheme: "", host: "", path: "", query: {} };
-
-	static parse(url) {
-		const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/;
-		let json = url.match(URLRegex)?.groups ?? null;
-		if (json?.path) json.paths = json.path.split("/"); else json.path = "";
-		//if (json?.paths?.at(-1)?.includes(".")) json.format = json.paths.at(-1).split(".").at(-1);
-		if (json?.paths) {
-			const fileName = json.paths[json.paths.length - 1];
-			if (fileName?.includes(".")) {
-				const list = fileName.split(".");
-				json.format = list[list.length - 1];
-			}
-		}
-		if (json?.query) json.query = Object.fromEntries(json.query.split("&").map((param) => param.split("=")));
-		return json
-	};
-
-	static stringify(json = this.#json) {
-		let url = "";
-		if (json?.scheme && json?.host) url += json.scheme + "://" + json.host;
-		if (json?.path) url += (json?.host) ? "/" + json.path : json.path;
-		if (json?.query) url += "?" + Object.entries(json.query).map(param => param.join("=")).join("&");
-		return url
-	};
-}
-
 var Settings$7 = {
 	Switch: true
 };
@@ -13693,18 +13662,18 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 📰 News v3.0.4(2) request.beta");
+const $ = new ENV(" iRingo: 📰 News v3.1.0(1) request.beta");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path; URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -13764,7 +13733,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "news-todayconfig-edge.apple.com":
 									// 路径判断
 									switch (PATH) {
-										case "v1/configs":
+										case "/v1/configs":
 											if (Settings.CountryCode !== "AUTO") body.storefrontId = Configs.Storefront.get(Settings.CountryCode) ?? "143441";
 											if (body?.deviceInfo?.preferredLanguages) {
 												body.deviceInfo.preferredLanguages.unshift("zh-SG", "zh-Hans-US", "zh-Hant-US");
@@ -13775,7 +13744,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "news-events.apple.com":
 								case "news-sports-events.apple.com":
 									switch (PATH) {
-										case "analyticseventsv2/async":
+										case "/analyticseventsv2/async":
 											if (body?.data?.session?.mobileData) {
 												body.data.session.mobileData.countryCode = "310";
 												body.data.session.mobileData.carrier = "Google Fi";
@@ -13795,7 +13764,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
-				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
 					// 主机判断
 					switch (HOST) {
@@ -13807,28 +13775,31 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							break;
 						case "news-client-search.apple.com":
 							switch (PATH) {
-								case "v1/search":
-									if (URL.query?.parsecParameters) {
-										//$.log(`🚧 调试信息`, `URL.query.parsecParameters: ${URL.query.parsecParameters}`, "");
-										URL.query.parsecParameters = decodeURIComponent(URL.query.parsecParameters);
-										$.log(`🚧 调试信息`, `decodeURIComponent(URL.query.parsecParameters): ${URL.query.parsecParameters}`, "");
-										URL.query.parsecParameters = JSON.parse(URL.query.parsecParameters);
-										//$.log(`🚧 调试信息`, `JSON.parse(URL.query.parsecParameters): ${URL.query.parsecParameters}`, "");
-										if (URL.query.parsecParameters.storeFront) if (Settings.CountryCode !== "AUTO") URL.query.parsecParameters.storeFront = URL.query.parsecParameters.storeFront.replace(/[\d]{6}/, Configs.Storefront.get(Settings.CountryCode) ?? "143441");
-										URL.query.parsecParameters = JSON.stringify(URL.query.parsecParameters);
-										//$.log(`🚧 调试信息`, `JSON.stringify(URL.query.parsecParameters): ${URL.query.parsecParameters}`, "");
-										URL.query.parsecParameters = encodeURIComponent(URL.query.parsecParameters);
-										//$.log(`🚧 调试信息`, `encodeURIComponent(URL.query.parsecParameters): ${URL.query.parsecParameters}`, "");
-									}									if (URL.query?.storefrontID) if (Settings.CountryCode !== "AUTO") URL.query.storefrontID = Configs.Storefront.get(Settings.CountryCode) ?? "143441";
-									if (URL.query?.newsPlusUser) URL.query.newsPlusUser = Settings?.newsPlusUser ?? true;
+								case "/v1/search":
+									const ParsecParameters = url.searchParams.get("parsecParameters"), StorefrontID = url.searchParams.get("storefrontID"), NewsPlusUser = url.searchParams.get("newsPlusUser");
+									$.log(`🚧 调试信息, ParsecParameters: ${ParsecParameters}, StorefrontID: ${StorefrontID}, NewsPlusUser: ${NewsPlusUser}`, "");
+									if (ParsecParameters) {
+										let parsecParameters = decodeURIComponent(ParsecParameters);
+										$.log(`🚧 调试信息`, `decodeURIComponent(ParsecParameters): ${parsecParameters}`, "");
+										parsecParameters = JSON.parse(parsecParameters);
+										//$.log(`🚧 调试信息`, `JSON.parse(parsecParameters): ${parsecParameters}`, "");
+										if (parsecParameters.storeFront) {
+											if (Settings.CountryCode !== "AUTO") parsecParameters.storeFront = parsecParameters.storeFront.replace(/[\d]{6}/, Configs.Storefront.get(Settings.CountryCode) || StorefrontID);
+										}										parsecParameters = JSON.stringify(parsecParameters);
+										//$.log(`🚧 调试信息`, `JSON.stringify(parsecParameters): ${parsecParameters}`, "");
+										parsecParameters = encodeURIComponent(parsecParameters);
+										//$.log(`🚧 调试信息`, `encodeURIComponent(parsecParameters): ${parsecParameters}`, "");
+										url.searchParams.set("parsecParameters", parsecParameters);
+									}									if (StorefrontID) {
+										if (Settings.CountryCode !== "AUTO") url.searchParams.set("storefrontID", Configs.Storefront.get(Settings.CountryCode) || StorefrontID);
+									}									if (NewsPlusUser) url.searchParams.set("newsPlusUser", Settings.NewsPlusUser || NewsPlusUser);
 									break;
 							}							break;
 					}					break;
 				case "CONNECT":
 				case "TRACE":
 					break;
-			}			if ($request.headers?.Host) $request.headers.Host = URL.host;
-			$request.url = URI.stringify(URL);
+			}			$request.url = url.toString();
 			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
