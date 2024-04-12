@@ -13489,7 +13489,7 @@ var Maps$1 = /*#__PURE__*/Object.freeze({
 var Settings$4 = {
 	Switch: true,
 	CountryCode: "US",
-	newsPlusUser: true
+	NewsPlusUser: true
 };
 var News = {
 	Settings: Settings$4
