@@ -745,35 +745,61 @@ class ENV {
 	}
 }
 
-class URI {
-	static name = "URI";
-	static version = "1.2.7";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static #json = { scheme: "", host: "", path: "", query: {} };
-
-	static parse(url) {
-		const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/;
-		let json = url.match(URLRegex)?.groups ?? null;
-		if (json?.path) json.paths = json.path.split("/"); else json.path = "";
-		//if (json?.paths?.at(-1)?.includes(".")) json.format = json.paths.at(-1).split(".").at(-1);
-		if (json?.paths) {
-			const fileName = json.paths[json.paths.length - 1];
-			if (fileName?.includes(".")) {
-				const list = fileName.split(".");
-				json.format = list[list.length - 1];
-			}
-		}
-		if (json?.query) json.query = Object.fromEntries(json.query.split("&").map((param) => param.split("=")));
-		return json
+class URL {
+	constructor(url, base = undefined) {
+		const name = "URL";
+		const version = "2.0.0";
+		console.log(`\n🟧 ${name} v${version}\n`);
+		url = this.#parse(url, base);
+		this.harf = this.toString();
+		return this;
 	};
 
-	static stringify(json = this.#json) {
-		let url = "";
-		if (json?.scheme && json?.host) url += json.scheme + "://" + json.host;
-		if (json?.path) url += (json?.host) ? "/" + json.path : json.path;
-		if (json?.query) url += "?" + Object.entries(json.query).map(param => param.join("=")).join("&");
-		return url
+	#parse(url, base = undefined) {
+		const URLRegex = /(?:(?<protocol>\w+:)\/\/(?:(?<username>[^\s:"]+)(?::(?<password>[^\s:"]+))?@)?(?<host>[^\s@/]+))?(?<pathname>\/?[^\s@?]+)?(?<search>\?[^\s?]+)?/;
+		const PortRegex = /(?<hostname>.+):(?<port>\d+)$/;
+		url = url.match(URLRegex)?.groups || {};
+		if (base) {
+			base = base?.match(URLRegex)?.groups || {};
+			if (!base.protocol || !base.hostname) throw new Error(`🚨 ${name}, ${base} is not a valid URL`);
+		}		if (url.protocol || base?.protocol) this.protocol = url.protocol || base.protocol;
+		if (url.username || base?.username) this.username = url.username || base.username;
+		if (url.password || base?.password) this.password = url.password || base.password;
+		if (url.host || base?.host) {
+			this.host = url.host || base.host;
+			this.hostname = this.host.match(PortRegex)?.groups.hostname ?? this.host;
+			this.port = this.host.match(PortRegex)?.groups.port ?? "";
+		}		if (url.pathname || base?.pathname) {
+			this.pathname = url.pathname || base?.pathname;
+			if (!this.pathname.startsWith("/")) this.pathname = "/" + this.pathname;
+			this.paths = this.pathname.split("/").filter(Boolean);
+			if (this.paths) {
+				const fileName = this.paths[this.paths.length - 1];
+				if (fileName?.includes(".")) {
+					const list = fileName.split(".");
+					this.format = list[list.length - 1];
+				}
+			}		} else this.pathname = "";
+		if (url.search || base?.search) {
+			this.search = url.search || base.search;
+			if (this.search) {
+				const array = this.search.slice(1).split("&").map((param) => param.split("="));
+				this.searchParams = new Map(array);
+			}		}		return this;
 	};
+
+	toString() {
+		let string = "";
+		if (this.protocol) string += this.protocol + "//";
+		if (this.username) string += this.username + (this.password ? ":" + this.password : "") + "@";
+		if (this.hostname) string += this.hostname;
+		if (this.port) string += ":" + this.port;
+		if (this.pathname) string += this.pathname;
+		if (this.searchParams) string += "?" + Array.from(this.searchParams).map(param => param.join("=")).join("&");
+		return string;
+	};
+
+	toJSON() { return JSON.stringify({ ...this }) };
 }
 
 var Settings$7 = {
@@ -13693,15 +13719,15 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 📺 TV v3.2.4(3) response.beta");
+const $ = new ENV(" iRingo: 📺 TV v3.3.0(4) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -13751,12 +13777,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					// 主机判断
 					switch (HOST) {
 						case "uts-api.itunes.apple.com":
+							const Version = parseInt(url.searchParams.get("v"), 10), Platform = url.searchParams.get("pfm"), Caller = url.searchParams.get("caller");
+							$.log(`🚧 调试信息, Version = ${Version}, Platform = ${Platform}, Caller = ${Caller}`, "");
+							const StoreFront = url.searchParams.get("sf");
+							const Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
+							$.log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "");
 							// 路径判断
 							switch (PATH) {
-								case "uts/v3/configurations":
-									const Version = parseInt(URL.query?.v, 10), Platform = URL.query?.pfm, Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
-									if (URL.query.caller !== "wta") { // 不修改caller=wta的configurations数据
-										$.log(`⚠ Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
+								case "/uts/v3/configurations":
+									if (Caller !== "wta") { // 不修改caller=wta的configurations数据
 										if (body?.data?.applicationProps) {
 											//body.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
 											//body.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
@@ -13933,7 +13962,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											*/
 											//body.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
 											//body.data.applicationProps.tvAppEnabledInStorefront = true;
-											//body.data.applicationProps.enabledClientFeatures = (URL.query?.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
+											//body.data.applicationProps.enabledClientFeatures = (Version > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
 											//	: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
 											//body.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 											//body.data.applicationProps.storefront.storefrontId = 143470;
@@ -14014,20 +14043,20 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															break;
 													}													break;
 											}											break;
-									}									//if (PATH.includes("uts/v3/canvases/Channels/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v2/brands/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/movies/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/shows/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/shelves/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/playables/")) $response.body = await getData("View", Settings, Configs);
+									}									//if (PATH.includes("/uts/v3/canvases/Channels/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v2/brands/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/movies/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/shows/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/shelves/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/playables/")) $response.body = await getData("View", Settings, Configs);
 									break;
 							}							break;
 						case "umc-tempo-api.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v3/register":
-								case "v3/channels/scoreboard":
-								case "v3/channels/scoreboard/":
+								case "/v3/register":
+								case "/v3/channels/scoreboard":
+								case "/v3/channels/scoreboard/":
 									$.log(JSON.stringify(body));
 									//body.channels.storeFront = "UNITED_STATES";
 									//body.channels.storeFront = "TAIWAN";
@@ -14064,23 +14093,23 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 	function setUrl(asset, HLSUrl, ServerUrl) {
 		$.log(`☑️ Set Url`, "");
 		if (asset?.hlsUrl) {
-			let hlsUrl = URI.parse(asset.hlsUrl);
-			switch (hlsUrl.path) {
+			let hlsUrl = new URL(asset.hlsUrl);
+			switch (hlsUrl.pathname) {
 				case "WebObjects/MZPlay.woa/hls/playlist.m3u8":
-					//hlsUrl.host = HLSUrl || "play.itunes.apple.com";
+					//hlsUrl.hostname = HLSUrl || "play.itunes.apple.com";
 					break;
 				case "WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8":
-					hlsUrl.host = HLSUrl || "play-edge.itunes.apple.com";
+					hlsUrl.hostname = HLSUrl || "play-edge.itunes.apple.com";
 					break;
-			}			asset.hlsUrl = URI.stringify(hlsUrl);
+			}			asset.hlsUrl = hlsUrl.toString();
 		}		if (asset?.fpsKeyServerUrl) {
-			let fpsKeyServerUrl = URI.parse(asset.fpsKeyServerUrl);
-			fpsKeyServerUrl.host = ServerUrl || "play.itunes.apple.com";
-			asset.fpsKeyServerUrl = URI.stringify(fpsKeyServerUrl);
+			let fpsKeyServerUrl = new URL(asset.fpsKeyServerUrl);
+			fpsKeyServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			asset.fpsKeyServerUrl = fpsKeyServerUrl.toString();
 		}		if (asset?.fpsNonceServerUrl) {
-			let fpsNonceServerUrl = URI.parse(asset.fpsNonceServerUrl);
-			fpsNonceServerUrl.host = ServerUrl || "play.itunes.apple.com";
-			asset.fpsNonceServerUrl = URI.stringify(fpsNonceServerUrl);
+			let fpsNonceServerUrl = new URL(asset.fpsNonceServerUrl);
+			fpsNonceServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
 		}		$.log(`✅ Set Url`, "");
 		return asset;
 	}}

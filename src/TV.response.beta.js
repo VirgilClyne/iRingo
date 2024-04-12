@@ -1,20 +1,20 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URL/URI.mjs";
+import URL from "./URL/URL.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📺 TV v3.2.4(3) response.beta");
+const $ = new ENV(" iRingo: 📺 TV v3.3.0(4) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -64,12 +64,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					// 主机判断
 					switch (HOST) {
 						case "uts-api.itunes.apple.com":
+							const Version = parseInt(url.searchParams.get("v"), 10), Platform = url.searchParams.get("pfm"), Caller = url.searchParams.get("caller");
+							$.log(`🚧 调试信息, Version = ${Version}, Platform = ${Platform}, Caller = ${Caller}`, "")
+							const StoreFront = url.searchParams.get("sf");
+							const Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
+							$.log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
 							// 路径判断
 							switch (PATH) {
-								case "uts/v3/configurations":
-									const Version = parseInt(URL.query?.v, 10), Platform = URL.query?.pfm, Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
-									if (URL.query.caller !== "wta") { // 不修改caller=wta的configurations数据
-										$.log(`⚠ Locale: ${Locale}`, `Platform: ${Platform}`, `Version: ${Version}`, "");
+								case "/uts/v3/configurations":
+									if (Caller !== "wta") { // 不修改caller=wta的configurations数据
 										if (body?.data?.applicationProps) {
 											//body.data.applicationProps.requiredParamsMap.WithoutUtsk.locale = "zh_Hans";
 											//body.data.applicationProps.requiredParamsMap.Default.locale = "zh_Hans";
@@ -261,7 +264,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											*/
 											//body.data.applicationProps.tabs = createTabsGroup("Tabs", caller, platform, locale, region);
 											//body.data.applicationProps.tvAppEnabledInStorefront = true;
-											//body.data.applicationProps.enabledClientFeatures = (URL.query?.v > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
+											//body.data.applicationProps.enabledClientFeatures = (Version > 53) ? [{ "domain": "tvapp", "name": "snwpcr" }, { "domain": "tvapp", "name": "store_tab" }]
 											//	: [{ "domain": "tvapp", "name": "expanse" }, { "domain": "tvapp", "name": "syndication" }, { "domain": "tvapp", "name": "snwpcr" }];
 											//body.data.applicationProps.storefront.localesSupported = ["zh_Hans", "zh_Hant", "yue-Hant", "en_US", "en_GB"];
 											//body.data.applicationProps.storefront.storefrontId = 143470;
@@ -352,21 +355,21 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											};
 											break;
 									};
-									//if (PATH.includes("uts/v3/canvases/Channels/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v2/brands/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/movies/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/shows/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/shelves/")) $response.body = await getData("View", Settings, Configs);
-									//else if (PATH.includes("uts/v3/playables/")) $response.body = await getData("View", Settings, Configs);
+									//if (PATH.includes("/uts/v3/canvases/Channels/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v2/brands/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/movies/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/shows/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/shelves/")) $response.body = await getData("View", Settings, Configs);
+									//else if (PATH.includes("/uts/v3/playables/")) $response.body = await getData("View", Settings, Configs);
 									break;
 							};
 							break;
 						case "umc-tempo-api.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v3/register":
-								case "v3/channels/scoreboard":
-								case "v3/channels/scoreboard/":
+								case "/v3/register":
+								case "/v3/channels/scoreboard":
+								case "/v3/channels/scoreboard/":
 									$.log(JSON.stringify(body));
 									//body.channels.storeFront = "UNITED_STATES";
 									//body.channels.storeFront = "TAIWAN";
@@ -410,29 +413,29 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 	function setUrl(asset, HLSUrl, ServerUrl) {
 		$.log(`☑️ Set Url`, "");
 		if (asset?.hlsUrl) {
-			let hlsUrl = URI.parse(asset.hlsUrl);
-			switch (hlsUrl.path) {
+			let hlsUrl = new URL(asset.hlsUrl);
+			switch (hlsUrl.pathname) {
 				case "WebObjects/MZPlay.woa/hls/playlist.m3u8":
-					//hlsUrl.host = HLSUrl || "play.itunes.apple.com";
+					//hlsUrl.hostname = HLSUrl || "play.itunes.apple.com";
 					break;
 				case "WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8":
-					hlsUrl.host = HLSUrl || "play-edge.itunes.apple.com";
+					hlsUrl.hostname = HLSUrl || "play-edge.itunes.apple.com";
 					break;
 				case "WebObjects/MZPlay.woa/hls/workout/playlist.m3u8":
-					//hlsUrl.host = HLSUrl || "play.itunes.apple.com";
+					//hlsUrl.hostname = HLSUrl || "play.itunes.apple.com";
 					break;
 			};
-			asset.hlsUrl = URI.stringify(hlsUrl);
+			asset.hlsUrl = hlsUrl.toString();
 		};
 		if (asset?.fpsKeyServerUrl) {
-			let fpsKeyServerUrl = URI.parse(asset.fpsKeyServerUrl);
-			fpsKeyServerUrl.host = ServerUrl || "play.itunes.apple.com";
-			asset.fpsKeyServerUrl = URI.stringify(fpsKeyServerUrl);
+			let fpsKeyServerUrl = new URL(asset.fpsKeyServerUrl);
+			fpsKeyServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			asset.fpsKeyServerUrl = fpsKeyServerUrl.toString();
 		};
 		if (asset?.fpsNonceServerUrl) {
-			let fpsNonceServerUrl = URI.parse(asset.fpsNonceServerUrl);
-			fpsNonceServerUrl.host = ServerUrl || "play.itunes.apple.com";
-			asset.fpsNonceServerUrl = URI.stringify(fpsNonceServerUrl);
+			let fpsNonceServerUrl = new URL(asset.fpsNonceServerUrl);
+			fpsNonceServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
 		};
 		$.log(`✅ Set Url`, "");
 		return asset;
@@ -450,15 +453,15 @@ async function getData(type, settings, database) {
 			"url": $request.url,
 			"headers": $request.headers
 		}
-		request.url = URI.parse(request.url);
-		request.url.query.sf = database.Storefront[CC]
-		$.log(`sf=${request.url.query.sf}`)
-		request.url.query.locale = database.Locale[CC]
-		$.log(`locale=${request.url.query.locale}`)
-		request.url = URI.stringify(request.url)
+		request.url = new URL(request.url);
+		request.url.searchParams.set("sf", database.Storefront[CC]);
+		$.log(`sf=${request.url.searchParams.get("sf")}`)
+		request.url.searchParams.set("locale", database.Locale[CC]);
+		$.log(`locale=${request.url.searchParams.get("locale")}`)
+		request.url = request.url.toString();
 		$.log(`request.url=${request.url}`)
 		request.headers["X-Surge-Skip-Scripting"] = "true"
-		data = await $.http.get(request).then(data => data);
+		data = await $.fetch(request).then(data => data);
 		$.log(`data=${JSON.stringify(data)}`)
 		if (data.statusCode === 200 || data.status === 200 ) break;
 	};
