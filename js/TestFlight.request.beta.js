@@ -745,35 +745,66 @@ class ENV {
 	}
 }
 
-class URI {
-	static name = "URI";
-	static version = "1.2.7";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static #json = { scheme: "", host: "", path: "", query: {} };
-
-	static parse(url) {
-		const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/;
-		let json = url.match(URLRegex)?.groups ?? null;
-		if (json?.path) json.paths = json.path.split("/"); else json.path = "";
-		//if (json?.paths?.at(-1)?.includes(".")) json.format = json.paths.at(-1).split(".").at(-1);
-		if (json?.paths) {
-			const fileName = json.paths[json.paths.length - 1];
-			if (fileName?.includes(".")) {
-				const list = fileName.split(".");
-				json.format = list[list.length - 1];
-			}
-		}
-		if (json?.query) json.query = Object.fromEntries(json.query.split("&").map((param) => param.split("=")));
-		return json
+class URL {
+	constructor(url, base = undefined) {
+		const name = "URL";
+		const version = "2.1.0";
+		console.log(`\n🟧 ${name} v${version}\n`);
+		url = this.#parse(url, base);
+		return this;
 	};
 
-	static stringify(json = this.#json) {
-		let url = "";
-		if (json?.scheme && json?.host) url += json.scheme + "://" + json.host;
-		if (json?.path) url += (json?.host) ? "/" + json.path : json.path;
-		if (json?.query) url += "?" + Object.entries(json.query).map(param => param.join("=")).join("&");
-		return url
+	#parse(url, base = undefined) {
+		const URLRegex = /(?:(?<protocol>\w+:)\/\/(?:(?<username>[^\s:"]+)(?::(?<password>[^\s:"]+))?@)?(?<host>[^\s@/]+))?(?<pathname>\/?[^\s@?]+)?(?<search>\?[^\s?]+)?/;
+		const PortRegex = /(?<hostname>.+):(?<port>\d+)$/;
+		url = url.match(URLRegex)?.groups || {};
+		if (base) {
+			base = base?.match(URLRegex)?.groups || {};
+			if (!base.protocol || !base.hostname) throw new Error(`🚨 ${name}, ${base} is not a valid URL`);
+		}		if (url.protocol || base?.protocol) this.protocol = url.protocol || base.protocol;
+		if (url.username || base?.username) this.username = url.username || base.username;
+		if (url.password || base?.password) this.password = url.password || base.password;
+		if (url.host || base?.host) {
+			this.host = url.host || base.host;
+			Object.freeze(this.host);
+			this.hostname = this.host.match(PortRegex)?.groups.hostname ?? this.host;
+			this.port = this.host.match(PortRegex)?.groups.port ?? "";
+		}		if (url.pathname || base?.pathname) {
+			this.pathname = url.pathname || base?.pathname;
+			if (!this.pathname.startsWith("/")) this.pathname = "/" + this.pathname;
+			this.paths = this.pathname.split("/").filter(Boolean);
+			Object.freeze(this.paths);
+			if (this.paths) {
+				const fileName = this.paths[this.paths.length - 1];
+				if (fileName?.includes(".")) {
+					const list = fileName.split(".");
+					this.format = list[list.length - 1];
+					Object.freeze(this.format);
+				}
+			}		} else this.pathname = "";
+		if (url.search || base?.search) {
+			this.search = url.search || base.search;
+			Object.freeze(this.search);
+			if (this.search) {
+				const array = this.search.slice(1).split("&").map((param) => param.split("="));
+				this.searchParams = new Map(array);
+			}		}		this.harf = this.toString();
+		Object.freeze(this.harf);
+		return this;
 	};
+
+	toString() {
+		let string = "";
+		if (this.protocol) string += this.protocol + "//";
+		if (this.username) string += this.username + (this.password ? ":" + this.password : "") + "@";
+		if (this.hostname) string += this.hostname;
+		if (this.port) string += ":" + this.port;
+		if (this.pathname) string += this.pathname;
+		if (this.searchParams) string += "?" + Array.from(this.searchParams).map(param => param.join("=")).join("&");
+		return string;
+	};
+
+	toJSON() { return JSON.stringify({ ...this }) };
 }
 
 var Settings$7 = {
@@ -13693,18 +13724,17 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) request.beta");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.2.0(1) request.beta");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -13761,7 +13791,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							switch (HOST) {
 								case "testflight.apple.com":
 									switch (PATH) {
-										case "v1/session/authenticate":
+										case "/v1/session/authenticate":
 											/*
 											if (Settings.storeCookies) { // 使用Cookies
 												$.log(`🚧 storeCookies`, "");
@@ -13780,12 +13810,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											*/
 											if (Settings.CountryCode !== "AUTO") body.storeFrontIdentifier = body.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
 											break;
-										case "v1/properties/testflight":
+										case "/v1/properties/testflight":
 											break;
-										case "v1/devices":
-										case "v1/devices/apns":
-										case "v1/devices/add":
-										case "v1/devices/remove":
+										case "/v1/devices":
+										case "/v1/devices/apns":
+										case "/v1/devices/add":
+										case "/v1/devices/remove":
 											break;
 										default:
 											switch (PATHs[0]) {
@@ -13801,21 +13831,21 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																default:
 																	switch (PATHs[3]) {
 																		case "apps":
-																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
+																			$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
 																			switch (PATHs[4]) {
 																				default:
 																					switch (PATHs[5]) {
 																						case "builds":
 																							switch (PATHs[7]) {
 																								case undefined:
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
+																									$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																									break;
 																								case "install":
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
+																									$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
 																									if (Settings.CountryCode !== "AUTO") body.storefrontId = body.storefrontId.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
 																									break;
 																								default:
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
+																									$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
 																									break;
 																							}																							break;
 																					}																					break;
@@ -13845,15 +13875,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "testflight.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v1/session/authenticate":
+								case "/v1/session/authenticate":
 									break;
 								case "v1/properties/testflight":
 									//$request.headers["X-Apple-Rosetta-Available"] = Settings.Rosetta;
 									break;
-								case "v1/devices":
-								case "v1/devices/apns":
-								case "v1/devices/add":
-								case "v1/devices/remove":
+								case "/v1/devices":
+								case "/v1/devices/apns":
+								case "/v1/devices/add":
+								case "/v1/devices/remove":
 									break;
 								default:
 									// headers auth mod
@@ -13881,8 +13911,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																	default:
 																		switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.test(PATHs[2])) {
 																			case true: // PATHs[2]是UUID
-																				$.log(`⚠ PATHs[2]是UUID，替换URL.path`, "");
-																				URL.path = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+																				$.log(`⚠ PATHs[2]是UUID，替换url.pathname`, "");
+																				url.pathname = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
 																				//break; // 不中断，继续处理
 																			case false: // PATHs[2]不是UUID
 																				if (XSessionId !== Caches.headers["X-Session-Id"]) { // sessionId不同
@@ -13934,8 +13964,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "CONNECT":
 				case "TRACE":
 					break;
-			}			if ($request.headers?.Host) $request.headers.Host = URL.host;
-			$request.url = URI.stringify(URL);
+			}			$request.url = url.toString();
 			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:

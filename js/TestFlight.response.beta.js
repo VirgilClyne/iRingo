@@ -745,35 +745,66 @@ class ENV {
 	}
 }
 
-class URI {
-	static name = "URI";
-	static version = "1.2.7";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static #json = { scheme: "", host: "", path: "", query: {} };
-
-	static parse(url) {
-		const URLRegex = /(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/;
-		let json = url.match(URLRegex)?.groups ?? null;
-		if (json?.path) json.paths = json.path.split("/"); else json.path = "";
-		//if (json?.paths?.at(-1)?.includes(".")) json.format = json.paths.at(-1).split(".").at(-1);
-		if (json?.paths) {
-			const fileName = json.paths[json.paths.length - 1];
-			if (fileName?.includes(".")) {
-				const list = fileName.split(".");
-				json.format = list[list.length - 1];
-			}
-		}
-		if (json?.query) json.query = Object.fromEntries(json.query.split("&").map((param) => param.split("=")));
-		return json
+class URL {
+	constructor(url, base = undefined) {
+		const name = "URL";
+		const version = "2.1.0";
+		console.log(`\n🟧 ${name} v${version}\n`);
+		url = this.#parse(url, base);
+		return this;
 	};
 
-	static stringify(json = this.#json) {
-		let url = "";
-		if (json?.scheme && json?.host) url += json.scheme + "://" + json.host;
-		if (json?.path) url += (json?.host) ? "/" + json.path : json.path;
-		if (json?.query) url += "?" + Object.entries(json.query).map(param => param.join("=")).join("&");
-		return url
+	#parse(url, base = undefined) {
+		const URLRegex = /(?:(?<protocol>\w+:)\/\/(?:(?<username>[^\s:"]+)(?::(?<password>[^\s:"]+))?@)?(?<host>[^\s@/]+))?(?<pathname>\/?[^\s@?]+)?(?<search>\?[^\s?]+)?/;
+		const PortRegex = /(?<hostname>.+):(?<port>\d+)$/;
+		url = url.match(URLRegex)?.groups || {};
+		if (base) {
+			base = base?.match(URLRegex)?.groups || {};
+			if (!base.protocol || !base.hostname) throw new Error(`🚨 ${name}, ${base} is not a valid URL`);
+		}		if (url.protocol || base?.protocol) this.protocol = url.protocol || base.protocol;
+		if (url.username || base?.username) this.username = url.username || base.username;
+		if (url.password || base?.password) this.password = url.password || base.password;
+		if (url.host || base?.host) {
+			this.host = url.host || base.host;
+			Object.freeze(this.host);
+			this.hostname = this.host.match(PortRegex)?.groups.hostname ?? this.host;
+			this.port = this.host.match(PortRegex)?.groups.port ?? "";
+		}		if (url.pathname || base?.pathname) {
+			this.pathname = url.pathname || base?.pathname;
+			if (!this.pathname.startsWith("/")) this.pathname = "/" + this.pathname;
+			this.paths = this.pathname.split("/").filter(Boolean);
+			Object.freeze(this.paths);
+			if (this.paths) {
+				const fileName = this.paths[this.paths.length - 1];
+				if (fileName?.includes(".")) {
+					const list = fileName.split(".");
+					this.format = list[list.length - 1];
+					Object.freeze(this.format);
+				}
+			}		} else this.pathname = "";
+		if (url.search || base?.search) {
+			this.search = url.search || base.search;
+			Object.freeze(this.search);
+			if (this.search) {
+				const array = this.search.slice(1).split("&").map((param) => param.split("="));
+				this.searchParams = new Map(array);
+			}		}		this.harf = this.toString();
+		Object.freeze(this.harf);
+		return this;
 	};
+
+	toString() {
+		let string = "";
+		if (this.protocol) string += this.protocol + "//";
+		if (this.username) string += this.username + (this.password ? ":" + this.password : "") + "@";
+		if (this.hostname) string += this.hostname;
+		if (this.port) string += ":" + this.port;
+		if (this.pathname) string += this.pathname;
+		if (this.searchParams) string += "?" + Array.from(this.searchParams).map(param => param.join("=")).join("&");
+		return string;
+	};
+
+	toJSON() { return JSON.stringify({ ...this }) };
 }
 
 var Settings$7 = {
@@ -13693,15 +13724,15 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) response.beta");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.2.0(1) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -13754,7 +13785,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "testflight.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v1/session/authenticate":
+								case "/v1/session/authenticate":
 									switch (Settings.MultiAccount) { // MultiAccount
 										case true:
 											$.log(`⚠ 启用多账号支持`, "");
@@ -13794,10 +13825,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 											}											break;
 									}									break;
-								case "v1/devices":
-								case "v1/devices/apns":
-								case "v1/devices/add":
-								case "v1/devices/remove":
+								case "/v1/devices":
+								case "/v1/devices/apns":
+								case "/v1/devices/add":
+								case "/v1/devices/remove":
 									break;
 								default:
 									switch (PATHs[0]) {
@@ -13810,29 +13841,29 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														case "settings":
 															switch (PATHs[3]) {
 																case undefined:
-																	$.log(`🚧 ${PATHs[0]}/accounts/settings`, "");
+																	$.log(`🚧 /${PATHs[0]}/accounts/settings`, "");
 																	break;
 																case "notifications":
 																	switch (PATHs[4]) {
 																		case "apps":
-																			$.log(`🚧 ${PATHs[0]}/accounts/settings/notifications/apps/`, "");
+																			$.log(`🚧 /${PATHs[0]}/accounts/settings/notifications/apps/`, "");
 																			break;
 																	}																	break;
 																default:
-																	$.log(`🚧 ${PATHs[0]}/accounts/settings/${PATHs[3]}/`, "");
+																	$.log(`🚧 /${PATHs[0]}/accounts/settings/${PATHs[3]}/`, "");
 																	break;
 															}															break;
 														case Caches?.data?.accountId: // UUID
 														default:
 															switch (PATHs[3]) {
 																case undefined:
-																	$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}`, "");
+																	$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}`, "");
 																	break;
 																case "apps":
-																	$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
+																	$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
 																	switch (PATHs[4]) {
 																		case undefined:
-																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
+																			$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
 																			switch (Settings.Universal) { // 通用
 																				case true:
 																					$.log(`🚧 启用通用应用支持`, "");
@@ -13853,12 +13884,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																		default:
 																			switch (PATHs[5]) {
 																				case undefined:
-																					$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}`, "");
+																					$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}`, "");
 																					break;
 																				case "builds":
 																					switch (PATHs[7]) {
 																						case undefined:
-																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
+																							$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																							switch (Settings.Universal) { // 通用
 																								case true:
 																									$.log(`🚧 启用通用应用支持`, "");
@@ -13871,10 +13902,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																									}																									break;
 																							}																							break;
 																						case "install":
-																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
+																							$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
 																							break;
 																						default:
-																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
+																							$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
 																							break;
 																					}																					break;
 																				case "platforms":
@@ -13885,17 +13916,17 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																						default:
 																							switch (PATHs[7]) {
 																								case undefined:
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}`, "");
+																									$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}`, "");
 																									break;
 																								case "trains":
 																									switch (PATHs[9]) {
 																										case undefined:
-																											$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}`, "");
+																											$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}`, "");
 																											break;
 																										case "builds":
 																											switch (PATHs[10]) {
 																												case undefined:
-																													$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
+																													$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
 																													switch (Settings.Universal) { // 通用
 																														case true:
 																															$.log(`🚧 启用通用应用支持`, "");
@@ -13906,25 +13937,25 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																															}																															break;
 																													}																													break;
 																												default:
-																													$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds/${PATHs[10]}`, "");
+																													$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds/${PATHs[10]}`, "");
 																													break;
 																											}																											break;
 																										default:
-																											$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/${PATHs[9]}`, "");
+																											$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/${PATHs[9]}`, "");
 																											break;
 																									}																									break;
 																								default:
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/${PATHs[7]}`, "");
+																									$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/${PATHs[7]}`, "");
 																									break;
 																							}																							break;
 																					}																					break;
 																				default:
-																					$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/${PATHs[5]}`, "");
+																					$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/${PATHs[5]}`, "");
 																					break;
 																			}																			break;
 																	}																	break;
 																default:
-																	$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/${PATHs[3]}/`, "");
+																	$.log(`🚧 /${PATHs[0]}/accounts/${PATHs[2]}/${PATHs[3]}/`, "");
 																	break;
 															}															break;
 													}													break;
@@ -13933,13 +13964,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														case "install":
 															switch (PATHs[4]) {
 																case undefined:
-																	$.log(`🚧 ${PATHs[0]}/apps/install`, "");
+																	$.log(`🚧 /${PATHs[0]}/apps/install`, "");
 																	break;
 																case "status":
-																	$.log(`🚧 ${PATHs[0]}/apps/install/status`, "");
+																	$.log(`🚧 /${PATHs[0]}/apps/install/status`, "");
 																	break;
 																default:
-																	$.log(`🚧 ${PATHs[0]}/apps/install/${PATHs[4]}`, "");
+																	$.log(`🚧 /${PATHs[0]}/apps/install/${PATHs[4]}`, "");
 																	break;
 															}															break;
 													}													break;
@@ -13947,16 +13978,16 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													switch (PATHs[2]) {
 														case Caches?.data?.accountId: // UUID
 														default:
-															$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}`, "");
+															$.log(`🚧 /${PATHs[0]}/messages/${PATHs[2]}`, "");
 															switch (PATHs[3]) {
 																case undefined:
-																	$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}`, "");
+																	$.log(`🚧 /${PATHs[0]}/messages/${PATHs[2]}`, "");
 																	break;
 																case "read":
-																	$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}/read`, "");
+																	$.log(`🚧 /${PATHs[0]}/messages/${PATHs[2]}/read`, "");
 																	break;
 																default:
-																	$.log(`🚧 ${PATHs[0]}/messages/${PATHs[2]}/${PATHs[3]}`, "");
+																	$.log(`🚧 /${PATHs[0]}/messages/${PATHs[2]}/${PATHs[3]}`, "");
 																	break;
 															}															break;
 													}													break;
