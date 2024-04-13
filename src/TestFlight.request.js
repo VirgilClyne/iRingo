@@ -1,23 +1,23 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URL/URI.mjs";
+import URL from "./URL/URL.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) request");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.2.0(1) request");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -64,15 +64,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							switch (HOST) {
 								case "testflight.apple.com":
 									switch (PATH) {
-										case "v1/session/authenticate":
+										case "/v1/session/authenticate":
 											if (Settings.CountryCode !== "AUTO") body.storeFrontIdentifier = body.storeFrontIdentifier.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
 											break;
-										case "v1/properties/testflight":
+										case "/v1/properties/testflight":
 											break;
-										case "v1/devices":
-										case "v1/devices/apns":
-										case "v1/devices/add":
-										case "v1/devices/remove":
+										case "/v1/devices":
+										case "/v1/devices/apns":
+										case "/v1/devices/add":
+										case "/v1/devices/remove":
 											break;
 										default:
 											switch (PATHs[0]) {
@@ -88,21 +88,17 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																default:
 																	switch (PATHs[3]) {
 																		case "apps":
-																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/`, "");
 																			switch (PATHs[4]) {
 																				default:
 																					switch (PATHs[5]) {
 																						case "builds":
 																							switch (PATHs[7]) {
 																								case undefined:
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																									break;
 																								case "install":
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/install`, "");
 																									if (Settings.CountryCode !== "AUTO") body.storefrontId = body.storefrontId.replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode));
 																									break;
 																								default:
-																									$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}/${PATHs[7]}`, "");
 																									break;
 																							};
 																							break;
@@ -142,15 +138,15 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "testflight.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v1/session/authenticate":
+								case "/v1/session/authenticate":
 									break;
 								case "v1/properties/testflight":
 									//$request.headers["X-Apple-Rosetta-Available"] = Settings.Rosetta;
 									break;
-								case "v1/devices":
-								case "v1/devices/apns":
-								case "v1/devices/add":
-								case "v1/devices/remove":
+								case "/v1/devices":
+								case "/v1/devices/apns":
+								case "/v1/devices/add":
+								case "/v1/devices/remove":
 									break;
 								default:
 									// headers auth mod
@@ -178,10 +174,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																	default:
 																		switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.test(PATHs[2])) {
 																			case true: // PATHs[2]是UUID
-																				$.log(`⚠ PATHs[2]是UUID，替换URL.path`, "");
-																				URL.path = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
+																				$.log(`⚠ PATHs[2]是UUID，替换url.pathname`, "");
+																				url.pathname = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
 																				//break; // 不中断，继续处理
-																				case false: // PATHs[2]不是UUID
+																			case false: // PATHs[2]不是UUID
 																				if (XSessionId !== Caches.headers["X-Session-Id"]) { // sessionId不同
 																					$.log(`⚠ sessionId不同，替换$request.headers`, "");
 																					if (IfNoneMatch) {
@@ -203,7 +199,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																				};
 																		};
 																		break;
-																		case Caches?.data?.accountId: // PATHs[2]有UUID且与accountId相同
+																	case Caches?.data?.accountId: // PATHs[2]有UUID且与accountId相同
 																		$.log(`⚠ PATHs[2]与accountId相同，更新Caches`, "");
 																		Caches.headers = {
 																			"X-Request-Id": XRequestId,
@@ -249,8 +245,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "TRACE":
 					break;
 			};
-			if ($request.headers?.Host) $request.headers.Host = URL.host;
-			$request.url = URI.stringify(URL);
+			$request.url = url.toString();
+			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;

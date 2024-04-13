@@ -1,20 +1,20 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URL/URI.mjs";
+import URL from "./URL/URL.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: ✈ TestFlight v3.1.2(2) response");
+const $ = new ENV(" iRingo: ✈ TestFlight v3.2.0(1) response");
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -57,7 +57,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "testflight.apple.com":
 							// 路径判断
 							switch (PATH) {
-								case "v1/session/authenticate":
+								case "/v1/session/authenticate":
 									switch (Settings.MultiAccount) { // MultiAccount
 										case true:
 											$.log(`⚠ 启用多账号支持`, "");
@@ -96,10 +96,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											break;
 									};
 									break;
-								case "v1/devices":
-								case "v1/devices/apns":
-								case "v1/devices/add":
-								case "v1/devices/remove":
+								case "/v1/devices":
+								case "/v1/devices/apns":
+								case "/v1/devices/add":
+								case "/v1/devices/remove":
 									break;
 								default:
 									switch (PATHs[0]) {
@@ -131,7 +131,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																case "apps":
 																	switch (PATHs[4]) {
 																		case undefined:
-																			$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps`, "");
 																			switch (Settings.Universal) { // 通用
 																				case true:
 																					$.log(`🚧 启用通用应用支持`, "");
@@ -161,7 +160,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																				case "builds":
 																					switch (PATHs[7]) {
 																						case undefined:
-																							$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/builds/${PATHs[6]}`, "");
 																							switch (Settings.Universal) { // 通用
 																								case true:
 																									$.log(`🚧 启用通用应用支持`, "");
@@ -200,7 +198,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																										case "builds":
 																											switch (PATHs[10]) {
 																												case undefined:
-																													$.log(`🚧 ${PATHs[0]}/accounts/${PATHs[2]}/apps/${PATHs[4]}/platforms/${PATHs[6]}/trains/${PATHs[8]}/builds`, "");
 																													switch (Settings.Universal) { // 通用
 																														case true:
 																															$.log(`🚧 启用通用应用支持`, "");
