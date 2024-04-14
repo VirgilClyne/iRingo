@@ -1786,7 +1786,7 @@
 					]
 				},
 				{
-					"id": "@iRingo.News.Settings.newsPlusUser",
+					"id": "@iRingo.News.Settings.NewsPlusUser",
 					"name": "[搜索]显示News+内容",
 					"val": true,
 					"type": "boolean",
