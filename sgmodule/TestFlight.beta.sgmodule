@@ -1,5 +1,5 @@
 #!name= iRingo: ✈ TestFlight β
-#!desc=(BETA) 1.自定义TestFlight登录商店地区 2.多账户保存及切换(需配置BoxJs使用) 3.让通用应用在任意苹果处理器设备上可安装
+#!desc=(BETA)\n1.自定义TestFlight登录商店地区\n2.多账户保存及切换(需配置BoxJs使用)\n3.让通用应用在任意苹果处理器设备上可安装
 #!openUrl=http://boxjs.com/#/app/iRingo.TestFlight.beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne

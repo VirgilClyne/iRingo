@@ -1,11 +1,23 @@
 #!name= iRingo: ☁️ iCloud Private Relay β
-#!desc=(BETA) 启用和自定义「iCloud专用代理」 注:本模块不包含任何必要的策略资源，请配合域名集使用
+#!desc=(BETA)\n启用和自定义「iCloud专用代理」\n注:本模块包含专用代理直连策略
 #!openUrl=http://boxjs.com/#/app/iRingo.PrivateRelay.beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理
 #!icon=https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png
 #!category= iRingo
+#!arguments=CountryCode:US,Proxy: DIRECT
+#!arguments-desc=CountryCode: 国家或地区代码\nProxy: ☁️ iCloud Private Relay 分流规则使用的策略名
+
+[Rule]
+# ☁️ iCloud Private Relay
+# https://developer.apple.com/cn/support/prepare-your-network-for-icloud-private-relay/
+# Private Relay API
+USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*,{{{Proxy}}}
+DOMAIN,mask-api.icloud.com,{{{Proxy}}}
+DOMAIN,mask-api.fe.apple-dns.net,{{{Proxy}}}
+# Optimize for Private Relay connections
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/iCloud.PrivateRelay.list,{{{Proxy}}}
 
 [Script]
 # fetchAuthTokens

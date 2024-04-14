@@ -1,5 +1,5 @@
 #!name= iRingo: 📰 News
-#!desc=(V2) 1.自定义解锁News的地区 2.Coming Soon… 注：该模块不包含代理规则组，使用过程中gateway.icloud.com会走与News相同的代理线路。
+#!desc=(V2) 1.自定义解锁News的地区\n2.Coming Soon…\n注：该模块不包含代理规则组，使用过程中gateway.icloud.com会走与News相同的代理线路。
 #!openUrl=http://boxjs.com/#/app/iRingo.News
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
