@@ -1,19 +1,11 @@
 #!name= iRingo: 📰 News
-#!desc=(V2) 1.自定义解锁News的地区 2.Coming Soon…
+#!desc=(V2) 1.自定义解锁News的地区 2.Coming Soon… 注：该模块不包含代理规则组，使用过程中gateway.icloud.com会走与News相同的代理线路。
 #!openUrl=http://boxjs.com/#/app/iRingo.News
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/📰News
 #!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
 #!category= iRingo
-#!arguments=CountryCode:US,Proxy: 🇺🇸美国,NewsPlusUser: true
-#!arguments-desc=CountryCode: 国家或地区代码\nProxy: News 分流规则使用的策略名\nNewsPlusUser: 是否为 News+ 用户
-
-[Rule]
-# ☁️ iCloud
-DOMAIN,gateway.icloud.com,{{{Proxy}}}
-# 📰 News
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/News.list,{{{Proxy}}}
 
 [Script]
 📰 News.v1.configs.request = type=http-request, pattern=^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs(\?.*)?$, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js, argument=CountryCode={{{CountryCode}}}
