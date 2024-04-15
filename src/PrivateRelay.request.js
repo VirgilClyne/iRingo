@@ -1,27 +1,26 @@
 import _ from './ENV/Lodash.mjs'
 import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
-import URI from "./URL/URI.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v3.0.4(2) request");
+const $ = new ENV(" iRingo: ☁️ iCloud Private Relay v3.1.0(1) request");
 
 // 构造回复数据
 let $response = undefined;
 
 /***************** Processing *****************/
 // 解构URL
-const URL = URI.parse($request.url);
-$.log(`⚠ URL: ${JSON.stringify(URL)}`, "");
+const url = new URL($request.url);
+$.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = URL.host, PATH = URL.path, PATHs = URL.paths;
-$.log(`⚠ METHOD: ${METHOD}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
-(async () => {
+!(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "PrivateRelay", Database);
 	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
@@ -85,7 +84,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
-				case undefined: // QX牛逼，script-echo-response不返回method
 				default:
 					// 主机判断
 					switch (HOST) {
@@ -98,12 +96,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							};
 							// 路径判断
 							switch (PATH) {
-								case "v1/fetchAuthTokens":
+								case "/v1/fetchAuthTokens":
 									_.set(Caches, "fetchAuthTokens.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchAuthTokens?.ETag));
 									$Storage.setItem("@iRingo.PrivateRelay.Caches", Caches);
 									break;
-								case "v3_1/fetchConfigFile":
-								case "v3_2/fetchConfigFile":
+								case "/v3_1/fetchConfigFile":
+								case "/v3_2/fetchConfigFile":
 									_.set(Caches, "fetchConfigFile.ETag", setETag($request.headers?.["If-None-Match"] ?? $request.headers?.["if-none-match"], Caches?.fetchConfigFile?.ETag));
 									$Storage.setItem("@iRingo.PrivateRelay.Caches", Caches);
 							};
@@ -114,8 +112,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "TRACE":
 					break;
 			};
-			if ($request.headers?.Host) $request.headers.Host = URL.host;
-			$request.url = URI.stringify(URL);
+			$request.url = url.toString();
+			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
