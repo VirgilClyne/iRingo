@@ -11,9 +11,9 @@
 DOMAIN,weather-analytics-events.apple.com,REJECT
 
 [Script]
-Weather Availability Request = type=http-request, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.*, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.request.beta.js, argument=
-Weather Availability Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.*, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.response.beta.js, argument=
-Weather Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.*, requires-body=1, timeout=20, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.response.beta.js, argument=
+Weather Availability Request = type=http-request, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.request.beta.js, argument=
+Weather Availability Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Availability.response.beta.js, argument=
+Weather Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/, requires-body=1, timeout=20, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.response.beta.js, argument=
 Weather Map Request = type=http-request, pattern=^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.Map.request.beta.js, argument=
 
 [MITM]

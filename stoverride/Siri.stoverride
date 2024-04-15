@@ -19,55 +19,55 @@ http:
     - "api*.smoot.apple.com"
     - "api*.smoot.apple.cn"
   script:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag
       name: Siri.response
       type: response
       require-body: true
       timeout: 10
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search
       name: Siri.response
       type: response
       require-body: true
       timeout: 10
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$
+    - match: ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card
       name: Siri.response
       type: request
       require-body: true

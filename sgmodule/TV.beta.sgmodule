@@ -10,9 +10,9 @@
 #!arguments-desc=Third-Party: 强制启用第三方流媒体APP集成
 
 [Script]
-📺 TV.uts.request = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.request.beta.js, argument=Third-Party={{{Third-Party}}}
-📺 TV.uts.response = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.response.beta.js, argument=Third-Party={{{Third-Party}}}
-📺 TV.umc.request = type=http-request, pattern=^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/.*, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.request.beta.js, argument=Third-Party={{{Third-Party}}}
+📺 TV.uts.request = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.request.beta.js, argument=Third-Party={{{Third-Party}}}
+📺 TV.uts.response = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.response.beta.js, argument=Third-Party={{{Third-Party}}}
+📺 TV.umc.request = type=http-request, pattern=^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/, requires-body=1, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/TV.request.beta.js, argument=Third-Party={{{Third-Party}}}
 
 [MITM]
 hostname = %APPEND% uts-api.itunes.apple.com, umc-tempo-api.apple.com

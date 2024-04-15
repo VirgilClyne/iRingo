@@ -9,20 +9,20 @@
 
 #[rewrite_local]
 # 🔍 Siri Bag (iOS/macOS)
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
 # 🔍 Siri Spotlight & Look Up Search (iOS/macOS)
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
 # 🔍 Siri warm (unknown)
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/warm url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
 # 🔍 Siri render (unknown)
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/render url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
 # 🔍 Siri Flight Search (iOS/macOS)
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
 # 🔍 Siri Siri Infomation Card (macOS)
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
-^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js
+^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js
 
 #[mitm]
 hostname = api*.smoot.apple.com, api*.smoot.apple.cn

@@ -7,9 +7,9 @@
 #!icon=https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp
 #!category= iRingo
 
-^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.request.js
-^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.response.js
-^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/.* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.response.js
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.request.js
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.response.js
+^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.response.js
 ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$ url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.request.js
 
 hostname = weather-edge.apple.com, weather-data.apple.com, weather-map.apple.com, weather-map2.apple.com

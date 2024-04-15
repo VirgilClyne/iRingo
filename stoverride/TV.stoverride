@@ -12,15 +12,15 @@ http:
     - "uts-api.itunes.apple.com"
     - "umc-tempo-api.apple.com"
   script:
-    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/
       name: TV.request
       type: request
       require-body: true
-    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/.*
+    - match: https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/
       name: TV.response
       type: response
       require-body: true
-    - match: ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/.*
+    - match: ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/
       name: TV.request
       type: request
       require-body: true

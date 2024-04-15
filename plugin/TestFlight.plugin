@@ -11,8 +11,8 @@
 skip-proxy = iosapps.itunes.apple.com
 
 [Script]
-http-request ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js, requires-body=true, tag=✈ TestFlight.request, argument=
-http-response ^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js, requires-body=true, tag=✈ TestFlight.response, argument=
+http-request ^https?:\/\/testflight\.apple\.com\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js, requires-body=true, tag=✈ TestFlight.request, argument=
+http-response ^https?:\/\/testflight\.apple\.com\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js, requires-body=true, tag=✈ TestFlight.response, argument=
 
 [MITM]
 hostname = testflight.apple.com

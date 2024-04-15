@@ -9,8 +9,8 @@
 
 #[rewrite_local]
 # ✈ TestFlight
-^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js
-^https?:\/\/testflight\.apple\.com\/(.+)(\?.*)?$ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js
+^https?:\/\/testflight\.apple\.com\/ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js
+^https?:\/\/testflight\.apple\.com\/ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js
 
 #[mitm]
 hostname = testflight.apple.com
