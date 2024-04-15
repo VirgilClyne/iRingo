@@ -1,11 +1,18 @@
 name: " iRingo: 🔍 Siri & Search"
-desc: "全面自定义「Siri与搜索」的功能。"
+desc: |-
+  全面自定义「Siri与搜索」的功能。
+  注：该覆写包含代理规则。"
 openUrl: "http://boxjs.com/#/app/iRingo.Siri"
 author: "VirgilClyne"
 homepage: "https://github.com/VirgilClyne"
 manual: "https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索"
 icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png"
 category: " iRingo"
+
+rules:
+  - DOMAIN,lookup-api.apple.com,PROXY
+  - DOMAIN,lookup-api.apple.com.edgekey.net,PROXY
+  - DOMAIN,e16991.b.akamaiedge.net,PROXY
 
 http:
   mitm:

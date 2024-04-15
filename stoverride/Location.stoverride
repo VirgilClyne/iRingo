@@ -1,5 +1,7 @@
 name: " iRingo: 📍 Location"
-desc: "全面自定义「定位服务」的功能。"
+desc: |-
+  全面自定义「定位服务」的功能。
+  注：该覆写包含代理规则。
 openUrl: "http://boxjs.com/#/app/iRingo.Location"
 author: "VirgilClyne"
 homepage: "https://github.com/VirgilClyne"
@@ -14,7 +16,6 @@ rules:
 http:
   mitm:
     - "gspe1-ssl.ls.apple.com"
-
   script:
     - match: ^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc
       name: GeoServices.response

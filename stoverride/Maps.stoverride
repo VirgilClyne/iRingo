@@ -1,5 +1,7 @@
 name: " iRingo: 🗺️ Maps"
-desc: "全面自定义「地图」的功能。"
+desc: |-
+  全面自定义「地图」的功能。
+  注：该覆写包含代理规则。
 openUrl: "http://boxjs.com/#/app/iRingo.Maps"
 author: "VirgilClyne"
 homepage: "https://github.com/VirgilClyne"
@@ -19,7 +21,6 @@ http:
   mitm:
     - "configuration.ls.apple.com"
     - "gspe35-ssl.ls.apple.com"
-
   script:
     - match: ^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults
       name: GeoServices.request
