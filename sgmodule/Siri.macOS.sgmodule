@@ -10,10 +10,9 @@
 #!arguments=CountryCode: SG,Proxy: 🌑Proxy
 #!arguments-desc=CountryCode: 国家或地区代码\nProxy: macOS‘查询’代理策略
 
-
 [Rule]
 # > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/Look_Up.Wikipedia.list,{{{Proxy}}}
+RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/LookUp.Wikipedia.list,{{{Proxy}}}
 
 [Script]
 # Bag (iOS/macOS)
