@@ -13662,7 +13662,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(6) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v3.2.1(1009) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -13683,11 +13683,17 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
-			const LOCALE = url.searchParams.get("locale");
-			$.log(`🚧 LOCALE: ${LOCALE}`, "");
-			Settings.CountryCode = (Settings.CountryCode == "AUTO") ? LOCALE?.match(/[A-Z]{2}$/)?.[0] : Settings.CountryCode;
-			url.searchParams.set("cc", Settings.CountryCode);
-			// 方法判断
+			const Locale = url.searchParams.get("locale");
+			const [ Language, CountryCode ] = Locale?.split("_") ?? [];
+			$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
+			switch (Settings.CountryCode) {
+				case "AUTO":
+					Settings.CountryCode = CountryCode;
+					break;
+				default:
+					if (url.searchParams.has("cc")) url.searchParams.set("cc", Settings.CountryCode);
+					break;
+			}			// 方法判断
 			switch (METHOD) {
 				case "POST":
 				case "PUT":
@@ -13711,10 +13717,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							let q = url.searchParams.get("q");
 							// 路径判断
 							switch (PATH) {
-								case "/warm":
-								case "/render":
-								case "/flight": // 航班
-									break;
 								case "/search": // 搜索
 									switch (url.searchParams.get("qtype")) {
 										case "zkw": // 处理"新闻"小组件
@@ -13724,7 +13726,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case "MO":
 												case "TW":
 												case "SG":
-													url.searchParams.set("locale", `${Settings.CountryCode}_SG`);
+													url.searchParams.set("locale", `${Language}_SG`);
 													break;
 												case "US":
 												case "CA":
@@ -13733,7 +13735,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													// 不做修正
 													break;
 												default:
-													url.searchParams.set("locale", `${Settings.CountryCode}_US`);
+													url.searchParams.set("locale", `${Language}_US`);
 													break;
 											}											break;
 										default: // 其他搜索
@@ -13747,22 +13749,40 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												if (/.*%E5%B8%82%20weather$/.test(q)) url.searchParams.set("q", q.replace(/%20weather$/, "%E5%B8%82%20weather"));
 											}											break;
 									}									break;
-								case "card": // 卡片
-									url.searchParams.set("card_locale", LOCALE);
+								case "/card": // 卡片
 									switch (url.searchParams.get("include")) {
 										case "tv":
 										case "movies":
-											switch (url.searchParams.get("storefront")?.match(/[\d]{6}/g)) { //StoreFront ID, from App Store Region
-												case "143463": // CN
+											url.searchParams.set("card_locale", `${Language}_${Settings.CountryCode}`);
+											const storefront = url.searchParams.get("storefront")?.match(/[\d]{6}/g);
+											switch (storefront) { //StoreFront ID, from App Store Region
+												case "143463": // HK
+													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK"));
+													break;
+												case "143464": // SG
+													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG"));
+													break;
+												case "143465": // CN
 													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-HK"));
 													break;
 												case "143470": // TW
 													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-TW"));
 													break;
-												case "143464": // SG
-													url.searchParams.set("q", q.replace(/%2F[a-z]{2}-[A-Z]{2}/, "%2Fzh-SG"));
+											}											break;
+										case "apps":
+										case "music":
+											url.searchParams.set("card_locale", `${Language}_${Settings.CountryCode}`);
+											break;
+										case "dictionary":
+											switch (Language) {
+												case "zh-Hans":
+												case "zh-Hant":
+													url.searchParams.set("card_locale", `en_${Settings.CountryCode}`);
 													break;
 											}											break;
+										default:
+											url.searchParams.set("card_locale", `${Language}_${Settings.CountryCode}`);
+											break;
 									}									break;
 							}							break;
 					}					break;
