@@ -13662,7 +13662,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.1.0(2) response.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v3.2.0(1005) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -13737,40 +13737,58 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									}
 									body.min_query_len = 3;
 									let Overrides = body?.overrides;
-									if (Overrides) {
-										Settings.Functions.forEach(app => {
-											let APP = Overrides?.[`${app}`];
-											if (APP) {
-												APP.enabled = true;
-												APP.feedback_enabled = true;
-												//APP.min_query_len = 2;
-												//APP.search_render_timeout = 200;
-												//APP.first_use_description = "";
-												//APP.first_use_learn_more = "";
-											} else APP = { enabled: true, feedback_enabled: true };
-										});
-										Overrides?.flightutilities;
-										let Lookup = Overrides?.lookup;
-										if (Lookup) {
-											Lookup.min_query_len = 2;
-										}										Overrides?.mail;
-										Overrides?.messages;
-										Overrides?.news;
-										let Safari = Overrides?.safari;
-										if (Safari) {
-											Safari.experiments_custom_feedback_enabled = true;
-										}										let Spotlight = Overrides?.spotlight;
-										if (Spotlight) {
-											Spotlight.use_twolayer_ranking = true;
-											Spotlight.experiments_custom_feedback_enabled = true;
-											Spotlight.min_query_len = 2;
-											Spotlight.collect_scores = true;
-											Spotlight.collect_anonymous_metadata = true;
-										}										let VisualIntelligence = Overrides?.visualintelligence;
-										if (VisualIntelligence) {
-											VisualIntelligence.enabled_domains = [...new Set([...VisualIntelligence.enabled_domains ?? [], ...Configs.VisualIntelligence.enabled_domains])];
-											VisualIntelligence.supported_domains = [...new Set([...VisualIntelligence.supported_domains ?? [], ...Configs.VisualIntelligence.supported_domains])];
-										}									}									// Safari Smart History
+									if (Overrides) [...new Set([...Object.keys(Overrides), ...Settings.Functions])].forEach(Function => {
+										$.log(`🎉 覆盖列表`, `Function: ${Function}`, "");
+										//_.set(Overrides, `${Function}.enabled`, true);
+										//_.set(Overrides, `${Function}.feedback_enabled`, true);
+										switch (Function) {
+											case "flightutilities":
+												Lodash.set(Overrides, "flightutilities.enabled", true);
+												Lodash.set(Overrides, "flightutilities.feedback_enabled", true);
+												//_.set(Overrides, "flightutilities.flight_url",  "https:\/\/api-glb-aps1b.smoot.apple.com\/flight");
+												//_.set(Overrides, "flightutilities.fallback_flight_url", "https:\/\/api-glb-apse1c.smoot.apple.com\/flight");
+												break;
+											case "lookup":
+												Lodash.set(Overrides, "lookup.enabled", true);
+												Lodash.set(Overrides, "lookup.feedback_enabled", true);
+												//_.set(Overrides, "lookup.min_query_len", 2);
+												//_.set(Overrides, "lookup.search_render_timeout", 2000);
+												break;
+											case "mail":
+												Lodash.set(Overrides, "mail.enabled", true);
+												Lodash.set(Overrides, "mail.feedback_enabled", true);
+												break;
+											case "messages":
+												Lodash.set(Overrides, "messages.enabled", true);
+												Lodash.set(Overrides, "messages.feedback_enabled", true);
+												break;
+											case "news":
+												Lodash.set(Overrides, "news.enabled", true);
+												Lodash.set(Overrides, "news.feedback_enabled", true);
+												break;
+											case "safari":
+												Lodash.set(Overrides, "safari.enabled", true);
+												Lodash.set(Overrides, "safari.feedback_enabled", true);
+												Lodash.set(Overrides, "safari.experiments_custom_feedback_enabled", true);
+												break;
+											case "spotlight":
+												Lodash.set(Overrides, "spotlight.enabled", true);
+												Lodash.set(Overrides, "spotlight.feedback_enabled", true);
+												//_.set(Overrides, "spotlight.use_twolayer_ranking", true);
+												//_.set(Overrides, "spotlight.experiments_custom_feedback_enabled", true);
+												//_.set(Overrides, "spotlight.min_query_len", 2);
+												//_.set(Overrides, "spotlight.collect_scores", true);
+												//_.set(Overrides, "spotlight.collect_anonymous_metadata", true);
+												break;
+											case "visualintelligence":
+												Lodash.set(Overrides, "visualintelligence.enabled", true);
+												Lodash.set(Overrides, "visualintelligence.feedback_enabled", true);
+												Lodash.set(Overrides, "visualintelligence.enabled_domains", [...new Set([...Overrides.visualIntelligence?.enabled_domains ?? [], ...Configs.VisualIntelligence.enabled_domains])]);
+												Lodash.set(Overrides, "visualintelligence.supported_domains", [...new Set([...Overrides.visualIntelligence?.supported_domains ?? [], ...Configs.VisualIntelligence.supported_domains])]);
+												break;
+										}
+									});
+									// Safari Smart History
 									body.safari_smart_history_enabled = (Settings.Safari_Smart_History) ? true : false;
 									body.smart_history_feature_feedback_enabled = (Settings.Safari_Smart_History) ? true : false;
 									/*
