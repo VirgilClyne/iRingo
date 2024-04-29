@@ -6,7 +6,7 @@ import URL from "./URL/URL.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📺 TV v3.3.0(4) response");
+const $ = new ENV(" iRingo: 📺 TV v3.3.0(1005) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -166,11 +166,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										};
 									};
 									break;
-								case "uts/v3/user/settings":
+								case "/uts/v3/user/settings":
 									break;
-								case "uts/v3/canvases/Roots/watchNow": // 立即观看
-								case "uts/v3/canvases/Channels/tvs.sbd.4000": // Apple TV+
-								case "uts/v3/canvases/Channels/tvs.sbd.7000": // MLS Season Pass
+								case "/uts/v3/canvases/Roots/watchNow": // 立即观看
+								case "/uts/v3/canvases/Channels/tvs.sbd.4000": // Apple TV+
+								case "/uts/v3/canvases/Channels/tvs.sbd.7000": // MLS Season Pass
 									let shelves = body?.data?.canvas?.shelves;
 									if (shelves) {
 										shelves = shelves.map(shelf => {
@@ -188,10 +188,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										body.data.canvas.shelves = shelves;
 									};
 									break;
-								case "uts/v3/shelves/uts.col.UpNext": // 待播清單
-								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000": // Apple TV+ 待播節目
-								case "uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.7000": // MLS Season Pass 待播節目
-								case "uts/v3/shelves/edt.col.62d7229e-d9a1-4f00-98e5-458c11ed3938": // 精選推薦
+								case "/uts/v3/shelves/uts.col.UpNext": // 待播清單
+								case "/uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.4000": // Apple TV+ 待播節目
+								case "/uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.7000": // MLS Season Pass 待播節目
+								case "/uts/v3/shelves/edt.col.62d7229e-d9a1-4f00-98e5-458c11ed3938": // 精選推薦
 									let shelf = body?.data?.shelf;
 									if (shelf?.items) {
 										shelf.items = shelf.items.map(item => {
