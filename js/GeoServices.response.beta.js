@@ -11,7 +11,7 @@ class Lodash {
 		if (!Array.isArray(path)) path = this.toPath(path);
 
 		const result = path.reduce((previousValue, currentValue) => {
-			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object 
+			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object
 		}, object);
 		return (result === undefined) ? defaultValue : result;
 	}
@@ -309,7 +309,7 @@ class ENV {
 		Object.assign(this, opts);
 		this.log(`\n🚩 开始!\n${name}\n`);
 	}
-	
+
 	environment() {
 		switch (this.platform()) {
 			case 'Surge':
@@ -751,7 +751,7 @@ class XML {
 	static name = "XML";
 	static version = "0.4.2";
 	static about = () => console.log(`\n🟧 ${this.name} v${this.version}\n`);
-	
+
 	static #ATTRIBUTE_KEY = "@";
 	static #CHILD_NODE_KEY = "#";
 	static #UNESCAPE = {
@@ -944,7 +944,7 @@ class XML {
 			}
 			return object;
 
-			/** 
+			/**
 			 * Chunk Array
 			 * @author VirgilClyne
 			 * @param {Array} source - source
@@ -1966,111 +1966,53 @@ var Configs$2 = {
 	CN: {
 		tileSet: [
 			{
-				style: 1,
-				validVersion: [
+				"scale": 0,
+				"style": 1,
+				"checksumType": 0,
+				"countryRegionWhitelist": [
 					{
-						identifier: 2112,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							}
-						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": "IN"
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -2110,460 +2052,446 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=8",
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: "IN"
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
+							{
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							}
+						],
+						"identifier": 2170,
+						"genericTile": []
 					}
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=8",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 7,
-				validVersion: [
+				"scale": 1,
+				"style": 7,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 1,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-2-cn-ssl.ls.apple.com/2/tiles",
+				"validVersion": [
 					{
-						identifier: 51,
-						availableTiles: [
+						"genericTile": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 7
-							},
-							{
-								minX: 179,
-								minY: 80,
-								maxX: 224,
-								maxY: 128,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 359,
-								minY: 161,
-								maxX: 449,
-								maxY: 257,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 719,
-								minY: 323,
-								maxX: 898,
-								maxY: 915,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 1438,
-								minY: 646,
-								maxX: 1797,
-								maxY: 1031,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 2876,
-								minY: 1292,
-								maxX: 3594,
-								maxY: 2062,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 5752,
-								minY: 2584,
-								maxX: 7188,
-								maxY: 4124,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 11504,
-								minY: 5168,
-								maxX: 14376,
-								maxY: 8248,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 23008,
-								minY: 10336,
-								maxX: 28752,
-								maxY: 16496,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 46016,
-								minY: 20672,
-								maxX: 57504,
-								maxY: 32992,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 92032,
-								minY: 41344,
-								maxX: 115008,
-								maxY: 65984,
-								minZ: 17,
-								maxZ: 17
-							},
-							{
-								minX: 184064,
-								minY: 82668,
-								maxX: 230016,
-								maxY: 131976,
-								minZ: 18,
-								maxZ: 18
+								"resourceIndex": 1971,
+								"textureIndex": 0,
+								"tileType": 2
 							}
 						],
-						genericTile: [
+						"availableTiles": [
 							{
-								tileType: 2,
-								textureIndex: 0,
-								resourceIndex: 1971
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 224,
+								"minZ": 8,
+								"minX": 179,
+								"maxY": 128,
+								"minY": 80,
+								"maxZ": 8
+							},
+							{
+								"maxX": 449,
+								"minZ": 9,
+								"minX": 359,
+								"maxY": 257,
+								"minY": 161,
+								"maxZ": 9
+							},
+							{
+								"maxX": 898,
+								"minZ": 10,
+								"minX": 719,
+								"maxY": 915,
+								"minY": 323,
+								"maxZ": 10
+							},
+							{
+								"maxX": 1797,
+								"minZ": 11,
+								"minX": 1438,
+								"maxY": 1031,
+								"minY": 646,
+								"maxZ": 11
+							},
+							{
+								"maxX": 3594,
+								"minZ": 12,
+								"minX": 2876,
+								"maxY": 2062,
+								"minY": 1292,
+								"maxZ": 12
+							},
+							{
+								"maxX": 7188,
+								"minZ": 13,
+								"minX": 5752,
+								"maxY": 4124,
+								"minY": 2584,
+								"maxZ": 13
+							},
+							{
+								"maxX": 14376,
+								"minZ": 14,
+								"minX": 11504,
+								"maxY": 8248,
+								"minY": 5168,
+								"maxZ": 14
+							},
+							{
+								"maxX": 28752,
+								"minZ": 15,
+								"minX": 23008,
+								"maxY": 16496,
+								"minY": 10336,
+								"maxZ": 15
+							},
+							{
+								"maxX": 57504,
+								"minZ": 16,
+								"minX": 46016,
+								"maxY": 32992,
+								"minY": 20672,
+								"maxZ": 16
+							},
+							{
+								"maxX": 115008,
+								"minZ": 17,
+								"minX": 92032,
+								"maxY": 65984,
+								"minY": 41344,
+								"maxZ": 17
+							},
+							{
+								"maxX": 230016,
+								"minZ": 18,
+								"minX": 184064,
+								"maxY": 131976,
+								"minY": 82668,
+								"maxZ": 18
 							}
-						]
+						],
+						"identifier": 52
 					}
-				],
-				scale: 1,
-				size: 1,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-2-cn-ssl.ls.apple.com/2/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 7,
-				validVersion: [
+				"scale": 2,
+				"style": 7,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 1,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-2-cn-ssl.ls.apple.com/2/tiles",
+				"validVersion": [
 					{
-						identifier: 51,
-						availableTiles: [
+						"genericTile": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 7
-							},
-							{
-								minX: 179,
-								minY: 80,
-								maxX: 224,
-								maxY: 128,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 359,
-								minY: 161,
-								maxX: 449,
-								maxY: 257,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 719,
-								minY: 323,
-								maxX: 898,
-								maxY: 915,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 1438,
-								minY: 646,
-								maxX: 1797,
-								maxY: 1031,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 2876,
-								minY: 1292,
-								maxX: 3594,
-								maxY: 2062,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 5752,
-								minY: 2584,
-								maxX: 7188,
-								maxY: 4124,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 11504,
-								minY: 5168,
-								maxX: 14376,
-								maxY: 8248,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 23008,
-								minY: 10336,
-								maxX: 28752,
-								maxY: 16496,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 46016,
-								minY: 20672,
-								maxX: 57504,
-								maxY: 32992,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 92032,
-								minY: 41344,
-								maxX: 115008,
-								maxY: 65984,
-								minZ: 17,
-								maxZ: 17
-							},
-							{
-								minX: 184064,
-								minY: 82668,
-								maxX: 230016,
-								maxY: 131976,
-								minZ: 18,
-								maxZ: 18
+								"resourceIndex": 1971,
+								"textureIndex": 0,
+								"tileType": 2
 							}
 						],
-						genericTile: [
+						"availableTiles": [
 							{
-								tileType: 2,
-								textureIndex: 0,
-								resourceIndex: 1971
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 224,
+								"minZ": 8,
+								"minX": 179,
+								"maxY": 128,
+								"minY": 80,
+								"maxZ": 8
+							},
+							{
+								"maxX": 449,
+								"minZ": 9,
+								"minX": 359,
+								"maxY": 257,
+								"minY": 161,
+								"maxZ": 9
+							},
+							{
+								"maxX": 898,
+								"minZ": 10,
+								"minX": 719,
+								"maxY": 915,
+								"minY": 323,
+								"maxZ": 10
+							},
+							{
+								"maxX": 1797,
+								"minZ": 11,
+								"minX": 1438,
+								"maxY": 1031,
+								"minY": 646,
+								"maxZ": 11
+							},
+							{
+								"maxX": 3594,
+								"minZ": 12,
+								"minX": 2876,
+								"maxY": 2062,
+								"minY": 1292,
+								"maxZ": 12
+							},
+							{
+								"maxX": 7188,
+								"minZ": 13,
+								"minX": 5752,
+								"maxY": 4124,
+								"minY": 2584,
+								"maxZ": 13
+							},
+							{
+								"maxX": 14376,
+								"minZ": 14,
+								"minX": 11504,
+								"maxY": 8248,
+								"minY": 5168,
+								"maxZ": 14
+							},
+							{
+								"maxX": 28752,
+								"minZ": 15,
+								"minX": 23008,
+								"maxY": 16496,
+								"minY": 10336,
+								"maxZ": 15
+							},
+							{
+								"maxX": 57504,
+								"minZ": 16,
+								"minX": 46016,
+								"maxY": 32992,
+								"minY": 20672,
+								"maxZ": 16
+							},
+							{
+								"maxX": 115008,
+								"minZ": 17,
+								"minX": 92032,
+								"maxY": 65984,
+								"minY": 41344,
+								"maxZ": 17
+							},
+							{
+								"maxX": 230016,
+								"minZ": 18,
+								"minX": 184064,
+								"maxY": 131976,
+								"minY": 82668,
+								"maxZ": 18
 							}
-						]
+						],
+						"identifier": 52
 					}
-				],
-				scale: 2,
-				size: 1,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-2-cn-ssl.ls.apple.com/2/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 11,
-				validVersion: [
+				"scale": 0,
+				"style": 11,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=1",
+				"validVersion": [
 					{
-						identifier: 470,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 474
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=1",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 12,
-				validVersion: [
+				"scale": 0,
+				"style": 12,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe12-cn-ssl.ls.apple.com/traffic",
+				"validVersion": [
 					{
-						identifier: 2111,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 120
+						"identifier": 2169,
+						"timeToLiveSeconds": 120,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe12-cn-ssl.ls.apple.com/traffic",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 13,
-				validVersion: [
+				"scale": 0,
+				"style": 13,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 2092,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
-							}
-						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 604800,
-						supportedLanguagesVersion: 1
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -2603,44 +2531,82 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=2",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 18,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=2",
+				"validVersion": [
 					{
-						identifier: 2112,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2150,
+						"timeToLiveSeconds": 604800,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 18,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -2680,156 +2646,78 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 20,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 2112,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2170,
+						"genericTile": []
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 20,
+				"checksumType": 0,
+				"countryRegionWhitelist": [
+					{
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": "IN"
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -2869,128 +2757,181 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
-					}
-				],
-				countryRegionWhitelist: [
-					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: "IN"
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 22,
-				validVersion: [
-					{
-						identifier: 2112,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 15
-							}
 						],
-						genericTile: [
-						]
+						"identifier": 1
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 30,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 146,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 262143,
-								maxY: 262143,
-								minZ: 18,
-								maxZ: 18
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2170,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 22,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 1,
-						language: [
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 2170
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 30,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -3030,116 +2971,57 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 37,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 1904,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 262143,
+								"minZ": 18,
+								"minX": 0,
+								"maxY": 262143,
+								"minY": 0,
+								"maxZ": 18
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 150,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 37,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -3179,116 +3061,113 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=2",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 47,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles?flags=2",
+				"validVersion": [
 					{
-						identifier: 1904,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 1958,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 47,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -3328,84 +3207,149 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 48,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 1904,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 1958,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 53,
-				validVersion: [
+				"scale": 0,
+				"style": 48,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 2112,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 1958
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 53,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -3445,84 +3389,77 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
+					{
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 2170,
+						"genericTile": []
+					}
+				]
 			},
 			{
-				style: 54,
-				validVersion: [
+				"scale": 0,
+				"style": 54,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 2112,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 2170
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 56,
-				validVersion: [
+				"scale": 0,
+				"style": 56,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 16,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
-							}
-						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -3562,397 +3499,374 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 57,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 3600
+						"identifier": 16,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gsp76-cn-ssl.ls.apple.com/api/tile",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 58,
-				validVersion: [
+				"scale": 0,
+				"style": 57,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gsp76-cn-ssl.ls.apple.com/api/tile",
+				"validVersion": [
 					{
-						identifier: 137,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 0,
+						"timeToLiveSeconds": 3600,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 59,
-				validVersion: [
+				"scale": 0,
+				"style": 58,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 80,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 145
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/asset/v3/model",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 60,
-				validVersion: [
+				"scale": 0,
+				"style": 59,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/asset/v3/model",
+				"validVersion": [
 					{
-						identifier: 30,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 84
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/asset/v3/material",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 61,
-				validVersion: [
+				"scale": 0,
+				"style": 60,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/asset/v3/material",
+				"validVersion": [
 					{
-						identifier: 30,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 30
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 64,
-				validVersion: [
+				"scale": 0,
+				"style": 61,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 16,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 30
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 64,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -3992,189 +3906,107 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 65,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 2,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 3600
+						"identifier": 16,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-cn-ssl.ls.apple.com/65/v1",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 66,
-				validVersion: [
+				"scale": 0,
+				"style": 65,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-cn-ssl.ls.apple.com/65/v1",
+				"validVersion": [
 					{
-						identifier: 2112,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2,
+						"timeToLiveSeconds": 3600,
+						"genericTile": []
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 66,
+				"checksumType": 0,
+				"countryRegionWhitelist": [
+					{
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": "IN"
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -4214,160 +4046,190 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: "IN"
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 67,
-				validVersion: [
-					{
-						identifier: 2112,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2170,
+						"genericTile": []
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 67,
+				"checksumType": 0,
+				"countryRegionWhitelist": [
+					{
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": "IN"
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -4407,184 +4269,121 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: "IN"
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 68,
-				validVersion: [
-					{
-						identifier: 2092,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2170,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 68,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -4624,438 +4423,414 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 69,
-				validVersion: [
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 21,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 2150,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 72,
-				validVersion: [
+				"scale": 0,
+				"style": 69,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 2,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 3600
+						"identifier": 21
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 73,
-				validVersion: [
+				"scale": 0,
+				"style": 72,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"validVersion": [
 					{
-						identifier: 470,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 2,
+						"timeToLiveSeconds": 3600,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 76,
-				validVersion: [
+				"scale": 0,
+				"style": 73,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 524287,
-								maxY: 524287,
-								minZ: 19,
-								maxZ: 19
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
+						"identifier": 474
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-cn-ssl.ls.apple.com/sis/v1",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 79,
-				validVersion: [
+				"scale": 0,
+				"style": 76,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-cn-ssl.ls.apple.com/sis/v1",
+				"validVersion": [
 					{
-						identifier: 29,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 524287,
+								"minZ": 19,
+								"minX": 0,
+								"maxY": 524287,
+								"minY": 0,
+								"maxZ": 19
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 0,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 84,
-				validVersion: [
+				"scale": 0,
+				"style": 79,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				"validVersion": [
 					{
-						identifier: 2092,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 1800,
-						supportedLanguagesVersion: 1
+						"identifier": 29
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 84,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -5095,28 +4870,146 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-2-cn-ssl.ls.apple.com/poi_update",
-				supportsMultipathTCP: false
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe19-2-cn-ssl.ls.apple.com/poi_update",
+				"validVersion": [
+					{
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
+							{
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
+							}
+						],
+						"identifier": 2150,
+						"timeToLiveSeconds": 1800,
+						"genericTile": []
+					}
+				]
 			}
 		],
 		attribution: [
 			{
-				name: "AutoNavi",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-cn2-66.html",
-				resource: [
+				"region": [],
+				"name": "AutoNavi",
+				"url": "https://gspe21-ssl.ls.apple.com/html/attribution-cn2-66.html",
+				"resource": [
 					{
-						resourceType: 6,
-						filename: "autonavi-4.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 61,
 							"1": 130,
 							"2": 126,
@@ -5138,17 +5031,15 @@ var Configs$2 = {
 							"18": 252,
 							"19": 219
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "autonavi-4.png",
+						"resourceType": 6
 					},
 					{
-						resourceType: 6,
-						filename: "autonavi-4@2x.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 101,
 							"1": 191,
 							"2": 219,
@@ -5170,17 +5061,15 @@ var Configs$2 = {
 							"18": 26,
 							"19": 203
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "autonavi-4@2x.png",
+						"resourceType": 6
 					},
 					{
-						resourceType: 6,
-						filename: "autonavi-4@2x.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 101,
 							"1": 191,
 							"2": 219,
@@ -5202,17 +5091,15 @@ var Configs$2 = {
 							"18": 26,
 							"19": 203
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "autonavi-4@2x.png",
+						"resourceType": 6
 					},
 					{
-						resourceType: 5,
-						filename: "autonavi-logo-mask-1.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 247,
 							"1": 152,
 							"2": 81,
@@ -5234,17 +5121,15 @@ var Configs$2 = {
 							"18": 164,
 							"19": 74
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "autonavi-logo-mask-1.png",
+						"resourceType": 5
 					},
 					{
-						resourceType: 5,
-						filename: "autonavi-logo-mask-1@2x.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 54,
 							"1": 203,
 							"2": 95,
@@ -5266,17 +5151,15 @@ var Configs$2 = {
 							"18": 11,
 							"19": 127
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "autonavi-logo-mask-1@2x.png",
+						"resourceType": 5
 					},
 					{
-						resourceType: 5,
-						filename: "autonavi-logo-mask-1@3x.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 131,
 							"1": 225,
 							"2": 158,
@@ -5298,337 +5181,235 @@ var Configs$2 = {
 							"18": 15,
 							"19": 99
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "autonavi-logo-mask-1@3x.png",
+						"resourceType": 5
 					}
-				],
-				region: [
-				],
-				linkDisplayStringIndex: 0
+				]
 			},
 			{
-				name: "© GeoTechnologies, Inc.",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-cn2-66.html",
-				resource: [
-				],
-				region: [
+				"region": [
 					{
-						minX: 218,
-						minY: 102,
-						maxX: 225,
-						maxY: 104,
-						minZ: 8,
-						maxZ: 21
+						"maxX": 225,
+						"minZ": 8,
+						"minX": 218,
+						"maxY": 104,
+						"minY": 102,
+						"maxZ": 21
 					},
 					{
-						minX: 221,
-						minY: 98,
-						maxX: 228,
-						maxY: 101,
-						minZ: 8,
-						maxZ: 21
+						"maxX": 228,
+						"minZ": 8,
+						"minX": 221,
+						"maxY": 101,
+						"minY": 98,
+						"maxZ": 21
 					},
 					{
-						minX: 226,
-						minY: 91,
-						maxX: 231,
-						maxY: 97,
-						minZ: 8,
-						maxZ: 21
+						"maxX": 231,
+						"minZ": 8,
+						"minX": 226,
+						"maxY": 97,
+						"minY": 91,
+						"maxZ": 21
 					}
 				],
-				linkDisplayStringIndex: 0
+				"name": "© GeoTechnologies, Inc.",
+				"url": "https://gspe21-ssl.ls.apple.com/html/attribution-cn2-66.html",
+				"resource": []
 			}
 		],
 		urlInfoSet: [
 			{
-				alternateResourcesURL: [
+				"backgroundRevGeoURL": {
+					"url": "https://dispatcher.is.autonavi.com/dispatcher",
+					"supportsMultipathTCP": false
+				},
+				"searchAttributionManifestURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/config/search-attribution-1278",
+					"supportsMultipathTCP": false
+				},
+				"analyticsSessionlessURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
+				},
+				"poiBusynessActivityCollectionURL": {
+					"url": "https://gsp53-ssl.ls.apple.com/hvr/rt_poi_activity",
+					"supportsMultipathTCP": false
+				},
+				"offlineDataDownloadBaseURL": {
+					"url": "https://gspe121-cn-ssl.ls.apple.com",
+					"supportsMultipathTCP": false
+				},
+				"wifiConnectionQualityProbeURL": {
+					"url": "https://gsp10-ssl-cn.ls.apple.com/hvr/wcq",
+					"supportsMultipathTCP": false
+				},
+				"junctionImageServiceURL": {
+					"url": "https://direction2.is.autonavi.com/direction",
+					"supportsMultipathTCP": false
+				},
+				"etaURL": {
+					"url": "https://direction2.is.autonavi.com/direction",
+					"supportsMultipathTCP": false
+				},
+				"analyticsCohortSessionURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
+				},
+				"resourcesURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/",
+					"supportsMultipathTCP": false
+				},
+				"feedbackLookupURL": {
+					"url": "https://rap.is.autonavi.com/lookup",
+					"supportsMultipathTCP": false
+				},
+				"batchTrafficProbeURL": {
+					"url": "https://gsp10-ssl.ls.apple.com/hvr/v2/loc",
+					"supportsMultipathTCP": false
+				},
+				"batchReverseGeocoderURL": {
+					"url": "https://batch-rgeo.is.autonavi.com/batchRGeo",
+					"supportsMultipathTCP": false
+				},
+				"spatialLookupURL": {
+					"url": "https://spatialsearch.is.autonavi.com/spatialsearch",
+					"supportsMultipathTCP": false
+				},
+				"realtimeTrafficProbeURL": {
+					"url": "https://gsp9-ssl.apple.com/hvr/v2/rtloc",
+					"supportsMultipathTCP": false
+				},
+				"wifiQualityTileURL": {
+					"url": "https://gspe85-cn-ssl.ls.apple.com/wifi_request_tile",
+					"supportsMultipathTCP": false
+				},
+				"problemSubmissionURL": {
+					"url": "https://rap.is.autonavi.com/rap",
+					"supportsMultipathTCP": false
+				},
+				"reverseGeocoderVersionsURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/config/revgeo-version-11.plist",
+					"supportsMultipathTCP": false
+				},
+				"problemCategoriesURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-475.plist",
+					"supportsMultipathTCP": false
+				},
+				"batchReverseGeocoderPlaceRequestURL": {
+					"url": "https://dispatcher.is.autonavi.com/dispatcher",
+					"supportsMultipathTCP": false
+				},
+				"wifiQualityURL": {
+					"url": "https://gsp85-cn-ssl.ls.apple.com/wifi_request",
+					"supportsMultipathTCP": false
+				},
+				"polyLocationShiftURL": {
+					"url": "https://shift.is.autonavi.com/localshift",
+					"supportsMultipathTCP": false
+				},
+				"problemStatusURL": {
+					"url": "https://rap.is.autonavi.com/rapstatus",
+					"supportsMultipathTCP": false
+				},
+				"feedbackSubmissionURL": {
+					"url": "https://rap.is.autonavi.com/rap",
+					"supportsMultipathTCP": false
+				},
+				"offlineDataBatchListURL": {
+					"url": "https://ods.is.autonavi.com/api/batchesForRegion",
+					"supportsMultipathTCP": false
+				},
+				"offlineDataSizeURL": {
+					"url": "https://ods.is.autonavi.com/api/sizeForRegion",
+					"supportsMultipathTCP": false
+				},
+				"analyticsShortSessionURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
+				},
+				"alternateResourcesURL": [
 					{
-						url: "https://cdn.apple-mapkit.com/rap",
-						supportsMultipathTCP: false
+						"url": "https://cdn.apple-mapkit.com/rap",
+						"supportsMultipathTCP": false
 					},
 					{
-						url: "https://limit-rule.is.autonavi.com/lpr/rules/download",
-						supportsMultipathTCP: false
+						"url": "https://limit-rule.is.autonavi.com/lpr/rules/download",
+						"supportsMultipathTCP": false
 					}
 				],
-				resourcesURL: {
-					url: "https://gspe21-ssl.ls.apple.com/",
-					supportsMultipathTCP: false
+				"abExperimentURL": {
+					"url": "https://gsp-ssl.ls.apple.com/cn/ab.arpc",
+					"supportsMultipathTCP": false
 				},
-				searchAttributionManifestURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/search-attribution-1263",
-					supportsMultipathTCP: false
+				"logMessageUsageURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/a/v2/use",
+					"supportsMultipathTCP": false
 				},
-				directionsURL: {
-					url: "https://direction2.is.autonavi.com/direction",
-					supportsMultipathTCP: false
+				"rapWebBundleURL": {
+					"url": "https://cdn.apple-mapkit.com/rap",
+					"supportsMultipathTCP": false
 				},
-				etaURL: {
-					url: "https://direction2.is.autonavi.com/direction",
-					supportsMultipathTCP: false
+				"dispatcherURL": {
+					"url": "https://dispatcher.is.autonavi.com/dispatcher",
+					"supportsMultipathTCP": false
 				},
-				batchReverseGeocoderURL: {
-					url: "https://batch-rgeo.is.autonavi.com/batchRGeo",
-					supportsMultipathTCP: false
+				"simpleETAURL": {
+					"url": "https://direction2.is.autonavi.com/direction",
+					"supportsMultipathTCP": false
 				},
-				simpleETAURL: {
-					url: "https://direction2.is.autonavi.com/direction",
-					supportsMultipathTCP: false
+				"analyticsLongSessionURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
 				},
-				polyLocationShiftURL: {
-					url: "https://shift.is.autonavi.com/localshift",
-					supportsMultipathTCP: false
+				"backgroundDispatcherURL": {
+					"url": "https://dispatcher.is.autonavi.com/dispatcher",
+					"supportsMultipathTCP": false
 				},
-				problemSubmissionURL: {
-					url: "https://rap.is.autonavi.com/rap",
-					supportsMultipathTCP: false
+				"webModuleBaseURL": {
+					"url": "https://placecard-server-wm.is.autonavi.com",
+					"supportsMultipathTCP": false
 				},
-				problemStatusURL: {
-					url: "https://rap.is.autonavi.com/rapstatus",
-					supportsMultipathTCP: false
+				"directionsURL": {
+					"url": "https://direction2.is.autonavi.com/direction",
+					"supportsMultipathTCP": false
 				},
-				reverseGeocoderVersionsURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/revgeo-version-11.plist",
-					supportsMultipathTCP: false
+				"logMessageUsageV3URL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
 				},
-				problemCategoriesURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-424.plist",
-					supportsMultipathTCP: false
-				},
-				announcementsURL: {
-					url: "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod-cn",
-					supportsMultipathTCP: false
-				},
-				dispatcherURL: {
-					url: "https://dispatcher.is.autonavi.com/dispatcher",
-					supportsMultipathTCP: false
-				},
-				abExperimentURL: {
-					url: "https://gsp-ssl.ls.apple.com/cn/ab.arpc",
-					supportsMultipathTCP: false
-				},
-				logMessageUsageURL: {
-					url: "https://gsp64-ssl.ls.apple.com/a/v2/use",
-					supportsMultipathTCP: false
-				},
-				spatialLookupURL: {
-					url: "https://spatialsearch.is.autonavi.com/spatialsearch",
-					supportsMultipathTCP: false
-				},
-				realtimeTrafficProbeURL: {
-					url: "https://gsp9-ssl.apple.com/hvr/v2/rtloc",
-					supportsMultipathTCP: false
-				},
-				batchTrafficProbeURL: {
-					url: "https://gsp10-ssl.ls.apple.com/hvr/v2/loc",
-					supportsMultipathTCP: false
-				},
-				logMessageUsageV3URL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				backgroundDispatcherURL: {
-					url: "https://dispatcher.is.autonavi.com/dispatcher",
-					supportsMultipathTCP: false
-				},
-				backgroundRevGeoURL: {
-					url: "https://dispatcher.is.autonavi.com/dispatcher",
-					supportsMultipathTCP: false
-				},
-				wifiConnectionQualityProbeURL: {
-					url: "https://gsp10-ssl-cn.ls.apple.com/hvr/wcq",
-					supportsMultipathTCP: false
-				},
-				wifiQualityURL: {
-					url: "https://gsp85-cn-ssl.ls.apple.com/wifi_request",
-					supportsMultipathTCP: false
-				},
-				feedbackSubmissionURL: {
-					url: "https://rap.is.autonavi.com/rap",
-					supportsMultipathTCP: false
-				},
-				feedbackLookupURL: {
-					url: "https://rap.is.autonavi.com/lookup",
-					supportsMultipathTCP: false
-				},
-				junctionImageServiceURL: {
-					url: "https://direction2.is.autonavi.com/direction",
-					supportsMultipathTCP: false
-				},
-				analyticsCohortSessionURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				analyticsLongSessionURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				analyticsShortSessionURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				analyticsSessionlessURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				webModuleBaseURL: {
-					url: "https://placecard-server-wm.is.autonavi.com",
-					supportsMultipathTCP: false
-				},
-				wifiQualityTileURL: {
-					url: "https://gspe85-cn-ssl.ls.apple.com/wifi_request_tile",
-					supportsMultipathTCP: false
-				},
-				batchReverseGeocoderPlaceRequestURL: {
-					url: "https://dispatcher.is.autonavi.com/dispatcher",
-					supportsMultipathTCP: false
-				},
-				poiBusynessActivityCollectionURL: {
-					url: "https://gsp53-ssl.ls.apple.com/hvr/rt_poi_activity",
-					supportsMultipathTCP: false
-				},
-				rapWebBundleURL: {
-					url: "https://cdn.apple-mapkit.com/rap",
-					supportsMultipathTCP: false
-				},
-				offlineDataBatchListURL: {
-					url: "https://ods.is.autonavi.com/api/batchesForRegion",
-					supportsMultipathTCP: false
-				},
-				offlineDataSizeURL: {
-					url: "https://ods.is.autonavi.com/api/sizeForRegion",
-					supportsMultipathTCP: false
-				},
-				offlineDataDownloadBaseURL: {
-					url: "https://gspe121-cn-ssl.ls.apple.com",
-					supportsMultipathTCP: false
+				"announcementsURL": {
+					"url": "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod-cn",
+					"supportsMultipathTCP": false
 				}
 			}
 		],
 		muninBucket: [
 			{
-				bucketID: 2,
-				bucketURL: "https://gspe72-cn-ssl.ls.apple.com/mnn_us"
+				"bucketID": 2,
+				"bucketURL": "https://gspe72-cn-ssl.ls.apple.com/mnn_us"
 			},
 			{
-				bucketID: 6,
-				bucketURL: "https://gspe72-cn-ssl.ls.apple.com/mnn_us"
+				"bucketID": 6,
+				"bucketURL": "https://gspe72-cn-ssl.ls.apple.com/mnn_us"
 			}
 		]
 	},
 	XX: {
 		tileSet: [
 			{
-				style: 1,
-				validVersion: [
+				"scale": 0,
+				"style": 1,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 16034178,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							}
-						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -5669,165 +5450,163 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf?flags=8",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 1,
-				validVersion: [
-					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
 					{
-						identifier: 1,
-						language: [
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
+				],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf?flags=8"
+			},
+			{
+				"scale": 0,
+				"style": 1,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -5868,445 +5647,397 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
+							{
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							}
+						],
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
+					{
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
 				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=8",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=8"
 			},
 			{
-				style: 7,
-				validVersion: [
+				"scale": 1,
+				"style": 7,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 1,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
 					{
-						identifier: 9711,
-						availableTiles: [
+						"genericTile": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 22
+								"resourceIndex": 1971,
+								"textureIndex": 0,
+								"tileType": 2
 							}
 						],
-						genericTile: [
+						"availableTiles": [
 							{
-								tileType: 2,
-								textureIndex: 0,
-								resourceIndex: 1971
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 22
 							}
-						]
+						],
+						"identifier": 9751
 					}
-				],
-				scale: 1,
-				size: 1,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 7,
-				validVersion: [
+				"scale": 2,
+				"style": 7,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 1,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
 					{
-						identifier: 9711,
-						availableTiles: [
+						"genericTile": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 22
+								"resourceIndex": 1971,
+								"textureIndex": 0,
+								"tileType": 2
 							}
 						],
-						genericTile: [
+						"availableTiles": [
 							{
-								tileType: 2,
-								textureIndex: 0,
-								resourceIndex: 1971
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 22
 							}
-						]
+						],
+						"identifier": 9751
 					}
-				],
-				scale: 2,
-				size: 1,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 11,
-				validVersion: [
+				"scale": 0,
+				"style": 11,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf?flags=1",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf?flags=1"
 			},
 			{
-				style: 11,
-				validVersion: [
+				"scale": 0,
+				"style": 11,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=1",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=1"
 			},
 			{
-				style: 12,
-				validVersion: [
+				"scale": 0,
+				"style": 12,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 120
+						"identifier": 16283028,
+						"timeToLiveSeconds": 120,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe12-ssl.ls.apple.com/traffic",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe12-ssl.ls.apple.com/traffic"
 			},
 			{
-				style: 12,
-				validVersion: [
+				"scale": 0,
+				"style": 12,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 120
+						"identifier": 16283661,
+						"timeToLiveSeconds": 120,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe12-kittyhawk-ssl.ls.apple.com/traffic",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe12-kittyhawk-ssl.ls.apple.com/traffic"
 			},
 			{
-				style: 13,
-				validVersion: [
+				"scale": 0,
+				"style": 13,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 16034178,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
-							}
-						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -6347,149 +6078,146 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf?flags=2",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 13,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf?flags=2"
+			},
+			{
+				"scale": 0,
+				"style": 13,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -6530,173 +6258,291 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
-					}
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=2",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 14,
-				validVersion: [
-					{
-						identifier: 1,
-						availableTiles: [
 						],
-						genericTile: [
-						]
+						"identifier": 1
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 15,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 1,
-						availableTiles: [
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 16,
-				validVersion: [
-					{
-						identifier: 1,
-						availableTiles: [
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 17,
-				validVersion: [
-					{
-						identifier: 27,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 408,
-								minY: 2760,
-								maxX: 2583,
-								maxY: 3659,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 3848,
-								minY: 2332,
-								maxX: 4535,
-								maxY: 3235,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 1,
-				size: 1,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=2"
 			},
 			{
-				style: 18,
-				validVersion: [
+				"scale": 0,
+				"style": 14,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 15,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 16,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 17,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 0
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 1,
+				"style": 17,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 1,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
 					{
-						identifier: 1,
-						language: [
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 2583,
+								"minZ": 13,
+								"minX": 408,
+								"maxY": 3659,
+								"minY": 2760,
+								"maxZ": 13
+							},
+							{
+								"maxX": 4535,
+								"minZ": 13,
+								"minX": 3848,
+								"maxY": 3235,
+								"minY": 2332,
+								"maxZ": 13
+							}
+						],
+						"identifier": 32
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 18,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -6737,45 +6583,42 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 18,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 18,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -6816,157 +6659,42 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 20,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 20,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -7007,197 +6735,195 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 20,
-				validVersion: [
-					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
 					{
-						identifier: 1,
-						language: [
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
+				],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 20,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -7238,295 +6964,381 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 22,
-				validVersion: [
-					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
+					{
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 22,
-				validVersion: [
+				"scale": 0,
+				"style": 22,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 30,
-				validVersion: [
+				"scale": 0,
+				"style": 22,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 262143,
-								maxY: 262143,
-								minZ: 18,
-								maxZ: 18
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 30,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -7567,61 +7379,58 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 30,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 262143,
-								maxY: 262143,
-								minZ: 18,
-								maxZ: 18
+								"maxX": 262143,
+								"minZ": 18,
+								"minX": 0,
+								"maxY": 262143,
+								"minY": 0,
+								"maxZ": 18
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 30,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -7662,157 +7471,86 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 33,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 4,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 7
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 262143,
+								"minZ": 18,
+								"minX": 0,
+								"maxY": 262143,
+								"minY": 0,
+								"maxZ": 18
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 1,
-				size: 1,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 37,
-				validVersion: [
+				"scale": 1,
+				"style": 33,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 1,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 7
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 4
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 37,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -7853,125 +7591,122 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf?flags=2",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 37,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf?flags=2"
+			},
+			{
+				"scale": 0,
+				"style": 37,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8012,197 +7747,179 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
-					}
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=2",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 42,
-				validVersion: [
-					{
-						identifier: 1,
-						availableTiles: [
 						],
-						genericTile: [
-						]
+						"identifier": 1
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 43,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 1,
-						availableTiles: [
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 44,
-				validVersion: [
-					{
-						identifier: 1,
-						availableTiles: [
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 47,
-				validVersion: [
-					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf?flags=2"
+			},
+			{
+				"scale": 0,
+				"style": 42,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
 					{
-						identifier: 1,
-						language: [
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 43,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 44,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 47,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8243,125 +7960,122 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 47,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 47,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8402,151 +8116,215 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 48,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 11201196,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							}
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 48,
-				validVersion: [
-					{
-						identifier: 11201196,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							}
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 52,
-				validVersion: [
-					{
-						identifier: 1,
-						availableTiles: [
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe11-ssl.ls.apple.com/tile",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 53,
-				validVersion: [
-					{
-						identifier: 16034178,
-						availableTiles: [
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 48,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 1,
-						language: [
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 11201196
+					}
+				],
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 48,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 11201196
+					}
+				],
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 52,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 0,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe11-ssl.ls.apple.com/tile",
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [],
+						"identifier": 1
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 53,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8587,45 +8365,42 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 53,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 53,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8666,127 +8441,116 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
+					{
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 16283661,
+						"genericTile": []
+					}
 				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 54,
-				validVersion: [
+				"scale": 0,
+				"style": 54,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 13658945,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 13658945
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 54,
-				validVersion: [
+				"scale": 0,
+				"style": 54,
+				"checksumType": 0,
+				"requestStyle": 1,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 13659050,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 13659050
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 56,
-				validVersion: [
+				"scale": 0,
+				"style": 56,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 16034178,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
-							}
-						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8827,45 +8591,42 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 56,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 56,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -8906,792 +8667,745 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 57,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 3600
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe76-ssl.ls.apple.com/api/tile",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 58,
-				validVersion: [
+				"scale": 0,
+				"style": 57,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe76-ssl.ls.apple.com/api/tile",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 0,
+						"timeToLiveSeconds": 3600,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 58,
-				validVersion: [
+				"scale": 0,
+				"style": 58,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 59,
-				validVersion: [
+				"scale": 0,
+				"style": 58,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/asset/v3/model",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 59,
-				validVersion: [
+				"scale": 0,
+				"style": 59,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/model",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/asset/v3/model"
 			},
 			{
-				style: 60,
-				validVersion: [
+				"scale": 0,
+				"style": 59,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/asset/v3/material",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/model"
 			},
 			{
-				style: 60,
-				validVersion: [
+				"scale": 0,
+				"style": 60,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/material",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/asset/v3/material"
 			},
 			{
-				style: 61,
-				validVersion: [
+				"scale": 0,
+				"style": 60,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/material"
 			},
 			{
-				style: 61,
-				validVersion: [
+				"scale": 0,
+				"style": 61,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 62,
-				validVersion: [
+				"scale": 0,
+				"style": 61,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 62,
-				validVersion: [
+				"scale": 0,
+				"style": 62,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 64,
-				validVersion: [
+				"scale": 0,
+				"style": 62,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 64,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -9732,45 +9446,42 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 64,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 64,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -9811,190 +9522,71 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 65,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 2,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 3600
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/65/v1",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 66,
-				validVersion: [
+				"scale": 0,
+				"style": 65,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/65/v1",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 2,
+						"timeToLiveSeconds": 3600,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				]
+			},
+			{
+				"scale": 0,
+				"style": 66,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -10035,197 +9627,195 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 66,
-				validVersion: [
-					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
 					{
-						identifier: 1,
-						language: [
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
+				],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 66,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -10266,165 +9856,195 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 67,
-				validVersion: [
-					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
 					{
-						identifier: 1,
-						language: [
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
+				],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 67,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -10465,165 +10085,163 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 67,
-				validVersion: [
-					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
 					{
-						identifier: 1,
-						language: [
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
+				],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 67,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -10664,189 +10282,163 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
+				"validVersion": [
 					{
-						countryCode: "AE",
-						region: "AE"
-					},
-					{
-						countryCode: "AE",
-						region: "SA"
-					},
-					{
-						countryCode: "IN",
-						region: ""
-					},
-					{
-						countryCode: "JP",
-						region: "JP"
-					},
-					{
-						countryCode: "KR",
-						region: "KR"
-					},
-					{
-						countryCode: "MA",
-						region: "MA"
-					},
-					{
-						countryCode: "RU",
-						region: "RU"
-					},
-					{
-						countryCode: "SA",
-						region: "AE"
-					},
-					{
-						countryCode: "SA",
-						region: "SA"
-					},
-					{
-						countryCode: "VN",
-						region: "VN"
-					}
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 68,
-				validVersion: [
-					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [
 					{
-						identifier: 1,
-						language: [
+						"countryCode": "AE",
+						"region": "AE"
+					},
+					{
+						"countryCode": "AE",
+						"region": "SA"
+					},
+					{
+						"countryCode": "IN",
+						"region": ""
+					},
+					{
+						"countryCode": "JP",
+						"region": "JP"
+					},
+					{
+						"countryCode": "KR",
+						"region": "KR"
+					},
+					{
+						"countryCode": "MA",
+						"region": "MA"
+					},
+					{
+						"countryCode": "RU",
+						"region": "RU"
+					},
+					{
+						"countryCode": "SA",
+						"region": "AE"
+					},
+					{
+						"countryCode": "SA",
+						"region": "SA"
+					},
+					{
+						"countryCode": "VN",
+						"region": "VN"
+					}
+				],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 68,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
+					{
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -10887,149 +10479,146 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 68,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 68,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -11070,998 +10659,926 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 69,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 69,
-				validVersion: [
+				"scale": 0,
+				"style": 69,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 70,
-				validVersion: [
+				"scale": 0,
+				"style": 69,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 1,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe76-ssl.ls.apple.com/api/vltile",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 71,
-				validVersion: [
+				"scale": 0,
+				"style": 70,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe76-ssl.ls.apple.com/api/vltile",
+				"validVersion": [
 					{
-						identifier: 1,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2097151,
-								maxY: 2097151,
-								minZ: 21,
-								maxZ: 21
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 1,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe92-ssl.ls.apple.com",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 72,
-				validVersion: [
+				"scale": 0,
+				"style": 71,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe92-ssl.ls.apple.com",
+				"validVersion": [
 					{
-						identifier: 2,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 2097151,
+								"minZ": 21,
+								"minX": 0,
+								"maxY": 2097151,
+								"minY": 0,
+								"maxZ": 21
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 3600
+						"identifier": 1
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/72/v2",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 73,
-				validVersion: [
+				"scale": 0,
+				"style": 72,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/72/v2",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 2,
+						"timeToLiveSeconds": 3600,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 73,
-				validVersion: [
+				"scale": 0,
+				"style": 73,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 74,
-				validVersion: [
+				"scale": 0,
+				"style": 73,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2097151,
-								maxY: 2097151,
-								minZ: 21,
-								maxZ: 21
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/pbz/v1",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 75,
-				validVersion: [
+				"scale": 0,
+				"style": 74,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/pbz/v1",
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 2097151,
+								"minZ": 21,
+								"minX": 0,
+								"maxY": 2097151,
+								"minY": 0,
+								"maxZ": 21
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
+						"identifier": 0,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/pbz/v1",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 76,
-				validVersion: [
+				"scale": 0,
+				"style": 75,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/pbz/v1",
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 524287,
-								maxY: 524287,
-								minZ: 19,
-								maxZ: 19
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
+						"identifier": 0,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/sis/v1",
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 78,
-				validVersion: [
+				"scale": 0,
+				"style": 76,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/sis/v1",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 524287,
+								"minZ": 19,
+								"minX": 0,
+								"maxY": 524287,
+								"minY": 0,
+								"maxZ": 19
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 0,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 78,
-				validVersion: [
+				"scale": 0,
+				"style": 78,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 79,
-				validVersion: [
+				"scale": 0,
+				"style": 78,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 79,
-				validVersion: [
+				"scale": 0,
+				"style": 79,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 80,
-				validVersion: [
+				"scale": 0,
+				"style": 79,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 0,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/sdm/v1",
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
-				style: 82,
-				validVersion: [
+				"scale": 0,
+				"style": 80,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/sdm/v1",
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 0,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
 					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/asset/v3/model-occlusion",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				]
 			},
 			{
-				style: 82,
-				validVersion: [
+				"scale": 0,
+				"style": 82,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/model-occlusion",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/asset/v3/model-occlusion"
 			},
 			{
-				style: 84,
-				validVersion: [
+				"scale": 0,
+				"style": 82,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 1800,
-						supportedLanguagesVersion: 1
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/model-occlusion"
+			},
+			{
+				"scale": 0,
+				"style": 84,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -12102,150 +11619,147 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-2-ssl.ls.apple.com/poi_update",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 84,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 65535,
-								maxY: 65535,
-								minZ: 16,
-								maxZ: 16
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 131071,
-								maxY: 131071,
-								minZ: 17,
-								maxZ: 17
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 1800,
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"timeToLiveSeconds": 1800,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-2-ssl.ls.apple.com/poi_update"
+			},
+			{
+				"scale": 0,
+				"style": 84,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -12286,223 +11800,205 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-2-ssl.ls.apple.com/poi_update",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 85,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
+							},
+							{
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
+							},
+							{
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							},
+							{
+								"maxX": 65535,
+								"minZ": 16,
+								"minX": 0,
+								"maxY": 65535,
+								"minY": 0,
+								"maxZ": 16
+							},
+							{
+								"maxX": 131071,
+								"minZ": 17,
+								"minX": 0,
+								"maxY": 131071,
+								"minY": 0,
+								"maxZ": 17
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661,
+						"timeToLiveSeconds": 1800,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-2-ssl.ls.apple.com/live_tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-2-ssl.ls.apple.com/poi_update"
 			},
 			{
-				style: 85,
-				validVersion: [
+				"scale": 0,
+				"style": 85,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283028
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-2-ssl.ls.apple.com/live_tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-2-ssl.ls.apple.com/live_tile.vf"
 			},
 			{
-				style: 87,
-				validVersion: [
+				"scale": 0,
+				"style": 85,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"genericTile": [],
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
-							},
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283661
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-2-ssl.ls.apple.com/live_tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 87,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -12543,157 +12039,154 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 87,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16030619,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1,
-								maxY: 1,
-								minZ: 1,
-								maxZ: 1
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 3,
-								maxY: 3,
-								minZ: 2,
-								maxZ: 2
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 7,
-								maxY: 7,
-								minZ: 3,
-								maxZ: 3
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 15,
-								maxY: 15,
-								minZ: 4,
-								maxZ: 4
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 31,
-								maxY: 31,
-								minZ: 5,
-								maxZ: 5
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 63,
-								maxY: 63,
-								minZ: 6,
-								maxZ: 6
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 255,
-								maxY: 255,
-								minZ: 8,
-								maxZ: 8
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 511,
-								maxY: 511,
-								minZ: 9,
-								maxZ: 9
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 1023,
-								maxY: 1023,
-								minZ: 10,
-								maxZ: 10
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 2047,
-								maxY: 2047,
-								minZ: 11,
-								maxZ: 11
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 16383,
-								maxY: 16383,
-								minZ: 14,
-								maxZ: 14
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						],
-						supportedLanguagesVersion: 1
+						"identifier": 16283028,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 87,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [
 					{
-						identifier: 1,
-						language: [
+						"language": [
 							"ar",
 							"ca",
 							"cs",
@@ -12734,270 +12227,495 @@ var Configs$2 = {
 							"zh-Hans",
 							"zh-Hant",
 							"zh-HK"
-						]
+						],
+						"identifier": 1
 					}
 				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 88,
-				validVersion: [
+				"validVersion": [
 					{
-						identifier: 16034178,
-						availableTiles: [
+						"supportedLanguagesVersion": 1,
+						"availableTiles": [
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 1,
+								"minZ": 1,
+								"minX": 0,
+								"maxY": 1,
+								"minY": 0,
+								"maxZ": 1
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							}
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 88,
-				validVersion: [
-					{
-						identifier: 16030619,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 127,
-								maxY: 127,
-								minZ: 7,
-								maxZ: 7
+								"maxX": 3,
+								"minZ": 2,
+								"minX": 0,
+								"maxY": 3,
+								"minY": 0,
+								"maxZ": 2
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 4095,
-								maxY: 4095,
-								minZ: 12,
-								maxZ: 12
-							}
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 89,
-				validVersion: [
-					{
-						identifier: 1,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 262143,
-								maxY: 262143,
-								minZ: 18,
-								maxZ: 18
-							}
-						],
-						genericTile: [
-						],
-						timeToLiveSeconds: 86400
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe79-ssl.ls.apple.com/ray/v1",
-				supportsMultipathTCP: false
-			},
-			{
-				style: 90,
-				validVersion: [
-					{
-						identifier: 16034178,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 7,
+								"minZ": 3,
+								"minX": 0,
+								"maxY": 7,
+								"minY": 0,
+								"maxZ": 3
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
-							}
-						],
-						genericTile: [
-						]
-					}
-				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
-				],
-				countryRegionWhitelist: [
-				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
-				],
-				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf",
-				dataSet: 0,
-				supportsMultipathTCP: false
-			},
-			{
-				style: 90,
-				validVersion: [
-					{
-						identifier: 16030619,
-						availableTiles: [
-							{
-								minX: 0,
-								minY: 0,
-								maxX: 8191,
-								maxY: 8191,
-								minZ: 13,
-								maxZ: 13
+								"maxX": 15,
+								"minZ": 4,
+								"minX": 0,
+								"maxY": 15,
+								"minY": 0,
+								"maxZ": 4
 							},
 							{
-								minX: 0,
-								minY: 0,
-								maxX: 32767,
-								maxY: 32767,
-								minZ: 15,
-								maxZ: 15
+								"maxX": 31,
+								"minZ": 5,
+								"minX": 0,
+								"maxY": 31,
+								"minY": 0,
+								"maxZ": 5
+							},
+							{
+								"maxX": 63,
+								"minZ": 6,
+								"minX": 0,
+								"maxY": 63,
+								"minY": 0,
+								"maxZ": 6
+							},
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 255,
+								"minZ": 8,
+								"minX": 0,
+								"maxY": 255,
+								"minY": 0,
+								"maxZ": 8
+							},
+							{
+								"maxX": 511,
+								"minZ": 9,
+								"minX": 0,
+								"maxY": 511,
+								"minY": 0,
+								"maxZ": 9
+							},
+							{
+								"maxX": 1023,
+								"minZ": 10,
+								"minX": 0,
+								"maxY": 1023,
+								"minY": 0,
+								"maxZ": 10
+							},
+							{
+								"maxX": 2047,
+								"minZ": 11,
+								"minX": 0,
+								"maxY": 2047,
+								"minY": 0,
+								"maxZ": 11
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							},
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 16383,
+								"minZ": 14,
+								"minX": 0,
+								"maxY": 16383,
+								"minY": 0,
+								"maxZ": 14
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
 							}
 						],
-						genericTile: [
-						]
+						"identifier": 16283661,
+						"genericTile": []
 					}
 				],
-				scale: 0,
-				size: 2,
-				supportedLanguage: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 88,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							}
+						],
+						"identifier": 16283028
+					}
 				],
-				countryRegionWhitelist: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 88,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 127,
+								"minZ": 7,
+								"minX": 0,
+								"maxY": 127,
+								"minY": 0,
+								"maxZ": 7
+							},
+							{
+								"maxX": 4095,
+								"minZ": 12,
+								"minX": 0,
+								"maxY": 4095,
+								"minY": 0,
+								"maxZ": 12
+							}
+						],
+						"identifier": 16283661
+					}
 				],
-				checksumType: 0,
-				requestStyle: 0,
-				deviceSKUWhitelist: [
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 89,
+				"checksumType": 0,
+				"countryRegionWhitelist": [],
+				"size": 2,
+				"requestStyle": 1,
+				"deviceSKUWhitelist": [],
+				"supportedLanguage": [],
+				"supportsMultipathTCP": false,
+				"baseURL": "https://gspe79-ssl.ls.apple.com/ray/v1",
+				"validVersion": [
+					{
+						"availableTiles": [
+							{
+								"maxX": 262143,
+								"minZ": 18,
+								"minX": 0,
+								"maxY": 262143,
+								"minY": 0,
+								"maxZ": 18
+							}
+						],
+						"identifier": 1,
+						"timeToLiveSeconds": 86400,
+						"genericTile": []
+					}
+				]
+			},
+			{
+				"scale": 0,
+				"style": 90,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 0,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 16283028
+					}
 				],
-				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf",
-				dataSet: 1,
-				supportsMultipathTCP: false
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				"scale": 0,
+				"style": 90,
+				"checksumType": 0,
+				"requestStyle": 0,
+				"supportsMultipathTCP": false,
+				"dataSet": 1,
+				"size": 2,
+				"supportedLanguage": [],
+				"validVersion": [
+					{
+						"genericTile": [],
+						"availableTiles": [
+							{
+								"maxX": 8191,
+								"minZ": 13,
+								"minX": 0,
+								"maxY": 8191,
+								"minY": 0,
+								"maxZ": 13
+							},
+							{
+								"maxX": 32767,
+								"minZ": 15,
+								"minX": 0,
+								"maxY": 32767,
+								"minY": 0,
+								"maxZ": 15
+							}
+						],
+						"identifier": 16283661
+					}
+				],
+				"deviceSKUWhitelist": [],
+				"countryRegionWhitelist": [],
+				"baseURL": "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			}
 		],
 		attribution: [
 			{
-				name: "‎",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-275.html",
-				resource: [
-				],
-				region: [
-				],
-				linkDisplayStringIndex: 0,
-				plainTextURL: "https://gspe21-ssl.ls.apple.com/html/attribution-274.txt",
-				plainTextURLSHA256Checksum: {
-					"0": 95,
-					"1": 21,
-					"2": 102,
-					"3": 110,
-					"4": 8,
-					"5": 247,
-					"6": 232,
-					"7": 236,
-					"8": 45,
-					"9": 156,
-					"10": 70,
-					"11": 137,
-					"12": 179,
-					"13": 197,
-					"14": 80,
-					"15": 243,
-					"16": 60,
-					"17": 246,
-					"18": 254,
-					"19": 239,
-					"20": 198,
-					"21": 57,
-					"22": 65,
-					"23": 219,
-					"24": 22,
-					"25": 147,
-					"26": 180,
-					"27": 123,
-					"28": 186,
-					"29": 78,
-					"30": 122,
-					"31": 162
+				"region": [],
+				"name": "‎",
+				"url": "https://gspe21-ssl.ls.apple.com/html/attribution-277.html",
+				"resource": [],
+				"linkDisplayStringIndex": 0,
+				"plainTextURL": "https://gspe21-ssl.ls.apple.com/html/attribution-276.txt",
+				"plainTextURLSHA256Checksum": {
+					"0": 23,
+					"1": 205,
+					"2": 77,
+					"3": 134,
+					"4": 47,
+					"5": 251,
+					"6": 220,
+					"7": 223,
+					"8": 247,
+					"9": 82,
+					"10": 216,
+					"11": 183,
+					"12": 42,
+					"13": 22,
+					"14": 222,
+					"15": 4,
+					"16": 99,
+					"17": 19,
+					"18": 69,
+					"19": 96,
+					"20": 24,
+					"21": 89,
+					"22": 86,
+					"23": 22,
+					"24": 113,
+					"25": 203,
+					"26": 166,
+					"27": 27,
+					"28": 50,
+					"29": 153,
+					"30": 174,
+					"31": 96
 				}
 			},
 			{
-				name: "MMI",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-275.html",
-				resource: [
+				"region": [
 					{
-						resourceType: 5,
-						filename: "mmi-mask-2.png",
-						checksum: {
+						"maxX": 183,
+						"minZ": 8,
+						"minX": 176,
+						"maxY": 122,
+						"minY": 110,
+						"maxZ": 21
+					},
+					{
+						"maxX": 188,
+						"minZ": 8,
+						"minX": 178,
+						"maxY": 107,
+						"minY": 107,
+						"maxZ": 21
+					},
+					{
+						"maxX": 183,
+						"minZ": 8,
+						"minX": 178,
+						"maxY": 109,
+						"minY": 108,
+						"maxZ": 21
+					},
+					{
+						"maxX": 180,
+						"minZ": 8,
+						"minX": 180,
+						"maxY": 106,
+						"minY": 105,
+						"maxZ": 21
+					},
+					{
+						"maxX": 183,
+						"minZ": 8,
+						"minX": 181,
+						"maxY": 106,
+						"minY": 104,
+						"maxZ": 21
+					},
+					{
+						"maxX": 182,
+						"minZ": 8,
+						"minX": 182,
+						"maxY": 103,
+						"minY": 103,
+						"maxZ": 21
+					},
+					{
+						"maxX": 184,
+						"minZ": 8,
+						"minX": 184,
+						"maxY": 106,
+						"minY": 104,
+						"maxZ": 21
+					},
+					{
+						"maxX": 195,
+						"minZ": 8,
+						"minX": 184,
+						"maxY": 110,
+						"minY": 108,
+						"maxZ": 21
+					},
+					{
+						"maxX": 194,
+						"minZ": 8,
+						"minX": 184,
+						"maxY": 111,
+						"minY": 111,
+						"maxZ": 21
+					},
+					{
+						"maxX": 191,
+						"minZ": 8,
+						"minX": 184,
+						"maxY": 120,
+						"minY": 112,
+						"maxZ": 21
+					},
+					{
+						"maxX": 184,
+						"minZ": 8,
+						"minX": 184,
+						"maxY": 121,
+						"minY": 121,
+						"maxZ": 21
+					},
+					{
+						"maxX": 185,
+						"minZ": 8,
+						"minX": 185,
+						"maxY": 106,
+						"minY": 105,
+						"maxZ": 21
+					},
+					{
+						"maxX": 190,
+						"minZ": 8,
+						"minX": 190,
+						"maxY": 107,
+						"minY": 107,
+						"maxZ": 21
+					},
+					{
+						"maxX": 194,
+						"minZ": 8,
+						"minX": 193,
+						"maxY": 123,
+						"minY": 118,
+						"maxZ": 21
+					},
+					{
+						"maxX": 195,
+						"minZ": 8,
+						"minX": 195,
+						"maxY": 118,
+						"minY": 118,
+						"maxZ": 21
+					}
+				],
+				"linkDisplayStringIndex": 0,
+				"name": "MMI",
+				"url": "https://gspe21-ssl.ls.apple.com/html/attribution-277.html",
+				"resource": [
+					{
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 35,
 							"1": 54,
 							"2": 2,
@@ -13019,17 +12737,15 @@ var Configs$2 = {
 							"18": 32,
 							"19": 41
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "mmi-mask-2.png",
+						"resourceType": 5
 					},
 					{
-						resourceType: 5,
-						filename: "mmi-mask-2@2x.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 5,
 							"1": 160,
 							"2": 112,
@@ -13051,17 +12767,15 @@ var Configs$2 = {
 							"18": 220,
 							"19": 80
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "mmi-mask-2@2x.png",
+						"resourceType": 5
 					},
 					{
-						resourceType: 5,
-						filename: "mmi-mask-2@3x.png",
-						checksum: {
+						"region": [],
+						"filter": [],
+						"checksum": {
 							"0": 240,
 							"1": 170,
 							"2": 204,
@@ -13083,393 +12797,267 @@ var Configs$2 = {
 							"18": 74,
 							"19": 220
 						},
-						region: [
-						],
-						filter: [
-						],
-						validationMethod: 0,
-						updateMethod: 0
+						"updateMethod": 0,
+						"validationMethod": 0,
+						"filename": "mmi-mask-2@3x.png",
+						"resourceType": 5
 					}
-				],
-				region: [
-					{
-						minX: 176,
-						minY: 110,
-						maxX: 183,
-						maxY: 122,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 178,
-						minY: 107,
-						maxX: 188,
-						maxY: 107,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 178,
-						minY: 108,
-						maxX: 183,
-						maxY: 109,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 180,
-						minY: 105,
-						maxX: 180,
-						maxY: 106,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 181,
-						minY: 104,
-						maxX: 183,
-						maxY: 106,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 182,
-						minY: 103,
-						maxX: 182,
-						maxY: 103,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 184,
-						minY: 104,
-						maxX: 184,
-						maxY: 106,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 184,
-						minY: 108,
-						maxX: 195,
-						maxY: 110,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 184,
-						minY: 111,
-						maxX: 194,
-						maxY: 111,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 184,
-						minY: 112,
-						maxX: 191,
-						maxY: 120,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 184,
-						minY: 121,
-						maxX: 184,
-						maxY: 121,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 185,
-						minY: 105,
-						maxX: 185,
-						maxY: 106,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 190,
-						minY: 107,
-						maxX: 190,
-						maxY: 107,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 193,
-						minY: 118,
-						maxX: 194,
-						maxY: 123,
-						minZ: 8,
-						maxZ: 21
-					},
-					{
-						minX: 195,
-						minY: 118,
-						maxX: 195,
-						maxY: 118,
-						minZ: 8,
-						maxZ: 21
-					}
-				],
-				linkDisplayStringIndex: 0
+				]
 			},
 			{
-				name: "© GeoTechnologies, Inc.",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-275.html",
-				resource: [
-				],
-				region: [
+				"region": [
 					{
-						minX: 218,
-						minY: 102,
-						maxX: 225,
-						maxY: 104,
-						minZ: 8,
-						maxZ: 21
+						"maxX": 225,
+						"minZ": 8,
+						"minX": 218,
+						"maxY": 104,
+						"minY": 102,
+						"maxZ": 21
 					},
 					{
-						minX: 221,
-						minY: 98,
-						maxX: 228,
-						maxY: 101,
-						minZ: 8,
-						maxZ: 21
+						"maxX": 228,
+						"minZ": 8,
+						"minX": 221,
+						"maxY": 101,
+						"minY": 98,
+						"maxZ": 21
 					},
 					{
-						minX: 226,
-						minY: 91,
-						maxX: 231,
-						maxY: 97,
-						minZ: 8,
-						maxZ: 21
+						"maxX": 231,
+						"minZ": 8,
+						"minX": 226,
+						"maxY": 97,
+						"minY": 91,
+						"maxZ": 21
 					}
 				],
-				linkDisplayStringIndex: 0
+				"linkDisplayStringIndex": 0,
+				"name": "© GeoTechnologies, Inc.",
+				"url": "https://gspe21-ssl.ls.apple.com/html/attribution-277.html",
+				"resource": []
 			}
 		],
 		urlInfoSet: [
 			{
-				alternateResourcesURL: [
+				"backgroundRevGeoURL": {
+					"url": "https://gsp57-ssl-revgeo.ls.apple.com/dispatcher.arpc",
+					"supportsMultipathTCP": false
+				},
+				"announcementsURL": {
+					"url": "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod",
+					"supportsMultipathTCP": false
+				},
+				"searchAttributionManifestURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/config/search-attribution-1277",
+					"supportsMultipathTCP": false
+				},
+				"analyticsSessionlessURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
+				},
+				"proactiveAppClipURL": {
+					"url": "https://gspe79-ssl.ls.apple.com/72/v2",
+					"supportsMultipathTCP": false
+				},
+				"enrichmentSubmissionURL": {
+					"url": "https://sundew.ls.apple.com/v1/feedback/submission.arpc",
+					"supportsMultipathTCP": false
+				},
+				"wifiConnectionQualityProbeURL": {
+					"url": "https://gsp10-ssl.ls.apple.com/hvr/wcq",
+					"supportsMultipathTCP": false
+				},
+				"poiBusynessActivityCollectionURL": {
+					"url": "https://gsp53-ssl.ls.apple.com/hvr/rt_poi_activity",
+					"supportsMultipathTCP": false
+				},
+				"offlineDataDownloadBaseURL": {
+					"url": "https://gspe121-ssl.ls.apple.com",
+					"supportsMultipathTCP": false
+				},
+				"etaURL": {
+					"url": "https://gsp-ssl.ls.apple.com/directions.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
+				},
+				"analyticsCohortSessionURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
+				},
+				"resourcesURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/",
+					"supportsMultipathTCP": false
+				},
+				"problemOptInURL": {
+					"url": "https://sundew.ls.apple.com/grp/oi",
+					"supportsMultipathTCP": false
+				},
+				"proactiveRoutingURL": {
+					"url": "https://gsp-ssl-commute.ls.apple.com/directions.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
+				},
+				"feedbackLookupURL": {
+					"url": "https://gsp-ssl.ls.apple.com/feedback.arpc",
+					"supportsMultipathTCP": false
+				},
+				"bluePOIDispatcherURL": {
+					"url": "https://gsp57-ssl-locus.ls.apple.com/dispatcher.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
+				},
+				"batchTrafficProbeURL": {
+					"url": "https://gsp10-ssl.ls.apple.com/hvr/v2/loc",
+					"supportsMultipathTCP": false
+				},
+				"batchReverseGeocoderURL": {
+					"url": "https://gsp36-ssl.ls.apple.com/revgeo.arpc",
+					"supportsMultipathTCP": false
+				},
+				"spatialLookupURL": {
+					"url": "https://gsp51-ssl.ls.apple.com/api/v1.0/poi/data",
+					"supportsMultipathTCP": false
+				},
+				"realtimeTrafficProbeURL": {
+					"url": "https://gsp9-ssl.apple.com/hvr/v2/rtloc",
+					"supportsMultipathTCP": false
+				},
+				"addressCorrectionTaggedLocationURL": {
+					"url": "https://gsp47-ssl.ls.apple.com/ac",
+					"supportsMultipathTCP": false
+				},
+				"problemSubmissionURL": {
+					"url": "https://sundew.ls.apple.com/v1/feedback/submission.arpc",
+					"supportsMultipathTCP": false
+				},
+				"reverseGeocoderVersionsURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/config/revgeo-version-11.plist",
+					"supportsMultipathTCP": false
+				},
+				"wifiQualityTileURL": {
+					"url": "https://gspe85-ssl.ls.apple.com/wifi_request_tile",
+					"supportsMultipathTCP": false
+				},
+				"problemCategoriesURL": {
+					"url": "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-475.plist",
+					"supportsMultipathTCP": false
+				},
+				"batchReverseGeocoderPlaceRequestURL": {
+					"url": "https://gsp36-ssl.ls.apple.com/revgeo_pr.arpc",
+					"supportsMultipathTCP": false
+				},
+				"wifiQualityURL": {
+					"url": "https://gsp85-ssl.ls.apple.com/wifi_request",
+					"supportsMultipathTCP": false
+				},
+				"problemStatusURL": {
+					"url": "https://sundew.ls.apple.com/grp/st",
+					"supportsMultipathTCP": false
+				},
+				"feedbackSubmissionURL": {
+					"url": "https://sundew.ls.apple.com/v1/feedback/submission.arpc",
+					"supportsMultipathTCP": false
+				},
+				"pressureProbeDataURL": {
+					"url": "https://gsp10-ssl.ls.apple.com/hvr/cpr",
+					"supportsMultipathTCP": false
+				},
+				"offlineDataBatchListURL": {
+					"url": "https://gspe121-ssl.ls.apple.com/api/batchesForRegion",
+					"supportsMultipathTCP": false
+				},
+				"offlineDataSizeURL": {
+					"url": "https://gspe121-ssl.ls.apple.com/api/sizeForRegion",
+					"supportsMultipathTCP": false
+				},
+				"analyticsShortSessionURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
+				},
+				"bcxDispatcherURL": {
+					"url": "https://gsp57-ssl-bcx.ls.apple.com/dispatcher.arpc",
+					"supportsMultipathTCP": false
+				},
+				"alternateResourcesURL": [
 					{
-						url: "https://cdn.apple-mapkit.com/rap",
-						supportsMultipathTCP: false
+						"url": "https://cdn.apple-mapkit.com/rap",
+						"supportsMultipathTCP": false
 					}
 				],
-				resourcesURL: {
-					url: "https://gspe21-ssl.ls.apple.com/",
-					supportsMultipathTCP: false
+				"abExperimentURL": {
+					"url": "https://gsp-ssl.ls.apple.com/ab.arpc",
+					"supportsMultipathTCP": false
 				},
-				searchAttributionManifestURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/search-attribution-1262",
-					supportsMultipathTCP: false
+				"logMessageUsageURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/a/v2/use",
+					"supportsMultipathTCP": false
 				},
-				directionsURL: {
-					url: "https://gsp-ssl.ls.apple.com/directions.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
+				"addressCorrectionInitURL": {
+					"url": "https://gsp47-ssl.ls.apple.com/ac",
+					"supportsMultipathTCP": false
 				},
-				etaURL: {
-					url: "https://gsp-ssl.ls.apple.com/directions.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
+				"dispatcherURL": {
+					"url": "https://gsp-ssl.ls.apple.com/dispatcher.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
 				},
-				batchReverseGeocoderURL: {
-					url: "https://gsp36-ssl.ls.apple.com/revgeo.arpc",
-					supportsMultipathTCP: false
+				"ugcLogDiscardURL": {
+					"url": "https://sundew.ls.apple.com/v1/log_message",
+					"supportsMultipathTCP": false
 				},
-				simpleETAURL: {
-					url: "https://gsp-ssl.ls.apple.com/directions.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
+				"rapWebBundleURL": {
+					"url": "https://cdn.apple-mapkit.com/rap",
+					"supportsMultipathTCP": false
 				},
-				addressCorrectionInitURL: {
-					url: "https://gsp47-ssl.ls.apple.com/ac",
-					supportsMultipathTCP: false
+				"networkSelectionHarvestURL": {
+					"url": "https://gsp10-ssl.ls.apple.com/hvr/strn",
+					"supportsMultipathTCP": false
 				},
-				addressCorrectionUpdateURL: {
-					url: "https://gsp47-ssl.ls.apple.com/ac",
-					supportsMultipathTCP: false
+				"simpleETAURL": {
+					"url": "https://gsp-ssl.ls.apple.com/directions.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
 				},
-				problemSubmissionURL: {
-					url: "https://sundew.ls.apple.com/v1/feedback/submission.arpc",
-					supportsMultipathTCP: false
+				"businessPortalBaseURL": {
+					"url": "https://mapsconnect.apple.com/business/ui/claimPlace",
+					"supportsMultipathTCP": false
 				},
-				problemStatusURL: {
-					url: "https://sundew.ls.apple.com/grp/st",
-					supportsMultipathTCP: false
+				"analyticsLongSessionURL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
 				},
-				reverseGeocoderVersionsURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/revgeo-version-11.plist",
-					supportsMultipathTCP: false
+				"backgroundDispatcherURL": {
+					"url": "https://gsp57-ssl-background.ls.apple.com/dispatcher.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
 				},
-				problemCategoriesURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-424.plist",
-					supportsMultipathTCP: false
+				"webModuleBaseURL": {
+					"url": "https://maps.apple.com",
+					"supportsMultipathTCP": false
 				},
-				announcementsURL: {
-					url: "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod",
-					supportsMultipathTCP: false
+				"directionsURL": {
+					"url": "https://gsp-ssl.ls.apple.com/directions.arpc",
+					"supportsMultipathTCP": true,
+					"alternativeMultipathTCPPort": 5228
 				},
-				dispatcherURL: {
-					url: "https://gsp-ssl.ls.apple.com/dispatcher.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
+				"addressCorrectionUpdateURL": {
+					"url": "https://gsp47-ssl.ls.apple.com/ac",
+					"supportsMultipathTCP": false
 				},
-				problemOptInURL: {
-					url: "https://sundew.ls.apple.com/grp/oi",
-					supportsMultipathTCP: false
-				},
-				abExperimentURL: {
-					url: "https://gsp-ssl.ls.apple.com/ab.arpc",
-					supportsMultipathTCP: false
-				},
-				businessPortalBaseURL: {
-					url: "https://mapsconnect.apple.com/business/ui/claimPlace",
-					supportsMultipathTCP: false
-				},
-				logMessageUsageURL: {
-					url: "https://gsp64-ssl.ls.apple.com/a/v2/use",
-					supportsMultipathTCP: false
-				},
-				spatialLookupURL: {
-					url: "https://gsp51-ssl.ls.apple.com/api/v1.0/poi/data",
-					supportsMultipathTCP: false
-				},
-				realtimeTrafficProbeURL: {
-					url: "https://gsp9-ssl.apple.com/hvr/v2/rtloc",
-					supportsMultipathTCP: false
-				},
-				batchTrafficProbeURL: {
-					url: "https://gsp10-ssl.ls.apple.com/hvr/v2/loc",
-					supportsMultipathTCP: false
-				},
-				proactiveRoutingURL: {
-					url: "https://gsp-ssl-commute.ls.apple.com/directions.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
-				},
-				logMessageUsageV3URL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				backgroundDispatcherURL: {
-					url: "https://gsp57-ssl-background.ls.apple.com/dispatcher.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
-				},
-				bluePOIDispatcherURL: {
-					url: "https://gsp57-ssl-locus.ls.apple.com/dispatcher.arpc",
-					supportsMultipathTCP: true,
-					alternativeMultipathTCPPort: 5228
-				},
-				backgroundRevGeoURL: {
-					url: "https://gsp57-ssl-revgeo.ls.apple.com/dispatcher.arpc",
-					supportsMultipathTCP: false
-				},
-				wifiConnectionQualityProbeURL: {
-					url: "https://gsp10-ssl.ls.apple.com/hvr/wcq",
-					supportsMultipathTCP: false
-				},
-				wifiQualityURL: {
-					url: "https://gsp85-ssl.ls.apple.com/wifi_request",
-					supportsMultipathTCP: false
-				},
-				feedbackSubmissionURL: {
-					url: "https://sundew.ls.apple.com/v1/feedback/submission.arpc",
-					supportsMultipathTCP: false
-				},
-				feedbackLookupURL: {
-					url: "https://gsp-ssl.ls.apple.com/feedback.arpc",
-					supportsMultipathTCP: false
-				},
-				analyticsCohortSessionURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				analyticsLongSessionURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				analyticsShortSessionURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				analyticsSessionlessURL: {
-					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
-					supportsMultipathTCP: false
-				},
-				webModuleBaseURL: {
-					url: "https://maps.apple.com",
-					supportsMultipathTCP: false
-				},
-				wifiQualityTileURL: {
-					url: "https://gspe85-ssl.ls.apple.com/wifi_request_tile",
-					supportsMultipathTCP: false
-				},
-				addressCorrectionTaggedLocationURL: {
-					url: "https://gsp47-ssl.ls.apple.com/ac",
-					supportsMultipathTCP: false
-				},
-				proactiveAppClipURL: {
-					url: "https://gspe79-ssl.ls.apple.com/72/v2",
-					supportsMultipathTCP: false
-				},
-				enrichmentSubmissionURL: {
-					url: "https://sundew.ls.apple.com/v1/feedback/submission.arpc",
-					supportsMultipathTCP: false
-				},
-				ugcLogDiscardURL: {
-					url: "https://sundew.ls.apple.com/v1/log_message",
-					supportsMultipathTCP: false
-				},
-				batchReverseGeocoderPlaceRequestURL: {
-					url: "https://gsp36-ssl.ls.apple.com/revgeo_pr.arpc",
-					supportsMultipathTCP: false
-				},
-				pressureProbeDataURL: {
-					url: "https://gsp10-ssl.ls.apple.com/hvr/cpr",
-					supportsMultipathTCP: false
-				},
-				poiBusynessActivityCollectionURL: {
-					url: "https://gsp53-ssl.ls.apple.com/hvr/rt_poi_activity",
-					supportsMultipathTCP: false
-				},
-				rapWebBundleURL: {
-					url: "https://cdn.apple-mapkit.com/rap",
-					supportsMultipathTCP: false
-				},
-				networkSelectionHarvestURL: {
-					url: "https://gsp10-ssl.ls.apple.com/hvr/strn",
-					supportsMultipathTCP: false
-				},
-				offlineDataBatchListURL: {
-					url: "https://gspe121-ssl.ls.apple.com/api/batchesForRegion",
-					supportsMultipathTCP: false
-				},
-				offlineDataSizeURL: {
-					url: "https://gspe121-ssl.ls.apple.com/api/sizeForRegion",
-					supportsMultipathTCP: false
-				},
-				offlineDataDownloadBaseURL: {
-					url: "https://gspe121-ssl.ls.apple.com",
-					supportsMultipathTCP: false
-				},
-				bcxDispatcherURL: {
-					url: "https://gsp57-ssl-bcx.ls.apple.com/dispatcher.arpc",
-					supportsMultipathTCP: false
+				"logMessageUsageV3URL": {
+					"url": "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					"supportsMultipathTCP": false
 				}
 			}
 		],
 		muninBucket: [
 			{
-				bucketID: 2,
-				bucketURL: "https://gspe72-ssl.ls.apple.com/mnn_us"
+				"bucketID": 2,
+				"bucketURL": "https://gspe72-ssl.ls.apple.com/mnn_us"
 			},
 			{
-				bucketID: 6,
-				bucketURL: "https://gspe72-ssl.ls.apple.com/mnn_us"
+				"bucketID": 6,
+				"bucketURL": "https://gspe72-ssl.ls.apple.com/mnn_us"
 			}
 		]
 	}
@@ -15230,7 +14818,7 @@ class BinaryWriter {
      * Write a `sint64` value, a signed, zig-zag-encoded 64-bit varint.
      */
     sint64(value) {
-        let long = PbLong.from(value), 
+        let long = PbLong.from(value),
         // zigzag encode
         sign = long.hi >> 31, lo = (long.lo << 1) ^ sign, hi = ((long.hi << 1) | (long.lo >>> 31)) ^ sign;
         varint64write(lo, hi, this.buf);
