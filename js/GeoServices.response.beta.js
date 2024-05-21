@@ -1964,6 +1964,7 @@ var Settings$5 = {
 };
 var Configs$2 = {
 	CN: {
+		releaseInfo: "PROD-CN (24.19)",
 		tileSet: [
 			{
 				"scale": 0,
@@ -5398,6 +5399,7 @@ var Configs$2 = {
 		]
 	},
 	XX: {
+		releaseInfo: "PROD (24.19)",
 		tileSet: [
 			{
 				"scale": 0,
