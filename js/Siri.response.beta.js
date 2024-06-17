@@ -294,7 +294,7 @@ class $Storage {
 
 class ENV {
 	static name = "ENV"
-	static version = '1.8.3'
+	static version = '1.8.2'
 	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) }
 
 	constructor(name, opts) {
@@ -421,10 +421,10 @@ class ENV {
 		// 初始化参数
 		switch (request.constructor) {
 			case Object:
-				request = { ...option, ...request };
+				request = { ...request, ...option };
 				break;
 			case String:
-				request = { ...option, "url": request };
+				request = { "url": request, ...option };
 				break;
 		}		// 自动判断请求方法
 		if (!request.method) {
@@ -1958,7 +1958,7 @@ var Configs$2 = {
 								maxZ: 14
 							}
 						],
-						identifier: 2182,
+						identifier: 2197,
 						genericTile: [
 						]
 					}
@@ -2258,7 +2258,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 475
+						identifier: 476
 					}
 				]
 			},
@@ -2296,7 +2296,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 2181,
+						identifier: 2196,
 						timeToLiveSeconds: 120,
 						genericTile: [
 						]
@@ -2414,7 +2414,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 2162,
+						identifier: 2176,
 						timeToLiveSeconds: 604800,
 						genericTile: [
 						]
@@ -2492,7 +2492,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 2182,
+						identifier: 2197,
 						genericTile: [
 						]
 					}
@@ -2717,7 +2717,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 2182,
+						identifier: 2197,
 						genericTile: [
 						]
 					}
@@ -2751,7 +2751,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 2182
+						identifier: 2197
 					}
 				]
 			},
@@ -2842,7 +2842,7 @@ var Configs$2 = {
 								maxZ: 18
 							}
 						],
-						identifier: 151,
+						identifier: 152,
 						genericTile: [
 						]
 					}
@@ -2991,7 +2991,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 1968,
+						identifier: 1983,
 						genericTile: [
 						]
 					}
@@ -3140,7 +3140,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 1968,
+						identifier: 1983,
 						genericTile: [
 						]
 					}
@@ -3182,7 +3182,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 1968
+						identifier: 1983
 					}
 				]
 			},
@@ -3257,7 +3257,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 2182,
+						identifier: 2197,
 						genericTile: [
 						]
 					}
@@ -3299,7 +3299,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 2182
+						identifier: 2197
 					}
 				]
 			},
@@ -3569,7 +3569,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 147
+						identifier: 149
 					}
 				]
 			},
@@ -3601,7 +3601,7 @@ var Configs$2 = {
 								maxZ: 1
 							}
 						],
-						identifier: 85
+						identifier: 86
 					}
 				]
 			},
@@ -4062,7 +4062,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 2182,
+						identifier: 2197,
 						genericTile: [
 						]
 					}
@@ -4255,7 +4255,7 @@ var Configs$2 = {
 								maxZ: 14
 							}
 						],
-						identifier: 2182,
+						identifier: 2197,
 						genericTile: [
 						]
 					}
@@ -4436,7 +4436,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 2162,
+						identifier: 2176,
 						genericTile: [
 						]
 					}
@@ -4590,7 +4590,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 475
+						identifier: 476
 					}
 				]
 			},
@@ -4728,6 +4728,118 @@ var Configs$2 = {
 							}
 						],
 						identifier: 29
+					}
+				]
+			},
+			{
+				scale: 0,
+				style: 83,
+				checksumType: 0,
+				countryRegionWhitelist: [
+				],
+				size: 0,
+				requestStyle: 0,
+				deviceSKUWhitelist: [
+				],
+				supportedLanguage: [
+				],
+				supportsMultipathTCP: false,
+				baseURL: "https://gspe19-cn-ssl.ls.apple.com/tiles",
+				validVersion: [
+					{
+						genericTile: [
+						],
+						availableTiles: [
+							{
+								maxX: 7,
+								minZ: 3,
+								minX: 0,
+								maxY: 7,
+								minY: 0,
+								maxZ: 3
+							},
+							{
+								maxX: 15,
+								minZ: 4,
+								minX: 0,
+								maxY: 15,
+								minY: 0,
+								maxZ: 4
+							},
+							{
+								maxX: 31,
+								minZ: 5,
+								minX: 0,
+								maxY: 31,
+								minY: 0,
+								maxZ: 5
+							},
+							{
+								maxX: 63,
+								minZ: 6,
+								minX: 0,
+								maxY: 63,
+								minY: 0,
+								maxZ: 6
+							},
+							{
+								maxX: 127,
+								minZ: 7,
+								minX: 0,
+								maxY: 127,
+								minY: 0,
+								maxZ: 7
+							},
+							{
+								maxX: 255,
+								minZ: 8,
+								minX: 0,
+								maxY: 255,
+								minY: 0,
+								maxZ: 8
+							},
+							{
+								maxX: 511,
+								minZ: 9,
+								minX: 0,
+								maxY: 511,
+								minY: 0,
+								maxZ: 9
+							},
+							{
+								maxX: 1023,
+								minZ: 10,
+								minX: 0,
+								maxY: 1023,
+								minY: 0,
+								maxZ: 10
+							},
+							{
+								maxX: 2047,
+								minZ: 11,
+								minX: 0,
+								maxY: 2047,
+								minY: 0,
+								maxZ: 11
+							},
+							{
+								maxX: 4095,
+								minZ: 12,
+								minX: 0,
+								maxY: 4095,
+								minY: 0,
+								maxZ: 12
+							},
+							{
+								maxX: 8191,
+								minZ: 13,
+								minX: 0,
+								maxY: 8191,
+								minY: 0,
+								maxZ: 13
+							}
+						],
+						identifier: 3
 					}
 				]
 			},
@@ -4906,7 +5018,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 2162,
+						identifier: 2176,
 						timeToLiveSeconds: 1800,
 						genericTile: [
 						]
@@ -5082,12 +5194,168 @@ var Configs$2 = {
 		],
 		muninBucket: [
 			{
-				bucketID: 2,
-				bucketURL: "https://gspe72-cn-ssl.ls.apple.com/mnn_us"
-			},
-			{
-				bucketID: 6,
-				bucketURL: "https://gspe72-cn-ssl.ls.apple.com/mnn_us"
+				backgroundRevGeoURL: {
+					url: "https://dispatcher.is.autonavi.com/dispatcher",
+					supportsMultipathTCP: false
+				},
+				searchAttributionManifestURL: {
+					url: "https://gspe21-ssl.ls.apple.com/config/search-attribution-1323",
+					supportsMultipathTCP: false
+				},
+				analyticsSessionlessURL: {
+					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					supportsMultipathTCP: false
+				},
+				poiBusynessActivityCollectionURL: {
+					url: "https://gsp53-ssl.ls.apple.com/hvr/rt_poi_activity",
+					supportsMultipathTCP: false
+				},
+				offlineDataDownloadBaseURL: {
+					url: "https://gspe121-cn-ssl.ls.apple.com",
+					supportsMultipathTCP: false
+				},
+				wifiConnectionQualityProbeURL: {
+					url: "https://gsp10-ssl-cn.ls.apple.com/hvr/wcq",
+					supportsMultipathTCP: false
+				},
+				junctionImageServiceURL: {
+					url: "https://direction2.is.autonavi.com/direction",
+					supportsMultipathTCP: false
+				},
+				etaURL: {
+					url: "https://direction2.is.autonavi.com/direction",
+					supportsMultipathTCP: false
+				},
+				analyticsCohortSessionURL: {
+					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					supportsMultipathTCP: false
+				},
+				resourcesURL: {
+					url: "https://gspe21-ssl.ls.apple.com/",
+					supportsMultipathTCP: false
+				},
+				feedbackLookupURL: {
+					url: "https://rap.is.autonavi.com/lookup",
+					supportsMultipathTCP: false
+				},
+				batchTrafficProbeURL: {
+					url: "https://gsp10-ssl.ls.apple.com/hvr/v2/loc",
+					supportsMultipathTCP: false
+				},
+				batchReverseGeocoderURL: {
+					url: "https://batch-rgeo.is.autonavi.com/batchRGeo",
+					supportsMultipathTCP: false
+				},
+				spatialLookupURL: {
+					url: "https://spatialsearch.is.autonavi.com/spatialsearch",
+					supportsMultipathTCP: false
+				},
+				realtimeTrafficProbeURL: {
+					url: "https://gsp9-ssl.apple.com/hvr/v2/rtloc",
+					supportsMultipathTCP: false
+				},
+				wifiQualityTileURL: {
+					url: "https://gspe85-cn-ssl.ls.apple.com/wifi_request_tile",
+					supportsMultipathTCP: false
+				},
+				problemSubmissionURL: {
+					url: "https://rap.is.autonavi.com/rap",
+					supportsMultipathTCP: false
+				},
+				reverseGeocoderVersionsURL: {
+					url: "https://gspe21-ssl.ls.apple.com/config/revgeo-version-11.plist",
+					supportsMultipathTCP: false
+				},
+				problemCategoriesURL: {
+					url: "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-482.plist",
+					supportsMultipathTCP: false
+				},
+				batchReverseGeocoderPlaceRequestURL: {
+					url: "https://dispatcher.is.autonavi.com/dispatcher",
+					supportsMultipathTCP: false
+				},
+				wifiQualityURL: {
+					url: "https://gsp85-cn-ssl.ls.apple.com/wifi_request",
+					supportsMultipathTCP: false
+				},
+				polyLocationShiftURL: {
+					url: "https://shift.is.autonavi.com/localshift",
+					supportsMultipathTCP: false
+				},
+				problemStatusURL: {
+					url: "https://rap.is.autonavi.com/rapstatus",
+					supportsMultipathTCP: false
+				},
+				feedbackSubmissionURL: {
+					url: "https://rap.is.autonavi.com/rap",
+					supportsMultipathTCP: false
+				},
+				offlineDataBatchListURL: {
+					url: "https://ods.is.autonavi.com/api/batchesForRegion",
+					supportsMultipathTCP: false
+				},
+				offlineDataSizeURL: {
+					url: "https://ods.is.autonavi.com/api/sizeForRegion",
+					supportsMultipathTCP: false
+				},
+				analyticsShortSessionURL: {
+					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					supportsMultipathTCP: false
+				},
+				alternateResourcesURL: [
+					{
+						url: "https://cdn.apple-mapkit.com/rap",
+						supportsMultipathTCP: false
+					},
+					{
+						url: "https://limit-rule.is.autonavi.com/lpr/rules/download",
+						supportsMultipathTCP: false
+					}
+				],
+				abExperimentURL: {
+					url: "https://gsp-ssl.ls.apple.com/cn/ab.arpc",
+					supportsMultipathTCP: false
+				},
+				logMessageUsageURL: {
+					url: "https://gsp64-ssl.ls.apple.com/a/v2/use",
+					supportsMultipathTCP: false
+				},
+				rapWebBundleURL: {
+					url: "https://cdn.apple-mapkit.com/rap",
+					supportsMultipathTCP: false
+				},
+				dispatcherURL: {
+					url: "https://dispatcher.is.autonavi.com/dispatcher",
+					supportsMultipathTCP: false
+				},
+				simpleETAURL: {
+					url: "https://direction2.is.autonavi.com/direction",
+					supportsMultipathTCP: false
+				},
+				analyticsLongSessionURL: {
+					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					supportsMultipathTCP: false
+				},
+				backgroundDispatcherURL: {
+					url: "https://dispatcher.is.autonavi.com/dispatcher",
+					supportsMultipathTCP: false
+				},
+				webModuleBaseURL: {
+					url: "https://placecard-server-wm.is.autonavi.com",
+					supportsMultipathTCP: false
+				},
+				directionsURL: {
+					url: "https://direction2.is.autonavi.com/direction",
+					supportsMultipathTCP: false
+				},
+				logMessageUsageV3URL: {
+					url: "https://gsp64-ssl.ls.apple.com/hvr/v3/use",
+					supportsMultipathTCP: false
+				},
+				announcementsURL: {
+					url: "https://gspe35-ssl.ls.apple.com/config/announcements?environment=prod-cn",
+					supportsMultipathTCP: false
+				}
 			}
 		]
 	},
@@ -5097,44 +5365,44 @@ var Configs$2 = {
 				region: [
 				],
 				name: "‎",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-277.html",
+				url: "https://gspe21-ssl.ls.apple.com/html/attribution-279.html",
 				resource: [
 				],
 				linkDisplayStringIndex: 0,
-				plainTextURL: "https://gspe21-ssl.ls.apple.com/html/attribution-276.txt",
+				plainTextURL: "https://gspe21-ssl.ls.apple.com/html/attribution-278.txt",
 				plainTextURLSHA256Checksum: {
-					"0": 23,
-					"1": 205,
-					"2": 77,
-					"3": 134,
-					"4": 47,
-					"5": 251,
-					"6": 220,
-					"7": 223,
-					"8": 247,
-					"9": 82,
-					"10": 216,
-					"11": 183,
-					"12": 42,
-					"13": 22,
-					"14": 222,
-					"15": 4,
-					"16": 99,
-					"17": 19,
-					"18": 69,
-					"19": 96,
-					"20": 24,
-					"21": 89,
-					"22": 86,
-					"23": 22,
-					"24": 113,
-					"25": 203,
-					"26": 166,
-					"27": 27,
-					"28": 50,
-					"29": 153,
-					"30": 174,
-					"31": 96
+					"0": 124,
+					"1": 102,
+					"2": 134,
+					"3": 184,
+					"4": 40,
+					"5": 189,
+					"6": 231,
+					"7": 39,
+					"8": 109,
+					"9": 244,
+					"10": 228,
+					"11": 192,
+					"12": 151,
+					"13": 223,
+					"14": 17,
+					"15": 129,
+					"16": 158,
+					"17": 253,
+					"18": 70,
+					"19": 5,
+					"20": 123,
+					"21": 187,
+					"22": 50,
+					"23": 87,
+					"24": 25,
+					"25": 122,
+					"26": 38,
+					"27": 36,
+					"28": 33,
+					"29": 149,
+					"30": 18,
+					"31": 234
 				}
 			},
 			{
@@ -5262,7 +5530,7 @@ var Configs$2 = {
 				],
 				linkDisplayStringIndex: 0,
 				name: "MMI",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-277.html",
+				url: "https://gspe21-ssl.ls.apple.com/html/attribution-279.html",
 				resource: [
 					{
 						region: [
@@ -5391,7 +5659,7 @@ var Configs$2 = {
 				],
 				linkDisplayStringIndex: 0,
 				name: "© GeoTechnologies, Inc.",
-				url: "https://gspe21-ssl.ls.apple.com/html/attribution-277.html",
+				url: "https://gspe21-ssl.ls.apple.com/html/attribution-279.html",
 				resource: [
 				]
 			}
@@ -5546,7 +5814,7 @@ var Configs$2 = {
 								maxZ: 14
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -5745,7 +6013,7 @@ var Configs$2 = {
 								maxZ: 14
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -5910,7 +6178,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -5959,7 +6227,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -5998,7 +6266,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						timeToLiveSeconds: 120,
 						genericTile: [
 						]
@@ -6040,7 +6308,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						timeToLiveSeconds: 120,
 						genericTile: [
 						]
@@ -6224,7 +6492,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -6407,7 +6675,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -6654,7 +6922,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -6733,7 +7001,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -6924,7 +7192,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -7155,7 +7423,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -7294,7 +7562,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -7391,7 +7659,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -7484,7 +7752,7 @@ var Configs$2 = {
 								maxZ: 18
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -7579,7 +7847,7 @@ var Configs$2 = {
 								maxZ: 18
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -7770,7 +8038,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -7929,7 +8197,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -8160,7 +8428,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -8319,7 +8587,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -8504,7 +8772,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -8583,7 +8851,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -8744,7 +9012,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -8823,7 +9091,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -9019,7 +9287,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9180,7 +9448,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9213,7 +9481,7 @@ var Configs$2 = {
 								maxZ: 1
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9246,7 +9514,7 @@ var Configs$2 = {
 								maxZ: 1
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9343,7 +9611,7 @@ var Configs$2 = {
 								maxZ: 9
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9440,7 +9708,7 @@ var Configs$2 = {
 								maxZ: 9
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9473,7 +9741,7 @@ var Configs$2 = {
 								maxZ: 7
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9506,7 +9774,7 @@ var Configs$2 = {
 								maxZ: 7
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9539,7 +9807,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9572,7 +9840,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -9649,7 +9917,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -9728,7 +9996,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -9952,7 +10220,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -10183,7 +10451,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -10382,7 +10650,7 @@ var Configs$2 = {
 								maxZ: 14
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -10581,7 +10849,7 @@ var Configs$2 = {
 								maxZ: 14
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -10804,7 +11072,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -10987,7 +11255,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -11062,7 +11330,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11135,7 +11403,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11290,7 +11558,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11347,7 +11615,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11388,47 +11656,6 @@ var Configs$2 = {
 								maxY: 2097151,
 								minY: 0,
 								maxZ: 21
-							}
-						],
-						identifier: 0,
-						timeToLiveSeconds: 86400,
-						genericTile: [
-						]
-					}
-				]
-			},
-			{
-				scale: 0,
-				style: 75,
-				checksumType: 0,
-				countryRegionWhitelist: [
-				],
-				size: 2,
-				requestStyle: 1,
-				deviceSKUWhitelist: [
-				],
-				supportedLanguage: [
-				],
-				supportsMultipathTCP: false,
-				baseURL: "https://gspe79-ssl.ls.apple.com/pbz/v1",
-				validVersion: [
-					{
-						availableTiles: [
-							{
-								maxX: 1023,
-								minZ: 10,
-								minX: 0,
-								maxY: 1023,
-								minY: 0,
-								maxZ: 10
-							},
-							{
-								maxX: 131071,
-								minZ: 17,
-								minX: 0,
-								maxY: 131071,
-								minY: 0,
-								maxZ: 17
 							}
 						],
 						identifier: 0,
@@ -11503,7 +11730,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11536,7 +11763,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11633,7 +11860,7 @@ var Configs$2 = {
 								maxZ: 9
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11730,7 +11957,7 @@ var Configs$2 = {
 								maxZ: 9
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11804,7 +12031,7 @@ var Configs$2 = {
 								maxZ: 1
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11837,7 +12064,7 @@ var Configs$2 = {
 								maxZ: 1
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -11845,6 +12072,296 @@ var Configs$2 = {
 				countryRegionWhitelist: [
 				],
 				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/asset/v3/model-occlusion"
+			},
+			{
+				scale: 0,
+				style: 83,
+				checksumType: 0,
+				requestStyle: 0,
+				supportsMultipathTCP: false,
+				dataSet: 0,
+				size: 0,
+				supportedLanguage: [
+				],
+				validVersion: [
+					{
+						genericTile: [
+						],
+						availableTiles: [
+							{
+								maxX: 7,
+								minZ: 3,
+								minX: 0,
+								maxY: 7,
+								minY: 0,
+								maxZ: 3
+							},
+							{
+								maxX: 15,
+								minZ: 4,
+								minX: 0,
+								maxY: 15,
+								minY: 0,
+								maxZ: 4
+							},
+							{
+								maxX: 31,
+								minZ: 5,
+								minX: 0,
+								maxY: 31,
+								minY: 0,
+								maxZ: 5
+							},
+							{
+								maxX: 63,
+								minZ: 6,
+								minX: 0,
+								maxY: 63,
+								minY: 0,
+								maxZ: 6
+							},
+							{
+								maxX: 127,
+								minZ: 7,
+								minX: 0,
+								maxY: 127,
+								minY: 0,
+								maxZ: 7
+							},
+							{
+								maxX: 255,
+								minZ: 8,
+								minX: 0,
+								maxY: 255,
+								minY: 0,
+								maxZ: 8
+							},
+							{
+								maxX: 511,
+								minZ: 9,
+								minX: 0,
+								maxY: 511,
+								minY: 0,
+								maxZ: 9
+							},
+							{
+								maxX: 1023,
+								minZ: 10,
+								minX: 0,
+								maxY: 1023,
+								minY: 0,
+								maxZ: 10
+							},
+							{
+								maxX: 2047,
+								minZ: 11,
+								minX: 0,
+								maxY: 2047,
+								minY: 0,
+								maxZ: 11
+							},
+							{
+								maxX: 4095,
+								minZ: 12,
+								minX: 0,
+								maxY: 4095,
+								minY: 0,
+								maxZ: 12
+							},
+							{
+								maxX: 8191,
+								minZ: 13,
+								minX: 0,
+								maxY: 8191,
+								minY: 0,
+								maxZ: 13
+							},
+							{
+								maxX: 16383,
+								minZ: 14,
+								minX: 0,
+								maxY: 16383,
+								minY: 0,
+								maxZ: 14
+							},
+							{
+								maxX: 32767,
+								minZ: 15,
+								minX: 0,
+								maxY: 32767,
+								minY: 0,
+								maxZ: 15
+							},
+							{
+								maxX: 65535,
+								minZ: 16,
+								minX: 0,
+								maxY: 65535,
+								minY: 0,
+								maxZ: 16
+							},
+							{
+								maxX: 131071,
+								minZ: 17,
+								minX: 0,
+								maxY: 131071,
+								minY: 0,
+								maxZ: 17
+							}
+						],
+						identifier: 16357893
+					}
+				],
+				deviceSKUWhitelist: [
+				],
+				countryRegionWhitelist: [
+				],
+				baseURL: "https://gspe19-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				scale: 0,
+				style: 83,
+				checksumType: 0,
+				requestStyle: 0,
+				supportsMultipathTCP: false,
+				dataSet: 1,
+				size: 0,
+				supportedLanguage: [
+				],
+				validVersion: [
+					{
+						genericTile: [
+						],
+						availableTiles: [
+							{
+								maxX: 7,
+								minZ: 3,
+								minX: 0,
+								maxY: 7,
+								minY: 0,
+								maxZ: 3
+							},
+							{
+								maxX: 15,
+								minZ: 4,
+								minX: 0,
+								maxY: 15,
+								minY: 0,
+								maxZ: 4
+							},
+							{
+								maxX: 31,
+								minZ: 5,
+								minX: 0,
+								maxY: 31,
+								minY: 0,
+								maxZ: 5
+							},
+							{
+								maxX: 63,
+								minZ: 6,
+								minX: 0,
+								maxY: 63,
+								minY: 0,
+								maxZ: 6
+							},
+							{
+								maxX: 127,
+								minZ: 7,
+								minX: 0,
+								maxY: 127,
+								minY: 0,
+								maxZ: 7
+							},
+							{
+								maxX: 255,
+								minZ: 8,
+								minX: 0,
+								maxY: 255,
+								minY: 0,
+								maxZ: 8
+							},
+							{
+								maxX: 511,
+								minZ: 9,
+								minX: 0,
+								maxY: 511,
+								minY: 0,
+								maxZ: 9
+							},
+							{
+								maxX: 1023,
+								minZ: 10,
+								minX: 0,
+								maxY: 1023,
+								minY: 0,
+								maxZ: 10
+							},
+							{
+								maxX: 2047,
+								minZ: 11,
+								minX: 0,
+								maxY: 2047,
+								minY: 0,
+								maxZ: 11
+							},
+							{
+								maxX: 4095,
+								minZ: 12,
+								minX: 0,
+								maxY: 4095,
+								minY: 0,
+								maxZ: 12
+							},
+							{
+								maxX: 8191,
+								minZ: 13,
+								minX: 0,
+								maxY: 8191,
+								minY: 0,
+								maxZ: 13
+							},
+							{
+								maxX: 16383,
+								minZ: 14,
+								minX: 0,
+								maxY: 16383,
+								minY: 0,
+								maxZ: 14
+							},
+							{
+								maxX: 32767,
+								minZ: 15,
+								minX: 0,
+								maxY: 32767,
+								minY: 0,
+								maxZ: 15
+							},
+							{
+								maxX: 65535,
+								minZ: 16,
+								minX: 0,
+								maxY: 65535,
+								minY: 0,
+								maxZ: 16
+							},
+							{
+								maxX: 131071,
+								minZ: 17,
+								minX: 0,
+								maxY: 131071,
+								minY: 0,
+								maxZ: 17
+							}
+						],
+						identifier: 16361517
+					}
+				],
+				deviceSKUWhitelist: [
+				],
+				countryRegionWhitelist: [
+				],
+				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
 			},
 			{
 				scale: 0,
@@ -12018,7 +12535,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						timeToLiveSeconds: 1800,
 						genericTile: [
 						]
@@ -12202,7 +12719,7 @@ var Configs$2 = {
 								maxZ: 17
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						timeToLiveSeconds: 1800,
 						genericTile: [
 						]
@@ -12238,7 +12755,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -12271,7 +12788,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -12460,7 +12977,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310,
+						identifier: 16388440,
 						genericTile: [
 						]
 					}
@@ -12651,7 +13168,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272,
+						identifier: 16389156,
 						genericTile: [
 						]
 					}
@@ -12694,7 +13211,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -12735,7 +13252,7 @@ var Configs$2 = {
 								maxZ: 12
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -12809,7 +13326,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16329310
+						identifier: 16388440
 					}
 				],
 				deviceSKUWhitelist: [
@@ -12850,7 +13367,7 @@ var Configs$2 = {
 								maxZ: 15
 							}
 						],
-						identifier: 16330272
+						identifier: 16389156
 					}
 				],
 				deviceSKUWhitelist: [
@@ -12858,6 +13375,215 @@ var Configs$2 = {
 				countryRegionWhitelist: [
 				],
 				baseURL: "https://gspe19-kittyhawk-ssl.ls.apple.com/tile.vf"
+			},
+			{
+				scale: 0,
+				style: 91,
+				checksumType: 0,
+				countryRegionWhitelist: [
+				],
+				size: 2,
+				requestStyle: 0,
+				deviceSKUWhitelist: [
+				],
+				supportedLanguage: [
+				],
+				supportsMultipathTCP: false,
+				baseURL: "https://gspe11-ssl-vss.ls.apple.com/tile",
+				validVersion: [
+					{
+						genericTile: [
+						],
+						availableTiles: [
+							{
+								maxX: 1,
+								minZ: 1,
+								minX: 0,
+								maxY: 1,
+								minY: 0,
+								maxZ: 1
+							},
+							{
+								maxX: 3,
+								minZ: 2,
+								minX: 0,
+								maxY: 3,
+								minY: 0,
+								maxZ: 2
+							},
+							{
+								maxX: 7,
+								minZ: 3,
+								minX: 0,
+								maxY: 7,
+								minY: 0,
+								maxZ: 3
+							},
+							{
+								maxX: 15,
+								minZ: 4,
+								minX: 0,
+								maxY: 15,
+								minY: 0,
+								maxZ: 4
+							}
+						],
+						identifier: 2
+					}
+				]
+			},
+			{
+				scale: 1,
+				style: 92,
+				checksumType: 0,
+				countryRegionWhitelist: [
+				],
+				size: 1,
+				requestStyle: 0,
+				deviceSKUWhitelist: [
+				],
+				supportedLanguage: [
+				],
+				supportsMultipathTCP: false,
+				baseURL: "https://gspe11-ssl-vss.ls.apple.com/tile",
+				validVersion: [
+					{
+						genericTile: [
+						],
+						availableTiles: [
+							{
+								maxX: 127,
+								minZ: 7,
+								minX: 0,
+								maxY: 127,
+								minY: 0,
+								maxZ: 7
+							},
+							{
+								maxX: 2047,
+								minZ: 11,
+								minX: 0,
+								maxY: 2047,
+								minY: 0,
+								maxZ: 11
+							},
+							{
+								maxX: 2583,
+								minZ: 13,
+								minX: 408,
+								maxY: 3659,
+								minY: 2760,
+								maxZ: 13
+							},
+							{
+								maxX: 4535,
+								minZ: 13,
+								minX: 3848,
+								maxY: 3235,
+								minY: 2332,
+								maxZ: 13
+							}
+						],
+						identifier: 32
+					}
+				]
+			},
+			{
+				scale: 0,
+				style: 94,
+				checksumType: 0,
+				countryRegionWhitelist: [
+				],
+				size: 0,
+				requestStyle: 0,
+				deviceSKUWhitelist: [
+				],
+				supportedLanguage: [
+				],
+				supportsMultipathTCP: false,
+				baseURL: "https://gspe79-ssl.ls.apple.com/ccc/v1",
+				validVersion: [
+					{
+						availableTiles: [
+							{
+								maxX: 1023,
+								minZ: 10,
+								minX: 0,
+								maxY: 1023,
+								minY: 0,
+								maxZ: 10
+							},
+							{
+								maxX: 262143,
+								minZ: 18,
+								minX: 0,
+								maxY: 262143,
+								minY: 0,
+								maxZ: 18
+							}
+						],
+						identifier: 1,
+						timeToLiveSeconds: 86400,
+						genericTile: [
+						]
+					}
+				]
+			},
+			{
+				scale: 0,
+				style: 95,
+				checksumType: 0,
+				countryRegionWhitelist: [
+				],
+				size: 2,
+				requestStyle: 0,
+				deviceSKUWhitelist: [
+				],
+				supportedLanguage: [
+				],
+				supportsMultipathTCP: false,
+				baseURL: "https://gspe11-ssl-vss.ls.apple.com/tile",
+				validVersion: [
+					{
+						genericTile: [
+						],
+						availableTiles: [
+							{
+								maxX: 1,
+								minZ: 1,
+								minX: 0,
+								maxY: 1,
+								minY: 0,
+								maxZ: 1
+							},
+							{
+								maxX: 3,
+								minZ: 2,
+								minX: 0,
+								maxY: 3,
+								minY: 0,
+								maxZ: 2
+							},
+							{
+								maxX: 7,
+								minZ: 3,
+								minX: 0,
+								maxY: 7,
+								minY: 0,
+								maxZ: 3
+							},
+							{
+								maxX: 15,
+								minZ: 4,
+								minX: 0,
+								maxY: 15,
+								minY: 0,
+								maxZ: 4
+							}
+						],
+						identifier: 1
+					}
+				]
 			}
 		],
 		urlInfoSet: [
@@ -12871,7 +13597,7 @@ var Configs$2 = {
 					supportsMultipathTCP: false
 				},
 				searchAttributionManifestURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/search-attribution-1292",
+					url: "https://gspe21-ssl.ls.apple.com/config/search-attribution-1322",
 					supportsMultipathTCP: false
 				},
 				analyticsSessionlessURL: {
@@ -12962,7 +13688,7 @@ var Configs$2 = {
 					supportsMultipathTCP: false
 				},
 				problemCategoriesURL: {
-					url: "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-480.plist",
+					url: "https://gspe21-ssl.ls.apple.com/config/com.apple.GEO.BusinessLocalizedCategories-482.plist",
 					supportsMultipathTCP: false
 				},
 				batchReverseGeocoderPlaceRequestURL: {
