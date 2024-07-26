@@ -4,8 +4,12 @@ import ENV from "./ENV/ENV.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
+import pako from "./pako/dist/pako.esm.mjs";
+import addgRPCHeader from "./function/addgRPCHeader.mjs";
 
-const $ = new ENV(" iRingo: 🔍 Siri v3.2.1(1009) request.beta");
+import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
+
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.0(4001) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -90,11 +94,44 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/grpc":
 						case "application/grpc+proto":
 						case "applecation/octet-stream":
-							// 路径判断
-							switch (PATH) {
-								case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": // 新闻建议
+							//$.log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
+							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
+							//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+							switch (FORMAT) {
+								case "application/protobuf":
+								case "application/x-protobuf":
+								case "application/vnd.google.protobuf":
+									break;
+								case "application/grpc":
+								case "application/grpc+proto":
+									/******************  initialization start  *******************/
+									/******************  initialization finish  *******************/
+									// 先拆分B站gRPC校验头和protobuf数据体
+									let header = rawBody.slice(0, 5);
+									body = rawBody.slice(5);
+									// 处理request压缩protobuf数据体
+									switch (header?.[0]) {
+										case 0: // unGzip
+											break;
+										case 1: // Gzip
+											body = pako.ungzip(body);
+											header[0] = 0; // unGzip
+											break;
+									};
+									// 解析链接并处理protobuf数据
+									// 路径判断
+									switch (PATH) {
+										case "/apple.parsec.siri.v2alpha.SiriSearch/SiriSearch": // 搜索
+											break;
+										case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": // 新闻建议
+											break;
+									};
+									//rawBody = addgRPCHeader({ header, body }); // gzip压缩有问题，别用
+									rawBody = body;
 									break;
 							};
+							// 写入二进制数据
+							$request.body = rawBody;
 							break;
 					};
 					//break; // 不中断，继续处理URL

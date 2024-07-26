@@ -26,5 +26,8 @@
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-terser": "^0.4.4",
 		"rollup": "^4.9.6"
+	},
+	"dependencies": {
+		"@protobuf-ts/plugin": "^2.9.4"
 	}
 }

@@ -11,7 +11,7 @@ class Lodash {
 		if (!Array.isArray(path)) path = this.toPath(path);
 
 		const result = path.reduce((previousValue, currentValue) => {
-			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object
+			return Object(previousValue)[currentValue]; // null undefined get attribute will throwError, Object() can return a object 
 		}, object);
 		return (result === undefined) ? defaultValue : result;
 	}
@@ -309,7 +309,7 @@ class ENV {
 		Object.assign(this, opts);
 		this.log(`\n🚩 开始!\n${name}\n`);
 	}
-
+	
 	environment() {
 		switch (this.platform()) {
 			case 'Surge':
@@ -751,7 +751,7 @@ class XML {
 	static name = "XML";
 	static version = "0.4.2";
 	static about = () => console.log(`\n🟧 ${this.name} v${this.version}\n`);
-
+	
 	static #ATTRIBUTE_KEY = "@";
 	static #CHILD_NODE_KEY = "#";
 	static #UNESCAPE = {
@@ -944,7 +944,7 @@ class XML {
 			}
 			return object;
 
-			/**
+			/** 
 			 * Chunk Array
 			 * @author VirgilClyne
 			 * @param {Array} source - source
@@ -15840,7 +15840,7 @@ class BinaryWriter {
      * Write a `sint64` value, a signed, zig-zag-encoded 64-bit varint.
      */
     sint64(value) {
-        let long = PbLong.from(value),
+        let long = PbLong.from(value), 
         // zigzag encode
         sign = long.hi >> 31, lo = (long.lo << 1) ^ sign, hi = ((long.hi << 1) | (long.lo >>> 31)) ^ sign;
         varint64write(lo, hi, this.buf);
@@ -19244,17 +19244,6 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 				};
 				break;
 				*/
-			case 83: // VECTOR_TOPOGRAPHIC
-				// TODO
-				// tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
-				break;
-			case 91: // UNUSED_91
-			case 92: // UNUSED_92
-			case 94: // UNUSED_94
-			case 95: // UNUSED_95
-				// TODO
-				// tileSet = caches?.CN?.tileSet?.find(i => i.style === tileSet.style);
-				break;
 		}		return tileSet;
 	}).flat(Infinity).filter(Boolean);
 	$.log(`✅ Set TileSets`, "");
