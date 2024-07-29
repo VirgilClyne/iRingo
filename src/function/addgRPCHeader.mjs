@@ -1,3 +1,5 @@
+import pako from "../pako/dist/pako.esm.mjs";
+
 /**
  * Add gRPC Header
  * @author app2smile

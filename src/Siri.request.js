@@ -16,7 +16,7 @@ const url = new URL($request.url);
 $.log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}`, "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -27,7 +27,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 		case true:
 		default:
 			const Locale = url.searchParams.get("locale");
-			const [ Language, CountryCode ] = Locale?.split("_") ?? [];
+			const [Language, CountryCode] = Locale?.split("_") ?? [];
 			$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
 			switch (Settings.CountryCode) {
 				case "AUTO":
@@ -57,7 +57,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/x-mpegurl":
 						case "application/vnd.apple.mpegurl":
 						case "audio/mpegurl":
-								break;
+							break;
 						case "text/xml":
 						case "text/html":
 						case "text/plist":
@@ -79,12 +79,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "applecation/octet-stream":
 							// 路径判断
 							switch (PATH) {
+								case "/apple.parsec.siri.v2alpha.SiriSearch/SiriSearch": // Siri搜索
+									break;
 								case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": // 新闻建议
 									break;
 							};
 							break;
 					};
-					//break; // 不中断，继续处理URL
+				//break; // 不中断，继续处理URL
 				case "GET":
 				case "HEAD":
 				case "OPTIONS":
@@ -104,8 +106,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "cdn.smoot.apple.com":
 							break;
 						default: // 其他主机
-						let q = url.searchParams.get("q");
-						// 路径判断
+							let q = url.searchParams.get("q");
+							// 路径判断
 							switch (PATH) {
 								case "/search": // 搜索
 									switch (url.searchParams.get("qtype")) {
