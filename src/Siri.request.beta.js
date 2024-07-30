@@ -9,7 +9,7 @@ import addgRPCHeader from "./function/addgRPCHeader.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.0(4015) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.0(4018) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -110,6 +110,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									// 主机判断
 									switch (HOST) {
 										case "guzzoni.smoot.apple.com":
+										case "api-siri.smoot.apple.com":
+										case "api2.smoot.apple.com":
+										default:
 											// 路径判断
 											switch (PATH) {
 												case "/apple.parsec.siri.v2alpha.SiriSearch/SiriSearch": // Siri搜索
@@ -117,9 +120,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													class SiriPegasusRequest$Type extends MessageType {
 														constructor() {
 															super("SiriPegasusRequest", [
-																{ no: 1, name: "content", kind: "message", T: () => Content },
-																{ no: 2, name: "client", kind: "message", T: () => Client },
-																{ no: 5, name: "m5", kind: "message", T: () => M5 }
+																{ no: 1, name: "queries", kind: "message", T: () => Content },
+																{ no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext },
+																{ no: 5, name: "siriPegasusContext", kind: "message", T: () => SiriPegasusContext }
 															]);
 														}
 													}
@@ -132,23 +135,27 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														}
 													}
 													const Content = new Content$Type();
-													class Client$Type extends MessageType {
+													class PegasusQueryContext$Type extends MessageType {
 														constructor() {
-															super("Client", [
-																{ no: 1, name: "key", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 2, name: "cc", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+															super("PegasusQueryContext", [
+																{ no: 1, name: "secretKey", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 2, name: "countryCode", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
 																{ no: 3, name: "locale", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 4, name: "esl", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 5, name: "languages", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
-																{ no: 6, name: "storefront", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 4, name: "effectiveSystemLanguage", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 5, name: "preferredLanguages", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+																{ no: 6, name: "storeFront", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
 																{ no: 8, name: "timeZone", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 9, name: "skuRegion", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
 																{ no: 14, name: "location", kind: "message", T: () => Location },
-																{ no: 19, name: "F19", kind: "scalar", jsonName: "F19", T: 2 /*ScalarType.FLOAT*/ },
-																{ no: 26, name: "siriLocale", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+																{ no: 18, name: "installedAppsSignature", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 19, name: "uiScale", kind: "scalar", T: 2 /*ScalarType.FLOAT*/ },
+																{ no: 22, name: "hsEnabled", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+																{ no: 26, name: "region", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 28, name: "trialIdentifiers", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
 															]);
 														}
 													}
-													const Client = new Client$Type();
+													const PegasusQueryContext = new PegasusQueryContext$Type();
 													class Location$Type extends MessageType {
 														constructor() {
 															super("Location", [
@@ -159,14 +166,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														}
 													}
 													const Location = new Location$Type();
-													class M5$Type extends MessageType {
+													class SiriPegasusContext$Type extends MessageType {
 														constructor() {
-															super("M5", [
-																{ no: 14, name: "m5m14", kind: "message", jsonName: "m5m14", T: () => M5M14 }
+															super("SiriPegasusContext", [
+																{ no: 14, name: "conversationContext", kind: "message", T: () => M5M14 }
 															]);
 														}
 													}
-													const M5 = new M5$Type();
+													const SiriPegasusContext = new SiriPegasusContext$Type();
 													class M5M14$Type extends MessageType {
 														constructor() {
 															super("M5M14", [
@@ -190,7 +197,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													};
-													Locale = data.client.locale;
+													Locale = data.queryContext.locale;
 													[Language, CountryCode] = Locale?.split("_") ?? [];
 													$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
 													switch (Settings.CountryCode) {
@@ -198,20 +205,16 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															Settings.CountryCode = CountryCode;
 														//break;
 														default:
-															if (data?.client?.cc) data.client.cc = Settings.CountryCode;
-															//if (data?.client?.siriLocale) data.client.siriLocale = `${Language}_${Settings.CountryCode}`;
-															if (data?.m5?.m5M14?.cc) data.m5.m5M14.cc = Settings.CountryCode;
+															if (data?.queryContext?.countryCode) data.queryContext.countryCode = Settings.CountryCode;
+															//if (data?.queryContext?.region) data.queryContext.region = `${Language}_${Settings.CountryCode}`;
+															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
 															break;
 													};
-													delete data?.client?.location;
+													if (data?.queryContext?.skuRegion) data.queryContext.skuRegion = "LL";
+													delete data?.queryContext?.location;
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
-											};
-											break;
-										default:
-											// 路径判断
-											switch (PATH) {
 												case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": // 新闻建议
 													/******************  initialization start  *******************/
 													/******************  initialization finish  *******************/
