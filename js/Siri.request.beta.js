@@ -24123,7 +24123,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.1(4021) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.3(4022) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -24328,6 +24328,48 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													delete data?.queryContext?.location;
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
+													break;
+												}												case "/apple.parsec.lookup.v1alpha.LookupSearch/LookupSearch": { // 查询搜索
+													/******************  initialization start  *******************/
+													class LookupSearchRequest$Type extends MessageType {
+														constructor() {
+															super("LookupSearchRequest", [
+																//{ no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Query },
+																{ no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext }
+															]);
+														}
+													}
+													const LookupSearchRequest = new LookupSearchRequest$Type();
+													/******************  initialization finish  *******************/
+													let data = LookupSearchRequest.fromBinary(body);
+													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													let UF = UnknownFieldHandler.list(data);
+													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													if (UF) {
+														UF = UF.map(uf => {
+															//uf.no; // 22
+															//uf.wireType; // WireType.Varint
+															// use the binary reader to decode the raw data:
+															let reader = new BinaryReader(uf.data);
+															let addedNumber = reader.int32(); // 7777
+															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+														});
+													}													Locale = data.queryContext.locale;
+													[Language, CountryCode] = Locale?.split("_") ?? [];
+													$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
+													switch (Settings.CountryCode) {
+														case "AUTO":
+															Settings.CountryCode = CountryCode;
+														//break;
+														default:
+															if (data?.queryContext?.countryCode) data.queryContext.countryCode = Settings.CountryCode;
+															//if (data?.queryContext?.region) data.queryContext.region = `${Language}_${Settings.CountryCode}`;
+															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
+															break;
+													}													if (data?.queryContext?.skuRegion === "CH") data.queryContext.skuRegion = "LL";
+													delete data?.queryContext?.location;
+													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													body = LookupSearchRequest.toBinary(data);
 													break;
 												}												case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": { // 新闻建议
 													/******************  initialization start  *******************/
