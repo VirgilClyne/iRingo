@@ -3,6 +3,15 @@ import commonjs from "@rollup/plugin-commonjs";
 
 export default [
 	{
+		input: 'src/Weather.V2.request.beta.js',
+		output: {
+			file: 'js/Weather.V2.request.beta.js',
+			//format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+		},
+		plugins: [json(), commonjs()]
+	},
+	{
 		input: 'src/GeoServices.request.beta.js',
 		output: {
 			file: 'js/GeoServices.request.beta.js',

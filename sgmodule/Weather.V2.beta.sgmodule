@@ -1,0 +1,17 @@
+#!name= iRingo: 🌤 Weather β
+#!desc=V2 & iOS 18.0⬆️ & BETA
+#!openUrl=http://boxjs.com/#/app/iRingo.Weather.beta
+#!author=Wordless Echo & Virgil Clyne
+#!homepage=https://github.com/WordlessEcho
+#!manual=https://github.com/VirgilClyne/iRingo/wiki/🌤天气
+#!icon=https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp
+#!category= iRingo
+
+[Rule]
+DOMAIN,weather-analytics-events.apple.com,REJECT
+
+[Script]
+🌤 Weather.request = type=http-request, pattern=^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.V2.request.beta.js, argument=
+
+[MITM]
+hostname = %APPEND% weatherkit.apple.com
