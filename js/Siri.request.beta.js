@@ -21177,6 +21177,26 @@ function addgRPCHeader({ header, body }, encoding = undefined) {
 		return new Uint8Array(arr);
 	}}
 
+function modifyPegasusQueryContext(queryContext, Settings) {
+    console.log(`☑️ modify PegasusQueryContext`, "");
+    Locale = queryContext.locale;
+    [Language, CountryCode] = Locale?.split("_") ?? [];
+    console.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`);
+    switch (Settings.CountryCode) {
+        case "AUTO":
+            Settings.CountryCode = CountryCode;
+        //break;
+        default:
+            if (queryContext?.countryCode) queryContext.countryCode = Settings.CountryCode;
+            //if (queryContext?.region) queryContext.region = `${Language}_${Settings.CountryCode}`;
+            //if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
+            break;
+    }    if (queryContext?.skuRegion === "CH") queryContext.skuRegion = "LL";
+    delete queryContext?.location;
+    console.log(`✅ modify PegasusQueryContext`, "");
+    return queryContext;
+}
+
 /**
  * Get the type of a JSON value.
  * Distinguishes between array, null and object.
@@ -24123,7 +24143,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.3(4022) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.4(4026) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -24312,20 +24332,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															let addedNumber = reader.int32(); // 7777
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
-													}													Locale = data.queryContext.locale;
-													[Language, CountryCode] = Locale?.split("_") ?? [];
-													$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
-													switch (Settings.CountryCode) {
-														case "AUTO":
-															Settings.CountryCode = CountryCode;
-														//break;
-														default:
-															if (data?.queryContext?.countryCode) data.queryContext.countryCode = Settings.CountryCode;
-															//if (data?.queryContext?.region) data.queryContext.region = `${Language}_${Settings.CountryCode}`;
-															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
-															break;
-													}													if (data?.queryContext?.skuRegion === "CH") data.queryContext.skuRegion = "LL";
-													delete data?.queryContext?.location;
+													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
@@ -24354,22 +24361,37 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															let addedNumber = reader.int32(); // 7777
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
-													}													Locale = data.queryContext.locale;
-													[Language, CountryCode] = Locale?.split("_") ?? [];
-													$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
-													switch (Settings.CountryCode) {
-														case "AUTO":
-															Settings.CountryCode = CountryCode;
-														//break;
-														default:
-															if (data?.queryContext?.countryCode) data.queryContext.countryCode = Settings.CountryCode;
-															//if (data?.queryContext?.region) data.queryContext.region = `${Language}_${Settings.CountryCode}`;
-															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
-															break;
-													}													if (data?.queryContext?.skuRegion === "CH") data.queryContext.skuRegion = "LL";
-													delete data?.queryContext?.location;
+													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = LookupSearchRequest.toBinary(data);
+													break;
+												}												case "/apple.parsec.responseframework.engagement.v1alpha.EngagementSearch/EngagementSearch": { //
+													/******************  initialization start  *******************/
+													class EngagementRequest$Type extends MessageType {
+														constructor() {
+															super("EngagementRequest", [
+																{ no: 1, name: "queryContext", kind: "message", T: () => PegasusQueryContext }
+															]);
+														}
+													}
+													const EngagementRequest = new EngagementRequest$Type();
+													/******************  initialization finish  *******************/
+													let data = EngagementRequest.fromBinary(body);
+													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													let UF = UnknownFieldHandler.list(data);
+													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													if (UF) {
+														UF = UF.map(uf => {
+															//uf.no; // 22
+															//uf.wireType; // WireType.Varint
+															// use the binary reader to decode the raw data:
+															let reader = new BinaryReader(uf.data);
+															let addedNumber = reader.int32(); // 7777
+															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+														});
+													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
+													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													body = EngagementRequest.toBinary(data);
 													break;
 												}												case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": { // 新闻建议
 													/******************  initialization start  *******************/
@@ -24396,20 +24418,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															let addedNumber = reader.int32(); // 7777
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
-													}													Locale = data.queryContext.locale;
-													[Language, CountryCode] = Locale?.split("_") ?? [];
-													$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
-													switch (Settings.CountryCode) {
-														case "AUTO":
-															Settings.CountryCode = CountryCode;
-														//break;
-														default:
-															if (data?.queryContext?.countryCode) data.queryContext.countryCode = Settings.CountryCode;
-															//if (data?.queryContext?.region) data.queryContext.region = `${Language}_${Settings.CountryCode}`;
-															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
-															break;
-													}													if (data?.queryContext?.skuRegion === "CH") data.queryContext.skuRegion = "LL";
-													delete data?.queryContext?.location;
+													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = ZkwSuggestRequest.toBinary(data);
 													break;
