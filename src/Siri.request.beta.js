@@ -9,7 +9,7 @@ import addgRPCHeader from "./function/addgRPCHeader.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.0(4018) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.1(4021) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -113,59 +113,62 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "api-siri.smoot.apple.com":
 										case "api2.smoot.apple.com":
 										default:
+											/******************  initialization start  *******************/
+											class Query$Type extends MessageType {
+												constructor() {
+													super("Query", [
+														{ no: 1, name: "keyword", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+													]);
+												}
+											}
+											const Query = new Query$Type();
+											class PegasusQueryContext$Type extends MessageType {
+												constructor() {
+													super("PegasusQueryContext", [
+														{ no: 1, name: "secretKey", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 2, name: "countryCode", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 3, name: "locale", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 4, name: "effectiveSystemLanguage", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 5, name: "preferredLanguages", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+														{ no: 6, name: "storeFront", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 8, name: "timeZone", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 9, name: "skuRegion", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 14, name: "location", kind: "message", T: () => Location },
+														{ no: 18, name: "installedAppsSignature", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 19, name: "uiScale", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ },
+														{ no: 21, name: "seedBuild", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+														{ no: 22, name: "hsEnabled", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+														{ no: 26, name: "region", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+														{ no: 28, name: "trialIdentifiers", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+													]);
+												}
+											}
+											const PegasusQueryContext = new PegasusQueryContext$Type();
+											class Location$Type extends MessageType {
+												constructor() {
+													super("Location", [
+														{ no: 1, name: "latitude", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ },
+														{ no: 2, name: "longitude", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ },
+														{ no: 4, name: "altitude", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ }
+													]);
+												}
+											}
+											const Location = new Location$Type();
+											/******************  initialization finish  *******************/
 											// 路径判断
 											switch (PATH) {
-												case "/apple.parsec.siri.v2alpha.SiriSearch/SiriSearch": // Siri搜索
+												case "/apple.parsec.siri.v2alpha.SiriSearch/SiriSearch": { // Siri搜索
 													/******************  initialization start  *******************/
 													class SiriPegasusRequest$Type extends MessageType {
 														constructor() {
 															super("SiriPegasusRequest", [
-																{ no: 1, name: "queries", kind: "message", T: () => Content },
+																{ no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Query },
 																{ no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext },
 																{ no: 5, name: "siriPegasusContext", kind: "message", T: () => SiriPegasusContext }
 															]);
 														}
 													}
 													const SiriPegasusRequest = new SiriPegasusRequest$Type();
-													class Content$Type extends MessageType {
-														constructor() {
-															super("Content", [
-																{ no: 1, name: "keyword", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
-															]);
-														}
-													}
-													const Content = new Content$Type();
-													class PegasusQueryContext$Type extends MessageType {
-														constructor() {
-															super("PegasusQueryContext", [
-																{ no: 1, name: "secretKey", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 2, name: "countryCode", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 3, name: "locale", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 4, name: "effectiveSystemLanguage", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 5, name: "preferredLanguages", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
-																{ no: 6, name: "storeFront", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 8, name: "timeZone", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 9, name: "skuRegion", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 14, name: "location", kind: "message", T: () => Location },
-																{ no: 18, name: "installedAppsSignature", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 19, name: "uiScale", kind: "scalar", T: 2 /*ScalarType.FLOAT*/ },
-																{ no: 22, name: "hsEnabled", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-																{ no: 26, name: "region", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-																{ no: 28, name: "trialIdentifiers", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
-															]);
-														}
-													}
-													const PegasusQueryContext = new PegasusQueryContext$Type();
-													class Location$Type extends MessageType {
-														constructor() {
-															super("Location", [
-																{ no: 1, name: "latitude", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ },
-																{ no: 2, name: "longitude", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ },
-																{ no: 4, name: "altitude", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ }
-															]);
-														}
-													}
-													const Location = new Location$Type();
 													class SiriPegasusContext$Type extends MessageType {
 														constructor() {
 															super("SiriPegasusContext", [
@@ -210,15 +213,57 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
 															break;
 													};
-													if (data?.queryContext?.skuRegion) data.queryContext.skuRegion = "LL";
+													if (data?.queryContext?.skuRegion === "CH") data.queryContext.skuRegion = "LL";
 													delete data?.queryContext?.location;
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
-												case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": // 新闻建议
+												};
+												case "/apple.parsec.spotlight.v1alpha.ZkwSuggestService/Suggest": { // 新闻建议
 													/******************  initialization start  *******************/
+													class ZkwSuggestRequest$Type extends MessageType {
+														constructor() {
+															super("ZkwSuggestRequest", [
+																//{ no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Query },
+																{ no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext }
+															]);
+														}
+													}
+													const ZkwSuggestRequest = new ZkwSuggestRequest$Type();
 													/******************  initialization finish  *******************/
+													let data = ZkwSuggestRequest.fromBinary(body);
+													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													let UF = UnknownFieldHandler.list(data);
+													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													if (UF) {
+														UF = UF.map(uf => {
+															//uf.no; // 22
+															//uf.wireType; // WireType.Varint
+															// use the binary reader to decode the raw data:
+															let reader = new BinaryReader(uf.data);
+															let addedNumber = reader.int32(); // 7777
+															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+														});
+													};
+													Locale = data.queryContext.locale;
+													[Language, CountryCode] = Locale?.split("_") ?? [];
+													$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
+													switch (Settings.CountryCode) {
+														case "AUTO":
+															Settings.CountryCode = CountryCode;
+														//break;
+														default:
+															if (data?.queryContext?.countryCode) data.queryContext.countryCode = Settings.CountryCode;
+															//if (data?.queryContext?.region) data.queryContext.region = `${Language}_${Settings.CountryCode}`;
+															if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
+															break;
+													};
+													if (data?.queryContext?.skuRegion === "CH") data.queryContext.skuRegion = "LL";
+													delete data?.queryContext?.location;
+													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													body = ZkwSuggestRequest.toBinary(data);
 													break;
+												};
 											};
 											break;
 									};
