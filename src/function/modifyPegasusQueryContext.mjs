@@ -14,7 +14,7 @@ export default function modifyPegasusQueryContext(queryContext, Settings) {
             break;
     };
     if (queryContext?.skuRegion === "CH") queryContext.skuRegion = "LL";
-    delete queryContext?.location;
+    //delete queryContext?.location;
     console.log(`✅ modify PegasusQueryContext`, "");
     return queryContext;
 };

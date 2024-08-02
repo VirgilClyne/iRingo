@@ -10,7 +10,7 @@ import modifyPegasusQueryContext from "./function/modifyPegasusQueryContext.mjs"
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.4(4026) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.5(4029) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -173,11 +173,40 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													class SiriPegasusContext$Type extends MessageType {
 														constructor() {
 															super("SiriPegasusContext", [
+																{ no: 1, name: "deviceState", kind: "message", T: () => DeviceState },
+																{ no: 8, name: "restrictions", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
 																{ no: 14, name: "conversationContext", kind: "message", T: () => M5M14 }
 															]);
 														}
 													}
 													const SiriPegasusContext = new SiriPegasusContext$Type();
+													class DeviceState$Type extends MessageType {
+														constructor() {
+															super("DeviceState", [
+																{ no: 1, name: "companionName", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+																{ no: 2, name: "deviceName", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+																{ no: 3, name: "inputOrigin", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+																{ no: 4, name: "isAppleTv", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 5, name: "isCarDnd", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 6, name: "isCarPlay", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 7, name: "isEyesFree", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 8, name: "isHomePod", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 9, name: "isLockedWithPasscode", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 10, name: "isMac", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 11, name: "isMultiUser", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 12, name: "isPad", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 13, name: "isPhone", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 14, name: "isTextToSpeechEnabled", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 15, name: "isVox", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 16, name: "isVoiceGenderFemale", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 17, name: "isVoiceGenderMale", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 18, name: "isVoiceGenderUnknown", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 19, name: "isVoiceTriggerEnabled", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 20, name: "isWatch", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ }
+															]);
+														}
+													}
+													const DeviceState = new DeviceState$Type();
 													class M5M14$Type extends MessageType {
 														constructor() {
 															super("M5M14", [
@@ -202,6 +231,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														});
 													};
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
+													const keyword = data?.queries?.[0]?.keyword;
+													if (keyword.includes("天气")) {}
+													else if (keyword.includes("weather")) {}
+													else delete data?.queryContext?.location;
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
