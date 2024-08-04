@@ -11,10 +11,10 @@
 DOMAIN,weather-analytics-events.apple.com,REJECT
 
 [Script]
-Weather Availability Request = type=http-request, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.request.js, argument=
-Weather Availability Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.response.js, argument=
-Weather Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/, requires-body=1, timeout=20, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.response.js, argument=
-Weather Map Request = type=http-request, pattern=^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.request.js, argument=
+Weather Availability Request = type=http-request, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/, requires-body=0, script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Availability.request.js, argument=
+Weather Availability Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/, requires-body=1, script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Availability.response.js, argument=
+Weather Response = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/, requires-body=1, timeout=20, script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.response.js, argument=
+Weather Map Request = type=http-request, pattern=^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$, requires-body=0, script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Map.request.js, argument=
 
 [MITM]
 hostname = %APPEND% weather-edge.apple.com, weather-data.apple.com, weather-data-origin.apple.com, weather-map.apple.com, weather-map2.apple.com

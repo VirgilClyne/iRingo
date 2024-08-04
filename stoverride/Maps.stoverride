@@ -57,8 +57,8 @@ http:
 
 script-providers:
   GeoServices.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.request.js
     interval: 86400
   GeoServices.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.response.js
     interval: 86400

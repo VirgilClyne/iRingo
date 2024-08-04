@@ -13,9 +13,9 @@ DOMAIN-SUFFIX,waqi.info
 ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* header-del If-None-Match
 
 [Script]
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/Archive/js/Weather.Availability.js, requires-body=1, tag=Apple Weather Availability
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/Archive/js/Weather.js, requires-body=1, timeout=20, tag=Apple Weather
-http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/Archive/js/Weather.Map.js, requires-body=0, tag=Apple Weather Map
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.* script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/Archive/js/Weather.Availability.js, requires-body=1, tag=Apple Weather Availability
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather\/.* script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/Archive/js/Weather.js, requires-body=1, timeout=20, tag=Apple Weather
+http-request ^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/.*(\?.*country=CN.*) script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/Archive/js/Weather.Map.js, requires-body=0, tag=Apple Weather Map
 
 [MITM]
 hostname = weather-data.apple.com, weather-map.apple.com

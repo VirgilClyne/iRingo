@@ -24365,7 +24365,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const keyword = data?.queries?.[0]?.keyword;
 													if (keyword.includes("天气")) ;
 													else if (keyword.includes("weather")) ;
-													else delete data?.queryContext?.location;
+													//else delete data?.queryContext?.location;
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;

@@ -28,5 +28,5 @@ http:
 
 script-providers:
   Apple_News:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Apple_News.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/beta/archive/js/Apple_News.js
     interval: 86400

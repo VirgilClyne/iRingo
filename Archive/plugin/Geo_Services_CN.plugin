@@ -8,7 +8,7 @@
 
 [Script]
 # Redirect Geo Services to CN
-http-response ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Geo_Services_CN.js, requires-body=true, tag=Geo_Services_CN
+http-response ^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/archive/js/Geo_Services_CN.js, requires-body=true, tag=Geo_Services_CN
 
 [MITM]
 hostname = gspe1-ssl.ls.apple.com

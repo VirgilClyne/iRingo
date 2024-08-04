@@ -9,14 +9,14 @@
 
 #[rewrite_local]
 # 🗺️ Network Defaults
-^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
-^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults url script-request-header https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.request.js
+^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults url script-response-body https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.response.js
 # 🗺️ Announcements
-^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
-^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements url script-request-header https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.request.js
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements url script-response-body https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.response.js
 # 🗺️ Resource Manifest
-^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
-^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config url script-request-header https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.request.js
+^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config url script-response-body https://raw.githubusercontent.com/Asstiff/iRingo/main/js/GeoServices.response.js
 
 #[mitm]
 hostname = configuration.ls.apple.com, gspe35-ssl.ls.apple.com

@@ -18,5 +18,5 @@ http:
 
 script-providers:
   Apple_Weather:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Apple_Weather.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/archive/js/Apple_Weather.js
     interval: 86400

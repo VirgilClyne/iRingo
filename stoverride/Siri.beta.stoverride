@@ -77,8 +77,8 @@ http:
 
 script-providers:
   Siri.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/beta/js/Siri.request.beta.js
     interval: 86400
   Siri.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/beta/js/Siri.response.beta.js
     interval: 86400

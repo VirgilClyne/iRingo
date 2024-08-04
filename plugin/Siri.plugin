@@ -16,16 +16,16 @@ DOMAIN,e16991.b.akamaiedge.net
 
 [Script]
 # Bag (iOS/macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.bag.request
-http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.bag.response
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.bag.request
+http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/bag script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.bag.response
 # Siri Suggestion & Look Up Search (iOS/macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.search.request
-http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.search.response
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.search.request
+http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/search script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.search.response
 # Siri Infomation Card (macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.card.request
-http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.card.response
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.card.request
+http-response ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/card script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.response.js, requires-body=1, timeout=10, tag=🔍 Siri.card.response
 # Flight Search (iOS/macOS)
-http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.flight.request
+http-request ^https?:\/\/api(.*)\.smoot\.apple\.(com|cn)\/flight script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Siri.request.js, timeout=5, tag=🔍 Siri.flight.request
 
 [MITM]
 hostname = api*.smoot.apple.com, api*.smoot.apple.cn

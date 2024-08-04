@@ -3712,7 +3712,7 @@ const waqiToAqiMetadata = (feedData) => {
     expireTimestamp: validExpireTimestamp,
     providerLogo: {
       forV1: 'https://waqi.info/images/logo.png',
-      forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png',
+      forV2: 'https://raw.githubusercontent.com/Asstiff/iRingo/main/image/waqi.info.logo.png',
     },
     providerName: isNonEmptyString(feedData?.data?.city?.name)
       ? `${feedData.data.city.name} (The World Air Quality Project)`
@@ -5372,8 +5372,8 @@ if (settings.switch) {
                   return {
                     [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
                       {
-                        forV1: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/weatherol-logo-colorful.png',
-                        forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/weatherol-logo.png',
+                        forV1: 'https://raw.githubusercontent.com/Asstiff/iRingo/main/image/weatherol-logo-colorful.png',
+                        forV2: 'https://raw.githubusercontent.com/Asstiff/iRingo/main/image/weatherol-logo.png',
                       },
                       '气象在线',
                       'https://www.weatherol.cn/',
@@ -5391,8 +5391,8 @@ if (settings.switch) {
                   return {
                     [METADATA]: toMetadata(apiVersion, colorfulCloudsToAqiMetadata(
                       {
-                        forV1: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/colorfulclouds-logo-colorful.png',
-                        forV2: 'https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/colorfulclouds-logo.png',
+                        forV1: 'https://raw.githubusercontent.com/Asstiff/iRingo/main/image/colorfulclouds-logo-colorful.png',
+                        forV2: 'https://raw.githubusercontent.com/Asstiff/iRingo/main/image/colorfulclouds-logo.png',
                       },
                       getColorfulCloudsName(appleLanguage),
                       'https://caiyunapp.com/weather/',

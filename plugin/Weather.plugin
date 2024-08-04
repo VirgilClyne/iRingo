@@ -12,10 +12,10 @@ DOMAIN,weather-analytics-events.apple.com,REJECT
 DOMAIN-SUFFIX,waqi.info
 
 [Script]
-http-request ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.request.js, requires-body=0, tag=Weather Availability Request
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.response.js, requires-body=1, tag=Weather Availability Response
-http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.response.js, requires-body=1, timeout=20, tag=Weather Response
-http-request ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.request.js, requires-body=0, tag=Weather Map Request
+http-request ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/ script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Availability.request.js, requires-body=0, tag=Weather Availability Request
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/availability\/ script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Availability.response.js, requires-body=1, tag=Weather Availability Response
+http-response ^https?:\/\/weather-data\.apple\.com\/(v1|v2|v3)\/weather\/ script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.response.js, requires-body=1, timeout=20, tag=Weather Response
+http-request ^https?:\/\/weather-map2?\.apple\.com\/(v1|v2)\/mapOverlay\/\w+(\?.*country=CN.*)?$ script-path=https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Map.request.js, requires-body=0, tag=Weather Map Request
 
 [MITM]
 hostname = weather-edge.apple.com, weather-data.apple.com, weather-map.apple.com, weather-map2.apple.com

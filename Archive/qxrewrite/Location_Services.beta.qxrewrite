@@ -4,9 +4,9 @@
 #!desc=2.修改GCC(Geo Country Code)检测结果
 
 # Response Location Services Geo Country Code Check Result to US
-^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) url script-echo-response https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Location_Services.beta.js
+^https?:\/\/gspe\d*-ssl\.ls\.apple\.com(/pep/gcc) url script-echo-response https://raw.githubusercontent.com/Asstiff/iRingo/beta/archive/js/Location_Services.beta.js
 # Rewrite Location Services Configuration Functions Internationalization
-^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Location_Services.beta.js
-^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Location_Services.beta.js
+^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* url script-request-header https://raw.githubusercontent.com/Asstiff/iRingo/beta/archive/js/Location_Services.beta.js
+^https?:\/\/configuration\.ls\.apple\.com(\/config\/defaults\?).* url script-response-body https://raw.githubusercontent.com/Asstiff/iRingo/beta/archive/js/Location_Services.beta.js
 
 hostname = configuration.ls.apple.com, gspe1-ssl.ls.apple.com

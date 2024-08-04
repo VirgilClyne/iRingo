@@ -42,14 +42,14 @@ http:
 
 script-providers:
   Weather.Availability.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.request.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Availability.request.js
     interval: 86400
   Weather.Availability.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.response.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Availability.response.js
     interval: 86400
   Weather.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.response.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.response.js
     interval: 86400
   Weather.Map.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.request.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/Weather.Map.request.js
     interval: 86400

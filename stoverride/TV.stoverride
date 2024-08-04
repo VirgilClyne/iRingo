@@ -27,8 +27,8 @@ http:
 
 script-providers:
   TV.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/TV.request.js
     interval: 86400
   TV.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/js/TV.response.js
     interval: 86400

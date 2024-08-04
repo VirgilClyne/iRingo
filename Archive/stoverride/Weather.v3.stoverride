@@ -28,11 +28,11 @@ http:
 
 script-providers:
   Apple_Weather_Availability:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/Archive/js/Weather.Availability.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/Archive/js/Weather.Availability.js
     interval: 86400
   Apple_Weather:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/Archive/js/Weather.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/Archive/js/Weather.js
     interval: 86400
   Apple_Weather_Map:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/Archive/js/Weather.Map.js
+    url: https://raw.githubusercontent.com/Asstiff/iRingo/main/Archive/js/Weather.Map.js
     interval: 86400
