@@ -24389,15 +24389,20 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															break;
 														case keyword == "风" || (keyword.includes("风") && (keyword.includes("速") || keyword.includes("向") || keyword.includes("吗") || keyword.includes("大"))):
 															break;
-														case keyword.includes("the air") || keyword.includes("AQI") || keyword.includes("air quality") || keyword.includes("atmosphare"):
+														case keyword.includes("the air") || keyword.includes("aqi") || keyword.includes("air quality") || keyword.includes("atmosphare"):
 															break;
-														case keyword.includes("空气") || keyword.includes("AQI") || keyword.includes("空气质量"):
+														case keyword.includes("空气")|| keyword.includes("空气质量"):
 															break;
-														case keyword.includes("UV") || keyword.includes("ultraviolet") || keyword.includes("紫外线"):
+														case keyword.includes("uv") || keyword.includes("ultraviolet") || keyword.includes("紫外线"):
 															break;
 														case keyword.includes("precipitation") || keyword.includes("forecast") || ((keyword.includes("chance") || keyword.includes("possibilit")) && keyword.includes("rain")):
 															break;
 														case keyword.includes("降雪") || keyword.includes("降水") || keyword.includes("预报") || ((keyword.includes("概率") || keyword.includes("几率")) && (keyword.includes("降水") || keyword.includes("降雪"))):
+															break;
+														case keyword.includes("search") || keyword.includes("web") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜索"):
+															if (data?.queryContext?.location) {
+																	delete data.queryContext.location;
+															}
 															break;
 														default:
 															if (data?.queryContext?.location) {
