@@ -24365,7 +24365,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const keyword = data?.queries?.[0]?.keyword.toLowerCase();
 
 													switch (true) {
-														case keyword.includes("search") || keyword.includes("mean") || keyword.includes("translate") || (keyword.includes(" in ") && !keyword.includes(" here")) || keyword.includes("web") || keyword.includes("internet") || keyword.includes("define") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜") || keyword.includes("翻译") || keyword.includes("意思"):
+														case keyword.includes("search") || keyword.includes("mean") || keyword.includes("explain") || keyword.includes("look up") || keyword.includes("translate") || (keyword.includes(" in ") && !keyword.includes(" here")) || keyword.includes("web") || keyword.includes("internet") || keyword.includes("define") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜") || keyword.includes("解释") || keyword.includes("翻译") || keyword.includes("意思"):
 															if (data?.queryContext?.location) {
 																	delete data.queryContext.location;
 															}
