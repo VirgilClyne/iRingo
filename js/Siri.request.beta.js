@@ -24362,7 +24362,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													const keyword = data?.queries?.[0]?.keyword.toString.toLowerCase();
+													const keyword = data?.queries?.[0]?.keyword.toString().toLowerCase();
 
 													switch (true) {
 														case keyword.includes("weather") || keyword.includes("天气"):
