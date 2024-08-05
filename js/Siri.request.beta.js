@@ -24365,6 +24365,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const keyword = data?.queries?.[0]?.keyword.toString().toLowerCase();
 
 													switch (true) {
+														case keyword.includes("search") || keyword.includes("web") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜索"):
+															if (data?.queryContext?.location) {
+																	delete data.queryContext.location;
+															}
+															break;
 														case keyword.includes("weather") || keyword.includes("天气"):
 															break;
 														case keyword.includes("气压") || keyword.includes("空气压强") || keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric")  || keyword.includes("atmospheric"))):
@@ -24398,11 +24403,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														case keyword.includes("precipitation") || keyword.includes("forecast") || ((keyword.includes("chance") || keyword.includes("possibilit")) && keyword.includes("rain")):
 															break;
 														case keyword.includes("降雪") || keyword.includes("降水") || keyword.includes("预报") || ((keyword.includes("概率") || keyword.includes("几率")) && (keyword.includes("降水") || keyword.includes("降雪"))):
-															break;
-														case keyword.includes("search") || keyword.includes("web") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜索"):
-															if (data?.queryContext?.location) {
-																	delete data.queryContext.location;
-															}
 															break;
 														default:
 															if (data?.queryContext?.location) {
