@@ -24372,7 +24372,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															break;
 														case keyword.includes("weather") || keyword.includes("天气"):
 															break;
-														case keyword.includes("气压") || keyword.includes("空气压强") || keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric") || keyword.includes("atmospheric") || keyword.includes("atmosphere"))):
+														case keyword.includes("气压") || keyword.includes("空气压强") || keyword.includes("压强") || keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric") || keyword.includes("atmospheric") || keyword.includes("atmosphere"))):
 															break;
 														case keyword.includes("湿度") || ((keyword.includes("how ") || keyword.includes("air")) && keyword.includes(" wet")) || keyword.includes("humidity"):
 															break;
@@ -24398,7 +24398,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															break;
 														case keyword.includes("空气")|| keyword.includes("空气质量"):
 															break;
-														case ((keyword.includes("uv") || keyword.includes("ultraviolet")) && keyword.includes("the")) || keyword.includes("紫外线"):
+														case keyword.includes("uv index") || keyword.includes("ultraviolet index outside") || keyword.includes("紫外线"):
 															break;
 														case keyword.includes("precipitation") || keyword.includes("forecast") || ((keyword.includes("chance") || keyword.includes("possibilit")) && keyword.includes("rain")):
 															break;
