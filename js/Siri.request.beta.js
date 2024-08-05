@@ -24362,10 +24362,30 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													const keyword = data?.queries?.[0]?.keyword;
-													if (keyword.includes("天气")) ;
-													else if (keyword.includes("weather")) ;
-													//else delete data?.queryContext?.location;
+													const keyword = data?.queries?.[0]?.keyword.toLowerCase;
+
+													keyword = keyword.toLowerCase();  // 将关键词转换为小写
+
+													switch (true) {
+														case keyword.includes("weather") || keyword.includes("天气"):
+															console.log("Handling weather related query...");
+															break;
+														case keyword.includes("pressure") && keyword.includes("today"):
+															console.log("Handling pressure and today related query...");
+															break;
+														case keyword == "pressure":
+															console.log("Handling pressure and today related query...");
+															break;
+														case (keyword.includes("how") && keyword.includes("wet")) || keyword.includes("humidity"):
+															console.log("Handling how wet today related query...");
+															break;
+														default:
+															// 如果不符合任何上述条件，则可能删除位置数据
+															if (data?.queryContext?.location) {
+																delete data.queryContext.location;
+															}
+															break;
+													}
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
