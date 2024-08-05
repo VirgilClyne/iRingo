@@ -24143,7 +24143,7 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.5(4029) request.beta");
+const $ = new ENV(" iRingo: 🔍 Siri v4.0.8(4036) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -24221,6 +24221,148 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//$.log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
 							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
 							//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+							/******************  initialization start  *******************/
+							class Any$Type extends MessageType {
+								constructor() {
+									super("google.protobuf.Any", [
+										{ no: 1, name: "type_url", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+										{ no: 2, name: "value", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
+									]);
+								}
+								/**
+								 * Pack the message into a new `Any`.
+								 *
+								 * Uses 'type.googleapis.com/full.type.name' as the type URL.
+								 */
+								pack(message, type) {
+									return {
+										typeUrl: this.typeNameToUrl(type.typeName), value: type.toBinary(message),
+									};
+								}
+								/**
+								 * Unpack the message from the `Any`.
+								 */
+								unpack(any, type, options) {
+									if (!this.contains(any, type))
+										throw new Error("Cannot unpack google.protobuf.Any with typeUrl '" + any.typeUrl + "' as " + type.typeName + ".");
+									return type.fromBinary(any.value, options);
+								}
+								/**
+								 * Does the given `Any` contain a packed message of the given type?
+								 */
+								contains(any, type) {
+									if (!any.typeUrl.length)
+										return false;
+									let wants = typeof type == "string" ? type : type.typeName;
+									let has = this.typeUrlToName(any.typeUrl);
+									return wants === has;
+								}
+								/**
+								 * Convert the message to canonical JSON value.
+								 *
+								 * You have to provide the `typeRegistry` option so that the
+								 * packed message can be converted to JSON.
+								 *
+								 * The `typeRegistry` option is also required to read
+								 * `google.protobuf.Any` from JSON format.
+								 */
+								internalJsonWrite(any, options) {
+									if (any.typeUrl === "")
+										return {};
+									let typeName = this.typeUrlToName(any.typeUrl);
+									let opt = jsonWriteOptions(options);
+									let type = opt.typeRegistry?.find(t => t.typeName === typeName);
+									if (!type)
+										throw new globalThis.Error("Unable to convert google.protobuf.Any with typeUrl '" + any.typeUrl + "' to JSON. The specified type " + typeName + " is not available in the type registry.");
+									let value = type.fromBinary(any.value, { readUnknownField: false });
+									let json = type.internalJsonWrite(value, opt);
+									if (typeName.startsWith("google.protobuf.") || !isJsonObject(json))
+										json = { value: json };
+									json["@type"] = any.typeUrl;
+									return json;
+								}
+								internalJsonRead(json, options, target) {
+									if (!isJsonObject(json))
+										throw new globalThis.Error("Unable to parse google.protobuf.Any from JSON " + typeofJsonValue(json) + ".");
+									if (typeof json["@type"] != "string" || json["@type"] == "")
+										return this.create();
+									let typeName = this.typeUrlToName(json["@type"]);
+									let type = options?.typeRegistry?.find(t => t.typeName == typeName);
+									if (!type)
+										throw new globalThis.Error("Unable to parse google.protobuf.Any from JSON. The specified type " + typeName + " is not available in the type registry.");
+									let value;
+									if (typeName.startsWith("google.protobuf.") && json.hasOwnProperty("value"))
+										value = type.fromJson(json["value"], options);
+									else {
+										let copy = Object.assign({}, json);
+										delete copy["@type"];
+										value = type.fromJson(copy, options);
+									}
+									if (target === undefined)
+										target = this.create();
+									target.typeUrl = json["@type"];
+									target.value = type.toBinary(value);
+									return target;
+								}
+								typeNameToUrl(name) {
+									if (!name.length)
+										throw new Error("invalid type name: " + name);
+									return "type.googleapis.com/" + name;
+								}
+								typeUrlToName(url) {
+									if (!url.length)
+										throw new Error("invalid type url: " + url);
+									let slash = url.lastIndexOf("/");
+									let name = slash > 0 ? url.substring(slash + 1) : url;
+									if (!name.length)
+										throw new Error("invalid type url: " + url);
+									return name;
+								}
+								create(value) {
+									const message = globalThis.Object.create((this.messagePrototype));
+									message.typeUrl = "";
+									message.value = new Uint8Array(0);
+									if (value !== undefined)
+										reflectionMergePartial(this, message, value);
+									return message;
+								}
+								internalBinaryRead(reader, length, options, target) {
+									let message = target ?? this.create(), end = reader.pos + length;
+									while (reader.pos < end) {
+										let [fieldNo, wireType] = reader.tag();
+										switch (fieldNo) {
+											case /* string type_url */ 1:
+												message.typeUrl = reader.string();
+												break;
+											case /* bytes value */ 2:
+												message.value = reader.bytes();
+												break;
+											default:
+												let u = options.readUnknownField;
+												if (u === "throw")
+													throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+												let d = reader.skip(wireType);
+												if (u !== false)
+													(u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+										}
+									}
+									return message;
+								}
+								internalBinaryWrite(message, writer, options) {
+									/* string type_url = 1; */
+									if (message.typeUrl !== "")
+										writer.tag(1, WireType.LengthDelimited).string(message.typeUrl);
+									/* bytes value = 2; */
+									if (message.value.length)
+										writer.tag(2, WireType.LengthDelimited).bytes(message.value);
+									let u = options.writeUnknownFields;
+									if (u !== false)
+										(u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+									return writer;
+								}
+							}
+							const Any = new Any$Type();							
+							/******************  initialization finish  *******************/
 							switch (FORMAT) {
 								case "application/protobuf":
 								case "application/x-protobuf":
@@ -24247,14 +24389,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "api2.smoot.apple.com":
 										default:
 											/******************  initialization start  *******************/
-											class Query$Type extends MessageType {
-												constructor() {
-													super("Query", [
-														{ no: 1, name: "keyword", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
-													]);
-												}
-											}
-											const Query = new Query$Type();
 											class PegasusQueryContext$Type extends MessageType {
 												constructor() {
 													super("PegasusQueryContext", [
@@ -24295,13 +24429,41 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													class SiriPegasusRequest$Type extends MessageType {
 														constructor() {
 															super("SiriPegasusRequest", [
-																{ no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Query },
+																{ no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => QueryFeatures },
 																{ no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext },
-																{ no: 5, name: "siriPegasusContext", kind: "message", T: () => SiriPegasusContext }
+																{ no: 3, name: "userDataShareOptIn", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+																{ no: 5, name: "siriPegasusContext", kind: "message", T: () => SiriPegasusContext },
+																{ no: 6, name: "siriEnvironment", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ }
 															]);
 														}
 													}
 													const SiriPegasusRequest = new SiriPegasusRequest$Type();
+													class QueryFeatures$Type extends MessageType {
+														constructor() {
+															super("QueryFeatures", [
+																{ no: 1, name: "query", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 2, name: "qsyn", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																{ no: 2002, name: "executableQueryString", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => ExecutableQueryString }
+															]);
+														}
+													}
+													const QueryFeatures = new QueryFeatures$Type();
+													class ExecutableQueryString$Type extends MessageType {
+														constructor() {
+															super("ExecutableQueryString", [
+																{ no: 2, name: "m2", kind: "message", T: () => M2 }
+															]);
+														}
+													}
+													const ExecutableQueryString = new ExecutableQueryString$Type();
+													class M2$Type extends MessageType {
+														constructor() {
+															super("M2", [
+																{ no: 2, name: "supplement", kind: "message", T: () => Any }
+															]);
+														}
+													}
+													const M2 = new M2$Type();
 													class SiriPegasusContext$Type extends MessageType {
 														constructor() {
 															super("SiriPegasusContext", [
@@ -24362,10 +24524,38 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													const keyword = data?.queries?.[0]?.keyword;
-													if (keyword.includes("天气")) ;
-													else if (keyword.includes("weather")) ;
-													else delete data?.queryContext?.location;
+													let fixLocation = true;
+													data?.queries?.[0]?.executableQueryString.forEach((executableQueryString, index) => {
+														switch (executableQueryString?.m2?.supplement?.typeUrl) {
+															case "type.googleapis.com/apple.parsec.siri.v2alpha.AppInfo":
+																/******************  initialization start  *******************/
+																class ApplicationInfomationRequest$Type extends MessageType {
+																	constructor() {
+																		super("ApplicationInfomationRequest", [
+																			{ no: 2, name: "bundleID", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+																			{ no: 4, name: "launchIntent", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+																		]);
+																	}
+																}
+																const ApplicationInfomationRequest = new ApplicationInfomationRequest$Type();
+																/******************  initialization finish  *******************/
+																const AppInfo = ApplicationInfomationRequest.fromBinary(executableQueryString?.m2?.supplement?.value);
+																$.log(`🚧 AppInfo: ${JSON.stringify(AppInfo)}`, "");
+																switch (AppInfo?.bundleID) {
+																	case "com.apple.weather":
+																	case "com.heweather.weatherapp":
+																		fixLocation = false;
+																		break;
+																	case "com.apple.store.Jolly":
+																		fixLocation = false;
+																		break;
+																	case "com.apple.Music":
+																	case "com.apple.AppStore":
+																		fixLocation = false;
+																		break;
+																}																break;
+														}													});
+													if (fixLocation) delete data?.queryContext?.location;
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
