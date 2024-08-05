@@ -24398,7 +24398,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															break;
 														case keyword.includes("空气")|| keyword.includes("空气质量"):
 															break;
-														case keyword.includes("uv") || keyword.includes("ultraviolet") || keyword.includes("紫外线"):
+														case ((keyword.includes("uv") || keyword.includes("ultraviolet")) && keyword.includes("the")) || keyword.includes("紫外线"):
 															break;
 														case keyword.includes("precipitation") || keyword.includes("forecast") || ((keyword.includes("chance") || keyword.includes("possibilit")) && keyword.includes("rain")):
 															break;
