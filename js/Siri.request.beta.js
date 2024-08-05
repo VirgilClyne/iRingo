@@ -24362,7 +24362,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													const keyword = data?.queries?.[0]?.keyword.toString().toLowerCase();
+													const keyword = data?.queries?.[0]?.keyword.toLowerCase();
 
 													switch (true) {
 														case keyword.includes("search") || keyword.includes("mean") || keyword.includes("translate") || (keyword.includes(" in ") && !keyword.includes(" here")) || keyword.includes("web") || keyword.includes("internet") || keyword.includes("define") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜") || keyword.includes("翻译") || keyword.includes("意思"):
