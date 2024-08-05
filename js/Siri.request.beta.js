@@ -24362,10 +24362,54 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													const keyword = data?.queries?.[0]?.keyword;
-													if (keyword.includes("天气")) ;
-													else if (keyword.includes("weather")) ;
-													else delete data?.queryContext?.location;
+													const keyword = data?.queries?.[0]?.keyword.toString().toLowerCase();
+
+													switch (true) {
+														case keyword.includes("search") || keyword.includes("web") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜索"):
+															if (data?.queryContext?.location) {
+																	delete data.queryContext.location;
+															}
+															break;
+														case keyword.includes("weather") || keyword.includes("天气"):
+															break;
+														case keyword.includes("气压") || keyword.includes("空气压强") || keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric")  || keyword.includes("atmospheric"))):
+															break;
+														case keyword.includes("湿度") || ((keyword.includes("how") || keyword.includes("air")) && keyword.includes("wet")) || keyword.includes("humidity"):
+															break;
+														case keyword.includes("月相") || keyword.includes("moon phase") || (keyword.includes("what\'s") && (keyword.includes("the moon"))):
+															break;
+														case (keyword.includes("sun") && (keyword.includes("rise") || keyword.includes("set") || keyword.includes("fall"))) || keyword.includes("sunrise") || keyword.includes("sunset"):
+															break;
+														case (keyword.includes("太阳") && (keyword.includes("升") || keyword.includes("落") || keyword.includes("下山"))) || keyword.includes("日出") || keyword.includes("日落"):
+															break;
+														case (keyword.includes("is") || keyword.includes("it")) && (keyword.includes("rain") || keyword.includes("shin") || keyword.includes("sunny") || keyword.includes("hot") || keyword.includes("cold") || keyword.includes("freeze") || keyword.includes("warm") || keyword.includes("wind") || keyword.includes("fog") || keyword.includes("haz")  || keyword.includes("thunder") || keyword.includes("storm") || keyword.includes("lightn") || keyword.includes("snow") || keyword.includes("hail") || keyword.includes("clear") || keyword.includes("tornado") || keyword.includes("hurricane")):
+															break;
+														case (keyword.includes("有") || keyword.includes("会") || keyword.includes("吗")) && (keyword.includes("下雨") || keyword.includes("晒") || keyword.includes("晴") || keyword.includes("热") || keyword.includes("冷") || keyword.includes("暖") || keyword.includes("风") || keyword.includes("雾")  || keyword.includes("霾") || keyword.includes("雷") || keyword.includes("风暴") || keyword.includes("电") || keyword.includes("雪") || keyword.includes("雹")):
+															break;
+														case keyword.includes("temperature"):
+															break;
+														case keyword.includes("温度"):
+															break;
+														case keyword == "wind" || (keyword.includes("wind") && (keyword.includes("speed") || keyword.includes("direction") || keyword.includes("what\'s") || keyword.includes("how\'s"))):
+															break;
+														case keyword == "风" || (keyword.includes("风") && (keyword.includes("速") || keyword.includes("向") || keyword.includes("吗") || keyword.includes("大"))):
+															break;
+														case keyword.includes("the air") || keyword.includes("aqi") || keyword.includes("air quality") || keyword.includes("atmosphare"):
+															break;
+														case keyword.includes("空气")|| keyword.includes("空气质量"):
+															break;
+														case keyword.includes("uv") || keyword.includes("ultraviolet") || keyword.includes("紫外线"):
+															break;
+														case keyword.includes("precipitation") || keyword.includes("forecast") || ((keyword.includes("chance") || keyword.includes("possibilit")) && keyword.includes("rain")):
+															break;
+														case keyword.includes("降雪") || keyword.includes("降水") || keyword.includes("预报") || ((keyword.includes("概率") || keyword.includes("几率")) && (keyword.includes("降水") || keyword.includes("降雪"))):
+															break;
+														default:
+															if (data?.queryContext?.location) {
+																delete data.queryContext.location;
+															}
+															break;
+													}
 													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
