@@ -24362,25 +24362,22 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													}													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													const keyword = data?.queries?.[0]?.keyword.toLowerCase;
-
-													keyword = keyword.toLowerCase();  // 将关键词转换为小写
+													const keyword = data?.queries?.[0]?.keyword.toString.toLowerCase();
 
 													switch (true) {
 														case keyword.includes("weather") || keyword.includes("天气"):
-															console.log("Handling weather related query...");
 															break;
 														case keyword.includes("pressure") && keyword.includes("today"):
-															console.log("Handling pressure and today related query...");
 															break;
 														case keyword == "pressure":
-															console.log("Handling pressure and today related query...");
 															break;
-														case (keyword.includes("how") && keyword.includes("wet")) || keyword.includes("humidity"):
-															console.log("Handling how wet today related query...");
+														case (keyword.includes("how") && keyword.includes("wet")) || (keyword.includes("air") && keyword.includes("wet")) || keyword.includes("humidity"):
+															break;
+														case (keyword.includes("sun") && keyword.includes("rise")) || keyword.includes("sunrise"):
+															break;
+														case (keyword.includes("sun") && keyword.includes("fall")) || keyword.includes("sunset"):
 															break;
 														default:
-															// 如果不符合任何上述条件，则可能删除位置数据
 															if (data?.queryContext?.location) {
 																delete data.queryContext.location;
 															}
