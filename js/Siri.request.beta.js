@@ -24367,15 +24367,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													switch (true) {
 														case keyword.includes("weather") || keyword.includes("天气"):
 															break;
-														case keyword.includes("pressure") && keyword.includes("today"):
+														case keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric")  || keyword.includes("atmospheric"))):
 															break;
-														case keyword == "pressure":
+														case ((keyword.includes("how" ) || keyword.includes("air")) && keyword.includes("wet")) || keyword.includes("humidity"):
 															break;
-														case (keyword.includes("how") && keyword.includes("wet")) || (keyword.includes("air") && keyword.includes("wet")) || keyword.includes("humidity"):
-															break;
-														case (keyword.includes("sun") && keyword.includes("rise")) || keyword.includes("sunrise"):
-															break;
-														case (keyword.includes("sun") && keyword.includes("fall")) || keyword.includes("sunset"):
+														case (keyword.includes("sun") && (keyword.includes("rise") || keyword.includes("fall"))) || keyword.includes("sunrise") || keyword.includes("sunset"):
 															break;
 														default:
 															if (data?.queryContext?.location) {
