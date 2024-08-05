@@ -24365,20 +24365,20 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const keyword = data?.queries?.[0]?.keyword.toString().toLowerCase();
 
 													switch (true) {
-														case keyword.includes("search") || keyword.includes("web") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜索"):
+														case keyword.includes("search") || keyword.includes("mean") || keyword.includes("translate") || (keyword.includes(" in ") && !keyword.includes(" here")) || keyword.includes("web") || keyword.includes("internet") || keyword.includes("define") || keyword.includes("wikipedia") || keyword.includes("什么是") || keyword.includes("搜") || keyword.includes("翻译") || keyword.includes("意思"):
 															if (data?.queryContext?.location) {
 																	delete data.queryContext.location;
 															}
 															break;
 														case keyword.includes("weather") || keyword.includes("天气"):
 															break;
-														case keyword.includes("气压") || keyword.includes("空气压强") || keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric")  || keyword.includes("atmospheric"))):
+														case keyword.includes("气压") || keyword.includes("空气压强") || keyword == "pressure" || (keyword.includes("pressure") && (keyword.includes("air") || keyword.includes("barometric") || keyword.includes("atmospheric") || keyword.includes("atmosphere"))):
 															break;
-														case keyword.includes("湿度") || ((keyword.includes("how") || keyword.includes("air")) && keyword.includes("wet")) || keyword.includes("humidity"):
+														case keyword.includes("湿度") || ((keyword.includes("how ") || keyword.includes("air")) && keyword.includes(" wet")) || keyword.includes("humidity"):
 															break;
 														case keyword.includes("月相") || keyword.includes("moon phase") || (keyword.includes("what\'s") && (keyword.includes("the moon"))):
 															break;
-														case (keyword.includes("sun") && (keyword.includes("rise") || keyword.includes("set") || keyword.includes("fall"))) || keyword.includes("sunrise") || keyword.includes("sunset"):
+														case (keyword.includes("sun ") && (keyword.includes("rise") || keyword.includes("set") || keyword.includes("fall"))) || keyword.includes("sunrise") || keyword.includes("sunset"):
 															break;
 														case (keyword.includes("太阳") && (keyword.includes("升") || keyword.includes("落") || keyword.includes("下山"))) || keyword.includes("日出") || keyword.includes("日落"):
 															break;
