@@ -5,7 +5,9 @@ import ENV from "./ENV/ENV.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 🌤 Weather v4.0.0(4001) request.beta");
+import { ByteBuffer } from "../node_modules/flatbuffers/mjs/flatbuffers.js";
+
+const $ = new ENV(" iRingo: 🌤 Weather v4.0.1(4002) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -74,6 +76,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = JSON.stringify(body);
 							break;
+						case "application/vnd.apple.flatbuffer":
 						case "application/protobuf":
 						case "application/x-protobuf":
 						case "application/vnd.google.protobuf":
@@ -83,6 +86,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//$.log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
 							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
 							//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+							switch (FORMAT) {
+								case "application/vnd.apple.flatbuffer":
+									// 解析FlatBuffer
+									body = new flatbuffers.ByteBuffer(rawBody);
+									$.log(`🚧 body: ${body}`, "");
+									//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+									break;
+							};
 							// 写入二进制数据
 							$request.body = rawBody;
 							break;

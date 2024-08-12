@@ -28,6 +28,7 @@
 		"rollup": "^4.9.6"
 	},
 	"dependencies": {
-		"@protobuf-ts/plugin": "^2.9.4"
+		"@protobuf-ts/plugin": "^2.9.4",
+		"flatbuffers": "^24.3.25"
 	}
 }
