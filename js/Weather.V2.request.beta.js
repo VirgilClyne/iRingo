@@ -13430,6 +13430,16 @@ var Configs$2 = {
 				]
 			}
 		],
+		dataSet: [
+			{
+				identifier: 0,
+				dataSetDescription: "TomTom"
+			},
+			{
+				identifier: 1,
+				dataSetDescription: "KittyHawk"
+			}
+		],
 		urlInfoSet: [
 			{
 				backgroundRevGeoURL: {
@@ -14272,7 +14282,18 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-const $ = new ENV(" iRingo: 🌤 Weather v4.0.0(4001) request.beta");
+const int32 = new Int32Array(2);
+new Float32Array(int32.buffer);
+new Float64Array(int32.buffer);
+new Uint16Array(new Uint8Array([1, 0]).buffer)[0] === 1;
+
+var Encoding;
+(function (Encoding) {
+    Encoding[Encoding["UTF8_BYTES"] = 1] = "UTF8_BYTES";
+    Encoding[Encoding["UTF16_STRING"] = 2] = "UTF16_STRING";
+})(Encoding || (Encoding = {}));
+
+const $ = new ENV(" iRingo: 🌤 Weather v4.0.1(4002) request.beta");
 
 // 构造回复数据
 let $response = undefined;
@@ -14293,6 +14314,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
+			let body = {};
 			// 方法判断
 			switch (METHOD) {
 				case "POST":
@@ -14338,6 +14360,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = JSON.stringify(body);
 							break;
+						case "application/vnd.apple.flatbuffer":
 						case "application/protobuf":
 						case "application/x-protobuf":
 						case "application/vnd.google.protobuf":
@@ -14347,7 +14370,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//$.log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
 							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
 							//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
-							// 写入二进制数据
+							switch (FORMAT) {
+								case "application/vnd.apple.flatbuffer":
+									// 解析FlatBuffer
+									body = new flatbuffers.ByteBuffer(rawBody);
+									$.log(`🚧 body: ${body}`, "");
+									//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+									break;
+							}							// 写入二进制数据
 							$request.body = rawBody;
 							break;
 					}					//break; // 不中断，继续处理URL
@@ -14385,6 +14415,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
+				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
+				if ($response.headers?.["Content-Encoding"]) ;
+				if ($response.headers?.["content-encoding"]) ;
 				if ($.isQuanX()) {
 					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
 					delete $response.headers?.["Content-Length"];

@@ -13430,6 +13430,16 @@ var Configs$2 = {
 				]
 			}
 		],
+		dataSet: [
+			{
+				identifier: 0,
+				dataSetDescription: "TomTom"
+			},
+			{
+				identifier: 1,
+				dataSetDescription: "KittyHawk"
+			}
+		],
 		urlInfoSet: [
 			{
 				backgroundRevGeoURL: {
@@ -14338,6 +14348,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
+				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
+				if ($response.headers?.["Content-Encoding"]) ;
+				if ($response.headers?.["content-encoding"]) ;
 				if ($.isQuanX()) {
 					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
 					delete $response.headers?.["Content-Length"];
