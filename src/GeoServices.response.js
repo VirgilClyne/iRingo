@@ -8,7 +8,7 @@ import setENV from "./function/setENV.mjs";
 
 import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.5.0(2) response");
+const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.5.0(3) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -1380,14 +1380,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											switch (url.searchParams.get("country_code")) {
 												case "CN":
 													setCache(Caches, "CN", body);
-													if (!Caches.XX) Caches.XX = Configs.XX;
+													Caches.XX = Caches.XX || Configs.XX;
 													// announcementsSupportedLanguage
 													//body.announcementsSupportedLanguage?.push?.("zh-CN");
 													//body.announcementsSupportedLanguage?.push?.("zh-TW");
 													break;
 												default:
 													setCache(Caches, "XX", body);
-													if (!Caches.CN) Caches.CN = Configs.CN;
+													Caches.CN = Caches.CN || Configs.CN;
 													// resource
 													body.resource.push({ "resourceType": 7, "filename": "POITypeMapping-CN-1.json", "checksum": { "0": 242, "1": 10, "2": 179, "3": 107, "4": 214, "5": 41, "6": 50, "7": 223, "8": 62, "9": 204, "10": 134, "11": 7, "12": 103, "13": 206, "14": 96, "15": 242, "16": 24, "17": 42, "18": 79, "19": 223 }, "region": [], "filter": [], "validationMethod": 0, "updateMethod": 0 });
 													body.resource.push({ "resourceType": 7, "filename": "China.cms-lpr", "checksum": { "0": 196, "1": 139, "2": 158, "3": 17, "4": 250, "5": 132, "6": 138, "7": 10, "8": 138, "9": 38, "10": 96, "11": 130, "12": 82, "13": 80, "14": 4, "15": 239, "16": 11, "17": 107, "18": 183, "19": 236 }, "region": [{ "minX": 1, "minY": 0, "maxX": 1, "maxY": 0, "minZ": 1, "maxZ": 25 }], "filter": [{ "scale": [], "scenario": [4] }], "connectionType": 0, "preferWiFiAllowedStaleThreshold": 0, "validationMethod": 1, "alternateResourceURLIndex": 1, "updateMethod": 1, "timeToLiveSeconds": 0 });
@@ -1395,7 +1395,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											};
 											body.tileSet = tileSets(body.tileSet, Settings, Caches);
 											body.attribution = attributions(body.attribution, url, Caches);
-											//body.dataSet = dataSets(body.dataSet, Settings, Caches);
+											body.dataSet = body.dataSet || Caches.XX?.dataSet || Configs.XX?.dataSet;
 											body.urlInfoSet = urlInfoSets(body.urlInfoSet, url, Settings, Caches);
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
 											// releaseInfo
