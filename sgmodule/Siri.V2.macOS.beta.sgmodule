@@ -1,5 +1,5 @@
 #!name= iRingo: Apple Intelligence & Siri V2 β
-#!desc=V2 & macOS 14.6⬆️ & BETA\n全面自定义「Apple Intelligence与Siri」的功能。
+#!desc=V2 & macOS 14.6⬆️ & BETA\n全面自定义「Apple Intelligence与Siri」的功能。\n⚠️从macOS 15起，「Siri与搜索」已拆分为「搜索」和「Apple Intelligence与Siri」两个功能\n⚠️本模块不含自定义「搜索」功能
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri.Beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
@@ -11,8 +11,6 @@
 #!arguments-desc=CountryCode: 国家或地区代码\nProxy: macOS‘查询’代理策略
 
 [Rule]
-# > Reject distribute 🇨🇳 Siri configuration file
-DOMAIN,api.smoot.apple.cn,REJECT // # 🇨🇳Bag (iOS/macOS)
 # > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
 RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/LookUp.Wikipedia.list,{{{Proxy}}}
 
@@ -29,19 +27,6 @@ RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/LookU
 # Apple.Parsec.Spotlight.V1Alpha.ZkwSuggestService
 🔍 Spotlight.ZkwSuggestService.request = type=http-request, pattern=^https?:\/\/(api-.*)\.smoot\.apple\.com\/apple\.parsec\.spotlight\.v1alpha\.ZkwSuggestService\/Suggest, requires-body=1, binary-body-mode=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=CountryCode={{{CountryCode}}}
 🔍 Spotlight.ZkwSuggestService.response = type=http-response, pattern=^https?:\/\/(api-.*)\.smoot\.apple\.com\/apple\.parsec\.spotlight\.v1alpha\.ZkwSuggestService\/Suggest, requires-body=1, binary-body-mode=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js, argument=CountryCode={{{CountryCode}}}
-
-# Siri Suggestion & Look Up Search (iOS/macOS)
-🔍 Siri.search.request = type=http-request, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/search, requires-body=0, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=CountryCode={{{CountryCode}}}
-🔍 Siri.search.response = type=http-response, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/search, requires-body=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js, argument=CountryCode={{{CountryCode}}}
-# Siri Infomation Card (macOS)
-🔍 Siri.card.request = type=http-request, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/card, requires-body=0, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=CountryCode={{{CountryCode}}}
-🔍 Siri.card.response = type=http-response, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/card, requires-body=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js, argument=CountryCode={{{CountryCode}}}
-# Flight Search (iOS/macOS)
-🔍 Siri.flight.request = type=http-request, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/flight, requires-body=0, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=CountryCode={{{CountryCode}}}
-# warm (unknown)
-🔍 Siri.warm.request = type=http-request, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/warm, requires-body=0, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=CountryCode={{{CountryCode}}}
-# render (unknown)
-🔍 Siri.render.request = type=http-request, pattern=^https?:\/\/(api2|api-.*)\.smoot\.apple\.com\/render, requires-body=0, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js, argument=CountryCode={{{CountryCode}}}
 
 [MITM]
 hostname = %APPEND% guzzoni.smoot.apple.com, api2.smoot.apple.com, api-*.smoot.apple.com
