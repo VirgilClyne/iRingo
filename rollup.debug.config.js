@@ -3,9 +3,9 @@ import commonjs from "@rollup/plugin-commonjs";
 
 export default [
 	{
-		input: 'src/Weather.V2.request.beta.js',
+		input: 'src/WeatherKit.response.beta.js',
 		output: {
-			file: 'js/Weather.V2.request.beta.js',
+			file: 'js/WeatherKit.response.beta.js',
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},

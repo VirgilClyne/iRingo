@@ -1,4 +1,4 @@
-#!name= iRingo: 🌤 Weather β
+#!name= iRingo: 🌤 WeatherKit β
 #!desc=V2 & iOS 18.0⬆️ & BETA
 #!openUrl=http://boxjs.com/#/app/iRingo.Weather.beta
 #!author=Wordless Echo & Virgil Clyne
@@ -11,7 +11,7 @@
 DOMAIN,weather-analytics-events.apple.com,REJECT
 
 [Script]
-🌤 Weather.request = type=http-request, pattern=^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/, requires-body=0, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Weather.V2.request.beta.js, argument=
+🌤 WeatherKit.response = type=http-response, pattern=^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/, requires-body=1, binary-body-mode=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/WeatherKit.response.beta.js, argument=
 
 [MITM]
 hostname = %APPEND% weatherkit.apple.com

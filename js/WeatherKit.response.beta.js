@@ -13682,14 +13682,14 @@ var Settings$4 = {
 	CountryCode: "US",
 	NewsPlusUser: true
 };
-var News = {
+var News$1 = {
 	Settings: Settings$4
 };
 
-var News$1 = /*#__PURE__*/Object.freeze({
+var News$2 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	Settings: Settings$4,
-	default: News
+	default: News$1
 });
 
 var Settings$3 = {
@@ -14197,7 +14197,7 @@ var Database$1 = Database = {
 	"Default": Default$1,
 	"Location": Location$1,
 	"Maps": Maps$1,
-	"News": News$1,
+	"News": News$2,
 	"PrivateRelay": PrivateRelay$1,
 	"Siri": Siri$1,
 	"TestFlight": TestFlight$1,
@@ -14282,10 +14282,14 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
+const SIZEOF_INT = 4;
+const FILE_IDENTIFIER_LENGTH = 4;
+const SIZE_PREFIX_LENGTH = 4;
+
 const int32 = new Int32Array(2);
-new Float32Array(int32.buffer);
-new Float64Array(int32.buffer);
-new Uint16Array(new Uint8Array([1, 0]).buffer)[0] === 1;
+const float32 = new Float32Array(int32.buffer);
+const float64 = new Float64Array(int32.buffer);
+const isLittleEndian = new Uint16Array(new Uint8Array([1, 0]).buffer)[0] === 1;
 
 var Encoding;
 (function (Encoding) {
@@ -14293,10 +14297,1429 @@ var Encoding;
     Encoding[Encoding["UTF16_STRING"] = 2] = "UTF16_STRING";
 })(Encoding || (Encoding = {}));
 
-const $ = new ENV(" iRingo: 🌤 Weather v4.0.1(4002) request.beta");
+class ByteBuffer {
+    /**
+     * Create a new ByteBuffer with a given array of bytes (`Uint8Array`)
+     */
+    constructor(bytes_) {
+        this.bytes_ = bytes_;
+        this.position_ = 0;
+        this.text_decoder_ = new TextDecoder();
+    }
+    /**
+     * Create and allocate a new ByteBuffer with a given size.
+     */
+    static allocate(byte_size) {
+        return new ByteBuffer(new Uint8Array(byte_size));
+    }
+    clear() {
+        this.position_ = 0;
+    }
+    /**
+     * Get the underlying `Uint8Array`.
+     */
+    bytes() {
+        return this.bytes_;
+    }
+    /**
+     * Get the buffer's position.
+     */
+    position() {
+        return this.position_;
+    }
+    /**
+     * Set the buffer's position.
+     */
+    setPosition(position) {
+        this.position_ = position;
+    }
+    /**
+     * Get the buffer's capacity.
+     */
+    capacity() {
+        return this.bytes_.length;
+    }
+    readInt8(offset) {
+        return this.readUint8(offset) << 24 >> 24;
+    }
+    readUint8(offset) {
+        return this.bytes_[offset];
+    }
+    readInt16(offset) {
+        return this.readUint16(offset) << 16 >> 16;
+    }
+    readUint16(offset) {
+        return this.bytes_[offset] | this.bytes_[offset + 1] << 8;
+    }
+    readInt32(offset) {
+        return this.bytes_[offset] | this.bytes_[offset + 1] << 8 | this.bytes_[offset + 2] << 16 | this.bytes_[offset + 3] << 24;
+    }
+    readUint32(offset) {
+        return this.readInt32(offset) >>> 0;
+    }
+    readInt64(offset) {
+        return BigInt.asIntN(64, BigInt(this.readUint32(offset)) + (BigInt(this.readUint32(offset + 4)) << BigInt(32)));
+    }
+    readUint64(offset) {
+        return BigInt.asUintN(64, BigInt(this.readUint32(offset)) + (BigInt(this.readUint32(offset + 4)) << BigInt(32)));
+    }
+    readFloat32(offset) {
+        int32[0] = this.readInt32(offset);
+        return float32[0];
+    }
+    readFloat64(offset) {
+        int32[isLittleEndian ? 0 : 1] = this.readInt32(offset);
+        int32[isLittleEndian ? 1 : 0] = this.readInt32(offset + 4);
+        return float64[0];
+    }
+    writeInt8(offset, value) {
+        this.bytes_[offset] = value;
+    }
+    writeUint8(offset, value) {
+        this.bytes_[offset] = value;
+    }
+    writeInt16(offset, value) {
+        this.bytes_[offset] = value;
+        this.bytes_[offset + 1] = value >> 8;
+    }
+    writeUint16(offset, value) {
+        this.bytes_[offset] = value;
+        this.bytes_[offset + 1] = value >> 8;
+    }
+    writeInt32(offset, value) {
+        this.bytes_[offset] = value;
+        this.bytes_[offset + 1] = value >> 8;
+        this.bytes_[offset + 2] = value >> 16;
+        this.bytes_[offset + 3] = value >> 24;
+    }
+    writeUint32(offset, value) {
+        this.bytes_[offset] = value;
+        this.bytes_[offset + 1] = value >> 8;
+        this.bytes_[offset + 2] = value >> 16;
+        this.bytes_[offset + 3] = value >> 24;
+    }
+    writeInt64(offset, value) {
+        this.writeInt32(offset, Number(BigInt.asIntN(32, value)));
+        this.writeInt32(offset + 4, Number(BigInt.asIntN(32, value >> BigInt(32))));
+    }
+    writeUint64(offset, value) {
+        this.writeUint32(offset, Number(BigInt.asUintN(32, value)));
+        this.writeUint32(offset + 4, Number(BigInt.asUintN(32, value >> BigInt(32))));
+    }
+    writeFloat32(offset, value) {
+        float32[0] = value;
+        this.writeInt32(offset, int32[0]);
+    }
+    writeFloat64(offset, value) {
+        float64[0] = value;
+        this.writeInt32(offset, int32[isLittleEndian ? 0 : 1]);
+        this.writeInt32(offset + 4, int32[isLittleEndian ? 1 : 0]);
+    }
+    /**
+     * Return the file identifier.   Behavior is undefined for FlatBuffers whose
+     * schema does not include a file_identifier (likely points at padding or the
+     * start of a the root vtable).
+     */
+    getBufferIdentifier() {
+        if (this.bytes_.length < this.position_ + SIZEOF_INT +
+            FILE_IDENTIFIER_LENGTH) {
+            throw new Error('FlatBuffers: ByteBuffer is too short to contain an identifier.');
+        }
+        let result = "";
+        for (let i = 0; i < FILE_IDENTIFIER_LENGTH; i++) {
+            result += String.fromCharCode(this.readInt8(this.position_ + SIZEOF_INT + i));
+        }
+        return result;
+    }
+    /**
+     * Look up a field in the vtable, return an offset into the object, or 0 if the
+     * field is not present.
+     */
+    __offset(bb_pos, vtable_offset) {
+        const vtable = bb_pos - this.readInt32(bb_pos);
+        return vtable_offset < this.readInt16(vtable) ? this.readInt16(vtable + vtable_offset) : 0;
+    }
+    /**
+     * Initialize any Table-derived type to point to the union at the given offset.
+     */
+    __union(t, offset) {
+        t.bb_pos = offset + this.readInt32(offset);
+        t.bb = this;
+        return t;
+    }
+    /**
+     * Create a JavaScript string from UTF-8 data stored inside the FlatBuffer.
+     * This allocates a new string and converts to wide chars upon each access.
+     *
+     * To avoid the conversion to string, pass Encoding.UTF8_BYTES as the
+     * "optionalEncoding" argument. This is useful for avoiding conversion when
+     * the data will just be packaged back up in another FlatBuffer later on.
+     *
+     * @param offset
+     * @param opt_encoding Defaults to UTF16_STRING
+     */
+    __string(offset, opt_encoding) {
+        offset += this.readInt32(offset);
+        const length = this.readInt32(offset);
+        offset += SIZEOF_INT;
+        const utf8bytes = this.bytes_.subarray(offset, offset + length);
+        if (opt_encoding === Encoding.UTF8_BYTES)
+            return utf8bytes;
+        else
+            return this.text_decoder_.decode(utf8bytes);
+    }
+    /**
+     * Handle unions that can contain string as its member, if a Table-derived type then initialize it,
+     * if a string then return a new one
+     *
+     * WARNING: strings are immutable in JS so we can't change the string that the user gave us, this
+     * makes the behaviour of __union_with_string different compared to __union
+     */
+    __union_with_string(o, offset) {
+        if (typeof o === 'string') {
+            return this.__string(offset);
+        }
+        return this.__union(o, offset);
+    }
+    /**
+     * Retrieve the relative offset stored at "offset"
+     */
+    __indirect(offset) {
+        return offset + this.readInt32(offset);
+    }
+    /**
+     * Get the start of data of a vector whose offset is stored at "offset" in this object.
+     */
+    __vector(offset) {
+        return offset + this.readInt32(offset) + SIZEOF_INT; // data starts after the length
+    }
+    /**
+     * Get the length of a vector whose offset is stored at "offset" in this object.
+     */
+    __vector_len(offset) {
+        return this.readInt32(offset + this.readInt32(offset));
+    }
+    __has_identifier(ident) {
+        if (ident.length != FILE_IDENTIFIER_LENGTH) {
+            throw new Error('FlatBuffers: file identifier must be length ' +
+                FILE_IDENTIFIER_LENGTH);
+        }
+        for (let i = 0; i < FILE_IDENTIFIER_LENGTH; i++) {
+            if (ident.charCodeAt(i) != this.readInt8(this.position() + SIZEOF_INT + i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * A helper function for generating list for obj api
+     */
+    createScalarList(listAccessor, listLength) {
+        const ret = [];
+        for (let i = 0; i < listLength; ++i) {
+            const val = listAccessor(i);
+            if (val !== null) {
+                ret.push(val);
+            }
+        }
+        return ret;
+    }
+    /**
+     * A helper function for generating list for obj api
+     * @param listAccessor function that accepts an index and return data at that index
+     * @param listLength listLength
+     * @param res result list
+     */
+    createObjList(listAccessor, listLength) {
+        const ret = [];
+        for (let i = 0; i < listLength; ++i) {
+            const val = listAccessor(i);
+            if (val !== null) {
+                ret.push(val.unpack());
+            }
+        }
+        return ret;
+    }
+}
 
-// 构造回复数据
-let $response = undefined;
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var ComparisonType;
+(function (ComparisonType) {
+    ComparisonType[ComparisonType["UNKNOWN"] = 0] = "UNKNOWN";
+    ComparisonType[ComparisonType["UNKNOWN1"] = 1] = "UNKNOWN1";
+    ComparisonType[ComparisonType["WORSE"] = 2] = "WORSE";
+    ComparisonType[ComparisonType["SAME"] = 3] = "SAME";
+    ComparisonType[ComparisonType["BETTER"] = 4] = "BETTER";
+    ComparisonType[ComparisonType["UNKNOWN5"] = 5] = "UNKNOWN5";
+})(ComparisonType || (ComparisonType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var SourceType;
+(function (SourceType) {
+    SourceType[SourceType["APPLE_INTERNAL"] = 0] = "APPLE_INTERNAL";
+    SourceType[SourceType["MODELED"] = 1] = "MODELED";
+    SourceType[SourceType["STATION"] = 2] = "STATION";
+})(SourceType || (SourceType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Metadata {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsMetadata(bb, obj) {
+        return (obj || new Metadata()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsMetadata(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Metadata()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    attributionUrl(optionalEncoding) {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+    }
+    expireTime() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    language(optionalEncoding) {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+    }
+    latitude() {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    }
+    longitude() {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    }
+    unknown5() {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    providerName(optionalEncoding) {
+        const offset = this.bb.__offset(this.bb_pos, 16);
+        return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+    }
+    readTime() {
+        const offset = this.bb.__offset(this.bb_pos, 18);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    reportedTime() {
+        const offset = this.bb.__offset(this.bb_pos, 20);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    unknown9() {
+        const offset = this.bb.__offset(this.bb_pos, 22);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    sourceType() {
+        const offset = this.bb.__offset(this.bb_pos, 24);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
+    }
+    unknown11() {
+        const offset = this.bb.__offset(this.bb_pos, 26);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    unknown12() {
+        const offset = this.bb.__offset(this.bb_pos, 28);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    unknown13() {
+        const offset = this.bb.__offset(this.bb_pos, 30);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    unknown14() {
+        const offset = this.bb.__offset(this.bb_pos, 32);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    unknown15() {
+        const offset = this.bb.__offset(this.bb_pos, 34);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    static startMetadata(builder) {
+        builder.startObject(16);
+    }
+    static addAttributionUrl(builder, attributionUrlOffset) {
+        builder.addFieldOffset(0, attributionUrlOffset, 0);
+    }
+    static addExpireTime(builder, expireTime) {
+        builder.addFieldInt32(1, expireTime, 0);
+    }
+    static addLanguage(builder, languageOffset) {
+        builder.addFieldOffset(2, languageOffset, 0);
+    }
+    static addLatitude(builder, latitude) {
+        builder.addFieldFloat32(3, latitude, 0.0);
+    }
+    static addLongitude(builder, longitude) {
+        builder.addFieldFloat32(4, longitude, 0.0);
+    }
+    static addUnknown5(builder, unknown5) {
+        builder.addFieldInt32(5, unknown5, 0);
+    }
+    static addProviderName(builder, providerNameOffset) {
+        builder.addFieldOffset(6, providerNameOffset, 0);
+    }
+    static addReadTime(builder, readTime) {
+        builder.addFieldInt32(7, readTime, 0);
+    }
+    static addReportedTime(builder, reportedTime) {
+        builder.addFieldInt32(8, reportedTime, 0);
+    }
+    static addUnknown9(builder, unknown9) {
+        builder.addFieldInt32(9, unknown9, 0);
+    }
+    static addSourceType(builder, sourceType) {
+        builder.addFieldInt8(10, sourceType, SourceType.APPLE_INTERNAL);
+    }
+    static addUnknown11(builder, unknown11) {
+        builder.addFieldInt32(11, unknown11, 0);
+    }
+    static addUnknown12(builder, unknown12) {
+        builder.addFieldInt32(12, unknown12, 0);
+    }
+    static addUnknown13(builder, unknown13) {
+        builder.addFieldInt32(13, unknown13, 0);
+    }
+    static addUnknown14(builder, unknown14) {
+        builder.addFieldInt32(14, unknown14, 0);
+    }
+    static addUnknown15(builder, unknown15) {
+        builder.addFieldInt32(15, unknown15, 0);
+    }
+    static endMetadata(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, unknown5, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11, unknown12, unknown13, unknown14, unknown15) {
+        Metadata.startMetadata(builder);
+        Metadata.addAttributionUrl(builder, attributionUrlOffset);
+        Metadata.addExpireTime(builder, expireTime);
+        Metadata.addLanguage(builder, languageOffset);
+        Metadata.addLatitude(builder, latitude);
+        Metadata.addLongitude(builder, longitude);
+        Metadata.addUnknown5(builder, unknown5);
+        Metadata.addProviderName(builder, providerNameOffset);
+        Metadata.addReadTime(builder, readTime);
+        Metadata.addReportedTime(builder, reportedTime);
+        Metadata.addUnknown9(builder, unknown9);
+        Metadata.addSourceType(builder, sourceType);
+        Metadata.addUnknown11(builder, unknown11);
+        Metadata.addUnknown12(builder, unknown12);
+        Metadata.addUnknown13(builder, unknown13);
+        Metadata.addUnknown14(builder, unknown14);
+        Metadata.addUnknown15(builder, unknown15);
+        return Metadata.endMetadata(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var PollutantType;
+(function (PollutantType) {
+    PollutantType[PollutantType["NOT_AVAILABLE"] = 0] = "NOT_AVAILABLE";
+    PollutantType[PollutantType["C6H6"] = 1] = "C6H6";
+    PollutantType[PollutantType["NH3"] = 2] = "NH3";
+    PollutantType[PollutantType["NMHC"] = 3] = "NMHC";
+    PollutantType[PollutantType["NO"] = 4] = "NO";
+    PollutantType[PollutantType["NO2"] = 5] = "NO2";
+    PollutantType[PollutantType["NOX"] = 6] = "NOX";
+    PollutantType[PollutantType["OZONE"] = 7] = "OZONE";
+    PollutantType[PollutantType["PM2_5"] = 8] = "PM2_5";
+    PollutantType[PollutantType["SO2"] = 9] = "SO2";
+    PollutantType[PollutantType["PM10"] = 10] = "PM10";
+    PollutantType[PollutantType["CO"] = 11] = "CO";
+    PollutantType[PollutantType["UNKNOWN12"] = 12] = "UNKNOWN12";
+    PollutantType[PollutantType["UNKNOWN13"] = 13] = "UNKNOWN13";
+})(PollutantType || (PollutantType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var UnitType;
+(function (UnitType) {
+    UnitType[UnitType["PARTS_PER_BILLION"] = 0] = "PARTS_PER_BILLION";
+    UnitType[UnitType["MICROGRAMS_PER_CUBIC_METER"] = 1] = "MICROGRAMS_PER_CUBIC_METER";
+})(UnitType || (UnitType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Pollutant {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsPollutant(bb, obj) {
+        return (obj || new Pollutant()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsPollutant(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Pollutant()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    pollutantType() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+    }
+    amount() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    }
+    units() {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : UnitType.PARTS_PER_BILLION;
+    }
+    static startPollutant(builder) {
+        builder.startObject(3);
+    }
+    static addPollutantType(builder, pollutantType) {
+        builder.addFieldInt8(0, pollutantType, PollutantType.NOT_AVAILABLE);
+    }
+    static addAmount(builder, amount) {
+        builder.addFieldFloat32(1, amount, 0.0);
+    }
+    static addUnits(builder, units) {
+        builder.addFieldInt8(2, units, UnitType.PARTS_PER_BILLION);
+    }
+    static endPollutant(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createPollutant(builder, pollutantType, amount, units) {
+        Pollutant.startPollutant(builder);
+        Pollutant.addPollutantType(builder, pollutantType);
+        Pollutant.addAmount(builder, amount);
+        Pollutant.addUnits(builder, units);
+        return Pollutant.endPollutant(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class AirQuality {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsAirQuality(bb, obj) {
+        return (obj || new AirQuality()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsAirQuality(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new AirQuality()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    metadata(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? (obj || new Metadata()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    categoryIndex() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+    }
+    index() {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+    }
+    isSignificant() {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? !!this.bb.readInt8(this.bb_pos + offset) : false;
+    }
+    pollutants(index, obj) {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? (obj || new Pollutant()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+    }
+    pollutantsLength() {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    previousDayComparison() {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : ComparisonType.UNKNOWN;
+    }
+    primaryPollutant() {
+        const offset = this.bb.__offset(this.bb_pos, 16);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+    }
+    scale(optionalEncoding) {
+        const offset = this.bb.__offset(this.bb_pos, 18);
+        return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+    }
+    static startAirQuality(builder) {
+        builder.startObject(8);
+    }
+    static addMetadata(builder, metadataOffset) {
+        builder.addFieldOffset(0, metadataOffset, 0);
+    }
+    static addCategoryIndex(builder, categoryIndex) {
+        builder.addFieldInt8(1, categoryIndex, 0);
+    }
+    static addIndex(builder, index) {
+        builder.addFieldInt8(2, index, 0);
+    }
+    static addIsSignificant(builder, isSignificant) {
+        builder.addFieldInt8(3, +isSignificant, +false);
+    }
+    static addPollutants(builder, pollutantsOffset) {
+        builder.addFieldOffset(4, pollutantsOffset, 0);
+    }
+    static createPollutantsVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addOffset(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startPollutantsVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
+    }
+    static addPreviousDayComparison(builder, previousDayComparison) {
+        builder.addFieldInt8(5, previousDayComparison, ComparisonType.UNKNOWN);
+    }
+    static addPrimaryPollutant(builder, primaryPollutant) {
+        builder.addFieldInt8(6, primaryPollutant, PollutantType.NOT_AVAILABLE);
+    }
+    static addScale(builder, scaleOffset) {
+        builder.addFieldOffset(7, scaleOffset, 0);
+    }
+    static endAirQuality(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createAirQuality(builder, metadataOffset, categoryIndex, index, isSignificant, pollutantsOffset, previousDayComparison, primaryPollutant, scaleOffset) {
+        AirQuality.startAirQuality(builder);
+        AirQuality.addMetadata(builder, metadataOffset);
+        AirQuality.addCategoryIndex(builder, categoryIndex);
+        AirQuality.addIndex(builder, index);
+        AirQuality.addIsSignificant(builder, isSignificant);
+        AirQuality.addPollutants(builder, pollutantsOffset);
+        AirQuality.addPreviousDayComparison(builder, previousDayComparison);
+        AirQuality.addPrimaryPollutant(builder, primaryPollutant);
+        AirQuality.addScale(builder, scaleOffset);
+        return AirQuality.endAirQuality(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var ForecastToken;
+(function (ForecastToken) {
+    ForecastToken[ForecastToken["CLEAR"] = 0] = "CLEAR";
+    ForecastToken[ForecastToken["START"] = 1] = "START";
+    ForecastToken[ForecastToken["STOP"] = 2] = "STOP";
+    ForecastToken[ForecastToken["START_STOP"] = 3] = "START_STOP";
+    ForecastToken[ForecastToken["STOP_START"] = 4] = "STOP_START";
+    ForecastToken[ForecastToken["CONSTANT"] = 5] = "CONSTANT";
+    ForecastToken[ForecastToken["UNKNOWN6"] = 6] = "UNKNOWN6";
+})(ForecastToken || (ForecastToken = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var ParameterType;
+(function (ParameterType) {
+    ParameterType[ParameterType["FIRST_AT"] = 0] = "FIRST_AT";
+    ParameterType[ParameterType["SECOND_AT"] = 1] = "SECOND_AT";
+    ParameterType[ParameterType["UNKNOWN2"] = 2] = "UNKNOWN2";
+    ParameterType[ParameterType["UNKNOWN3"] = 3] = "UNKNOWN3";
+    ParameterType[ParameterType["UNKNOWN4"] = 4] = "UNKNOWN4";
+    ParameterType[ParameterType["UNKNOWN5"] = 5] = "UNKNOWN5";
+})(ParameterType || (ParameterType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Parameter {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsParameter(bb, obj) {
+        return (obj || new Parameter()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsParameter(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Parameter()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    type() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : ParameterType.FIRST_AT;
+    }
+    date() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    static startParameter(builder) {
+        builder.startObject(2);
+    }
+    static addType(builder, type) {
+        builder.addFieldInt8(0, type, ParameterType.FIRST_AT);
+    }
+    static addDate(builder, date) {
+        builder.addFieldInt32(1, date, 0);
+    }
+    static endParameter(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createParameter(builder, type, date) {
+        Parameter.startParameter(builder);
+        Parameter.addType(builder, type);
+        Parameter.addDate(builder, date);
+        return Parameter.endParameter(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var WeatherCondition;
+(function (WeatherCondition) {
+    WeatherCondition[WeatherCondition["CLEAR"] = 0] = "CLEAR";
+    WeatherCondition[WeatherCondition["TEMPERATURE_MAX"] = 1] = "TEMPERATURE_MAX";
+    WeatherCondition[WeatherCondition["PRECIPITATION"] = 2] = "PRECIPITATION";
+    WeatherCondition[WeatherCondition["UNKNOWN3"] = 3] = "UNKNOWN3";
+    WeatherCondition[WeatherCondition["UNKNOWN4"] = 4] = "UNKNOWN4";
+    WeatherCondition[WeatherCondition["HEAVY_RAIN"] = 5] = "HEAVY_RAIN";
+    WeatherCondition[WeatherCondition["RAIN"] = 6] = "RAIN";
+    WeatherCondition[WeatherCondition["DRIZZLE"] = 7] = "DRIZZLE";
+    WeatherCondition[WeatherCondition["POSSIBLE_DRIZZLE"] = 8] = "POSSIBLE_DRIZZLE";
+    WeatherCondition[WeatherCondition["UNKNOWN9"] = 9] = "UNKNOWN9";
+    WeatherCondition[WeatherCondition["UNKNOWN10"] = 10] = "UNKNOWN10";
+    WeatherCondition[WeatherCondition["UNKNOWN11"] = 11] = "UNKNOWN11";
+    WeatherCondition[WeatherCondition["UNKNOWN12"] = 12] = "UNKNOWN12";
+    WeatherCondition[WeatherCondition["UNKNOWN13"] = 13] = "UNKNOWN13";
+    WeatherCondition[WeatherCondition["UNKNOWN14"] = 14] = "UNKNOWN14";
+    WeatherCondition[WeatherCondition["SNOW"] = 15] = "SNOW";
+    WeatherCondition[WeatherCondition["UNKNOWN16"] = 16] = "UNKNOWN16";
+    WeatherCondition[WeatherCondition["UNKNOWN17"] = 17] = "UNKNOWN17";
+    WeatherCondition[WeatherCondition["UNKNOWN18"] = 18] = "UNKNOWN18";
+})(WeatherCondition || (WeatherCondition = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Condition {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsCondition(bb, obj) {
+        return (obj || new Condition()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsCondition(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Condition()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    startTime() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    endTime() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    forecastToken() {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : ForecastToken.CLEAR;
+    }
+    beginCondition() {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : WeatherCondition.CLEAR;
+    }
+    endCondition() {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : WeatherCondition.CLEAR;
+    }
+    parameters(index, obj) {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? (obj || new Parameter()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+    }
+    parametersLength() {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    static startCondition(builder) {
+        builder.startObject(6);
+    }
+    static addStartTime(builder, startTime) {
+        builder.addFieldInt32(0, startTime, 0);
+    }
+    static addEndTime(builder, endTime) {
+        builder.addFieldInt32(1, endTime, 0);
+    }
+    static addForecastToken(builder, forecastToken) {
+        builder.addFieldInt8(2, forecastToken, ForecastToken.CLEAR);
+    }
+    static addBeginCondition(builder, beginCondition) {
+        builder.addFieldInt8(3, beginCondition, WeatherCondition.CLEAR);
+    }
+    static addEndCondition(builder, endCondition) {
+        builder.addFieldInt8(4, endCondition, WeatherCondition.CLEAR);
+    }
+    static addParameters(builder, parametersOffset) {
+        builder.addFieldOffset(5, parametersOffset, 0);
+    }
+    static createParametersVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addOffset(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startParametersVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
+    }
+    static endCondition(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createCondition(builder, startTime, endTime, forecastToken, beginCondition, endCondition, parametersOffset) {
+        Condition.startCondition(builder);
+        Condition.addStartTime(builder, startTime);
+        Condition.addEndTime(builder, endTime);
+        Condition.addForecastToken(builder, forecastToken);
+        Condition.addBeginCondition(builder, beginCondition);
+        Condition.addEndCondition(builder, endCondition);
+        Condition.addParameters(builder, parametersOffset);
+        return Condition.endCondition(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var ConditionCode;
+(function (ConditionCode) {
+    ConditionCode[ConditionCode["CLEAR"] = 0] = "CLEAR";
+    ConditionCode[ConditionCode["TEMPERATURE_MAX"] = 1] = "TEMPERATURE_MAX";
+    ConditionCode[ConditionCode["PRECIPITATION"] = 2] = "PRECIPITATION";
+    ConditionCode[ConditionCode["UNKNOWN3"] = 3] = "UNKNOWN3";
+    ConditionCode[ConditionCode["UNKNOWN4"] = 4] = "UNKNOWN4";
+    ConditionCode[ConditionCode["CLOUDY"] = 5] = "CLOUDY";
+    ConditionCode[ConditionCode["DRIZZLE"] = 6] = "DRIZZLE";
+    ConditionCode[ConditionCode["FLURRIES"] = 7] = "FLURRIES";
+    ConditionCode[ConditionCode["FOGGY"] = 8] = "FOGGY";
+    ConditionCode[ConditionCode["UNKNOWN9"] = 9] = "UNKNOWN9";
+    ConditionCode[ConditionCode["UNKNOWN10"] = 10] = "UNKNOWN10";
+    ConditionCode[ConditionCode["UNKNOWN11"] = 11] = "UNKNOWN11";
+    ConditionCode[ConditionCode["UNKNOWN12"] = 12] = "UNKNOWN12";
+    ConditionCode[ConditionCode["HAZE"] = 13] = "HAZE";
+    ConditionCode[ConditionCode["HEAVY_RAIN"] = 14] = "HEAVY_RAIN";
+    ConditionCode[ConditionCode["HEAVY_SNOW"] = 15] = "HEAVY_SNOW";
+    ConditionCode[ConditionCode["UNKNOWN16"] = 16] = "UNKNOWN16";
+    ConditionCode[ConditionCode["UNKNOWN17"] = 17] = "UNKNOWN17";
+    ConditionCode[ConditionCode["UNKNOWN18"] = 18] = "UNKNOWN18";
+    ConditionCode[ConditionCode["MOSTLY_CLEAR"] = 19] = "MOSTLY_CLEAR";
+    ConditionCode[ConditionCode["MOSTLY_CLOUDY"] = 20] = "MOSTLY_CLOUDY";
+    ConditionCode[ConditionCode["PARTLY_CLOUDY"] = 21] = "PARTLY_CLOUDY";
+    ConditionCode[ConditionCode["RAIN"] = 22] = "RAIN";
+    ConditionCode[ConditionCode["UNKNOWN23"] = 23] = "UNKNOWN23";
+    ConditionCode[ConditionCode["UNKNOWN24"] = 24] = "UNKNOWN24";
+    ConditionCode[ConditionCode["UNKNOWN25"] = 25] = "UNKNOWN25";
+    ConditionCode[ConditionCode["SNOW"] = 26] = "SNOW";
+    ConditionCode[ConditionCode["UNKNOWN27"] = 27] = "UNKNOWN27";
+    ConditionCode[ConditionCode["UNKNOWN28"] = 28] = "UNKNOWN28";
+    ConditionCode[ConditionCode["UNKNOWN29"] = 29] = "UNKNOWN29";
+    ConditionCode[ConditionCode["THUNDERSTORMS"] = 30] = "THUNDERSTORMS";
+    ConditionCode[ConditionCode["UNKNOWN31"] = 31] = "UNKNOWN31";
+    ConditionCode[ConditionCode["WINDY"] = 32] = "WINDY";
+    ConditionCode[ConditionCode["UNKNOWN33"] = 33] = "UNKNOWN33";
+    ConditionCode[ConditionCode["UNKNOWN34"] = 34] = "UNKNOWN34";
+    ConditionCode[ConditionCode["UNKNOWN35"] = 35] = "UNKNOWN35";
+    ConditionCode[ConditionCode["UNKNOWN36"] = 36] = "UNKNOWN36";
+    ConditionCode[ConditionCode["UNKNOWN37"] = 37] = "UNKNOWN37";
+    ConditionCode[ConditionCode["UNKNOWN38"] = 38] = "UNKNOWN38";
+    ConditionCode[ConditionCode["UNKNOWN39"] = 39] = "UNKNOWN39";
+    ConditionCode[ConditionCode["UNKNOWN40"] = 40] = "UNKNOWN40";
+    ConditionCode[ConditionCode["UNKNOWN41"] = 41] = "UNKNOWN41";
+    ConditionCode[ConditionCode["UNKNOWN42"] = 42] = "UNKNOWN42";
+    ConditionCode[ConditionCode["UNKNOWN43"] = 43] = "UNKNOWN43";
+    ConditionCode[ConditionCode["UNKNOWN44"] = 44] = "UNKNOWN44";
+})(ConditionCode || (ConditionCode = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class CurrentWeather {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsCurrentWeather(bb, obj) {
+        return (obj || new CurrentWeather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsCurrentWeather(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new CurrentWeather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startCurrentWeather(builder) {
+        builder.startObject(0);
+    }
+    static endCurrentWeather(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createCurrentWeather(builder) {
+        CurrentWeather.startCurrentWeather(builder);
+        return CurrentWeather.endCurrentWeather(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class ForecastDaily {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsForecastDaily(bb, obj) {
+        return (obj || new ForecastDaily()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsForecastDaily(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new ForecastDaily()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startForecastDaily(builder) {
+        builder.startObject(0);
+    }
+    static endForecastDaily(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createForecastDaily(builder) {
+        ForecastDaily.startForecastDaily(builder);
+        return ForecastDaily.endForecastDaily(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class ForecastHourly {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsForecastHourly(bb, obj) {
+        return (obj || new ForecastHourly()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsForecastHourly(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new ForecastHourly()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startForecastHourly(builder) {
+        builder.startObject(0);
+    }
+    static endForecastHourly(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createForecastHourly(builder) {
+        ForecastHourly.startForecastHourly(builder);
+        return ForecastHourly.endForecastHourly(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Minute {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsMinute(bb, obj) {
+        return (obj || new Minute()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsMinute(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Minute()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    startTime() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    precipitationChance() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+    }
+    precipitationIntensity() {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    }
+    perceivedPrecipitationIntensity() {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    }
+    static startMinute(builder) {
+        builder.startObject(4);
+    }
+    static addStartTime(builder, startTime) {
+        builder.addFieldInt32(0, startTime, 0);
+    }
+    static addPrecipitationChance(builder, precipitationChance) {
+        builder.addFieldInt8(1, precipitationChance, 0);
+    }
+    static addPrecipitationIntensity(builder, precipitationIntensity) {
+        builder.addFieldFloat32(2, precipitationIntensity, 0.0);
+    }
+    static addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity) {
+        builder.addFieldFloat32(3, perceivedPrecipitationIntensity, 0.0);
+    }
+    static endMinute(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createMinute(builder, startTime, precipitationChance, precipitationIntensity, perceivedPrecipitationIntensity) {
+        Minute.startMinute(builder);
+        Minute.addStartTime(builder, startTime);
+        Minute.addPrecipitationChance(builder, precipitationChance);
+        Minute.addPrecipitationIntensity(builder, precipitationIntensity);
+        Minute.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
+        return Minute.endMinute(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var PrecipitationType;
+(function (PrecipitationType) {
+    PrecipitationType[PrecipitationType["CLEAR"] = 0] = "CLEAR";
+    PrecipitationType[PrecipitationType["RAIN"] = 1] = "RAIN";
+    PrecipitationType[PrecipitationType["SNOW"] = 2] = "SNOW";
+    PrecipitationType[PrecipitationType["SLEET"] = 3] = "SLEET";
+    PrecipitationType[PrecipitationType["HAIL"] = 4] = "HAIL";
+    PrecipitationType[PrecipitationType["MIXED"] = 5] = "MIXED";
+})(PrecipitationType || (PrecipitationType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Summary {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsSummary(bb, obj) {
+        return (obj || new Summary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsSummary(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Summary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    startTime() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    endTime() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    condition() {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+    }
+    precipitationChance() {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+    }
+    precipitationIntensity() {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
+    }
+    static startSummary(builder) {
+        builder.startObject(5);
+    }
+    static addStartTime(builder, startTime) {
+        builder.addFieldInt32(0, startTime, 0);
+    }
+    static addEndTime(builder, endTime) {
+        builder.addFieldInt32(1, endTime, 0);
+    }
+    static addCondition(builder, condition) {
+        builder.addFieldInt8(2, condition, PrecipitationType.CLEAR);
+    }
+    static addPrecipitationChance(builder, precipitationChance) {
+        builder.addFieldInt8(3, precipitationChance, 0);
+    }
+    static addPrecipitationIntensity(builder, precipitationIntensity) {
+        builder.addFieldFloat32(4, precipitationIntensity, 0.0);
+    }
+    static endSummary(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createSummary(builder, startTime, endTime, condition, precipitationChance, precipitationIntensity) {
+        Summary.startSummary(builder);
+        Summary.addStartTime(builder, startTime);
+        Summary.addEndTime(builder, endTime);
+        Summary.addCondition(builder, condition);
+        Summary.addPrecipitationChance(builder, precipitationChance);
+        Summary.addPrecipitationIntensity(builder, precipitationIntensity);
+        return Summary.endSummary(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class ForecastNextHour {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsForecastNextHour(bb, obj) {
+        return (obj || new ForecastNextHour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsForecastNextHour(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new ForecastNextHour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    metadata(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? (obj || new Metadata()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    condition(index, obj) {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? (obj || new Condition()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+    }
+    conditionLength() {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    summary(index, obj) {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? (obj || new Summary()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+    }
+    summaryLength() {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    forecastStart() {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    forecastEnd() {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+    }
+    minutes(index, obj) {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? (obj || new Minute()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+    }
+    minutesLength() {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    static startForecastNextHour(builder) {
+        builder.startObject(6);
+    }
+    static addMetadata(builder, metadataOffset) {
+        builder.addFieldOffset(0, metadataOffset, 0);
+    }
+    static addCondition(builder, conditionOffset) {
+        builder.addFieldOffset(1, conditionOffset, 0);
+    }
+    static createConditionVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addOffset(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startConditionVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
+    }
+    static addSummary(builder, summaryOffset) {
+        builder.addFieldOffset(2, summaryOffset, 0);
+    }
+    static createSummaryVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addOffset(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startSummaryVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
+    }
+    static addForecastStart(builder, forecastStart) {
+        builder.addFieldInt32(3, forecastStart, 0);
+    }
+    static addForecastEnd(builder, forecastEnd) {
+        builder.addFieldInt32(4, forecastEnd, 0);
+    }
+    static addMinutes(builder, minutesOffset) {
+        builder.addFieldOffset(5, minutesOffset, 0);
+    }
+    static createMinutesVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addOffset(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startMinutesVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
+    }
+    static endForecastNextHour(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createForecastNextHour(builder, metadataOffset, conditionOffset, summaryOffset, forecastStart, forecastEnd, minutesOffset) {
+        ForecastNextHour.startForecastNextHour(builder);
+        ForecastNextHour.addMetadata(builder, metadataOffset);
+        ForecastNextHour.addCondition(builder, conditionOffset);
+        ForecastNextHour.addSummary(builder, summaryOffset);
+        ForecastNextHour.addForecastStart(builder, forecastStart);
+        ForecastNextHour.addForecastEnd(builder, forecastEnd);
+        ForecastNextHour.addMinutes(builder, minutesOffset);
+        return ForecastNextHour.endForecastNextHour(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class HistoricalComparison {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsHistoricalComparison(bb, obj) {
+        return (obj || new HistoricalComparison()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsHistoricalComparison(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new HistoricalComparison()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startHistoricalComparison(builder) {
+        builder.startObject(0);
+    }
+    static endHistoricalComparison(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createHistoricalComparison(builder) {
+        HistoricalComparison.startHistoricalComparison(builder);
+        return HistoricalComparison.endHistoricalComparison(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class News {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsNews(bb, obj) {
+        return (obj || new News()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsNews(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new News()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startNews(builder) {
+        builder.startObject(0);
+    }
+    static endNews(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createNews(builder) {
+        News.startNews(builder);
+        return News.endNews(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class WeatherAlert {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsWeatherAlert(bb, obj) {
+        return (obj || new WeatherAlert()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsWeatherAlert(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new WeatherAlert()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startWeatherAlert(builder) {
+        builder.startObject(0);
+    }
+    static endWeatherAlert(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createWeatherAlert(builder) {
+        WeatherAlert.startWeatherAlert(builder);
+        return WeatherAlert.endWeatherAlert(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class weatherChanges {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsweatherChanges(bb, obj) {
+        return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsweatherChanges(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static startweatherChanges(builder) {
+        builder.startObject(0);
+    }
+    static endweatherChanges(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createweatherChanges(builder) {
+        weatherChanges.startweatherChanges(builder);
+        return weatherChanges.endweatherChanges(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class Weather {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsWeather(bb, obj) {
+        return (obj || new Weather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsWeather(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new Weather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    airQuality(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? (obj || new AirQuality()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    currentWeather(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 6);
+        return offset ? (obj || new CurrentWeather()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    forecastDaily(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 8);
+        return offset ? (obj || new ForecastDaily()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    forecastHourly(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 10);
+        return offset ? (obj || new ForecastHourly()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    forecastNextHour(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 12);
+        return offset ? (obj || new ForecastNextHour()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    news(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 14);
+        return offset ? (obj || new News()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    weatherAlerts(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 16);
+        return offset ? (obj || new WeatherAlert()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    weatherChanges(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 18);
+        return offset ? (obj || new weatherChanges()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    historicalComparisons(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 20);
+        return offset ? (obj || new HistoricalComparison()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
+    static startWeather(builder) {
+        builder.startObject(9);
+    }
+    static addAirQuality(builder, airQualityOffset) {
+        builder.addFieldOffset(0, airQualityOffset, 0);
+    }
+    static addCurrentWeather(builder, currentWeatherOffset) {
+        builder.addFieldOffset(1, currentWeatherOffset, 0);
+    }
+    static addForecastDaily(builder, forecastDailyOffset) {
+        builder.addFieldOffset(2, forecastDailyOffset, 0);
+    }
+    static addForecastHourly(builder, forecastHourlyOffset) {
+        builder.addFieldOffset(3, forecastHourlyOffset, 0);
+    }
+    static addForecastNextHour(builder, forecastNextHourOffset) {
+        builder.addFieldOffset(4, forecastNextHourOffset, 0);
+    }
+    static addNews(builder, newsOffset) {
+        builder.addFieldOffset(5, newsOffset, 0);
+    }
+    static addWeatherAlerts(builder, weatherAlertsOffset) {
+        builder.addFieldOffset(6, weatherAlertsOffset, 0);
+    }
+    static addWeatherChanges(builder, weatherChangesOffset) {
+        builder.addFieldOffset(7, weatherChangesOffset, 0);
+    }
+    static addHistoricalComparisons(builder, historicalComparisonsOffset) {
+        builder.addFieldOffset(8, historicalComparisonsOffset, 0);
+    }
+    static endWeather(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static finishWeatherBuffer(builder, offset) {
+        builder.finish(offset);
+    }
+    static finishSizePrefixedWeatherBuffer(builder, offset) {
+        builder.finish(offset, undefined, true);
+    }
+}
+
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.6(4028) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -14306,128 +15729,171 @@ $.log(`⚠ url: ${url.toJSON()}`, "");
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.pathname.split("/").filter(Boolean);
 $.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}, PATHs: ${PATHs}`, "");
 // 解析格式
-const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
+const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", Database$1);
+	const { Settings, Caches, Configs } = setENV("iRingo", "Weather", Database$1);
 	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
+			// 创建空数据
 			let body = {};
-			// 方法判断
-			switch (METHOD) {
-				case "POST":
-				case "PUT":
-				case "PATCH":
-				case "DELETE":
-					// 格式判断
-					switch (FORMAT) {
-						case undefined: // 视为无body
-							break;
-						case "application/x-www-form-urlencoded":
-						case "text/plain":
-						default:
-							//$.log(`🚧 body: ${body}`, "");
-							break;
-						case "application/x-mpegURL":
-						case "application/x-mpegurl":
-						case "application/vnd.apple.mpegurl":
-						case "audio/mpegurl":
-							//body = M3U8.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = M3U8.stringify(body);
-							break;
-						case "text/xml":
-						case "text/html":
-						case "text/plist":
-						case "application/xml":
-						case "application/plist":
-						case "application/x-plist":
-							//body = XML.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = XML.stringify(body);
-							break;
-						case "text/vtt":
-						case "application/vtt":
-							//body = VTT.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = VTT.stringify(body);
-							break;
-						case "text/json":
-						case "application/json":
-							//body = JSON.parse($request.body ?? "{}");
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-							//$request.body = JSON.stringify(body);
-							break;
-						case "application/vnd.apple.flatbuffer":
-						case "application/protobuf":
-						case "application/x-protobuf":
-						case "application/vnd.google.protobuf":
-						case "application/grpc":
-						case "application/grpc+proto":
-						case "applecation/octet-stream":
-							//$.log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
-							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
-							//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
-							switch (FORMAT) {
-								case "application/vnd.apple.flatbuffer":
-									// 解析FlatBuffer
-									body = new flatbuffers.ByteBuffer(rawBody);
-									$.log(`🚧 body: ${body}`, "");
-									//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-									break;
-							}							// 写入二进制数据
-							$request.body = rawBody;
-							break;
-					}					//break; // 不中断，继续处理URL
-				case "GET":
-				case "HEAD":
-				case "OPTIONS":
+			// 格式判断
+			switch (FORMAT) {
+				case undefined: // 视为无body
+					break;
+				case "application/x-www-form-urlencoded":
+				case "text/plain":
 				default:
-					// 主机判断
-					switch (HOST) {
-						case "weatherkit.apple.com":
-							// 路径判断
-							switch (PATHs[0]) {
-								case "api":
-									switch (PATHs[1]) {
-										case "v2":
-											switch (PATHs[2]) {
-												case "weather":
-													if ($request.headers?.Accept) $request.headers.Accept = "application/json";
-													if ($request.headers?.accept) $request.headers.accept = "application/json";
-													break;
+					//$.log(`🚧 body: ${body}`, "");
+					break;
+				case "application/x-mpegURL":
+				case "application/x-mpegurl":
+				case "application/vnd.apple.mpegurl":
+				case "audio/mpegurl":
+					//body = M3U8.parse($response.body);
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//$response.body = M3U8.stringify(body);
+					break;
+				case "text/xml":
+				case "text/html":
+				case "text/plist":
+				case "application/xml":
+				case "application/plist":
+				case "application/x-plist":
+					//body = XML.parse($response.body);
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//$response.body = XML.stringify(body);
+					break;
+				case "text/vtt":
+				case "application/vtt":
+					//body = VTT.parse($response.body);
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//$response.body = VTT.stringify(body);
+					break;
+				case "text/json":
+				case "application/json":
+					//body = JSON.parse($response.body ?? "{}");
+					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//$response.body = JSON.stringify(body);
+					break;
+				case "application/vnd.apple.flatbuffer":
+				case "application/protobuf":
+				case "application/x-protobuf":
+				case "application/vnd.google.protobuf":
+				case "application/grpc":
+				case "application/grpc+proto":
+				case "application/octet-stream":
+					//$.log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
+					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
+					//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+					switch (FORMAT) {
+						case "application/vnd.apple.flatbuffer":
+							// 解析FlatBuffer
+							body = new ByteBuffer(rawBody);
+							let data = {};
+							// 主机判断
+							switch (HOST) {
+								case "weatherkit.apple.com":
+									// 路径判断
+									switch (PATHs[0]) {
+										case "api":
+											switch (PATHs[1]) {
+												case "v2":
+													/******************  initialization start  *******************/
+													/******************  initialization finish  *******************/
+													switch (PATHs[2]) {
+														case "weather":
+															/******************  initialization start  *******************/
+															let weather = Weather.getRootAsWeather(body);
+															if (url.searchParams.get("dataSets").includes("airQuality")) {
+																data.airQuality = {
+																	"categoryIndex": weather.airQuality()?.categoryIndex(),
+																	"index": weather.airQuality()?.index(),
+																	"isSignificant": weather.airQuality()?.isSignificant(),
+																	"metadata": {
+																		"attributionUrl": weather.airQuality()?.metadata()?.attributionUrl(),
+																		"expireTime": weather.airQuality()?.metadata()?.expireTime(),
+																		"language": weather.airQuality()?.metadata()?.language(),
+																		"latitude": weather.airQuality()?.metadata()?.latitude(),
+																		"longitude": weather.airQuality()?.metadata()?.longitude(),
+																		"providerName": weather.airQuality()?.metadata()?.providerName(),
+																		"readTime": weather.airQuality()?.metadata()?.readTime(),
+																		"reportedTime": weather.airQuality()?.metadata()?.reportedTime(),
+																		"sourceType": SourceType[weather.airQuality()?.metadata()?.sourceType()],
+																		//"temporarilyUnavailable": weather.airQuality()?.metadata()?.temporarilyUnavailable(),
+																	},
+																	"pollutants": [],
+																	"previousDayComparison": ComparisonType[weather.airQuality()?.previousDayComparison()],
+																	"primaryPollutant": PollutantType[weather.airQuality()?.primaryPollutant()],
+																	"scale": weather.airQuality()?.scale(),
+																};
+																for (i = 0; i < weather.airQuality()?.pollutantsLength(); i++) data.airQuality.pollutants.push({
+																	"amount": weather.airQuality()?.pollutants(i)?.amount(),
+																	"pollutantType": PollutantType[weather.airQuality()?.pollutants(i)?.pollutantType()],
+																	"units": UnitType[weather.airQuality()?.pollutants(i)?.units()],
+																});
+															}															if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
+																data.forecastNextHour = {
+																	"condition": [],
+																	"forecastEnd": weather.forecastNextHour()?.forecastEnd(),
+																	"forecastStart": weather.forecastNextHour()?.forecastStart(),
+																	"metadata": {
+																		"attributionUrl": weather.forecastNextHour()?.metadata()?.attributionUrl(),
+																		"expireTime": weather.forecastNextHour()?.metadata()?.expireTime(),
+																		"language": weather.forecastNextHour()?.metadata()?.language(),
+																		"latitude": weather.forecastNextHour()?.metadata()?.latitude(),
+																		"longitude": weather.forecastNextHour()?.metadata()?.longitude(),
+																		"providerName": weather.forecastNextHour()?.metadata()?.providerName(),
+																		"readTime": weather.forecastNextHour()?.metadata()?.readTime(),
+																		"reportedTime": weather.forecastNextHour()?.metadata()?.reportedTime(),
+																		"sourceType": SourceType[weather.forecastNextHour()?.metadata()?.sourceType()],
+																		//"temporarilyUnavailable": weather.forecastNextHour()?.metadata()?.temporarilyUnavailable(),
+																	},
+																	"minutes": [],
+																	"summary": []
+																};
+																for (i = 0; i < weather.forecastNextHour()?.conditionLength(); i++) {
+																	let condition = {
+																		"beginCondition": WeatherCondition[weather.forecastNextHour()?.condition(i)?.beginCondition()],
+																		"endCondition": WeatherCondition[weather.forecastNextHour()?.condition(i)?.endCondition()],
+																		"forecastToken": ForecastToken[weather.forecastNextHour()?.condition(i)?.forecastToken()],
+																		"parameters": [],
+																		"startTime": weather.forecastNextHour()?.condition(i)?.startTime(),
+																	};
+																	for (j = 0; j < weather.forecastNextHour()?.condition(i)?.parametersLength(); j++) condition.parameters.push({
+																		"date": weather.forecastNextHour()?.condition(i)?.parameters(j)?.date(),
+																		"type": ParameterType[weather.forecastNextHour()?.condition(i)?.parameters(j)?.type()],
+																	});
+																	data.forecastNextHour.condition.push(condition);
+																}																for (i = 0; i < weather.forecastNextHour()?.minutesLength(); i++) data.forecastNextHour.minutes.push({
+																	"perceivedPrecipitationIntensity": weather.forecastNextHour()?.minutes(i)?.perceivedPrecipitationIntensity(),
+																	"precipitationChance": weather.forecastNextHour()?.minutes(i)?.precipitationChance(),
+																	"precipitationIntensity": weather.forecastNextHour()?.minutes(i)?.precipitationIntensity(),
+																	"startTime": weather.forecastNextHour()?.minutes(i)?.startTime(),
+																});
+																for (i = 0; i < weather.forecastNextHour()?.summaryLength(); i++) data.forecastNextHour.summary.push({
+																	"condition": PrecipitationType[weather.forecastNextHour()?.summary(i)?.condition()],
+																	"precipitationChance": weather.forecastNextHour()?.summary(i)?.precipitationChance(),
+																	"precipitationIntensity": weather.forecastNextHour()?.summary(i)?.precipitationIntensity(),
+																	"startTime": weather.forecastNextHour()?.summary(i)?.startTime(),
+																});
+															}															/******************  initialization finish  *******************/
+															$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+															/******************  initialization start  *******************/
+															/******************  initialization finish  *******************/
+															break;
+													}													break;
 											}											break;
 									}									break;
 							}							break;
-					}					break;
-				case "CONNECT":
-				case "TRACE":
+					}					// 写入二进制数据
+					$response.body = rawBody;
 					break;
-			}			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
-			break;
+			}			break;
 		case false:
 			break;
 	}})()
 	.catch((e) => $.logErr(e))
-	.finally(() => {
-		switch ($response) {
-			default: // 有构造回复数据，返回构造的回复数据
-				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
-				if ($response.headers?.["Content-Encoding"]) ;
-				if ($response.headers?.["content-encoding"]) ;
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
-				break;
-			case undefined: // 无构造回复数据，发送修改的请求数据
-				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
-				$.done($request);
-				break;
-		}	});
+	.finally(() => $.done($response));

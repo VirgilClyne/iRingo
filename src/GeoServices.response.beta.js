@@ -35,6 +35,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
+					//$.log(`🚧 body: ${body}`, "");
 					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
