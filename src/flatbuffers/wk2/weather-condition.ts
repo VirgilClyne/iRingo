@@ -4,8 +4,8 @@
 
 export enum WeatherCondition {
   CLEAR = 0,
-  TEMPERATURE_MAX = 1,
-  PRECIPITATION = 2,
+  UNKNOWN1 = 1,
+  UNKNOWN2 = 2,
   UNKNOWN3 = 3,
   UNKNOWN4 = 4,
   HEAVY_RAIN = 5,

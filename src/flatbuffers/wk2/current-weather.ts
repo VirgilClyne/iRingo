@@ -2,7 +2,13 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-import * as flatbuffers from "../../../node_modules/flatbuffers/mjs/flatbuffers.js";
+import * as flatbuffers from 'flatbuffers';
+
+import { ConditionCode } from '../wk2/condition-code.js';
+import { Metadata } from '../wk2/metadata.js';
+import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
+import { PressureTrend } from '../wk2/pressure-trend.js';
+
 
 export class CurrentWeather {
   bb: flatbuffers.ByteBuffer|null = null;
@@ -22,8 +28,470 @@ static getSizePrefixedRootAsCurrentWeather(bb:flatbuffers.ByteBuffer, obj?:Curre
   return (obj || new CurrentWeather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
+metadata(obj?:Metadata):Metadata|null {
+  const offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new Metadata()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+}
+
+asOf():number {
+  const offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+}
+
+cloudCover():number {
+  const offset = this.bb!.__offset(this.bb_pos, 8);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+cloudCoverLowAltPct():number {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+cloudCoverMidAltPct():number {
+  const offset = this.bb!.__offset(this.bb_pos, 12);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+cloudCoverHighAltPct():number {
+  const offset = this.bb!.__offset(this.bb_pos, 14);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+conditionCode():ConditionCode {
+  const offset = this.bb!.__offset(this.bb_pos, 16);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+}
+
+daylight():boolean {
+  const offset = this.bb!.__offset(this.bb_pos, 18);
+  return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
+}
+
+humidity():number {
+  const offset = this.bb!.__offset(this.bb_pos, 20);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+perceivedPrecipitationIntensity():number {
+  const offset = this.bb!.__offset(this.bb_pos, 22);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmount1h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 24);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmount6h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 26);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmount24h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 28);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmountNext1h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 30);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmountNext6h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 32);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmountNext24h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 34);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+precipitationAmountNext1hByType(index: number, obj?:PrecipitationAmountByType):PrecipitationAmountByType|null {
+  const offset = this.bb!.__offset(this.bb_pos, 36);
+  return offset ? (obj || new PrecipitationAmountByType()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+precipitationAmountNext1hByTypeLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 36);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+precipitationAmountNext6hByType(index: number, obj?:PrecipitationAmountByType):PrecipitationAmountByType|null {
+  const offset = this.bb!.__offset(this.bb_pos, 38);
+  return offset ? (obj || new PrecipitationAmountByType()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+precipitationAmountNext6hByTypeLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 38);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+precipitationAmountNext24hByType(index: number, obj?:PrecipitationAmountByType):PrecipitationAmountByType|null {
+  const offset = this.bb!.__offset(this.bb_pos, 40);
+  return offset ? (obj || new PrecipitationAmountByType()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+precipitationAmountNext24hByTypeLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 40);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+precipitationAmountPrevious1hByType(index: number, obj?:PrecipitationAmountByType):PrecipitationAmountByType|null {
+  const offset = this.bb!.__offset(this.bb_pos, 42);
+  return offset ? (obj || new PrecipitationAmountByType()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+precipitationAmountPrevious1hByTypeLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 42);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+precipitationAmountPrevious6hByType(index: number, obj?:PrecipitationAmountByType):PrecipitationAmountByType|null {
+  const offset = this.bb!.__offset(this.bb_pos, 44);
+  return offset ? (obj || new PrecipitationAmountByType()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+precipitationAmountPrevious6hByTypeLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 44);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+precipitationAmountPrevious24hByType(index: number, obj?:PrecipitationAmountByType):PrecipitationAmountByType|null {
+  const offset = this.bb!.__offset(this.bb_pos, 46);
+  return offset ? (obj || new PrecipitationAmountByType()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+precipitationAmountPrevious24hByTypeLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 46);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+precipitationIntensity():number {
+  const offset = this.bb!.__offset(this.bb_pos, 48);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+pressure():number {
+  const offset = this.bb!.__offset(this.bb_pos, 50);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+pressureTrend():PressureTrend {
+  const offset = this.bb!.__offset(this.bb_pos, 52);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : PressureTrend.RISING;
+}
+
+snowfallAmount1h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 54);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+snowfallAmount6h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 56);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+snowfallAmount24h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 58);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+snowfallAmountNext1h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 60);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+snowfallAmountNext6h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 62);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+snowfallAmountNext24h():number {
+  const offset = this.bb!.__offset(this.bb_pos, 64);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+temperature():number {
+  const offset = this.bb!.__offset(this.bb_pos, 66);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+temperatureApparent():number {
+  const offset = this.bb!.__offset(this.bb_pos, 68);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+temperatureUnknown():number {
+  const offset = this.bb!.__offset(this.bb_pos, 70);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+temperatureDewPoint():number {
+  const offset = this.bb!.__offset(this.bb_pos, 72);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+uvIndex():number {
+  const offset = this.bb!.__offset(this.bb_pos, 74);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+visibility():number {
+  const offset = this.bb!.__offset(this.bb_pos, 76);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+windDirection():number {
+  const offset = this.bb!.__offset(this.bb_pos, 78);
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+}
+
+windGust():number {
+  const offset = this.bb!.__offset(this.bb_pos, 80);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
+windSpeed():number {
+  const offset = this.bb!.__offset(this.bb_pos, 82);
+  return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
+}
+
 static startCurrentWeather(builder:flatbuffers.Builder) {
-  builder.startObject(0);
+  builder.startObject(40);
+}
+
+static addMetadata(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, metadataOffset, 0);
+}
+
+static addAsOf(builder:flatbuffers.Builder, asOf:number) {
+  builder.addFieldInt32(1, asOf, 0);
+}
+
+static addCloudCover(builder:flatbuffers.Builder, cloudCover:number) {
+  builder.addFieldInt8(2, cloudCover, 0);
+}
+
+static addCloudCoverLowAltPct(builder:flatbuffers.Builder, cloudCoverLowAltPct:number) {
+  builder.addFieldInt8(3, cloudCoverLowAltPct, 0);
+}
+
+static addCloudCoverMidAltPct(builder:flatbuffers.Builder, cloudCoverMidAltPct:number) {
+  builder.addFieldInt8(4, cloudCoverMidAltPct, 0);
+}
+
+static addCloudCoverHighAltPct(builder:flatbuffers.Builder, cloudCoverHighAltPct:number) {
+  builder.addFieldInt8(5, cloudCoverHighAltPct, 0);
+}
+
+static addConditionCode(builder:flatbuffers.Builder, conditionCode:ConditionCode) {
+  builder.addFieldInt8(6, conditionCode, ConditionCode.CLEAR);
+}
+
+static addDaylight(builder:flatbuffers.Builder, daylight:boolean) {
+  builder.addFieldInt8(7, +daylight, +false);
+}
+
+static addHumidity(builder:flatbuffers.Builder, humidity:number) {
+  builder.addFieldInt8(8, humidity, 0);
+}
+
+static addPerceivedPrecipitationIntensity(builder:flatbuffers.Builder, perceivedPrecipitationIntensity:number) {
+  builder.addFieldFloat32(9, perceivedPrecipitationIntensity, 0.0);
+}
+
+static addPrecipitationAmount1h(builder:flatbuffers.Builder, precipitationAmount1h:number) {
+  builder.addFieldFloat32(10, precipitationAmount1h, 0.0);
+}
+
+static addPrecipitationAmount6h(builder:flatbuffers.Builder, precipitationAmount6h:number) {
+  builder.addFieldFloat32(11, precipitationAmount6h, 0.0);
+}
+
+static addPrecipitationAmount24h(builder:flatbuffers.Builder, precipitationAmount24h:number) {
+  builder.addFieldFloat32(12, precipitationAmount24h, 0.0);
+}
+
+static addPrecipitationAmountNext1h(builder:flatbuffers.Builder, precipitationAmountNext1h:number) {
+  builder.addFieldFloat32(13, precipitationAmountNext1h, 0.0);
+}
+
+static addPrecipitationAmountNext6h(builder:flatbuffers.Builder, precipitationAmountNext6h:number) {
+  builder.addFieldFloat32(14, precipitationAmountNext6h, 0.0);
+}
+
+static addPrecipitationAmountNext24h(builder:flatbuffers.Builder, precipitationAmountNext24h:number) {
+  builder.addFieldFloat32(15, precipitationAmountNext24h, 0.0);
+}
+
+static addPrecipitationAmountNext1hByType(builder:flatbuffers.Builder, precipitationAmountNext1hByTypeOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(16, precipitationAmountNext1hByTypeOffset, 0);
+}
+
+static createPrecipitationAmountNext1hByTypeVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startPrecipitationAmountNext1hByTypeVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
+}
+
+static addPrecipitationAmountNext6hByType(builder:flatbuffers.Builder, precipitationAmountNext6hByTypeOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(17, precipitationAmountNext6hByTypeOffset, 0);
+}
+
+static createPrecipitationAmountNext6hByTypeVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startPrecipitationAmountNext6hByTypeVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
+}
+
+static addPrecipitationAmountNext24hByType(builder:flatbuffers.Builder, precipitationAmountNext24hByTypeOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(18, precipitationAmountNext24hByTypeOffset, 0);
+}
+
+static createPrecipitationAmountNext24hByTypeVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startPrecipitationAmountNext24hByTypeVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
+}
+
+static addPrecipitationAmountPrevious1hByType(builder:flatbuffers.Builder, precipitationAmountPrevious1hByTypeOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(19, precipitationAmountPrevious1hByTypeOffset, 0);
+}
+
+static createPrecipitationAmountPrevious1hByTypeVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startPrecipitationAmountPrevious1hByTypeVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
+}
+
+static addPrecipitationAmountPrevious6hByType(builder:flatbuffers.Builder, precipitationAmountPrevious6hByTypeOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(20, precipitationAmountPrevious6hByTypeOffset, 0);
+}
+
+static createPrecipitationAmountPrevious6hByTypeVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startPrecipitationAmountPrevious6hByTypeVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
+}
+
+static addPrecipitationAmountPrevious24hByType(builder:flatbuffers.Builder, precipitationAmountPrevious24hByTypeOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(21, precipitationAmountPrevious24hByTypeOffset, 0);
+}
+
+static createPrecipitationAmountPrevious24hByTypeVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startPrecipitationAmountPrevious24hByTypeVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
+}
+
+static addPrecipitationIntensity(builder:flatbuffers.Builder, precipitationIntensity:number) {
+  builder.addFieldFloat32(22, precipitationIntensity, 0.0);
+}
+
+static addPressure(builder:flatbuffers.Builder, pressure:number) {
+  builder.addFieldFloat32(23, pressure, 0.0);
+}
+
+static addPressureTrend(builder:flatbuffers.Builder, pressureTrend:PressureTrend) {
+  builder.addFieldInt8(24, pressureTrend, PressureTrend.RISING);
+}
+
+static addSnowfallAmount1h(builder:flatbuffers.Builder, snowfallAmount1h:number) {
+  builder.addFieldFloat32(25, snowfallAmount1h, 0.0);
+}
+
+static addSnowfallAmount6h(builder:flatbuffers.Builder, snowfallAmount6h:number) {
+  builder.addFieldFloat32(26, snowfallAmount6h, 0.0);
+}
+
+static addSnowfallAmount24h(builder:flatbuffers.Builder, snowfallAmount24h:number) {
+  builder.addFieldFloat32(27, snowfallAmount24h, 0.0);
+}
+
+static addSnowfallAmountNext1h(builder:flatbuffers.Builder, snowfallAmountNext1h:number) {
+  builder.addFieldFloat32(28, snowfallAmountNext1h, 0.0);
+}
+
+static addSnowfallAmountNext6h(builder:flatbuffers.Builder, snowfallAmountNext6h:number) {
+  builder.addFieldFloat32(29, snowfallAmountNext6h, 0.0);
+}
+
+static addSnowfallAmountNext24h(builder:flatbuffers.Builder, snowfallAmountNext24h:number) {
+  builder.addFieldFloat32(30, snowfallAmountNext24h, 0.0);
+}
+
+static addTemperature(builder:flatbuffers.Builder, temperature:number) {
+  builder.addFieldFloat32(31, temperature, 0.0);
+}
+
+static addTemperatureApparent(builder:flatbuffers.Builder, temperatureApparent:number) {
+  builder.addFieldFloat32(32, temperatureApparent, 0.0);
+}
+
+static addTemperatureUnknown(builder:flatbuffers.Builder, temperatureUnknown:number) {
+  builder.addFieldFloat32(33, temperatureUnknown, 0.0);
+}
+
+static addTemperatureDewPoint(builder:flatbuffers.Builder, temperatureDewPoint:number) {
+  builder.addFieldFloat32(34, temperatureDewPoint, 0.0);
+}
+
+static addUvIndex(builder:flatbuffers.Builder, uvIndex:number) {
+  builder.addFieldInt8(35, uvIndex, 0);
+}
+
+static addVisibility(builder:flatbuffers.Builder, visibility:number) {
+  builder.addFieldFloat32(36, visibility, 0.0);
+}
+
+static addWindDirection(builder:flatbuffers.Builder, windDirection:number) {
+  builder.addFieldInt8(37, windDirection, 0);
+}
+
+static addWindGust(builder:flatbuffers.Builder, windGust:number) {
+  builder.addFieldFloat32(38, windGust, 0.0);
+}
+
+static addWindSpeed(builder:flatbuffers.Builder, windSpeed:number) {
+  builder.addFieldFloat32(39, windSpeed, 0.0);
 }
 
 static endCurrentWeather(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -31,8 +499,48 @@ static endCurrentWeather(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createCurrentWeather(builder:flatbuffers.Builder):flatbuffers.Offset {
+static createCurrentWeather(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, asOf:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:ConditionCode, daylight:boolean, humidity:number, perceivedPrecipitationIntensity:number, precipitationAmount1h:number, precipitationAmount6h:number, precipitationAmount24h:number, precipitationAmountNext1h:number, precipitationAmountNext6h:number, precipitationAmountNext24h:number, precipitationAmountNext1hByTypeOffset:flatbuffers.Offset, precipitationAmountNext6hByTypeOffset:flatbuffers.Offset, precipitationAmountNext24hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious1hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious6hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious24hByTypeOffset:flatbuffers.Offset, precipitationIntensity:number, pressure:number, pressureTrend:PressureTrend, snowfallAmount1h:number, snowfallAmount6h:number, snowfallAmount24h:number, snowfallAmountNext1h:number, snowfallAmountNext6h:number, snowfallAmountNext24h:number, temperature:number, temperatureApparent:number, temperatureUnknown:number, temperatureDewPoint:number, uvIndex:number, visibility:number, windDirection:number, windGust:number, windSpeed:number):flatbuffers.Offset {
   CurrentWeather.startCurrentWeather(builder);
+  CurrentWeather.addMetadata(builder, metadataOffset);
+  CurrentWeather.addAsOf(builder, asOf);
+  CurrentWeather.addCloudCover(builder, cloudCover);
+  CurrentWeather.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
+  CurrentWeather.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
+  CurrentWeather.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
+  CurrentWeather.addConditionCode(builder, conditionCode);
+  CurrentWeather.addDaylight(builder, daylight);
+  CurrentWeather.addHumidity(builder, humidity);
+  CurrentWeather.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
+  CurrentWeather.addPrecipitationAmount1h(builder, precipitationAmount1h);
+  CurrentWeather.addPrecipitationAmount6h(builder, precipitationAmount6h);
+  CurrentWeather.addPrecipitationAmount24h(builder, precipitationAmount24h);
+  CurrentWeather.addPrecipitationAmountNext1h(builder, precipitationAmountNext1h);
+  CurrentWeather.addPrecipitationAmountNext6h(builder, precipitationAmountNext6h);
+  CurrentWeather.addPrecipitationAmountNext24h(builder, precipitationAmountNext24h);
+  CurrentWeather.addPrecipitationAmountNext1hByType(builder, precipitationAmountNext1hByTypeOffset);
+  CurrentWeather.addPrecipitationAmountNext6hByType(builder, precipitationAmountNext6hByTypeOffset);
+  CurrentWeather.addPrecipitationAmountNext24hByType(builder, precipitationAmountNext24hByTypeOffset);
+  CurrentWeather.addPrecipitationAmountPrevious1hByType(builder, precipitationAmountPrevious1hByTypeOffset);
+  CurrentWeather.addPrecipitationAmountPrevious6hByType(builder, precipitationAmountPrevious6hByTypeOffset);
+  CurrentWeather.addPrecipitationAmountPrevious24hByType(builder, precipitationAmountPrevious24hByTypeOffset);
+  CurrentWeather.addPrecipitationIntensity(builder, precipitationIntensity);
+  CurrentWeather.addPressure(builder, pressure);
+  CurrentWeather.addPressureTrend(builder, pressureTrend);
+  CurrentWeather.addSnowfallAmount1h(builder, snowfallAmount1h);
+  CurrentWeather.addSnowfallAmount6h(builder, snowfallAmount6h);
+  CurrentWeather.addSnowfallAmount24h(builder, snowfallAmount24h);
+  CurrentWeather.addSnowfallAmountNext1h(builder, snowfallAmountNext1h);
+  CurrentWeather.addSnowfallAmountNext6h(builder, snowfallAmountNext6h);
+  CurrentWeather.addSnowfallAmountNext24h(builder, snowfallAmountNext24h);
+  CurrentWeather.addTemperature(builder, temperature);
+  CurrentWeather.addTemperatureApparent(builder, temperatureApparent);
+  CurrentWeather.addTemperatureUnknown(builder, temperatureUnknown);
+  CurrentWeather.addTemperatureDewPoint(builder, temperatureDewPoint);
+  CurrentWeather.addUvIndex(builder, uvIndex);
+  CurrentWeather.addVisibility(builder, visibility);
+  CurrentWeather.addWindDirection(builder, windDirection);
+  CurrentWeather.addWindGust(builder, windGust);
+  CurrentWeather.addWindSpeed(builder, windSpeed);
   return CurrentWeather.endCurrentWeather(builder);
 }
 }

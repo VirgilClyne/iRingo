@@ -2,10 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 export var ComparisonType;
 (function (ComparisonType) {
-    ComparisonType[ComparisonType["UNKNOWN"] = 0] = "UNKNOWN";
-    ComparisonType[ComparisonType["UNKNOWN1"] = 1] = "UNKNOWN1";
-    ComparisonType[ComparisonType["WORSE"] = 2] = "WORSE";
-    ComparisonType[ComparisonType["SAME"] = 3] = "SAME";
-    ComparisonType[ComparisonType["BETTER"] = 4] = "BETTER";
-    ComparisonType[ComparisonType["UNKNOWN5"] = 5] = "UNKNOWN5";
+    ComparisonType[ComparisonType["UNKNOWN0"] = 0] = "UNKNOWN0";
+    ComparisonType[ComparisonType["TEMPERATURE_MAX"] = 1] = "TEMPERATURE_MAX";
+    ComparisonType[ComparisonType["PRECIPITATION"] = 2] = "PRECIPITATION";
 })(ComparisonType || (ComparisonType = {}));

@@ -2,9 +2,9 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-import * as flatbuffers from "../../../node_modules/flatbuffers/mjs/flatbuffers.js";
+import * as flatbuffers from 'flatbuffers';
 
-import { ComparisonType } from '../wk2/comparison-type.js';
+import { ComparisonTrend } from '../wk2/comparison-trend.js';
 import { Metadata } from '../wk2/metadata.js';
 import { Pollutant } from '../wk2/pollutant.js';
 import { PollutantType } from '../wk2/pollutant-type.js';
@@ -58,9 +58,9 @@ pollutantsLength():number {
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
-previousDayComparison():ComparisonType {
+previousDayComparison():ComparisonTrend {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ComparisonType.UNKNOWN;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
 }
 
 primaryPollutant():PollutantType {
@@ -111,8 +111,8 @@ static startPollutantsVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 }
 
-static addPreviousDayComparison(builder:flatbuffers.Builder, previousDayComparison:ComparisonType) {
-  builder.addFieldInt8(5, previousDayComparison, ComparisonType.UNKNOWN);
+static addPreviousDayComparison(builder:flatbuffers.Builder, previousDayComparison:ComparisonTrend) {
+  builder.addFieldInt8(5, previousDayComparison, ComparisonTrend.UNKNOWN);
 }
 
 static addPrimaryPollutant(builder:flatbuffers.Builder, primaryPollutant:PollutantType) {
@@ -128,7 +128,7 @@ static endAirQuality(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createAirQuality(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, categoryIndex:number, index:number, isSignificant:boolean, pollutantsOffset:flatbuffers.Offset, previousDayComparison:ComparisonType, primaryPollutant:PollutantType, scaleOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createAirQuality(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, categoryIndex:number, index:number, isSignificant:boolean, pollutantsOffset:flatbuffers.Offset, previousDayComparison:ComparisonTrend, primaryPollutant:PollutantType, scaleOffset:flatbuffers.Offset):flatbuffers.Offset {
   AirQuality.startAirQuality(builder);
   AirQuality.addMetadata(builder, metadataOffset);
   AirQuality.addCategoryIndex(builder, categoryIndex);

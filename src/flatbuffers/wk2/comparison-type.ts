@@ -3,10 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
 export enum ComparisonType {
-  UNKNOWN = 0,
-  UNKNOWN1 = 1,
-  WORSE = 2,
-  SAME = 3,
-  BETTER = 4,
-  UNKNOWN5 = 5
+  UNKNOWN0 = 0,
+  TEMPERATURE_MAX = 1,
+  PRECIPITATION = 2
 }

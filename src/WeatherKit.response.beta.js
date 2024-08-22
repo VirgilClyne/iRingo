@@ -8,7 +8,7 @@ import setENV from "./function/setENV.mjs";
 import * as flatbuffers from "../node_modules/flatbuffers/mjs/flatbuffers.js";
 import * as WK2 from "./flatbuffers/wk2.js";
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.6(4028) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.8(4039) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -81,7 +81,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
 							body = new flatbuffers.ByteBuffer(rawBody);
-							let data = {};
+							let builder = new flatbuffers.Builder();
 							// 主机判断
 							switch (HOST) {
 								case "weatherkit.apple.com":
@@ -96,8 +96,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														case "weather":
 															/******************  initialization start  *******************/
 															let weather = WK2.Weather.getRootAsWeather(body);
+															WK2.Weather.startWeather(builder);
 															if (url.searchParams.get("dataSets").includes("airQuality")) {
-																data.airQuality = {
+																/******************  initialization start  *******************/
+																let airQuality = {
 																	"categoryIndex": weather.airQuality()?.categoryIndex(),
 																	"index": weather.airQuality()?.index(),
 																	"isSignificant": weather.airQuality()?.isSignificant(),
@@ -118,14 +120,27 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																	"primaryPollutant": WK2.PollutantType[weather.airQuality()?.primaryPollutant()],
 																	"scale": weather.airQuality()?.scale(),
 																};
-																for (i = 0; i < weather.airQuality()?.pollutantsLength(); i++) data.airQuality.pollutants.push({
+																for (i = 0; i < weather.airQuality()?.pollutantsLength(); i++) airQuality.pollutants.push({
 																	"amount": weather.airQuality()?.pollutants(i)?.amount(),
 																	"pollutantType": WK2.PollutantType[weather.airQuality()?.pollutants(i)?.pollutantType()],
 																	"units": WK2.UnitType[weather.airQuality()?.pollutants(i)?.units()],
 																});
+																/******************  initialization finish  *******************/
+																$.log(`🚧 airQuality: ${JSON.stringify(airQuality)}`, "");
+																//WK2.Weather.addAirQuality(builder, WK2.AirQuality.createAirQuality(builder, airQuality.categoryIndex, airQuality.index, airQuality.isSignificant, WK2.MetacreateMetadata(builder, builder.createString(airQuality.metaattributionUrl), airQuality.metaexpireTime, builder.createString(airQuality.metalanguage), airQuality.metalatitude, airQuality.metalongitude, builder.createString(airQuality.metaproviderName), airQuality.metareadTime, airQuality.metareportedTime, WK2.SourceType[airQuality.metasourceType], airQuality.metatemporarilyUnavailable), airQuality.pollutants.map(p => WK2.Pollutant.createPollutant(builder, p.amount, WK2.PollutantType[p.pollutantType], WK2.UnitType[p.units])), WK2.ComparisonType[airQuality.previousDayComparison], WK2.PollutantType[airQuality.primaryPollutant], airQuality.scale));
+															};
+															if (url.searchParams.get("dataSets").includes("currentWeather")) {
+																//WK2.Weather.addCurrentWeather(builder, weather.currentWeather());
+															};
+															if (url.searchParams.get("dataSets").includes("forecastDaily")) {
+																//WK2.Weather.addForecastDaily(builder, weather.forecastDaily());
+															};
+															if (url.searchParams.get("dataSets").includes("forecastHourly")) {
+																//WK2.Weather.addForecastHourly(builder, weather.forecastHourly());
 															};
 															if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
-																data.forecastNextHour = {
+																/******************  initialization start  *******************/
+																let forecastNextHour = {
 																	"condition": [],
 																	"forecastEnd": weather.forecastNextHour()?.forecastEnd(),
 																	"forecastStart": weather.forecastNextHour()?.forecastStart(),
@@ -156,25 +171,39 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																		"date": weather.forecastNextHour()?.condition(i)?.parameters(j)?.date(),
 																		"type": WK2.ParameterType[weather.forecastNextHour()?.condition(i)?.parameters(j)?.type()],
 																	});
-																	data.forecastNextHour.condition.push(condition);
+																	forecastNextHour.condition.push(condition);
 																};
-																for (i = 0; i < weather.forecastNextHour()?.minutesLength(); i++) data.forecastNextHour.minutes.push({
+																for (i = 0; i < weather.forecastNextHour()?.minutesLength(); i++) forecastNextHour.minutes.push({
 																	"perceivedPrecipitationIntensity": weather.forecastNextHour()?.minutes(i)?.perceivedPrecipitationIntensity(),
 																	"precipitationChance": weather.forecastNextHour()?.minutes(i)?.precipitationChance(),
 																	"precipitationIntensity": weather.forecastNextHour()?.minutes(i)?.precipitationIntensity(),
 																	"startTime": weather.forecastNextHour()?.minutes(i)?.startTime(),
 																});
-																for (i = 0; i < weather.forecastNextHour()?.summaryLength(); i++) data.forecastNextHour.summary.push({
+																for (i = 0; i < weather.forecastNextHour()?.summaryLength(); i++) forecastNextHour.summary.push({
 																	"condition": WK2.PrecipitationType[weather.forecastNextHour()?.summary(i)?.condition()],
 																	"precipitationChance": weather.forecastNextHour()?.summary(i)?.precipitationChance(),
 																	"precipitationIntensity": weather.forecastNextHour()?.summary(i)?.precipitationIntensity(),
 																	"startTime": weather.forecastNextHour()?.summary(i)?.startTime(),
 																});
+																/******************  initialization finish  *******************/
+																$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour)}`, "");
+																//WK2.Weather.addForecastNextHour(builder, WK2.ForecastNextHour.createForecastNextHour(builder, forecastNextHour.condition.map(c => WK2.Condition.createCondition(builder, WK2.WeatherCondition[c.beginCondition], WK2.WeatherCondition[c.endCondition], WK2.ForecastToken[c.forecastToken], c.parameters.map(p => WK2.Parameter.createParameter(builder, p.date, WK2.ParameterType[p.type])), c.startTime)), forecastNextHour.forecastEnd, forecastNextHour.forecastStart, WK2.MetacreateMetadata(builder, builder.createString(forecastNextHour.metaattributionUrl), forecastNextHour.metaexpireTime, builder.createString(forecastNextHour.metalanguage), forecastNextHour.metalatitude, forecastNextHour.metalongitude, builder.createString(forecastNextHour.metaproviderName), forecastNextHour.metareadTime, forecastNextHour.metareportedTime, WK2.SourceType[forecastNextHour.metasourceType], forecastNextHour.metatemporarilyUnavailable), forecastNextHour.minutes.map(m => WK2.Minute.createMinute(builder, m.perceivedPrecipitationIntensity, m.precipitationChance, m.precipitationIntensity, m.startTime)), forecastNextHour.summary.map(s => WK2.Summary.createSummary(builder, WK2.PrecipitationType[s.condition], s.precipitationChance, s.precipitationIntensity, s.startTime))));
 															};
-															/******************  initialization finish  *******************/
-															$.log(`🚧 data: ${JSON.stringify(data)}`, "");
-															/******************  initialization start  *******************/
-															/******************  initialization finish  *******************/
+															if (url.searchParams.get("dataSets").includes("news")) {
+																//WK2.Weather.addNews(builder, weather.news());
+															}
+															if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
+																//WK2.Weather.addWeatherAlerts(builder, weather.weatherAlerts())
+															};
+															if (url.searchParams.get("dataSets").includes("weatherChange")) {
+																//WK2.Weather.addWeatherChanges(builder, weather.weatherChanges())
+															};
+															if (url.searchParams.get("dataSets").includes("trendComparison")) {
+																//WK2.Weather.addHistoricalComparisons(builder, weather.historicalComparisons())
+															};
+															let data = WK2.Weather.endWeather(builder);
+															//$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+															builder.finish(data);
 															break;
 													};
 													break;
@@ -183,6 +212,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									};
 									break;
 							};
+							//rawBody = builder.asUint8Array(); // Of type `Uint8Array`.
 							break;
 						case "application/protobuf":
 						case "application/x-protobuf":

@@ -2,7 +2,11 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-import * as flatbuffers from "../../../node_modules/flatbuffers/mjs/flatbuffers.js";
+import * as flatbuffers from 'flatbuffers';
+
+import { Change } from '../wk2/change.js';
+import { Metadata } from '../wk2/metadata.js';
+
 
 export class weatherChanges {
   bb: flatbuffers.ByteBuffer|null = null;
@@ -22,8 +26,61 @@ static getSizePrefixedRootAsweatherChanges(bb:flatbuffers.ByteBuffer, obj?:weath
   return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
+metadata(obj?:Metadata):Metadata|null {
+  const offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new Metadata()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+}
+
+forecastStart():number {
+  const offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+}
+
+forecastEnd():number {
+  const offset = this.bb!.__offset(this.bb_pos, 8);
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+}
+
+changes(index: number, obj?:Change):Change|null {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? (obj || new Change()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+changesLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
 static startweatherChanges(builder:flatbuffers.Builder) {
-  builder.startObject(0);
+  builder.startObject(4);
+}
+
+static addMetadata(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, metadataOffset, 0);
+}
+
+static addForecastStart(builder:flatbuffers.Builder, forecastStart:number) {
+  builder.addFieldInt32(1, forecastStart, 0);
+}
+
+static addForecastEnd(builder:flatbuffers.Builder, forecastEnd:number) {
+  builder.addFieldInt32(2, forecastEnd, 0);
+}
+
+static addChanges(builder:flatbuffers.Builder, changesOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(3, changesOffset, 0);
+}
+
+static createChangesVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startChangesVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
 }
 
 static endweatherChanges(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -31,8 +88,12 @@ static endweatherChanges(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createweatherChanges(builder:flatbuffers.Builder):flatbuffers.Offset {
+static createweatherChanges(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, forecastStart:number, forecastEnd:number, changesOffset:flatbuffers.Offset):flatbuffers.Offset {
   weatherChanges.startweatherChanges(builder);
+  weatherChanges.addMetadata(builder, metadataOffset);
+  weatherChanges.addForecastStart(builder, forecastStart);
+  weatherChanges.addForecastEnd(builder, forecastEnd);
+  weatherChanges.addChanges(builder, changesOffset);
   return weatherChanges.endweatherChanges(builder);
 }
 }

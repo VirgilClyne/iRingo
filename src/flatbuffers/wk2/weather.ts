@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-import * as flatbuffers from "../../../node_modules/flatbuffers/mjs/flatbuffers.js";
+import * as flatbuffers from 'flatbuffers';
 
 import { AirQuality } from '../wk2/air-quality.js';
 import { CurrentWeather } from '../wk2/current-weather.js';

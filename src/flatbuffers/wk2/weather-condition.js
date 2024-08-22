@@ -3,8 +3,8 @@
 export var WeatherCondition;
 (function (WeatherCondition) {
     WeatherCondition[WeatherCondition["CLEAR"] = 0] = "CLEAR";
-    WeatherCondition[WeatherCondition["TEMPERATURE_MAX"] = 1] = "TEMPERATURE_MAX";
-    WeatherCondition[WeatherCondition["PRECIPITATION"] = 2] = "PRECIPITATION";
+    WeatherCondition[WeatherCondition["UNKNOWN1"] = 1] = "UNKNOWN1";
+    WeatherCondition[WeatherCondition["UNKNOWN2"] = 2] = "UNKNOWN2";
     WeatherCondition[WeatherCondition["UNKNOWN3"] = 3] = "UNKNOWN3";
     WeatherCondition[WeatherCondition["UNKNOWN4"] = 4] = "UNKNOWN4";
     WeatherCondition[WeatherCondition["HEAVY_RAIN"] = 5] = "HEAVY_RAIN";

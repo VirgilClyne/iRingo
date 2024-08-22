@@ -2,7 +2,11 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-import * as flatbuffers from "../../../node_modules/flatbuffers/mjs/flatbuffers.js";
+import * as flatbuffers from 'flatbuffers';
+
+import { Day } from '../wk2/day.js';
+import { Metadata } from '../wk2/metadata.js';
+
 
 export class ForecastDaily {
   bb: flatbuffers.ByteBuffer|null = null;
@@ -22,8 +26,43 @@ static getSizePrefixedRootAsForecastDaily(bb:flatbuffers.ByteBuffer, obj?:Foreca
   return (obj || new ForecastDaily()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
+metadata(obj?:Metadata):Metadata|null {
+  const offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new Metadata()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+}
+
+days(index: number, obj?:Day):Day|null {
+  const offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? (obj || new Day()).__init(this.bb!.__indirect(this.bb!.__vector(this.bb_pos + offset) + index * 4), this.bb!) : null;
+}
+
+daysLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
 static startForecastDaily(builder:flatbuffers.Builder) {
-  builder.startObject(0);
+  builder.startObject(2);
+}
+
+static addMetadata(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, metadataOffset, 0);
+}
+
+static addDays(builder:flatbuffers.Builder, daysOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, daysOffset, 0);
+}
+
+static createDaysVector(builder:flatbuffers.Builder, data:flatbuffers.Offset[]):flatbuffers.Offset {
+  builder.startVector(4, data.length, 4);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addOffset(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startDaysVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(4, numElems, 4);
 }
 
 static endForecastDaily(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -31,8 +70,10 @@ static endForecastDaily(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createForecastDaily(builder:flatbuffers.Builder):flatbuffers.Offset {
+static createForecastDaily(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, daysOffset:flatbuffers.Offset):flatbuffers.Offset {
   ForecastDaily.startForecastDaily(builder);
+  ForecastDaily.addMetadata(builder, metadataOffset);
+  ForecastDaily.addDays(builder, daysOffset);
   return ForecastDaily.endForecastDaily(builder);
 }
 }
