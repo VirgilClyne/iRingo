@@ -8,22 +8,22 @@ import { DayWeatherConditions } from '../wk2/day-weather-conditions.js';
 import { Metadata } from '../wk2/metadata.js';
 
 
-export class ForecastDaily {
+export class DailyForecastData {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):ForecastDaily {
+  __init(i:number, bb:flatbuffers.ByteBuffer):DailyForecastData {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsForecastDaily(bb:flatbuffers.ByteBuffer, obj?:ForecastDaily):ForecastDaily {
-  return (obj || new ForecastDaily()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsDailyForecastData(bb:flatbuffers.ByteBuffer, obj?:DailyForecastData):DailyForecastData {
+  return (obj || new DailyForecastData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsForecastDaily(bb:flatbuffers.ByteBuffer, obj?:ForecastDaily):ForecastDaily {
+static getSizePrefixedRootAsDailyForecastData(bb:flatbuffers.ByteBuffer, obj?:DailyForecastData):DailyForecastData {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new ForecastDaily()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new DailyForecastData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 metadata(obj?:Metadata):Metadata|null {
@@ -41,7 +41,7 @@ daysLength():number {
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
-static startForecastDaily(builder:flatbuffers.Builder) {
+static startDailyForecastData(builder:flatbuffers.Builder) {
   builder.startObject(2);
 }
 
@@ -65,15 +65,15 @@ static startDaysVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 }
 
-static endForecastDaily(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endDailyForecastData(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createForecastDaily(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, daysOffset:flatbuffers.Offset):flatbuffers.Offset {
-  ForecastDaily.startForecastDaily(builder);
-  ForecastDaily.addMetadata(builder, metadataOffset);
-  ForecastDaily.addDays(builder, daysOffset);
-  return ForecastDaily.endForecastDaily(builder);
+static createDailyForecastData(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, daysOffset:flatbuffers.Offset):flatbuffers.Offset {
+  DailyForecastData.startDailyForecastData(builder);
+  DailyForecastData.addMetadata(builder, metadataOffset);
+  DailyForecastData.addDays(builder, daysOffset);
+  return DailyForecastData.endDailyForecastData(builder);
 }
 }

@@ -4,22 +4,22 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-export class Minute {
+export class ForecastMinute {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):Minute {
+  __init(i:number, bb:flatbuffers.ByteBuffer):ForecastMinute {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsMinute(bb:flatbuffers.ByteBuffer, obj?:Minute):Minute {
-  return (obj || new Minute()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsForecastMinute(bb:flatbuffers.ByteBuffer, obj?:ForecastMinute):ForecastMinute {
+  return (obj || new ForecastMinute()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsMinute(bb:flatbuffers.ByteBuffer, obj?:Minute):Minute {
+static getSizePrefixedRootAsForecastMinute(bb:flatbuffers.ByteBuffer, obj?:ForecastMinute):ForecastMinute {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new Minute()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new ForecastMinute()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 startTime():number {
@@ -42,7 +42,7 @@ perceivedPrecipitationIntensity():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
-static startMinute(builder:flatbuffers.Builder) {
+static startForecastMinute(builder:flatbuffers.Builder) {
   builder.startObject(4);
 }
 
@@ -62,17 +62,17 @@ static addPerceivedPrecipitationIntensity(builder:flatbuffers.Builder, perceived
   builder.addFieldFloat32(3, perceivedPrecipitationIntensity, 0.0);
 }
 
-static endMinute(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endForecastMinute(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createMinute(builder:flatbuffers.Builder, startTime:number, precipitationChance:number, precipitationIntensity:number, perceivedPrecipitationIntensity:number):flatbuffers.Offset {
-  Minute.startMinute(builder);
-  Minute.addStartTime(builder, startTime);
-  Minute.addPrecipitationChance(builder, precipitationChance);
-  Minute.addPrecipitationIntensity(builder, precipitationIntensity);
-  Minute.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
-  return Minute.endMinute(builder);
+static createForecastMinute(builder:flatbuffers.Builder, startTime:number, precipitationChance:number, precipitationIntensity:number, perceivedPrecipitationIntensity:number):flatbuffers.Offset {
+  ForecastMinute.startForecastMinute(builder);
+  ForecastMinute.addStartTime(builder, startTime);
+  ForecastMinute.addPrecipitationChance(builder, precipitationChance);
+  ForecastMinute.addPrecipitationIntensity(builder, precipitationIntensity);
+  ForecastMinute.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
+  return ForecastMinute.endForecastMinute(builder);
 }
 }

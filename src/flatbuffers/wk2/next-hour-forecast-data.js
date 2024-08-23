@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import * as flatbuffers from 'flatbuffers';
 import { Condition } from '../wk2/condition.js';
+import { ForecastMinute } from '../wk2/forecast-minute.js';
+import { ForecastPeriodSummary } from '../wk2/forecast-period-summary.js';
 import { Metadata } from '../wk2/metadata.js';
-import { Minute } from '../wk2/minute.js';
-import { Summary } from '../wk2/summary.js';
-export class ForecastNextHour {
+export class NextHourForecastData {
     bb = null;
     bb_pos = 0;
     __init(i, bb) {
@@ -13,12 +13,12 @@ export class ForecastNextHour {
         this.bb = bb;
         return this;
     }
-    static getRootAsForecastNextHour(bb, obj) {
-        return (obj || new ForecastNextHour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    static getRootAsNextHourForecastData(bb, obj) {
+        return (obj || new NextHourForecastData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    static getSizePrefixedRootAsForecastNextHour(bb, obj) {
+    static getSizePrefixedRootAsNextHourForecastData(bb, obj) {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-        return (obj || new ForecastNextHour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+        return (obj || new NextHourForecastData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
     metadata(obj) {
         const offset = this.bb.__offset(this.bb_pos, 4);
@@ -34,7 +34,7 @@ export class ForecastNextHour {
     }
     summary(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? (obj || new Summary()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+        return offset ? (obj || new ForecastPeriodSummary()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
     }
     summaryLength() {
         const offset = this.bb.__offset(this.bb_pos, 8);
@@ -50,13 +50,13 @@ export class ForecastNextHour {
     }
     minutes(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? (obj || new Minute()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+        return offset ? (obj || new ForecastMinute()).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
     }
     minutesLength() {
         const offset = this.bb.__offset(this.bb_pos, 14);
         return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
     }
-    static startForecastNextHour(builder) {
+    static startNextHourForecastData(builder) {
         builder.startObject(6);
     }
     static addMetadata(builder, metadataOffset) {
@@ -107,18 +107,18 @@ export class ForecastNextHour {
     static startMinutesVector(builder, numElems) {
         builder.startVector(4, numElems, 4);
     }
-    static endForecastNextHour(builder) {
+    static endNextHourForecastData(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createForecastNextHour(builder, metadataOffset, conditionOffset, summaryOffset, forecastStart, forecastEnd, minutesOffset) {
-        ForecastNextHour.startForecastNextHour(builder);
-        ForecastNextHour.addMetadata(builder, metadataOffset);
-        ForecastNextHour.addCondition(builder, conditionOffset);
-        ForecastNextHour.addSummary(builder, summaryOffset);
-        ForecastNextHour.addForecastStart(builder, forecastStart);
-        ForecastNextHour.addForecastEnd(builder, forecastEnd);
-        ForecastNextHour.addMinutes(builder, minutesOffset);
-        return ForecastNextHour.endForecastNextHour(builder);
+    static createNextHourForecastData(builder, metadataOffset, conditionOffset, summaryOffset, forecastStart, forecastEnd, minutesOffset) {
+        NextHourForecastData.startNextHourForecastData(builder);
+        NextHourForecastData.addMetadata(builder, metadataOffset);
+        NextHourForecastData.addCondition(builder, conditionOffset);
+        NextHourForecastData.addSummary(builder, summaryOffset);
+        NextHourForecastData.addForecastStart(builder, forecastStart);
+        NextHourForecastData.addForecastEnd(builder, forecastEnd);
+        NextHourForecastData.addMinutes(builder, minutesOffset);
+        return NextHourForecastData.endNextHourForecastData(builder);
     }
 }

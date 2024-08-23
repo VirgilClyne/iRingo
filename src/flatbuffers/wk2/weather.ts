@@ -5,13 +5,13 @@
 import * as flatbuffers from 'flatbuffers';
 
 import { AirQuality } from '../wk2/air-quality.js';
-import { CurrentWeather } from '../wk2/current-weather.js';
-import { ForecastDaily } from '../wk2/forecast-daily.js';
-import { ForecastHourly } from '../wk2/forecast-hourly.js';
-import { ForecastNextHour } from '../wk2/forecast-next-hour.js';
+import { CurrentWeatherData } from '../wk2/current-weather-data.js';
+import { DailyForecastData } from '../wk2/daily-forecast-data.js';
 import { HistoricalComparison } from '../wk2/historical-comparison.js';
+import { HourlyForecastData } from '../wk2/hourly-forecast-data.js';
 import { News } from '../wk2/news.js';
-import { WeatherAlert } from '../wk2/weather-alert.js';
+import { NextHourForecastData } from '../wk2/next-hour-forecast-data.js';
+import { WeatherAlertCollectionData } from '../wk2/weather-alert-collection-data.js';
 import { weatherChanges } from '../wk2/weather-changes.js';
 
 
@@ -38,24 +38,24 @@ airQuality(obj?:AirQuality):AirQuality|null {
   return offset ? (obj || new AirQuality()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-currentWeather(obj?:CurrentWeather):CurrentWeather|null {
+currentWeather(obj?:CurrentWeatherData):CurrentWeatherData|null {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? (obj || new CurrentWeather()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new CurrentWeatherData()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-forecastDaily(obj?:ForecastDaily):ForecastDaily|null {
+forecastDaily(obj?:DailyForecastData):DailyForecastData|null {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? (obj || new ForecastDaily()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new DailyForecastData()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-forecastHourly(obj?:ForecastHourly):ForecastHourly|null {
+forecastHourly(obj?:HourlyForecastData):HourlyForecastData|null {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? (obj || new ForecastHourly()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new HourlyForecastData()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-forecastNextHour(obj?:ForecastNextHour):ForecastNextHour|null {
+forecastNextHour(obj?:NextHourForecastData):NextHourForecastData|null {
   const offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? (obj || new ForecastNextHour()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new NextHourForecastData()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
 news(obj?:News):News|null {
@@ -63,9 +63,9 @@ news(obj?:News):News|null {
   return offset ? (obj || new News()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-weatherAlerts(obj?:WeatherAlert):WeatherAlert|null {
+weatherAlerts(obj?:WeatherAlertCollectionData):WeatherAlertCollectionData|null {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? (obj || new WeatherAlert()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new WeatherAlertCollectionData()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
 weatherChanges(obj?:weatherChanges):weatherChanges|null {

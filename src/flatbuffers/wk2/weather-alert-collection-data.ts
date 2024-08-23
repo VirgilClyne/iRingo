@@ -8,22 +8,22 @@ import { Metadata } from '../wk2/metadata.js';
 import { WeatherAlertSummary } from '../wk2/weather-alert-summary.js';
 
 
-export class WeatherAlert {
+export class WeatherAlertCollectionData {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):WeatherAlert {
+  __init(i:number, bb:flatbuffers.ByteBuffer):WeatherAlertCollectionData {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsWeatherAlert(bb:flatbuffers.ByteBuffer, obj?:WeatherAlert):WeatherAlert {
-  return (obj || new WeatherAlert()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsWeatherAlertCollectionData(bb:flatbuffers.ByteBuffer, obj?:WeatherAlertCollectionData):WeatherAlertCollectionData {
+  return (obj || new WeatherAlertCollectionData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsWeatherAlert(bb:flatbuffers.ByteBuffer, obj?:WeatherAlert):WeatherAlert {
+static getSizePrefixedRootAsWeatherAlertCollectionData(bb:flatbuffers.ByteBuffer, obj?:WeatherAlertCollectionData):WeatherAlertCollectionData {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new WeatherAlert()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new WeatherAlertCollectionData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 metadata(obj?:Metadata):Metadata|null {
@@ -48,7 +48,7 @@ alertsLength():number {
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
-static startWeatherAlert(builder:flatbuffers.Builder) {
+static startWeatherAlertCollectionData(builder:flatbuffers.Builder) {
   builder.startObject(3);
 }
 
@@ -76,16 +76,16 @@ static startAlertsVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 }
 
-static endWeatherAlert(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endWeatherAlertCollectionData(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createWeatherAlert(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, detailsUrlOffset:flatbuffers.Offset, alertsOffset:flatbuffers.Offset):flatbuffers.Offset {
-  WeatherAlert.startWeatherAlert(builder);
-  WeatherAlert.addMetadata(builder, metadataOffset);
-  WeatherAlert.addDetailsUrl(builder, detailsUrlOffset);
-  WeatherAlert.addAlerts(builder, alertsOffset);
-  return WeatherAlert.endWeatherAlert(builder);
+static createWeatherAlertCollectionData(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, detailsUrlOffset:flatbuffers.Offset, alertsOffset:flatbuffers.Offset):flatbuffers.Offset {
+  WeatherAlertCollectionData.startWeatherAlertCollectionData(builder);
+  WeatherAlertCollectionData.addMetadata(builder, metadataOffset);
+  WeatherAlertCollectionData.addDetailsUrl(builder, detailsUrlOffset);
+  WeatherAlertCollectionData.addAlerts(builder, alertsOffset);
+  return WeatherAlertCollectionData.endWeatherAlertCollectionData(builder);
 }
 }

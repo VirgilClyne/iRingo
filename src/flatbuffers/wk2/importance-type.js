@@ -8,6 +8,4 @@ export var ImportanceType;
     ImportanceType[ImportanceType["UNKNOWN3"] = 3] = "UNKNOWN3";
     ImportanceType[ImportanceType["UNKNOWN4"] = 4] = "UNKNOWN4";
     ImportanceType[ImportanceType["UNKNOWN5"] = 5] = "UNKNOWN5";
-    ImportanceType[ImportanceType["UNKNOWN6"] = 6] = "UNKNOWN6";
-    ImportanceType[ImportanceType["UNKNOWN7"] = 7] = "UNKNOWN7";
 })(ImportanceType || (ImportanceType = {}));

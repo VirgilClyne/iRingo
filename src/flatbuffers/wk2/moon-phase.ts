@@ -3,13 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
 export enum MoonPhase {
-  UNKNOWN0 = 0,
-  UNKNOWN1 = 1,
-  UNKNOWN2 = 2,
+  NEW = 0,
+  WAXING_CRESCENT = 1,
+  FIRST_QUARTER = 2,
   WAXING_GIBBOUS = 3,
   FULL = 4,
   WANING_GIBBOUS = 5,
   THIRD_QUARTER = 6,
-  WANING_CRESCENT = 7,
-  UNKNOWN8 = 8
+  WANING_CRESCENT = 7
 }

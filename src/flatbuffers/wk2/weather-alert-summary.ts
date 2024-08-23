@@ -4,30 +4,30 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { CertaintyType } from '../wk2/certainty-type.js';
+import { Certainty } from '../wk2/certainty.js';
 import { ImportanceType } from '../wk2/importance-type.js';
 import { ResponseType } from '../wk2/response-type.js';
-import { SeverityType } from '../wk2/severity-type.js';
+import { Severity } from '../wk2/severity.js';
 import { SignificanceType } from '../wk2/significance-type.js';
-import { UrgencyType } from '../wk2/urgency-type.js';
+import { Urgency } from '../wk2/urgency.js';
 
 
-export class Alert {
+export class WeatherAlertSummary {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):Alert {
+  __init(i:number, bb:flatbuffers.ByteBuffer):WeatherAlertSummary {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsAlert(bb:flatbuffers.ByteBuffer, obj?:Alert):Alert {
-  return (obj || new Alert()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsWeatherAlertSummary(bb:flatbuffers.ByteBuffer, obj?:WeatherAlertSummary):WeatherAlertSummary {
+  return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsAlert(bb:flatbuffers.ByteBuffer, obj?:Alert):Alert {
+static getSizePrefixedRootAsWeatherAlertSummary(bb:flatbuffers.ByteBuffer, obj?:WeatherAlertSummary):WeatherAlertSummary {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new Alert()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 id():number {
@@ -114,9 +114,9 @@ phenomenon(optionalEncoding?:any):string|Uint8Array|null {
   return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
-severity():SeverityType {
+severity():Severity {
   const offset = this.bb!.__offset(this.bb_pos, 32);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : SeverityType.UNKNOWN;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : Severity.UNKNOWN;
 }
 
 significance():SignificanceType {
@@ -138,14 +138,14 @@ eventSource(optionalEncoding?:any):string|Uint8Array|null {
   return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
-urgency():UrgencyType {
+urgency():Urgency {
   const offset = this.bb!.__offset(this.bb_pos, 40);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : UrgencyType.UNKNOWN;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : Urgency.UNKNOWN;
 }
 
-certainty():CertaintyType {
+certainty():Certainty {
   const offset = this.bb!.__offset(this.bb_pos, 42);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : CertaintyType.UNKNOWN;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : Certainty.UNKNOWN;
 }
 
 importance():ImportanceType {
@@ -178,7 +178,7 @@ unknown24():number {
   return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
 }
 
-static startAlert(builder:flatbuffers.Builder) {
+static startWeatherAlertSummary(builder:flatbuffers.Builder) {
   builder.startObject(24);
 }
 
@@ -238,8 +238,8 @@ static addPhenomenon(builder:flatbuffers.Builder, phenomenonOffset:flatbuffers.O
   builder.addFieldOffset(13, phenomenonOffset, 0);
 }
 
-static addSeverity(builder:flatbuffers.Builder, severity:SeverityType) {
-  builder.addFieldInt8(14, severity, SeverityType.UNKNOWN);
+static addSeverity(builder:flatbuffers.Builder, severity:Severity) {
+  builder.addFieldInt8(14, severity, Severity.UNKNOWN);
 }
 
 static addSignificance(builder:flatbuffers.Builder, significance:SignificanceType) {
@@ -254,12 +254,12 @@ static addEventSource(builder:flatbuffers.Builder, eventSourceOffset:flatbuffers
   builder.addFieldOffset(17, eventSourceOffset, 0);
 }
 
-static addUrgency(builder:flatbuffers.Builder, urgency:UrgencyType) {
-  builder.addFieldInt8(18, urgency, UrgencyType.UNKNOWN);
+static addUrgency(builder:flatbuffers.Builder, urgency:Urgency) {
+  builder.addFieldInt8(18, urgency, Urgency.UNKNOWN);
 }
 
-static addCertainty(builder:flatbuffers.Builder, certainty:CertaintyType) {
-  builder.addFieldInt8(19, certainty, CertaintyType.UNKNOWN);
+static addCertainty(builder:flatbuffers.Builder, certainty:Certainty) {
+  builder.addFieldInt8(19, certainty, Certainty.UNKNOWN);
 }
 
 static addImportance(builder:flatbuffers.Builder, importance:ImportanceType) {
@@ -290,37 +290,37 @@ static addUnknown24(builder:flatbuffers.Builder, unknown24:number) {
   builder.addFieldInt8(23, unknown24, 0);
 }
 
-static endAlert(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endWeatherAlertSummary(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createAlert(builder:flatbuffers.Builder, id:number, areaIdOffset:flatbuffers.Offset, unknown3:number, attributionUrlOffset:flatbuffers.Offset, countryCodeOffset:flatbuffers.Offset, descriptionOffset:flatbuffers.Offset, tokenOffset:flatbuffers.Offset, effectiveTime:number, expireTime:number, issuedTime:number, eventOnsetTime:number, eventEndTime:number, detailsUrlOffset:flatbuffers.Offset, phenomenonOffset:flatbuffers.Offset, severity:SeverityType, significance:SignificanceType, sourceOffset:flatbuffers.Offset, eventSourceOffset:flatbuffers.Offset, urgency:UrgencyType, certainty:CertaintyType, importance:ImportanceType, responsesOffset:flatbuffers.Offset, unknown23:number, unknown24:number):flatbuffers.Offset {
-  Alert.startAlert(builder);
-  Alert.addId(builder, id);
-  Alert.addAreaId(builder, areaIdOffset);
-  Alert.addUnknown3(builder, unknown3);
-  Alert.addAttributionUrl(builder, attributionUrlOffset);
-  Alert.addCountryCode(builder, countryCodeOffset);
-  Alert.addDescription(builder, descriptionOffset);
-  Alert.addToken(builder, tokenOffset);
-  Alert.addEffectiveTime(builder, effectiveTime);
-  Alert.addExpireTime(builder, expireTime);
-  Alert.addIssuedTime(builder, issuedTime);
-  Alert.addEventOnsetTime(builder, eventOnsetTime);
-  Alert.addEventEndTime(builder, eventEndTime);
-  Alert.addDetailsUrl(builder, detailsUrlOffset);
-  Alert.addPhenomenon(builder, phenomenonOffset);
-  Alert.addSeverity(builder, severity);
-  Alert.addSignificance(builder, significance);
-  Alert.addSource(builder, sourceOffset);
-  Alert.addEventSource(builder, eventSourceOffset);
-  Alert.addUrgency(builder, urgency);
-  Alert.addCertainty(builder, certainty);
-  Alert.addImportance(builder, importance);
-  Alert.addResponses(builder, responsesOffset);
-  Alert.addUnknown23(builder, unknown23);
-  Alert.addUnknown24(builder, unknown24);
-  return Alert.endAlert(builder);
+static createWeatherAlertSummary(builder:flatbuffers.Builder, id:number, areaIdOffset:flatbuffers.Offset, unknown3:number, attributionUrlOffset:flatbuffers.Offset, countryCodeOffset:flatbuffers.Offset, descriptionOffset:flatbuffers.Offset, tokenOffset:flatbuffers.Offset, effectiveTime:number, expireTime:number, issuedTime:number, eventOnsetTime:number, eventEndTime:number, detailsUrlOffset:flatbuffers.Offset, phenomenonOffset:flatbuffers.Offset, severity:Severity, significance:SignificanceType, sourceOffset:flatbuffers.Offset, eventSourceOffset:flatbuffers.Offset, urgency:Urgency, certainty:Certainty, importance:ImportanceType, responsesOffset:flatbuffers.Offset, unknown23:number, unknown24:number):flatbuffers.Offset {
+  WeatherAlertSummary.startWeatherAlertSummary(builder);
+  WeatherAlertSummary.addId(builder, id);
+  WeatherAlertSummary.addAreaId(builder, areaIdOffset);
+  WeatherAlertSummary.addUnknown3(builder, unknown3);
+  WeatherAlertSummary.addAttributionUrl(builder, attributionUrlOffset);
+  WeatherAlertSummary.addCountryCode(builder, countryCodeOffset);
+  WeatherAlertSummary.addDescription(builder, descriptionOffset);
+  WeatherAlertSummary.addToken(builder, tokenOffset);
+  WeatherAlertSummary.addEffectiveTime(builder, effectiveTime);
+  WeatherAlertSummary.addExpireTime(builder, expireTime);
+  WeatherAlertSummary.addIssuedTime(builder, issuedTime);
+  WeatherAlertSummary.addEventOnsetTime(builder, eventOnsetTime);
+  WeatherAlertSummary.addEventEndTime(builder, eventEndTime);
+  WeatherAlertSummary.addDetailsUrl(builder, detailsUrlOffset);
+  WeatherAlertSummary.addPhenomenon(builder, phenomenonOffset);
+  WeatherAlertSummary.addSeverity(builder, severity);
+  WeatherAlertSummary.addSignificance(builder, significance);
+  WeatherAlertSummary.addSource(builder, sourceOffset);
+  WeatherAlertSummary.addEventSource(builder, eventSourceOffset);
+  WeatherAlertSummary.addUrgency(builder, urgency);
+  WeatherAlertSummary.addCertainty(builder, certainty);
+  WeatherAlertSummary.addImportance(builder, importance);
+  WeatherAlertSummary.addResponses(builder, responsesOffset);
+  WeatherAlertSummary.addUnknown23(builder, unknown23);
+  WeatherAlertSummary.addUnknown24(builder, unknown24);
+  return WeatherAlertSummary.endWeatherAlertSummary(builder);
 }
 }

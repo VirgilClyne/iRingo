@@ -2,13 +2,11 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-export enum UrgencyType {
+export enum Certainty {
   UNKNOWN = 0,
   UNKNOWN1 = 1,
-  EXPECTED = 2,
-  FUTURE = 3,
+  LIKELY = 2,
+  POSSIBLE = 3,
   UNKNOWN4 = 4,
-  UNKNOWN5 = 5,
-  UNKNOWN6 = 6,
-  UNKNOWN7 = 7
+  UNKNOWN5 = 5
 }

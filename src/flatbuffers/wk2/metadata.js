@@ -37,9 +37,9 @@ export class Metadata {
         const offset = this.bb.__offset(this.bb_pos, 12);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
-    unknown5() {
+    providerLogo(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
     }
     providerName(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 16);
@@ -99,8 +99,8 @@ export class Metadata {
     static addLongitude(builder, longitude) {
         builder.addFieldFloat32(4, longitude, 0.0);
     }
-    static addUnknown5(builder, unknown5) {
-        builder.addFieldInt32(5, unknown5, 0);
+    static addProviderLogo(builder, providerLogoOffset) {
+        builder.addFieldOffset(5, providerLogoOffset, 0);
     }
     static addProviderName(builder, providerNameOffset) {
         builder.addFieldOffset(6, providerNameOffset, 0);
@@ -136,14 +136,14 @@ export class Metadata {
         const offset = builder.endObject();
         return offset;
     }
-    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, unknown5, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11, unknown12, unknown13, unknown14, unknown15) {
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11, unknown12, unknown13, unknown14, unknown15) {
         Metadata.startMetadata(builder);
         Metadata.addAttributionUrl(builder, attributionUrlOffset);
         Metadata.addExpireTime(builder, expireTime);
         Metadata.addLanguage(builder, languageOffset);
         Metadata.addLatitude(builder, latitude);
         Metadata.addLongitude(builder, longitude);
-        Metadata.addUnknown5(builder, unknown5);
+        Metadata.addProviderLogo(builder, providerLogoOffset);
         Metadata.addProviderName(builder, providerNameOffset);
         Metadata.addReadTime(builder, readTime);
         Metadata.addReportedTime(builder, reportedTime);

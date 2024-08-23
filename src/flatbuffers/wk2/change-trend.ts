@@ -2,14 +2,12 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-export enum ChangeType {
+export enum ChangeTrend {
   STEADY = 0,
   INC = 1,
   DEC = 2,
   UNKNOWN3 = 3,
   UNKNOWN4 = 4,
   UNKNOWN5 = 5,
-  UNKNOWN6 = 6,
-  UNKNOWN7 = 7,
-  UNKNOWN8 = 8
+  UNKNOWN6 = 6
 }

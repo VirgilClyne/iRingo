@@ -31,7 +31,7 @@ export var ConditionCode;
     ConditionCode[ConditionCode["SNOW"] = 26] = "SNOW";
     ConditionCode[ConditionCode["UNKNOWN27"] = 27] = "UNKNOWN27";
     ConditionCode[ConditionCode["UNKNOWN28"] = 28] = "UNKNOWN28";
-    ConditionCode[ConditionCode["UNKNOWN29"] = 29] = "UNKNOWN29";
+    ConditionCode[ConditionCode["FREEZING_DRIZZLE"] = 29] = "FREEZING_DRIZZLE";
     ConditionCode[ConditionCode["THUNDERSTORMS"] = 30] = "THUNDERSTORMS";
     ConditionCode[ConditionCode["UNKNOWN31"] = 31] = "UNKNOWN31";
     ConditionCode[ConditionCode["WINDY"] = 32] = "WINDY";

@@ -5,28 +5,28 @@
 import * as flatbuffers from 'flatbuffers';
 
 import { ConditionCode } from '../wk2/condition-code.js';
-import { Forecast } from '../wk2/forecast.js';
+import { DayPartForecast } from '../wk2/day-part-forecast.js';
 import { MoonPhase } from '../wk2/moon-phase.js';
 import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
 
 
-export class Day {
+export class DayWeatherConditions {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):Day {
+  __init(i:number, bb:flatbuffers.ByteBuffer):DayWeatherConditions {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsDay(bb:flatbuffers.ByteBuffer, obj?:Day):Day {
-  return (obj || new Day()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsDayWeatherConditions(bb:flatbuffers.ByteBuffer, obj?:DayWeatherConditions):DayWeatherConditions {
+  return (obj || new DayWeatherConditions()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsDay(bb:flatbuffers.ByteBuffer, obj?:Day):Day {
+static getSizePrefixedRootAsDayWeatherConditions(bb:flatbuffers.ByteBuffer, obj?:DayWeatherConditions):DayWeatherConditions {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new Day()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new DayWeatherConditions()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 forecastStart():number {
@@ -61,7 +61,7 @@ maxUvIndex():number {
 
 moonPhase():MoonPhase {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : MoonPhase.UNKNOWN0;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : MoonPhase.NEW;
 }
 
 moonrise():number {
@@ -199,22 +199,22 @@ visibilityMin():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
-daytimeForecast(obj?:Forecast):Forecast|null {
+daytimeForecast(obj?:DayPartForecast):DayPartForecast|null {
   const offset = this.bb!.__offset(this.bb_pos, 70);
-  return offset ? (obj || new Forecast()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new DayPartForecast()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-overnightForecast(obj?:Forecast):Forecast|null {
+overnightForecast(obj?:DayPartForecast):DayPartForecast|null {
   const offset = this.bb!.__offset(this.bb_pos, 72);
-  return offset ? (obj || new Forecast()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new DayPartForecast()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-restOfDayForecast(obj?:Forecast):Forecast|null {
+restOfDayForecast(obj?:DayPartForecast):DayPartForecast|null {
   const offset = this.bb!.__offset(this.bb_pos, 74);
-  return offset ? (obj || new Forecast()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new DayPartForecast()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
-static startDay(builder:flatbuffers.Builder) {
+static startDayWeatherConditions(builder:flatbuffers.Builder) {
   builder.startObject(36);
 }
 
@@ -243,7 +243,7 @@ static addMaxUvIndex(builder:flatbuffers.Builder, maxUvIndex:number) {
 }
 
 static addMoonPhase(builder:flatbuffers.Builder, moonPhase:MoonPhase) {
-  builder.addFieldInt8(6, moonPhase, MoonPhase.UNKNOWN0);
+  builder.addFieldInt8(6, moonPhase, MoonPhase.NEW);
 }
 
 static addMoonrise(builder:flatbuffers.Builder, moonrise:number) {
@@ -374,7 +374,7 @@ static addRestOfDayForecast(builder:flatbuffers.Builder, restOfDayForecastOffset
   builder.addFieldOffset(35, restOfDayForecastOffset, 0);
 }
 
-static endDay(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endDayWeatherConditions(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }

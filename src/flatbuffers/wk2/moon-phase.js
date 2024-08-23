@@ -2,13 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 export var MoonPhase;
 (function (MoonPhase) {
-    MoonPhase[MoonPhase["UNKNOWN0"] = 0] = "UNKNOWN0";
-    MoonPhase[MoonPhase["UNKNOWN1"] = 1] = "UNKNOWN1";
-    MoonPhase[MoonPhase["UNKNOWN2"] = 2] = "UNKNOWN2";
+    MoonPhase[MoonPhase["NEW"] = 0] = "NEW";
+    MoonPhase[MoonPhase["WAXING_CRESCENT"] = 1] = "WAXING_CRESCENT";
+    MoonPhase[MoonPhase["FIRST_QUARTER"] = 2] = "FIRST_QUARTER";
     MoonPhase[MoonPhase["WAXING_GIBBOUS"] = 3] = "WAXING_GIBBOUS";
     MoonPhase[MoonPhase["FULL"] = 4] = "FULL";
     MoonPhase[MoonPhase["WANING_GIBBOUS"] = 5] = "WANING_GIBBOUS";
     MoonPhase[MoonPhase["THIRD_QUARTER"] = 6] = "THIRD_QUARTER";
     MoonPhase[MoonPhase["WANING_CRESCENT"] = 7] = "WANING_CRESCENT";
-    MoonPhase[MoonPhase["UNKNOWN8"] = 8] = "UNKNOWN8";
 })(MoonPhase || (MoonPhase = {}));

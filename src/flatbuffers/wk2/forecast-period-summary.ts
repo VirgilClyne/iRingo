@@ -7,22 +7,22 @@ import * as flatbuffers from 'flatbuffers';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
 
 
-export class Summary {
+export class ForecastPeriodSummary {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):Summary {
+  __init(i:number, bb:flatbuffers.ByteBuffer):ForecastPeriodSummary {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsSummary(bb:flatbuffers.ByteBuffer, obj?:Summary):Summary {
-  return (obj || new Summary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsForecastPeriodSummary(bb:flatbuffers.ByteBuffer, obj?:ForecastPeriodSummary):ForecastPeriodSummary {
+  return (obj || new ForecastPeriodSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsSummary(bb:flatbuffers.ByteBuffer, obj?:Summary):Summary {
+static getSizePrefixedRootAsForecastPeriodSummary(bb:flatbuffers.ByteBuffer, obj?:ForecastPeriodSummary):ForecastPeriodSummary {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new Summary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new ForecastPeriodSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 startTime():number {
@@ -50,7 +50,7 @@ precipitationIntensity():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
-static startSummary(builder:flatbuffers.Builder) {
+static startForecastPeriodSummary(builder:flatbuffers.Builder) {
   builder.startObject(5);
 }
 
@@ -74,18 +74,18 @@ static addPrecipitationIntensity(builder:flatbuffers.Builder, precipitationInten
   builder.addFieldFloat32(4, precipitationIntensity, 0.0);
 }
 
-static endSummary(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endForecastPeriodSummary(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createSummary(builder:flatbuffers.Builder, startTime:number, endTime:number, condition:PrecipitationType, precipitationChance:number, precipitationIntensity:number):flatbuffers.Offset {
-  Summary.startSummary(builder);
-  Summary.addStartTime(builder, startTime);
-  Summary.addEndTime(builder, endTime);
-  Summary.addCondition(builder, condition);
-  Summary.addPrecipitationChance(builder, precipitationChance);
-  Summary.addPrecipitationIntensity(builder, precipitationIntensity);
-  return Summary.endSummary(builder);
+static createForecastPeriodSummary(builder:flatbuffers.Builder, startTime:number, endTime:number, condition:PrecipitationType, precipitationChance:number, precipitationIntensity:number):flatbuffers.Offset {
+  ForecastPeriodSummary.startForecastPeriodSummary(builder);
+  ForecastPeriodSummary.addStartTime(builder, startTime);
+  ForecastPeriodSummary.addEndTime(builder, endTime);
+  ForecastPeriodSummary.addCondition(builder, condition);
+  ForecastPeriodSummary.addPrecipitationChance(builder, precipitationChance);
+  ForecastPeriodSummary.addPrecipitationIntensity(builder, precipitationIntensity);
+  return ForecastPeriodSummary.endForecastPeriodSummary(builder);
 }
 }

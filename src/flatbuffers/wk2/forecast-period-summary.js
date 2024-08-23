@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import * as flatbuffers from 'flatbuffers';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
-export class Summary {
+export class ForecastPeriodSummary {
     bb = null;
     bb_pos = 0;
     __init(i, bb) {
@@ -10,12 +10,12 @@ export class Summary {
         this.bb = bb;
         return this;
     }
-    static getRootAsSummary(bb, obj) {
-        return (obj || new Summary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    static getRootAsForecastPeriodSummary(bb, obj) {
+        return (obj || new ForecastPeriodSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    static getSizePrefixedRootAsSummary(bb, obj) {
+    static getSizePrefixedRootAsForecastPeriodSummary(bb, obj) {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-        return (obj || new Summary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+        return (obj || new ForecastPeriodSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
     startTime() {
         const offset = this.bb.__offset(this.bb_pos, 4);
@@ -37,7 +37,7 @@ export class Summary {
         const offset = this.bb.__offset(this.bb_pos, 12);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
-    static startSummary(builder) {
+    static startForecastPeriodSummary(builder) {
         builder.startObject(5);
     }
     static addStartTime(builder, startTime) {
@@ -55,17 +55,17 @@ export class Summary {
     static addPrecipitationIntensity(builder, precipitationIntensity) {
         builder.addFieldFloat32(4, precipitationIntensity, 0.0);
     }
-    static endSummary(builder) {
+    static endForecastPeriodSummary(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createSummary(builder, startTime, endTime, condition, precipitationChance, precipitationIntensity) {
-        Summary.startSummary(builder);
-        Summary.addStartTime(builder, startTime);
-        Summary.addEndTime(builder, endTime);
-        Summary.addCondition(builder, condition);
-        Summary.addPrecipitationChance(builder, precipitationChance);
-        Summary.addPrecipitationIntensity(builder, precipitationIntensity);
-        return Summary.endSummary(builder);
+    static createForecastPeriodSummary(builder, startTime, endTime, condition, precipitationChance, precipitationIntensity) {
+        ForecastPeriodSummary.startForecastPeriodSummary(builder);
+        ForecastPeriodSummary.addStartTime(builder, startTime);
+        ForecastPeriodSummary.addEndTime(builder, endTime);
+        ForecastPeriodSummary.addCondition(builder, condition);
+        ForecastPeriodSummary.addPrecipitationChance(builder, precipitationChance);
+        ForecastPeriodSummary.addPrecipitationIntensity(builder, precipitationIntensity);
+        return ForecastPeriodSummary.endForecastPeriodSummary(builder);
     }
 }

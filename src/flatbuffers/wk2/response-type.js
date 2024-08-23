@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 export var ResponseType;
 (function (ResponseType) {
-    ResponseType[ResponseType["UNKNOWN"] = 0] = "UNKNOWN";
+    ResponseType[ResponseType["UNKNOWN0"] = 0] = "UNKNOWN0";
     ResponseType[ResponseType["UNKNOWN1"] = 1] = "UNKNOWN1";
     ResponseType[ResponseType["UNKNOWN2"] = 2] = "UNKNOWN2";
     ResponseType[ResponseType["UNKNOWN3"] = 3] = "UNKNOWN3";

@@ -4,7 +4,7 @@ import * as flatbuffers from 'flatbuffers';
 import { ConditionCode } from '../wk2/condition-code.js';
 import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
-export class Forecast {
+export class DayPartForecast {
     bb = null;
     bb_pos = 0;
     __init(i, bb) {
@@ -12,12 +12,12 @@ export class Forecast {
         this.bb = bb;
         return this;
     }
-    static getRootAsForecast(bb, obj) {
-        return (obj || new Forecast()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    static getRootAsDayPartForecast(bb, obj) {
+        return (obj || new DayPartForecast()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    static getSizePrefixedRootAsForecast(bb, obj) {
+    static getSizePrefixedRootAsDayPartForecast(bb, obj) {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-        return (obj || new Forecast()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+        return (obj || new DayPartForecast()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
@@ -115,7 +115,7 @@ export class Forecast {
         const offset = this.bb.__offset(this.bb_pos, 48);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
-    static startForecast(builder) {
+    static startDayPartForecast(builder) {
         builder.startObject(23);
     }
     static addForecastStart(builder, forecastStart) {
@@ -197,35 +197,35 @@ export class Forecast {
     static addWindSpeedMax(builder, windSpeedMax) {
         builder.addFieldFloat32(22, windSpeedMax, 0.0);
     }
-    static endForecast(builder) {
+    static endDayPartForecast(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createForecast(builder, forecastStart, forecastEnd, cloudCover, cloudCoverLowAltPct, cloudCoverMidAltPct, cloudCoverHighAltPct, conditionCode, humidity, humidityMax, humidityMin, precipitationAmount, precipitationAmountByTypeOffset, precipitationChance, precipitationType, snowfallAmount, temperatureMax, temperatureMin, visibilityMax, visibilityMin, windDirection, windGustSpeedMax, windSpeed, windSpeedMax) {
-        Forecast.startForecast(builder);
-        Forecast.addForecastStart(builder, forecastStart);
-        Forecast.addForecastEnd(builder, forecastEnd);
-        Forecast.addCloudCover(builder, cloudCover);
-        Forecast.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
-        Forecast.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
-        Forecast.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
-        Forecast.addConditionCode(builder, conditionCode);
-        Forecast.addHumidity(builder, humidity);
-        Forecast.addHumidityMax(builder, humidityMax);
-        Forecast.addHumidityMin(builder, humidityMin);
-        Forecast.addPrecipitationAmount(builder, precipitationAmount);
-        Forecast.addPrecipitationAmountByType(builder, precipitationAmountByTypeOffset);
-        Forecast.addPrecipitationChance(builder, precipitationChance);
-        Forecast.addPrecipitationType(builder, precipitationType);
-        Forecast.addSnowfallAmount(builder, snowfallAmount);
-        Forecast.addTemperatureMax(builder, temperatureMax);
-        Forecast.addTemperatureMin(builder, temperatureMin);
-        Forecast.addVisibilityMax(builder, visibilityMax);
-        Forecast.addVisibilityMin(builder, visibilityMin);
-        Forecast.addWindDirection(builder, windDirection);
-        Forecast.addWindGustSpeedMax(builder, windGustSpeedMax);
-        Forecast.addWindSpeed(builder, windSpeed);
-        Forecast.addWindSpeedMax(builder, windSpeedMax);
-        return Forecast.endForecast(builder);
+    static createDayPartForecast(builder, forecastStart, forecastEnd, cloudCover, cloudCoverLowAltPct, cloudCoverMidAltPct, cloudCoverHighAltPct, conditionCode, humidity, humidityMax, humidityMin, precipitationAmount, precipitationAmountByTypeOffset, precipitationChance, precipitationType, snowfallAmount, temperatureMax, temperatureMin, visibilityMax, visibilityMin, windDirection, windGustSpeedMax, windSpeed, windSpeedMax) {
+        DayPartForecast.startDayPartForecast(builder);
+        DayPartForecast.addForecastStart(builder, forecastStart);
+        DayPartForecast.addForecastEnd(builder, forecastEnd);
+        DayPartForecast.addCloudCover(builder, cloudCover);
+        DayPartForecast.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
+        DayPartForecast.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
+        DayPartForecast.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
+        DayPartForecast.addConditionCode(builder, conditionCode);
+        DayPartForecast.addHumidity(builder, humidity);
+        DayPartForecast.addHumidityMax(builder, humidityMax);
+        DayPartForecast.addHumidityMin(builder, humidityMin);
+        DayPartForecast.addPrecipitationAmount(builder, precipitationAmount);
+        DayPartForecast.addPrecipitationAmountByType(builder, precipitationAmountByTypeOffset);
+        DayPartForecast.addPrecipitationChance(builder, precipitationChance);
+        DayPartForecast.addPrecipitationType(builder, precipitationType);
+        DayPartForecast.addSnowfallAmount(builder, snowfallAmount);
+        DayPartForecast.addTemperatureMax(builder, temperatureMax);
+        DayPartForecast.addTemperatureMin(builder, temperatureMin);
+        DayPartForecast.addVisibilityMax(builder, visibilityMax);
+        DayPartForecast.addVisibilityMin(builder, visibilityMin);
+        DayPartForecast.addWindDirection(builder, windDirection);
+        DayPartForecast.addWindGustSpeedMax(builder, windGustSpeedMax);
+        DayPartForecast.addWindSpeed(builder, windSpeed);
+        DayPartForecast.addWindSpeedMax(builder, windSpeedMax);
+        return DayPartForecast.endDayPartForecast(builder);
     }
 }

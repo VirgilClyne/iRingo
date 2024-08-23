@@ -5,7 +5,7 @@ import { ConditionCode } from '../wk2/condition-code.js';
 import { Metadata } from '../wk2/metadata.js';
 import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
 import { PressureTrend } from '../wk2/pressure-trend.js';
-export class CurrentWeather {
+export class CurrentWeatherData {
     bb = null;
     bb_pos = 0;
     __init(i, bb) {
@@ -13,12 +13,12 @@ export class CurrentWeather {
         this.bb = bb;
         return this;
     }
-    static getRootAsCurrentWeather(bb, obj) {
-        return (obj || new CurrentWeather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    static getRootAsCurrentWeatherData(bb, obj) {
+        return (obj || new CurrentWeatherData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    static getSizePrefixedRootAsCurrentWeather(bb, obj) {
+    static getSizePrefixedRootAsCurrentWeatherData(bb, obj) {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-        return (obj || new CurrentWeather()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+        return (obj || new CurrentWeatherData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
     metadata(obj) {
         const offset = this.bb.__offset(this.bb_pos, 4);
@@ -176,7 +176,7 @@ export class CurrentWeather {
         const offset = this.bb.__offset(this.bb_pos, 68);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
-    temperatureUnknown() {
+    unknown34() {
         const offset = this.bb.__offset(this.bb_pos, 70);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
@@ -204,7 +204,7 @@ export class CurrentWeather {
         const offset = this.bb.__offset(this.bb_pos, 82);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
-    static startCurrentWeather(builder) {
+    static startCurrentWeatherData(builder) {
         builder.startObject(40);
     }
     static addMetadata(builder, metadataOffset) {
@@ -366,8 +366,8 @@ export class CurrentWeather {
     static addTemperatureApparent(builder, temperatureApparent) {
         builder.addFieldFloat32(32, temperatureApparent, 0.0);
     }
-    static addTemperatureUnknown(builder, temperatureUnknown) {
-        builder.addFieldFloat32(33, temperatureUnknown, 0.0);
+    static addUnknown34(builder, unknown34) {
+        builder.addFieldFloat32(33, unknown34, 0.0);
     }
     static addTemperatureDewPoint(builder, temperatureDewPoint) {
         builder.addFieldFloat32(34, temperatureDewPoint, 0.0);
@@ -387,52 +387,52 @@ export class CurrentWeather {
     static addWindSpeed(builder, windSpeed) {
         builder.addFieldFloat32(39, windSpeed, 0.0);
     }
-    static endCurrentWeather(builder) {
+    static endCurrentWeatherData(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createCurrentWeather(builder, metadataOffset, asOf, cloudCover, cloudCoverLowAltPct, cloudCoverMidAltPct, cloudCoverHighAltPct, conditionCode, daylight, humidity, perceivedPrecipitationIntensity, precipitationAmount1h, precipitationAmount6h, precipitationAmount24h, precipitationAmountNext1h, precipitationAmountNext6h, precipitationAmountNext24h, precipitationAmountNext1hByTypeOffset, precipitationAmountNext6hByTypeOffset, precipitationAmountNext24hByTypeOffset, precipitationAmountPrevious1hByTypeOffset, precipitationAmountPrevious6hByTypeOffset, precipitationAmountPrevious24hByTypeOffset, precipitationIntensity, pressure, pressureTrend, snowfallAmount1h, snowfallAmount6h, snowfallAmount24h, snowfallAmountNext1h, snowfallAmountNext6h, snowfallAmountNext24h, temperature, temperatureApparent, temperatureUnknown, temperatureDewPoint, uvIndex, visibility, windDirection, windGust, windSpeed) {
-        CurrentWeather.startCurrentWeather(builder);
-        CurrentWeather.addMetadata(builder, metadataOffset);
-        CurrentWeather.addAsOf(builder, asOf);
-        CurrentWeather.addCloudCover(builder, cloudCover);
-        CurrentWeather.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
-        CurrentWeather.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
-        CurrentWeather.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
-        CurrentWeather.addConditionCode(builder, conditionCode);
-        CurrentWeather.addDaylight(builder, daylight);
-        CurrentWeather.addHumidity(builder, humidity);
-        CurrentWeather.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
-        CurrentWeather.addPrecipitationAmount1h(builder, precipitationAmount1h);
-        CurrentWeather.addPrecipitationAmount6h(builder, precipitationAmount6h);
-        CurrentWeather.addPrecipitationAmount24h(builder, precipitationAmount24h);
-        CurrentWeather.addPrecipitationAmountNext1h(builder, precipitationAmountNext1h);
-        CurrentWeather.addPrecipitationAmountNext6h(builder, precipitationAmountNext6h);
-        CurrentWeather.addPrecipitationAmountNext24h(builder, precipitationAmountNext24h);
-        CurrentWeather.addPrecipitationAmountNext1hByType(builder, precipitationAmountNext1hByTypeOffset);
-        CurrentWeather.addPrecipitationAmountNext6hByType(builder, precipitationAmountNext6hByTypeOffset);
-        CurrentWeather.addPrecipitationAmountNext24hByType(builder, precipitationAmountNext24hByTypeOffset);
-        CurrentWeather.addPrecipitationAmountPrevious1hByType(builder, precipitationAmountPrevious1hByTypeOffset);
-        CurrentWeather.addPrecipitationAmountPrevious6hByType(builder, precipitationAmountPrevious6hByTypeOffset);
-        CurrentWeather.addPrecipitationAmountPrevious24hByType(builder, precipitationAmountPrevious24hByTypeOffset);
-        CurrentWeather.addPrecipitationIntensity(builder, precipitationIntensity);
-        CurrentWeather.addPressure(builder, pressure);
-        CurrentWeather.addPressureTrend(builder, pressureTrend);
-        CurrentWeather.addSnowfallAmount1h(builder, snowfallAmount1h);
-        CurrentWeather.addSnowfallAmount6h(builder, snowfallAmount6h);
-        CurrentWeather.addSnowfallAmount24h(builder, snowfallAmount24h);
-        CurrentWeather.addSnowfallAmountNext1h(builder, snowfallAmountNext1h);
-        CurrentWeather.addSnowfallAmountNext6h(builder, snowfallAmountNext6h);
-        CurrentWeather.addSnowfallAmountNext24h(builder, snowfallAmountNext24h);
-        CurrentWeather.addTemperature(builder, temperature);
-        CurrentWeather.addTemperatureApparent(builder, temperatureApparent);
-        CurrentWeather.addTemperatureUnknown(builder, temperatureUnknown);
-        CurrentWeather.addTemperatureDewPoint(builder, temperatureDewPoint);
-        CurrentWeather.addUvIndex(builder, uvIndex);
-        CurrentWeather.addVisibility(builder, visibility);
-        CurrentWeather.addWindDirection(builder, windDirection);
-        CurrentWeather.addWindGust(builder, windGust);
-        CurrentWeather.addWindSpeed(builder, windSpeed);
-        return CurrentWeather.endCurrentWeather(builder);
+    static createCurrentWeatherData(builder, metadataOffset, asOf, cloudCover, cloudCoverLowAltPct, cloudCoverMidAltPct, cloudCoverHighAltPct, conditionCode, daylight, humidity, perceivedPrecipitationIntensity, precipitationAmount1h, precipitationAmount6h, precipitationAmount24h, precipitationAmountNext1h, precipitationAmountNext6h, precipitationAmountNext24h, precipitationAmountNext1hByTypeOffset, precipitationAmountNext6hByTypeOffset, precipitationAmountNext24hByTypeOffset, precipitationAmountPrevious1hByTypeOffset, precipitationAmountPrevious6hByTypeOffset, precipitationAmountPrevious24hByTypeOffset, precipitationIntensity, pressure, pressureTrend, snowfallAmount1h, snowfallAmount6h, snowfallAmount24h, snowfallAmountNext1h, snowfallAmountNext6h, snowfallAmountNext24h, temperature, temperatureApparent, unknown34, temperatureDewPoint, uvIndex, visibility, windDirection, windGust, windSpeed) {
+        CurrentWeatherData.startCurrentWeatherData(builder);
+        CurrentWeatherData.addMetadata(builder, metadataOffset);
+        CurrentWeatherData.addAsOf(builder, asOf);
+        CurrentWeatherData.addCloudCover(builder, cloudCover);
+        CurrentWeatherData.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
+        CurrentWeatherData.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
+        CurrentWeatherData.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
+        CurrentWeatherData.addConditionCode(builder, conditionCode);
+        CurrentWeatherData.addDaylight(builder, daylight);
+        CurrentWeatherData.addHumidity(builder, humidity);
+        CurrentWeatherData.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
+        CurrentWeatherData.addPrecipitationAmount1h(builder, precipitationAmount1h);
+        CurrentWeatherData.addPrecipitationAmount6h(builder, precipitationAmount6h);
+        CurrentWeatherData.addPrecipitationAmount24h(builder, precipitationAmount24h);
+        CurrentWeatherData.addPrecipitationAmountNext1h(builder, precipitationAmountNext1h);
+        CurrentWeatherData.addPrecipitationAmountNext6h(builder, precipitationAmountNext6h);
+        CurrentWeatherData.addPrecipitationAmountNext24h(builder, precipitationAmountNext24h);
+        CurrentWeatherData.addPrecipitationAmountNext1hByType(builder, precipitationAmountNext1hByTypeOffset);
+        CurrentWeatherData.addPrecipitationAmountNext6hByType(builder, precipitationAmountNext6hByTypeOffset);
+        CurrentWeatherData.addPrecipitationAmountNext24hByType(builder, precipitationAmountNext24hByTypeOffset);
+        CurrentWeatherData.addPrecipitationAmountPrevious1hByType(builder, precipitationAmountPrevious1hByTypeOffset);
+        CurrentWeatherData.addPrecipitationAmountPrevious6hByType(builder, precipitationAmountPrevious6hByTypeOffset);
+        CurrentWeatherData.addPrecipitationAmountPrevious24hByType(builder, precipitationAmountPrevious24hByTypeOffset);
+        CurrentWeatherData.addPrecipitationIntensity(builder, precipitationIntensity);
+        CurrentWeatherData.addPressure(builder, pressure);
+        CurrentWeatherData.addPressureTrend(builder, pressureTrend);
+        CurrentWeatherData.addSnowfallAmount1h(builder, snowfallAmount1h);
+        CurrentWeatherData.addSnowfallAmount6h(builder, snowfallAmount6h);
+        CurrentWeatherData.addSnowfallAmount24h(builder, snowfallAmount24h);
+        CurrentWeatherData.addSnowfallAmountNext1h(builder, snowfallAmountNext1h);
+        CurrentWeatherData.addSnowfallAmountNext6h(builder, snowfallAmountNext6h);
+        CurrentWeatherData.addSnowfallAmountNext24h(builder, snowfallAmountNext24h);
+        CurrentWeatherData.addTemperature(builder, temperature);
+        CurrentWeatherData.addTemperatureApparent(builder, temperatureApparent);
+        CurrentWeatherData.addUnknown34(builder, unknown34);
+        CurrentWeatherData.addTemperatureDewPoint(builder, temperatureDewPoint);
+        CurrentWeatherData.addUvIndex(builder, uvIndex);
+        CurrentWeatherData.addVisibility(builder, visibility);
+        CurrentWeatherData.addWindDirection(builder, windDirection);
+        CurrentWeatherData.addWindGust(builder, windGust);
+        CurrentWeatherData.addWindSpeed(builder, windSpeed);
+        return CurrentWeatherData.endCurrentWeatherData(builder);
     }
 }

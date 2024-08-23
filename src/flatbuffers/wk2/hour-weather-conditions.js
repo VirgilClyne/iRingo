@@ -4,7 +4,7 @@ import * as flatbuffers from 'flatbuffers';
 import { ConditionCode } from '../wk2/condition-code.js';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
 import { PressureTrend } from '../wk2/pressure-trend.js';
-export class Hour {
+export class HourWeatherConditions {
     bb = null;
     bb_pos = 0;
     __init(i, bb) {
@@ -12,12 +12,12 @@ export class Hour {
         this.bb = bb;
         return this;
     }
-    static getRootAsHour(bb, obj) {
-        return (obj || new Hour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    static getRootAsHourWeatherConditions(bb, obj) {
+        return (obj || new HourWeatherConditions()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    static getSizePrefixedRootAsHour(bb, obj) {
+    static getSizePrefixedRootAsHourWeatherConditions(bb, obj) {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-        return (obj || new Hour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+        return (obj || new HourWeatherConditions()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
@@ -123,7 +123,7 @@ export class Hour {
         const offset = this.bb.__offset(this.bb_pos, 54);
         return offset ? this.bb.readFloat32(this.bb_pos + offset) : 0.0;
     }
-    static startHour(builder) {
+    static startHourWeatherConditions(builder) {
         builder.startObject(26);
     }
     static addForecastStart(builder, forecastStart) {
@@ -204,38 +204,38 @@ export class Hour {
     static addWindSpeed(builder, windSpeed) {
         builder.addFieldFloat32(25, windSpeed, 0.0);
     }
-    static endHour(builder) {
+    static endHourWeatherConditions(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createHour(builder, forecastStart, cloudCover, cloudCoverLowAltPct, cloudCoverMidAltPct, cloudCoverHighAltPct, conditionCode, daylight, humidity, perceivedPrecipitationIntensity, precipitationAmount, precipitationIntensity, precipitationChance, precipitationType, pressure, pressureTrend, snowfallAmount, snowfallIntensity, temperature, temperatureApparent, unknown20, temperatureDewPoint, uvIndex, visibility, windDirection, windGust, windSpeed) {
-        Hour.startHour(builder);
-        Hour.addForecastStart(builder, forecastStart);
-        Hour.addCloudCover(builder, cloudCover);
-        Hour.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
-        Hour.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
-        Hour.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
-        Hour.addConditionCode(builder, conditionCode);
-        Hour.addDaylight(builder, daylight);
-        Hour.addHumidity(builder, humidity);
-        Hour.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
-        Hour.addPrecipitationAmount(builder, precipitationAmount);
-        Hour.addPrecipitationIntensity(builder, precipitationIntensity);
-        Hour.addPrecipitationChance(builder, precipitationChance);
-        Hour.addPrecipitationType(builder, precipitationType);
-        Hour.addPressure(builder, pressure);
-        Hour.addPressureTrend(builder, pressureTrend);
-        Hour.addSnowfallAmount(builder, snowfallAmount);
-        Hour.addSnowfallIntensity(builder, snowfallIntensity);
-        Hour.addTemperature(builder, temperature);
-        Hour.addTemperatureApparent(builder, temperatureApparent);
-        Hour.addUnknown20(builder, unknown20);
-        Hour.addTemperatureDewPoint(builder, temperatureDewPoint);
-        Hour.addUvIndex(builder, uvIndex);
-        Hour.addVisibility(builder, visibility);
-        Hour.addWindDirection(builder, windDirection);
-        Hour.addWindGust(builder, windGust);
-        Hour.addWindSpeed(builder, windSpeed);
-        return Hour.endHour(builder);
+    static createHourWeatherConditions(builder, forecastStart, cloudCover, cloudCoverLowAltPct, cloudCoverMidAltPct, cloudCoverHighAltPct, conditionCode, daylight, humidity, perceivedPrecipitationIntensity, precipitationAmount, precipitationIntensity, precipitationChance, precipitationType, pressure, pressureTrend, snowfallAmount, snowfallIntensity, temperature, temperatureApparent, unknown20, temperatureDewPoint, uvIndex, visibility, windDirection, windGust, windSpeed) {
+        HourWeatherConditions.startHourWeatherConditions(builder);
+        HourWeatherConditions.addForecastStart(builder, forecastStart);
+        HourWeatherConditions.addCloudCover(builder, cloudCover);
+        HourWeatherConditions.addCloudCoverLowAltPct(builder, cloudCoverLowAltPct);
+        HourWeatherConditions.addCloudCoverMidAltPct(builder, cloudCoverMidAltPct);
+        HourWeatherConditions.addCloudCoverHighAltPct(builder, cloudCoverHighAltPct);
+        HourWeatherConditions.addConditionCode(builder, conditionCode);
+        HourWeatherConditions.addDaylight(builder, daylight);
+        HourWeatherConditions.addHumidity(builder, humidity);
+        HourWeatherConditions.addPerceivedPrecipitationIntensity(builder, perceivedPrecipitationIntensity);
+        HourWeatherConditions.addPrecipitationAmount(builder, precipitationAmount);
+        HourWeatherConditions.addPrecipitationIntensity(builder, precipitationIntensity);
+        HourWeatherConditions.addPrecipitationChance(builder, precipitationChance);
+        HourWeatherConditions.addPrecipitationType(builder, precipitationType);
+        HourWeatherConditions.addPressure(builder, pressure);
+        HourWeatherConditions.addPressureTrend(builder, pressureTrend);
+        HourWeatherConditions.addSnowfallAmount(builder, snowfallAmount);
+        HourWeatherConditions.addSnowfallIntensity(builder, snowfallIntensity);
+        HourWeatherConditions.addTemperature(builder, temperature);
+        HourWeatherConditions.addTemperatureApparent(builder, temperatureApparent);
+        HourWeatherConditions.addUnknown20(builder, unknown20);
+        HourWeatherConditions.addTemperatureDewPoint(builder, temperatureDewPoint);
+        HourWeatherConditions.addUvIndex(builder, uvIndex);
+        HourWeatherConditions.addVisibility(builder, visibility);
+        HourWeatherConditions.addWindDirection(builder, windDirection);
+        HourWeatherConditions.addWindGust(builder, windGust);
+        HourWeatherConditions.addWindSpeed(builder, windSpeed);
+        return HourWeatherConditions.endHourWeatherConditions(builder);
     }
 }

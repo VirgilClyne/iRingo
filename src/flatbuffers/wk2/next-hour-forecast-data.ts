@@ -10,22 +10,22 @@ import { ForecastPeriodSummary } from '../wk2/forecast-period-summary.js';
 import { Metadata } from '../wk2/metadata.js';
 
 
-export class ForecastNextHour {
+export class NextHourForecastData {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):ForecastNextHour {
+  __init(i:number, bb:flatbuffers.ByteBuffer):NextHourForecastData {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsForecastNextHour(bb:flatbuffers.ByteBuffer, obj?:ForecastNextHour):ForecastNextHour {
-  return (obj || new ForecastNextHour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsNextHourForecastData(bb:flatbuffers.ByteBuffer, obj?:NextHourForecastData):NextHourForecastData {
+  return (obj || new NextHourForecastData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsForecastNextHour(bb:flatbuffers.ByteBuffer, obj?:ForecastNextHour):ForecastNextHour {
+static getSizePrefixedRootAsNextHourForecastData(bb:flatbuffers.ByteBuffer, obj?:NextHourForecastData):NextHourForecastData {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new ForecastNextHour()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new NextHourForecastData()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 metadata(obj?:Metadata):Metadata|null {
@@ -73,7 +73,7 @@ minutesLength():number {
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
-static startForecastNextHour(builder:flatbuffers.Builder) {
+static startNextHourForecastData(builder:flatbuffers.Builder) {
   builder.startObject(6);
 }
 
@@ -137,19 +137,19 @@ static startMinutesVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 }
 
-static endForecastNextHour(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endNextHourForecastData(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createForecastNextHour(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, conditionOffset:flatbuffers.Offset, summaryOffset:flatbuffers.Offset, forecastStart:number, forecastEnd:number, minutesOffset:flatbuffers.Offset):flatbuffers.Offset {
-  ForecastNextHour.startForecastNextHour(builder);
-  ForecastNextHour.addMetadata(builder, metadataOffset);
-  ForecastNextHour.addCondition(builder, conditionOffset);
-  ForecastNextHour.addSummary(builder, summaryOffset);
-  ForecastNextHour.addForecastStart(builder, forecastStart);
-  ForecastNextHour.addForecastEnd(builder, forecastEnd);
-  ForecastNextHour.addMinutes(builder, minutesOffset);
-  return ForecastNextHour.endForecastNextHour(builder);
+static createNextHourForecastData(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, conditionOffset:flatbuffers.Offset, summaryOffset:flatbuffers.Offset, forecastStart:number, forecastEnd:number, minutesOffset:flatbuffers.Offset):flatbuffers.Offset {
+  NextHourForecastData.startNextHourForecastData(builder);
+  NextHourForecastData.addMetadata(builder, metadataOffset);
+  NextHourForecastData.addCondition(builder, conditionOffset);
+  NextHourForecastData.addSummary(builder, summaryOffset);
+  NextHourForecastData.addForecastStart(builder, forecastStart);
+  NextHourForecastData.addForecastEnd(builder, forecastEnd);
+  NextHourForecastData.addMinutes(builder, minutesOffset);
+  return NextHourForecastData.endNextHourForecastData(builder);
 }
 }

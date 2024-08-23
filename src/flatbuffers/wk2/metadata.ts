@@ -54,9 +54,11 @@ longitude():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
-unknown5():number {
+providerLogo():string|null
+providerLogo(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+providerLogo(optionalEncoding?:any):string|Uint8Array|null {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
 providerName():string|null
@@ -135,8 +137,8 @@ static addLongitude(builder:flatbuffers.Builder, longitude:number) {
   builder.addFieldFloat32(4, longitude, 0.0);
 }
 
-static addUnknown5(builder:flatbuffers.Builder, unknown5:number) {
-  builder.addFieldInt32(5, unknown5, 0);
+static addProviderLogo(builder:flatbuffers.Builder, providerLogoOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(5, providerLogoOffset, 0);
 }
 
 static addProviderName(builder:flatbuffers.Builder, providerNameOffset:flatbuffers.Offset) {
@@ -184,14 +186,14 @@ static endMetadata(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, unknown5:number, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, unknown9:number, sourceType:SourceType, unknown11:number, unknown12:number, unknown13:number, unknown14:number, unknown15:number):flatbuffers.Offset {
+static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, unknown9:number, sourceType:SourceType, unknown11:number, unknown12:number, unknown13:number, unknown14:number, unknown15:number):flatbuffers.Offset {
   Metadata.startMetadata(builder);
   Metadata.addAttributionUrl(builder, attributionUrlOffset);
   Metadata.addExpireTime(builder, expireTime);
   Metadata.addLanguage(builder, languageOffset);
   Metadata.addLatitude(builder, latitude);
   Metadata.addLongitude(builder, longitude);
-  Metadata.addUnknown5(builder, unknown5);
+  Metadata.addProviderLogo(builder, providerLogoOffset);
   Metadata.addProviderName(builder, providerNameOffset);
   Metadata.addReadTime(builder, readTime);
   Metadata.addReportedTime(builder, reportedTime);

@@ -2,13 +2,11 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-export enum SeverityType {
+export enum Severity {
   UNKNOWN = 0,
-  UNKNOWN1 = 1,
+  EXTREME = 1,
   SEVERE = 2,
   MODERATE = 3,
   MINOR = 4,
-  UNKNOWN5 = 5,
-  UNKNOWN6 = 6,
-  UNKNOWN7 = 7
+  UNKNOWN5 = 5
 }

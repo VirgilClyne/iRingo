@@ -32,7 +32,7 @@ export enum ConditionCode {
   SNOW = 26,
   UNKNOWN27 = 27,
   UNKNOWN28 = 28,
-  UNKNOWN29 = 29,
+  FREEZING_DRIZZLE = 29,
   THUNDERSTORMS = 30,
   UNKNOWN31 = 31,
   WINDY = 32,
