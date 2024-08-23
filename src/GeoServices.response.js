@@ -6,7 +6,7 @@ import XML from "./XML/XML.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
+import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 
 const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.5.0(4) response");
 

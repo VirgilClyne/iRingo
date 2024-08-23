@@ -1,5 +1,6 @@
 import json from '@rollup/plugin-json';
 import commonjs from "@rollup/plugin-commonjs";
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
 	{
@@ -9,7 +10,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/GeoServices.request.beta.js',
@@ -18,7 +19,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/GeoServices.response.beta.js',
@@ -27,7 +28,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/News.request.beta.js',
@@ -36,7 +37,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	/*
 	{
@@ -45,7 +46,7 @@ export default [
 			file: 'js/News.response.beta.js',
 			format: 'es'
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	*/
 	{
@@ -55,7 +56,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/PrivateRelay.response.beta.js',
@@ -64,7 +65,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/Siri.request.beta.js',
@@ -73,7 +74,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/Siri.response.beta.js',
@@ -82,7 +83,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/TestFlight.request.beta.js',
@@ -91,7 +92,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/TestFlight.response.beta.js',
@@ -100,7 +101,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/TV.request.beta.js',
@@ -109,7 +110,7 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
 		input: 'src/TV.response.beta.js',
@@ -118,6 +119,6 @@ export default [
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},
-		plugins: [json(), commonjs()]
+		plugins: [json(), commonjs(), nodeResolve()]
 	},
 ];

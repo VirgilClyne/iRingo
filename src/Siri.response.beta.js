@@ -7,7 +7,7 @@ import setENV from "./function/setENV.mjs";
 import pako from "./pako/dist/pako.esm.mjs";
 import addgRPCHeader from "./function/addgRPCHeader.mjs";
 
-import { WireType, UnknownFieldHandler, reflectionMergePartial, MESSAGE_TYPE, MessageType, BinaryReader, isJsonObject, typeofJsonValue, jsonWriteOptions } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
+import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 
 const $ = new ENV(" iRingo: 🔍 Siri & Search v4.0.0(4001) response.beta");
 

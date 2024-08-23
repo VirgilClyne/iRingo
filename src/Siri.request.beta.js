@@ -8,7 +8,7 @@ import pako from "./pako/dist/pako.esm.mjs";
 import addgRPCHeader from "./function/addgRPCHeader.mjs";
 import modifyPegasusQueryContext from "./function/modifyPegasusQueryContext.mjs";
 
-import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "../node_modules/@protobuf-ts/runtime/build/es2015/index.js";
+import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 
 const $ = new ENV(" iRingo: 🔍 Siri v4.0.8(4036) request.beta");
 

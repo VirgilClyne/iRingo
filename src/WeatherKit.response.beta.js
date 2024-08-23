@@ -5,7 +5,7 @@ import ENV from "./ENV/ENV.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-import * as flatbuffers from "../node_modules/flatbuffers/mjs/flatbuffers.js";
+import * as flatbuffers from 'flatbuffers';
 import * as WK2 from "./flatbuffers/wk2.js";
 
 const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.8(4039) response.beta");
