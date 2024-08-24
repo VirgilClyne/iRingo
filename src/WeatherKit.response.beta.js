@@ -7,8 +7,9 @@ import setENV from "./function/setENV.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
 
 import * as flatbuffers from 'flatbuffers';
+import * as WK2 from "./flatbuffers/wk2.js";
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.13(4057) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.14(4064) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -81,6 +82,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
 							const ByteBuffer = new flatbuffers.ByteBuffer(rawBody);
+							let builder = new flatbuffers.Builder();
 							// 主机判断
 							switch (HOST) {
 								case "weatherkit.apple.com":
@@ -89,11 +91,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										/******************  initialization start  *******************/
 										//const weatherData = WK2.Weather.getRootAsWeather(body);
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer });
-										//WK2.Weather.startWeather(builder);
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											body.airQuality = weatherKit2.decode("airQuality");
-											//$.log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
-											//WK2.Weather.addAirQuality(builder, WK2.AirQuality.createAirQuality(builder, airQuality.categoryIndex, airQuality.index, airQuality.isSignificant, WK2.MetacreateMetadata(builder, builder.createString(airQuality.metaattributionUrl), airQuality.metaexpireTime, builder.createString(airQuality.metalanguage), airQuality.metalatitude, airQuality.metalongitude, builder.createString(airQuality.metaproviderName), airQuality.metareadTime, airQuality.metareportedTime, WK2.SourceType[airQuality.metasourceType], airQuality.metatemporarilyUnavailable), airQuality.pollutants.map(p => WK2.Pollutant.createPollutant(builder, p.amount, WK2.PollutantType[p.pollutantType], WK2.UnitType[p.units])), WK2.ComparisonType[airQuality.previousDayComparison], WK2.PollutantType[airQuality.primaryPollutant], airQuality.scale));
+											$.log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
+											const airQualityOffset = weatherKit2.encode(builder, "airQuality", body.airQuality);
+											WK2.Weather.addAirQuality(builder, airQualityOffset);
+											$.log(`🚧 builder6: ${JSON.stringify(builder)}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											body.currentWeather = weatherKit2.decode("currentWeather");
@@ -117,25 +120,28 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("news")) {
 											body.news = weatherKit2.decode("news");
-											//$.log(`🚧 body.news: ${JSON.stringify(body.news, null, 2)}`, "");
+											$.log(`🚧 body.news: ${JSON.stringify(body.news, null, 2)}`, "");
 											//WK2.Weather.addNews(builder, weather.news());
 										};
 										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											body.weatherAlerts = weatherKit2.decode("weatherAlerts");
-											//$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body.weatherAlerts, null, 2)}`, "");
+											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body.weatherAlerts, null, 2)}`, "");
 											//WK2.Weather.addWeatherAlerts(builder, WeatherAlertCollectionData)
 										};
 										if (url.searchParams.get("dataSets").includes("weatherChange")) {
 											body.weatherChanges = weatherKit2.decode("weatherChange");
-											//$.log(`🚧 body.weatherChanges: ${JSON.stringify(body.weatherChanges, null, 2)}`, "");
+											$.log(`🚧 body.weatherChanges: ${JSON.stringify(body.weatherChanges, null, 2)}`, "");
 											//WK2.Weather.addWeatherChanges(builder, weatherChanges)
 										};
 										if (url.searchParams.get("dataSets").includes("trendComparison")) {
 											body.historicalComparisons = weatherKit2.decode("trendComparison");
-											//$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body.historicalComparisons, null, 2)}`, "");
+											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body.historicalComparisons, null, 2)}`, "");
 											//WK2.Weather.addHistoricalComparisons(builder, historicalComparisonsData)
 										};
-										$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+										//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+										WK2.Weather.startWeather(builder);
+										let WeatherData = WK2.Weather.endWeather(builder);
+										builder.finish(WeatherData);
 										break;
 									};
 									break;
