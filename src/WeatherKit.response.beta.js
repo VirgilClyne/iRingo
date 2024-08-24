@@ -7,9 +7,8 @@ import setENV from "./function/setENV.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
 
 import * as flatbuffers from 'flatbuffers';
-import * as WK2 from "./flatbuffers/wk2.js";
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.14(4064) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.0(4070) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -82,7 +81,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
 							const ByteBuffer = new flatbuffers.ByteBuffer(rawBody);
-							let builder = new flatbuffers.Builder();
+							const Builder = new flatbuffers.Builder();
 							// 主机判断
 							switch (HOST) {
 								case "weatherkit.apple.com":
@@ -90,63 +89,54 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									if (PATH.startsWith("/api/v2/weather/")) {
 										/******************  initialization start  *******************/
 										//const weatherData = WK2.Weather.getRootAsWeather(body);
-										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer });
+										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "initialSize": 10240 });
+										const Offset = {};
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											body.airQuality = weatherKit2.decode("airQuality");
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
-											const airQualityOffset = weatherKit2.encode(builder, "airQuality", body.airQuality);
-											WK2.Weather.addAirQuality(builder, airQualityOffset);
-											$.log(`🚧 builder6: ${JSON.stringify(builder)}`, "");
+											Offset.airQualityOffset = weatherKit2.encode(Builder, "airQuality", body.airQuality);
 										};
 										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											body.currentWeather = weatherKit2.decode("currentWeather");
-											//$.log(`🚧 body.currentWeather: ${JSON.stringify(body.currentWeather, null, 2)}`, "");
-											//WK2.Weather.addCurrentWeather(builder, CurrentWeatherData);
+											$.log(`🚧 body.currentWeather: ${JSON.stringify(body.currentWeather, null, 2)}`, "");
+											Offset.currentWeatherOffset = weatherKit2.encode(Builder, "currentWeather", body.currentWeather);
 										};
 										if (url.searchParams.get("dataSets").includes("forecastDaily")) {
 											body.forecastDaily = weatherKit2.decode("forecastDaily");
 											//$.log(`🚧 body.forecastDaily: ${JSON.stringify(body.forecastDaily, null, 2)}`, "");
-											//WK2.Weather.addForecastDaily(builder, DailyForecastData);
 										};
 										if (url.searchParams.get("dataSets").includes("forecastHourly")) {
 											body.forecastHourly = weatherKit2.decode("forecastHourly");
 											//$.log(`🚧 body.forecastHourly: ${JSON.stringify(body.forecastHourly, null, 2)}`, "");
-											//WK2.Weather.addForecastHourly(builder, HourlyForecastData);
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											body.forecastNextHour = weatherKit2.decode("forecastNextHour");
 											//$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body.forecastNextHour, null, 2)}`, "");
-											//WK2.Weather.addForecastNextHour(builder, WK2.ForecastNextHour.createForecastNextHour(builder, forecastNextHour.condition.map(c => WK2.Condition.createCondition(builder, WK2.WeatherCondition[c.beginCondition], WK2.WeatherCondition[c.endCondition], WK2.ForecastToken[c.forecastToken], c.parameters.map(p => WK2.Parameter.createParameter(builder, p.date, WK2.ParameterType[p.type])), c.startTime)), forecastNextHour.forecastEnd, forecastNextHour.forecastStart, WK2.MetacreateMetadata(builder, builder.createString(forecastNextHour.metaattributionUrl), forecastNextHour.metaexpireTime, builder.createString(forecastNextHour.metalanguage), forecastNextHour.metalatitude, forecastNextHour.metalongitude, builder.createString(forecastNextHour.metaproviderName), forecastNextHour.metareadTime, forecastNextHour.metareportedTime, WK2.SourceType[forecastNextHour.metasourceType], forecastNextHour.metatemporarilyUnavailable), forecastNextHour.minutes.map(m => WK2.Minute.createMinute(builder, m.perceivedPrecipitationIntensity, m.precipitationChance, m.precipitationIntensity, m.startTime)), forecastNextHour.summary.map(s => WK2.Summary.createSummary(builder, WK2.PrecipitationType[s.condition], s.precipitationChance, s.precipitationIntensity, s.startTime))));
 										};
 										if (url.searchParams.get("dataSets").includes("news")) {
 											body.news = weatherKit2.decode("news");
 											$.log(`🚧 body.news: ${JSON.stringify(body.news, null, 2)}`, "");
-											//WK2.Weather.addNews(builder, weather.news());
 										};
 										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											body.weatherAlerts = weatherKit2.decode("weatherAlerts");
 											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body.weatherAlerts, null, 2)}`, "");
-											//WK2.Weather.addWeatherAlerts(builder, WeatherAlertCollectionData)
 										};
 										if (url.searchParams.get("dataSets").includes("weatherChange")) {
 											body.weatherChanges = weatherKit2.decode("weatherChange");
 											$.log(`🚧 body.weatherChanges: ${JSON.stringify(body.weatherChanges, null, 2)}`, "");
-											//WK2.Weather.addWeatherChanges(builder, weatherChanges)
 										};
 										if (url.searchParams.get("dataSets").includes("trendComparison")) {
 											body.historicalComparisons = weatherKit2.decode("trendComparison");
 											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body.historicalComparisons, null, 2)}`, "");
-											//WK2.Weather.addHistoricalComparisons(builder, historicalComparisonsData)
 										};
 										//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-										WK2.Weather.startWeather(builder);
-										let WeatherData = WK2.Weather.endWeather(builder);
-										builder.finish(WeatherData);
+										let WeatherData = WeatherKit2.createWeather(Builder, Offset.airQualityOffset, Offset.currentWeatherOffset, Offset.forecastDailyOffset, Offset.forecastHourlyOffset, Offset.forecastNextHourOffset, Offset.newsOffset, Offset.weatherAlertsOffset, Offset.weatherChangesOffset, Offset.historicalComparisonsOffset);
+										Builder.finish(WeatherData);
 										break;
 									};
 									break;
 							};
-							//rawBody = builder.asUint8Array(); // Of type `Uint8Array`.
+							//rawBody = Builder.asUint8Array(); // Of type `Uint8Array`.
 							break;
 						case "application/protobuf":
 						case "application/x-protobuf":
