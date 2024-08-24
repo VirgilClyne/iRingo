@@ -3,7 +3,7 @@
 import * as flatbuffers from 'flatbuffers';
 import { Change } from '../wk2/change.js';
 import { Metadata } from '../wk2/metadata.js';
-export class weatherChanges {
+export class WeatherChanges {
     bb = null;
     bb_pos = 0;
     __init(i, bb) {
@@ -11,12 +11,12 @@ export class weatherChanges {
         this.bb = bb;
         return this;
     }
-    static getRootAsweatherChanges(bb, obj) {
-        return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    static getRootAsWeatherChanges(bb, obj) {
+        return (obj || new WeatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    static getSizePrefixedRootAsweatherChanges(bb, obj) {
+    static getSizePrefixedRootAsWeatherChanges(bb, obj) {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-        return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+        return (obj || new WeatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
     metadata(obj) {
         const offset = this.bb.__offset(this.bb_pos, 4);
@@ -38,7 +38,7 @@ export class weatherChanges {
         const offset = this.bb.__offset(this.bb_pos, 10);
         return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
     }
-    static startweatherChanges(builder) {
+    static startWeatherChanges(builder) {
         builder.startObject(4);
     }
     static addMetadata(builder, metadataOffset) {
@@ -63,16 +63,16 @@ export class weatherChanges {
     static startChangesVector(builder, numElems) {
         builder.startVector(4, numElems, 4);
     }
-    static endweatherChanges(builder) {
+    static endWeatherChanges(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createweatherChanges(builder, metadataOffset, forecastStart, forecastEnd, changesOffset) {
-        weatherChanges.startweatherChanges(builder);
-        weatherChanges.addMetadata(builder, metadataOffset);
-        weatherChanges.addForecastStart(builder, forecastStart);
-        weatherChanges.addForecastEnd(builder, forecastEnd);
-        weatherChanges.addChanges(builder, changesOffset);
-        return weatherChanges.endweatherChanges(builder);
+    static createWeatherChanges(builder, metadataOffset, forecastStart, forecastEnd, changesOffset) {
+        WeatherChanges.startWeatherChanges(builder);
+        WeatherChanges.addMetadata(builder, metadataOffset);
+        WeatherChanges.addForecastStart(builder, forecastStart);
+        WeatherChanges.addForecastEnd(builder, forecastEnd);
+        WeatherChanges.addChanges(builder, changesOffset);
+        return WeatherChanges.endWeatherChanges(builder);
     }
 }

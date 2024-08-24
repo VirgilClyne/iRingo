@@ -8,7 +8,7 @@ import WeatherKit2 from "./class/WeatherKit2.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.0(4070) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.2(4083) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -21,13 +21,14 @@ $.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}, PATHs: ${PATHs}`, ""
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
 $.log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
-	const { Settings, Caches, Configs } = setENV("iRingo", "Weather", Database);
+	const { Settings, Caches, Configs } = setENV("iRingo", "WeatherKit", Database);
 	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
 			// 创建空数据
 			let body = {};
+			delete $response.headers?.["ETag"];
 			// 格式判断
 			switch (FORMAT) {
 				case undefined: // 视为无body
@@ -63,9 +64,17 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 				case "text/json":
 				case "application/json":
-					//body = JSON.parse($response.body ?? "{}");
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = JSON.stringify(body);
+					body = JSON.parse($response.body ?? "{}");
+					switch (HOST) {
+						case "weatherkit.apple.com":
+							// 路径判断
+							if (PATH.startsWith("/api/v1/availability/")) {
+								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly"];
+							};
+							break;
+					};
+					$response.body = JSON.stringify(body);
 					break;
 				case "application/vnd.apple.flatbuffer":
 				case "application/protobuf":
@@ -87,56 +96,17 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "weatherkit.apple.com":
 									// 路径判断
 									if (PATH.startsWith("/api/v2/weather/")) {
-										/******************  initialization start  *******************/
-										//const weatherData = WK2.Weather.getRootAsWeather(body);
-										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "initialSize": 10240 });
-										const Offset = {};
-										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											body.airQuality = weatherKit2.decode("airQuality");
-											$.log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
-											Offset.airQualityOffset = weatherKit2.encode(Builder, "airQuality", body.airQuality);
-										};
-										if (url.searchParams.get("dataSets").includes("currentWeather")) {
-											body.currentWeather = weatherKit2.decode("currentWeather");
-											$.log(`🚧 body.currentWeather: ${JSON.stringify(body.currentWeather, null, 2)}`, "");
-											Offset.currentWeatherOffset = weatherKit2.encode(Builder, "currentWeather", body.currentWeather);
-										};
-										if (url.searchParams.get("dataSets").includes("forecastDaily")) {
-											body.forecastDaily = weatherKit2.decode("forecastDaily");
-											//$.log(`🚧 body.forecastDaily: ${JSON.stringify(body.forecastDaily, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("forecastHourly")) {
-											body.forecastHourly = weatherKit2.decode("forecastHourly");
-											//$.log(`🚧 body.forecastHourly: ${JSON.stringify(body.forecastHourly, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
-											body.forecastNextHour = weatherKit2.decode("forecastNextHour");
-											//$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body.forecastNextHour, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("news")) {
-											body.news = weatherKit2.decode("news");
-											$.log(`🚧 body.news: ${JSON.stringify(body.news, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
-											body.weatherAlerts = weatherKit2.decode("weatherAlerts");
-											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body.weatherAlerts, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("weatherChange")) {
-											body.weatherChanges = weatherKit2.decode("weatherChange");
-											$.log(`🚧 body.weatherChanges: ${JSON.stringify(body.weatherChanges, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("trendComparison")) {
-											body.historicalComparisons = weatherKit2.decode("trendComparison");
-											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body.historicalComparisons, null, 2)}`, "");
-										};
-										//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-										let WeatherData = WeatherKit2.createWeather(Builder, Offset.airQualityOffset, Offset.currentWeatherOffset, Offset.forecastDailyOffset, Offset.forecastHourlyOffset, Offset.forecastNextHourOffset, Offset.newsOffset, Offset.weatherAlertsOffset, Offset.weatherChangesOffset, Offset.historicalComparisonsOffset);
+										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
+										body = weatherKit2.decode("all");
+										//$.log(`🚧 body: ${JSON.stringify(body, null, 2)}`, "");
+										const WeatherData = weatherKit2.encode("all", body);
 										Builder.finish(WeatherData);
 										break;
 									};
 									break;
 							};
-							//rawBody = Builder.asUint8Array(); // Of type `Uint8Array`.
+							rawBody = Builder.asUint8Array(); // Of type `Uint8Array`.
+							//rawBody = Builder.dataBuffer(); // Of type `ArrayBuffer`.
 							break;
 						case "application/protobuf":
 						case "application/x-protobuf":

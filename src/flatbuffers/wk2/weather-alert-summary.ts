@@ -30,19 +30,9 @@ static getSizePrefixedRootAsWeatherAlertSummary(bb:flatbuffers.ByteBuffer, obj?:
   return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-id(index: number):number|null {
+id():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint32(this.bb!.__vector(this.bb_pos + offset) + index * 4) : 0;
-}
-
-idLength():number {
-  const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
-}
-
-idArray():Uint32Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? new Uint32Array(this.bb!.bytes().buffer, this.bb!.bytes().byteOffset + this.bb!.__vector(this.bb_pos + offset), this.bb!.__vector_len(this.bb_pos + offset)) : null;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 areaId():string|null
@@ -192,25 +182,8 @@ static startWeatherAlertSummary(builder:flatbuffers.Builder) {
   builder.startObject(24);
 }
 
-static addId(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(0, idOffset, 0);
-}
-
-static createIdVector(builder:flatbuffers.Builder, data:number[]|Uint32Array):flatbuffers.Offset;
-/**
- * @deprecated This Uint8Array overload will be removed in the future.
- */
-static createIdVector(builder:flatbuffers.Builder, data:number[]|Uint8Array):flatbuffers.Offset;
-static createIdVector(builder:flatbuffers.Builder, data:number[]|Uint32Array|Uint8Array):flatbuffers.Offset {
-  builder.startVector(4, data.length, 4);
-  for (let i = data.length - 1; i >= 0; i--) {
-    builder.addInt32(data[i]!);
-  }
-  return builder.endVector();
-}
-
-static startIdVector(builder:flatbuffers.Builder, numElems:number) {
-  builder.startVector(4, numElems, 4);
+static addId(builder:flatbuffers.Builder, id:number) {
+  builder.addFieldInt32(0, id, 0);
 }
 
 static addAreaId(builder:flatbuffers.Builder, areaIdOffset:flatbuffers.Offset) {
@@ -322,9 +295,9 @@ static endWeatherAlertSummary(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createWeatherAlertSummary(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset, areaIdOffset:flatbuffers.Offset, unknown3:number, attributionUrlOffset:flatbuffers.Offset, countryCodeOffset:flatbuffers.Offset, descriptionOffset:flatbuffers.Offset, tokenOffset:flatbuffers.Offset, effectiveTime:number, expireTime:number, issuedTime:number, eventOnsetTime:number, eventEndTime:number, detailsUrlOffset:flatbuffers.Offset, phenomenonOffset:flatbuffers.Offset, severity:Severity, significance:SignificanceType, sourceOffset:flatbuffers.Offset, eventSourceOffset:flatbuffers.Offset, urgency:Urgency, certainty:Certainty, importance:ImportanceType, responsesOffset:flatbuffers.Offset, unknown23:number, unknown24:number):flatbuffers.Offset {
+static createWeatherAlertSummary(builder:flatbuffers.Builder, id:number, areaIdOffset:flatbuffers.Offset, unknown3:number, attributionUrlOffset:flatbuffers.Offset, countryCodeOffset:flatbuffers.Offset, descriptionOffset:flatbuffers.Offset, tokenOffset:flatbuffers.Offset, effectiveTime:number, expireTime:number, issuedTime:number, eventOnsetTime:number, eventEndTime:number, detailsUrlOffset:flatbuffers.Offset, phenomenonOffset:flatbuffers.Offset, severity:Severity, significance:SignificanceType, sourceOffset:flatbuffers.Offset, eventSourceOffset:flatbuffers.Offset, urgency:Urgency, certainty:Certainty, importance:ImportanceType, responsesOffset:flatbuffers.Offset, unknown23:number, unknown24:number):flatbuffers.Offset {
   WeatherAlertSummary.startWeatherAlertSummary(builder);
-  WeatherAlertSummary.addId(builder, idOffset);
+  WeatherAlertSummary.addId(builder, id);
   WeatherAlertSummary.addAreaId(builder, areaIdOffset);
   WeatherAlertSummary.addUnknown3(builder, unknown3);
   WeatherAlertSummary.addAttributionUrl(builder, attributionUrlOffset);

@@ -9,7 +9,7 @@ import { HourlyForecastData } from '../wk2/hourly-forecast-data.js';
 import { News } from '../wk2/news.js';
 import { NextHourForecastData } from '../wk2/next-hour-forecast-data.js';
 import { WeatherAlertCollectionData } from '../wk2/weather-alert-collection-data.js';
-import { weatherChanges } from '../wk2/weather-changes.js';
+import { WeatherChanges } from '../wk2/weather-changes.js';
 export class Weather {
     bb = null;
     bb_pos = 0;
@@ -55,7 +55,7 @@ export class Weather {
     }
     weatherChanges(obj) {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? (obj || new weatherChanges()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+        return offset ? (obj || new WeatherChanges()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
     }
     historicalComparisons(obj) {
         const offset = this.bb.__offset(this.bb_pos, 20);

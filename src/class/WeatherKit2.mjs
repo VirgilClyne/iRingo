@@ -6,108 +6,195 @@ export default class weatherKit2 {
 		this.Name = "weatherKit2";
 		this.Version = "1.0.0";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+		//this.initialSize = 10240;
+		//this.builder = new flatbuffers.Builder(this.initialSize);
 		Object.assign(this, options);
+		this.weatherData = WK2.Weather.getRootAsWeather(this.bb);
 	};
 
-	encode(builder = new flatbuffers.Builder(this.initialSize), dataSets = "", data = {}) {
-		//const builder = new flatbuffers.Builder(this.initialSize);
+	encode(dataSet = "", data = {}) {
+		console.log(`☑️ encode, dataSet: ${dataSet}`);
 		let offset;
-		let metadataOffset = WK2.Metadata.createMetadata(builder, builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, builder.createString(data?.metadata?.providerLogo), builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.unknown9, WK2.SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
-		switch (dataSets) {
+		let metadataOffset;
+		if (data?.metadata) metadataOffset = WK2.Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.unknown9, WK2.SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
+		switch (dataSet) {
+			case "all":
+				const Offsets = {};
+				if (data?.airQuality) Offsets.airQualityOffset = this.encode("airQuality", data.airQuality);
+				if (data?.currentWeather) Offsets.currentWeatherOffset = this.encode("currentWeather", data.currentWeather);
+				if (data?.forecastDaily) Offsets.forecastDailyOffset = this.encode("forecastDaily", data.forecastDaily);
+				if (data?.forecastHourly) Offsets.forecastHourlyOffset = this.encode( "forecastHourly", data.forecastHourly);
+				//if (data?.forecastNextHour) Offsets.forecastNextHourOffset = this.encode("forecastNextHour", data.forecastNextHour);
+				//if (data?.news) Offsets.newsOffset = this.encode("news", data.news);
+				if (data?.weatherAlerts) Offsets.weatherAlertsOffset = this.encode("weatherAlerts", data.weatherAlerts);
+				//if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode("weatherChanges", data.weatherChanges);
+				//if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode("historicalComparisons", data.historicalComparisons);
+				offset = weatherKit2.createWeather(this.builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
+				break;
 			case "airQuality":
-				let pollutantsOffset = WK2.AirQuality.createPollutantsVector(builder, data?.pollutants?.map(p => WK2.Pollutant.createPollutant(builder, WK2.PollutantType[p.pollutantType], p.amount, WK2.UnitType[p.units])));
-				let scaleOffset = builder.createString(data?.scale);
-				offset = WK2.AirQuality.createAirQuality(builder, metadataOffset, data?.categoryIndex, data?.index, data?.isSignificant, pollutantsOffset, WK2.ComparisonTrend[data?.previousDayComparison], WK2.PollutantType[data?.primaryPollutant], scaleOffset);
+				let pollutantsOffset = WK2.AirQuality.createPollutantsVector(this.builder, data?.pollutants?.map(p => WK2.Pollutant.createPollutant(this.builder, WK2.PollutantType[p.pollutantType], p.amount, WK2.UnitType[p.units])));
+				let scaleOffset = this.builder.createString(data?.scale);
+				offset = WK2.AirQuality.createAirQuality(this.builder, metadataOffset, data?.categoryIndex, data?.index, data?.isSignificant, pollutantsOffset, WK2.ComparisonTrend[data?.previousDayComparison], WK2.PollutantType[data?.primaryPollutant], scaleOffset);
 				break;
 			case "currentWeather":
-				let precipitationAmountNext1hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountNext1hByTypeVector(builder, data?.precipitationAmountNext1hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				let precipitationAmountNext24hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountNext24hByTypeVector(builder, data?.precipitationAmountNext24hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				let precipitationAmountNext6hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountNext6hByTypeVector(builder, data?.precipitationAmountNext6hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				let precipitationAmountPrevious1hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious1hByTypeVector(builder, data?.precipitationAmountPrevious1hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				let precipitationAmountPrevious24hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious24hByTypeVector(builder, data?.precipitationAmountPrevious24hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				let precipitationAmountPrevious6hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious6hByTypeVector(builder, data?.precipitationAmountPrevious6hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				offset = WK2.CurrentWeatherData.createCurrentWeatherData(builder, metadataOffset, data?.asOf, data?.cloudCover, data?.cloudCoverLowAltPct, data?.cloudCoverMidAltPct, data?.cloudCoverHighAltPct, WK2.ConditionCode[data?.conditionCode], data?.daylight, data?.humidity, data?.perceivedPrecipitationIntensity, data?.precipitationAmount1h, data?.precipitationAmount6h, data?.precipitationAmount24h, data?.precipitationAmountNext1h, data?.precipitationAmountNext6h, data?.precipitationAmountNext24h, precipitationAmountNext1hByTypeOffset, precipitationAmountNext6hByTypeOffset, precipitationAmountNext24hByTypeOffset, precipitationAmountPrevious1hByTypeOffset, precipitationAmountPrevious6hByTypeOffset, precipitationAmountPrevious24hByTypeOffset, data?.precipitationIntensity, data?.pressure, WK2.PressureTrend[data?.pressureTrend], data?.snowfallAmount1h, data?.snowfallAmount6h, data?.snowfallAmount24h, data?.snowfallAmountNext1h, data?.snowfallAmountNext6h, data?.snowfallAmountNext24h, data?.temperature, data?.temperatureApparent, data?.unknown34, data?.temperatureDewPoint, data?.uvIndex, data?.visibility, data?.windDirection, data?.windGust, data?.windSpeed);
+				let precipitationAmountNext1hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountNext1hByTypeVector(this.builder, data?.precipitationAmountNext1hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+				let precipitationAmountNext24hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountNext24hByTypeVector(this.builder, data?.precipitationAmountNext24hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+				let precipitationAmountNext6hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountNext6hByTypeVector(this.builder, data?.precipitationAmountNext6hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+				let precipitationAmountPrevious1hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious1hByTypeVector(this.builder, data?.precipitationAmountPrevious1hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+				let precipitationAmountPrevious24hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious24hByTypeVector(this.builder, data?.precipitationAmountPrevious24hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+				let precipitationAmountPrevious6hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious6hByTypeVector(this.builder, data?.precipitationAmountPrevious6hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+				offset = WK2.CurrentWeatherData.createCurrentWeatherData(this.builder, metadataOffset, data?.asOf, data?.cloudCover, data?.cloudCoverLowAltPct, data?.cloudCoverMidAltPct, data?.cloudCoverHighAltPct, WK2.ConditionCode[data?.conditionCode], data?.daylight, data?.humidity, data?.perceivedPrecipitationIntensity, data?.precipitationAmount1h, data?.precipitationAmount6h, data?.precipitationAmount24h, data?.precipitationAmountNext1h, data?.precipitationAmountNext6h, data?.precipitationAmountNext24h, precipitationAmountNext1hByTypeOffset, precipitationAmountNext6hByTypeOffset, precipitationAmountNext24hByTypeOffset, precipitationAmountPrevious1hByTypeOffset, precipitationAmountPrevious6hByTypeOffset, precipitationAmountPrevious24hByTypeOffset, data?.precipitationIntensity, data?.pressure, WK2.PressureTrend[data?.pressureTrend], data?.snowfallAmount1h, data?.snowfallAmount6h, data?.snowfallAmount24h, data?.snowfallAmountNext1h, data?.snowfallAmountNext6h, data?.snowfallAmountNext24h, data?.temperature, data?.temperatureApparent, data?.unknown34, data?.temperatureDewPoint, data?.uvIndex, data?.visibility, data?.windDirection, data?.windGust, data?.windSpeed);
 				break;
 			case "forecastDaily":
-				for (let i = 0; i < data?.days.length; i++) {
-
-				};
-				//offset = WK2.DailyForecastData.createDaysVector(builder, 
-				//let daysOffset = WK2.DailyForecastData.createDaysVector(builder, data?.days?.map(day => WK2.Day.createDay(builder,
+				let daysOffsets = data?.days?.map(day => {
+					const Offsets = {};
+					Offsets.precipitationAmountByTypeOffest = WK2.DayWeatherConditions.createPrecipitationAmountByTypeVector(this.builder, day?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+					if (day?.daytimeForecast) {
+						Offsets.daytimeForecastPrecipitationAmountByTypeOffest = WK2.DayPartForecast.createPrecipitationAmountByTypeVector(this.builder, day?.daytimeForecast?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+						Offsets.daytimeForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.daytimeForecast?.forecastStart, day?.daytimeForecast?.forecastEnd, day?.daytimeForecast?.cloudCover, day?.daytimeForecast?.cloudCoverLowAltPct, day?.daytimeForecast?.cloudCoverMidAltPct, day?.daytimeForecast?.cloudCoverHighAltPct, WK2.ConditionCode[day?.daytimeForecast?.conditionCode], day?.daytimeForecast?.humidity, day?.daytimeForecast?.humidityMax, day?.daytimeForecast?.humidityMin, day?.daytimeForecast?.precipitationAmount, Offsets.daytimeForecastPrecipitationAmountByTypeOffest, day?.daytimeForecast?.precipitationChance, WK2.PrecipitationType[day?.daytimeForecast?.precipitationType], day?.daytimeForecast?.snowfallAmount, day?.daytimeForecast?.temperatureMax, day?.daytimeForecast?.temperatureMin, day?.daytimeForecast?.visibilityMax, day?.daytimeForecast?.visibilityMin, day?.daytimeForecast?.windDirection, day?.daytimeForecast?.windGustSpeedMax, day?.daytimeForecast?.windSpeed, day?.daytimeForecast?.windSpeedMax);
+					};
+					if (day?.overnightForecast) {
+						Offsets.overnightForecastPrecipitationAmountByTypeOffest = WK2.DayPartForecast.createPrecipitationAmountByTypeVector(this.builder, day?.overnightForecast?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+						Offsets.overnightForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.overnightForecast?.forecastStart, day?.overnightForecast?.forecastEnd, day?.overnightForecast?.cloudCover, day?.overnightForecast?.cloudCoverLowAltPct, day?.overnightForecast?.cloudCoverMidAltPct, day?.overnightForecast?.cloudCoverHighAltPct, WK2.ConditionCode[day?.overnightForecast?.conditionCode], day?.overnightForecast?.humidity, day?.overnightForecast?.humidityMax, day?.overnightForecast?.humidityMin, day?.overnightForecast?.precipitationAmount, Offsets.overnightForecastPrecipitationAmountByTypeOffest, day?.overnightForecast?.precipitationChance, WK2.PrecipitationType[day?.overnightForecast?.precipitationType], day?.overnightForecast?.snowfallAmount, day?.overnightForecast?.temperatureMax, day?.overnightForecast?.temperatureMin, day?.overnightForecast?.visibilityMax, day?.overnightForecast?.visibilityMin, day?.overnightForecast?.windDirection, day?.overnightForecast?.windGustSpeedMax, day?.overnightForecast?.windSpeed, day?.overnightForecast?.windSpeedMax);
+					};
+					if (day?.restOfDayForecast) {
+						Offsets.restOfDayForecastPrecipitationAmountByTypeOffest = WK2.DayPartForecast.createPrecipitationAmountByTypeVector(this.builder, day?.restOfDayForecast?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
+						Offsets.restOfDayForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.restOfDayForecast?.forecastStart, day?.restOfDayForecast?.forecastEnd, day?.restOfDayForecast?.cloudCover, day?.restOfDayForecast?.cloudCoverLowAltPct, day?.restOfDayForecast?.cloudCoverMidAltPct, day?.restOfDayForecast?.cloudCoverHighAltPct, WK2.ConditionCode[day?.restOfDayForecast?.conditionCode], day?.restOfDayForecast?.humidity, day?.restOfDayForecast?.humidityMax, day?.restOfDayForecast?.humidityMin, day?.restOfDayForecast?.precipitationAmount, Offsets.restOfDayForecastPrecipitationAmountByTypeOffest, day?.restOfDayForecast?.precipitationChance, WK2.PrecipitationType[day?.restOfDayForecast?.precipitationType], day?.restOfDayForecast?.snowfallAmount, day?.restOfDayForecast?.temperatureMax, day?.restOfDayForecast?.temperatureMin, day?.restOfDayForecast?.visibilityMax, day?.restOfDayForecast?.visibilityMin, day?.restOfDayForecast?.windDirection, day?.restOfDayForecast?.windGustSpeedMax, day?.restOfDayForecast?.windSpeed, day?.restOfDayForecast?.windSpeedMax);
+					};
+					WK2.DayWeatherConditions.startDayWeatherConditions(this.builder);
+					WK2.DayWeatherConditions.addForecastStart(this.builder, day?.forecastStart);
+					WK2.DayWeatherConditions.addForecastEnd(this.builder, day?.forecastEnd);
+					WK2.DayWeatherConditions.addConditionCode(this.builder, WK2.ConditionCode[day?.conditionCode]);
+					WK2.DayWeatherConditions.addHumidityMax(this.builder, day?.humidityMax);
+					WK2.DayWeatherConditions.addHumidityMin(this.builder, day?.humidityMin);
+					WK2.DayWeatherConditions.addMaxUvIndex(this.builder, day?.maxUvIndex);
+					WK2.DayWeatherConditions.addMoonPhase(this.builder, WK2.MoonPhase[day?.moonPhase]);
+					WK2.DayWeatherConditions.addMoonrise(this.builder, day?.moonrise);
+					WK2.DayWeatherConditions.addMoonset(this.builder, day?.moonset);
+					WK2.DayWeatherConditions.addPrecipitationAmount(this.builder, day?.precipitationAmount);
+					WK2.DayWeatherConditions.addPrecipitationAmountByType(this.builder, Offsets.precipitationAmountByTypeOffest);
+					WK2.DayWeatherConditions.addPrecipitationChance(this.builder, day?.precipitationChance);
+					WK2.DayWeatherConditions.addPrecipitationType(this.builder, WK2.PrecipitationType[day?.precipitationType]);
+					WK2.DayWeatherConditions.addSnowfallAmount(this.builder, day?.snowfallAmount);
+					WK2.DayWeatherConditions.addSolarMidnight(this.builder, day?.solarMidnight);
+					WK2.DayWeatherConditions.addSolarNoon(this.builder, day?.solarNoon);
+					WK2.DayWeatherConditions.addSunrise(this.builder, day?.sunrise);
+					WK2.DayWeatherConditions.addSunriseCivil(this.builder, day?.sunriseCivil);
+					WK2.DayWeatherConditions.addSunriseNautical(this.builder, day?.sunriseNautical);
+					WK2.DayWeatherConditions.addSunriseAstronomical(this.builder, day?.sunriseAstronomical);
+					WK2.DayWeatherConditions.addSunset(this.builder, day?.sunset);
+					WK2.DayWeatherConditions.addSunsetCivil(this.builder, day?.sunsetCivil);
+					WK2.DayWeatherConditions.addSunsetNautical(this.builder, day?.sunsetNautical);
+					WK2.DayWeatherConditions.addSunsetAstronomical(this.builder, day?.sunsetAstronomical);
+					WK2.DayWeatherConditions.addTemperatureMax(this.builder, day?.temperatureMax);
+					WK2.DayWeatherConditions.addTemperatureMaxTime(this.builder, day?.temperatureMaxTime);
+					WK2.DayWeatherConditions.addTemperatureMin(this.builder, day?.temperatureMin);
+					WK2.DayWeatherConditions.addTemperatureMinTime(this.builder, day?.temperatureMinTime);
+					WK2.DayWeatherConditions.addVisibilityMax(this.builder, day?.visibilityMax);
+					WK2.DayWeatherConditions.addVisibilityMin(this.builder, day?.visibilityMin);
+					WK2.DayWeatherConditions.addWindGustSpeedMax(this.builder, day?.windGustSpeedMax);
+					WK2.DayWeatherConditions.addWindSpeedAvg(this.builder, day?.windSpeedAvg);
+					WK2.DayWeatherConditions.addWindSpeedMax(this.builder, day?.windSpeedMax);
+					if (day?.daytimeForecast) WK2.DayWeatherConditions.addDaytimeForecast(this.builder, Offsets.daytimeForecastOffset);
+					if (day?.overnightForecast) WK2.DayWeatherConditions.addOvernightForecast(this.builder, Offsets.overnightForecastOffset);
+					if (day?.restOfDayForecast) WK2.DayWeatherConditions.addRestOfDayForecast(this.builder, Offsets.restOfDayForecastOffset);
+					return WK2.DayWeatherConditions.endDayWeatherConditions(this.builder);
+				});
+				let daysOffset = WK2.DailyForecastData.createDaysVector(this.builder, daysOffsets);
+				offset = WK2.DailyForecastData.createDailyForecastData(this.builder, metadataOffset, daysOffset);
 				break;
 			case "forecastHourly":
+				let hoursOffsets = data?.hours?.map(hour => WK2.HourWeatherConditions.createHourWeatherConditions(this.builder, hour?.forecastStart, hour?.cloudCover, hour?.cloudCoverLowAltPct, hour?.cloudCoverMidAltPct, hour?.cloudCoverHighAltPct, WK2.ConditionCode[hour?.conditionCode], hour?.daylight, hour?.humidity, hour?.perceivedPrecipitationIntensity, hour?.precipitationAmount, hour?.precipitationIntensity, hour?.precipitationChance, WK2.PrecipitationType[hour?.precipitationType], hour?.pressure, WK2.PressureTrend[hour?.pressureTrend], hour?.snowfallAmount, hour?.snowfallIntensity, hour?.temperature, hour?.temperatureApparent, hour?.unknown20, hour?.temperatureDewPoint, hour?.uvIndex, hour?.visibility, hour?.windDirection, hour?.windGust, hour?.windSpeed));
+				let hoursOffset = WK2.HourlyForecastData.createHoursVector(this.builder, hoursOffsets);
+				offset = WK2.HourlyForecastData.createHourlyForecastData(this.builder, metadataOffset, hoursOffset);
 				break;
 			case "forecastNextHour":
 				break;
 			case "news":
+				let placementsOffsets = data?.placements?.map(placement => {
+					let articlesOffsets = placement?.articles?.map(article => {
+						let alertIdsOffset = WK2.Articles.createAlertIdsVector(this.builder, article?.alertIds?.map(alertId => this.builder.createString(alertId)));
+						let headlineOverrideOffset = this.builder.createString(article?.headlineOverride);
+						let idOffset = this.builder.createString(article?.id);
+						let localeOffset = this.builder.createString(article?.locale);
+						let phenomenaOffset = WK2.Articles.createPhenomenaVector(this.builder, article?.phenomena?.map(phenomena => this.builder.createString(phenomena)));
+						let supportedStorefrontsOffset = WK2.Articles.createSupportedStorefrontsVector(this.builder, article?.supportedStorefronts?.map(supportedStorefront => this.builder.createString(supportedStorefront)));
+						return WK2.Articles.createArticles(this.builder, idOffset, supportedStorefrontsOffset, alertIdsOffset, phenomenaOffset, headlineOverrideOffset, localeOffset);
+					});
+					let articlesOffset = WK2.Placement.createArticlesVector(this.builder, articlesOffsets);
+					return WK2.Placement.createPlacement(this.builder, placement?.priority, articlesOffset, WK2.PlacementType[placement?.placement]);
+				});
+				let placementsOffset = WK2.News.createPlacementsVector(this.builder, placementsOffsets);
+				offset = WK2.News.createNews(this.builder, metadataOffset, placementsOffset);
 				break;
 			case "weatherAlert":
 			case "weatherAlerts":
+				let alertsOffsets = data?.alerts?.map(alert => {
+					let responsesOffsets = alert?.responses?.map(response => WK2.ResponseType[response]);
+					let responsesOffset = WK2.WeatherAlertSummary.createResponsesVector(this.builder, responsesOffsets);
+					//let idOffset = this.builder.createString(alert?.id);
+					let areaIdOffset = this.builder.createString(alert?.areaId);
+					let attributionUrlOffset = this.builder.createString(alert?.attributionUrl);
+					let countryCodeOffset = this.builder.createString(alert?.countryCode);
+					let descriptionOffset = this.builder.createString(alert?.description);
+					let tokenOffset = this.builder.createString(alert?.token);
+					let detailsUrlOffset = this.builder.createString(alert?.detailsUrl);
+					let phenomenonOffset = this.builder.createString(alert?.phenomenon);
+					let sourceOffset = this.builder.createString(alert?.source);
+					let eventSourceOffset = this.builder.createString(alert?.eventSource);
+					return WK2.WeatherAlertSummary.createWeatherAlertSummary(this.builder, alert?.id, areaIdOffset, alert?.unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, alert?.effectiveTime, alert?.expireTime, alert?.issuedTime, alert?.eventOnsetTime, alert?.eventEndTime, detailsUrlOffset, phenomenonOffset, WK2.Severity[alert?.severity], WK2.SignificanceType[alert?.significance], sourceOffset, eventSourceOffset, WK2.Urgency[alert?.urgency], WK2.Certainty[alert?.certainty], WK2.ImportanceType[alert?.importance], responsesOffset, alert?.unknown23, alert?.unknown24);
+				});
+				let alertsOffset = WK2.WeatherAlertCollectionData.createAlertsVector(this.builder, alertsOffsets);
+				let detailsUrlOffset = this.builder.createString(data?.detailsUrl);
+				offset = WK2.WeatherAlertCollectionData.createWeatherAlertCollectionData(this.builder, metadataOffset, detailsUrlOffset, alertsOffset);
 				break;
 			case "weatherChange":
 			case "weatherChanges":
+				let changesOffsets = data?.changes?.map(change => WK2.Change.createChange(this.builder, change?.forecastStart, change?.forecastEnd, WK2.ChangeTrend[change?.maxTemperatureChange], WK2.ChangeTrend[change?.minTemperatureChange], WK2.ChangeTrend[change?.dayPrecipitationChange], WK2.ChangeTrend[change?.nightPrecipitationChange]));
+				let changesOffset = WK2.WeatherChanges.createChangesVector(this.builder, changesOffsets);
+				offset = WK2.WeatherChanges.createWeatherChanges(this.builder, metadataOffset, data?.forecastStart, data?.forecastEnd, changesOffset);
 				break;
 			case "trendComparison":
 			case "trendComparisons":
 			case "historicalComparison":
 			case "historicalComparisons":
+				let comparisonsOffsets = data?.comparisons?.map(comparison => WK2.Comparison.createComparison(this.builder, WK2.ComparisonType[comparison?.condition], comparison?.currentValue, comparison?.baselineValue, WK2.DeviationType[comparison?.deviation], comparison?.baselineType, comparison?.baselineStartDate));
+				let comparisonsOffset = WK2.HistoricalComparison.createComparisonsVector(this.builder, comparisonsOffsets);
+				offset = WK2.HistoricalComparison.createHistoricalComparison(this.builder, metadataOffset, comparisonsOffset);
 				break;
 		};
+		console.log(`✅ encode, dataSet: ${dataSet}`);
 		return offset;
 	};
-	
-	encodeAll(data = {}) {
-		const builder = new flatbuffers.Builder(this.initialSize);
-		let offest = {};
-		if (data?.airQuality) offest.airQualityOffset = this.encode(builder, "airQuality", data.airQuality);
-		if (data?.currentWeather) offest.currentWeatherOffset = this.encode(builder, "currentWeather", data.currentWeather);
-		if (data?.forecastDaily) offest.forecastDailyOffset = this.encode(builder, "forecastDaily", data.forecastDaily);
-		if (data?.forecastHourly) offest.forecastHourlyOffset = this.encode(builder, "forecastHourly", data.forecastHourly);
-		if (data?.forecastNextHour) offest.forecastNextHourOffset = this.encode(builder, "forecastNextHour", data.forecastNextHour);
-		if (data?.news) offest.newsOffset = this.encode(builder, "news", data.news);
-		if (data?.weatherAlerts) offest.weatherAlertsOffset = this.encode(builder, "weatherAlerts", data.weatherAlerts);
-		if (data?.weatherChanges) offest.weatherChangesOffset = this.encode(builder, "weatherChanges", data.weatherChanges);
-		if (data?.historicalComparisons) offest.historicalComparisonsOffset = this.encode(builder, "historicalComparisons", data.historicalComparisons);
-		WK2.Weather.startWeather(builder);
-		if (offest.airQualityOffset) WK2.Weather.addAirQuality(builder, offest.airQualityOffset);
-		if (offest.currentWeatherOffset) WK2.Weather.addCurrentWeather(builder, offest.currentWeatherOffset);
-		if (offest.forecastDailyOffset) WK2.Weather.addForecastDaily(builder, offest.forecastDailyOffset);
-		if (offest.forecastHourlyOffset) WK2.Weather.addForecastHourly(builder, offest.forecastHourlyOffset);
-		if (offest.forecastNextHourOffset) WK2.Weather.addForecastNextHour(builder, offest.forecastNextHourOffset);
-		if (offest.newsOffset) WK2.Weather.addNews(builder, offest.newsOffset);
-		if (offest.weatherAlertsOffset) WK2.Weather.addWeatherAlerts(builder, offest.weatherAlertsOffset);
-		if (offest.weatherChangesOffset) WK2.Weather.addWeatherChanges(builder, offest.weatherChangesOffset);
-		if (offest.historicalComparisonsOffset) WK2.Weather.addHistoricalComparisons(builder, offest.historicalComparisonsOffset);
-		const WeatherData = WK2.Weather.endWeather(builder);
-		builder.finish(WeatherData);
-		return builder;
-		//return builder.asUint8Array();
-	};
 
-	static createWeather(builder, airQualityOffset, currentWeatherOffset, forecastDailyOffset, forecastHourlyOffset, forecastNextHourOffset, newsOffset, weatherAlertsOffset, weatherChangesOffset, historicalComparisonsOffset) {
-		WK2.Weather.startWeather(builder);
-		WK2.Weather.addAirQuality(builder, airQualityOffset);
-		WK2.Weather.addCurrentWeather(builder, currentWeatherOffset);
-		WK2.Weather.addForecastDaily(builder, forecastDailyOffset);
-		WK2.Weather.addForecastHourly(builder, forecastHourlyOffset);
-		WK2.Weather.addForecastNextHour(builder, forecastNextHourOffset);
-		WK2.Weather.addNews(builder, newsOffset);
-		WK2.Weather.addWeatherAlerts(builder, weatherAlertsOffset);
-		WK2.Weather.addWeatherChanges(builder, weatherChangesOffset);
-		WK2.Weather.addHistoricalComparisons(builder, historicalComparisonsOffset);
-		return WK2.Weather.endWeather(builder);
-	}
-
-	decode(dataSets = "", byteBuffer = this.bb) {
-		//const byteBuffer = new flatbuffers.ByteBuffer(uint8Array);
-		const WeatherData = WK2.Weather.getRootAsWeather(byteBuffer);
+	decode(dataSet = "", metadata) {
+		console.log(`☑️ decode, dataSet: ${dataSet}`);
 		let data = {};
-		let metadata;
-		switch (dataSets) {
+		const airQualityData = this.weatherData?.airQuality();
+		const CurrentWeatherData = this.weatherData?.currentWeather();
+		const DailyForecastData = this.weatherData?.forecastDaily();
+		const HourlyForecastData = this.weatherData?.forecastHourly();
+		const NextHourForecastData = this.weatherData?.forecastNextHour();
+		const newsData = this.weatherData?.news();
+		const WeatherAlertCollectionData = this.weatherData?.weatherAlerts();
+		const weatherChangesData = this.weatherData?.weatherChanges();
+		const historicalComparisonsData = this.weatherData?.historicalComparisons();
+		switch (dataSet) {
+			case "all":
+				if (airQualityData) data.airQuality = this.decode("airQuality", airQualityData);
+				if (CurrentWeatherData) data.currentWeather = this.decode("currentWeather", CurrentWeatherData);
+				if (DailyForecastData) data.forecastDaily = this.decode("forecastDaily", DailyForecastData);
+				if (HourlyForecastData) data.forecastHourly = this.decode("forecastHourly", HourlyForecastData);
+				//if (NextHourForecastData) data.forecastNextHour = this.decode("forecastNextHour", NextHourForecastData);
+				if (newsData) data.news = this.decode("news", newsData);
+				if (WeatherAlertCollectionData) data.weatherAlerts = this.decode("weatherAlerts", WeatherAlertCollectionData);
+				if (weatherChangesData) data.weatherChanges = this.decode("weatherChange", weatherChangesData);
+				if (historicalComparisonsData) data.historicalComparisons = this.decode("trendComparison", historicalComparisonsData);
+				break;
 			case "airQuality":
-				const airQualityData = WeatherData?.airQuality();
-				metadata = airQualityData.metadata();
+				metadata = airQualityData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"categoryIndex": airQualityData?.categoryIndex(),
 					"index": airQualityData?.index(),
 					"isSignificant": airQualityData?.isSignificant(),
@@ -123,9 +210,9 @@ export default class weatherKit2 {
 				});
 				break;
 			case "currentWeather":
-				const CurrentWeatherData = WeatherData?.currentWeather();
 				metadata = CurrentWeatherData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"asOf": CurrentWeatherData?.asOf(),
 					"cloudCover": CurrentWeatherData?.cloudCover(),
 					"cloudCoverHighAltPct": CurrentWeatherData?.cloudCoverHighAltPct(),
@@ -210,9 +297,9 @@ export default class weatherKit2 {
 				});
 				break;
 			case "forecastDaily":
-				const DailyForecastData = WeatherData?.forecastDaily();
 				metadata = DailyForecastData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"days": [],
 				};
 				for (let i = 0; i < DailyForecastData?.daysLength(); i++) {
@@ -364,11 +451,12 @@ export default class weatherKit2 {
 				};
 				break;
 			case "forecastHourly":
-				const HourlyForecastData = WeatherData?.forecastHourly();
 				metadata = HourlyForecastData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"hours": [],
 				};
+				
 				for (let i = 0; i < HourlyForecastData?.hoursLength(); i++) data.hours.push({
 					"cloudCover": HourlyForecastData?.hours(i)?.cloudCover(),
 					"cloudCoverHighAltPct": HourlyForecastData?.hours(i)?.cloudCoverHighAltPct(),
@@ -389,6 +477,7 @@ export default class weatherKit2 {
 					"snowfallIntensity": HourlyForecastData?.hours(i)?.snowfallIntensity(),
 					"temperature": HourlyForecastData?.hours(i)?.temperature(),
 					"temperatureApparent": HourlyForecastData?.hours(i)?.temperatureApparent(),
+					"unknown20": HourlyForecastData?.hours(i)?.unknown20(),
 					"temperatureDewPoint": HourlyForecastData?.hours(i)?.temperatureDewPoint(),
 					"uvIndex": HourlyForecastData?.hours(i)?.uvIndex(),
 					"visibility": HourlyForecastData?.hours(i)?.visibility(),
@@ -398,9 +487,10 @@ export default class weatherKit2 {
 				});
 				break;
 			case "forecastNextHour":
-				const NextHourForecastData = WeatherData?.forecastNextHour();
+				const NextHourForecastData = this.weatherData?.forecastNextHour();
 				metadata = NextHourForecastData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"condition": [],
 					"forecastEnd": NextHourForecastData?.forecastEnd(),
 					"forecastStart": NextHourForecastData?.forecastStart(),
@@ -434,10 +524,31 @@ export default class weatherKit2 {
 					"startTime": NextHourForecastData?.summary(i)?.startTime(),
 				});
 				break;
+			case "matadata":
+				data = {
+					"attributionUrl": metadata?.attributionUrl(),
+					"expireTime": metadata?.expireTime(),
+					"language": metadata?.language(),
+					"latitude": metadata?.latitude(),
+					"longitude": metadata?.longitude(),
+					"providerLogo": metadata?.providerLogo(),
+					"providerName": metadata?.providerName(),
+					"readTime": metadata?.readTime(),
+					"reportedTime": metadata?.reportedTime(),
+					"unknown9": metadata?.unknown9(),
+					"sourceType": WK2.SourceType[metadata?.sourceType()],
+					"unknown11": metadata?.unknown11(),
+					//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
+					"unknown12": metadata?.unknown12(),
+					"unknown13": metadata?.unknown13(),
+					"unknown14": metadata?.unknown14(),
+					"unknown15": metadata?.unknown15(),
+				};
+				break;
 			case "news":
-				const newsData = WeatherData?.news();
 				metadata = newsData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"placements": [],
 				};
 				for (let i = 0; i < newsData?.placementsLength(); i++) {
@@ -465,9 +576,9 @@ export default class weatherKit2 {
 				break;
 			case "weatherAlert":
 			case "weatherAlerts":
-				const WeatherAlertCollectionData = WeatherData?.weatherAlerts();
 				metadata = WeatherAlertCollectionData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"alerts": [],
 					"detailsUrl": WeatherAlertCollectionData?.detailsUrl(),
 				};
@@ -501,9 +612,9 @@ export default class weatherKit2 {
 				break;
 			case "weatherChange":
 			case "weatherChanges":
-				const weatherChangesData = WeatherData?.weatherChanges();
 				metadata = weatherChangesData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"changes": [],
 					"forecastEnd": weatherChangesData?.forecastEnd(),
 					"forecastStart": weatherChangesData?.forecastStart(),
@@ -524,9 +635,9 @@ export default class weatherKit2 {
 			case "trendComparisons":
 			case "historicalComparison":
 			case "historicalComparisons":
-				const historicalComparisonsData = WeatherData?.historicalComparisons();
 				metadata = historicalComparisonsData?.metadata();
 				data = {
+					"metadata": this.decode("matadata", metadata),
 					"comparisons": [],
 				};
 				for (let i = 0; i < historicalComparisonsData?.comparisonsLength(); i++) {
@@ -542,26 +653,23 @@ export default class weatherKit2 {
 				};
 				break;
 		};
-		data.metadata = {
-			"attributionUrl": metadata?.attributionUrl(),
-			"expireTime": metadata?.expireTime(),
-			"language": metadata?.language(),
-			"latitude": metadata?.latitude(),
-			"longitude": metadata?.longitude(),
-			"providerLogo": metadata?.providerLogo(),
-			"providerName": metadata?.providerName(),
-			"readTime": metadata?.readTime(),
-			"reportedTime": metadata?.reportedTime(),
-			"unknown9": metadata?.unknown9(),
-			"sourceType": WK2.SourceType[metadata?.sourceType()],
-			"unknown11": metadata?.unknown11(),
-			//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
-			"unknown12": metadata?.unknown12(),
-			"unknown13": metadata?.unknown13(),
-			"unknown14": metadata?.unknown14(),
-			"unknown15": metadata?.unknown15(),
-		};
+		console.log(`✅ decode, dataSet: ${dataSet}`);
 		return data;
-    };
+	};
+
+	static createWeather(builder, airQualityOffset, currentWeatherOffset, forecastDailyOffset, forecastHourlyOffset, forecastNextHourOffset, newsOffset, weatherAlertsOffset, weatherChangesOffset, historicalComparisonsOffset) {
+		WK2.Weather.startWeather(builder);
+		if (airQualityOffset) WK2.Weather.addAirQuality(builder, airQualityOffset);
+		if (currentWeatherOffset) WK2.Weather.addCurrentWeather(builder, currentWeatherOffset);
+		if (forecastDailyOffset) WK2.Weather.addForecastDaily(builder, forecastDailyOffset);
+		if (forecastHourlyOffset) WK2.Weather.addForecastHourly(builder, forecastHourlyOffset);
+		if (forecastNextHourOffset) WK2.Weather.addForecastNextHour(builder, forecastNextHourOffset);
+		if (newsOffset) WK2.Weather.addNews(builder, newsOffset);
+		if (weatherAlertsOffset) WK2.Weather.addWeatherAlerts(builder, weatherAlertsOffset);
+		if (weatherChangesOffset) WK2.Weather.addWeatherChanges(builder, weatherChangesOffset);
+		if (historicalComparisonsOffset) WK2.Weather.addHistoricalComparisons(builder, historicalComparisonsOffset);
+		return WK2.Weather.endWeather(builder);
+	}
+
 }
 

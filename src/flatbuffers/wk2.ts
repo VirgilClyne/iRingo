@@ -46,5 +46,5 @@ export { Urgency } from './wk2/urgency.js';
 export { Weather } from './wk2/weather.js';
 export { WeatherAlertCollectionData } from './wk2/weather-alert-collection-data.js';
 export { WeatherAlertSummary } from './wk2/weather-alert-summary.js';
+export { WeatherChanges } from './wk2/weather-changes.js';
 export { WeatherCondition } from './wk2/weather-condition.js';
-export { weatherChanges } from './wk2/weather-changes.js';

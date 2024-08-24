@@ -8,22 +8,22 @@ import { Change } from '../wk2/change.js';
 import { Metadata } from '../wk2/metadata.js';
 
 
-export class weatherChanges {
+export class WeatherChanges {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):weatherChanges {
+  __init(i:number, bb:flatbuffers.ByteBuffer):WeatherChanges {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsweatherChanges(bb:flatbuffers.ByteBuffer, obj?:weatherChanges):weatherChanges {
-  return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsWeatherChanges(bb:flatbuffers.ByteBuffer, obj?:WeatherChanges):WeatherChanges {
+  return (obj || new WeatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsweatherChanges(bb:flatbuffers.ByteBuffer, obj?:weatherChanges):weatherChanges {
+static getSizePrefixedRootAsWeatherChanges(bb:flatbuffers.ByteBuffer, obj?:WeatherChanges):WeatherChanges {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new weatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new WeatherChanges()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 metadata(obj?:Metadata):Metadata|null {
@@ -51,7 +51,7 @@ changesLength():number {
   return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
 }
 
-static startweatherChanges(builder:flatbuffers.Builder) {
+static startWeatherChanges(builder:flatbuffers.Builder) {
   builder.startObject(4);
 }
 
@@ -83,17 +83,17 @@ static startChangesVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 }
 
-static endweatherChanges(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endWeatherChanges(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createweatherChanges(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, forecastStart:number, forecastEnd:number, changesOffset:flatbuffers.Offset):flatbuffers.Offset {
-  weatherChanges.startweatherChanges(builder);
-  weatherChanges.addMetadata(builder, metadataOffset);
-  weatherChanges.addForecastStart(builder, forecastStart);
-  weatherChanges.addForecastEnd(builder, forecastEnd);
-  weatherChanges.addChanges(builder, changesOffset);
-  return weatherChanges.endweatherChanges(builder);
+static createWeatherChanges(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, forecastStart:number, forecastEnd:number, changesOffset:flatbuffers.Offset):flatbuffers.Offset {
+  WeatherChanges.startWeatherChanges(builder);
+  WeatherChanges.addMetadata(builder, metadataOffset);
+  WeatherChanges.addForecastStart(builder, forecastStart);
+  WeatherChanges.addForecastEnd(builder, forecastEnd);
+  WeatherChanges.addChanges(builder, changesOffset);
+  return WeatherChanges.endWeatherChanges(builder);
 }
 }
