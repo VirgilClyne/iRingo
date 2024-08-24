@@ -21,9 +21,17 @@ export class WeatherAlertSummary {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    id() {
+    id(index) {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb.__vector(this.bb_pos + offset) + index * 4) : 0;
+    }
+    idLength() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    idArray() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? new Uint32Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
     }
     areaId(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -128,8 +136,18 @@ export class WeatherAlertSummary {
     static startWeatherAlertSummary(builder) {
         builder.startObject(24);
     }
-    static addId(builder, id) {
-        builder.addFieldInt32(0, id, 0);
+    static addId(builder, idOffset) {
+        builder.addFieldOffset(0, idOffset, 0);
+    }
+    static createIdVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addInt32(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startIdVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
     }
     static addAreaId(builder, areaIdOffset) {
         builder.addFieldOffset(1, areaIdOffset, 0);
@@ -214,9 +232,9 @@ export class WeatherAlertSummary {
         const offset = builder.endObject();
         return offset;
     }
-    static createWeatherAlertSummary(builder, id, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
+    static createWeatherAlertSummary(builder, idOffset, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
         WeatherAlertSummary.startWeatherAlertSummary(builder);
-        WeatherAlertSummary.addId(builder, id);
+        WeatherAlertSummary.addId(builder, idOffset);
         WeatherAlertSummary.addAreaId(builder, areaIdOffset);
         WeatherAlertSummary.addUnknown3(builder, unknown3);
         WeatherAlertSummary.addAttributionUrl(builder, attributionUrlOffset);

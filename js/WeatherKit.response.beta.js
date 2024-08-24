@@ -18101,9 +18101,17 @@ class WeatherAlertSummary {
         bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
         return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    id() {
+    id(index) {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb.__vector(this.bb_pos + offset) + index * 4) : 0;
+    }
+    idLength() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+    }
+    idArray() {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? new Uint32Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
     }
     areaId(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -18208,8 +18216,18 @@ class WeatherAlertSummary {
     static startWeatherAlertSummary(builder) {
         builder.startObject(24);
     }
-    static addId(builder, id) {
-        builder.addFieldInt32(0, id, 0);
+    static addId(builder, idOffset) {
+        builder.addFieldOffset(0, idOffset, 0);
+    }
+    static createIdVector(builder, data) {
+        builder.startVector(4, data.length, 4);
+        for (let i = data.length - 1; i >= 0; i--) {
+            builder.addInt32(data[i]);
+        }
+        return builder.endVector();
+    }
+    static startIdVector(builder, numElems) {
+        builder.startVector(4, numElems, 4);
     }
     static addAreaId(builder, areaIdOffset) {
         builder.addFieldOffset(1, areaIdOffset, 0);
@@ -18294,9 +18312,9 @@ class WeatherAlertSummary {
         const offset = builder.endObject();
         return offset;
     }
-    static createWeatherAlertSummary(builder, id, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
+    static createWeatherAlertSummary(builder, idOffset, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
         WeatherAlertSummary.startWeatherAlertSummary(builder);
-        WeatherAlertSummary.addId(builder, id);
+        WeatherAlertSummary.addId(builder, idOffset);
         WeatherAlertSummary.addAreaId(builder, areaIdOffset);
         WeatherAlertSummary.addUnknown3(builder, unknown3);
         WeatherAlertSummary.addAttributionUrl(builder, attributionUrlOffset);
@@ -18563,7 +18581,472 @@ class Weather {
     }
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.11(4049) response.beta");
+class weatherKit2 {
+    constructor(options = {}) {
+		this.Name = "weatherKit2";
+		this.Version = "1.0.0";
+		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+		Object.assign(this, options);
+    };
+    
+    encode(dataSets = "", data = {}) {
+        const builder = new Builder(this.initialSize);
+		Weather.startWeather(builder);
+        const WeatherData = Weather.endWeather(builder);
+        builder.finish(WeatherData);
+        return builder.asUint8Array();
+    };
+
+    decode(dataSets = "", byteBuffer = this.bb) {
+        //const byteBuffer = new flatbuffers.ByteBuffer(uint8Array);
+        const WeatherData = Weather.getRootAsWeather(byteBuffer);
+		let data = {};
+		let metadata;
+        switch (dataSets) {
+			case "airQuality":
+				const airQualityData = WeatherData?.airQuality();
+				metadata = airQualityData.metadata();
+				data = {
+					"categoryIndex": airQualityData?.categoryIndex(),
+					"index": airQualityData?.index(),
+					"isSignificant": airQualityData?.isSignificant(),
+					"pollutants": [],
+					"previousDayComparison": ComparisonTrend[airQualityData?.previousDayComparison()],
+					"primaryPollutant": PollutantType[airQualityData?.primaryPollutant()],
+					"scale": airQualityData?.scale(),
+				};
+				for (let i = 0; i < airQualityData?.pollutantsLength(); i++) data.pollutants.push({
+					"amount": airQualityData?.pollutants(i)?.amount(),
+					"pollutantType": PollutantType[airQualityData?.pollutants(i)?.pollutantType()],
+					"units": UnitType[airQualityData?.pollutants(i)?.units()],
+				});
+				break;
+			case "currentWeather":
+				const CurrentWeatherData = WeatherData?.currentWeather();
+				metadata = CurrentWeatherData?.metadata();
+				data = {
+					"asOf": CurrentWeatherData?.asOf(),
+					"cloudCover": CurrentWeatherData?.cloudCover(),
+					"cloudCoverHighAltPct": CurrentWeatherData?.cloudCoverHighAltPct(),
+					"cloudCoverLowAltPct": CurrentWeatherData?.cloudCoverLowAltPct(),
+					"cloudCoverMidAltPct": CurrentWeatherData?.cloudCoverMidAltPct(),
+					"conditionCode": ConditionCode[CurrentWeatherData?.conditionCode()],
+					"daylight": CurrentWeatherData?.daylight(),
+					"humidity": CurrentWeatherData?.humidity(),
+					"perceivedPrecipitationIntensity": CurrentWeatherData?.perceivedPrecipitationIntensity(),
+					"precipitationAmount24h": CurrentWeatherData?.precipitationAmount24h(),
+					"precipitationAmountNext1hByType": [],
+					"precipitationAmountNext24h": CurrentWeatherData?.precipitationAmountNext24h(),
+					"precipitationAmountNext24hByType": [],
+					"precipitationAmountNext6h": CurrentWeatherData?.precipitationAmountNext6h(),
+					"precipitationAmountNext6hByType": [],
+					"precipitationAmountPrevious1hByType": [],
+					"precipitationAmountPrevious24hByType": [],
+					"precipitationAmountPrevious6hByType": [],
+					"precipitationIntensity": CurrentWeatherData?.precipitationIntensity(),
+					"pressure": CurrentWeatherData?.pressure(),
+					"pressureTrend": PressureTrend[CurrentWeatherData?.pressureTrend()],
+					"snowfallAmount1h": CurrentWeatherData?.snowfallAmount1h(),
+					"snowfallAmount24h": CurrentWeatherData?.snowfallAmount24h(),
+					"snowfallAmount6h": CurrentWeatherData?.snowfallAmount6h(),
+					"snowfallAmountNext1h": CurrentWeatherData?.snowfallAmountNext1h(),
+					"snowfallAmountNext24h": CurrentWeatherData?.snowfallAmountNext24h(),
+					"snowfallAmountNext6h": CurrentWeatherData?.snowfallAmountNext6h(),
+					"temperature": CurrentWeatherData?.temperature(),
+					"temperatureApparent": CurrentWeatherData?.temperatureApparent(),
+					"unknown34": CurrentWeatherData?.unknown34(),
+					"temperatureDewPoint": CurrentWeatherData?.temperatureDewPoint(),
+					"uvIndex": CurrentWeatherData?.uvIndex(),
+					"visibility": CurrentWeatherData?.visibility(),
+					"windDirection": CurrentWeatherData?.windDirection(),
+					"windGust": CurrentWeatherData?.windGust(),
+					"windSpeed": CurrentWeatherData?.windSpeed(),
+				};
+				for (let i = 0; i < CurrentWeatherData?.precipitationAmountNext1hByTypeLength(); i++) data.precipitationAmountNext1hByType.push({
+					"expected": CurrentWeatherData?.precipitationAmountNext1hByType(i)?.expected(),
+					"expectedSnow": CurrentWeatherData?.precipitationAmountNext1hByType(i)?.expectedSnow(),
+					"maximumSnow": CurrentWeatherData?.precipitationAmountNext1hByType(i)?.maximumSnow(),
+					"minimumSnow": CurrentWeatherData?.precipitationAmountNext1hByType(i)?.minimumSnow(),
+					"precipitationType": PrecipitationType[CurrentWeatherData?.precipitationAmountNext1hByType(i)?.precipitationType()],
+				});
+				for (let i = 0; i < CurrentWeatherData?.precipitationAmountNext24hByTypeLength(); i++) data.precipitationAmountNext24hByType.push({
+					"expected": CurrentWeatherData?.precipitationAmountNext24hByType(i)?.expected(),
+					"expectedSnow": CurrentWeatherData?.precipitationAmountNext24hByType(i)?.expectedSnow(),
+					"maximumSnow": CurrentWeatherData?.precipitationAmountNext24hByType(i)?.maximumSnow(),
+					"minimumSnow": CurrentWeatherData?.precipitationAmountNext24hByType(i)?.minimumSnow(),
+					"precipitationType": PrecipitationType[CurrentWeatherData?.precipitationAmountNext24hByType(i)?.precipitationType()],
+				});
+				for (let i = 0; i < CurrentWeatherData?.precipitationAmountNext6hByTypeLength(); i++) data.precipitationAmountNext6hByType.push({
+					"expected": CurrentWeatherData?.precipitationAmountNext6hByType(i)?.expected(),
+					"expectedSnow": CurrentWeatherData?.precipitationAmountNext6hByType(i)?.expectedSnow(),
+					"maximumSnow": CurrentWeatherData?.precipitationAmountNext6hByType(i)?.maximumSnow(),
+					"minimumSnow": CurrentWeatherData?.precipitationAmountNext6hByType(i)?.minimumSnow(),
+					"precipitationType": PrecipitationType[CurrentWeatherData?.precipitationAmountNext6hByType(i)?.precipitationType()],
+				});
+				for (let i = 0; i < CurrentWeatherData?.precipitationAmountPrevious1hByTypeLength(); i++) data.precipitationAmountPrevious1hByType.push({
+					"expected": CurrentWeatherData?.precipitationAmountPrevious1hByType(i)?.expected(),
+					"expectedSnow": CurrentWeatherData?.precipitationAmountPrevious1hByType(i)?.expectedSnow(),
+					"maximumSnow": CurrentWeatherData?.precipitationAmountPrevious1hByType(i)?.maximumSnow(),
+					"minimumSnow": CurrentWeatherData?.precipitationAmountPrevious1hByType(i)?.minimumSnow(),
+					"precipitationType": PrecipitationType[CurrentWeatherData?.precipitationAmountPrevious1hByType(i)?.precipitationType()],
+				});
+				for (let i = 0; i < CurrentWeatherData?.precipitationAmountPrevious24hByTypeLength(); i++) data.precipitationAmountPrevious24hByType.push({
+					"expected": CurrentWeatherData?.precipitationAmountPrevious24hByType(i)?.expected(),
+					"expectedSnow": CurrentWeatherData?.precipitationAmountPrevious24hByType(i)?.expectedSnow(),
+					"maximumSnow": CurrentWeatherData?.precipitationAmountPrevious24hByType(i)?.maximumSnow(),
+					"minimumSnow": CurrentWeatherData?.precipitationAmountPrevious24hByType(i)?.minimumSnow(),
+					"precipitationType": PrecipitationType[CurrentWeatherData?.precipitationAmountPrevious24hByType(i)?.precipitationType()],
+				});
+				for (let i = 0; i < CurrentWeatherData?.precipitationAmountPrevious6hByTypeLength(); i++) data.precipitationAmountPrevious6hByType.push({
+					"expected": CurrentWeatherData?.precipitationAmountPrevious6hByType(i)?.expected(),
+					"expectedSnow": CurrentWeatherData?.precipitationAmountPrevious6hByType(i)?.expectedSnow(),
+					"maximumSnow": CurrentWeatherData?.precipitationAmountPrevious6hByType(i)?.maximumSnow(),
+					"minimumSnow": CurrentWeatherData?.precipitationAmountPrevious6hByType(i)?.minimumSnow(),
+					"precipitationType": PrecipitationType[CurrentWeatherData?.precipitationAmountPrevious6hByType(i)?.precipitationType()],
+				});
+				break;
+			case "forecastDaily":
+				const DailyForecastData = WeatherData?.forecastDaily();
+				metadata = DailyForecastData?.metadata();
+				data = {
+					"days": [],
+				};
+				for (let i = 0; i < DailyForecastData?.daysLength(); i++) {
+					let day = {
+						"conditionCode": ConditionCode[DailyForecastData?.days(i)?.conditionCode()],
+						"forecastEnd": DailyForecastData?.days(i)?.forecastEnd(),
+						"forecastStart": DailyForecastData?.days(i)?.forecastStart(),
+						"humidityMax": DailyForecastData?.days(i)?.humidityMax(),
+						"humidityMin": DailyForecastData?.days(i)?.humidityMin(),
+						"maxUvIndex": DailyForecastData?.days(i)?.maxUvIndex(),
+						"moonPhase": MoonPhase[DailyForecastData?.days(i)?.moonPhase()],
+						"moonrise": DailyForecastData?.days(i)?.moonrise(),
+						"moonset": DailyForecastData?.days(i)?.moonset(),
+						"precipitationAmount": DailyForecastData?.days(i)?.precipitationAmount(),
+						"precipitationAmountByType": [],
+						"precipitationChance": DailyForecastData?.days(i)?.precipitationChance(),
+						"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.precipitationType()],
+						"snowfallAmount": DailyForecastData?.days(i)?.snowfallAmount(),
+						"solarMidnight": DailyForecastData?.days(i)?.solarMidnight(),
+						"solarNoon": DailyForecastData?.days(i)?.solarNoon(),
+						"sunrise": DailyForecastData?.days(i)?.sunrise(),
+						"sunriseCivil": DailyForecastData?.days(i)?.sunriseCivil(),
+						"sunriseNautical": DailyForecastData?.days(i)?.sunriseNautical(),
+						"sunriseAstronomical": DailyForecastData?.days(i)?.sunriseAstronomical(),
+						"sunset": DailyForecastData?.days(i)?.sunset(),
+						"sunsetCivil": DailyForecastData?.days(i)?.sunsetCivil(),
+						"sunsetNautical": DailyForecastData?.days(i)?.sunsetNautical(),
+						"sunsetAstronomical": DailyForecastData?.days(i)?.sunsetAstronomical(),
+						"temperatureMax": DailyForecastData?.days(i)?.temperatureMax(),
+						"temperatureMaxTime": DailyForecastData?.days(i)?.temperatureMaxTime(),
+						"temperatureMin": DailyForecastData?.days(i)?.temperatureMin(),
+						"temperatureMinTime": DailyForecastData?.days(i)?.temperatureMinTime(),
+						"visibilityMax": DailyForecastData?.days(i)?.visibilityMax(),
+						"visibilityMin": DailyForecastData?.days(i)?.visibilityMin(),
+						"windGustSpeedMax": DailyForecastData?.days(i)?.windGustSpeedMax(),
+						"windSpeedAvg": DailyForecastData?.days(i)?.windSpeedAvg(),
+						"windSpeedMax": DailyForecastData?.days(i)?.windSpeedMax(),
+					};
+					for (let j = 0; j < DailyForecastData?.days(i)?.precipitationAmountByTypeLength(); j++) day.precipitationAmountByType.push({
+						"expected": DailyForecastData?.days(i)?.precipitationAmountByType(j)?.expected(),
+						"expectedSnow": DailyForecastData?.days(i)?.precipitationAmountByType(j)?.expectedSnow(),
+						"maximumSnow": DailyForecastData?.days(i)?.precipitationAmountByType(j)?.maximumSnow(),
+						"minimumSnow": DailyForecastData?.days(i)?.precipitationAmountByType(j)?.minimumSnow(),
+						"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.precipitationAmountByType(j)?.precipitationType()],
+					});
+					if (DailyForecastData?.days(i)?.daytimeForecast()) {
+						day.daytimeForecast = {
+							"cloudCover": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCover(),
+							"cloudCoverHighAltPct": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCoverHighAltPct(),
+							"cloudCoverLowAltPct": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCoverLowAltPct(),
+							"cloudCoverMidAltPct": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCoverMidAltPct(),
+							"conditionCode": ConditionCode[DailyForecastData?.days(i)?.daytimeForecast()?.conditionCode()],
+							"forecastEnd": DailyForecastData?.days(i)?.daytimeForecast()?.forecastEnd(),
+							"forecastStart": DailyForecastData?.days(i)?.daytimeForecast()?.forecastStart(),
+							"humidity": DailyForecastData?.days(i)?.daytimeForecast()?.humidity(),
+							"humidityMax": DailyForecastData?.days(i)?.daytimeForecast()?.humidityMax(),
+							"humidityMin": DailyForecastData?.days(i)?.daytimeForecast()?.humidityMin(),
+							"precipitationAmount": DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmount(),
+							"precipitationAmountByType": [],
+							"precipitationChance": DailyForecastData?.days(i)?.daytimeForecast()?.precipitationChance(),
+							"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.daytimeForecast()?.precipitationType()],
+							"snowfallAmount": DailyForecastData?.days(i)?.daytimeForecast()?.snowfallAmount(),
+							"temperatureMax": DailyForecastData?.days(i)?.daytimeForecast()?.temperatureMax(),
+							"temperatureMin": DailyForecastData?.days(i)?.daytimeForecast()?.temperatureMin(),
+							"visibilityMax": DailyForecastData?.days(i)?.daytimeForecast()?.visibilityMax(),
+							"visibilityMin": DailyForecastData?.days(i)?.daytimeForecast()?.visibilityMin(),
+							"windDirection": DailyForecastData?.days(i)?.daytimeForecast()?.windDirection(),
+							"windGustSpeedMax": DailyForecastData?.days(i)?.daytimeForecast()?.windGustSpeedMax(),
+							"windSpeed": DailyForecastData?.days(i)?.daytimeForecast()?.windSpeed(),
+							"windSpeedMax": DailyForecastData?.days(i)?.daytimeForecast()?.windSpeedMax(),
+						};
+						for (let j = 0; j < DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmountByTypeLength(); j++) day.daytimeForecast.precipitationAmountByType.push({
+							"expected": DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmountByType(j)?.expected(),
+							"expectedSnow": DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmountByType(j)?.expectedSnow(),
+							"maximumSnow": DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmountByType(j)?.maximumSnow(),
+							"minimumSnow": DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmountByType(j)?.minimumSnow(),
+							"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.daytimeForecast()?.precipitationAmountByType(j)?.precipitationType()],
+						});
+					}					if (DailyForecastData?.days(i)?.overnightForecast()) {
+						day.overnightForecast = {
+							"cloudCover": DailyForecastData?.days(i)?.overnightForecast()?.cloudCover(),
+							"cloudCoverHighAltPct": DailyForecastData?.days(i)?.overnightForecast()?.cloudCoverHighAltPct(),
+							"cloudCoverLowAltPct": DailyForecastData?.days(i)?.overnightForecast()?.cloudCoverLowAltPct(),
+							"cloudCoverMidAltPct": DailyForecastData?.days(i)?.overnightForecast()?.cloudCoverMidAltPct(),
+							"conditionCode": ConditionCode[DailyForecastData?.days(i)?.overnightForecast()?.conditionCode()],
+							"forecastEnd": DailyForecastData?.days(i)?.overnightForecast()?.forecastEnd(),
+							"forecastStart": DailyForecastData?.days(i)?.overnightForecast()?.forecastStart(),
+							"humidity": DailyForecastData?.days(i)?.overnightForecast()?.humidity(),
+							"humidityMax": DailyForecastData?.days(i)?.overnightForecast()?.humidityMax(),
+							"humidityMin": DailyForecastData?.days(i)?.overnightForecast()?.humidityMin(),
+							"precipitationAmount": DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmount(),
+							"precipitationAmountByType": [],
+							"precipitationChance": DailyForecastData?.days(i)?.overnightForecast()?.precipitationChance(),
+							"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.overnightForecast()?.precipitationType()],
+							"snowfallAmount": DailyForecastData?.days(i)?.overnightForecast()?.snowfallAmount(),
+							"temperatureMax": DailyForecastData?.days(i)?.overnightForecast()?.temperatureMax(),
+							"temperatureMin": DailyForecastData?.days(i)?.overnightForecast()?.temperatureMin(),
+							"visibilityMax": DailyForecastData?.days(i)?.overnightForecast()?.visibilityMax(),
+							"visibilityMin": DailyForecastData?.days(i)?.overnightForecast()?.visibilityMin(),
+							"windDirection": DailyForecastData?.days(i)?.overnightForecast()?.windDirection(),
+							"windGustSpeedMax": DailyForecastData?.days(i)?.overnightForecast()?.windGustSpeedMax(),
+							"windSpeed": DailyForecastData?.days(i)?.overnightForecast()?.windSpeed(),
+							"windSpeedMax": DailyForecastData?.days(i)?.overnightForecast()?.windSpeedMax(),
+						};
+						for (let j = 0; j < DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmountByTypeLength(); j++) day.overnightForecast.precipitationAmountByType.push({
+							"expected": DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmountByType(j)?.expected(),
+							"expectedSnow": DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmountByType(j)?.expectedSnow(),
+							"maximumSnow": DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmountByType(j)?.maximumSnow(),
+							"minimumSnow": DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmountByType(j)?.minimumSnow(),
+							"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.overnightForecast()?.precipitationAmountByType(j)?.precipitationType()],
+						});
+					}					if (DailyForecastData?.days(i)?.restOfDayForecast()) {
+						day.restOfDayForecast = {
+							"cloudCover": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCover(),
+							"cloudCoverHighAltPct": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCoverHighAltPct(),
+							"cloudCoverLowAltPct": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCoverLowAltPct(),
+							"cloudCoverMidAltPct": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCoverMidAltPct(),
+							"conditionCode": ConditionCode[DailyForecastData?.days(i)?.restOfDayForecast()?.conditionCode()],
+							"forecastEnd": DailyForecastData?.days(i)?.restOfDayForecast()?.forecastEnd(),
+							"forecastStart": DailyForecastData?.days(i)?.restOfDayForecast()?.forecastStart(),
+							"humidity": DailyForecastData?.days(i)?.restOfDayForecast()?.humidity(),
+							"humidityMax": DailyForecastData?.days(i)?.restOfDayForecast()?.humidityMax(),
+							"humidityMin": DailyForecastData?.days(i)?.restOfDayForecast()?.humidityMin(),
+							"precipitationAmount": DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmount(),
+							"precipitationAmountByType": [],
+							"precipitationChance": DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationChance(),
+							"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationType()],
+							"snowfallAmount": DailyForecastData?.days(i)?.restOfDayForecast()?.snowfallAmount(),
+							"temperatureMax": DailyForecastData?.days(i)?.restOfDayForecast()?.temperatureMax(),
+							"temperatureMin": DailyForecastData?.days(i)?.restOfDayForecast()?.temperatureMin(),
+							"visibilityMax": DailyForecastData?.days(i)?.restOfDayForecast()?.visibilityMax(),
+							"visibilityMin": DailyForecastData?.days(i)?.restOfDayForecast()?.visibilityMin(),
+							"windDirection": DailyForecastData?.days(i)?.restOfDayForecast()?.windDirection(),
+							"windGustSpeedMax": DailyForecastData?.days(i)?.restOfDayForecast()?.windGustSpeedMax(),
+							"windSpeed": DailyForecastData?.days(i)?.restOfDayForecast()?.windSpeed(),
+							"windSpeedMax": DailyForecastData?.days(i)?.restOfDayForecast()?.windSpeedMax(),
+						};
+						for (let j = 0; j < DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmountByTypeLength(); j++) day.restOfDayForecast.precipitationAmountByType.push({
+							"expected": DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmountByType(j)?.expected(),
+							"expectedSnow": DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmountByType(j)?.expectedSnow(),
+							"maximumSnow": DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmountByType(j)?.maximumSnow(),
+							"minimumSnow": DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmountByType(j)?.minimumSnow(),
+							"precipitationType": PrecipitationType[DailyForecastData?.days(i)?.restOfDayForecast()?.precipitationAmountByType(j)?.precipitationType()],
+						});
+					}					data.days.push(day);
+				}				break;
+			case "forecastHourly":
+				const HourlyForecastData = WeatherData?.forecastHourly();
+				metadata = HourlyForecastData?.metadata();
+				data = {
+					"hours": [],
+				};
+				for (let i = 0; i < HourlyForecastData?.hoursLength(); i++) data.hours.push({
+					"cloudCover": HourlyForecastData?.hours(i)?.cloudCover(),
+					"cloudCoverHighAltPct": HourlyForecastData?.hours(i)?.cloudCoverHighAltPct(),
+					"cloudCoverLowAltPct": HourlyForecastData?.hours(i)?.cloudCoverLowAltPct(),
+					"cloudCoverMidAltPct": HourlyForecastData?.hours(i)?.cloudCoverMidAltPct(),
+					"conditionCode": ConditionCode[HourlyForecastData?.hours(i)?.conditionCode()],
+					"daylight": HourlyForecastData?.hours(i)?.daylight(),
+					"forecastStart": HourlyForecastData?.hours(i)?.forecastStart(),
+					"humidity": HourlyForecastData?.hours(i)?.humidity(),
+					"perceivedPrecipitationIntensity": HourlyForecastData?.hours(i)?.perceivedPrecipitationIntensity(),
+					"precipitationAmount": HourlyForecastData?.hours(i)?.precipitationAmount(),
+					"precipitationChance": HourlyForecastData?.hours(i)?.precipitationChance(),
+					"precipitationIntensity": HourlyForecastData?.hours(i)?.precipitationIntensity(),
+					"precipitationType": PrecipitationType[HourlyForecastData?.hours(i)?.precipitationType()],
+					"pressure": HourlyForecastData?.hours(i)?.pressure(),
+					"pressureTrend": PressureTrend[HourlyForecastData?.hours(i)?.pressureTrend()],
+					"snowfallAmount": HourlyForecastData?.hours(i)?.snowfallAmount(),
+					"snowfallIntensity": HourlyForecastData?.hours(i)?.snowfallIntensity(),
+					"temperature": HourlyForecastData?.hours(i)?.temperature(),
+					"temperatureApparent": HourlyForecastData?.hours(i)?.temperatureApparent(),
+					"temperatureDewPoint": HourlyForecastData?.hours(i)?.temperatureDewPoint(),
+					"uvIndex": HourlyForecastData?.hours(i)?.uvIndex(),
+					"visibility": HourlyForecastData?.hours(i)?.visibility(),
+					"windDirection": HourlyForecastData?.hours(i)?.windDirection(),
+					"windGust": HourlyForecastData?.hours(i)?.windGust(),
+					"windSpeed": HourlyForecastData?.hours(i)?.windSpeed(),
+				});
+				break;
+			case "forecastNextHour":
+				const NextHourForecastData = WeatherData?.forecastNextHour();
+				metadata = NextHourForecastData?.metadata();
+				data = {
+					"condition": [],
+					"forecastEnd": NextHourForecastData?.forecastEnd(),
+					"forecastStart": NextHourForecastData?.forecastStart(),
+					"minutes": [],
+					"summary": []
+				};
+				for (let i = 0; i < NextHourForecastData?.conditionLength(); i++) {
+					let condition = {
+						"beginCondition": WeatherCondition[NextHourForecastData?.condition(i)?.beginCondition()],
+						"endCondition": WeatherCondition[NextHourForecastData?.condition(i)?.endCondition()],
+						"forecastToken": ForecastToken[NextHourForecastData?.condition(i)?.forecastToken()],
+						"parameters": [],
+						"startTime": NextHourForecastData?.condition(i)?.startTime(),
+					};
+					for (let j = 0; j < NextHourForecastData?.condition(i)?.parametersLength(); j++) condition.parameters.push({
+						"date": NextHourForecastData?.condition(i)?.parameters(j)?.date(),
+						"type": ParameterType[NextHourForecastData?.condition(i)?.parameters(j)?.type()],
+					});
+					data.condition.push(condition);
+				}				for (let i = 0; i < NextHourForecastData?.minutesLength(); i++) data.minutes.push({
+					"perceivedPrecipitationIntensity": NextHourForecastData?.minutes(i)?.perceivedPrecipitationIntensity(),
+					"precipitationChance": NextHourForecastData?.minutes(i)?.precipitationChance(),
+					"precipitationIntensity": NextHourForecastData?.minutes(i)?.precipitationIntensity(),
+					"startTime": NextHourForecastData?.minutes(i)?.startTime(),
+				});
+				for (let i = 0; i < NextHourForecastData?.summaryLength(); i++) data.summary.push({
+					"condition": PrecipitationType[NextHourForecastData?.summary(i)?.condition()],
+					"precipitationChance": NextHourForecastData?.summary(i)?.precipitationChance(),
+					"precipitationIntensity": NextHourForecastData?.summary(i)?.precipitationIntensity(),
+					"startTime": NextHourForecastData?.summary(i)?.startTime(),
+				});
+				break;
+			case "news":
+				const newsData = WeatherData?.news();
+				metadata = newsData?.metadata();
+				data = {
+					"placements": [],
+				};
+				for (let i = 0; i < newsData?.placementsLength(); i++) {
+					let placement = {
+						"articles": [],
+						"placement": PlacementType[newsData?.placements(i)?.placement()],
+						"priority": newsData?.placements(i)?.priority(),
+					};
+					for (let j = 0; j < newsData?.placements(i)?.articlesLength(); j++) {
+						let article = {
+							"alertIds": [],
+							"headlineOverride": newsData?.placements(i)?.articles(j)?.headlineOverride(),
+							"id": newsData?.placements(i)?.articles(j)?.id(),
+							"locale": newsData?.placements(i)?.articles(j)?.locale(),
+							"phenomena": [],
+							"supportedStorefronts": [],
+						};
+						for (let k = 0; k < newsData?.placements(i)?.articles(j)?.alertIdsLength(); k++) article.alertIds.push(newsData?.placements(i)?.articles(j)?.alertIds(k));
+						for (let k = 0; k < newsData?.placements(i)?.articles(j)?.phenomenaLength(); k++) article.phenomena.push(newsData?.placements(i)?.articles(j)?.phenomena(k));
+						for (let k = 0; k < newsData?.placements(i)?.articles(j)?.supportedStorefrontsLength(); k++) article.supportedStorefronts.push(newsData?.placements(i)?.articles(j)?.supportedStorefronts(k));
+						placement.articles.push(article);
+					}					data.placements.push(placement);
+				}				break;
+			case "weatherAlert":
+			case "weatherAlerts":
+				const WeatherAlertCollectionData = WeatherData?.weatherAlerts();
+				metadata = WeatherAlertCollectionData?.metadata();
+				data = {
+					"alerts": [],
+					"detailsUrl": WeatherAlertCollectionData?.detailsUrl(),
+				};
+				for (let i = 0; i < WeatherAlertCollectionData?.alertsLength(); i++) {
+					let alert = {
+						"areaId": WeatherAlertCollectionData?.alerts(i)?.areaId(),
+						"attributionUrl": WeatherAlertCollectionData?.alerts(i)?.attributionUrl(),
+						"certainty": Certainty[WeatherAlertCollectionData?.alerts(i)?.certainty()],
+						"countryCode": WeatherAlertCollectionData?.alerts(i)?.countryCode(),
+						"description": WeatherAlertCollectionData?.alerts(i)?.description(),
+						"detailsUrl": WeatherAlertCollectionData?.alerts(i)?.detailsUrl(),
+						"effectiveTime": WeatherAlertCollectionData?.alerts(i)?.effectiveTime(),
+						"eventEndTime": WeatherAlertCollectionData?.alerts(i)?.eventEndTime(),
+						"eventOnsetTime": WeatherAlertCollectionData?.alerts(i)?.eventOnsetTime(),
+						"eventSource": WeatherAlertCollectionData?.alerts(i)?.eventSource(),
+						"expireTime": WeatherAlertCollectionData?.alerts(i)?.expireTime(),
+						"id": WeatherAlertCollectionData?.alerts(i)?.id(),
+						"importance": ImportanceType[WeatherAlertCollectionData?.alerts(i)?.importance()],
+						"issuedTime": WeatherAlertCollectionData?.alerts(i)?.issuedTime(),
+						"phenomenon": WeatherAlertCollectionData?.alerts(i)?.phenomenon(),
+						"responses": [],
+						"severity": Severity[WeatherAlertCollectionData?.alerts(i)?.severity()],
+						"significance": SignificanceType[WeatherAlertCollectionData?.alerts(i)?.significance()],
+						"source": WeatherAlertCollectionData?.alerts(i)?.source(),
+						"token": WeatherAlertCollectionData?.alerts(i)?.token(),
+						"urgency": Urgency[WeatherAlertCollectionData?.alerts(i)?.urgency()],
+					};
+					for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.responsesLength(); j++) alert.responses.push(ResponseType[WeatherAlertCollectionData?.alerts(i)?.responses(j)]);
+					data.alerts.push(alert);
+				}				break;
+			case "weatherChange":
+			case "weatherChanges":
+				const weatherChangesData = WeatherData?.weatherChanges();
+				metadata = weatherChangesData?.metadata();
+				data = {
+					"changes": [],
+					"forecastEnd": weatherChangesData?.forecastEnd(),
+					"forecastStart": weatherChangesData?.forecastStart(),
+				};
+				for (let i = 0; i < weatherChangesData?.changesLength(); i++) {
+					let change = {
+						"dayPrecipitationChange": ChangeTrend[weatherChangesData?.changes(i)?.dayPrecipitationChange()],
+						"forecastEnd": weatherChangesData?.changes(i)?.forecastEnd(),
+						"forecastStart": weatherChangesData?.changes(i)?.forecastStart(),
+						"maxTemperatureChange": ChangeTrend[weatherChangesData?.changes(i)?.maxTemperatureChange()],
+						"minTemperatureChange": ChangeTrend[weatherChangesData?.changes(i)?.minTemperatureChange()],
+						"nightPrecipitationChange": ChangeTrend[weatherChangesData?.changes(i)?.nightPrecipitationChange()],
+					};
+					data.changes.push(change);
+				}				break;
+			case "trendComparison":
+			case "trendComparisons":
+			case "historicalComparison":
+			case "historicalComparisons":
+				const historicalComparisonsData = WeatherData?.historicalComparisons();
+				metadata = historicalComparisonsData?.metadata();
+				data = {
+					"comparisons": [],
+				};
+				for (let i = 0; i < historicalComparisonsData?.comparisonsLength(); i++) {
+					let comparison = {
+						"baselineStartDate": historicalComparisonsData?.comparisons(i)?.baselineStartDate(),
+						"baselineType": historicalComparisonsData?.comparisons(i)?.baselineType(),
+						"baselineValue": historicalComparisonsData?.comparisons(i)?.baselineValue(),
+						"condition": ComparisonType[historicalComparisonsData?.comparisons(i)?.condition()],
+						"currentValue": historicalComparisonsData?.comparisons(i)?.currentValue(),
+						"deviation": DeviationType[historicalComparisonsData?.comparisons(i)?.deviation()],
+					};
+					data.comparisons.push(comparison);
+				}				break;
+		}		data.metadata = {
+			"attributionUrl": metadata?.attributionUrl(),
+			"expireTime": metadata?.expireTime(),
+			"language": metadata?.language(),
+			"latitude": metadata?.latitude(),
+			"longitude": metadata?.longitude(),
+			"providerLogo": metadata?.providerLogo(),
+			"providerName": metadata?.providerName(),
+			"readTime": metadata?.readTime(),
+			"reportedTime": metadata?.reportedTime(),
+			"unknown9": metadata?.unknown9(),
+			"sourceType": SourceType[metadata?.sourceType()],
+			"unknown11": metadata?.unknown11(),
+			//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
+		};
+		return data;
+    };
+}
+
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.0.13(4057) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -18635,351 +19118,53 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					switch (FORMAT) {
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
-							body = new ByteBuffer(rawBody);
-							let builder = new Builder();
+							const ByteBuffer$1 = new ByteBuffer(rawBody);
 							// 主机判断
 							switch (HOST) {
 								case "weatherkit.apple.com":
 									// 路径判断
 									if (PATH.startsWith("/api/v2/weather/")) {
 										/******************  initialization start  *******************/
-										let weather = Weather.getRootAsWeather(body);
-										Weather.startWeather(builder);
+										//const weatherData = WK2.Weather.getRootAsWeather(body);
+										const weatherKit2$1 = new weatherKit2({ "bb": ByteBuffer$1 });
+										//WK2.Weather.startWeather(builder);
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											/******************  initialization start  *******************/
-											let airQuality = {
-												"categoryIndex": weather.airQuality()?.categoryIndex(),
-												"index": weather.airQuality()?.index(),
-												"isSignificant": weather.airQuality()?.isSignificant(),
-												"metadata": {
-													"attributionUrl": weather.airQuality()?.metadata()?.attributionUrl(),
-													"expireTime": weather.airQuality()?.metadata()?.expireTime(),
-													"language": weather.airQuality()?.metadata()?.language(),
-													"latitude": weather.airQuality()?.metadata()?.latitude(),
-													"longitude": weather.airQuality()?.metadata()?.longitude(),
-													"providerLogo": weather.airQuality()?.metadata()?.providerLogo(),
-													"providerName": weather.airQuality()?.metadata()?.providerName(),
-													"readTime": weather.airQuality()?.metadata()?.readTime(),
-													"reportedTime": weather.airQuality()?.metadata()?.reportedTime(),
-													"unknown9": weather.airQuality()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.airQuality()?.metadata()?.sourceType()],
-													"unknown11": weather.airQuality()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.airQuality()?.metadata()?.temporarilyUnavailable(),
-												},
-												"pollutants": [],
-												"previousDayComparison": ComparisonTrend[weather.airQuality()?.previousDayComparison()],
-												"primaryPollutant": PollutantType[weather.airQuality()?.primaryPollutant()],
-												"scale": weather.airQuality()?.scale(),
-											};
-											for (i = 0; i < weather.airQuality()?.pollutantsLength(); i++) airQuality.pollutants.push({
-												"amount": weather.airQuality()?.pollutants(i)?.amount(),
-												"pollutantType": PollutantType[weather.airQuality()?.pollutants(i)?.pollutantType()],
-												"units": UnitType[weather.airQuality()?.pollutants(i)?.units()],
-											});
-											/******************  initialization finish  *******************/
-											$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+											body.airQuality = weatherKit2$1.decode("airQuality");
+											//$.log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
 											//WK2.Weather.addAirQuality(builder, WK2.AirQuality.createAirQuality(builder, airQuality.categoryIndex, airQuality.index, airQuality.isSignificant, WK2.MetacreateMetadata(builder, builder.createString(airQuality.metaattributionUrl), airQuality.metaexpireTime, builder.createString(airQuality.metalanguage), airQuality.metalatitude, airQuality.metalongitude, builder.createString(airQuality.metaproviderName), airQuality.metareadTime, airQuality.metareportedTime, WK2.SourceType[airQuality.metasourceType], airQuality.metatemporarilyUnavailable), airQuality.pollutants.map(p => WK2.Pollutant.createPollutant(builder, p.amount, WK2.PollutantType[p.pollutantType], WK2.UnitType[p.units])), WK2.ComparisonType[airQuality.previousDayComparison], WK2.PollutantType[airQuality.primaryPollutant], airQuality.scale));
 										}										if (url.searchParams.get("dataSets").includes("currentWeather")) {
-											/******************  initialization start  *******************/
-											let currentWeather = {
-												"conditionCode": ConditionCode[weather.currentWeather()?.conditionCode()],
-												"metadata": {
-													"attributionUrl": weather.currentWeather()?.metadata()?.attributionUrl(),
-													"expireTime": weather.currentWeather()?.metadata()?.expireTime(),
-													"language": weather.currentWeather()?.metadata()?.language(),
-													"latitude": weather.currentWeather()?.metadata()?.latitude(),
-													"longitude": weather.currentWeather()?.metadata()?.longitude(),
-													"providerLogo": weather.currentWeather()?.metadata()?.providerLogo(),
-													"providerName": weather.currentWeather()?.metadata()?.providerName(),
-													"readTime": weather.currentWeather()?.metadata()?.readTime(),
-													"reportedTime": weather.currentWeather()?.metadata()?.reportedTime(),
-													"unknown9": weather.currentWeather()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.currentWeather()?.metadata()?.sourceType()],
-													"unknown11": weather.currentWeather()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.currentWeather()?.metadata()?.temporarilyUnavailable(),
-												},
-												"unknown34": weather.currentWeather()?.unknown34(),
-											};
-											/******************  initialization finish  *******************/
-											$.log(`🚧 currentWeather: ${JSON.stringify(currentWeather, null, 2)}`, "");
-											//WK2.Weather.addCurrentWeather(builder, weather.currentWeather());
+											body.currentWeather = weatherKit2$1.decode("currentWeather");
+											//$.log(`🚧 body.currentWeather: ${JSON.stringify(body.currentWeather, null, 2)}`, "");
+											//WK2.Weather.addCurrentWeather(builder, CurrentWeatherData);
 										}										if (url.searchParams.get("dataSets").includes("forecastDaily")) {
-											/******************  initialization start  *******************/
-											let forecastDaily = {
-												"days": [],
-												"metadata": {
-													"attributionUrl": weather.forecastDaily()?.metadata()?.attributionUrl(),
-													"expireTime": weather.forecastDaily()?.metadata()?.expireTime(),
-													"language": weather.forecastDaily()?.metadata()?.language(),
-													"latitude": weather.forecastDaily()?.metadata()?.latitude(),
-													"longitude": weather.forecastDaily()?.metadata()?.longitude(),
-													"providerLogo": weather.forecastDaily()?.metadata()?.providerLogo(),
-													"providerName": weather.forecastDaily()?.metadata()?.providerName(),
-													"readTime": weather.forecastDaily()?.metadata()?.readTime(),
-													"reportedTime": weather.forecastDaily()?.metadata()?.reportedTime(),
-													"unknown9": weather.forecastDaily()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.forecastDaily()?.metadata()?.sourceType()],
-													"unknown11": weather.forecastDaily()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.forecastDaily()?.metadata()?.temporarilyUnavailable(),
-												},
-											};
-											for (i = 0; i < weather.forecastDaily()?.daysLength(); i++) {
-												let day = {
-													"conditionCode": ConditionCode[weather.forecastDaily()?.days(i)?.conditionCode()],
-													"moonPhase": MoonPhase[weather.forecastDaily()?.days(i)?.moonPhase()],
-													"precipitationType": PrecipitationType[weather.forecastDaily()?.days(i)?.precipitationType()],
-
-												};
-												forecastDaily.days.push(day);
-											}											/******************  initialization finish  *******************/
-											$.log(`🚧 forecastDaily: ${JSON.stringify(forecastDaily, null, 2)}`, "");
-											//WK2.Weather.addForecastDaily(builder, weather.forecastDaily());
+											body.forecastDaily = weatherKit2$1.decode("forecastDaily");
+											//$.log(`🚧 body.forecastDaily: ${JSON.stringify(body.forecastDaily, null, 2)}`, "");
+											//WK2.Weather.addForecastDaily(builder, DailyForecastData);
 										}										if (url.searchParams.get("dataSets").includes("forecastHourly")) {
-											/******************  initialization start  *******************/
-											let forecastHourly = {
-												"metadata": {
-													"attributionUrl": weather.forecastHourly()?.metadata()?.attributionUrl(),
-													"expireTime": weather.forecastHourly()?.metadata()?.expireTime(),
-													"language": weather.forecastHourly()?.metadata()?.language(),
-													"latitude": weather.forecastHourly()?.metadata()?.latitude(),
-													"longitude": weather.forecastHourly()?.metadata()?.longitude(),
-													"providerLogo": weather.forecastHourly()?.metadata()?.providerLogo(),
-													"providerName": weather.forecastHourly()?.metadata()?.providerName(),
-													"readTime": weather.forecastHourly()?.metadata()?.readTime(),
-													"reportedTime": weather.forecastHourly()?.metadata()?.reportedTime(),
-													"unknown9": weather.forecastHourly()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.forecastHourly()?.metadata()?.sourceType()],
-													"unknown11": weather.forecastHourly()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.forecastHourly()?.metadata()?.temporarilyUnavailable(),
-												},
-												"hours": [],
-											};
-											for (i = 0; i < weather.forecastHourly()?.hoursLength(); i++) forecastHourly.hours.push({
-												"conditionCode": ConditionCode[weather.forecastHourly()?.hours(i)?.conditionCode()],
-												"precipitationType": PrecipitationType[weather.forecastHourly()?.hours(i)?.precipitationType()],
-												"snowfallAmount": weather.forecastHourly()?.hours(i)?.snowfallAmount(),
-												"snowfallIntensity": weather.forecastHourly()?.hours(i)?.snowfallIntensity(),
-											});
-											/******************  initialization finish  *******************/
-											$.log(`🚧 forecastHourly: ${JSON.stringify(forecastHourly, null, 2)}`, "");
-											//WK2.Weather.addForecastHourly(builder, weather.forecastHourly());
+											body.forecastHourly = weatherKit2$1.decode("forecastHourly");
+											//$.log(`🚧 body.forecastHourly: ${JSON.stringify(body.forecastHourly, null, 2)}`, "");
+											//WK2.Weather.addForecastHourly(builder, HourlyForecastData);
 										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
-											/******************  initialization start  *******************/
-											let forecastNextHour = {
-												"condition": [],
-												"forecastEnd": weather.forecastNextHour()?.forecastEnd(),
-												"forecastStart": weather.forecastNextHour()?.forecastStart(),
-												"metadata": {
-													"attributionUrl": weather.forecastNextHour()?.metadata()?.attributionUrl(),
-													"expireTime": weather.forecastNextHour()?.metadata()?.expireTime(),
-													"language": weather.forecastNextHour()?.metadata()?.language(),
-													"latitude": weather.forecastNextHour()?.metadata()?.latitude(),
-													"longitude": weather.forecastNextHour()?.metadata()?.longitude(),
-													"providerLogo": weather.forecastNextHour()?.metadata()?.providerLogo(),
-													"providerName": weather.forecastNextHour()?.metadata()?.providerName(),
-													"readTime": weather.forecastNextHour()?.metadata()?.readTime(),
-													"reportedTime": weather.forecastNextHour()?.metadata()?.reportedTime(),
-													"unknown9": weather.forecastNextHour()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.forecastNextHour()?.metadata()?.sourceType()],
-													"unknown11": weather.forecastNextHour()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.forecastNextHour()?.metadata()?.temporarilyUnavailable(),
-												},
-												"minutes": [],
-												"summary": []
-											};
-											for (i = 0; i < weather.forecastNextHour()?.conditionLength(); i++) {
-												let condition = {
-													"beginCondition": WeatherCondition[weather.forecastNextHour()?.condition(i)?.beginCondition()],
-													"endCondition": WeatherCondition[weather.forecastNextHour()?.condition(i)?.endCondition()],
-													"forecastToken": ForecastToken[weather.forecastNextHour()?.condition(i)?.forecastToken()],
-													"parameters": [],
-													"startTime": weather.forecastNextHour()?.condition(i)?.startTime(),
-												};
-												for (j = 0; j < weather.forecastNextHour()?.condition(i)?.parametersLength(); j++) condition.parameters.push({
-													"date": weather.forecastNextHour()?.condition(i)?.parameters(j)?.date(),
-													"type": ParameterType[weather.forecastNextHour()?.condition(i)?.parameters(j)?.type()],
-												});
-												forecastNextHour.condition.push(condition);
-											}											for (i = 0; i < weather.forecastNextHour()?.minutesLength(); i++) forecastNextHour.minutes.push({
-												"perceivedPrecipitationIntensity": weather.forecastNextHour()?.minutes(i)?.perceivedPrecipitationIntensity(),
-												"precipitationChance": weather.forecastNextHour()?.minutes(i)?.precipitationChance(),
-												"precipitationIntensity": weather.forecastNextHour()?.minutes(i)?.precipitationIntensity(),
-												"startTime": weather.forecastNextHour()?.minutes(i)?.startTime(),
-											});
-											for (i = 0; i < weather.forecastNextHour()?.summaryLength(); i++) forecastNextHour.summary.push({
-												"condition": PrecipitationType[weather.forecastNextHour()?.summary(i)?.condition()],
-												"precipitationChance": weather.forecastNextHour()?.summary(i)?.precipitationChance(),
-												"precipitationIntensity": weather.forecastNextHour()?.summary(i)?.precipitationIntensity(),
-												"startTime": weather.forecastNextHour()?.summary(i)?.startTime(),
-											});
-											/******************  initialization finish  *******************/
-											$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+											body.forecastNextHour = weatherKit2$1.decode("forecastNextHour");
+											//$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body.forecastNextHour, null, 2)}`, "");
 											//WK2.Weather.addForecastNextHour(builder, WK2.ForecastNextHour.createForecastNextHour(builder, forecastNextHour.condition.map(c => WK2.Condition.createCondition(builder, WK2.WeatherCondition[c.beginCondition], WK2.WeatherCondition[c.endCondition], WK2.ForecastToken[c.forecastToken], c.parameters.map(p => WK2.Parameter.createParameter(builder, p.date, WK2.ParameterType[p.type])), c.startTime)), forecastNextHour.forecastEnd, forecastNextHour.forecastStart, WK2.MetacreateMetadata(builder, builder.createString(forecastNextHour.metaattributionUrl), forecastNextHour.metaexpireTime, builder.createString(forecastNextHour.metalanguage), forecastNextHour.metalatitude, forecastNextHour.metalongitude, builder.createString(forecastNextHour.metaproviderName), forecastNextHour.metareadTime, forecastNextHour.metareportedTime, WK2.SourceType[forecastNextHour.metasourceType], forecastNextHour.metatemporarilyUnavailable), forecastNextHour.minutes.map(m => WK2.Minute.createMinute(builder, m.perceivedPrecipitationIntensity, m.precipitationChance, m.precipitationIntensity, m.startTime)), forecastNextHour.summary.map(s => WK2.Summary.createSummary(builder, WK2.PrecipitationType[s.condition], s.precipitationChance, s.precipitationIntensity, s.startTime))));
 										}										if (url.searchParams.get("dataSets").includes("news")) {
-											/******************  initialization start  *******************/
-											let news = {
-												"metadata": {
-													"attributionUrl": weather.news()?.metadata()?.attributionUrl(),
-													"expireTime": weather.news()?.metadata()?.expireTime(),
-													"language": weather.news()?.metadata()?.language(),
-													"latitude": weather.news()?.metadata()?.latitude(),
-													"longitude": weather.news()?.metadata()?.longitude(),
-													"providerLogo": weather.news()?.metadata()?.providerLogo(),
-													"providerName": weather.news()?.metadata()?.providerName(),
-													"readTime": weather.news()?.metadata()?.readTime(),
-													"reportedTime": weather.news()?.metadata()?.reportedTime(),
-													"unknown9": weather.news()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.news()?.metadata()?.sourceType()],
-													"unknown11": weather.news()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.news()?.metadata()?.temporarilyUnavailable(),
-												},
-												"placements": [],
-											};
-											for (i = 0; i < weather.news()?.placementsLength(); i++) {
-												let placement = {
-													"articles": [],
-													"placement": PlacementType[weather.news()?.placements(i)?.placement()],
-													"priority": weather.news()?.placements(i)?.priority(),
-												};
-												for (j = 0; j < weather.news()?.placements(i)?.articlesLength(); j++) {
-													let article = {
-														"alertIds": [],
-														"headlineOverride": weather.news()?.placements(i)?.articles(j)?.headlineOverride(),
-														"id": weather.news()?.placements(i)?.articles(j)?.id(),
-														"locale": weather.news()?.placements(i)?.articles(j)?.locale(),
-														"phenomena": [],
-														"supportedStorefronts": [],
-													};
-													for (k = 0; k < weather.news()?.placements(i)?.articles(j)?.alertIdsLength(); k++) article.alertIds.push(weather.news()?.placements(i)?.articles(j)?.alertIds(k));
-													for (k = 0; k < weather.news()?.placements(i)?.articles(j)?.phenomenaLength(); k++) article.phenomena.push(weather.news()?.placements(i)?.articles(j)?.phenomena(k));
-													for (k = 0; k < weather.news()?.placements(i)?.articles(j)?.supportedStorefrontsLength(); k++) article.supportedStorefronts.push(weather.news()?.placements(i)?.articles(j)?.supportedStorefronts(k));
-													placement.articles.push(article);
-												}												news.placements.push(placement);
-											}											/******************  initialization finish  *******************/
-											$.log(`🚧 news: ${JSON.stringify(news, null, 2)}`, "");
+											body.news = weatherKit2$1.decode("news");
+											//$.log(`🚧 body.news: ${JSON.stringify(body.news, null, 2)}`, "");
 											//WK2.Weather.addNews(builder, weather.news());
-										}
-										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
-											/******************  initialization start  *******************/
-											let weatherAlerts = {
-												"alerts": [],
-												"detailsUrl": weather.weatherAlerts()?.detailsUrl(),
-												"metadata": {
-													"attributionUrl": weather.weatherAlerts()?.metadata()?.attributionUrl(),
-													"expireTime": weather.weatherAlerts()?.metadata()?.expireTime(),
-													"language": weather.weatherAlerts()?.metadata()?.language(),
-													"latitude": weather.weatherAlerts()?.metadata()?.latitude(),
-													"longitude": weather.weatherAlerts()?.metadata()?.longitude(),
-													"providerLogo": weather.weatherAlerts()?.metadata()?.providerLogo(),
-													"providerName": weather.weatherAlerts()?.metadata()?.providerName(),
-													"readTime": weather.weatherAlerts()?.metadata()?.readTime(),
-													"reportedTime": weather.weatherAlerts()?.metadata()?.reportedTime(),
-													"unknown9": weather.weatherAlerts()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.weatherAlerts()?.metadata()?.sourceType()],
-													"unknown11": weather.weatherAlerts()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.weatherAlerts()?.metadata()?.temporarilyUnavailable(),
-												},
-											};
-											for (i = 0; i < weather.weatherAlerts()?.alertsLength(); i++) {
-												let alert = {
-													"areaId": weather.weatherAlerts()?.alerts(i)?.areaId(),
-													"attributionUrl": weather.weatherAlerts()?.alerts(i)?.attributionUrl(),
-													"certainty": Certainty[weather.weatherAlerts()?.alerts(i)?.certainty()],
-													"countryCode": weather.weatherAlerts()?.alerts(i)?.countryCode(),
-													"description": weather.weatherAlerts()?.alerts(i)?.description(),
-													"detailsUrl": weather.weatherAlerts()?.alerts(i)?.detailsUrl(),
-													"effectiveTime": weather.weatherAlerts()?.alerts(i)?.effectiveTime(),
-													"eventEndTime": weather.weatherAlerts()?.alerts(i)?.eventEndTime(),
-													"eventOnsetTime": weather.weatherAlerts()?.alerts(i)?.eventOnsetTime(),
-													"eventSource": weather.weatherAlerts()?.alerts(i)?.eventSource(),
-													"expireTime": weather.weatherAlerts()?.alerts(i)?.expireTime(),
-													"id": weather.weatherAlerts()?.alerts(i)?.id(),
-													"importance": ImportanceType[weather.weatherAlerts()?.alerts(i)?.importance()],
-													"issuedTime": weather.weatherAlerts()?.alerts(i)?.issuedTime(),
-													"phenomenon": weather.weatherAlerts()?.alerts(i)?.phenomenon(),
-													"responses": [],
-													"severity": Severity[weather.weatherAlerts()?.alerts(i)?.severity()],
-													"significance": SignificanceType[weather.weatherAlerts()?.alerts(i)?.significance()],
-													"source": weather.weatherAlerts()?.alerts(i)?.source(),
-													"token": weather.weatherAlerts()?.alerts(i)?.token(),
-													"urgency": Urgency[weather.weatherAlerts()?.alerts(i)?.urgency()],
-												};
-												for (j = 0; j < weather.weatherAlerts()?.alerts(i)?.responsesLength(); j++) alert.responses.push(ResponseType[weather.weatherAlerts()?.alerts(i)?.responses(j)]);
-												weatherAlerts.alerts.push(alert);
-											}											/******************  initialization finish  *******************/
-											$.log(`🚧 weatherAlerts: ${JSON.stringify(weatherAlerts, null, 2)}`, "");
-											//WK2.Weather.addWeatherAlerts(builder, weather.weatherAlerts())
+										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
+											body.weatherAlerts = weatherKit2$1.decode("weatherAlerts");
+											//$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body.weatherAlerts, null, 2)}`, "");
+											//WK2.Weather.addWeatherAlerts(builder, WeatherAlertCollectionData)
 										}										if (url.searchParams.get("dataSets").includes("weatherChange")) {
-											/******************  initialization start  *******************/
-											let weatherChanges = {
-												"changes": [],
-												"forecastEnd": weather.weatherChanges()?.forecastEnd(),
-												"forecastStart": weather.weatherChanges()?.forecastStart(),
-												"metadata": {
-													"attributionUrl": weather.weatherChanges()?.metadata()?.attributionUrl(),
-													"expireTime": weather.weatherChanges()?.metadata()?.expireTime(),
-													"language": weather.weatherChanges()?.metadata()?.language(),
-													"latitude": weather.weatherChanges()?.metadata()?.latitude(),
-													"longitude": weather.weatherChanges()?.metadata()?.longitude(),
-													"providerLogo": weather.weatherChanges()?.metadata()?.providerLogo(),
-													"providerName": weather.weatherChanges()?.metadata()?.providerName(),
-													"readTime": weather.weatherChanges()?.metadata()?.readTime(),
-													"reportedTime": weather.weatherChanges()?.metadata()?.reportedTime(),
-													"unknown9": weather.weatherChanges()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.weatherChanges()?.metadata()?.sourceType()],
-													"unknown11": weather.weatherChanges()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.weatherChanges()?.metadata()?.temporarilyUnavailable(),
-												},
-											};
-											for (i = 0; i < weather.weatherChanges()?.changesLength(); i++) {
-												let change = {
-													"dayPrecipitationChange": ChangeTrend[weather.weatherChanges()?.changes(i)?.dayPrecipitationChange()],
-													"forecastEnd": weather.weatherChanges()?.changes(i)?.forecastEnd(),
-													"forecastStart": weather.weatherChanges()?.changes(i)?.forecastStart(),
-													"maxTemperatureChange": ChangeTrend[weather.weatherChanges()?.changes(i)?.maxTemperatureChange()],
-													"minTemperatureChange": ChangeTrend[weather.weatherChanges()?.changes(i)?.minTemperatureChange()],
-													"nightPrecipitationChange": ChangeTrend[weather.weatherChanges()?.changes(i)?.nightPrecipitationChange()],
-												};
-												weatherChanges.changes.push(change);
-											}											/******************  initialization finish  *******************/
-											$.log(`🚧 weatherChanges: ${JSON.stringify(weatherChanges, null, 2)}`, "");
-											//WK2.Weather.addWeatherChanges(builder, weather.weatherChanges())
+											body.weatherChanges = weatherKit2$1.decode("weatherChange");
+											//$.log(`🚧 body.weatherChanges: ${JSON.stringify(body.weatherChanges, null, 2)}`, "");
+											//WK2.Weather.addWeatherChanges(builder, weatherChanges)
 										}										if (url.searchParams.get("dataSets").includes("trendComparison")) {
-											/******************  initialization start  *******************/
-											let historicalComparisons = {
-												"comparisons": [],
-												"metadata": {
-													"attributionUrl": weather.historicalComparisons()?.metadata()?.attributionUrl(),
-													"expireTime": weather.historicalComparisons()?.metadata()?.expireTime(),
-													"language": weather.historicalComparisons()?.metadata()?.language(),
-													"latitude": weather.historicalComparisons()?.metadata()?.latitude(),
-													"longitude": weather.historicalComparisons()?.metadata()?.longitude(),
-													"providerLogo": weather.historicalComparisons()?.metadata()?.providerLogo(),
-													"providerName": weather.historicalComparisons()?.metadata()?.providerName(),
-													"readTime": weather.historicalComparisons()?.metadata()?.readTime(),
-													"reportedTime": weather.historicalComparisons()?.metadata()?.reportedTime(),
-													"unknown9": weather.historicalComparisons()?.metadata()?.unknown9(),
-													"sourceType": SourceType[weather.historicalComparisons()?.metadata()?.sourceType()],
-													"unknown11": weather.historicalComparisons()?.metadata()?.unknown11(),
-													//"temporarilyUnavailable": weather.historicalComparisons()?.metadata()?.temporarilyUnavailable(),
-												},
-											};
-											for (i = 0; i < weather.historicalComparisons()?.comparisonsLength(); i++) {
-												let comparison = {
-													"baselineStartDate": weather.historicalComparisons()?.comparisons(i)?.baselineStartDate(),
-													"baselineType": weather.historicalComparisons()?.comparisons(i)?.baselineType(),
-													"baselineValue": weather.historicalComparisons()?.comparisons(i)?.baselineValue(),
-													"condition": ComparisonType[weather.historicalComparisons()?.comparisons(i)?.condition()],
-													"currentValue": weather.historicalComparisons()?.comparisons(i)?.currentValue(),
-													"deviation": DeviationType[weather.historicalComparisons()?.comparisons(i)?.deviation()],
-												};
-												historicalComparisons.comparisons.push(comparison);
-											}											/******************  initialization finish  *******************/
-											$.log(`🚧 historicalComparisons: ${JSON.stringify(historicalComparisons, null, 2)}`, "");
-											//WK2.Weather.addHistoricalComparisons(builder, weather.historicalComparisons())
-										}										let data = Weather.endWeather(builder);
-										//$.log(`🚧 data: ${JSON.stringify(data)}`, "");
-										builder.finish(data);
+											body.historicalComparisons = weatherKit2$1.decode("trendComparison");
+											//$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body.historicalComparisons, null, 2)}`, "");
+											//WK2.Weather.addHistoricalComparisons(builder, historicalComparisonsData)
+										}										$.log(`🚧 body: ${JSON.stringify(body)}`, "");
 										break;
 									}									break;
 							}							//rawBody = builder.asUint8Array(); // Of type `Uint8Array`.
