@@ -5,10 +5,11 @@ import ENV from "./ENV/ENV.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
+import WAQI from "./class/WAQI.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.3(4100) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.0(4103) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -26,9 +27,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
+			const Waqi = new WAQI(url);
 			// 创建空数据
 			let body = {};
-			delete $response.headers?.["ETag"];
 			// 格式判断
 			switch (FORMAT) {
 				case undefined: // 视为无body

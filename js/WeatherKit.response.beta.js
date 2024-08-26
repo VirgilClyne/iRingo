@@ -18609,7 +18609,7 @@ class WeatherKit2 {
 				if (data?.weatherAlerts) Offsets.weatherAlertsOffset = this.encode("weatherAlerts", data.weatherAlerts);
 				if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode("weatherChanges", data.weatherChanges);
 				if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode("historicalComparisons", data.historicalComparisons);
-				offset = weatherKit2.createWeather(this.builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
+				offset = WeatherKit2.createWeather(this.builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
 				break;
 			case "airQuality":
 				let pollutantsOffset = AirQuality.createPollutantsVector(this.builder, data?.pollutants?.map(p => Pollutant.createPollutant(this.builder, PollutantType[p.pollutantType], p.amount, UnitType[p.units])));
@@ -19256,7 +19256,31 @@ class WeatherKit2 {
 
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.3(4100) response.beta");
+class WAQI {
+    constructor(url = new URL(), options = {}) {
+        this.Name = "WAQI";
+        this.Version = "1.0.1";
+        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+        this.url = $request.url;
+        const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
+        const Parameters = (url?.pathname ?? url).match(RegExp)?.groups;
+        this.version = Parameters?.version;
+        this.language = Parameters?.language;
+        this.latitude = Parameters?.latitude;
+        this.longitude = Parameters?.longitude;
+        this.country = Parameters?.countryCode ?? url?.searchParams?.get("country");
+        Object.assign(this, options);
+        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
+    };
+
+    Nearest(mapqVersion = "mapq2") {
+        const url = `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`;
+        console.log(`\n🟧 url: ${url}\n`);
+        return url;
+    };
+}
+
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.0(4103) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19274,9 +19298,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
+			new WAQI(url);
 			// 创建空数据
 			let body = {};
-			delete $response.headers?.["ETag"];
 			// 格式判断
 			switch (FORMAT) {
 				case undefined: // 视为无body
@@ -19342,8 +19366,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "weatherkit.apple.com":
 									// 路径判断
 									if (PATH.startsWith("/api/v2/weather/")) {
-										const weatherKit2$1 = new WeatherKit2({ "bb": ByteBuffer$1, "builder": Builder$1 });
-										body = weatherKit2$1.decode("all");
+										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer$1, "builder": Builder$1 });
+										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											//if (body?.airQuality?.metadata) body.airQuality.metadata.providerName = "iRingo";
@@ -19352,35 +19376,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
 											//if (body?.weatherAlerts?.metadata) body.weatherAlerts.metadata.providerName = "iRingo";
-											//if (body?.weatherAlerts?.alerts) body.weatherAlerts.alerts = [];
-											/*
-											if (body?.weatherAlerts?.alerts) body.weatherAlerts.alerts.map(alert => {
-												delete alert?.attributionUrl;
-												delete alert?.areaId;
-												delete alert?.certainty;
-												delete alert?.countryCode;
-												delete alert?.description;
-												delete alert?.detailsUrl;
-												delete alert?.effectiveTime;
-												delete alert?.eventEndTime;
-												delete alert?.eventOnsetTime;
-												delete alert?.eventSource;
-												delete alert?.expireTime;
-												alert.id = [];
-												delete alert?.importance;
-												delete alert?.issuedTime;
-												delete alert?.phenomenon;
-												alert.responses = [];
-												delete alert?.severity;
-												delete alert?.significance;
-												delete alert?.source;
-												delete alert?.token;
-												delete alert?.unknown3;
-												delete alert?.urgency;
-												return alert;
-											});
-											*/
-											//$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("trendComparison")) {
 											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
 										}										const WeatherData = weatherKit2.encode("all", body);
