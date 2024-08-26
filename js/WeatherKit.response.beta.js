@@ -15247,7 +15247,7 @@ class Metadata {
     }
     expireTime() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     language(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 8);
@@ -15271,42 +15271,26 @@ class Metadata {
     }
     readTime() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     reportedTime() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     unknown9() {
         const offset = this.bb.__offset(this.bb_pos, 22);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sourceType() {
         const offset = this.bb.__offset(this.bb_pos, 24);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
     }
     unknown11() {
         const offset = this.bb.__offset(this.bb_pos, 26);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown12() {
-        const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown13() {
-        const offset = this.bb.__offset(this.bb_pos, 30);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown14() {
-        const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown15() {
-        const offset = this.bb.__offset(this.bb_pos, 34);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     static startMetadata(builder) {
-        builder.startObject(16);
+        builder.startObject(12);
     }
     static addAttributionUrl(builder, attributionUrlOffset) {
         builder.addFieldOffset(0, attributionUrlOffset, 0);
@@ -15344,23 +15328,11 @@ class Metadata {
     static addUnknown11(builder, unknown11) {
         builder.addFieldInt32(11, unknown11, 0);
     }
-    static addUnknown12(builder, unknown12) {
-        builder.addFieldInt32(12, unknown12, 0);
-    }
-    static addUnknown13(builder, unknown13) {
-        builder.addFieldInt32(13, unknown13, 0);
-    }
-    static addUnknown14(builder, unknown14) {
-        builder.addFieldInt32(14, unknown14, 0);
-    }
-    static addUnknown15(builder, unknown15) {
-        builder.addFieldInt32(15, unknown15, 0);
-    }
     static endMetadata(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11, unknown12, unknown13, unknown14, unknown15) {
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11) {
         Metadata.startMetadata(builder);
         Metadata.addAttributionUrl(builder, attributionUrlOffset);
         Metadata.addExpireTime(builder, expireTime);
@@ -15374,10 +15346,6 @@ class Metadata {
         Metadata.addUnknown9(builder, unknown9);
         Metadata.addSourceType(builder, sourceType);
         Metadata.addUnknown11(builder, unknown11);
-        Metadata.addUnknown12(builder, unknown12);
-        Metadata.addUnknown13(builder, unknown13);
-        Metadata.addUnknown14(builder, unknown14);
-        Metadata.addUnknown15(builder, unknown15);
         return Metadata.endMetadata(builder);
     }
 }
@@ -15429,7 +15397,7 @@ class Pollutant {
     }
     pollutantType() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
     }
     amount() {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -15437,7 +15405,7 @@ class Pollutant {
     }
     units() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : UnitType.PARTS_PER_BILLION;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : UnitType.PARTS_PER_BILLION;
     }
     static startPollutant(builder) {
         builder.startObject(3);
@@ -15487,11 +15455,11 @@ class AirQuality {
     }
     categoryIndex() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     index() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt16(this.bb_pos + offset) : 0;
     }
     isSignificant() {
         const offset = this.bb.__offset(this.bb_pos, 10);
@@ -15507,11 +15475,11 @@ class AirQuality {
     }
     previousDayComparison() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
     }
     primaryPollutant() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
     }
     scale(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 18);
@@ -15527,7 +15495,7 @@ class AirQuality {
         builder.addFieldInt8(1, categoryIndex, 0);
     }
     static addIndex(builder, index) {
-        builder.addFieldInt8(2, index, 0);
+        builder.addFieldInt16(2, index, 0);
     }
     static addIsSignificant(builder, isSignificant) {
         builder.addFieldInt8(3, +isSignificant, +false);
@@ -15694,6 +15662,18 @@ class Articles {
 
 // automatically generated by the FlatBuffers compiler, do not modify
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+var BaselineType;
+(function (BaselineType) {
+    BaselineType[BaselineType["MEAN"] = 0] = "MEAN";
+    BaselineType[BaselineType["UNKNOWN1"] = 1] = "UNKNOWN1";
+    BaselineType[BaselineType["UNKNOWN2"] = 2] = "UNKNOWN2";
+    BaselineType[BaselineType["UNKNOWN3"] = 3] = "UNKNOWN3";
+    BaselineType[BaselineType["UNKNOWN4"] = 4] = "UNKNOWN4";
+    BaselineType[BaselineType["UNKNOWN5"] = 5] = "UNKNOWN5";
+})(BaselineType || (BaselineType = {}));
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 var Certainty;
 (function (Certainty) {
     Certainty[Certainty["UNKNOWN"] = 0] = "UNKNOWN";
@@ -15736,27 +15716,27 @@ class Change {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     maxTemperatureChange() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ChangeTrend.STEADY;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
     }
     minTemperatureChange() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ChangeTrend.STEADY;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
     }
     dayPrecipitationChange() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ChangeTrend.STEADY;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
     }
     nightPrecipitationChange() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ChangeTrend.STEADY;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
     }
     static startChange(builder) {
         builder.startObject(6);
@@ -15834,7 +15814,7 @@ class Comparison {
     }
     condition() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ComparisonType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ComparisonType.UNKNOWN0;
     }
     currentValue() {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -15846,15 +15826,15 @@ class Comparison {
     }
     deviation() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
     }
     baselineType() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     baselineStartDate() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     static startComparison(builder) {
         builder.startObject(6);
@@ -15872,7 +15852,7 @@ class Comparison {
         builder.addFieldInt8(3, deviation, DeviationType.UNKNOWN0);
     }
     static addBaselineType(builder, baselineType) {
-        builder.addFieldInt8(4, baselineType, 0);
+        builder.addFieldInt32(4, baselineType, 0);
     }
     static addBaselineStartDate(builder, baselineStartDate) {
         builder.addFieldInt32(5, baselineStartDate, 0);
@@ -15937,11 +15917,11 @@ class Parameter {
     }
     type() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ParameterType.FIRST_AT;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ParameterType.FIRST_AT;
     }
     date() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     static startParameter(builder) {
         builder.startObject(2);
@@ -16008,23 +15988,23 @@ class Condition {
     }
     startTime() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     endTime() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastToken() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ForecastToken.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ForecastToken.CLEAR;
     }
     beginCondition() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : WeatherCondition.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
     }
     endCondition() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : WeatherCondition.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
     }
     parameters(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 14);
@@ -16163,7 +16143,7 @@ class PrecipitationAmountByType {
     }
     precipitationType() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     expected() {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -16246,27 +16226,27 @@ class CurrentWeatherData {
     }
     asOf() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     cloudCover() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverLowAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverMidAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverHighAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     daylight() {
         const offset = this.bb.__offset(this.bb_pos, 18);
@@ -16274,7 +16254,7 @@ class CurrentWeatherData {
     }
     humidity() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     perceivedPrecipitationIntensity() {
         const offset = this.bb.__offset(this.bb_pos, 22);
@@ -16362,7 +16342,7 @@ class CurrentWeatherData {
     }
     pressureTrend() {
         const offset = this.bb.__offset(this.bb_pos, 52);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PressureTrend.RISING;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PressureTrend.RISING;
     }
     snowfallAmount1h() {
         const offset = this.bb.__offset(this.bb_pos, 54);
@@ -16406,7 +16386,7 @@ class CurrentWeatherData {
     }
     uvIndex() {
         const offset = this.bb.__offset(this.bb_pos, 74);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     visibility() {
         const offset = this.bb.__offset(this.bb_pos, 76);
@@ -16414,7 +16394,7 @@ class CurrentWeatherData {
     }
     windDirection() {
         const offset = this.bb.__offset(this.bb_pos, 78);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt16(this.bb_pos + offset) : 0;
     }
     windGust() {
         const offset = this.bb.__offset(this.bb_pos, 80);
@@ -16599,7 +16579,7 @@ class CurrentWeatherData {
         builder.addFieldFloat32(36, visibility, 0.0);
     }
     static addWindDirection(builder, windDirection) {
-        builder.addFieldInt8(37, windDirection, 0);
+        builder.addFieldInt16(37, windDirection, 0);
     }
     static addWindGust(builder, windGust) {
         builder.addFieldFloat32(38, windGust, 0.0);
@@ -16676,43 +16656,43 @@ class DayPartForecast {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     cloudCover() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverLowAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverMidAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverHighAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     humidity() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     humidityMax() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     humidityMin() {
         const offset = this.bb.__offset(this.bb_pos, 22);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationAmount() {
         const offset = this.bb.__offset(this.bb_pos, 24);
@@ -16728,11 +16708,11 @@ class DayPartForecast {
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationType() {
         const offset = this.bb.__offset(this.bb_pos, 30);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     snowfallAmount() {
         const offset = this.bb.__offset(this.bb_pos, 32);
@@ -16918,39 +16898,39 @@ class DayWeatherConditions {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     humidityMax() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     humidityMin() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     maxUvIndex() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     moonPhase() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : MoonPhase.NEW;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : MoonPhase.NEW;
     }
     moonrise() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     moonset() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     precipitationAmount() {
         const offset = this.bb.__offset(this.bb_pos, 22);
@@ -16966,11 +16946,11 @@ class DayWeatherConditions {
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 26);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationType() {
         const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     snowfallAmount() {
         const offset = this.bb.__offset(this.bb_pos, 30);
@@ -16978,43 +16958,43 @@ class DayWeatherConditions {
     }
     solarMidnight() {
         const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     solarNoon() {
         const offset = this.bb.__offset(this.bb_pos, 34);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunrise() {
         const offset = this.bb.__offset(this.bb_pos, 36);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunriseCivil() {
         const offset = this.bb.__offset(this.bb_pos, 38);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunriseNautical() {
         const offset = this.bb.__offset(this.bb_pos, 40);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunriseAstronomical() {
         const offset = this.bb.__offset(this.bb_pos, 42);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunset() {
         const offset = this.bb.__offset(this.bb_pos, 44);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunsetCivil() {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunsetNautical() {
         const offset = this.bb.__offset(this.bb_pos, 48);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunsetAstronomical() {
         const offset = this.bb.__offset(this.bb_pos, 50);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     temperatureMax() {
         const offset = this.bb.__offset(this.bb_pos, 52);
@@ -17022,7 +17002,7 @@ class DayWeatherConditions {
     }
     temperatureMaxTime() {
         const offset = this.bb.__offset(this.bb_pos, 54);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     temperatureMin() {
         const offset = this.bb.__offset(this.bb_pos, 56);
@@ -17030,7 +17010,7 @@ class DayWeatherConditions {
     }
     temperatureMinTime() {
         const offset = this.bb.__offset(this.bb_pos, 58);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     windGustSpeedMax() {
         const offset = this.bb.__offset(this.bb_pos, 60);
@@ -17270,11 +17250,11 @@ class ForecastMinute {
     }
     startTime() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationIntensity() {
         const offset = this.bb.__offset(this.bb_pos, 8);
@@ -17332,19 +17312,19 @@ class ForecastPeriodSummary {
     }
     startTime() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     endTime() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     condition() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationIntensity() {
         const offset = this.bb.__offset(this.bb_pos, 12);
@@ -17462,27 +17442,27 @@ class HourWeatherConditions {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     cloudCover() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverLowAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverMidAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverHighAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     daylight() {
         const offset = this.bb.__offset(this.bb_pos, 16);
@@ -17490,7 +17470,7 @@ class HourWeatherConditions {
     }
     humidity() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     perceivedPrecipitationIntensity() {
         const offset = this.bb.__offset(this.bb_pos, 20);
@@ -17506,11 +17486,11 @@ class HourWeatherConditions {
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 26);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationType() {
         const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     pressure() {
         const offset = this.bb.__offset(this.bb_pos, 30);
@@ -17518,7 +17498,7 @@ class HourWeatherConditions {
     }
     pressureTrend() {
         const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PressureTrend.RISING;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PressureTrend.RISING;
     }
     snowfallAmount() {
         const offset = this.bb.__offset(this.bb_pos, 34);
@@ -17546,7 +17526,7 @@ class HourWeatherConditions {
     }
     uvIndex() {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     visibility() {
         const offset = this.bb.__offset(this.bb_pos, 48);
@@ -17743,6 +17723,44 @@ class HourlyForecastData {
 
 // automatically generated by the FlatBuffers compiler, do not modify
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+class ID {
+    bb = null;
+    bb_pos = 0;
+    __init(i, bb) {
+        this.bb_pos = i;
+        this.bb = bb;
+        return this;
+    }
+    static getRootAsID(bb, obj) {
+        return (obj || new ID()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    static getSizePrefixedRootAsID(bb, obj) {
+        bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
+        return (obj || new ID()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    }
+    uuid(optionalEncoding) {
+        const offset = this.bb.__offset(this.bb_pos, 4);
+        return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+    }
+    static startID(builder) {
+        builder.startObject(1);
+    }
+    static addUuid(builder, uuidOffset) {
+        builder.addFieldOffset(0, uuidOffset, 0);
+    }
+    static endID(builder) {
+        const offset = builder.endObject();
+        return offset;
+    }
+    static createID(builder, uuidOffset) {
+        ID.startID(builder);
+        ID.addUuid(builder, uuidOffset);
+        return ID.endID(builder);
+    }
+}
+
+// automatically generated by the FlatBuffers compiler, do not modify
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 var ImportanceType;
 (function (ImportanceType) {
     ImportanceType[ImportanceType["NORMAL"] = 0] = "NORMAL";
@@ -17797,7 +17815,7 @@ class Placement {
     }
     priority() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     articles(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -17809,7 +17827,7 @@ class Placement {
     }
     placement() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PlacementType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PlacementType.UNKNOWN0;
     }
     static startPlacement(builder) {
         builder.startObject(3);
@@ -17945,11 +17963,11 @@ class NextHourForecastData {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     minutes(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 14);
@@ -18101,9 +18119,9 @@ class WeatherAlertSummary {
         bb.setPosition(bb.position() + SIZE_PREFIX_LENGTH);
         return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    id() {
+    id(obj) {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? (obj || new ID()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
     }
     areaId(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -18111,7 +18129,7 @@ class WeatherAlertSummary {
     }
     unknown3() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     attributionUrl(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 10);
@@ -18159,11 +18177,11 @@ class WeatherAlertSummary {
     }
     severity() {
         const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : Severity.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Severity.UNKNOWN;
     }
     significance() {
         const offset = this.bb.__offset(this.bb_pos, 34);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : SignificanceType.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : SignificanceType.UNKNOWN;
     }
     source(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 36);
@@ -18175,19 +18193,19 @@ class WeatherAlertSummary {
     }
     urgency() {
         const offset = this.bb.__offset(this.bb_pos, 40);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : Urgency.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Urgency.UNKNOWN;
     }
     certainty() {
         const offset = this.bb.__offset(this.bb_pos, 42);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : Certainty.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Certainty.UNKNOWN;
     }
     importance() {
         const offset = this.bb.__offset(this.bb_pos, 44);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ImportanceType.NORMAL;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ImportanceType.NORMAL;
     }
     responses(index) {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
+        return offset ? this.bb.readInt8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
     }
     responsesLength() {
         const offset = this.bb.__offset(this.bb_pos, 46);
@@ -18195,21 +18213,21 @@ class WeatherAlertSummary {
     }
     responsesArray() {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
+        return offset ? new Int8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
     }
     unknown23() {
         const offset = this.bb.__offset(this.bb_pos, 48);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     unknown24() {
         const offset = this.bb.__offset(this.bb_pos, 50);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     static startWeatherAlertSummary(builder) {
         builder.startObject(24);
     }
-    static addId(builder, id) {
-        builder.addFieldInt32(0, id, 0);
+    static addId(builder, idOffset) {
+        builder.addFieldOffset(0, idOffset, 0);
     }
     static addAreaId(builder, areaIdOffset) {
         builder.addFieldOffset(1, areaIdOffset, 0);
@@ -18294,9 +18312,9 @@ class WeatherAlertSummary {
         const offset = builder.endObject();
         return offset;
     }
-    static createWeatherAlertSummary(builder, id, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
+    static createWeatherAlertSummary(builder, idOffset, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
         WeatherAlertSummary.startWeatherAlertSummary(builder);
-        WeatherAlertSummary.addId(builder, id);
+        WeatherAlertSummary.addId(builder, idOffset);
         WeatherAlertSummary.addAreaId(builder, areaIdOffset);
         WeatherAlertSummary.addUnknown3(builder, unknown3);
         WeatherAlertSummary.addAttributionUrl(builder, attributionUrlOffset);
@@ -18415,11 +18433,11 @@ class WeatherChanges {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     changes(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 10);
@@ -18563,7 +18581,7 @@ class Weather {
     }
 }
 
-class weatherKit2 {
+class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
 		this.Version = "1.0.0";
@@ -18586,11 +18604,11 @@ class weatherKit2 {
 				if (data?.currentWeather) Offsets.currentWeatherOffset = this.encode("currentWeather", data.currentWeather);
 				if (data?.forecastDaily) Offsets.forecastDailyOffset = this.encode("forecastDaily", data.forecastDaily);
 				if (data?.forecastHourly) Offsets.forecastHourlyOffset = this.encode( "forecastHourly", data.forecastHourly);
-				//if (data?.forecastNextHour) Offsets.forecastNextHourOffset = this.encode("forecastNextHour", data.forecastNextHour);
-				//if (data?.news) Offsets.newsOffset = this.encode("news", data.news);
+				if (data?.forecastNextHour) Offsets.forecastNextHourOffset = this.encode("forecastNextHour", data.forecastNextHour);
+				if (data?.news) Offsets.newsOffset = this.encode("news", data.news);
 				if (data?.weatherAlerts) Offsets.weatherAlertsOffset = this.encode("weatherAlerts", data.weatherAlerts);
-				//if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode("weatherChanges", data.weatherChanges);
-				//if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode("historicalComparisons", data.historicalComparisons);
+				if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode("weatherChanges", data.weatherChanges);
+				if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode("historicalComparisons", data.historicalComparisons);
 				offset = weatherKit2.createWeather(this.builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
 				break;
 			case "airQuality":
@@ -18668,6 +18686,17 @@ class weatherKit2 {
 				offset = HourlyForecastData.createHourlyForecastData(this.builder, metadataOffset, hoursOffset);
 				break;
 			case "forecastNextHour":
+				let conditionOffsets = data?.condition?.map(condition => {
+					let parametersOffsets = condition?.parameters.map(parameter => Parameter.createParameter(this.builder, ParameterType[parameter?.type], parameter?.date));
+					let parametersOffset = Condition.createParametersVector(this.builder, parametersOffsets);
+					return Condition.createCondition(this.builder, condition?.startTime, condition?.endTime, ForecastToken[condition?.forecastToken], WeatherCondition[condition?.beginCondition], WeatherCondition[condition?.endCondition], parametersOffset);
+				});
+				let conditionOffset = NextHourForecastData.createConditionVector(this.builder, conditionOffsets);
+				let summaryOffsets = data?.summary?.map(summary => ForecastPeriodSummary.createForecastPeriodSummary(this.builder, summary?.startTime, summary?.endTime, PrecipitationType[summary?.condition], summary?.precipitationChance, summary?.precipitationIntensity));
+				let summaryOffset = NextHourForecastData.createSummaryVector(this.builder, summaryOffsets);
+				let minutesOffsets = data?.minutes?.map(minute => ForecastMinute.createForecastMinute(this.builder, minute?.startTime, minute?.precipitationChance, minute?.precipitationIntensity, minute?.perceivedPrecipitationIntensity));
+				let minutesOffset = NextHourForecastData.createMinutesVector(this.builder, minutesOffsets);
+				offset = NextHourForecastData.createNextHourForecastData(this.builder, metadataOffset, conditionOffset, summaryOffset, data?.forecastStart, data?.forecastEnd, minutesOffset);
 				break;
 			case "news":
 				let placementsOffsets = data?.placements?.map(placement => {
@@ -18691,7 +18720,11 @@ class weatherKit2 {
 				let alertsOffsets = data?.alerts?.map(alert => {
 					let responsesOffsets = alert?.responses?.map(response => ResponseType[response]);
 					let responsesOffset = WeatherAlertSummary.createResponsesVector(this.builder, responsesOffsets);
-					//let idOffset = this.builder.createString(alert?.id);
+					let idOffset = ID.createID(this.builder, this.builder.createString(alert?.id?.uuid));
+					//let idOffset = WK2.WeatherAlertSummary.createIdVector(this.builder, alert?.id);
+					//WK2.WeatherAlertSummary.startIdVector(this.builder, alert?.id?.length);
+					//alert?.id?.map(id => WK2.UUID.createUUID(this.builder, id?.lowBytes, id?.highBytes));
+					//let idOffset = this.builder.endVector();
 					let areaIdOffset = this.builder.createString(alert?.areaId);
 					let attributionUrlOffset = this.builder.createString(alert?.attributionUrl);
 					let countryCodeOffset = this.builder.createString(alert?.countryCode);
@@ -18701,7 +18734,7 @@ class weatherKit2 {
 					let phenomenonOffset = this.builder.createString(alert?.phenomenon);
 					let sourceOffset = this.builder.createString(alert?.source);
 					let eventSourceOffset = this.builder.createString(alert?.eventSource);
-					return WeatherAlertSummary.createWeatherAlertSummary(this.builder, alert?.id, areaIdOffset, alert?.unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, alert?.effectiveTime, alert?.expireTime, alert?.issuedTime, alert?.eventOnsetTime, alert?.eventEndTime, detailsUrlOffset, phenomenonOffset, Severity[alert?.severity], SignificanceType[alert?.significance], sourceOffset, eventSourceOffset, Urgency[alert?.urgency], Certainty[alert?.certainty], ImportanceType[alert?.importance], responsesOffset, alert?.unknown23, alert?.unknown24);
+					return WeatherAlertSummary.createWeatherAlertSummary(this.builder, idOffset, areaIdOffset, alert?.unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, alert?.effectiveTime, alert?.expireTime, alert?.issuedTime, alert?.eventOnsetTime, alert?.eventEndTime, detailsUrlOffset, phenomenonOffset, Severity[alert?.severity], SignificanceType[alert?.significance], sourceOffset, eventSourceOffset, Urgency[alert?.urgency], Certainty[alert?.certainty], ImportanceType[alert?.importance], responsesOffset, alert?.unknown23, alert?.unknown24);
 				});
 				let alertsOffset = WeatherAlertCollectionData.createAlertsVector(this.builder, alertsOffsets);
 				let detailsUrlOffset = this.builder.createString(data?.detailsUrl);
@@ -18732,7 +18765,7 @@ class weatherKit2 {
 		const CurrentWeatherData = this.weatherData?.currentWeather();
 		const DailyForecastData = this.weatherData?.forecastDaily();
 		const HourlyForecastData = this.weatherData?.forecastHourly();
-		this.weatherData?.forecastNextHour();
+		const NextHourForecastData = this.weatherData?.forecastNextHour();
 		const newsData = this.weatherData?.news();
 		const WeatherAlertCollectionData = this.weatherData?.weatherAlerts();
 		const weatherChangesData = this.weatherData?.weatherChanges();
@@ -18743,7 +18776,7 @@ class weatherKit2 {
 				if (CurrentWeatherData) data.currentWeather = this.decode("currentWeather", CurrentWeatherData);
 				if (DailyForecastData) data.forecastDaily = this.decode("forecastDaily", DailyForecastData);
 				if (HourlyForecastData) data.forecastHourly = this.decode("forecastHourly", HourlyForecastData);
-				//if (NextHourForecastData) data.forecastNextHour = this.decode("forecastNextHour", NextHourForecastData);
+				if (NextHourForecastData) data.forecastNextHour = this.decode("forecastNextHour", NextHourForecastData);
 				if (newsData) data.news = this.decode("news", newsData);
 				if (WeatherAlertCollectionData) data.weatherAlerts = this.decode("weatherAlerts", WeatherAlertCollectionData);
 				if (weatherChangesData) data.weatherChanges = this.decode("weatherChange", weatherChangesData);
@@ -19010,7 +19043,6 @@ class weatherKit2 {
 					"metadata": this.decode("matadata", metadata),
 					"hours": [],
 				};
-				
 				for (let i = 0; i < HourlyForecastData?.hoursLength(); i++) data.hours.push({
 					"cloudCover": HourlyForecastData?.hours(i)?.cloudCover(),
 					"cloudCoverHighAltPct": HourlyForecastData?.hours(i)?.cloudCoverHighAltPct(),
@@ -19041,7 +19073,6 @@ class weatherKit2 {
 				});
 				break;
 			case "forecastNextHour":
-				const NextHourForecastData = this.weatherData?.forecastNextHour();
 				metadata = NextHourForecastData?.metadata();
 				data = {
 					"metadata": this.decode("matadata", metadata),
@@ -19055,6 +19086,7 @@ class weatherKit2 {
 					let condition = {
 						"beginCondition": WeatherCondition[NextHourForecastData?.condition(i)?.beginCondition()],
 						"endCondition": WeatherCondition[NextHourForecastData?.condition(i)?.endCondition()],
+						"endTime": NextHourForecastData?.condition(i)?.endTime(),
 						"forecastToken": ForecastToken[NextHourForecastData?.condition(i)?.forecastToken()],
 						"parameters": [],
 						"startTime": NextHourForecastData?.condition(i)?.startTime(),
@@ -19092,10 +19124,10 @@ class weatherKit2 {
 					"sourceType": SourceType[metadata?.sourceType()],
 					"unknown11": metadata?.unknown11(),
 					//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
-					"unknown12": metadata?.unknown12(),
-					"unknown13": metadata?.unknown13(),
-					"unknown14": metadata?.unknown14(),
-					"unknown15": metadata?.unknown15(),
+					//"unknown12": metadata?.unknown12(),
+					//"unknown13": metadata?.unknown13(),
+					//"unknown14": metadata?.unknown14(),
+					//"unknown15": metadata?.unknown15(),
 				};
 				break;
 			case "news":
@@ -19134,6 +19166,7 @@ class weatherKit2 {
 					"detailsUrl": WeatherAlertCollectionData?.detailsUrl(),
 				};
 				for (let i = 0; i < WeatherAlertCollectionData?.alertsLength(); i++) {
+					//let uuid = { "uuid": WeatherAlertCollectionData?.alerts(i)?.id().uuid() };
 					let alert = {
 						"areaId": WeatherAlertCollectionData?.alerts(i)?.areaId(),
 						"attributionUrl": WeatherAlertCollectionData?.alerts(i)?.attributionUrl(),
@@ -19146,7 +19179,7 @@ class weatherKit2 {
 						"eventOnsetTime": WeatherAlertCollectionData?.alerts(i)?.eventOnsetTime(),
 						"eventSource": WeatherAlertCollectionData?.alerts(i)?.eventSource(),
 						"expireTime": WeatherAlertCollectionData?.alerts(i)?.expireTime(),
-						"id": WeatherAlertCollectionData?.alerts(i)?.id(),
+						"id": { "uuid": WeatherAlertCollectionData?.alerts(i)?.id()?.uuid() },
 						"importance": ImportanceType[WeatherAlertCollectionData?.alerts(i)?.importance()],
 						"issuedTime": WeatherAlertCollectionData?.alerts(i)?.issuedTime(),
 						"phenomenon": WeatherAlertCollectionData?.alerts(i)?.phenomenon(),
@@ -19155,8 +19188,11 @@ class weatherKit2 {
 						"significance": SignificanceType[WeatherAlertCollectionData?.alerts(i)?.significance()],
 						"source": WeatherAlertCollectionData?.alerts(i)?.source(),
 						"token": WeatherAlertCollectionData?.alerts(i)?.token(),
+						"unknown3": WeatherAlertCollectionData?.alerts(i)?.unknown3(),
 						"urgency": Urgency[WeatherAlertCollectionData?.alerts(i)?.urgency()],
 					};
+					//for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.idLength(); j++) alert.id.push(WeatherAlertCollectionData?.alerts(i)?.id(j));
+					//for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.idLength(); j++) alert.id.push({ "lowBytes": WeatherAlertCollectionData?.alerts(i)?.id(j).lowBytes(), "highBytes": WeatherAlertCollectionData?.alerts(i)?.id(j).highBytes() });
 					for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.responsesLength(); j++) alert.responses.push(ResponseType[WeatherAlertCollectionData?.alerts(i)?.responses(j)]);
 					data.alerts.push(alert);
 				}				break;
@@ -19220,7 +19256,7 @@ class weatherKit2 {
 
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.2(4083) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.3(4100) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19282,7 +19318,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							if (PATH.startsWith("/api/v1/availability/")) {
 								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly"];
+								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly", "historicalComparisons", "weatherChanges", "weatherAlerts", "weatherAlertNotifications", "news"];
 							}							break;
 					}					$response.body = JSON.stringify(body);
 					break;
@@ -19306,10 +19342,48 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "weatherkit.apple.com":
 									// 路径判断
 									if (PATH.startsWith("/api/v2/weather/")) {
-										const weatherKit2$1 = new weatherKit2({ "bb": ByteBuffer$1, "builder": Builder$1 });
+										const weatherKit2$1 = new WeatherKit2({ "bb": ByteBuffer$1, "builder": Builder$1 });
 										body = weatherKit2$1.decode("all");
-										//$.log(`🚧 body: ${JSON.stringify(body, null, 2)}`, "");
-										const WeatherData = weatherKit2$1.encode("all", body);
+										if (url.searchParams.get("dataSets").includes("airQuality")) {
+											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											//if (body?.airQuality?.metadata) body.airQuality.metadata.providerName = "iRingo";
+										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
+											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
+											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
+											//if (body?.weatherAlerts?.metadata) body.weatherAlerts.metadata.providerName = "iRingo";
+											//if (body?.weatherAlerts?.alerts) body.weatherAlerts.alerts = [];
+											/*
+											if (body?.weatherAlerts?.alerts) body.weatherAlerts.alerts.map(alert => {
+												delete alert?.attributionUrl;
+												delete alert?.areaId;
+												delete alert?.certainty;
+												delete alert?.countryCode;
+												delete alert?.description;
+												delete alert?.detailsUrl;
+												delete alert?.effectiveTime;
+												delete alert?.eventEndTime;
+												delete alert?.eventOnsetTime;
+												delete alert?.eventSource;
+												delete alert?.expireTime;
+												alert.id = [];
+												delete alert?.importance;
+												delete alert?.issuedTime;
+												delete alert?.phenomenon;
+												alert.responses = [];
+												delete alert?.severity;
+												delete alert?.significance;
+												delete alert?.source;
+												delete alert?.token;
+												delete alert?.unknown3;
+												delete alert?.urgency;
+												return alert;
+											});
+											*/
+											//$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
+										}										if (url.searchParams.get("dataSets").includes("trendComparison")) {
+											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
+										}										const WeatherData = weatherKit2.encode("all", body);
 										Builder$1.finish(WeatherData);
 										break;
 									}									break;

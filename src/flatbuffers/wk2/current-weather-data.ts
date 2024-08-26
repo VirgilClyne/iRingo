@@ -35,32 +35,32 @@ metadata(obj?:Metadata):Metadata|null {
 
 asOf():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 cloudCover():number {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 cloudCoverLowAltPct():number {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 cloudCoverMidAltPct():number {
   const offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 cloudCoverHighAltPct():number {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 conditionCode():ConditionCode {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
 }
 
 daylight():boolean {
@@ -70,7 +70,7 @@ daylight():boolean {
 
 humidity():number {
   const offset = this.bb!.__offset(this.bb_pos, 20);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 perceivedPrecipitationIntensity():number {
@@ -180,7 +180,7 @@ pressure():number {
 
 pressureTrend():PressureTrend {
   const offset = this.bb!.__offset(this.bb_pos, 52);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : PressureTrend.RISING;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : PressureTrend.RISING;
 }
 
 snowfallAmount1h():number {
@@ -235,7 +235,7 @@ temperatureDewPoint():number {
 
 uvIndex():number {
   const offset = this.bb!.__offset(this.bb_pos, 74);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 visibility():number {
@@ -245,7 +245,7 @@ visibility():number {
 
 windDirection():number {
   const offset = this.bb!.__offset(this.bb_pos, 78);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt16(this.bb_pos + offset) : 0;
 }
 
 windGust():number {
@@ -483,7 +483,7 @@ static addVisibility(builder:flatbuffers.Builder, visibility:number) {
 }
 
 static addWindDirection(builder:flatbuffers.Builder, windDirection:number) {
-  builder.addFieldInt8(37, windDirection, 0);
+  builder.addFieldInt16(37, windDirection, 0);
 }
 
 static addWindGust(builder:flatbuffers.Builder, windGust:number) {

@@ -26,11 +26,11 @@ export class AirQuality {
     }
     categoryIndex() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     index() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt16(this.bb_pos + offset) : 0;
     }
     isSignificant() {
         const offset = this.bb.__offset(this.bb_pos, 10);
@@ -46,11 +46,11 @@ export class AirQuality {
     }
     previousDayComparison() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
     }
     primaryPollutant() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
     }
     scale(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 18);
@@ -66,7 +66,7 @@ export class AirQuality {
         builder.addFieldInt8(1, categoryIndex, 0);
     }
     static addIndex(builder, index) {
-        builder.addFieldInt8(2, index, 0);
+        builder.addFieldInt16(2, index, 0);
     }
     static addIsSignificant(builder, isSignificant) {
         builder.addFieldInt8(3, +isSignificant, +false);

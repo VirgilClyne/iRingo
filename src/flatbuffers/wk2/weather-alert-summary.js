@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import * as flatbuffers from 'flatbuffers';
 import { Certainty } from '../wk2/certainty.js';
+import { ID } from '../wk2/id.js';
 import { ImportanceType } from '../wk2/importance-type.js';
 import { Severity } from '../wk2/severity.js';
 import { SignificanceType } from '../wk2/significance-type.js';
@@ -21,9 +22,9 @@ export class WeatherAlertSummary {
         bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
         return (obj || new WeatherAlertSummary()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
     }
-    id() {
+    id(obj) {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? (obj || new ID()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
     }
     areaId(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -31,7 +32,7 @@ export class WeatherAlertSummary {
     }
     unknown3() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     attributionUrl(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 10);
@@ -79,11 +80,11 @@ export class WeatherAlertSummary {
     }
     severity() {
         const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : Severity.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Severity.UNKNOWN;
     }
     significance() {
         const offset = this.bb.__offset(this.bb_pos, 34);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : SignificanceType.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : SignificanceType.UNKNOWN;
     }
     source(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 36);
@@ -95,19 +96,19 @@ export class WeatherAlertSummary {
     }
     urgency() {
         const offset = this.bb.__offset(this.bb_pos, 40);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : Urgency.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Urgency.UNKNOWN;
     }
     certainty() {
         const offset = this.bb.__offset(this.bb_pos, 42);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : Certainty.UNKNOWN;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Certainty.UNKNOWN;
     }
     importance() {
         const offset = this.bb.__offset(this.bb_pos, 44);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ImportanceType.NORMAL;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ImportanceType.NORMAL;
     }
     responses(index) {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
+        return offset ? this.bb.readInt8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
     }
     responsesLength() {
         const offset = this.bb.__offset(this.bb_pos, 46);
@@ -115,21 +116,21 @@ export class WeatherAlertSummary {
     }
     responsesArray() {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
+        return offset ? new Int8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
     }
     unknown23() {
         const offset = this.bb.__offset(this.bb_pos, 48);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     unknown24() {
         const offset = this.bb.__offset(this.bb_pos, 50);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     static startWeatherAlertSummary(builder) {
         builder.startObject(24);
     }
-    static addId(builder, id) {
-        builder.addFieldInt32(0, id, 0);
+    static addId(builder, idOffset) {
+        builder.addFieldOffset(0, idOffset, 0);
     }
     static addAreaId(builder, areaIdOffset) {
         builder.addFieldOffset(1, areaIdOffset, 0);
@@ -214,9 +215,9 @@ export class WeatherAlertSummary {
         const offset = builder.endObject();
         return offset;
     }
-    static createWeatherAlertSummary(builder, id, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
+    static createWeatherAlertSummary(builder, idOffset, areaIdOffset, unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, effectiveTime, expireTime, issuedTime, eventOnsetTime, eventEndTime, detailsUrlOffset, phenomenonOffset, severity, significance, sourceOffset, eventSourceOffset, urgency, certainty, importance, responsesOffset, unknown23, unknown24) {
         WeatherAlertSummary.startWeatherAlertSummary(builder);
-        WeatherAlertSummary.addId(builder, id);
+        WeatherAlertSummary.addId(builder, idOffset);
         WeatherAlertSummary.addAreaId(builder, areaIdOffset);
         WeatherAlertSummary.addUnknown3(builder, unknown3);
         WeatherAlertSummary.addAttributionUrl(builder, attributionUrlOffset);

@@ -23,7 +23,7 @@ export class Metadata {
     }
     expireTime() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     language(optionalEncoding) {
         const offset = this.bb.__offset(this.bb_pos, 8);
@@ -47,42 +47,26 @@ export class Metadata {
     }
     readTime() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     reportedTime() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     unknown9() {
         const offset = this.bb.__offset(this.bb_pos, 22);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sourceType() {
         const offset = this.bb.__offset(this.bb_pos, 24);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
     }
     unknown11() {
         const offset = this.bb.__offset(this.bb_pos, 26);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown12() {
-        const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown13() {
-        const offset = this.bb.__offset(this.bb_pos, 30);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown14() {
-        const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
-    }
-    unknown15() {
-        const offset = this.bb.__offset(this.bb_pos, 34);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     static startMetadata(builder) {
-        builder.startObject(16);
+        builder.startObject(12);
     }
     static addAttributionUrl(builder, attributionUrlOffset) {
         builder.addFieldOffset(0, attributionUrlOffset, 0);
@@ -120,23 +104,11 @@ export class Metadata {
     static addUnknown11(builder, unknown11) {
         builder.addFieldInt32(11, unknown11, 0);
     }
-    static addUnknown12(builder, unknown12) {
-        builder.addFieldInt32(12, unknown12, 0);
-    }
-    static addUnknown13(builder, unknown13) {
-        builder.addFieldInt32(13, unknown13, 0);
-    }
-    static addUnknown14(builder, unknown14) {
-        builder.addFieldInt32(14, unknown14, 0);
-    }
-    static addUnknown15(builder, unknown15) {
-        builder.addFieldInt32(15, unknown15, 0);
-    }
     static endMetadata(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11, unknown12, unknown13, unknown14, unknown15) {
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11) {
         Metadata.startMetadata(builder);
         Metadata.addAttributionUrl(builder, attributionUrlOffset);
         Metadata.addExpireTime(builder, expireTime);
@@ -150,10 +122,6 @@ export class Metadata {
         Metadata.addUnknown9(builder, unknown9);
         Metadata.addSourceType(builder, sourceType);
         Metadata.addUnknown11(builder, unknown11);
-        Metadata.addUnknown12(builder, unknown12);
-        Metadata.addUnknown13(builder, unknown13);
-        Metadata.addUnknown14(builder, unknown14);
-        Metadata.addUnknown15(builder, unknown15);
         return Metadata.endMetadata(builder);
     }
 }

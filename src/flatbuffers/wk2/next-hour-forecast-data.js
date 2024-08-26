@@ -42,11 +42,11 @@ export class NextHourForecastData {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     minutes(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 14);

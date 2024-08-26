@@ -19,19 +19,19 @@ export class ForecastPeriodSummary {
     }
     startTime() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     endTime() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     condition() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationIntensity() {
         const offset = this.bb.__offset(this.bb_pos, 12);

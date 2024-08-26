@@ -20,7 +20,7 @@ export class Placement {
     }
     priority() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     articles(index, obj) {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -32,7 +32,7 @@ export class Placement {
     }
     placement() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PlacementType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PlacementType.UNKNOWN0;
     }
     static startPlacement(builder) {
         builder.startObject(3);

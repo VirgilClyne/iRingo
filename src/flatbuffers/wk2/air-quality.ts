@@ -35,12 +35,12 @@ metadata(obj?:Metadata):Metadata|null {
 
 categoryIndex():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 index():number {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt16(this.bb_pos + offset) : 0;
 }
 
 isSignificant():boolean {
@@ -60,12 +60,12 @@ pollutantsLength():number {
 
 previousDayComparison():ComparisonTrend {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ComparisonTrend.UNKNOWN;
 }
 
 primaryPollutant():PollutantType {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
 }
 
 scale():string|null
@@ -88,7 +88,7 @@ static addCategoryIndex(builder:flatbuffers.Builder, categoryIndex:number) {
 }
 
 static addIndex(builder:flatbuffers.Builder, index:number) {
-  builder.addFieldInt8(2, index, 0);
+  builder.addFieldInt16(2, index, 0);
 }
 
 static addIsSignificant(builder:flatbuffers.Builder, isSignificant:boolean) {

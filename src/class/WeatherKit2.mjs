@@ -1,7 +1,7 @@
 import * as flatbuffers from 'flatbuffers';
 import * as WK2 from "../flatbuffers/wk2.js";
 
-export default class weatherKit2 {
+export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
 		this.Version = "1.0.0";
@@ -24,12 +24,12 @@ export default class weatherKit2 {
 				if (data?.currentWeather) Offsets.currentWeatherOffset = this.encode("currentWeather", data.currentWeather);
 				if (data?.forecastDaily) Offsets.forecastDailyOffset = this.encode("forecastDaily", data.forecastDaily);
 				if (data?.forecastHourly) Offsets.forecastHourlyOffset = this.encode( "forecastHourly", data.forecastHourly);
-				//if (data?.forecastNextHour) Offsets.forecastNextHourOffset = this.encode("forecastNextHour", data.forecastNextHour);
-				//if (data?.news) Offsets.newsOffset = this.encode("news", data.news);
+				if (data?.forecastNextHour) Offsets.forecastNextHourOffset = this.encode("forecastNextHour", data.forecastNextHour);
+				if (data?.news) Offsets.newsOffset = this.encode("news", data.news);
 				if (data?.weatherAlerts) Offsets.weatherAlertsOffset = this.encode("weatherAlerts", data.weatherAlerts);
-				//if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode("weatherChanges", data.weatherChanges);
-				//if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode("historicalComparisons", data.historicalComparisons);
-				offset = weatherKit2.createWeather(this.builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
+				if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode("weatherChanges", data.weatherChanges);
+				if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode("historicalComparisons", data.historicalComparisons);
+				offset = WeatherKit2.createWeather(this.builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
 				break;
 			case "airQuality":
 				let pollutantsOffset = WK2.AirQuality.createPollutantsVector(this.builder, data?.pollutants?.map(p => WK2.Pollutant.createPollutant(this.builder, WK2.PollutantType[p.pollutantType], p.amount, WK2.UnitType[p.units])));
@@ -109,6 +109,17 @@ export default class weatherKit2 {
 				offset = WK2.HourlyForecastData.createHourlyForecastData(this.builder, metadataOffset, hoursOffset);
 				break;
 			case "forecastNextHour":
+				let conditionOffsets = data?.condition?.map(condition => {
+					let parametersOffsets = condition?.parameters.map(parameter => WK2.Parameter.createParameter(this.builder, WK2.ParameterType[parameter?.type], parameter?.date));
+					let parametersOffset = WK2.Condition.createParametersVector(this.builder, parametersOffsets);
+					return WK2.Condition.createCondition(this.builder, condition?.startTime, condition?.endTime, WK2.ForecastToken[condition?.forecastToken], WK2.WeatherCondition[condition?.beginCondition], WK2.WeatherCondition[condition?.endCondition], parametersOffset);
+				});
+				let conditionOffset = WK2.NextHourForecastData.createConditionVector(this.builder, conditionOffsets);
+				let summaryOffsets = data?.summary?.map(summary => WK2.ForecastPeriodSummary.createForecastPeriodSummary(this.builder, summary?.startTime, summary?.endTime, WK2.PrecipitationType[summary?.condition], summary?.precipitationChance, summary?.precipitationIntensity));
+				let summaryOffset = WK2.NextHourForecastData.createSummaryVector(this.builder, summaryOffsets);
+				let minutesOffsets = data?.minutes?.map(minute => WK2.ForecastMinute.createForecastMinute(this.builder, minute?.startTime, minute?.precipitationChance, minute?.precipitationIntensity, minute?.perceivedPrecipitationIntensity));
+				let minutesOffset = WK2.NextHourForecastData.createMinutesVector(this.builder, minutesOffsets);
+				offset = WK2.NextHourForecastData.createNextHourForecastData(this.builder, metadataOffset, conditionOffset, summaryOffset, data?.forecastStart, data?.forecastEnd, minutesOffset);
 				break;
 			case "news":
 				let placementsOffsets = data?.placements?.map(placement => {
@@ -132,7 +143,11 @@ export default class weatherKit2 {
 				let alertsOffsets = data?.alerts?.map(alert => {
 					let responsesOffsets = alert?.responses?.map(response => WK2.ResponseType[response]);
 					let responsesOffset = WK2.WeatherAlertSummary.createResponsesVector(this.builder, responsesOffsets);
-					//let idOffset = this.builder.createString(alert?.id);
+					let idOffset = WK2.ID.createID(this.builder, this.builder.createString(alert?.id?.uuid));
+					//let idOffset = WK2.WeatherAlertSummary.createIdVector(this.builder, alert?.id);
+					//WK2.WeatherAlertSummary.startIdVector(this.builder, alert?.id?.length);
+					//alert?.id?.map(id => WK2.UUID.createUUID(this.builder, id?.lowBytes, id?.highBytes));
+					//let idOffset = this.builder.endVector();
 					let areaIdOffset = this.builder.createString(alert?.areaId);
 					let attributionUrlOffset = this.builder.createString(alert?.attributionUrl);
 					let countryCodeOffset = this.builder.createString(alert?.countryCode);
@@ -142,7 +157,7 @@ export default class weatherKit2 {
 					let phenomenonOffset = this.builder.createString(alert?.phenomenon);
 					let sourceOffset = this.builder.createString(alert?.source);
 					let eventSourceOffset = this.builder.createString(alert?.eventSource);
-					return WK2.WeatherAlertSummary.createWeatherAlertSummary(this.builder, alert?.id, areaIdOffset, alert?.unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, alert?.effectiveTime, alert?.expireTime, alert?.issuedTime, alert?.eventOnsetTime, alert?.eventEndTime, detailsUrlOffset, phenomenonOffset, WK2.Severity[alert?.severity], WK2.SignificanceType[alert?.significance], sourceOffset, eventSourceOffset, WK2.Urgency[alert?.urgency], WK2.Certainty[alert?.certainty], WK2.ImportanceType[alert?.importance], responsesOffset, alert?.unknown23, alert?.unknown24);
+					return WK2.WeatherAlertSummary.createWeatherAlertSummary(this.builder, idOffset, areaIdOffset, alert?.unknown3, attributionUrlOffset, countryCodeOffset, descriptionOffset, tokenOffset, alert?.effectiveTime, alert?.expireTime, alert?.issuedTime, alert?.eventOnsetTime, alert?.eventEndTime, detailsUrlOffset, phenomenonOffset, WK2.Severity[alert?.severity], WK2.SignificanceType[alert?.significance], sourceOffset, eventSourceOffset, WK2.Urgency[alert?.urgency], WK2.Certainty[alert?.certainty], WK2.ImportanceType[alert?.importance], responsesOffset, alert?.unknown23, alert?.unknown24);
 				});
 				let alertsOffset = WK2.WeatherAlertCollectionData.createAlertsVector(this.builder, alertsOffsets);
 				let detailsUrlOffset = this.builder.createString(data?.detailsUrl);
@@ -185,7 +200,7 @@ export default class weatherKit2 {
 				if (CurrentWeatherData) data.currentWeather = this.decode("currentWeather", CurrentWeatherData);
 				if (DailyForecastData) data.forecastDaily = this.decode("forecastDaily", DailyForecastData);
 				if (HourlyForecastData) data.forecastHourly = this.decode("forecastHourly", HourlyForecastData);
-				//if (NextHourForecastData) data.forecastNextHour = this.decode("forecastNextHour", NextHourForecastData);
+				if (NextHourForecastData) data.forecastNextHour = this.decode("forecastNextHour", NextHourForecastData);
 				if (newsData) data.news = this.decode("news", newsData);
 				if (WeatherAlertCollectionData) data.weatherAlerts = this.decode("weatherAlerts", WeatherAlertCollectionData);
 				if (weatherChangesData) data.weatherChanges = this.decode("weatherChange", weatherChangesData);
@@ -456,7 +471,6 @@ export default class weatherKit2 {
 					"metadata": this.decode("matadata", metadata),
 					"hours": [],
 				};
-				
 				for (let i = 0; i < HourlyForecastData?.hoursLength(); i++) data.hours.push({
 					"cloudCover": HourlyForecastData?.hours(i)?.cloudCover(),
 					"cloudCoverHighAltPct": HourlyForecastData?.hours(i)?.cloudCoverHighAltPct(),
@@ -487,7 +501,6 @@ export default class weatherKit2 {
 				});
 				break;
 			case "forecastNextHour":
-				const NextHourForecastData = this.weatherData?.forecastNextHour();
 				metadata = NextHourForecastData?.metadata();
 				data = {
 					"metadata": this.decode("matadata", metadata),
@@ -501,6 +514,7 @@ export default class weatherKit2 {
 					let condition = {
 						"beginCondition": WK2.WeatherCondition[NextHourForecastData?.condition(i)?.beginCondition()],
 						"endCondition": WK2.WeatherCondition[NextHourForecastData?.condition(i)?.endCondition()],
+						"endTime": NextHourForecastData?.condition(i)?.endTime(),
 						"forecastToken": WK2.ForecastToken[NextHourForecastData?.condition(i)?.forecastToken()],
 						"parameters": [],
 						"startTime": NextHourForecastData?.condition(i)?.startTime(),
@@ -539,10 +553,10 @@ export default class weatherKit2 {
 					"sourceType": WK2.SourceType[metadata?.sourceType()],
 					"unknown11": metadata?.unknown11(),
 					//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
-					"unknown12": metadata?.unknown12(),
-					"unknown13": metadata?.unknown13(),
-					"unknown14": metadata?.unknown14(),
-					"unknown15": metadata?.unknown15(),
+					//"unknown12": metadata?.unknown12(),
+					//"unknown13": metadata?.unknown13(),
+					//"unknown14": metadata?.unknown14(),
+					//"unknown15": metadata?.unknown15(),
 				};
 				break;
 			case "news":
@@ -583,6 +597,7 @@ export default class weatherKit2 {
 					"detailsUrl": WeatherAlertCollectionData?.detailsUrl(),
 				};
 				for (let i = 0; i < WeatherAlertCollectionData?.alertsLength(); i++) {
+					//let uuid = { "uuid": WeatherAlertCollectionData?.alerts(i)?.id().uuid() };
 					let alert = {
 						"areaId": WeatherAlertCollectionData?.alerts(i)?.areaId(),
 						"attributionUrl": WeatherAlertCollectionData?.alerts(i)?.attributionUrl(),
@@ -595,7 +610,7 @@ export default class weatherKit2 {
 						"eventOnsetTime": WeatherAlertCollectionData?.alerts(i)?.eventOnsetTime(),
 						"eventSource": WeatherAlertCollectionData?.alerts(i)?.eventSource(),
 						"expireTime": WeatherAlertCollectionData?.alerts(i)?.expireTime(),
-						"id": WeatherAlertCollectionData?.alerts(i)?.id(),
+						"id": { "uuid": WeatherAlertCollectionData?.alerts(i)?.id()?.uuid() },
 						"importance": WK2.ImportanceType[WeatherAlertCollectionData?.alerts(i)?.importance()],
 						"issuedTime": WeatherAlertCollectionData?.alerts(i)?.issuedTime(),
 						"phenomenon": WeatherAlertCollectionData?.alerts(i)?.phenomenon(),
@@ -604,8 +619,11 @@ export default class weatherKit2 {
 						"significance": WK2.SignificanceType[WeatherAlertCollectionData?.alerts(i)?.significance()],
 						"source": WeatherAlertCollectionData?.alerts(i)?.source(),
 						"token": WeatherAlertCollectionData?.alerts(i)?.token(),
+						"unknown3": WeatherAlertCollectionData?.alerts(i)?.unknown3(),
 						"urgency": WK2.Urgency[WeatherAlertCollectionData?.alerts(i)?.urgency()],
 					};
+					//for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.idLength(); j++) alert.id.push(WeatherAlertCollectionData?.alerts(i)?.id(j));
+					//for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.idLength(); j++) alert.id.push({ "lowBytes": WeatherAlertCollectionData?.alerts(i)?.id(j).lowBytes(), "highBytes": WeatherAlertCollectionData?.alerts(i)?.id(j).highBytes() });
 					for (let j = 0; j < WeatherAlertCollectionData?.alerts(i)?.responsesLength(); j++) alert.responses.push(WK2.ResponseType[WeatherAlertCollectionData?.alerts(i)?.responses(j)]);
 					data.alerts.push(alert);
 				};

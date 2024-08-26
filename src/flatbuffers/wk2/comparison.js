@@ -20,7 +20,7 @@ export class Comparison {
     }
     condition() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ComparisonType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ComparisonType.UNKNOWN0;
     }
     currentValue() {
         const offset = this.bb.__offset(this.bb_pos, 6);
@@ -32,15 +32,15 @@ export class Comparison {
     }
     deviation() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
     }
     baselineType() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     baselineStartDate() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     static startComparison(builder) {
         builder.startObject(6);
@@ -58,7 +58,7 @@ export class Comparison {
         builder.addFieldInt8(3, deviation, DeviationType.UNKNOWN0);
     }
     static addBaselineType(builder, baselineType) {
-        builder.addFieldInt8(4, baselineType, 0);
+        builder.addFieldInt32(4, baselineType, 0);
     }
     static addBaselineStartDate(builder, baselineStartDate) {
         builder.addFieldInt32(5, baselineStartDate, 0);

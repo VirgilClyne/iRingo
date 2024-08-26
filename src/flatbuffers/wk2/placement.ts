@@ -28,7 +28,7 @@ static getSizePrefixedRootAsPlacement(bb:flatbuffers.ByteBuffer, obj?:Placement)
 
 priority():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 articles(index: number, obj?:Articles):Articles|null {
@@ -43,7 +43,7 @@ articlesLength():number {
 
 placement():PlacementType {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : PlacementType.UNKNOWN0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : PlacementType.UNKNOWN0;
 }
 
 static startPlacement(builder:flatbuffers.Builder) {

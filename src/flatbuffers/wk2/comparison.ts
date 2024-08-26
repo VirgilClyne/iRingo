@@ -28,7 +28,7 @@ static getSizePrefixedRootAsComparison(bb:flatbuffers.ByteBuffer, obj?:Compariso
 
 condition():ComparisonType {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ComparisonType.UNKNOWN0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ComparisonType.UNKNOWN0;
 }
 
 currentValue():number {
@@ -43,17 +43,17 @@ baselineValue():number {
 
 deviation():DeviationType {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
 }
 
 baselineType():number {
   const offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 baselineStartDate():number {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 static startComparison(builder:flatbuffers.Builder) {
@@ -77,7 +77,7 @@ static addDeviation(builder:flatbuffers.Builder, deviation:DeviationType) {
 }
 
 static addBaselineType(builder:flatbuffers.Builder, baselineType:number) {
-  builder.addFieldInt8(4, baselineType, 0);
+  builder.addFieldInt32(4, baselineType, 0);
 }
 
 static addBaselineStartDate(builder:flatbuffers.Builder, baselineStartDate:number) {

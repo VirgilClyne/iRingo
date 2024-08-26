@@ -8,7 +8,7 @@ import WeatherKit2 from "./class/WeatherKit2.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.2(4083) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.1.3(4100) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -70,7 +70,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							if (PATH.startsWith("/api/v1/availability/")) {
 								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly"];
+								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly", "historicalComparisons", "weatherChanges", "weatherAlerts", "weatherAlertNotifications", "news"];
 							};
 							break;
 					};
@@ -98,7 +98,20 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									if (PATH.startsWith("/api/v2/weather/")) {
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
 										body = weatherKit2.decode("all");
-										//$.log(`🚧 body: ${JSON.stringify(body, null, 2)}`, "");
+										if (url.searchParams.get("dataSets").includes("airQuality")) {
+											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											//if (body?.airQuality?.metadata) body.airQuality.metadata.providerName = "iRingo";
+										};
+										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
+											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+										};
+										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
+											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
+											//if (body?.weatherAlerts?.metadata) body.weatherAlerts.metadata.providerName = "iRingo";
+										};
+										if (url.searchParams.get("dataSets").includes("trendComparison")) {
+											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
+										};
 										const WeatherData = weatherKit2.encode("all", body);
 										Builder.finish(WeatherData);
 										break;

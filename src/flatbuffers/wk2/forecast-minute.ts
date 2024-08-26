@@ -24,12 +24,12 @@ static getSizePrefixedRootAsForecastMinute(bb:flatbuffers.ByteBuffer, obj?:Forec
 
 startTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 precipitationChance():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 precipitationIntensity():number {

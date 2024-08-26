@@ -21,43 +21,43 @@ export class DayPartForecast {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     cloudCover() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverLowAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverMidAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverHighAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     humidity() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     humidityMax() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     humidityMin() {
         const offset = this.bb.__offset(this.bb_pos, 22);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationAmount() {
         const offset = this.bb.__offset(this.bb_pos, 24);
@@ -73,11 +73,11 @@ export class DayPartForecast {
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationType() {
         const offset = this.bb.__offset(this.bb_pos, 30);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     snowfallAmount() {
         const offset = this.bb.__offset(this.bb_pos, 32);

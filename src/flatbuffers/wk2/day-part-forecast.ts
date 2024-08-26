@@ -29,52 +29,52 @@ static getSizePrefixedRootAsDayPartForecast(bb:flatbuffers.ByteBuffer, obj?:DayP
 
 forecastStart():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 forecastEnd():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 cloudCover():number {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 cloudCoverLowAltPct():number {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 cloudCoverMidAltPct():number {
   const offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 cloudCoverHighAltPct():number {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 conditionCode():ConditionCode {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
 }
 
 humidity():number {
   const offset = this.bb!.__offset(this.bb_pos, 18);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 humidityMax():number {
   const offset = this.bb!.__offset(this.bb_pos, 20);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 humidityMin():number {
   const offset = this.bb!.__offset(this.bb_pos, 22);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 precipitationAmount():number {
@@ -94,12 +94,12 @@ precipitationAmountByTypeLength():number {
 
 precipitationChance():number {
   const offset = this.bb!.__offset(this.bb_pos, 28);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
 precipitationType():PrecipitationType {
   const offset = this.bb!.__offset(this.bb_pos, 30);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
 }
 
 snowfallAmount():number {

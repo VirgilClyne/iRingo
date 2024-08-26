@@ -26,27 +26,27 @@ export class CurrentWeatherData {
     }
     asOf() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     cloudCover() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverLowAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverMidAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     cloudCoverHighAltPct() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     daylight() {
         const offset = this.bb.__offset(this.bb_pos, 18);
@@ -54,7 +54,7 @@ export class CurrentWeatherData {
     }
     humidity() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     perceivedPrecipitationIntensity() {
         const offset = this.bb.__offset(this.bb_pos, 22);
@@ -142,7 +142,7 @@ export class CurrentWeatherData {
     }
     pressureTrend() {
         const offset = this.bb.__offset(this.bb_pos, 52);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PressureTrend.RISING;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PressureTrend.RISING;
     }
     snowfallAmount1h() {
         const offset = this.bb.__offset(this.bb_pos, 54);
@@ -186,7 +186,7 @@ export class CurrentWeatherData {
     }
     uvIndex() {
         const offset = this.bb.__offset(this.bb_pos, 74);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     visibility() {
         const offset = this.bb.__offset(this.bb_pos, 76);
@@ -194,7 +194,7 @@ export class CurrentWeatherData {
     }
     windDirection() {
         const offset = this.bb.__offset(this.bb_pos, 78);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt16(this.bb_pos + offset) : 0;
     }
     windGust() {
         const offset = this.bb.__offset(this.bb_pos, 80);
@@ -379,7 +379,7 @@ export class CurrentWeatherData {
         builder.addFieldFloat32(36, visibility, 0.0);
     }
     static addWindDirection(builder, windDirection) {
-        builder.addFieldInt8(37, windDirection, 0);
+        builder.addFieldInt16(37, windDirection, 0);
     }
     static addWindGust(builder, windGust) {
         builder.addFieldFloat32(38, windGust, 0.0);

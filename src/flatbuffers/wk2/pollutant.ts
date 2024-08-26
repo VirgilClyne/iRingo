@@ -28,7 +28,7 @@ static getSizePrefixedRootAsPollutant(bb:flatbuffers.ByteBuffer, obj?:Pollutant)
 
 pollutantType():PollutantType {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : PollutantType.NOT_AVAILABLE;
 }
 
 amount():number {
@@ -38,7 +38,7 @@ amount():number {
 
 units():UnitType {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : UnitType.PARTS_PER_BILLION;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : UnitType.PARTS_PER_BILLION;
 }
 
 static startPollutant(builder:flatbuffers.Builder) {

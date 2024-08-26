@@ -34,7 +34,7 @@ attributionUrl(optionalEncoding?:any):string|Uint8Array|null {
 
 expireTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 language():string|null
@@ -70,51 +70,31 @@ providerName(optionalEncoding?:any):string|Uint8Array|null {
 
 readTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 18);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 reportedTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 20);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 unknown9():number {
   const offset = this.bb!.__offset(this.bb_pos, 22);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 sourceType():SourceType {
   const offset = this.bb!.__offset(this.bb_pos, 24);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
 }
 
 unknown11():number {
   const offset = this.bb!.__offset(this.bb_pos, 26);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
-}
-
-unknown12():number {
-  const offset = this.bb!.__offset(this.bb_pos, 28);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
-}
-
-unknown13():number {
-  const offset = this.bb!.__offset(this.bb_pos, 30);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
-}
-
-unknown14():number {
-  const offset = this.bb!.__offset(this.bb_pos, 32);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
-}
-
-unknown15():number {
-  const offset = this.bb!.__offset(this.bb_pos, 34);
-  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 static startMetadata(builder:flatbuffers.Builder) {
-  builder.startObject(16);
+  builder.startObject(12);
 }
 
 static addAttributionUrl(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset) {
@@ -165,28 +145,12 @@ static addUnknown11(builder:flatbuffers.Builder, unknown11:number) {
   builder.addFieldInt32(11, unknown11, 0);
 }
 
-static addUnknown12(builder:flatbuffers.Builder, unknown12:number) {
-  builder.addFieldInt32(12, unknown12, 0);
-}
-
-static addUnknown13(builder:flatbuffers.Builder, unknown13:number) {
-  builder.addFieldInt32(13, unknown13, 0);
-}
-
-static addUnknown14(builder:flatbuffers.Builder, unknown14:number) {
-  builder.addFieldInt32(14, unknown14, 0);
-}
-
-static addUnknown15(builder:flatbuffers.Builder, unknown15:number) {
-  builder.addFieldInt32(15, unknown15, 0);
-}
-
 static endMetadata(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, unknown9:number, sourceType:SourceType, unknown11:number, unknown12:number, unknown13:number, unknown14:number, unknown15:number):flatbuffers.Offset {
+static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, unknown9:number, sourceType:SourceType, unknown11:number):flatbuffers.Offset {
   Metadata.startMetadata(builder);
   Metadata.addAttributionUrl(builder, attributionUrlOffset);
   Metadata.addExpireTime(builder, expireTime);
@@ -200,10 +164,6 @@ static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuff
   Metadata.addUnknown9(builder, unknown9);
   Metadata.addSourceType(builder, sourceType);
   Metadata.addUnknown11(builder, unknown11);
-  Metadata.addUnknown12(builder, unknown12);
-  Metadata.addUnknown13(builder, unknown13);
-  Metadata.addUnknown14(builder, unknown14);
-  Metadata.addUnknown15(builder, unknown15);
   return Metadata.endMetadata(builder);
 }
 }

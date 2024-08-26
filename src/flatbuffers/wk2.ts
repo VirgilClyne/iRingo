@@ -4,6 +4,7 @@
 
 export { AirQuality } from './wk2/air-quality.js';
 export { Articles } from './wk2/articles.js';
+export { BaselineType } from './wk2/baseline-type.js';
 export { Certainty } from './wk2/certainty.js';
 export { Change } from './wk2/change.js';
 export { ChangeTrend } from './wk2/change-trend.js';
@@ -23,6 +24,7 @@ export { ForecastToken } from './wk2/forecast-token.js';
 export { HistoricalComparison } from './wk2/historical-comparison.js';
 export { HourWeatherConditions } from './wk2/hour-weather-conditions.js';
 export { HourlyForecastData } from './wk2/hourly-forecast-data.js';
+export { ID } from './wk2/id.js';
 export { ImportanceType } from './wk2/importance-type.js';
 export { Metadata } from './wk2/metadata.js';
 export { MoonPhase } from './wk2/moon-phase.js';

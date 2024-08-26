@@ -23,39 +23,39 @@ export class DayWeatherConditions {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 8);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : ConditionCode.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
     }
     humidityMax() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     humidityMin() {
         const offset = this.bb.__offset(this.bb_pos, 12);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     maxUvIndex() {
         const offset = this.bb.__offset(this.bb_pos, 14);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     moonPhase() {
         const offset = this.bb.__offset(this.bb_pos, 16);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : MoonPhase.NEW;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : MoonPhase.NEW;
     }
     moonrise() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     moonset() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     precipitationAmount() {
         const offset = this.bb.__offset(this.bb_pos, 22);
@@ -71,11 +71,11 @@ export class DayWeatherConditions {
     }
     precipitationChance() {
         const offset = this.bb.__offset(this.bb_pos, 26);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : 0;
     }
     precipitationType() {
         const offset = this.bb.__offset(this.bb_pos, 28);
-        return offset ? this.bb.readUint8(this.bb_pos + offset) : PrecipitationType.CLEAR;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : PrecipitationType.CLEAR;
     }
     snowfallAmount() {
         const offset = this.bb.__offset(this.bb_pos, 30);
@@ -83,43 +83,43 @@ export class DayWeatherConditions {
     }
     solarMidnight() {
         const offset = this.bb.__offset(this.bb_pos, 32);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     solarNoon() {
         const offset = this.bb.__offset(this.bb_pos, 34);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunrise() {
         const offset = this.bb.__offset(this.bb_pos, 36);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunriseCivil() {
         const offset = this.bb.__offset(this.bb_pos, 38);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunriseNautical() {
         const offset = this.bb.__offset(this.bb_pos, 40);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunriseAstronomical() {
         const offset = this.bb.__offset(this.bb_pos, 42);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunset() {
         const offset = this.bb.__offset(this.bb_pos, 44);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunsetCivil() {
         const offset = this.bb.__offset(this.bb_pos, 46);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunsetNautical() {
         const offset = this.bb.__offset(this.bb_pos, 48);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     sunsetAstronomical() {
         const offset = this.bb.__offset(this.bb_pos, 50);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     temperatureMax() {
         const offset = this.bb.__offset(this.bb_pos, 52);
@@ -127,7 +127,7 @@ export class DayWeatherConditions {
     }
     temperatureMaxTime() {
         const offset = this.bb.__offset(this.bb_pos, 54);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     temperatureMin() {
         const offset = this.bb.__offset(this.bb_pos, 56);
@@ -135,7 +135,7 @@ export class DayWeatherConditions {
     }
     temperatureMinTime() {
         const offset = this.bb.__offset(this.bb_pos, 58);
-        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
     windGustSpeedMax() {
         const offset = this.bb.__offset(this.bb_pos, 60);
