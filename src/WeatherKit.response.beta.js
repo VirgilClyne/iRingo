@@ -10,7 +10,7 @@ import WAQI from "./class/WAQI.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4117) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4119) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -105,9 +105,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case true:
 												default:
 													const Waqi = new WAQI($, { "url": url });
-													const airQuality = await Waqi.Nearest("mapq");
-													if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
-													body.airQuality = { ...body?.airQuality, ...airQuality };
+													const Nearest = await Waqi.Nearest("mapq");
+													const Token = await Waqi.Token(Nearest?.metadata?.stationId);
+													//Caches.WAQI.set(stationId, token);
+													const AQI = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
+													const Metadata = { ...body?.airQuality?.metadata, ...Nearest?.metadata, ...AQI?.metadata };
+													body.airQuality = { ...body?.airQuality, ...Nearest, ...AQI };
+													body.airQuality.metadata = Metadata;
 													$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 													break;
 												case false:
@@ -117,7 +121,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
-											$.log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
+											//$.log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");

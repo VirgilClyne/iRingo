@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.0.8";
+        this.Version = "1.1.3";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -99,10 +99,11 @@ export default class WAQI {
 		}
 	};
 
-    async Nearest(mapqVersion = "mapq2", header = { "Content-Type": "application/json" }) {
+    async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
         console.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`);
         const request = {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
+            //"url": `https://mapq.waqi.info/${mapqVersion}/nearest/station/${stationId}?n=1`,
             "header": header,
         };
         let airQuality;
@@ -110,61 +111,52 @@ export default class WAQI {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             switch (mapqVersion) {
                 case "mapq2":
-                    if (body?.status === "ok") {
+                    switch (body?.status) {
+                        case "ok":
                         airQuality = {
                             "metadata": {
                                 "attributionUrl": request.url,
-                                "latitude": body?.data?.stations?.[0]?.geo?.[0],
-                                "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                "providerLogo": providerNameToLogo("WAQI", this.version),
-                                "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
-                                "temporarilyUnavailable": false,
-                                "sourceType": "STATION",
-                                "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
-                            },
-                            "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
-                            "primaryPollutant": null,
-                            "scale": "EPA_NowCast.2302"
-                        };
-                    } else {
-                        airQuality = {
-                            "metadata": {
-                                "attributionUrl": request.url,
-                                "providerLogo": providerNameToLogo("WAQI", this.version),
-                                "providerName": "World Air Quality Index Project",
-                                "temporarilyUnavailable": true,
-                            }
-                        };
-                        throw { "status": "error", "reason": error.reason };
+                                    "latitude": body?.data?.stations?.[0]?.geo?.[0],
+                                    "longitude": body?.data?.stations?.[0]?.geo?.[1],
+                                    "providerLogo": providerNameToLogo("WAQI", this.version),
+                                    "providerName": `World Air Quality Index Project\n监测站：${body?.data?.stations?.[0]?.name}`,
+                                    "temporarilyUnavailable": false,
+                                    "sourceType": "STATION",
+                                    "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
+                                },
+                                "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
+                                "primaryPollutant": null,
+                                "scale": "EPA_NowCast.2302"
+                            };
+                            break;
+                        case "error":
+                        case undefined:
+                            throw { "status": body?.status, "reason": body?.reason };
                     };
                     break;
                 case "mapq":
-                    if (body?.d) {
-                        airQuality = {
-                            "metadata": {
-                                "attributionUrl": request.url,
-                                "latitude": body?.d?.[0]?.geo?.[0],
-                                "longitude": body?.d?.[0]?.geo?.[1],
-                                "providerLogo": providerNameToLogo("WAQI", this.version),
-                                "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
-                                "temporarilyUnavailable": false,
-                                "sourceType": "STATION",
-                                "stationId": parseInt(body?.d?.[0]?.x, 10),
-                            },
-                            "index": parseInt(body?.d?.[0]?.v, 10),
-                            "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
-                            "scale": "EPA_NowCast.2302"
-                        };
-                    } else {
-                        airQuality = {
-                            "metadata": {
-                                "attributionUrl": request.url,
-                                "providerLogo": providerNameToLogo("WAQI", this.version),
-                                "providerName": "World Air Quality Index Project",
-                                "temporarilyUnavailable": true,
-                            }
-                        };
-                        throw { "status": "error", "reason": error.message };
+                    switch (body?.status) {
+                        default:
+                        case undefined:
+                            airQuality = {
+                                "metadata": {
+                                    "attributionUrl": request.url,
+                                    "latitude": body?.d?.[0]?.geo?.[0],
+                                    "longitude": body?.d?.[0]?.geo?.[1],
+                                    "providerLogo": providerNameToLogo("WAQI", this.version),
+                                    "providerName": `World Air Quality Index Project\n监测站：${body?.d?.[0]?.nna}`,
+                                    "temporarilyUnavailable": false,
+                                    "sourceType": "STATION",
+                                    "stationId": parseInt(body?.d?.[0]?.x, 10),
+                                    "stationKey": body?.d?.[0]?.k,
+                                },
+                                "index": parseInt(body?.d?.[0]?.v, 10),
+                                "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
+                                "scale": "EPA_NowCast.2302"
+                            };
+                            break;
+                        case "error":
+                            throw { "status": body?.status, "reason": body?.message };
                     };
                     break;
                 default:
@@ -179,15 +171,92 @@ export default class WAQI {
         };
     };
 
-    async AQI (stationId, header = { "Content-Type": "application/json" }, token) {
+    async Token(stationId = new Number, header = { "Content-Type": "application/json" }){
+        console.log(`☑️ Token, stationId: ${stationId}`);
+        const request = {
+            //"url": `https://api.waqi.info/api/token/${stationId}`,
+            "url": `https://api2.waqi.info/api/token/${stationId}`,
+            "header": header,
+        };
+        let token;
+        try {
+            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            switch (body?.status) {
+                case "error":
+                    throw { "status": body?.status, "reason": body?.data };
+                default:
+                    switch (body?.rxs?.status) {
+                        case "ok":
+                            switch (body?.rxs?.obs?.[0]?.status) {
+                                case "ok":
+                                    token = body?.rxs?.obs?.[0]?.msg?.token;
+                                    //uid = body?.rxs?.obs?.[0]?.uid;
+                                    break;
+                                case "error":
+                                    throw { "status": body?.rxs?.obs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg };
+                            };
+                            break;
+                        case "error":
+                        case undefined:
+                            throw { "status": body?.rxs?.status, "reason": body?.rxs };
+                    };
+                    break;
+            };
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            console.log(`token: ${token}`);
+            console.log(`✅ Token`);
+            return token;
+        };
+    };
+
+    async AQI(stationId = new Number, token = "na", header = { "Content-Type": "application/json" }) {
         console.log(`☑️ AQI, stationId: ${stationId}`);
         const request = {
-            "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
+            "url": `https://api2.waqi.info/api/feed/@${stationId}/aqi.json`,
             "header": header,
             "body": `token=${token}&id=${stationId}`,
         };
         let airQuality;
         try {
+            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            switch (body?.status) {
+                case "error":
+                    throw { "status": body?.status, "reason": body?.data };
+                default:
+                case undefined:
+                    switch (body?.rxs?.status) {
+                        case "ok":
+                            switch (body?.rxs?.obs?.[0]?.status) {
+                                case "ok":
+                                    airQuality = {
+                                        "metadata": {
+                                            "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
+                                            "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
+                                            "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
+                                            "providerLogo": providerNameToLogo("WAQI", this.version),
+                                            "providerName": `World Air Quality Index Project\n监测站：${body?.rxs?.obs?.[0]?.msg?.city?.name}`,
+                                            "temporarilyUnavailable": false,
+                                            "sourceType": "STATION",
+                                            "stationId": stationId,
+                                        },
+                                        "index": parseInt(body?.rxs?.obs?.[0]?.msg?.aqi, 10),
+                                        "primaryPollutant": this.#Configs.Pollutants[body?.rxs?.obs?.[0]?.msg?.dominentpol] || "NOT_AVAILABLE",
+                                        "scale": "EPA_NowCast.2302"
+                                    };
+                                    break;
+                                case "error":
+                                case undefined:
+                                    throw { "status": body?.rxs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg };
+                            };
+                            break;
+                        case "error":
+                        case undefined:
+                            throw { "status": body?.rxs?.status, "reason": body?.rxs };
+                    };
+                    break;
+            };
         } catch (error) {
             this.logErr(error);
         } finally {
