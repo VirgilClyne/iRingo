@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.7";
+        this.Version = "1.1.9";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -117,6 +117,7 @@ export default class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
+                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -145,6 +146,7 @@ export default class WAQI {
                                 "attributionUrl": request.url,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
+                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.data?.stations?.[0]?.name}`,
                                     "readTime": new Date().getTime() / 1000,
@@ -169,7 +171,7 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
             console.log(`✅ Nearest`);
             return airQuality;
         };
@@ -208,7 +210,7 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`token: ${token}`);
+            console.log(`🚧 token: ${token}`);
             console.log(`✅ Token`);
             return token;
         };
@@ -236,6 +238,7 @@ export default class WAQI {
                                     airQuality = {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
+                                            "expireTime": new Date().getTime() / 1000 + 60 * 60,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -265,7 +268,7 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
             console.log(`✅ AQI`);
             return airQuality;
         };
@@ -286,6 +289,7 @@ export default class WAQI {
                     airQuality = {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
+                            "expireTime": new Date().getTime() / 1000 + 60 * 60,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -308,7 +312,7 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
             console.log(`✅ AQI2`);
             return airQuality;
         };

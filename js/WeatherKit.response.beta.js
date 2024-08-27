@@ -19305,7 +19305,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.7";
+        this.Version = "1.1.9";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19418,6 +19418,7 @@ class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
+                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19446,6 +19447,7 @@ class WAQI {
                                 "attributionUrl": request.url,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
+                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.data?.stations?.[0]?.name}`,
                                     "readTime": new Date().getTime() / 1000,
@@ -19470,7 +19472,7 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
             console.log(`✅ Nearest`);
             return airQuality;
         }    };
@@ -19508,7 +19510,7 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`token: ${token}`);
+            console.log(`🚧 token: ${token}`);
             console.log(`✅ Token`);
             return token;
         }    };
@@ -19535,6 +19537,7 @@ class WAQI {
                                     airQuality = {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
+                                            "expireTime": new Date().getTime() / 1000 + 60 * 60,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19564,7 +19567,7 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
             console.log(`✅ AQI`);
             return airQuality;
         }    }
@@ -19584,6 +19587,7 @@ class WAQI {
                     airQuality = {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
+                            "expireTime": new Date().getTime() / 1000 + 60 * 60,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19606,13 +19610,13 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
             console.log(`✅ AQI2`);
             return airQuality;
         }    }
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4120) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.2(4122) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19701,30 +19705,38 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											let airQuality;
+											let metadata;
 											switch (Settings?.AQI?.Provider) {
 												case "WeatherKit":
 													break;
 												case "WeatherOL":
+													break;
+												case "QWeather":
 													break;
 												case "ColorfulClouds":
 													break;
 												case "WAQI":
 												default:
 													const Waqi = new WAQI($, { "url": url });
-													let Nearest, AQI;
 													if (Settings?.API?.WAQI?.Token) {
-														AQI = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
+														airQuality = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
+														metadata = airQuality?.metadata;
+														airQuality = airQuality;
 													} else {
-														Nearest = await Waqi.Nearest();
-														await Waqi.Token(Nearest?.metadata?.stationId);
-														//Caches.WAQI.set(stationId, token);
-														AQI = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
+														const Nearest = await Waqi.Nearest();
+														const Token = await Waqi.Token(Nearest?.metadata?.stationId);
+														//Caches.WAQI.set(stationId, Token);
+														airQuality = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
+														metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
+														airQuality = { ...Nearest, ...airQuality };
 													}
-													const Metadata = { ...body?.airQuality?.metadata, ...Nearest?.metadata, ...AQI?.metadata };
-													body.airQuality = { ...body?.airQuality, ...Nearest, ...AQI };
-													body.airQuality.metadata = Metadata;
-													$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 													break;
+											}											if (metadata) {
+												metadata = { ...body?.airQuality?.metadata, ...metadata };
+												body.airQuality = { ...body?.airQuality, ...airQuality };
+												body.airQuality.metadata = metadata;
+												$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											}											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										}										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
@@ -19737,10 +19749,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												case "WeatherOL":
 												default:
 													break;
+												case "QWeather":
+													break;
 												case "ColorfulClouds":
 													break;
 											}											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
-											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
 											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
