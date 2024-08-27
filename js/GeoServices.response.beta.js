@@ -14625,17 +14625,26 @@ var TV$1 = /*#__PURE__*/Object.freeze({
 var Settings = {
 	Switch: true,
 	NextHour: {
-		Switch: true
+		Provider: "WeatherOL"
 	},
 	AQI: {
-		Switch: true,
-		Mode: "WAQI Public",
+		Provider: "WAQI",
 		Location: "Station",
-		Auth: null,
-		Scale: "EPA_NowCast.2207"
+		ReplaceProviders: [
+			"QWeather"
+		],
+		Token: "EPA_NowCast.2302"
 	},
-	"Map": {
-		AQI: false
+	API: {
+		WAQI: {
+			Token: null
+		},
+		QWeather: {
+			Token: null
+		},
+		ColorfulClouds: {
+			Token: null
+		}
 	}
 };
 var Configs = {
