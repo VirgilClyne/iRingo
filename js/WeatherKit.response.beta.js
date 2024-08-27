@@ -14410,6 +14410,42 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
+function providerNameToLogo(providerName, version) {
+    console.log(`☑️ providerNameToLogo, providerName: ${providerName}, version: ${version}`);
+    let providerLogo;
+    switch (providerName) {
+        case "WAQI":
+        case "World Air Quality Index Project":
+            switch (version) {
+                case "v1":
+                    providerLogo = "https://waqi.info/images/logo.png";
+                    break;
+                case "v2":
+                    providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/src/icon/${version}/WAQI.png`;
+                    break;
+            }            break;
+        case "ColofulClouds":
+        case "彩云天气":
+            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/src/icon/${version}/ColofulClouds.png`;
+            break;
+        case "气象在线":
+        case "WeatherOL":
+            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/src/icon/${version}/WeatherOL.png`;
+            break;
+        case "QWeather":
+        case "和风天气":
+            providerLogo = `https://weather-data.apple.com/assets/${version}/QWeather.png`;
+            break;
+        case "The Weather Channel":
+            providerLogo = `https://weather-data.apple.com/assets/${version}/TWC.png`;
+            break;
+        case "BreezoMeter":
+            providerLogo = `https://weather-data.apple.com/assets/${version}/BreezoMeter.png`;
+            break;
+    }    console.log(`✅ providerNameToLogo`);
+    return providerLogo;
+}
+
 const SIZEOF_SHORT = 2;
 const SIZEOF_INT = 4;
 const FILE_IDENTIFIER_LENGTH = 4;
@@ -19372,8 +19408,7 @@ class WAQI {
                                 "attributionUrl": request.url,
                                 "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                 "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
                                 "temporarilyUnavailable": false,
                                 "sourceType": "STATION",
@@ -19387,8 +19422,7 @@ class WAQI {
                         airQuality = {
                             "metadata": {
                                 "attributionUrl": request.url,
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": "World Air Quality Index Project",
                                 "temporarilyUnavailable": true,
                             }
@@ -19403,8 +19437,7 @@ class WAQI {
                                 "attributionUrl": request.url,
                                 "latitude": body?.d?.[0]?.geo?.[0],
                                 "longitude": body?.d?.[0]?.geo?.[1],
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
                                 "temporarilyUnavailable": false,
                                 "sourceType": "STATION",
@@ -19418,8 +19451,7 @@ class WAQI {
                         airQuality = {
                             "metadata": {
                                 "attributionUrl": request.url,
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": "World Air Quality Index Project",
                                 "temporarilyUnavailable": true,
                             }
@@ -19439,7 +19471,7 @@ class WAQI {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4111) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4112) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19532,6 +19564,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											const airQuality = await Waqi.Nearest("mapq");
 											if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
 											body.airQuality = { ...body?.airQuality, ...airQuality };
+											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");

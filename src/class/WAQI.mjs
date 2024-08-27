@@ -1,4 +1,5 @@
 import ENV from "../ENV/ENV.mjs";
+import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
@@ -115,8 +116,7 @@ export default class WAQI {
                                 "attributionUrl": request.url,
                                 "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                 "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
                                 "temporarilyUnavailable": false,
                                 "sourceType": "STATION",
@@ -130,8 +130,7 @@ export default class WAQI {
                         airQuality = {
                             "metadata": {
                                 "attributionUrl": request.url,
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": "World Air Quality Index Project",
                                 "temporarilyUnavailable": true,
                             }
@@ -146,8 +145,7 @@ export default class WAQI {
                                 "attributionUrl": request.url,
                                 "latitude": body?.d?.[0]?.geo?.[0],
                                 "longitude": body?.d?.[0]?.geo?.[1],
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
                                 "temporarilyUnavailable": false,
                                 "sourceType": "STATION",
@@ -161,8 +159,7 @@ export default class WAQI {
                         airQuality = {
                             "metadata": {
                                 "attributionUrl": request.url,
-                                //"providerLogo": "https://waqi.info/images/logo.png",
-                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerLogo": providerNameToLogo("WAQI", this.version),
                                 "providerName": "World Air Quality Index Project",
                                 "temporarilyUnavailable": true,
                             }
