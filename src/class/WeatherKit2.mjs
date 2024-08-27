@@ -4,7 +4,7 @@ import * as WK2 from "../flatbuffers/wk2.js";
 export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.1";
+		this.Version = "1.0.2";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
 		//this.initialSize = 10240;
 		//this.builder = new flatbuffers.Builder(this.initialSize);
@@ -533,6 +533,7 @@ export default class WeatherKit2 {
 				});
 				for (let i = 0; i < NextHourForecastData?.summaryLength(); i++) data.summary.push({
 					"condition": WK2.PrecipitationType[NextHourForecastData?.summary(i)?.condition()],
+					"endTime": NextHourForecastData?.summary(i)?.endTime(),
 					"precipitationChance": NextHourForecastData?.summary(i)?.precipitationChance(),
 					"precipitationIntensity": NextHourForecastData?.summary(i)?.precipitationIntensity(),
 					"startTime": NextHourForecastData?.summary(i)?.startTime(),

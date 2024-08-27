@@ -145,7 +145,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 											let forecastNextHour;
 											let metadata;
-											switch (Settings?.AQI?.Provider) {
+											switch (Settings?.NextHour?.Provider) {
 												case "WeatherKit":
 													break;
 												case "WeatherOL":
