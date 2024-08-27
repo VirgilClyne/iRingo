@@ -114,7 +114,7 @@
 				{
 					"id": "@iRingo.WeatherKit.Settings.NextHour.Provider",
 					"name": "[未来一小时降水强度]数据源",
-					"val": "WeatherOL",
+					"val": "ColorfulClouds",
 					"type": "radios",
 					"items": [
 						{
@@ -122,16 +122,12 @@
 							"label": "WeatherKit"
 						},
 						{
-							"key": "WeatherOL",
-							"label": "气象在线"
-						},
-						{
 							"key": " QWeather",
-							"label": "彩云天气（需要 API 令牌）"
+							"label": "和风天气"
 						},
 						{
 							"key": "ColorfulClouds",
-							"label": "彩云天气（需要 API 令牌，专业套餐及以上）"
+							"label": "彩云天气"
 						}
 					],
 					"desc": "气象在线与彩云天气的数据源相同，但不支持简体中文以外的语言。"
@@ -147,8 +143,8 @@
 							"label": "WeatherKit"
 						},
 						{
-							"key": "WeatherOL",
-							"label": "气象在线"
+							"key": " QWeather",
+							"label": "和风天气"
 						},
 						{
 							"key": "ColorfulClouds",

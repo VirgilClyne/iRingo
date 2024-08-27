@@ -14196,7 +14196,7 @@ var TV$1 = /*#__PURE__*/Object.freeze({
 var Settings = {
 	Switch: true,
 	NextHour: {
-		Provider: "WeatherOL"
+		Provider: "ColorfulClouds"
 	},
 	AQI: {
 		Provider: "WAQI",
@@ -14208,13 +14208,16 @@ var Settings = {
 	},
 	API: {
 		WAQI: {
-			Token: null
+			Token: null,
+			Header: null
 		},
 		QWeather: {
-			Token: null
+			Token: null,
+			Header: null
 		},
 		ColorfulClouds: {
-			Token: null
+			Token: null,
+			Header: null
 		}
 	}
 };
