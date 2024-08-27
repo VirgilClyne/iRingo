@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.0.7";
+        this.Version = "1.0.8";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -178,4 +178,22 @@ export default class WAQI {
             return airQuality;
         };
     };
+
+    async AQI (stationId, header = { "Content-Type": "application/json" }, token) {
+        console.log(`☑️ AQI, stationId: ${stationId}`);
+        const request = {
+            "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
+            "header": header,
+            "body": `token=${token}&id=${stationId}`,
+        };
+        let airQuality;
+        try {
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`✅ AQI`);
+            return airQuality;
+        };
+    }
 };
