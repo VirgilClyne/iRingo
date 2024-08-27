@@ -19309,7 +19309,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.9";
+        this.Version = "1.1.12";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19422,12 +19422,12 @@ class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
-                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
+                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.d?.[0]?.nna}`,
-                                    "readTime": new Date().getTime() / 1000,
+                                    "readTime": Math.round(Date.now() / 1000),
                                     "reportedTime": body?.d?.[0]?.t,
                                     "temporarilyUnavailable": false,
                                     "sourceType": "STATION",
@@ -19451,11 +19451,11 @@ class WAQI {
                                 "attributionUrl": request.url,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
+                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.data?.stations?.[0]?.name}`,
-                                    "readTime": new Date().getTime() / 1000,
-                                    "reportedTime": new Date(body?.data?.stations?.[0]?.utime).setMilliseconds(0).getTime() / 1000,
+                                    "readTime": Math.round(Date.now() / 1000),
+                                    "reportedTime": Math.round(new Date(body?.data?.stations?.[0]?.utime).getTime() / 1000),
                                     "temporarilyUnavailable": false,
                                     "sourceType": "STATION",
                                     "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
@@ -19541,12 +19541,12 @@ class WAQI {
                                     airQuality = {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
-                                            "expireTime": new Date().getTime() / 1000 + 60 * 60,
+                                            "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
                                             "providerName": `World Air Quality Index Project\n监测站：${body?.rxs?.obs?.[0]?.msg?.city?.name}`,
-                                            "readTime": new Date().getTime() / 1000,
+                                            "readTime": Math.round(Date.now() / 1000),
                                             "reportedTime": body?.rxs?.obs?.[0]?.msg?.time?.v,
                                             "temporarilyUnavailable": false,
                                             "sourceType": "STATION",
@@ -19591,12 +19591,12 @@ class WAQI {
                     airQuality = {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
-                            "expireTime": new Date().getTime() / 1000 + 60 * 60,
+                            "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
                             "providerName": `World Air Quality Index Project\n监测站：${body?.data?.city?.name}`,
-                            "readTime": new Date().getTime() / 1000,
+                            "readTime": Math.round(Date.now() / 1000),
                             "reportedTime": body?.data?.time?.v,
                             "temporarilyUnavailable": false,
                             "sourceType": "STATION",
@@ -19623,7 +19623,7 @@ class WAQI {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.0.5";
+        this.Version = "1.0.9";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19727,7 +19727,6 @@ class ColorfulClouds {
         let forecastNextHour;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
-            console.log(`🚧 body: ${JSON.stringify(body, null, 2)}`);
             switch (body?.status) {
                 case "ok":
                     switch (body?.result?.minutely?.status) {
@@ -19735,26 +19734,27 @@ class ColorfulClouds {
                             forecastNextHour = {
                                 "metadata": {
                                     "attributionUrl": "https://www.caiyunapp.com/h5",
-                                    "expireTime": new Date().getTime() / 1000 + 60 * 60,
+                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
                                     "language": body?.lang,
                                     "latitude": body?.location?.[0],
                                     "longitude": body?.location?.[1],
                                     "providerLogo": providerNameToLogo("彩云天气", this.version),
-                                    "providerName": `彩云天气`,
-                                    "readTime": new Date().getTime() / 1000,
+                                    "providerName": "彩云天气",
+                                    "readTime": Math.round(Date.now() / 1000),
                                     "reportedTime": body?.server_time,
                                     "temporarilyUnavailable": false,
                                     "sourceType": "MODELED",
                                 },
                                 "condition": [],
                                 "forecastEnd": 0,
-                                "forecastStart": new Date().setMinutes(0, 0, 0).getTime() / 1000,
+                                "forecastStart": Math.round(Date.now() / 1000),
                                 "minutes": body?.result?.minutely?.precipitation_2h?.map((precipitationIntensity, index) => {
+                                    console.log(`🚧 precipitationIntensity: ${precipitationIntensity}, index: ${index}`);
                                     const minute = {
                                         "perceivedPrecipitationIntensity": precipitationIntensity,
                                         "precipitationChance": 0,
                                         "precipitationIntensity": precipitationIntensity,
-                                        "startTime": new Date().setMinutes(index, 0, 0).getTime() / 1000,
+                                        "startTime": Math.round(Date.now() / 1000) + 60 * index,
                                     };
                                     if (index < 30) minute.precipitationChance = data?.result?.minutely?.probability?.[0];
                                     else if (index < 60) minute.precipitationChance = data?.result?.minutely?.probability?.[1];
@@ -19782,7 +19782,7 @@ class ColorfulClouds {
             console.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`);
             console.log(`✅ Minutely`);
             return forecastNextHour;
-        }    }
+        }    };
 }
 
 const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4123) response.beta");
