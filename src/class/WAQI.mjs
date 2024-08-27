@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.12";
+        this.Version = "1.1.13";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -31,72 +31,6 @@ export default class WAQI {
 			"pm10": "PM10",
 			"other": "NOT_AVAILABLE"
 		},
-		"Status": {
-			"clear": "CLEAR",
-			"sleet": "SLEET",
-			"drizzle": "RAIN",
-			"rain": "RAIN",
-			"heavy_rain": "RAIN",
-			"flurries": "SNOW",
-			"snow": "SNOW",
-			"heavy_snow": "SNOW"
-		},
-		"Precipitation": {
-			"Level": {
-				"INVALID": -1,
-				"NO": 0,
-				"LIGHT": 1,
-				"MODERATE": 2,
-				"HEAVY": 3,
-				"STORM": 4
-			},
-			"Range": {
-				"RADAR": {
-					"NO": [
-						0,
-						0.031
-					],
-					"LIGHT": [
-						0.031,
-						0.25
-					],
-					"MODERATE": [
-						0.25,
-						0.35
-					],
-					"HEAVY": [
-						0.35,
-						0.48
-					],
-					"STORM": [
-						0.48,
-						1
-					]
-				},
-				"MMPERHR": {
-					"NO": [
-						0,
-						0.08
-					],
-					"LIGHT": [
-						0.08,
-						3.44
-					],
-					"MODERATE": [
-						3.44,
-						11.33
-					],
-					"HEAVY": [
-						11.33,
-						51.30
-					],
-					"STORM": [
-						51.30,
-						100
-					]
-				}
-			}
-		}
 	};
 
     async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {

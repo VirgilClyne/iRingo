@@ -11,7 +11,7 @@ import ColorfulClouds from "./class/ColorfulClouds.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4123) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4124) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -101,7 +101,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											let airQuality;
 											let metadata;
 											switch (Settings?.AQI?.Provider) {
@@ -134,7 +134,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												metadata = { ...body?.airQuality?.metadata, ...metadata };
 												body.airQuality = { ...body?.airQuality, ...airQuality };
 												body.airQuality.metadata = metadata;
-												$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+												//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											};
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										};

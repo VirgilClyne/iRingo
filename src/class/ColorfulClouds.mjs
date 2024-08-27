@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.0.9";
+        this.Version = "1.0.12";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -130,17 +130,16 @@ export default class ColorfulClouds {
                                 "forecastEnd": 0,
                                 "forecastStart": Math.round(Date.now() / 1000),
                                 "minutes": body?.result?.minutely?.precipitation_2h?.map((precipitationIntensity, index) => {
-                                    console.log(`🚧 precipitationIntensity: ${precipitationIntensity}, index: ${index}`);
                                     const minute = {
-                                        "perceivedPrecipitationIntensity": precipitationIntensity,
+                                        "perceivedPrecipitationIntensity": 0,
                                         "precipitationChance": 0,
                                         "precipitationIntensity": precipitationIntensity,
                                         "startTime": Math.round(Date.now() / 1000) + 60 * index,
                                     };
-                                    if (index < 30) minute.precipitationChance = data?.result?.minutely?.probability?.[0]
-                                    else if (index < 60) minute.precipitationChance = data?.result?.minutely?.probability?.[1]
-                                    else if (index < 90) minute.precipitationChance = data?.result?.minutely?.probability?.[2]
-                                    else minute.precipitationChance = data?.result?.minutely?.probability?.[3];
+                                    if (index < 30) minute.precipitationChance = body?.result?.minutely?.probability?.[0]
+                                    else if (index < 60) minute.precipitationChance = body?.result?.minutely?.probability?.[1]
+                                    else if (index < 90) minute.precipitationChance = body?.result?.minutely?.probability?.[2]
+                                    else minute.precipitationChance = body?.result?.minutely?.probability?.[3];
                                     return minute;
                                 }),
                                 "summary": []

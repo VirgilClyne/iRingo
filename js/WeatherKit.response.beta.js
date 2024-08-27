@@ -19309,7 +19309,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.12";
+        this.Version = "1.1.13";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19336,72 +19336,6 @@ class WAQI {
 			"pm10": "PM10",
 			"other": "NOT_AVAILABLE"
 		},
-		"Status": {
-			"clear": "CLEAR",
-			"sleet": "SLEET",
-			"drizzle": "RAIN",
-			"rain": "RAIN",
-			"heavy_rain": "RAIN",
-			"flurries": "SNOW",
-			"snow": "SNOW",
-			"heavy_snow": "SNOW"
-		},
-		"Precipitation": {
-			"Level": {
-				"INVALID": -1,
-				"NO": 0,
-				"LIGHT": 1,
-				"MODERATE": 2,
-				"HEAVY": 3,
-				"STORM": 4
-			},
-			"Range": {
-				"RADAR": {
-					"NO": [
-						0,
-						0.031
-					],
-					"LIGHT": [
-						0.031,
-						0.25
-					],
-					"MODERATE": [
-						0.25,
-						0.35
-					],
-					"HEAVY": [
-						0.35,
-						0.48
-					],
-					"STORM": [
-						0.48,
-						1
-					]
-				},
-				"MMPERHR": {
-					"NO": [
-						0,
-						0.08
-					],
-					"LIGHT": [
-						0.08,
-						3.44
-					],
-					"MODERATE": [
-						3.44,
-						11.33
-					],
-					"HEAVY": [
-						11.33,
-						51.30
-					],
-					"STORM": [
-						51.30,
-						100
-					]
-				}
-			}
-		}
 	};
 
     async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
@@ -19623,7 +19557,7 @@ class WAQI {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.0.9";
+        this.Version = "1.0.12";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19749,17 +19683,16 @@ class ColorfulClouds {
                                 "forecastEnd": 0,
                                 "forecastStart": Math.round(Date.now() / 1000),
                                 "minutes": body?.result?.minutely?.precipitation_2h?.map((precipitationIntensity, index) => {
-                                    console.log(`🚧 precipitationIntensity: ${precipitationIntensity}, index: ${index}`);
                                     const minute = {
-                                        "perceivedPrecipitationIntensity": precipitationIntensity,
+                                        "perceivedPrecipitationIntensity": 0,
                                         "precipitationChance": 0,
                                         "precipitationIntensity": precipitationIntensity,
                                         "startTime": Math.round(Date.now() / 1000) + 60 * index,
                                     };
-                                    if (index < 30) minute.precipitationChance = data?.result?.minutely?.probability?.[0];
-                                    else if (index < 60) minute.precipitationChance = data?.result?.minutely?.probability?.[1];
-                                    else if (index < 90) minute.precipitationChance = data?.result?.minutely?.probability?.[2];
-                                    else minute.precipitationChance = data?.result?.minutely?.probability?.[3];
+                                    if (index < 30) minute.precipitationChance = body?.result?.minutely?.probability?.[0];
+                                    else if (index < 60) minute.precipitationChance = body?.result?.minutely?.probability?.[1];
+                                    else if (index < 90) minute.precipitationChance = body?.result?.minutely?.probability?.[2];
+                                    else minute.precipitationChance = body?.result?.minutely?.probability?.[3];
                                     return minute;
                                 }),
                                 "summary": []
@@ -19785,7 +19718,7 @@ class ColorfulClouds {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4123) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4124) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19873,7 +19806,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer$1, "builder": Builder$1 });
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											let airQuality;
 											let metadata;
 											switch (Settings?.AQI?.Provider) {
@@ -19905,7 +19838,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												metadata = { ...body?.airQuality?.metadata, ...metadata };
 												body.airQuality = { ...body?.airQuality, ...airQuality };
 												body.airQuality.metadata = metadata;
-												$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+												//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											}											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										}										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
