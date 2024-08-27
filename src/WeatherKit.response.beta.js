@@ -9,7 +9,7 @@ import WAQI from "./class/WAQI.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4107) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4110) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -102,33 +102,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											const Waqi = new WAQI($, { "url": url });
 											const airQuality = await Waqi.Nearest("mapq");
-											if (airQuality) {
-												body.airQuality = {
-													"metadata": {
-															"attributionUrl": airQuality?.metadata?.attributionUrl || body?.airQuality?.metadata?.attributionUrl,
-															"expireTime": airQuality?.metadata?.expireTime || body?.airQuality?.metadata?.expireTime,
-															"language": airQuality?.metadata?.language || body?.airQuality?.metadata?.language,
-															"latitude": airQuality?.metadata?.latitude || body?.airQuality?.metadata?.latitude,
-															"longitude": airQuality?.metadata?.longitude || body?.airQuality?.metadata?.longitude,
-															"providerLogo": airQuality?.metadata?.providerLogo || body?.airQuality?.metadata?.providerLogo,
-															"providerName": airQuality?.metadata?.providerName || body?.airQuality?.metadata?.providerName,
-															"readTime": airQuality?.metadata?.readTime || body?.airQuality?.metadata?.readTime,
-															"reportedTime": airQuality?.metadata?.reportedTime || body?.airQuality?.metadata?.reportedTime,
-															"unknown9": airQuality?.metadata?.unknown9 || body?.airQuality?.metadata?.unknown9,
-															"sourceType": airQuality?.metadata?.sourceType || body?.airQuality?.metadata?.sourceType,
-															"stationId": airQuality?.metadata?.stationId || body?.airQuality?.metadata?.stationId,
-															"unknown11":  airQuality?.metadata?.unknown11 || body?.airQuality?.metadata?.unknown11,
-															"temporarilyUnavailable": airQuality?.metadata?.temporarilyUnavailable || body?.airQuality?.metadata?.temporarilyUnavailable,
-													},
-													"categoryIndex": airQuality?.categoryIndex || body?.airQuality?.categoryIndex,
-													"index": airQuality?.index || body?.airQuality?.index,
-													"isSignificant": airQuality?.isSignificant || body?.airQuality?.isSignificant,
-													"pollutants": airQuality?.pollutants || body?.airQuality?.pollutants,
-													"previousDayComparison": airQuality?.previousDayComparison || body?.airQuality?.previousDayComparison,
-													"primaryPollutant": airQuality?.primaryPollutant || body?.airQuality?.primaryPollutant,
-													"scale": airQuality?.scale || body?.airQuality?.scale,
-												};
-											};
+											if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
+											body.airQuality = { ...body?.airQuality, ...airQuality };
+											body.airQuality.metadata.unknown9 = 1;
+											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");

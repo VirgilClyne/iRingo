@@ -3,7 +3,7 @@ import ENV from "../ENV/ENV.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.0.6";
+        this.Version = "1.0.7";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -104,84 +104,81 @@ export default class WAQI {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             "header": header,
         };
-        const airQuality = await this.$.fetch(request).then(response => {
-            let airQuality = null;
-            try {
-                const body = JSON.parse(response?.body ?? "{}");
-                switch (mapqVersion) {
-                    case "mapq2":
-                        if (body?.status === "ok") {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "latitude": body?.data?.stations?.[0]?.geo?.[0],
-                                    "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
-                                    "temporarilyUnavailable": false,
-                                    "sourceType": "STATION",
-                                    "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
-                                },
-                                "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
-                                "primaryPollutant": null,
-                                "scale": "EPA_NowCast.2302"
-                            };
-                        } else {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": "World Air Quality Index Project",
-                                    "temporarilyUnavailable": true,
-                                }
-                            };
-                            throw { "status": "error", "reason": error.reason };
+        let airQuality;
+        try {
+            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            switch (mapqVersion) {
+                case "mapq2":
+                    if (body?.status === "ok") {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                "latitude": body?.data?.stations?.[0]?.geo?.[0],
+                                "longitude": body?.data?.stations?.[0]?.geo?.[1],
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
+                                "temporarilyUnavailable": false,
+                                "sourceType": "STATION",
+                                "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
+                            },
+                            "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
+                            "primaryPollutant": null,
+                            "scale": "EPA_NowCast.2302"
                         };
-                        break;
-                    case "mapq":
-                        if (body?.d) {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "latitude": body?.d?.[0]?.geo?.[0],
-                                    "longitude": body?.d?.[0]?.geo?.[1],
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
-                                    "temporarilyUnavailable": false,
-                                    "sourceType": "STATION",
-                                    "stationId": parseInt(body?.d?.[0]?.x, 10),
-                                },
-                                "index": parseInt(body?.d?.[0]?.v, 10),
-                                "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
-                                "scale": "EPA_NowCast.2302"
-                            };
-                        } else {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": "World Air Quality Index Project",
-                                    "temporarilyUnavailable": true,
-                                }
-                            };
-                            throw { "status": "error", "reason": error.message };
+                    } else {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": "World Air Quality Index Project",
+                                "temporarilyUnavailable": true,
+                            }
                         };
-                        break;
-                    default:
-                        break;
-                };
-            } catch (error) {
-                this.logErr(error);
-            } finally {
-                console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-                return airQuality;
-            }
-        });
-        console.log(`✅ Nearest`);
-        return airQuality;
+                        throw { "status": "error", "reason": error.reason };
+                    };
+                    break;
+                case "mapq":
+                    if (body?.d) {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                "latitude": body?.d?.[0]?.geo?.[0],
+                                "longitude": body?.d?.[0]?.geo?.[1],
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
+                                "temporarilyUnavailable": false,
+                                "sourceType": "STATION",
+                                "stationId": parseInt(body?.d?.[0]?.x, 10),
+                            },
+                            "index": parseInt(body?.d?.[0]?.v, 10),
+                            "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
+                            "scale": "EPA_NowCast.2302"
+                        };
+                    } else {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": "World Air Quality Index Project",
+                                "temporarilyUnavailable": true,
+                            }
+                        };
+                        throw { "status": "error", "reason": error.message };
+                    };
+                    break;
+                default:
+                    break;
+            };
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`✅ Nearest`);
+            return airQuality;
+        };
     };
 };

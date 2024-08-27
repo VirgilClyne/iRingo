@@ -19259,7 +19259,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.0.6";
+        this.Version = "1.0.7";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19360,89 +19360,85 @@ class WAQI {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             "header": header,
         };
-        const airQuality = await this.$.fetch(request).then(response => {
-            let airQuality = null;
-            try {
-                const body = JSON.parse(response?.body ?? "{}");
-                switch (mapqVersion) {
-                    case "mapq2":
-                        if (body?.status === "ok") {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "latitude": body?.data?.stations?.[0]?.geo?.[0],
-                                    "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
-                                    "temporarilyUnavailable": false,
-                                    "sourceType": "STATION",
-                                    "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
-                                },
-                                "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
-                                "primaryPollutant": null,
-                                "scale": "EPA_NowCast.2302"
-                            };
-                        } else {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": "World Air Quality Index Project",
-                                    "temporarilyUnavailable": true,
-                                }
-                            };
-                            throw { "status": "error", "reason": error.reason };
+        let airQuality;
+        try {
+            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            switch (mapqVersion) {
+                case "mapq2":
+                    if (body?.status === "ok") {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                "latitude": body?.data?.stations?.[0]?.geo?.[0],
+                                "longitude": body?.data?.stations?.[0]?.geo?.[1],
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": `World Air Quality Index Project - ${body?.data?.stations?.[0]?.name}`,
+                                "temporarilyUnavailable": false,
+                                "sourceType": "STATION",
+                                "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
+                            },
+                            "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
+                            "primaryPollutant": null,
+                            "scale": "EPA_NowCast.2302"
                         };
-                        break;
-                    case "mapq":
-                        if (body?.d) {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "latitude": body?.d?.[0]?.geo?.[0],
-                                    "longitude": body?.d?.[0]?.geo?.[1],
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
-                                    "temporarilyUnavailable": false,
-                                    "sourceType": "STATION",
-                                    "stationId": parseInt(body?.d?.[0]?.x, 10),
-                                },
-                                "index": parseInt(body?.d?.[0]?.v, 10),
-                                "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
-                                "scale": "EPA_NowCast.2302"
-                            };
-                        } else {
-                            airQuality = {
-                                "metadata": {
-                                    "attributionUrl": request.url,
-                                    "providerLogo": "https://waqi.info/images/logo.png",
-                                    //"providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
-                                    "providerName": "World Air Quality Index Project",
-                                    "temporarilyUnavailable": true,
-                                }
-                            };
-                            throw { "status": "error", "reason": error.message };
+                    } else {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": "World Air Quality Index Project",
+                                "temporarilyUnavailable": true,
+                            }
                         };
-                        break;
-                    default:
-                        break;
-                };
-            } catch (error) {
-                this.logErr(error);
-            } finally {
-                console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-                return airQuality;
-            }
-        });
-        console.log(`✅ Nearest`);
-        return airQuality;
-    };
+                        throw { "status": "error", "reason": error.reason };
+                    };
+                    break;
+                case "mapq":
+                    if (body?.d) {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                "latitude": body?.d?.[0]?.geo?.[0],
+                                "longitude": body?.d?.[0]?.geo?.[1],
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": `World Air Quality Index Project - ${body?.d?.[0]?.nna}`,
+                                "temporarilyUnavailable": false,
+                                "sourceType": "STATION",
+                                "stationId": parseInt(body?.d?.[0]?.x, 10),
+                            },
+                            "index": parseInt(body?.d?.[0]?.v, 10),
+                            "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
+                            "scale": "EPA_NowCast.2302"
+                        };
+                    } else {
+                        airQuality = {
+                            "metadata": {
+                                "attributionUrl": request.url,
+                                //"providerLogo": "https://waqi.info/images/logo.png",
+                                "providerLogo": "https://raw.githubusercontent.com/VirgilClyne/iRingo/main/image/waqi.info.logo.png",
+                                "providerName": "World Air Quality Index Project",
+                                "temporarilyUnavailable": true,
+                            }
+                        };
+                        throw { "status": "error", "reason": error.message };
+                    };
+                    break;
+                default:
+                    break;
+            };
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`✅ Nearest`);
+            return airQuality;
+        }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4107) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4110) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19533,33 +19529,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											const Waqi = new WAQI($, { "url": url });
 											const airQuality = await Waqi.Nearest("mapq");
-											if (airQuality) {
-												body.airQuality = {
-													"metadata": {
-															"attributionUrl": airQuality?.metadata?.attributionUrl || body?.airQuality?.metadata?.attributionUrl,
-															"expireTime": airQuality?.metadata?.expireTime || body?.airQuality?.metadata?.expireTime,
-															"language": airQuality?.metadata?.language || body?.airQuality?.metadata?.language,
-															"latitude": airQuality?.metadata?.latitude || body?.airQuality?.metadata?.latitude,
-															"longitude": airQuality?.metadata?.longitude || body?.airQuality?.metadata?.longitude,
-															"providerLogo": airQuality?.metadata?.providerLogo || body?.airQuality?.metadata?.providerLogo,
-															"providerName": airQuality?.metadata?.providerName || body?.airQuality?.metadata?.providerName,
-															"readTime": airQuality?.metadata?.readTime || body?.airQuality?.metadata?.readTime,
-															"reportedTime": airQuality?.metadata?.reportedTime || body?.airQuality?.metadata?.reportedTime,
-															"unknown9": airQuality?.metadata?.unknown9 || body?.airQuality?.metadata?.unknown9,
-															"sourceType": airQuality?.metadata?.sourceType || body?.airQuality?.metadata?.sourceType,
-															"stationId": airQuality?.metadata?.stationId || body?.airQuality?.metadata?.stationId,
-															"unknown11":  airQuality?.metadata?.unknown11 || body?.airQuality?.metadata?.unknown11,
-															"temporarilyUnavailable": airQuality?.metadata?.temporarilyUnavailable || body?.airQuality?.metadata?.temporarilyUnavailable,
-													},
-													"categoryIndex": airQuality?.categoryIndex || body?.airQuality?.categoryIndex,
-													"index": airQuality?.index || body?.airQuality?.index,
-													"isSignificant": airQuality?.isSignificant || body?.airQuality?.isSignificant,
-													"pollutants": airQuality?.pollutants || body?.airQuality?.pollutants,
-													"previousDayComparison": airQuality?.previousDayComparison || body?.airQuality?.previousDayComparison,
-													"primaryPollutant": airQuality?.primaryPollutant || body?.airQuality?.primaryPollutant,
-													"scale": airQuality?.scale || body?.airQuality?.scale,
-												};
-											}										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
+											if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
+											body.airQuality = { ...body?.airQuality, ...airQuality };
+											body.airQuality.metadata.unknown9 = 1;
+											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
