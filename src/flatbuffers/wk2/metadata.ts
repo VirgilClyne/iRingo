@@ -78,9 +78,9 @@ reportedTime():number {
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
-unknown9():number {
+temporarilyUnavailable():boolean {
   const offset = this.bb!.__offset(this.bb_pos, 22);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
 }
 
 sourceType():SourceType {
@@ -133,8 +133,8 @@ static addReportedTime(builder:flatbuffers.Builder, reportedTime:number) {
   builder.addFieldInt32(8, reportedTime, 0);
 }
 
-static addUnknown9(builder:flatbuffers.Builder, unknown9:number) {
-  builder.addFieldInt32(9, unknown9, 0);
+static addTemporarilyUnavailable(builder:flatbuffers.Builder, temporarilyUnavailable:boolean) {
+  builder.addFieldInt8(9, +temporarilyUnavailable, +false);
 }
 
 static addSourceType(builder:flatbuffers.Builder, sourceType:SourceType) {
@@ -150,7 +150,7 @@ static endMetadata(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, unknown9:number, sourceType:SourceType, unknown11:number):flatbuffers.Offset {
+static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, temporarilyUnavailable:boolean, sourceType:SourceType, unknown11:number):flatbuffers.Offset {
   Metadata.startMetadata(builder);
   Metadata.addAttributionUrl(builder, attributionUrlOffset);
   Metadata.addExpireTime(builder, expireTime);
@@ -161,7 +161,7 @@ static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuff
   Metadata.addProviderName(builder, providerNameOffset);
   Metadata.addReadTime(builder, readTime);
   Metadata.addReportedTime(builder, reportedTime);
-  Metadata.addUnknown9(builder, unknown9);
+  Metadata.addTemporarilyUnavailable(builder, temporarilyUnavailable);
   Metadata.addSourceType(builder, sourceType);
   Metadata.addUnknown11(builder, unknown11);
   return Metadata.endMetadata(builder);

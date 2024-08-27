@@ -4,7 +4,7 @@ import * as WK2 from "../flatbuffers/wk2.js";
 export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.0";
+		this.Version = "1.0.1";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
 		//this.initialSize = 10240;
 		//this.builder = new flatbuffers.Builder(this.initialSize);
@@ -16,7 +16,7 @@ export default class WeatherKit2 {
 		console.log(`☑️ encode, dataSet: ${dataSet}`);
 		let offset;
 		let metadataOffset;
-		if (data?.metadata) metadataOffset = WK2.Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.unknown9, WK2.SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
+		if (data?.metadata) metadataOffset = WK2.Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.temporarilyUnavailable, WK2.SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
 		switch (dataSet) {
 			case "all":
 				const Offsets = {};
@@ -549,7 +549,8 @@ export default class WeatherKit2 {
 					"providerName": metadata?.providerName(),
 					"readTime": metadata?.readTime(),
 					"reportedTime": metadata?.reportedTime(),
-					"unknown9": metadata?.unknown9(),
+					"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
+					//"unknown9": metadata?.unknown9(),
 					"sourceType": WK2.SourceType[metadata?.sourceType()],
 					"unknown11": metadata?.unknown11(),
 					//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),

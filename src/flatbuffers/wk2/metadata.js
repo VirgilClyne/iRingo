@@ -53,9 +53,9 @@ export class Metadata {
         const offset = this.bb.__offset(this.bb_pos, 20);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
-    unknown9() {
+    temporarilyUnavailable() {
         const offset = this.bb.__offset(this.bb_pos, 22);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? !!this.bb.readInt8(this.bb_pos + offset) : false;
     }
     sourceType() {
         const offset = this.bb.__offset(this.bb_pos, 24);
@@ -95,8 +95,8 @@ export class Metadata {
     static addReportedTime(builder, reportedTime) {
         builder.addFieldInt32(8, reportedTime, 0);
     }
-    static addUnknown9(builder, unknown9) {
-        builder.addFieldInt32(9, unknown9, 0);
+    static addTemporarilyUnavailable(builder, temporarilyUnavailable) {
+        builder.addFieldInt8(9, +temporarilyUnavailable, +false);
     }
     static addSourceType(builder, sourceType) {
         builder.addFieldInt8(10, sourceType, SourceType.APPLE_INTERNAL);
@@ -108,7 +108,7 @@ export class Metadata {
         const offset = builder.endObject();
         return offset;
     }
-    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11) {
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, temporarilyUnavailable, sourceType, unknown11) {
         Metadata.startMetadata(builder);
         Metadata.addAttributionUrl(builder, attributionUrlOffset);
         Metadata.addExpireTime(builder, expireTime);
@@ -119,7 +119,7 @@ export class Metadata {
         Metadata.addProviderName(builder, providerNameOffset);
         Metadata.addReadTime(builder, readTime);
         Metadata.addReportedTime(builder, reportedTime);
-        Metadata.addUnknown9(builder, unknown9);
+        Metadata.addTemporarilyUnavailable(builder, temporarilyUnavailable);
         Metadata.addSourceType(builder, sourceType);
         Metadata.addUnknown11(builder, unknown11);
         return Metadata.endMetadata(builder);

@@ -15277,9 +15277,9 @@ class Metadata {
         const offset = this.bb.__offset(this.bb_pos, 20);
         return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
     }
-    unknown9() {
+    temporarilyUnavailable() {
         const offset = this.bb.__offset(this.bb_pos, 22);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? !!this.bb.readInt8(this.bb_pos + offset) : false;
     }
     sourceType() {
         const offset = this.bb.__offset(this.bb_pos, 24);
@@ -15319,8 +15319,8 @@ class Metadata {
     static addReportedTime(builder, reportedTime) {
         builder.addFieldInt32(8, reportedTime, 0);
     }
-    static addUnknown9(builder, unknown9) {
-        builder.addFieldInt32(9, unknown9, 0);
+    static addTemporarilyUnavailable(builder, temporarilyUnavailable) {
+        builder.addFieldInt8(9, +temporarilyUnavailable, +false);
     }
     static addSourceType(builder, sourceType) {
         builder.addFieldInt8(10, sourceType, SourceType.APPLE_INTERNAL);
@@ -15332,7 +15332,7 @@ class Metadata {
         const offset = builder.endObject();
         return offset;
     }
-    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, unknown9, sourceType, unknown11) {
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, temporarilyUnavailable, sourceType, unknown11) {
         Metadata.startMetadata(builder);
         Metadata.addAttributionUrl(builder, attributionUrlOffset);
         Metadata.addExpireTime(builder, expireTime);
@@ -15343,7 +15343,7 @@ class Metadata {
         Metadata.addProviderName(builder, providerNameOffset);
         Metadata.addReadTime(builder, readTime);
         Metadata.addReportedTime(builder, reportedTime);
-        Metadata.addUnknown9(builder, unknown9);
+        Metadata.addTemporarilyUnavailable(builder, temporarilyUnavailable);
         Metadata.addSourceType(builder, sourceType);
         Metadata.addUnknown11(builder, unknown11);
         return Metadata.endMetadata(builder);
@@ -18584,7 +18584,7 @@ class Weather {
 class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.0";
+		this.Version = "1.0.1";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
 		//this.initialSize = 10240;
 		//this.builder = new flatbuffers.Builder(this.initialSize);
@@ -18596,7 +18596,7 @@ class WeatherKit2 {
 		console.log(`☑️ encode, dataSet: ${dataSet}`);
 		let offset;
 		let metadataOffset;
-		if (data?.metadata) metadataOffset = Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.unknown9, SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
+		if (data?.metadata) metadataOffset = Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.temporarilyUnavailable, SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
 		switch (dataSet) {
 			case "all":
 				const Offsets = {};
@@ -19120,7 +19120,8 @@ class WeatherKit2 {
 					"providerName": metadata?.providerName(),
 					"readTime": metadata?.readTime(),
 					"reportedTime": metadata?.reportedTime(),
-					"unknown9": metadata?.unknown9(),
+					"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
+					//"unknown9": metadata?.unknown9(),
 					"sourceType": SourceType[metadata?.sourceType()],
 					"unknown11": metadata?.unknown11(),
 					//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
@@ -19438,7 +19439,7 @@ class WAQI {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4110) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4111) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19531,7 +19532,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											const airQuality = await Waqi.Nearest("mapq");
 											if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
 											body.airQuality = { ...body?.airQuality, ...airQuality };
-											body.airQuality.metadata.unknown9 = 1;
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");

@@ -9,7 +9,7 @@ import WAQI from "./class/WAQI.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4110) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4111) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -104,7 +104,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											const airQuality = await Waqi.Nearest("mapq");
 											if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
 											body.airQuality = { ...body?.airQuality, ...airQuality };
-											body.airQuality.metadata.unknown9 = 1;
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
