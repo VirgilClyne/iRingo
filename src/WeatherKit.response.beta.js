@@ -7,10 +7,11 @@ import setENV from "./function/setENV.mjs";
 import providerNameToLogo from "./function/providerNameToLogo.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
 import WAQI from "./class/WAQI.mjs";
+import ColorfulClouds from "./class/ColorfulClouds.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.2(4122) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4123) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -143,26 +144,30 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
-											let forecastNextHour;
-											let metadata;
-											switch (Settings?.NextHour?.Provider) {
-												case "WeatherKit":
-													break;
-												case "WeatherOL":
-												default:
-													break;
-												case "QWeather":
-													break;
-												case "ColorfulClouds":
-													break;
+											if (!body?.forecastNextHour) {
+												let forecastNextHour;
+												let metadata;
+												switch (Settings?.NextHour?.Provider) {
+													case "WeatherKit":
+														break;
+													case "WeatherOL":
+													default:
+														break;
+													case "QWeather":
+														break;
+													case "ColorfulClouds":
+														const colorfulClouds = new ColorfulClouds($, { "url": url });
+														forecastNextHour = await colorfulClouds.Minutely();
+														break;
+												};
+												if (metadata) {
+													metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
+													body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
+													body.forecastNextHour.metadata = metadata;
+													$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+												};
+												if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 											};
-											if (metadata) {
-												metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
-												body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
-												body.forecastNextHour.metadata = metadata;
-												$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
-											};
-											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 										};
 										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
