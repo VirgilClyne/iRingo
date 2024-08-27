@@ -23,13 +23,13 @@ export default function providerNameToLogo(providerName, version) {
             break;
         case "QWeather":
         case "和风天气":
-            providerLogo = `https://weather-data.apple.com/assets/${version}/QWeather.png`;
+            providerLogo = `https://weatherkit.apple.com/assets/${version}/QWeather.png`;
             break;
         case "The Weather Channel":
-            providerLogo = `https://weather-data.apple.com/assets/${version}/TWC.png`;
+            providerLogo = `https://weatherkit.apple.com/assets/${version}/TWC.png`;
             break;
         case "BreezoMeter":
-            providerLogo = `https://weather-data.apple.com/assets/${version}/BreezoMeter.png`;
+            providerLogo = `https://weatherkit.apple.com/assets/${version}/BreezoMeter.png`;
             break;
         default:
             break;

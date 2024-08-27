@@ -14434,13 +14434,13 @@ function providerNameToLogo(providerName, version) {
             break;
         case "QWeather":
         case "和风天气":
-            providerLogo = `https://weather-data.apple.com/assets/${version}/QWeather.png`;
+            providerLogo = `https://weatherkit.apple.com/assets/${version}/QWeather.png`;
             break;
         case "The Weather Channel":
-            providerLogo = `https://weather-data.apple.com/assets/${version}/TWC.png`;
+            providerLogo = `https://weatherkit.apple.com/assets/${version}/TWC.png`;
             break;
         case "BreezoMeter":
-            providerLogo = `https://weather-data.apple.com/assets/${version}/BreezoMeter.png`;
+            providerLogo = `https://weatherkit.apple.com/assets/${version}/BreezoMeter.png`;
             break;
     }    console.log(`✅ providerNameToLogo`);
     return providerLogo;
@@ -19296,7 +19296,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.0.7";
+        this.Version = "1.0.8";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19469,9 +19469,21 @@ class WAQI {
             console.log(`✅ Nearest`);
             return airQuality;
         }    };
+
+    async AQI (stationId, header = { "Content-Type": "application/json" }, token) {
+        console.log(`☑️ AQI, stationId: ${stationId}`);
+        let airQuality;
+        try {
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            console.log(`airQuality: ${JSON.stringify(airQuality, null, 2)}`);
+            console.log(`✅ AQI`);
+            return airQuality;
+        }    }
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4112) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.2.1(4117) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -19560,18 +19572,39 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
-											const Waqi = new WAQI($, { "url": url });
-											const airQuality = await Waqi.Nearest("mapq");
-											if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
-											body.airQuality = { ...body?.airQuality, ...airQuality };
-											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
-											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											switch (Settings?.AQI?.Switch) {
+												case true:
+												default:
+													const Waqi = new WAQI($, { "url": url });
+													const airQuality = await Waqi.Nearest("mapq");
+													if (body?.airQuality?.metadata) airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
+													body.airQuality = { ...body?.airQuality, ...airQuality };
+													$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+													break;
+												case false:
+													break;
+											}											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
+										}										if (url.searchParams.get("dataSets").includes("currentWeather")) {
+											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
+											$.log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+											switch (Settings?.NextHour?.Switch) {
+												case true:
+												default:
+													$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+													break;
+												case false:
+													break;
+											}											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
+											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
 											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
-											//if (body?.weatherAlerts?.metadata) body.weatherAlerts.metadata.providerName = "iRingo";
+										}										if (url.searchParams.get("dataSets").includes("WeatherChange")) {
+											if (body?.WeatherChanges?.metadata?.providerName && !body?.WeatherChanges?.metadata?.providerLogo) body.WeatherChanges.metadata.providerLogo = providerNameToLogo(body?.WeatherChanges?.metadata?.providerName, "v2");
+											$.log(`🚧 body.WeatherChanges: ${JSON.stringify(body?.WeatherChanges, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("trendComparison")) {
+											if (body?.historicalComparisons?.metadata?.providerName && !body?.historicalComparisons?.metadata?.providerLogo) body.historicalComparisons.metadata.providerLogo = providerNameToLogo(body?.historicalComparisons?.metadata?.providerName, "v2");
 											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
 										}										const WeatherData = weatherKit2.encode("all", body);
 										Builder$1.finish(WeatherData);
