@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.1.0";
+        this.Version = "1.1.6";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -113,9 +113,12 @@ export default class ColorfulClouds {
                 case "ok":
                     switch (body?.result?.minutely?.status) {
                         case "ok":
+                            body.result.minutely.probability = body.result.minutely.probability.map(probability => Math.round(probability * 100));
+                            let minuteStemp = new Date(timeStamp * 1000).setMinutes(0, 0, 0);
+                            minuteStemp = minuteStemp.valueOf() / 1000;
                             let condition = "CLEAR";
-                            if (body?.result?.minutely?.description.includes("下雨")) condition = "RAIN";
-                            else if (body?.result?.minutely?.description.includes("下雪")) condition = "SNOW"
+                            if (body?.result?.minutely?.description.includes("雨")) condition = "RAIN";
+                            else if (body?.result?.minutely?.description.includes("雪")) condition = "SNOW"
                             else if (body?.result?.minutely?.description.includes("雨夹雪")) condition = "SLEET"
                             else if (body?.result?.minutely?.description.includes("冰雹")) condition = "HAIL"
                             forecastNextHour = {
@@ -127,7 +130,7 @@ export default class ColorfulClouds {
                                     "longitude": body?.location?.[1],
                                     "providerLogo": providerNameToLogo("彩云天气", this.version),
                                     "providerName": "彩云天气",
-                                    "readTime": timeStamp,
+                                    "readTime": minuteStemp,
                                     "reportedTime": body?.server_time,
                                     "temporarilyUnavailable": false,
                                     "sourceType": "MODELED",
@@ -140,7 +143,7 @@ export default class ColorfulClouds {
                                         "perceivedPrecipitationIntensity": precipitationIntensity,
                                         "precipitationChance": 0,
                                         "precipitationIntensity": precipitationIntensity,
-                                        "startTime": timeStamp + 60 * index,
+                                        "startTime": minuteStemp + 60 * index,
                                     };
                                     if (index < 30) minute.precipitationChance = body?.result?.minutely?.probability?.[0]
                                     else if (index < 60) minute.precipitationChance = body?.result?.minutely?.probability?.[1]
@@ -150,7 +153,7 @@ export default class ColorfulClouds {
                                 }),
                                 "summary": []
                             };
-                            let summary = {
+                            const Summary = {
                                 "condition": "CLEAR",
                                 "precipitationChance": 0,
                                 "startTime": 0,
@@ -160,59 +163,58 @@ export default class ColorfulClouds {
                             for (let i = 0; i < forecastNextHour?.minutes?.length; i++) {
                                 const minute = forecastNextHour?.minutes?.[i];
                                 const previousMinute = forecastNextHour?.minutes?.[i - 1];
-                                let maxPrecipitationIntensity = Math.max(minute?.precipitationIntensity, previousMinute?.precipitationIntensity);
-                                let maxPrecipitationChance = Math.max(minute?.precipitationChance, previousMinute?.precipitationChance);
+                                let maxPrecipitationIntensity = Math.max(minute?.precipitationIntensity ?? 0, previousMinute?.precipitationIntensity ?? 0);
+                                let maxPrecipitationChance = Math.max(minute?.precipitationChance ?? 0, previousMinute?.precipitationChance ?? 0);
                                 switch (i) {
                                     case 0:
-                                        summary.startTime = minute.startTime;
+                                        Summary.startTime = minute.startTime;
                                         if (minute?.precipitationIntensity > 0) {
-                                            summary.condition = condition;
-                                            summary.precipitationChance = maxPrecipitationChance;
-                                            summary.precipitationIntensity = maxPrecipitationIntensity;
+                                            Summary.condition = condition;
+                                            Summary.precipitationChance = maxPrecipitationChance;
+                                            Summary.precipitationIntensity = maxPrecipitationIntensity;
                                         };
                                         break;
                                     default:
                                         if (Boolean(minute?.perceivedPrecipitationIntensity) !== Boolean(previousMinute?.perceivedPrecipitationIntensity)) {
-                                            summary.endTime = minute.startTime;
-                                            switch (summary.condition) {
+                                            Summary.endTime = minute.startTime;
+                                            switch (Summary.condition) {
                                                 case "CLEAR":
                                                     break;
                                                 default:
-                                                    summary.precipitationChance = maxPrecipitationChance;
-                                                    summary.precipitationIntensity = maxPrecipitationIntensity;
-                                                    forecastNextHour.forecastEnd = minute.startTime;
+                                                    Summary.precipitationChance = maxPrecipitationChance;
+                                                    Summary.precipitationIntensity = maxPrecipitationIntensity;
                                                     break;
                                             };
-                                            forecastNextHour.summary.push(summary);
-                                            summary.startTime = minute.startTime;
-                                            switch (summary.condition) {
+                                            forecastNextHour.summary.push({ ...Summary });
+                                            Summary.startTime = minute.startTime;
+                                            switch (Summary.condition) {
                                                 case "CLEAR":
-                                                    summary.condition = condition;
-                                                    summary.precipitationChance = maxPrecipitationChance;
-                                                    summary.precipitationIntensity = maxPrecipitationIntensity;
+                                                    Summary.condition = condition;
+                                                    Summary.precipitationChance = maxPrecipitationChance;
+                                                    Summary.precipitationIntensity = maxPrecipitationIntensity;
                                                     break;
                                                 default:
-                                                    summary.condition = "CLEAR"
-                                                    summary.precipitationChance = 0;
-                                                    summary.precipitationIntensity = 0;
+                                                    Summary.condition = "CLEAR"
+                                                    Summary.precipitationChance = 0;
+                                                    Summary.precipitationIntensity = 0;
                                                     break;
                                             };
                                             maxPrecipitationChance = 0;
                                             maxPrecipitationIntensity = 0;
                                         };
                                         break;
-                                    case forecastNextHour?.minutes?.length:
-                                        delete summary.endTime;
-                                        switch (summary.condition) {
+                                    case forecastNextHour?.minutes?.length - 1:
+                                        forecastNextHour.forecastEnd = minute.startTime + 60;
+                                        delete Summary.endTime;
+                                        switch (Summary.condition) {
                                             case "CLEAR":
                                                 break;
                                             default:
-                                                summary.precipitationChance = maxPrecipitationChance;
-                                                summary.precipitationIntensity = maxPrecipitationIntensity;
-                                                delete forecastNextHour?.forecastEnd;
+                                                Summary.precipitationChance = maxPrecipitationChance;
+                                                Summary.precipitationIntensity = maxPrecipitationIntensity;
                                                 break;
                                         };
-                                        forecastNextHour.summary.push(summary);
+                                        forecastNextHour.summary.push({ ...Summary });
                                         break;
                                 };
                             };

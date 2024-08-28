@@ -101,7 +101,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											let airQuality;
 											let metadata;
 											switch (Settings?.AQI?.Provider) {
@@ -134,6 +134,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												metadata = { ...body?.airQuality?.metadata, ...metadata };
 												body.airQuality = { ...body?.airQuality, ...airQuality };
 												body.airQuality.metadata = metadata;
+												if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
 												//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											};
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
