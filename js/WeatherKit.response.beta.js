@@ -19309,7 +19309,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.13";
+        this.Version = "1.1.16";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19358,6 +19358,7 @@ class WAQI {
                                 "metadata": {
                                     "attributionUrl": request.url,
                                     "expireTime": timeStamp + 60 * 60,
+                                    //"language": this.language,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19369,7 +19370,10 @@ class WAQI {
                                     "stationId": parseInt(body?.d?.[0]?.x, 10),
                                     "stationKey": body?.d?.[0]?.k,
                                 },
+                                "categoryIndex": 1,
                                 "index": parseInt(body?.d?.[0]?.v, 10),
+                                "isSignificant": true,
+                                //"previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
                                 "scale": "EPA_NowCast.2302"
                             };
@@ -19381,9 +19385,10 @@ class WAQI {
                 case "mapq2":
                     switch (body?.status) {
                         case "ok":
-                        airQuality = {
-                            "metadata": {
-                                "attributionUrl": request.url,
+                            airQuality = {
+                                "metadata": {
+                                    "attributionUrl": request.url,
+                                    //"language": this.language,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
                                     "expireTime": timeStamp + 60 * 60,
@@ -19395,8 +19400,11 @@ class WAQI {
                                     "sourceType": "STATION",
                                     "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
                                 },
+                                "categoryIndex": 1,
                                 "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
-                                "primaryPollutant": null,
+                                "isSignificant": true,
+                                //"previousDayComparison": "UNKNOWN",
+                                "primaryPollutant": "NOT_AVAILABLE",
                                 "scale": "EPA_NowCast.2302"
                             };
                             break;
@@ -19479,6 +19487,7 @@ class WAQI {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
                                             "expireTime": timeStamp + 60 * 60,
+                                            //"language": this.language,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19489,7 +19498,10 @@ class WAQI {
                                             "sourceType": "STATION",
                                             "stationId": stationId,
                                         },
+                                        "categoryIndex": 1,
                                         "index": parseInt(body?.rxs?.obs?.[0]?.msg?.aqi, 10),
+                                        "isSignificant": true,
+                                        //"previousDayComparison": "UNKNOWN",
                                         "primaryPollutant": this.#Configs.Pollutants[body?.rxs?.obs?.[0]?.msg?.dominentpol] || "NOT_AVAILABLE",
                                         "scale": "EPA_NowCast.2302"
                                     };
@@ -19530,6 +19542,7 @@ class WAQI {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
                             "expireTime": timeStamp + 60 * 60,
+                            //"language": this.language,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19540,7 +19553,10 @@ class WAQI {
                             "sourceType": "STATION",
                             "stationId": stationId || parseInt(body?.data?.idx, 10),
                         },
+                        "categoryIndex": 1,
                         "index": parseInt(body?.data?.aqi, 10),
+                        "isSignificant": true,
+                        //"previousDayComparison": "UNKNOWN",
                         "primaryPollutant": this.#Configs.Pollutants[body?.data?.dominentpol] || "NOT_AVAILABLE",
                         "scale": "EPA_NowCast.2302"
                     };
