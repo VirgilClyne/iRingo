@@ -4,7 +4,7 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { ChangeTrend } from '../wk2/change-trend.js';
+import { Direction } from '../wk2/direction.js';
 
 
 export class Change {
@@ -35,24 +35,24 @@ forecastEnd():number {
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
-maxTemperatureChange():ChangeTrend {
+maxTemperatureChange():Direction {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : Direction.STEADY;
 }
 
-minTemperatureChange():ChangeTrend {
+minTemperatureChange():Direction {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : Direction.STEADY;
 }
 
-dayPrecipitationChange():ChangeTrend {
+dayPrecipitationChange():Direction {
   const offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : Direction.STEADY;
 }
 
-nightPrecipitationChange():ChangeTrend {
+nightPrecipitationChange():Direction {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ChangeTrend.STEADY;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : Direction.STEADY;
 }
 
 static startChange(builder:flatbuffers.Builder) {
@@ -67,20 +67,20 @@ static addForecastEnd(builder:flatbuffers.Builder, forecastEnd:number) {
   builder.addFieldInt32(1, forecastEnd, 0);
 }
 
-static addMaxTemperatureChange(builder:flatbuffers.Builder, maxTemperatureChange:ChangeTrend) {
-  builder.addFieldInt8(2, maxTemperatureChange, ChangeTrend.STEADY);
+static addMaxTemperatureChange(builder:flatbuffers.Builder, maxTemperatureChange:Direction) {
+  builder.addFieldInt8(2, maxTemperatureChange, Direction.STEADY);
 }
 
-static addMinTemperatureChange(builder:flatbuffers.Builder, minTemperatureChange:ChangeTrend) {
-  builder.addFieldInt8(3, minTemperatureChange, ChangeTrend.STEADY);
+static addMinTemperatureChange(builder:flatbuffers.Builder, minTemperatureChange:Direction) {
+  builder.addFieldInt8(3, minTemperatureChange, Direction.STEADY);
 }
 
-static addDayPrecipitationChange(builder:flatbuffers.Builder, dayPrecipitationChange:ChangeTrend) {
-  builder.addFieldInt8(4, dayPrecipitationChange, ChangeTrend.STEADY);
+static addDayPrecipitationChange(builder:flatbuffers.Builder, dayPrecipitationChange:Direction) {
+  builder.addFieldInt8(4, dayPrecipitationChange, Direction.STEADY);
 }
 
-static addNightPrecipitationChange(builder:flatbuffers.Builder, nightPrecipitationChange:ChangeTrend) {
-  builder.addFieldInt8(5, nightPrecipitationChange, ChangeTrend.STEADY);
+static addNightPrecipitationChange(builder:flatbuffers.Builder, nightPrecipitationChange:Direction) {
+  builder.addFieldInt8(5, nightPrecipitationChange, Direction.STEADY);
 }
 
 static endChange(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -88,7 +88,7 @@ static endChange(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createChange(builder:flatbuffers.Builder, forecastStart:number, forecastEnd:number, maxTemperatureChange:ChangeTrend, minTemperatureChange:ChangeTrend, dayPrecipitationChange:ChangeTrend, nightPrecipitationChange:ChangeTrend):flatbuffers.Offset {
+static createChange(builder:flatbuffers.Builder, forecastStart:number, forecastEnd:number, maxTemperatureChange:Direction, minTemperatureChange:Direction, dayPrecipitationChange:Direction, nightPrecipitationChange:Direction):flatbuffers.Offset {
   Change.startChange(builder);
   Change.addForecastStart(builder, forecastStart);
   Change.addForecastEnd(builder, forecastEnd);

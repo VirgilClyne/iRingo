@@ -5,7 +5,7 @@
 import * as flatbuffers from 'flatbuffers';
 
 import { ComparisonType } from '../wk2/comparison-type.js';
-import { DeviationType } from '../wk2/deviation-type.js';
+import { Deviation } from '../wk2/deviation.js';
 
 
 export class Comparison {
@@ -41,9 +41,9 @@ baselineValue():number {
   return offset ? this.bb!.readFloat32(this.bb_pos + offset) : 0.0;
 }
 
-deviation():DeviationType {
+deviation():Deviation {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : Deviation.MUCHHIGHER;
 }
 
 baselineType():number {
@@ -72,8 +72,8 @@ static addBaselineValue(builder:flatbuffers.Builder, baselineValue:number) {
   builder.addFieldFloat32(2, baselineValue, 0.0);
 }
 
-static addDeviation(builder:flatbuffers.Builder, deviation:DeviationType) {
-  builder.addFieldInt8(3, deviation, DeviationType.UNKNOWN0);
+static addDeviation(builder:flatbuffers.Builder, deviation:Deviation) {
+  builder.addFieldInt8(3, deviation, Deviation.MUCHHIGHER);
 }
 
 static addBaselineType(builder:flatbuffers.Builder, baselineType:number) {
@@ -89,7 +89,7 @@ static endComparison(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createComparison(builder:flatbuffers.Builder, condition:ComparisonType, currentValue:number, baselineValue:number, deviation:DeviationType, baselineType:number, baselineStartDate:number):flatbuffers.Offset {
+static createComparison(builder:flatbuffers.Builder, condition:ComparisonType, currentValue:number, baselineValue:number, deviation:Deviation, baselineType:number, baselineStartDate:number):flatbuffers.Offset {
   Comparison.startComparison(builder);
   Comparison.addCondition(builder, condition);
   Comparison.addCurrentValue(builder, currentValue);

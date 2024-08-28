@@ -2,12 +2,8 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
-export enum ChangeTrend {
+export enum Direction {
   STEADY = 0,
   INC = 1,
-  DEC = 2,
-  UNKNOWN3 = 3,
-  UNKNOWN4 = 4,
-  UNKNOWN5 = 5,
-  UNKNOWN6 = 6
+  DEC = 2
 }

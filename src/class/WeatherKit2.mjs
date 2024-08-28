@@ -4,7 +4,7 @@ import * as WK2 from "../flatbuffers/wk2.js";
 export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.2";
+		this.Version = "1.0.3";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
 		//this.initialSize = 10240;
 		//this.builder = new flatbuffers.Builder(this.initialSize);
@@ -165,7 +165,7 @@ export default class WeatherKit2 {
 				break;
 			case "weatherChange":
 			case "weatherChanges":
-				let changesOffsets = data?.changes?.map(change => WK2.Change.createChange(this.builder, change?.forecastStart, change?.forecastEnd, WK2.ChangeTrend[change?.maxTemperatureChange], WK2.ChangeTrend[change?.minTemperatureChange], WK2.ChangeTrend[change?.dayPrecipitationChange], WK2.ChangeTrend[change?.nightPrecipitationChange]));
+				let changesOffsets = data?.changes?.map(change => WK2.Change.createChange(this.builder, change?.forecastStart, change?.forecastEnd, WK2.Direction[change?.maxTemperatureChange], WK2.Direction[change?.minTemperatureChange], WK2.Direction[change?.dayPrecipitationChange], WK2.Direction[change?.nightPrecipitationChange]));
 				let changesOffset = WK2.WeatherChanges.createChangesVector(this.builder, changesOffsets);
 				offset = WK2.WeatherChanges.createWeatherChanges(this.builder, metadataOffset, data?.forecastStart, data?.forecastEnd, changesOffset);
 				break;
@@ -173,7 +173,7 @@ export default class WeatherKit2 {
 			case "trendComparisons":
 			case "historicalComparison":
 			case "historicalComparisons":
-				let comparisonsOffsets = data?.comparisons?.map(comparison => WK2.Comparison.createComparison(this.builder, WK2.ComparisonType[comparison?.condition], comparison?.currentValue, comparison?.baselineValue, WK2.DeviationType[comparison?.deviation], comparison?.baselineType, comparison?.baselineStartDate));
+				let comparisonsOffsets = data?.comparisons?.map(comparison => WK2.Comparison.createComparison(this.builder, WK2.ComparisonType[comparison?.condition], comparison?.currentValue, comparison?.baselineValue, WK2.Deviation[comparison?.deviation], comparison?.baselineType, comparison?.baselineStartDate));
 				let comparisonsOffset = WK2.HistoricalComparison.createComparisonsVector(this.builder, comparisonsOffsets);
 				offset = WK2.HistoricalComparison.createHistoricalComparison(this.builder, metadataOffset, comparisonsOffset);
 				break;
@@ -641,12 +641,12 @@ export default class WeatherKit2 {
 				};
 				for (let i = 0; i < weatherChangesData?.changesLength(); i++) {
 					let change = {
-						"dayPrecipitationChange": WK2.ChangeTrend[weatherChangesData?.changes(i)?.dayPrecipitationChange()],
+						"dayPrecipitationChange": WK2.Direction[weatherChangesData?.changes(i)?.dayPrecipitationChange()],
 						"forecastEnd": weatherChangesData?.changes(i)?.forecastEnd(),
 						"forecastStart": weatherChangesData?.changes(i)?.forecastStart(),
-						"maxTemperatureChange": WK2.ChangeTrend[weatherChangesData?.changes(i)?.maxTemperatureChange()],
-						"minTemperatureChange": WK2.ChangeTrend[weatherChangesData?.changes(i)?.minTemperatureChange()],
-						"nightPrecipitationChange": WK2.ChangeTrend[weatherChangesData?.changes(i)?.nightPrecipitationChange()],
+						"maxTemperatureChange": WK2.Direction[weatherChangesData?.changes(i)?.maxTemperatureChange()],
+						"minTemperatureChange": WK2.Direction[weatherChangesData?.changes(i)?.minTemperatureChange()],
+						"nightPrecipitationChange": WK2.Direction[weatherChangesData?.changes(i)?.nightPrecipitationChange()],
 					};
 					data.changes.push(change);
 				};
@@ -667,7 +667,7 @@ export default class WeatherKit2 {
 						"baselineValue": historicalComparisonsData?.comparisons(i)?.baselineValue(),
 						"condition": WK2.ComparisonType[historicalComparisonsData?.comparisons(i)?.condition()],
 						"currentValue": historicalComparisonsData?.comparisons(i)?.currentValue(),
-						"deviation": WK2.DeviationType[historicalComparisonsData?.comparisons(i)?.deviation()],
+						"deviation": WK2.Deviation[historicalComparisonsData?.comparisons(i)?.deviation()],
 					};
 					data.comparisons.push(comparison);
 				};

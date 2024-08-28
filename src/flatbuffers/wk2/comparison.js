@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import * as flatbuffers from 'flatbuffers';
 import { ComparisonType } from '../wk2/comparison-type.js';
-import { DeviationType } from '../wk2/deviation-type.js';
+import { Deviation } from '../wk2/deviation.js';
 export class Comparison {
     bb = null;
     bb_pos = 0;
@@ -32,7 +32,7 @@ export class Comparison {
     }
     deviation() {
         const offset = this.bb.__offset(this.bb_pos, 10);
-        return offset ? this.bb.readInt8(this.bb_pos + offset) : DeviationType.UNKNOWN0;
+        return offset ? this.bb.readInt8(this.bb_pos + offset) : Deviation.MUCHHIGHER;
     }
     baselineType() {
         const offset = this.bb.__offset(this.bb_pos, 12);
@@ -55,7 +55,7 @@ export class Comparison {
         builder.addFieldFloat32(2, baselineValue, 0.0);
     }
     static addDeviation(builder, deviation) {
-        builder.addFieldInt8(3, deviation, DeviationType.UNKNOWN0);
+        builder.addFieldInt8(3, deviation, Deviation.MUCHHIGHER);
     }
     static addBaselineType(builder, baselineType) {
         builder.addFieldInt32(4, baselineType, 0);
