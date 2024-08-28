@@ -19348,6 +19348,7 @@ class WAQI {
         let airQuality;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (mapqVersion) {
                 case "mapq":
                     switch (body?.status) {
@@ -19356,12 +19357,12 @@ class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
-                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                    "expireTime": timeStamp + 60 * 60,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.d?.[0]?.nna}`,
-                                    "readTime": Math.round(Date.now() / 1000),
+                                    "readTime": timeStamp,
                                     "reportedTime": body?.d?.[0]?.t,
                                     "temporarilyUnavailable": false,
                                     "sourceType": "STATION",
@@ -19385,10 +19386,10 @@ class WAQI {
                                 "attributionUrl": request.url,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                    "expireTime": timeStamp + 60 * 60,
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.data?.stations?.[0]?.name}`,
-                                    "readTime": Math.round(Date.now() / 1000),
+                                    "readTime": timeStamp,
                                     "reportedTime": Math.round(new Date(body?.data?.stations?.[0]?.utime).getTime() / 1000),
                                     "temporarilyUnavailable": false,
                                     "sourceType": "STATION",
@@ -19424,6 +19425,7 @@ class WAQI {
         let token;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
                     throw { "status": body?.status, "reason": body?.data };
@@ -19463,6 +19465,7 @@ class WAQI {
         let airQuality;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
                     throw { "status": body?.status, "reason": body?.data };
@@ -19475,12 +19478,12 @@ class WAQI {
                                     airQuality = {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
-                                            "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                            "expireTime": timeStamp + 60 * 60,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
                                             "providerName": `World Air Quality Index Project\n监测站：${body?.rxs?.obs?.[0]?.msg?.city?.name}`,
-                                            "readTime": Math.round(Date.now() / 1000),
+                                            "readTime": timeStamp,
                                             "reportedTime": body?.rxs?.obs?.[0]?.msg?.time?.v,
                                             "temporarilyUnavailable": false,
                                             "sourceType": "STATION",
@@ -19520,17 +19523,18 @@ class WAQI {
         let airQuality;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
                     airQuality = {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
-                            "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                            "expireTime": timeStamp + 60 * 60,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
                             "providerName": `World Air Quality Index Project\n监测站：${body?.data?.city?.name}`,
-                            "readTime": Math.round(Date.now() / 1000),
+                            "readTime": timeStamp,
                             "reportedTime": body?.data?.time?.v,
                             "temporarilyUnavailable": false,
                             "sourceType": "STATION",
@@ -19557,7 +19561,7 @@ class WAQI {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.0.12";
+        this.Version = "1.1.0";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19655,39 +19659,45 @@ class ColorfulClouds {
     async Minutely(token = "Y2FpeXVuX25vdGlmeQ==", version = "v2.6", header = { "Content-Type": "application/json" }) {
         console.log(`☑️ Minutely, token: ${token}, version: ${version}`);
         const request = {
-            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely`,
+            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": header,
         };
         let forecastNextHour;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
                     switch (body?.result?.minutely?.status) {
                         case "ok":
+                            let condition = "CLEAR";
+                            if (body?.result?.minutely?.description.includes("下雨")) condition = "RAIN";
+                            else if (body?.result?.minutely?.description.includes("下雪")) condition = "SNOW";
+                            else if (body?.result?.minutely?.description.includes("雨夹雪")) condition = "SLEET";
+                            else if (body?.result?.minutely?.description.includes("冰雹")) condition = "HAIL";
                             forecastNextHour = {
                                 "metadata": {
                                     "attributionUrl": "https://www.caiyunapp.com/h5",
-                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                    "expireTime": timeStamp + 60 * 60,
                                     "language": body?.lang,
                                     "latitude": body?.location?.[0],
                                     "longitude": body?.location?.[1],
                                     "providerLogo": providerNameToLogo("彩云天气", this.version),
                                     "providerName": "彩云天气",
-                                    "readTime": Math.round(Date.now() / 1000),
+                                    "readTime": timeStamp,
                                     "reportedTime": body?.server_time,
                                     "temporarilyUnavailable": false,
                                     "sourceType": "MODELED",
                                 },
                                 "condition": [],
                                 "forecastEnd": 0,
-                                "forecastStart": Math.round(Date.now() / 1000),
+                                "forecastStart": timeStamp,
                                 "minutes": body?.result?.minutely?.precipitation_2h?.map((precipitationIntensity, index) => {
                                     const minute = {
-                                        "perceivedPrecipitationIntensity": 0,
+                                        "perceivedPrecipitationIntensity": precipitationIntensity,
                                         "precipitationChance": 0,
                                         "precipitationIntensity": precipitationIntensity,
-                                        "startTime": Math.round(Date.now() / 1000) + 60 * index,
+                                        "startTime": timeStamp + 60 * index,
                                     };
                                     if (index < 30) minute.precipitationChance = body?.result?.minutely?.probability?.[0];
                                     else if (index < 60) minute.precipitationChance = body?.result?.minutely?.probability?.[1];
@@ -19696,6 +19706,72 @@ class ColorfulClouds {
                                     return minute;
                                 }),
                                 "summary": []
+                            };
+                            let summary = {
+                                "condition": "CLEAR",
+                                "precipitationChance": 0,
+                                "startTime": 0,
+                                "endTime": 0,
+                                "precipitationIntensity": 0
+                            };
+                            for (let i = 0; i < forecastNextHour?.minutes?.length; i++) {
+                                const minute = forecastNextHour?.minutes?.[i];
+                                const previousMinute = forecastNextHour?.minutes?.[i - 1];
+                                let maxPrecipitationIntensity = Math.max(minute?.precipitationIntensity, previousMinute?.precipitationIntensity);
+                                let maxPrecipitationChance = Math.max(minute?.precipitationChance, previousMinute?.precipitationChance);
+                                switch (i) {
+                                    case 0:
+                                        summary.startTime = minute.startTime;
+                                        if (minute?.precipitationIntensity > 0) {
+                                            summary.condition = condition;
+                                            summary.precipitationChance = maxPrecipitationChance;
+                                            summary.precipitationIntensity = maxPrecipitationIntensity;
+                                        };
+                                        break;
+                                    default:
+                                        if (Boolean(minute?.perceivedPrecipitationIntensity) !== Boolean(previousMinute?.perceivedPrecipitationIntensity)) {
+                                            summary.endTime = minute.startTime;
+                                            switch (summary.condition) {
+                                                case "CLEAR":
+                                                    break;
+                                                default:
+                                                    summary.precipitationChance = maxPrecipitationChance;
+                                                    summary.precipitationIntensity = maxPrecipitationIntensity;
+                                                    forecastNextHour.forecastEnd = minute.startTime;
+                                                    break;
+                                            };
+                                            forecastNextHour.summary.push(summary);
+                                            summary.startTime = minute.startTime;
+                                            switch (summary.condition) {
+                                                case "CLEAR":
+                                                    summary.condition = condition;
+                                                    summary.precipitationChance = maxPrecipitationChance;
+                                                    summary.precipitationIntensity = maxPrecipitationIntensity;
+                                                    break;
+                                                default:
+                                                    summary.condition = "CLEAR";
+                                                    summary.precipitationChance = 0;
+                                                    summary.precipitationIntensity = 0;
+                                                    break;
+                                            };
+                                            maxPrecipitationChance = 0;
+                                            maxPrecipitationIntensity = 0;
+                                        };
+                                        break;
+                                    case forecastNextHour?.minutes?.length:
+                                        delete summary.endTime;
+                                        switch (summary.condition) {
+                                            case "CLEAR":
+                                                break;
+                                            default:
+                                                summary.precipitationChance = maxPrecipitationChance;
+                                                summary.precipitationIntensity = maxPrecipitationIntensity;
+                                                delete forecastNextHour?.forecastEnd;
+                                                break;
+                                        };
+                                        forecastNextHour.summary.push(summary);
+                                        break;
+                                };
                             };
                             break;
                         case "error":

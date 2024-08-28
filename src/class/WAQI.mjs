@@ -43,6 +43,7 @@ export default class WAQI {
         let airQuality;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (mapqVersion) {
                 case "mapq":
                     switch (body?.status) {
@@ -51,12 +52,12 @@ export default class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
-                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                    "expireTime": timeStamp + 60 * 60,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.d?.[0]?.nna}`,
-                                    "readTime": Math.round(Date.now() / 1000),
+                                    "readTime": timeStamp,
                                     "reportedTime": body?.d?.[0]?.t,
                                     "temporarilyUnavailable": false,
                                     "sourceType": "STATION",
@@ -80,10 +81,10 @@ export default class WAQI {
                                 "attributionUrl": request.url,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
-                                    "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                    "expireTime": timeStamp + 60 * 60,
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
                                     "providerName": `World Air Quality Index Project\n监测站：${body?.data?.stations?.[0]?.name}`,
-                                    "readTime": Math.round(Date.now() / 1000),
+                                    "readTime": timeStamp,
                                     "reportedTime": Math.round(new Date(body?.data?.stations?.[0]?.utime).getTime() / 1000),
                                     "temporarilyUnavailable": false,
                                     "sourceType": "STATION",
@@ -120,6 +121,7 @@ export default class WAQI {
         let token;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
                     throw { "status": body?.status, "reason": body?.data };
@@ -160,6 +162,7 @@ export default class WAQI {
         let airQuality;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
                     throw { "status": body?.status, "reason": body?.data };
@@ -172,12 +175,12 @@ export default class WAQI {
                                     airQuality = {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
-                                            "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                                            "expireTime": timeStamp + 60 * 60,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
                                             "providerName": `World Air Quality Index Project\n监测站：${body?.rxs?.obs?.[0]?.msg?.city?.name}`,
-                                            "readTime": Math.round(Date.now() / 1000),
+                                            "readTime": timeStamp,
                                             "reportedTime": body?.rxs?.obs?.[0]?.msg?.time?.v,
                                             "temporarilyUnavailable": false,
                                             "sourceType": "STATION",
@@ -218,17 +221,18 @@ export default class WAQI {
         let airQuality;
         try {
             const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
                     airQuality = {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
-                            "expireTime": Math.round(Date.now() / 1000) + 60 * 60,
+                            "expireTime": timeStamp + 60 * 60,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
                             "providerName": `World Air Quality Index Project\n监测站：${body?.data?.city?.name}`,
-                            "readTime": Math.round(Date.now() / 1000),
+                            "readTime": timeStamp,
                             "reportedTime": body?.data?.time?.v,
                             "temporarilyUnavailable": false,
                             "sourceType": "STATION",
