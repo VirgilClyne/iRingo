@@ -19573,7 +19573,7 @@ class WAQI {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.1.18";
+        this.Version = "1.2.4";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19603,13 +19603,6 @@ class ColorfulClouds {
         "WeatherCondition": {
             "晴朗": "CLEAR",
             "雨夹雪": "SLEET",
-            "雨": "RAIN",
-            "雪": "SNOW",
-            "冰雹": "HAIL",
-        },
-        "PrecipitationType": {
-            "晴朗": "CLEAR",
-            "雨夹雪": "SLEET",
             "小雨": "DIZZLE",
             "下雨": "RAIN",
             "中雨": "RAIN",
@@ -19618,6 +19611,13 @@ class ColorfulClouds {
             "下雪": "SNOW",
             "中雪": "SNOW",
             "大雪": "HEAVY_SNOW",
+            "冰雹": "HAIL",
+        },
+        "PrecipitationType": {
+            "晴朗": "CLEAR",
+            "雨夹雪": "SLEET",
+            "雨": "RAIN",
+            "雪": "SNOW",
             "冰雹": "HAIL",
         }
     };
@@ -19742,6 +19742,8 @@ class ColorfulClouds {
                                     else if (index < 60) minute.precipitationChance = body?.result?.minutely?.probability?.[1];
                                     else if (index < 90) minute.precipitationChance = body?.result?.minutely?.probability?.[2];
                                     else minute.precipitationChance = body?.result?.minutely?.probability?.[3];
+                                    if (minute.perceivedPrecipitationIntensity !== 0) minute.precipitationType = PrecipitationType;
+                                    else minute.precipitationType = "CLEAR";
                                     minute.condition = this.#ConditionType(minute.perceivedPrecipitationIntensity, minute.precipitationChance, PrecipitationType);
                                     return minute;
                                 }),
@@ -19787,16 +19789,18 @@ class ColorfulClouds {
                                             case "POSSIBLE_FLURRIES":
                                             case "POSSIBLE_SLEET":
                                             case "POSSIBLE_HAIL":
-                                                Condition.forecastToken = "START";
-                                                break;
+                                                Condition.forecastToken = "CONSTANT";
+                                                Condition.parameters = [];
+;                                                break;
                                             default:
-                                                Condition.forecastToken = "START";
+                                                Condition.forecastToken = "CONSTANT";
+                                                Condition.parameters = [];
                                                 break;
                                         };
                                         break;
                                     default:
-                                        if (Boolean(minute?.perceivedPrecipitationIntensity) !== Boolean(previousMinute?.perceivedPrecipitationIntensity)) {
-                                            /******** Summary ********/
+                                        /******** Summary ********/
+                                        if (minute?.precipitationType !== previousMinute?.precipitationType) {
                                             Summary.endTime = minute.startTime;
                                             switch (Summary.condition) {
                                                 case "CLEAR":
@@ -19807,12 +19811,13 @@ class ColorfulClouds {
                                                     break;
                                             };
                                             forecastNextHour.summary.push({ ...Summary });
+                                            // reset
                                             Summary.startTime = minute.startTime;
                                             switch (Summary.condition) {
                                                 case "CLEAR":
                                                     Summary.condition = PrecipitationType;
-                                                    Summary.precipitationChance = maxPrecipitationChance;
-                                                    Summary.precipitationIntensity = maxPrecipitationIntensity;
+                                                    Summary.precipitationChance = minute.precipitationChance;
+                                                    Summary.precipitationIntensity = minute.precipitationIntensity;
                                                     break;
                                                 default:
                                                     Summary.condition = "CLEAR";
@@ -19822,39 +19827,85 @@ class ColorfulClouds {
                                             };
                                             maxPrecipitationChance = 0;
                                             maxPrecipitationIntensity = 0;
-                                            /******** Condition ********/
+                                        };
+                                        /******** Condition ********/
+                                        if (minute.condition !== previousMinute.condition) {
                                             Condition.endTime = minute.startTime;
-                                            switch (Condition.beginCondition) {
+                                            Condition.endCondition = previousMinute.condition;
+                                            switch (Condition.forecastToken) {
                                                 case "CLEAR":
                                                     Condition.forecastToken = "CLEAR";
+                                                    Condition.parameters = [];
+                                                    forecastNextHour.condition.push({ ...Condition });
+                                                    // reset
+                                                    Condition.startTime = minute.startTime;
+                                                    Condition.endTime = 0;
+                                                    Condition.forecastToken = "START";
                                                     break;
-                                                case "POSSIBLE_DRIZZLE":
-                                                case "POSSIBLE_FLURRIES":
-                                                case "POSSIBLE_SLEET":
-                                                case "POSSIBLE_HAIL":
-                                                    Condition.forecastToken = "STOP_START";
+                                                case "CONSTANT":
+                                                    Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
+                                                    forecastNextHour.condition.push({ ...Condition });
+                                                    if (minute?.precipitationType !== previousMinute?.precipitationType) {
+                                                        //reset
+                                                        Condition.startTime = minute.startTime;
+                                                        Condition.endTime = 0;
+                                                        Condition.forecastToken = "STOP";
+                                                    } else {
+                                                        Condition.startTime = minute.startTime;
+                                                        Condition.endTime = 0;
+                                                        Condition.forecastToken = "CONSTANT";
+                                                        Condition.parameters = [];
+                                                    };
                                                     break;
-                                                default:
-                                                    Condition.endCondition = previousMinute.condition;
+                                                case "START":
+                                                    Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
+                                                    if (minute?.precipitationType !== previousMinute?.precipitationType) {
+                                                        // reset
+                                                        Condition.startTime = minute.startTime;
+                                                        Condition.endTime = 0;
+                                                        Condition.forecastToken = "START_STOP";
+                                                    } else {
+                                                        forecastNextHour.condition.push({ ...Condition });
+                                                        // reset
+                                                        Condition.startTime = minute.startTime;
+                                                        Condition.endTime = 0;
+                                                        Condition.forecastToken = "CONSTANT";
+                                                        Condition.parameters = [];
+                                                    };
+                                                    break;
+                                                case "STOP":
+                                                    Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
+                                                    if (minute?.precipitationType !== previousMinute?.precipitationType) {
+                                                        forecastNextHour.condition.push({ ...Condition });
+                                                        // reset
+                                                        Condition.startTime = minute.startTime;
+                                                        Condition.endTime = 0;
+                                                        Condition.forecastToken = "CLEAR";
+                                                        Condition.parameters = [];
+                                                    } else {
+                                                        // reset
+                                                        Condition.startTime = minute.startTime;
+                                                        Condition.endTime = 0;
+                                                        Condition.forecastToken = "STOP_START";
+                                                    };
+                                                    break;
+                                                case "START_STOP":
+                                                    Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
+                                                    forecastNextHour.condition.push({ ...Condition });
+                                                    // reset
+                                                    Condition.startTime = minute.startTime;
+                                                    Condition.endTime = 0;
                                                     Condition.forecastToken = "STOP";
+                                                    Condition.parameters = [];
                                                     break;
-                                            };
-                                            forecastNextHour.condition.push({ ...Condition });
-                                            Condition.beginCondition = minute.condition;
-                                            Condition.endCondition = minute.condition;
-                                            Condition.startTime = minute.startTime;
-                                            switch (Condition.beginCondition) {
-                                                case "CLEAR":
-                                                    Condition.forecastToken = "CLEAR";
-                                                    break;
-                                                case "POSSIBLE_DRIZZLE":
-                                                case "POSSIBLE_FLURRIES":
-                                                case "POSSIBLE_SLEET":
-                                                case "POSSIBLE_HAIL":
+                                                case "STOP_START":
+                                                    Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
+                                                    forecastNextHour.condition.push({ ...Condition });
+                                                    // reset
+                                                    Condition.startTime = minute.startTime;
+                                                    Condition.endTime = 0;
                                                     Condition.forecastToken = "START";
-                                                    break;
-                                                default:
-                                                    Condition.forecastToken = "START";
+                                                    Condition.parameters = [];
                                                     break;
                                             };
                                         };
@@ -19873,18 +19924,41 @@ class ColorfulClouds {
                                         };
                                         forecastNextHour.summary.push({ ...Summary });
                                         /******** Condition ********/
-                                        delete Condition.endTime;
-                                        /*
-                                        switch (Condition.beginCondition) {
+                                        switch (Condition.forecastToken) {
                                             case "CLEAR":
+                                                Condition.beginCondition = "CLEAR";
                                                 Condition.endCondition = "CLEAR";
+                                                delete Condition.endTime;
+                                                Condition.parameters = [];
+                                                forecastNextHour.condition.push({ ...Condition });
                                                 break;
-                                            default:
-                                                Condition.endCondition = Condition.beginCondition;
+                                            case "CONSTANT":
+                                                Condition.endCondition = previousMinute.condition;
+                                                delete Condition.endTime;
+                                                Condition.parameters = [];
+                                                forecastNextHour.condition.push({ ...Condition });
+                                                break;
+                                            case "START":
+                                                forecastNextHour.condition.push({ ...Condition });
+                                                Condition.startTime = Condition.endTime;
+                                                delete Condition.endTime;
+                                                Condition.forecastToken = "CONSTANT";
+                                                Condition.parameters = [];
+                                                break;
+                                            case "STOP":
+                                                forecastNextHour.condition.push({ ...Condition });
+                                                Condition.startTime = Condition.endTime;
+                                                delete Condition.endTime;
+                                                Condition.forecastToken = "CONSTANT";
+                                                Condition.parameters = [];
+                                                break;
+                                            case "START_STOP":
+                                                Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
+                                                forecastNextHour.condition.push({ ...Condition });
+                                                // reset
+                                                Condition.startTime = Condition.endTime;
                                                 break;
                                         };
-                                        */
-                                        forecastNextHour.condition.push({ ...Condition });
                                         break;
                                 };
                             };
