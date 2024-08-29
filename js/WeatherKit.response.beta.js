@@ -20027,7 +20027,7 @@ class ColorfulClouds {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4125) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4126) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20176,8 +20176,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
 													body.forecastNextHour.metadata = metadata;
 													$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
-												}												if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
-											}										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
+												}											}											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
+										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
 											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("WeatherChange")) {
