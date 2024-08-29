@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.4.10";
+        this.Version = "1.5.1";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -234,6 +234,61 @@ export default class ColorfulClouds {
                     Condition.parameters = [];
                     break;
                 default:
+                    switch (minute?.precipitationType) {
+                        case previousMinute?.precipitationType: // ✅与前次相同
+                            break;
+                        default: // 与前次不同
+                            Condition.endTime = minute.startTime; // ✅更新结束时间
+                            Condition.endCondition = previousMinute.condition; // ✅更新结束条件
+                            switch (Condition.forecastToken) {
+                                case "CLEAR":
+                                    // ✅START
+                                    Condition.beginCondition = minute.condition;
+                                    Condition.endCondition = minute.condition;
+                                    Condition.forecastToken = "START"; // ✅不推送，可能变为START_STOP
+                                    Condition.startTime = Condition.endTime;
+                                    Condition.parameters = [];
+                                    break;
+                                case "CONSTANT":
+                                    // ✅STOP
+                                    Condition.endCondition = previousMinute.condition;
+                                    Condition.forecastToken = "STOP"; // ✅不推送，可能变为STOP_START
+                                    break;
+                                case "START":
+                                    // ✅START_STOP
+                                    Condition.forecastToken = "START_STOP"; // ✅不推送，等确定SECOND_AT后推送
+                                    Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
+                                    break;
+                                case "STOP":
+                                    // ✅STOP_START
+                                    Condition.forecastToken = "STOP_START"; // ✅不推送，等确定SECOND_AT后推送
+                                    Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
+                                    break;
+                                case "START_STOP":
+                                    // ✅START_STOP
+                                    Condition.parameters.push({ "date": minute.startTime, "type": "SECOND_AT" });
+                                    Conditions.push({ ...Condition });
+                                    // CLEAR
+                                    Condition.beginCondition = "CLEAR";
+                                    Condition.endCondition = "CLEAR";
+                                    Condition.forecastToken = "CLEAR";
+                                    Condition.startTime = Condition.endTime;
+                                    Condition.parameters = [];
+                                    break;
+                                case "STOP_START":
+                                    // ✅STOP_START
+                                    Condition.parameters.push({ "date": minute.startTime, "type": "SECOND_AT" });
+                                    Conditions.push({ ...Condition });
+                                    // CONSTANT
+                                    Condition.beginCondition = minute.condition;
+                                    Condition.endCondition = minute.condition;
+                                    Condition.forecastToken = "CONSTANT";
+                                    Condition.startTime = Condition.endTime;
+                                    Condition.parameters = [];
+                                    break;
+                            };
+                            break;
+                    };
                     if (minute.condition !== previousMinute.condition) {
                         Condition.endTime = minute.startTime;
                         Condition.endCondition = previousMinute.condition;
@@ -252,9 +307,7 @@ export default class ColorfulClouds {
                                         // STOP
                                         Condition.endCondition = previousMinute.condition;
                                         Condition.forecastToken = "STOP";
-                                        Condition.startTime = Condition.endTime;
-                                        Condition.parameters = [];
-                                        break;
+                                          break;
                                     default:
                                         //Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
                                         //Conditions.push({ ...Condition });
@@ -280,19 +333,19 @@ export default class ColorfulClouds {
                                         Condition.parameters = [];
                                         break;
                                     default:
-                                        Conditions.push({ ...Condition });
+                                        //Conditions.push({ ...Condition });
                                         // CONSTANT
-                                        Condition.forecastToken = "CONSTANT";
-                                        Condition.startTime = Condition.endTime;
-                                        Condition.parameters = [];
+                                        //Condition.forecastToken = "CONSTANT";
+                                        //Condition.startTime = Condition.endTime;
+                                        //Condition.parameters = [];
                                         break;
                                 };
                                 break;
                             case "STOP": //✅
-                                Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
                                 // STOP_START
                                 switch (minute?.precipitationType) {
                                     case "CLEAR":
+                                        Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
                                         Conditions.push({ ...Condition });
                                         // CLEAR
                                         Condition.beginCondition = "CLEAR";
@@ -302,7 +355,7 @@ export default class ColorfulClouds {
                                         Condition.parameters = [];
                                         break;
                                     default:
-                                        Condition.forecastToken = "STOP_START";
+                                        //Condition.forecastToken = "STOP_START";
                                         break;
                                 };
                                 break;
@@ -332,7 +385,8 @@ export default class ColorfulClouds {
                     Condition.endTime = minute.startTime;
                     Condition.endCondition = previousMinute.condition;
                     switch (Condition.forecastToken) {
-                        case "CLEAR": //✅
+                        case "CLEAR":
+                            // ✅确定CLEAR
                             Condition.beginCondition = "CLEAR";
                             Condition.endCondition = "CLEAR";
                             Condition.forecastToken = "CLEAR";
@@ -340,10 +394,11 @@ export default class ColorfulClouds {
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
-                        case "CONSTANT": //✅
+                        case "CONSTANT":
+                            // ✅确定CONSTANT
                             Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
                             Conditions.push({ ...Condition });
-                            // CONSTANT
+                            // ✅补充CONSTANT
                             Condition.beginCondition = minute.condition;
                             Condition.endCondition = minute.condition;
                             Condition.startTime = Condition.endTime;
@@ -351,18 +406,22 @@ export default class ColorfulClouds {
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
-                        case "START": //✅
+                        case "START":
+                            // ✅确定START
+                            Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
                             Conditions.push({ ...Condition });
-                            // CONSTANT
+                            // ✅补充CONSTANT
                             Condition.forecastToken = "CONSTANT";
                             Condition.startTime = Condition.endTime;
                             delete Condition.endTime;
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
-                        case "STOP": //✅
+                        case "STOP":
+                            // ✅确定STOP
+                            Condition.parameters.push({ "date": minute.startTime, "type": "FIRST_AT" });
                             Conditions.push({ ...Condition });
-                            // CLEAR
+                            // ✅补充CLEAR
                             Condition.beginCondition = "CLEAR";
                             Condition.endCondition = "CLEAR";
                             Condition.forecastToken = "CLEAR";
@@ -371,25 +430,27 @@ export default class ColorfulClouds {
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
-                        case "START_STOP": //✅
-                            Condition.parameters.push({ "date": minute.startTime, "type": "SECOND_AT" });
+                        case "START_STOP":
+                            // ✅确定START
+                            Condition.forecastToken = "START";
                             Conditions.push({ ...Condition });
-                            // CLEAR
+                            // ✅补充CONSTANT
+                            Condition.startTime = Condition.endTime;
+                            delete Condition.endTime;
+                            Condition.forecastToken = "CONSTANT";
+                            Condition.parameters = [];
+                            Conditions.push({ ...Condition });
+                            break;
+                        case "STOP_START":
+                            // ✅确定STOP
+                            Condition.forecastToken = "STOP";
+                            Conditions.push({ ...Condition });
+                            // ✅补充CLEAR
                             Condition.beginCondition = "CLEAR";
                             Condition.endCondition = "CLEAR";
                             Condition.forecastToken = "CLEAR";
                             Condition.startTime = Condition.endTime;
                             delete Condition.endTime;
-                            Condition.parameters = [];
-                            Conditions.push({ ...Condition });
-                            break;
-                        case "STOP_START": //✅
-                            Condition.parameters.push({ "date": minute.startTime, "type": "SECOND_AT" });
-                            Conditions.push({ ...Condition })
-                            // CONSTANT
-                            Condition.startTime = Condition.endTime;
-                            delete Condition.endTime;
-                            Condition.forecastToken = "CONSTANT";
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
@@ -416,7 +477,7 @@ export default class ColorfulClouds {
                     switch (body?.result?.minutely?.status) {
                         case "ok":
                             body.result.minutely.probability = body.result.minutely.probability.map(probability => Math.round(probability * 100));
-                            let minuteStemp = new Date(timeStamp * 1000).setMinutes(0, 0, 0);
+                            let minuteStemp = new Date(timeStamp * 1000).setSeconds(0, 0);
                             minuteStemp = minuteStemp.valueOf() / 1000;
                             const PrecipitationType = this.#PrecipitationType(body?.result?.minutely?.description);
                             const WeatherCondition = this.#WeatherCondition(body?.result?.minutely?.description);
