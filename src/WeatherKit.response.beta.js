@@ -11,7 +11,7 @@ import ColorfulClouds from "./class/ColorfulClouds.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4124) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4125) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -159,6 +159,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													case "ColorfulClouds":
 														const colorfulClouds = new ColorfulClouds($, { "url": url });
 														forecastNextHour = await colorfulClouds.Minutely();
+														metadata = forecastNextHour?.metadata;
 														break;
 												};
 												if (metadata) {

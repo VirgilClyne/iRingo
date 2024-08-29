@@ -19983,7 +19983,7 @@ class ColorfulClouds {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4124) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4125) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20112,6 +20112,8 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 											if (!body?.forecastNextHour) {
+												let forecastNextHour;
+												let metadata;
 												switch (Settings?.NextHour?.Provider) {
 													case "WeatherKit":
 														break;
@@ -20122,8 +20124,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														break;
 													case "ColorfulClouds":
 														const colorfulClouds = new ColorfulClouds($, { "url": url });
-														await colorfulClouds.Minutely();
+														forecastNextHour = await colorfulClouds.Minutely();
+														metadata = forecastNextHour?.metadata;
 														break;
+												}												if (metadata) {
+													metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
+													body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
+													body.forecastNextHour.metadata = metadata;
+													$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 												}												if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 											}										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
