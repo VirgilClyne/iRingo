@@ -4,9 +4,5 @@
 
 export enum ParameterType {
   FIRST_AT = 0,
-  SECOND_AT = 1,
-  UNKNOWN2 = 2,
-  UNKNOWN3 = 3,
-  UNKNOWN4 = 4,
-  UNKNOWN5 = 5
+  SECOND_AT = 1
 }

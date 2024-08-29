@@ -4,8 +4,4 @@ export var ParameterType;
 (function (ParameterType) {
     ParameterType[ParameterType["FIRST_AT"] = 0] = "FIRST_AT";
     ParameterType[ParameterType["SECOND_AT"] = 1] = "SECOND_AT";
-    ParameterType[ParameterType["UNKNOWN2"] = 2] = "UNKNOWN2";
-    ParameterType[ParameterType["UNKNOWN3"] = 3] = "UNKNOWN3";
-    ParameterType[ParameterType["UNKNOWN4"] = 4] = "UNKNOWN4";
-    ParameterType[ParameterType["UNKNOWN5"] = 5] = "UNKNOWN5";
 })(ParameterType || (ParameterType = {}));

@@ -23,11 +23,11 @@ export class DayWeatherConditions {
     }
     forecastStart() {
         const offset = this.bb.__offset(this.bb_pos, 4);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
     }
     forecastEnd() {
         const offset = this.bb.__offset(this.bb_pos, 6);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
     }
     conditionCode() {
         const offset = this.bb.__offset(this.bb_pos, 8);
@@ -51,11 +51,11 @@ export class DayWeatherConditions {
     }
     moonrise() {
         const offset = this.bb.__offset(this.bb_pos, 18);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
     }
     moonset() {
         const offset = this.bb.__offset(this.bb_pos, 20);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
     }
     precipitationAmount() {
         const offset = this.bb.__offset(this.bb_pos, 22);
@@ -127,7 +127,7 @@ export class DayWeatherConditions {
     }
     temperatureMaxTime() {
         const offset = this.bb.__offset(this.bb_pos, 54);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
     }
     temperatureMin() {
         const offset = this.bb.__offset(this.bb_pos, 56);
@@ -135,7 +135,7 @@ export class DayWeatherConditions {
     }
     temperatureMinTime() {
         const offset = this.bb.__offset(this.bb_pos, 58);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
+        return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
     }
     windGustSpeedMax() {
         const offset = this.bb.__offset(this.bb_pos, 60);

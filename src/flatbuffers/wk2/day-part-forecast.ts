@@ -29,12 +29,12 @@ static getSizePrefixedRootAsDayPartForecast(bb:flatbuffers.ByteBuffer, obj?:DayP
 
 forecastStart():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 forecastEnd():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 cloudCover():number {

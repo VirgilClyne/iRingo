@@ -27,12 +27,12 @@ static getSizePrefixedRootAsForecastPeriodSummary(bb:flatbuffers.ByteBuffer, obj
 
 startTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 endTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 condition():PrecipitationType {

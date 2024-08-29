@@ -34,7 +34,7 @@ attributionUrl(optionalEncoding?:any):string|Uint8Array|null {
 
 expireTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 language():string|null
@@ -70,12 +70,12 @@ providerName(optionalEncoding?:any):string|Uint8Array|null {
 
 readTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 18);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 reportedTime():number {
   const offset = this.bb!.__offset(this.bb_pos, 20);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
 temporarilyUnavailable():boolean {
