@@ -19305,7 +19305,7 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.16";
+        this.Version = "1.1.18";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -19371,7 +19371,7 @@ class WAQI {
                                 "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
-                                "scale": "EPA_NowCast.2302"
+                                "scale": "EPA_NowCast"
                             };
                             break;
                         case "error":
@@ -19401,7 +19401,7 @@ class WAQI {
                                 "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": "NOT_AVAILABLE",
-                                "scale": "EPA_NowCast.2302"
+                                "scale": "EPA_NowCast"
                             };
                             break;
                         case "error":
@@ -19499,7 +19499,7 @@ class WAQI {
                                         "isSignificant": true,
                                         //"previousDayComparison": "UNKNOWN",
                                         "primaryPollutant": this.#Configs.Pollutants[body?.rxs?.obs?.[0]?.msg?.dominentpol] || "NOT_AVAILABLE",
-                                        "scale": "EPA_NowCast.2302"
+                                        "scale": "EPA_NowCast"
                                     };
                                     break;
                                 case "error":
@@ -19554,7 +19554,7 @@ class WAQI {
                         "isSignificant": true,
                         //"previousDayComparison": "UNKNOWN",
                         "primaryPollutant": this.#Configs.Pollutants[body?.data?.dominentpol] || "NOT_AVAILABLE",
-                        "scale": "EPA_NowCast.2302"
+                        "scale": "EPA_NowCast"
                     };
                     break;
                 case "error":
