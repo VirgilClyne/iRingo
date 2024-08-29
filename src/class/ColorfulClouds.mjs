@@ -4,7 +4,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.2.4";
+        this.Version = "1.2.19";
         console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -72,26 +72,24 @@ export default class ColorfulClouds {
         console.log(`✅ #PrecipitationType: ${precipitationType}`);
         return precipitationType;
     };
-
-    #ConditionType(perceivedPrecipitationIntensity, precipitationChance, precipitationType) {
-        //console.log(`☑️ #ConditionType, maxPerceivedPrecipitationIntensity: ${maxPerceivedPrecipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`);
+    #ConditionType(precipitationIntensity, precipitationType) {
+        // refer: https://docs.caiyunapp.com/weather-api/v2/v2.6/tables/precip.html
+        //console.log(`☑️ #ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`);
         let condition = "CLEAR";
-        if (perceivedPrecipitationIntensity === 0) {
-            if (precipitationChance === 0) condition = "CLEAR"
-            else if (precipitationChance > 0) {
-                switch (precipitationType) {
-                    case "RAIN":
-                        condition = "POSSIBLE_DRIZZLE";
-                        break;
-                    case "SNOW":
-                        condition = "POSSIBLE_FLURRIES";
-                        break;
-                    default:
-                        condition = `POSSIBLE_${precipitationType}`;
-                        break;
-                };
+        if (precipitationIntensity === 0) condition = "CLEAR"
+        else if (precipitationIntensity > 0 && precipitationIntensity < 0.0606) {
+            switch (precipitationType) {
+                case "RAIN":
+                    condition = "POSSIBLE_DRIZZLE";
+                    break;
+                case "SNOW":
+                    condition = "POSSIBLE_FLURRIES";
+                    break;
+                default:
+                    condition = `POSSIBLE_${precipitationType}`;
+                    break;
             };
-        } else if (perceivedPrecipitationIntensity > 0 && perceivedPrecipitationIntensity < 1) {
+        } else if (precipitationIntensity >= 0.0606 && precipitationIntensity < 0.8989) {
             switch (precipitationType) {
                 case "RAIN":
                     condition = "DIZZLE";
@@ -103,7 +101,7 @@ export default class ColorfulClouds {
                     condition = precipitationType;
                     break;
             };
-        } else if (perceivedPrecipitationIntensity >= 1 && perceivedPrecipitationIntensity < 2) {
+        } else if (precipitationIntensity >= 0.8989 && precipitationIntensity < 2.87) {
             switch (precipitationType) {
                 case "RAIN":
                     condition = "RAIN";
@@ -181,11 +179,12 @@ export default class ColorfulClouds {
                                     else minute.precipitationChance = body?.result?.minutely?.probability?.[3];
                                     if (minute.perceivedPrecipitationIntensity !== 0) minute.precipitationType = PrecipitationType;
                                     else minute.precipitationType = "CLEAR";
-                                    minute.condition = this.#ConditionType(minute.perceivedPrecipitationIntensity, minute.precipitationChance, PrecipitationType);
+                                    minute.condition = this.#ConditionType(minute.perceivedPrecipitationIntensity, PrecipitationType);
                                     return minute;
                                 }),
                                 "summary": []
                             };
+                            forecastNextHour.minutes.length = 90;
                             const Summary = {
                                 "condition": "CLEAR",
                                 "precipitationChance": 0,
@@ -271,26 +270,22 @@ export default class ColorfulClouds {
                                             Condition.endCondition = previousMinute.condition;
                                             switch (Condition.forecastToken) {
                                                 case "CLEAR":
-                                                    Condition.forecastToken = "CLEAR";
-                                                    Condition.parameters = [];
                                                     forecastNextHour.condition.push({ ...Condition });
                                                     // reset
-                                                    Condition.startTime = minute.startTime;
-                                                    Condition.endTime = 0;
-                                                    Condition.forecastToken = "START";
+                                                    if (minute?.precipitationType !== previousMinute?.precipitationType) Condition.forecastToken = "START";
+                                                    else Condition.forecastToken = "CLEAR";
+                                                    Condition.parameters = [];
                                                     break;
                                                 case "CONSTANT":
                                                     Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
-                                                    forecastNextHour.condition.push({ ...Condition });
                                                     if (minute?.precipitationType !== previousMinute?.precipitationType) {
-                                                        //reset
-                                                        Condition.startTime = minute.startTime;
-                                                        Condition.endTime = 0;
                                                         Condition.forecastToken = "STOP";
+                                                        forecastNextHour.condition.push({ ...Condition });
+                                                        //reset
+                                                        Condition.forecastToken = "CLEAR";
+                                                        Condition.parameters = [];
                                                     } else {
-                                                        Condition.startTime = minute.startTime;
-                                                        Condition.endTime = 0;
-                                                        Condition.forecastToken = "CONSTANT";
+                                                        forecastNextHour.condition.push({ ...Condition });
                                                         Condition.parameters = [];
                                                     };
                                                     break;
@@ -298,14 +293,10 @@ export default class ColorfulClouds {
                                                     Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
                                                     if (minute?.precipitationType !== previousMinute?.precipitationType) {
                                                         // reset
-                                                        Condition.startTime = minute.startTime;
-                                                        Condition.endTime = 0;
                                                         Condition.forecastToken = "START_STOP";
                                                     } else {
                                                         forecastNextHour.condition.push({ ...Condition });
                                                         // reset
-                                                        Condition.startTime = minute.startTime;
-                                                        Condition.endTime = 0;
                                                         Condition.forecastToken = "CONSTANT";
                                                         Condition.parameters = [];
                                                     };
@@ -313,25 +304,19 @@ export default class ColorfulClouds {
                                                 case "STOP":
                                                     Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
                                                     if (minute?.precipitationType !== previousMinute?.precipitationType) {
+                                                        // reset
+                                                        Condition.forecastToken = "STOP_START";
+                                                    } else {
                                                         forecastNextHour.condition.push({ ...Condition });
                                                         // reset
-                                                        Condition.startTime = minute.startTime;
-                                                        Condition.endTime = 0;
                                                         Condition.forecastToken = "CLEAR";
                                                         Condition.parameters = [];
-                                                    } else {
-                                                        // reset
-                                                        Condition.startTime = minute.startTime;
-                                                        Condition.endTime = 0;
-                                                        Condition.forecastToken = "STOP_START";
                                                     };
                                                     break;
                                                 case "START_STOP":
                                                     Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
                                                     forecastNextHour.condition.push({ ...Condition });
                                                     // reset
-                                                    Condition.startTime = minute.startTime;
-                                                    Condition.endTime = 0;
                                                     Condition.forecastToken = "STOP";
                                                     Condition.parameters = [];
                                                     break;
@@ -339,12 +324,15 @@ export default class ColorfulClouds {
                                                     Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
                                                     forecastNextHour.condition.push({ ...Condition });
                                                     // reset
-                                                    Condition.startTime = minute.startTime;
-                                                    Condition.endTime = 0;
                                                     Condition.forecastToken = "START";
                                                     Condition.parameters = [];
                                                     break;
                                             };
+                                            // reset
+                                            Condition.beginCondition = minute.condition;
+                                            Condition.endCondition = minute.condition;
+                                            Condition.startTime = minute.startTime;
+                                            Condition.endTime = 0;
                                         };
                                         break;
                                     case forecastNextHour?.minutes?.length - 1:
@@ -361,39 +349,48 @@ export default class ColorfulClouds {
                                         };
                                         forecastNextHour.summary.push({ ...Summary });
                                         /******** Condition ********/
+                                        Condition.endTime = minute.startTime;
+                                        Condition.endCondition = previousMinute.condition;
                                         switch (Condition.forecastToken) {
                                             case "CLEAR":
                                                 Condition.beginCondition = "CLEAR";
                                                 Condition.endCondition = "CLEAR";
+                                                Condition.forecastToken = "CLEAR";
                                                 delete Condition.endTime;
                                                 Condition.parameters = [];
                                                 forecastNextHour.condition.push({ ...Condition });
                                                 break;
                                             case "CONSTANT":
-                                                Condition.endCondition = previousMinute.condition;
                                                 delete Condition.endTime;
                                                 Condition.parameters = [];
                                                 forecastNextHour.condition.push({ ...Condition });
                                                 break;
                                             case "START":
                                                 forecastNextHour.condition.push({ ...Condition });
+                                                // reset
                                                 Condition.startTime = Condition.endTime;
-                                                delete Condition.endTime;
                                                 Condition.forecastToken = "CONSTANT";
                                                 Condition.parameters = [];
+                                                forecastNextHour.condition.push({ ...Condition });
                                                 break;
                                             case "STOP":
                                                 forecastNextHour.condition.push({ ...Condition });
+                                                // reset
+                                                Condition.beginCondition = "CLEAR";
+                                                Condition.endCondition = "CLEAR";
                                                 Condition.startTime = Condition.endTime;
                                                 delete Condition.endTime;
                                                 Condition.forecastToken = "CONSTANT";
                                                 Condition.parameters = [];
+                                                forecastNextHour.condition.push({ ...Condition });
                                                 break;
                                             case "START_STOP":
                                                 Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
                                                 forecastNextHour.condition.push({ ...Condition });
-                                                // reset
-                                                Condition.startTime = Condition.endTime;
+                                                break;
+                                            case "STOP_START":
+                                                Condition.parameters.push({ "date": Condition.endTime, "type": "SECOND_AT" });
+                                                forecastNextHour.condition.push({ ...Condition });
                                                 break;
                                         };
                                         break;
@@ -414,7 +411,7 @@ export default class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`);
+            //console.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`);
             console.log(`✅ Minutely`);
             return forecastNextHour;
         };
