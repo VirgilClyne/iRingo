@@ -11,7 +11,7 @@ import ColorfulClouds from "./class/ColorfulClouds.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.3.0(4126) response");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.0(4129) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -38,15 +38,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
-					//$.log(`🚧 body: ${body}`, "");
 					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
-					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
 				case "text/html":
@@ -54,15 +50,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
-					//body = XML.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
-					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
 				case "application/json":
@@ -85,9 +75,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/grpc":
 				case "application/grpc+proto":
 				case "application/octet-stream":
-					//$.log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
 					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
-					//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
 					switch (FORMAT) {
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
@@ -101,87 +89,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
-											let airQuality;
-											let metadata;
-											switch (Settings?.AQI?.Provider) {
-												case "WeatherKit":
-													break;
-												case "WeatherOL":
-													break;
-												case "QWeather":
-													break;
-												case "ColorfulClouds":
-													break;
-												case "WAQI":
-												default:
-													const Waqi = new WAQI($, { "url": url });
-													if (Settings?.API?.WAQI?.Token) {
-														airQuality = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
-														metadata = airQuality?.metadata;
-														airQuality = airQuality;
-													} else {
-														const Nearest = await Waqi.Nearest();
-														const Token = await Waqi.Token(Nearest?.metadata?.stationId);
-														//Caches.WAQI.set(stationId, Token);
-														airQuality = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
-														metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
-														airQuality = { ...Nearest, ...airQuality };
-													}
-													break;
-											};
-											if (metadata) {
-												metadata = { ...body?.airQuality?.metadata, ...metadata };
-												body.airQuality = { ...body?.airQuality, ...airQuality };
-												body.airQuality.metadata = metadata;
-												if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
-												//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
-											};
+											if (Settings.AQI.ReplaceProviders.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
-										};
-										if (url.searchParams.get("dataSets").includes("currentWeather")) {
-											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
-											//$.log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
 											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
-											if (!body?.forecastNextHour) {
-												let forecastNextHour;
-												let metadata;
-												switch (Settings?.NextHour?.Provider) {
-													case "WeatherKit":
-														break;
-													case "WeatherOL":
-													default:
-														break;
-													case "QWeather":
-														break;
-													case "ColorfulClouds":
-														const colorfulClouds = new ColorfulClouds($, { "url": url });
-														forecastNextHour = await colorfulClouds.Minutely();
-														metadata = forecastNextHour?.metadata;
-														break;
-												};
-												if (metadata) {
-													metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
-													body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
-													body.forecastNextHour.metadata = metadata;
-													$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
-												};
-											};
+											if (!body?.forecastNextHour) body = await InjectForecastNextHour(url, body, Settings);
 											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
-										};
-										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
-											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
-											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("WeatherChange")) {
-											if (body?.WeatherChanges?.metadata?.providerName && !body?.WeatherChanges?.metadata?.providerLogo) body.WeatherChanges.metadata.providerLogo = providerNameToLogo(body?.WeatherChanges?.metadata?.providerName, "v2");
-											$.log(`🚧 body.WeatherChanges: ${JSON.stringify(body?.WeatherChanges, null, 2)}`, "");
-										};
-										if (url.searchParams.get("dataSets").includes("trendComparison")) {
-											if (body?.historicalComparisons?.metadata?.providerName && !body?.historicalComparisons?.metadata?.providerLogo) body.historicalComparisons.metadata.providerLogo = providerNameToLogo(body?.historicalComparisons?.metadata?.providerName, "v2");
-											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
 										};
 										const WeatherData = weatherKit2.encode("all", body);
 										Builder.finish(WeatherData);
@@ -212,3 +126,68 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 })()
 	.catch((e) => $.logErr(e))
 	.finally(() => $.done($response))
+
+async function InjectAirQuality(url, body, Settings) {
+	$.log(`☑️ InjectAirQuality`, "");
+	let airQuality;
+	let metadata;
+	switch (Settings?.AQI?.Provider) {
+		case "WeatherKit":
+			break;
+		case "QWeather":
+			break;
+		case "ColorfulClouds":
+			break;
+		case "WAQI":
+		default:
+			const Waqi = new WAQI($, { "url": url });
+			if (Settings?.API?.WAQI?.Token) {
+				airQuality = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
+				metadata = airQuality?.metadata;
+				airQuality = airQuality;
+			} else {
+				const Nearest = await Waqi.Nearest();
+				const Token = await Waqi.Token(Nearest?.metadata?.stationId);
+				//Caches.WAQI.set(stationId, Token);
+				airQuality = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
+				metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
+				airQuality = { ...Nearest, ...airQuality };
+			}
+			break;
+	};
+	if (metadata) {
+		metadata = { ...body?.airQuality?.metadata, ...metadata };
+		body.airQuality = { ...body?.airQuality, ...airQuality };
+		body.airQuality.metadata = metadata;
+		if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
+	};
+	$.log(`✅ InjectAirQuality`, "");
+	return body;
+};
+
+async function InjectForecastNextHour(url, body, Settings) {
+	$.log(`☑️ InjectForecastNextHour`, "");
+	let forecastNextHour;
+	let metadata;
+	switch (Settings?.NextHour?.Provider) {
+		case "WeatherKit":
+			break;
+		case "WeatherOL":
+		default:
+			break;
+		case "QWeather":
+			break;
+		case "ColorfulClouds":
+			const colorfulClouds = new ColorfulClouds($, { "url": url });
+			forecastNextHour = await colorfulClouds.Minutely(Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==");
+			metadata = forecastNextHour?.metadata;
+			break;
+	};
+	if (metadata) {
+		metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
+		body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
+		body.forecastNextHour.metadata = metadata;
+	};
+	$.log(`✅ InjectForecastNextHour`, "");
+	return body;
+};
