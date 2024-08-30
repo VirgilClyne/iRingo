@@ -47,7 +47,9 @@ export default class ColorfulClouds {
         "PrecipitationType": {
             "晴朗": "CLEAR",
             "雨夹雪": "SLEET",
+            "rain": "RAIN",
             "雨": "RAIN",
+            "snow": "SNOW",
             "雪": "SNOW",
             "冰雹": "HAIL",
         }

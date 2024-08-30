@@ -8,6 +8,5 @@ export enum ForecastToken {
   STOP = 2,
   START_STOP = 3,
   STOP_START = 4,
-  CONSTANT = 5,
-  UNKNOWN6 = 6
+  CONSTANT = 5
 }

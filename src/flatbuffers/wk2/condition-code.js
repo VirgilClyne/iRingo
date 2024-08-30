@@ -20,7 +20,7 @@ export var ConditionCode;
     ConditionCode[ConditionCode["HEAVY_SNOW"] = 15] = "HEAVY_SNOW";
     ConditionCode[ConditionCode["UNKNOWN16"] = 16] = "UNKNOWN16";
     ConditionCode[ConditionCode["UNKNOWN17"] = 17] = "UNKNOWN17";
-    ConditionCode[ConditionCode["UNKNOWN18"] = 18] = "UNKNOWN18";
+    ConditionCode[ConditionCode["ISOLATED_THUNDERSTORMS"] = 18] = "ISOLATED_THUNDERSTORMS";
     ConditionCode[ConditionCode["MOSTLY_CLEAR"] = 19] = "MOSTLY_CLEAR";
     ConditionCode[ConditionCode["MOSTLY_CLOUDY"] = 20] = "MOSTLY_CLOUDY";
     ConditionCode[ConditionCode["PARTLY_CLOUDY"] = 21] = "PARTLY_CLOUDY";

@@ -8,5 +8,4 @@ export var ForecastToken;
     ForecastToken[ForecastToken["START_STOP"] = 3] = "START_STOP";
     ForecastToken[ForecastToken["STOP_START"] = 4] = "STOP_START";
     ForecastToken[ForecastToken["CONSTANT"] = 5] = "CONSTANT";
-    ForecastToken[ForecastToken["UNKNOWN6"] = 6] = "UNKNOWN6";
 })(ForecastToken || (ForecastToken = {}));
