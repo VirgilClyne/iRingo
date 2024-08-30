@@ -19565,25 +19565,12 @@ class WAQI {
         }    }
 }
 
-class ColorfulClouds {
-    constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
-        this.Name = "ColorfulClouds";
-        this.Version = "1.6.9";
-        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
-        this.url = $request.url;
-        const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
-        const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
-        this.version = options?.version ?? Parameters?.version;
-        this.language = options?.language ?? Parameters?.language;
-        this.latitude = options?.latitude ?? Parameters?.latitude;
-        this.longitude = options?.longitude ?? Parameters?.longitude;
-        this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
-        //Object.assign(this, options);
-        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
-        this.$ = $;
-    };
+class ForecastNextHour {
+    #Name = "forecastNextHour";
+    #Version = "v1.0.0";
+    #Author = "iRingo";
 
-    #Configs = {
+    static #Configs = {
         "Pollutants": {
             "co": "CO",
             "no": "NO",
@@ -19619,29 +19606,30 @@ class ColorfulClouds {
         }
     };
 
-    #WeatherCondition(sentence) {
-        console.log(`☑️ #WeatherCondition, sentence: ${sentence}`);
+    static WeatherCondition(sentence) {
+        console.log(`☑️ WeatherCondition, sentence: ${sentence}`);
         let weatherCondition = "CLEAR";
         Object.keys(this.#Configs.WeatherCondition).forEach(key => {
             if (sentence.includes(key)) weatherCondition = this.#Configs.WeatherCondition[key];
         });
-        console.log(`✅ #WeatherCondition: ${weatherCondition}`);
+        console.log(`✅ WeatherCondition: ${weatherCondition}`);
         return weatherCondition;
     };
 
-    #PrecipitationType(sentence) {
-        console.log(`☑️ #PrecipitationType, sentence: ${sentence}`);
+    static PrecipitationType(sentence) {
+        console.log(`☑️ PrecipitationType, sentence: ${sentence}`);
         let precipitationType = "CLEAR";
         Object.keys(this.#Configs.PrecipitationType).forEach(key => {
             if (sentence.includes(key)) precipitationType = this.#Configs.PrecipitationType[key];
         });
-        console.log(`✅ #PrecipitationType: ${precipitationType}`);
+        console.log(`✅ PrecipitationType: ${precipitationType}`);
         return precipitationType;
     };
 
-    #ConditionType(precipitationIntensity, precipitationType) {
+    static ConditionType(precipitationIntensity, precipitationType) {
         // refer: https://docs.caiyunapp.com/weather-api/v2/v2.6/tables/precip.html
-        //console.log(`☑️ #ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`);
+        //console.log(`☑️ ConditionType`);
+        //console.log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`);
         let condition = "CLEAR";
         if (precipitationIntensity === 0) condition = "CLEAR";
         else if (precipitationIntensity > 0 && precipitationIntensity < 0.0606) {
@@ -19692,22 +19680,22 @@ class ColorfulClouds {
         return condition;
     };
 
-    #Minute(minutes = [], description = "") {
+    static Minute(minutes = [], description = "") {
         console.log(`☑️ #Minute`);
-        const PrecipitationType = this.#PrecipitationType(description);
+        const PrecipitationType = this.PrecipitationType(description);
         minutes = minutes.map(minute => {
-            minute.condition = this.#ConditionType(minute.precipitationIntensity, PrecipitationType);
-            minute.perceivedPrecipitationIntensity = this.#toPerceivedPrecipitationIntensity(minute.precipitationIntensity, minute.condition);
+            minute.condition = this.ConditionType(minute.precipitationIntensity, PrecipitationType);
+            minute.perceivedPrecipitationIntensity = this.toPerceivedPrecipitationIntensity(minute.precipitationIntensity, minute.condition);
             if (minute.perceivedPrecipitationIntensity >= 0.001) minute.precipitationType = PrecipitationType;
             else minute.precipitationType = "CLEAR";
             return minute;
         });
-        console.log(`✅ #Minute`);
+        console.log(`✅ Minute`);
         return minutes;
     };
 
-    #Summary(minutes = []) {
-        console.log(`☑️ #Summary`);
+    static Summary(minutes = []) {
+        console.log(`☑️ Summary`);
         const Summaries = [];
         const Summary = {
             "condition": "CLEAR",
@@ -19767,12 +19755,12 @@ class ColorfulClouds {
                             break;
                     }                    Summaries.push({ ...Summary });
                     break;
-            }        }        console.log(`✅ #Summary`);
+            }        }        console.log(`✅ Summary`);
         return Summaries;
     };
 
-    Condition(minutes = []) {
-        console.log(`☑️ #Condition`);
+    static Condition(minutes = []) {
+        console.log(`☑️ Condition`);
         const Conditions = [];
         const Condition = {
             "beginCondition": "CLEAR",
@@ -19908,11 +19896,11 @@ class ColorfulClouds {
                             console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
                             break;
                     }                    break;
-            }        }        console.log(`✅ #Condition`);
+            }        }        console.log(`✅ Condition`);
         return Conditions;
     };
 
-    #toPerceivedPrecipitationIntensity(precipitationIntensity, condition) {
+    static toPerceivedPrecipitationIntensity(precipitationIntensity, condition) {
         let perceivedPrecipitationIntensity = 0;
         let level = 0; // full level = 3;
         switch (condition) {
@@ -19943,6 +19931,26 @@ class ColorfulClouds {
         }        perceivedPrecipitationIntensity = Math.round(perceivedPrecipitationIntensity * 1000) / 1000;
         return perceivedPrecipitationIntensity;
     };
+}
+
+class ColorfulClouds {
+    constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
+        this.Name = "ColorfulClouds";
+        this.Version = "1.6.9";
+        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+        this.url = $request.url;
+        const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
+        const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
+        this.version = options?.version ?? Parameters?.version;
+        this.language = options?.language ?? Parameters?.language;
+        this.latitude = options?.latitude ?? Parameters?.latitude;
+        this.longitude = options?.longitude ?? Parameters?.longitude;
+        this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
+        //Object.assign(this, options);
+        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
+        this.$ = $;
+    };
+
     async Minutely(token = "Y2FpeXVuX25vdGlmeQ==", version = "v2.6", header = { "Content-Type": "application/json" }) {
         console.log(`☑️ Minutely, token: ${token}, version: ${version}`);
         const request = {
@@ -19994,9 +20002,9 @@ class ColorfulClouds {
                             };
                             forecastNextHour.minutes.length = 90;
                             forecastNextHour.forecastEnd = minuteStemp + 60 * forecastNextHour.minutes.length;
-                            forecastNextHour.minutes = this.#Minute(forecastNextHour.minutes, body?.result?.minutely?.description);
-                            forecastNextHour.summary = this.#Summary(forecastNextHour.minutes);
-                            forecastNextHour.condition = this.Condition(forecastNextHour.minutes);
+                            forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.result?.minutely?.description);
+                            forecastNextHour.summary = ForecastNextHour.Summary(forecastNextHour.minutes);
+                            forecastNextHour.condition = ForecastNextHour.Condition(forecastNextHour.minutes);
                             break;
                         case "error":
                         case "failed":
