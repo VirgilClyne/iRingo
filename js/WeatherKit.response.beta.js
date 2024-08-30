@@ -19570,7 +19570,7 @@ class WAQI {
 
 class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.0.2";
+    Version = "v1.0.3";
     Author = "iRingo";
 
     static #Configs = {
@@ -19707,7 +19707,7 @@ class ForecastNextHour {
             "startTime": 0,
             "precipitationIntensity": 0
         };
-        const Length = Math.min(60, minutes.length);
+        const Length = Math.min(71, minutes.length);
         for (let i = 0; i < Length; i++) {
             const minute = minutes[i];
             const previousMinute = minutes[i - 1];
@@ -19721,7 +19721,6 @@ class ForecastNextHour {
                         Summary.precipitationChance = maxPrecipitationChance;
                         Summary.precipitationIntensity = maxPrecipitationIntensity;                    }                    break;
                 default:
-                    /******** Summary ********/
                     if (minute?.precipitationType !== previousMinute?.precipitationType) {
                         Summary.endTime = minute.startTime;
                         switch (Summary.condition) {
@@ -19773,13 +19772,14 @@ class ForecastNextHour {
             "parameters": [],
             "startTime": 0
         };
-        const Length = Math.min(60, minutes.length);
+        const Length = Math.min(71, minutes.length);
         for (let i = 0; i < Length; i++) {
             const minute = minutes[i];
             const previousMinute = minutes[i - 1];
-            console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+            //console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
             switch (i) {
                 case 0:
+                    console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     Condition.beginCondition = minute.condition;
                     Condition.endCondition = minute.condition;
                     Condition.startTime = minute.startTime;
@@ -19791,6 +19791,7 @@ class ForecastNextHour {
                             Condition.forecastToken = "CONSTANT";
                             break;
                     }                    Condition.parameters = [];
+                    console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     break;
                 default:
                     switch (minute?.precipitationType) {
@@ -19900,7 +19901,7 @@ class ForecastNextHour {
                             console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
                             break;
                     }                    break;
-            }            console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+            }            //console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
         }        console.log(`✅ Condition`, "");
         return Conditions;
     };
