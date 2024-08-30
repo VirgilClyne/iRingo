@@ -1,5 +1,5 @@
 export default function providerNameToLogo(providerName, version) {
-    console.log(`☑️ providerNameToLogo, providerName: ${providerName}, version: ${version}`);
+    console.log(`☑️ providerNameToLogo, providerName: ${providerName}, version: ${version}`, "");
     let providerLogo;
     switch (providerName) {
         case "WAQI":
@@ -34,6 +34,6 @@ export default function providerNameToLogo(providerName, version) {
         default:
             break;
     };
-    console.log(`✅ providerNameToLogo`);
+    console.log(`✅ providerNameToLogo`, "");
     return providerLogo;
 };

@@ -4,8 +4,8 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.18";
-        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+        this.Version = "1.1.19";
+        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
         const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
@@ -15,7 +15,7 @@ export default class WAQI {
         this.longitude = options?.longitude ?? Parameters?.longitude;
         this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
         //Object.assign(this, options);
-        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
+        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
         this.$ = $;
     };
 
@@ -34,7 +34,7 @@ export default class WAQI {
 	};
 
     async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`);
+        this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
         const request = {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             //"url": `https://mapq.waqi.info/${mapqVersion}/nearest/station/${stationId}?n=1`,
@@ -114,14 +114,14 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-            console.log(`✅ Nearest`);
+            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ Nearest`, "");
             return airQuality;
         };
     };
 
     async Token(stationId = new Number, header = { "Content-Type": "application/json" }){
-        console.log(`☑️ Token, stationId: ${stationId}`);
+        this.$.log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
             "header": header,
@@ -154,14 +154,14 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 token: ${token}`);
-            console.log(`✅ Token`);
+            this.$.log(`🚧 token: ${token}`, "");
+            this.$.log(`✅ Token`, "");
             return token;
         };
     };
 
     async AQI(stationId = new Number, token = "na", header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`);
+        this.$.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
         const request = {
             "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
             "header": header,
@@ -217,14 +217,14 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-            console.log(`✅ AQI`);
+            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ AQI`, "");
             return airQuality;
         };
     }
 
     async AQI2(token = "na", stationId, header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`);
+        this.$.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
             "header": header,
@@ -266,8 +266,8 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-            console.log(`✅ AQI2`);
+            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ AQI2`, "");
             return airQuality;
         };
     }

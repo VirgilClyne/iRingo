@@ -5,8 +5,8 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.6.9";
-        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+        this.Version = "1.6.10";
+        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
         const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
@@ -16,12 +16,12 @@ export default class ColorfulClouds {
         this.longitude = options?.longitude ?? Parameters?.longitude;
         this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
         //Object.assign(this, options);
-        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
+        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
         this.$ = $;
     };
 
     async Minutely(token = "Y2FpeXVuX25vdGlmeQ==", version = "v2.6", header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ Minutely, token: ${token}, version: ${version}`);
+        this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": header,
@@ -89,8 +89,8 @@ export default class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            //console.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`);
-            console.log(`✅ Minutely`);
+            //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+            this.$.log(`✅ Minutely`, "");
             return forecastNextHour;
         };
     };

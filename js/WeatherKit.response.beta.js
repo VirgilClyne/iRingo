@@ -14423,7 +14423,7 @@ function setENV(name, platforms, database) {
 }
 
 function providerNameToLogo(providerName, version) {
-    console.log(`☑️ providerNameToLogo, providerName: ${providerName}, version: ${version}`);
+    console.log(`☑️ providerNameToLogo, providerName: ${providerName}, version: ${version}`, "");
     let providerLogo;
     switch (providerName) {
         case "WAQI":
@@ -14454,7 +14454,7 @@ function providerNameToLogo(providerName, version) {
         case "BreezoMeter":
             providerLogo = `https://weatherkit.apple.com/assets/${version}/BreezoMeter.png`;
             break;
-    }    console.log(`✅ providerNameToLogo`);
+    }    console.log(`✅ providerNameToLogo`, "");
     return providerLogo;
 }
 
@@ -18623,16 +18623,14 @@ class Weather {
 class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.3";
-		console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
-		//this.initialSize = 10240;
-		//this.builder = new flatbuffers.Builder(this.initialSize);
+		this.Version = "1.0.4";
+		console.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
 		Object.assign(this, options);
 		this.weatherData = Weather.getRootAsWeather(this.bb);
 	};
 
 	encode(dataSet = "", data = {}) {
-		console.log(`☑️ encode, dataSet: ${dataSet}`);
+		console.log(`☑️ encode, dataSet: ${dataSet}`, "");
 		let offset;
 		let metadataOffset;
 		if (data?.metadata) metadataOffset = Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.temporarilyUnavailable, SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
@@ -18793,12 +18791,12 @@ class WeatherKit2 {
 				let comparisonsOffset = HistoricalComparison.createComparisonsVector(this.builder, comparisonsOffsets);
 				offset = HistoricalComparison.createHistoricalComparison(this.builder, metadataOffset, comparisonsOffset);
 				break;
-		}		console.log(`✅ encode, dataSet: ${dataSet}`);
+		}		console.log(`✅ encode, dataSet: ${dataSet}`, "");
 		return offset;
 	};
 
 	decode(dataSet = "", metadata) {
-		console.log(`☑️ decode, dataSet: ${dataSet}`);
+		console.log(`☑️ decode, dataSet: ${dataSet}`, "");
 		let data = {};
 		const airQualityData = this.weatherData?.airQuality();
 		const CurrentWeatherData = this.weatherData?.currentWeather();
@@ -19277,7 +19275,7 @@ class WeatherKit2 {
 					};
 					data.comparisons.push(comparison);
 				}				break;
-		}		console.log(`✅ decode, dataSet: ${dataSet}`);
+		}		console.log(`✅ decode, dataSet: ${dataSet}`, "");
 		return data;
 	};
 
@@ -19300,8 +19298,8 @@ class WeatherKit2 {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
         this.Name = "WAQI";
-        this.Version = "1.1.18";
-        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+        this.Version = "1.1.19";
+        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
         const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
@@ -19311,7 +19309,7 @@ class WAQI {
         this.longitude = options?.longitude ?? Parameters?.longitude;
         this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
         //Object.assign(this, options);
-        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
+        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
         this.$ = $;
     };
 
@@ -19330,7 +19328,7 @@ class WAQI {
 	};
 
     async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`);
+        this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
         const request = {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             //"url": `https://mapq.waqi.info/${mapqVersion}/nearest/station/${stationId}?n=1`,
@@ -19410,13 +19408,13 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-            console.log(`✅ Nearest`);
+            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ Nearest`, "");
             return airQuality;
         }    };
 
     async Token(stationId = new Number, header = { "Content-Type": "application/json" }){
-        console.log(`☑️ Token, stationId: ${stationId}`);
+        this.$.log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
             "header": header,
@@ -19449,13 +19447,13 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 token: ${token}`);
-            console.log(`✅ Token`);
+            this.$.log(`🚧 token: ${token}`, "");
+            this.$.log(`✅ Token`, "");
             return token;
         }    };
 
     async AQI(stationId = new Number, token = "na", header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`);
+        this.$.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
         const request = {
             "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
             "header": header,
@@ -19511,13 +19509,13 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-            console.log(`✅ AQI`);
+            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ AQI`, "");
             return airQuality;
         }    }
 
     async AQI2(token = "na", stationId, header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`);
+        this.$.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
             "header": header,
@@ -19559,16 +19557,16 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`);
-            console.log(`✅ AQI2`);
+            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ AQI2`, "");
             return airQuality;
         }    }
 }
 
 class ForecastNextHour {
-    #Name = "forecastNextHour";
-    #Version = "v1.0.0";
-    #Author = "iRingo";
+    Name = "forecastNextHour";
+    Version = "v1.0.1";
+    Author = "iRingo";
 
     static #Configs = {
         "Pollutants": {
@@ -19607,29 +19605,29 @@ class ForecastNextHour {
     };
 
     static WeatherCondition(sentence) {
-        console.log(`☑️ WeatherCondition, sentence: ${sentence}`);
+        console.log(`☑️ WeatherCondition, sentence: ${sentence}`, "");
         let weatherCondition = "CLEAR";
         Object.keys(this.#Configs.WeatherCondition).forEach(key => {
             if (sentence.includes(key)) weatherCondition = this.#Configs.WeatherCondition[key];
         });
-        console.log(`✅ WeatherCondition: ${weatherCondition}`);
+        console.log(`✅ WeatherCondition: ${weatherCondition}`, "");
         return weatherCondition;
     };
 
     static PrecipitationType(sentence) {
-        console.log(`☑️ PrecipitationType, sentence: ${sentence}`);
+        console.log(`☑️ PrecipitationType, sentence: ${sentence}`, "");
         let precipitationType = "CLEAR";
         Object.keys(this.#Configs.PrecipitationType).forEach(key => {
             if (sentence.includes(key)) precipitationType = this.#Configs.PrecipitationType[key];
         });
-        console.log(`✅ PrecipitationType: ${precipitationType}`);
+        console.log(`✅ PrecipitationType: ${precipitationType}`, "");
         return precipitationType;
     };
 
     static ConditionType(precipitationIntensity, precipitationType) {
         // refer: https://docs.caiyunapp.com/weather-api/v2/v2.6/tables/precip.html
-        //console.log(`☑️ ConditionType`);
-        //console.log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`);
+        //console.log(`☑️ ConditionType`, "");
+        //console.log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`, "");
         let condition = "CLEAR";
         if (precipitationIntensity === 0) condition = "CLEAR";
         else if (precipitationIntensity > 0 && precipitationIntensity < 0.0606) {
@@ -19676,12 +19674,12 @@ class ForecastNextHour {
                 default:
                     condition = precipitationType;
                     break;
-            }        }        //console.log(`✅ #ConditionType: ${condition}`);
+            }        }        //console.log(`✅ #ConditionType: ${condition}`, "");
         return condition;
     };
 
     static Minute(minutes = [], description = "") {
-        console.log(`☑️ #Minute`);
+        console.log(`☑️ #Minute`, "");
         const PrecipitationType = this.PrecipitationType(description);
         minutes = minutes.map(minute => {
             minute.condition = this.ConditionType(minute.precipitationIntensity, PrecipitationType);
@@ -19690,12 +19688,12 @@ class ForecastNextHour {
             else minute.precipitationType = "CLEAR";
             return minute;
         });
-        console.log(`✅ Minute`);
+        console.log(`✅ Minute`, "");
         return minutes;
     };
 
     static Summary(minutes = []) {
-        console.log(`☑️ Summary`);
+        console.log(`☑️ Summary`, "");
         const Summaries = [];
         const Summary = {
             "condition": "CLEAR",
@@ -19755,12 +19753,12 @@ class ForecastNextHour {
                             break;
                     }                    Summaries.push({ ...Summary });
                     break;
-            }        }        console.log(`✅ Summary`);
+            }        }        console.log(`✅ Summary`, "");
         return Summaries;
     };
 
     static Condition(minutes = []) {
-        console.log(`☑️ Condition`);
+        console.log(`☑️ Condition`, "");
         const Conditions = [];
         const Condition = {
             "beginCondition": "CLEAR",
@@ -19786,7 +19784,7 @@ class ForecastNextHour {
                             Condition.forecastToken = "CONSTANT";
                             break;
                     }                    Condition.parameters = [];
-                    console.log(`⚠️ 0, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
+                    //console.log(`⚠️ 0, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     break;
                 default:
                     switch (minute?.precipitationType) {
@@ -19836,10 +19834,10 @@ class ForecastNextHour {
                                     Condition.parameters = [{ "date": Condition.endTime, "type": "FIRST_AT" }];
                                     break;
                                 case "START_STOP": // ✅当前RAIN
-                                    console.log(`⚠️ START_STOP\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
+                                    console.log(`⚠️ START_STOP\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                                     break;
                                 case "STOP_START": // ✅当前CLEAR
-                                    console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
+                                    console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                                     break;
                             }                            break;
                     }                    break;
@@ -19896,7 +19894,7 @@ class ForecastNextHour {
                             console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
                             break;
                     }                    break;
-            }        }        console.log(`✅ Condition`);
+            }        }        console.log(`✅ Condition`, "");
         return Conditions;
     };
 
@@ -19936,8 +19934,8 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.6.9";
-        console.log(`\n🟧 ${this.Name} v${this.Version}\n`);
+        this.Version = "1.6.10";
+        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
         const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
@@ -19947,12 +19945,12 @@ class ColorfulClouds {
         this.longitude = options?.longitude ?? Parameters?.longitude;
         this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
         //Object.assign(this, options);
-        console.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`);
+        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
         this.$ = $;
     };
 
     async Minutely(token = "Y2FpeXVuX25vdGlmeQ==", version = "v2.6", header = { "Content-Type": "application/json" }) {
-        console.log(`☑️ Minutely, token: ${token}, version: ${version}`);
+        this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": header,
@@ -20020,8 +20018,8 @@ class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            //console.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`);
-            console.log(`✅ Minutely`);
+            //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+            this.$.log(`✅ Minutely`, "");
             return forecastNextHour;
         }    };
 }
