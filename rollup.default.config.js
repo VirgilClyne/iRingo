@@ -5,9 +5,9 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
 	{
-		input: 'src/WeatherKit.response.beta.js',
+		input: 'src/WeatherKit.response.js',
 		output: {
-			file: 'js/WeatherKit.response.beta.js',
+			file: 'js/WeatherKit.response.js',
 			//format: 'es',
 			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
 		},

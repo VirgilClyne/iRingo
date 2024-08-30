@@ -9,17 +9,17 @@ export default function providerNameToLogo(providerName, version) {
                     providerLogo = "https://waqi.info/images/logo.png";
                     break;
                 case "v2":
-                    providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/src/icon/${version}/WAQI.png`;
+                    providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/main/src/icon/${version}/WAQI.png`;
                     break;
             };
             break;
         case "ColofulClouds":
         case "彩云天气":
-            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/src/icon/${version}/ColofulClouds.png`;
+            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/main/src/icon/${version}/ColofulClouds.png`;
             break;
         case "气象在线":
         case "WeatherOL":
-            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/src/icon/${version}/WeatherOL.png`;
+            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/main/src/icon/${version}/WeatherOL.png`;
             break;
         case "QWeather":
         case "和风天气":
