@@ -1,0 +1,38 @@
+name: " iRingo: 🌤 WeatherKit"
+desc: |-
+  iOS 18 & macOS 15 & watchOS 11
+  1.解锁全部天气功能
+  2.替换空气质量数据
+  3.添加下一小时降水数据
+openUrl: "http://boxjs.com/#/app/iRingo.WeatherKit"
+author: "Virgil Clyne & Wordless Echo"
+homepage: "https://github.com/VirgilClyne/iRingo/wiki"
+manual: "https://github.com/VirgilClyne/iRingo/wiki/🌤-天气服务"
+icon: "https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-96x96_2x.png"
+category: " iRingo"
+
+rules:
+  - DOMAIN,weather-analytics-events.apple.com,REJECT-DROP
+
+http:
+  mitm:
+    - "weatherkit.apple.com"
+  script:
+    - match: ^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/
+      name: WeatherKit.api.v1.availability.response
+      type: response
+      require-body: true
+    - match: ^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/
+      name: WeatherKit.api.v2.weather.response
+      type: response
+      require-body: true
+      binary-mode: true
+      argument:
+
+script-providers:
+  WeatherKit.api.v1.availability.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js
+    interval: 86400
+  WeatherKit.api.v2.weather.response:
+    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js
+    interval: 86400
