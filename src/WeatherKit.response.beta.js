@@ -11,7 +11,7 @@ import ColorfulClouds from "./class/ColorfulClouds.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.0(4129) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.0(4130) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -72,7 +72,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							if (PATH.startsWith("/api/v1/availability/")) {
 								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly", "historicalComparisons", "weatherChanges", "weatherAlerts", "weatherAlertNotifications", "news"];
+								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly", "forecastPeriodic", "historicalComparisons", "weatherChanges", "forecastNextHour", "weatherAlerts", "weatherAlertNotifications", "news"];
 							};
 							break;
 					};
