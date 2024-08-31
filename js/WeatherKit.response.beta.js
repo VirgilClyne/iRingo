@@ -19561,7 +19561,7 @@ class WAQI {
 
 class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.0.4";
+    Version = "v1.0.8";
     Author = "iRingo";
 
     static #Configs = {
@@ -19796,14 +19796,14 @@ class ForecastNextHour {
                                     Condition.endCondition = minute.condition;
                                     Condition.forecastToken = "START"; // ✅不推送，可能变为START_STOP
                                     Condition.endTime = minute.startTime; // ✅更新结束时间
-                                    Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
+                                    Condition.parameters = [{ "date": Condition.endTime, "type": "FIRST_AT" }];
                                     break;
                                 case "CONSTANT": // ✅当前CLEAR
                                     // ✅STOP
                                     Condition.endCondition = previousMinute.condition; // ✅更新结束条件
                                     Condition.forecastToken = "STOP"; // ✅不推送，可能变为STOP_START
                                     Condition.endTime = minute.startTime; // ✅更新结束时间
-                                    Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
+                                    Condition.parameters = [{ "date": Condition.endTime, "type": "FIRST_AT" }];
                                     break;
                                 case "START": // ✅当前CLEAR
                                     // ✅START_STOP
@@ -19823,9 +19823,10 @@ class ForecastNextHour {
                                     // ✅STOP_START
                                     Condition.forecastToken = "STOP_START";
                                     Condition.parameters.push({ "date": minute.startTime, "type": "SECOND_AT" });
+                                    Conditions.push({ ...Condition });
                                     // ✅START
-                                    Condition.beginCondition = previousMinute.condition;
-                                    Condition.endCondition = previousMinute.condition;
+                                    Condition.beginCondition = minute.condition;
+                                    Condition.endCondition = minute.condition;
                                     Condition.forecastToken = "START"; // ✅不推送，可能变为START_STOP
                                     Condition.startTime = Condition.endTime;
                                     Condition.endTime = minute.startTime; // ✅更新结束时间
