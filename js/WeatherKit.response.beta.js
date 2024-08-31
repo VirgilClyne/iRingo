@@ -14443,7 +14443,7 @@ function providerNameToLogo(providerName, version) {
             }            break;
         case "ColofulClouds":
         case "彩云天气":
-            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/main/src/icon/${version}/ColofulClouds.png`;
+            providerLogo = `https://raw.githubusercontent.com/VirgilClyne/iRingo/main/src/icon/${version}/ColorfulClouds.png`;
             break;
         case "气象在线":
         case "WeatherOL":
