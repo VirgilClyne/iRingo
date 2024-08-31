@@ -1,4 +1,3 @@
-
 export default class ForecastNextHour {
     Name = "forecastNextHour";
     Version = "v1.1.10";

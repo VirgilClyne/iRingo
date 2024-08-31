@@ -1,37 +1,30 @@
 import ENV from "../ENV/ENV.mjs";
+import parseWeatherKitURL from "../function/parseWeatherKitURL.mjs"
 import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class WAQI {
-    constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
+    constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.1.19";
+        this.Version = "1.2.0";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        this.url = $request.url;
-        const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
-        const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
-        this.version = options?.version ?? Parameters?.version;
-        this.language = options?.language ?? Parameters?.language;
-        this.latitude = options?.latitude ?? Parameters?.latitude;
-        this.longitude = options?.longitude ?? Parameters?.longitude;
-        this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
-        //Object.assign(this, options);
-        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
+        const Parameters = parseWeatherKitURL(options.url);
+        Object.assign(this, Parameters, options);
         this.$ = $;
     };
 
     #Configs = {
-		"Pollutants": {
-			"co": "CO",
-			"no": "NO",
-			"no2": "NO2",
-			"so2": "SO2",
-			"o3": "OZONE",
-			"nox": "NOX",
-			"pm25": "PM2_5",
-			"pm10": "PM10",
-			"other": "NOT_AVAILABLE"
-		},
-	};
+        "Pollutants": {
+            "co": "CO",
+            "no": "NO",
+            "no2": "NO2",
+            "so2": "SO2",
+            "o3": "OZONE",
+            "nox": "NOX",
+            "pm25": "PM2_5",
+            "pm10": "PM10",
+            "other": "NOT_AVAILABLE"
+        },
+    };
 
     async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
         this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
@@ -53,7 +46,7 @@ export default class WAQI {
                                 "metadata": {
                                     "attributionUrl": request.url,
                                     "expireTime": timeStamp + 60 * 60,
-                                    //"language": this.language,
+                                    "language": `${this.language}-${this.country}`,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -83,7 +76,7 @@ export default class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
-                                    //"language": this.language,
+                                    "language": `${this.language}-${this.country}`,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
                                     "expireTime": timeStamp + 60 * 60,
@@ -120,7 +113,7 @@ export default class WAQI {
         };
     };
 
-    async Token(stationId = new Number, header = { "Content-Type": "application/json" }){
+    async Token(stationId = new Number, header = { "Content-Type": "application/json" }) {
         this.$.log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
@@ -184,7 +177,7 @@ export default class WAQI {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
                                             "expireTime": timeStamp + 60 * 60,
-                                            //"language": this.language,
+                                            "language": `${this.language}-${this.country}`,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -240,7 +233,7 @@ export default class WAQI {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
                             "expireTime": timeStamp + 60 * 60,
-                            //"language": this.language,
+                            "language": `${this.language}-${this.country}`,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),

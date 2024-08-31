@@ -19285,37 +19285,49 @@ class WeatherKit2 {
 
 }
 
+function parseWeatherKitURL(url = $request.url) {
+    console.log(`☑️ parseWeatherKitURL`, "");
+    const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.?\d*)\/(?<longitude>-?\d+\.?\d*)(\?.*(?<country>country=[A-Z]{2})?.*)?/i;
+    const LanguageRegExp = /^(?<language>\w{2})(-\w+)?-(?<country>[A-Z]{2})$/i;
+    const Parameters = (url?.pathname || url).match(RegExp)?.groups;
+    let result = {
+        "version": Parameters?.version,
+        "language": Parameters?.language,
+        "latitude": Parameters?.latitude,
+        "longitude": Parameters?.longitude,
+        "country": Parameters?.country || url?.searchParams?.get("country")
+    };
+    //console.log(JSON.stringify(result, null, 2), "");
+    const LanguageParameters = result.language.match(LanguageRegExp)?.groups;
+    result.language = LanguageParameters.language;
+    result.country = result.country || LanguageParameters.country;
+    console.log(`✅ parseWeatherKitURL\n🟧version: ${result.version} 🟧language: ${result.language} 🟧country: ${result.country}\n🟧latitude: ${result.latitude} 🟧longitude: ${result.longitude}\n`, "");
+    return result;
+}
+
 class WAQI {
-    constructor($ = new ENV("WAQI"), options = { "url": new URL() }) {
+    constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.1.19";
+        this.Version = "1.2.0";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        this.url = $request.url;
-        const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
-        const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
-        this.version = options?.version ?? Parameters?.version;
-        this.language = options?.language ?? Parameters?.language;
-        this.latitude = options?.latitude ?? Parameters?.latitude;
-        this.longitude = options?.longitude ?? Parameters?.longitude;
-        this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
-        //Object.assign(this, options);
-        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
+        const Parameters = parseWeatherKitURL(options.url);
+        Object.assign(this, Parameters, options);
         this.$ = $;
     };
 
     #Configs = {
-		"Pollutants": {
-			"co": "CO",
-			"no": "NO",
-			"no2": "NO2",
-			"so2": "SO2",
-			"o3": "OZONE",
-			"nox": "NOX",
-			"pm25": "PM2_5",
-			"pm10": "PM10",
-			"other": "NOT_AVAILABLE"
-		},
-	};
+        "Pollutants": {
+            "co": "CO",
+            "no": "NO",
+            "no2": "NO2",
+            "so2": "SO2",
+            "o3": "OZONE",
+            "nox": "NOX",
+            "pm25": "PM2_5",
+            "pm10": "PM10",
+            "other": "NOT_AVAILABLE"
+        },
+    };
 
     async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
         this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
@@ -19337,7 +19349,7 @@ class WAQI {
                                 "metadata": {
                                     "attributionUrl": request.url,
                                     "expireTime": timeStamp + 60 * 60,
-                                    //"language": this.language,
+                                    "language": `${this.language}-${this.country}`,
                                     "latitude": body?.d?.[0]?.geo?.[0],
                                     "longitude": body?.d?.[0]?.geo?.[1],
                                     "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19367,7 +19379,7 @@ class WAQI {
                             airQuality = {
                                 "metadata": {
                                     "attributionUrl": request.url,
-                                    //"language": this.language,
+                                    "language": `${this.language}-${this.country}`,
                                     "latitude": body?.data?.stations?.[0]?.geo?.[0],
                                     "longitude": body?.data?.stations?.[0]?.geo?.[1],
                                     "expireTime": timeStamp + 60 * 60,
@@ -19403,7 +19415,7 @@ class WAQI {
             return airQuality;
         }    };
 
-    async Token(stationId = new Number, header = { "Content-Type": "application/json" }){
+    async Token(stationId = new Number, header = { "Content-Type": "application/json" }) {
         this.$.log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
@@ -19466,7 +19478,7 @@ class WAQI {
                                         "metadata": {
                                             "attributionUrl": body?.rxs?.obs?.[0]?.msg?.city?.url,
                                             "expireTime": timeStamp + 60 * 60,
-                                            //"language": this.language,
+                                            "language": `${this.language}-${this.country}`,
                                             "latitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[0],
                                             "longitude": body?.rxs?.obs?.[0]?.msg?.city?.geo?.[1],
                                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19521,7 +19533,7 @@ class WAQI {
                         "metadata": {
                             "attributionUrl": body?.data?.city?.url,
                             "expireTime": timeStamp + 60 * 60,
-                            //"language": this.language,
+                            "language": `${this.language}-${this.country}`,
                             "latitude": body?.data?.city?.geo?.[0],
                             "longitude": body?.data?.city?.geo?.[1],
                             "providerLogo": providerNameToLogo("WAQI", this.version),
@@ -19946,20 +19958,12 @@ class ForecastNextHour {
 }
 
 class ColorfulClouds {
-    constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
+    constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.6.13";
+        this.Version = "1.7.0";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        this.url = $request.url;
-        const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
-        const Parameters = (options?.url?.pathname ?? options?.url).match(RegExp)?.groups;
-        this.version = options?.version ?? Parameters?.version;
-        this.language = options?.language ?? Parameters?.language;
-        this.latitude = options?.latitude ?? Parameters?.latitude;
-        this.longitude = options?.longitude ?? Parameters?.longitude;
-        this.country = options?.country ?? Parameters?.countryCode ?? options?.url?.searchParams?.get("country");
-        //Object.assign(this, options);
-        $.log(`\n🟧 version: ${this.version} language: ${this.language}\n🟧 latitude: ${this.latitude} longitude: ${this.longitude}\n🟧 country: ${this.country}\n`, "");
+        const Parameters = parseWeatherKitURL(options.url);
+        Object.assign(this, Parameters, options, $);
         this.$ = $;
     };
 
@@ -19984,7 +19988,7 @@ class ColorfulClouds {
                                 "metadata": {
                                     "attributionUrl": "https://www.caiyunapp.com/h5",
                                     "expireTime": timeStamp + 60 * 60,
-                                    "language": "zh-CN", // body?.lang,
+                                    "language": `${this.language}-${this.country}`, // body?.lang,
                                     "latitude": body?.location?.[0],
                                     "longitude": body?.location?.[1],
                                     "providerLogo": providerNameToLogo("彩云天气", this.version),
