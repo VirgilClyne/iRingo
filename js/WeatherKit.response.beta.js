@@ -18619,8 +18619,8 @@ class Weather {
 
 class WeatherKit2 {
 	constructor(options = {}) {
-		this.Name = "weatherKit2";
-		this.Version = "1.0.6";
+		this.Name = "WeatherKit2";
+		this.Version = "1.0.7";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
 		Object.assign(this, options);
 		this.weatherData = Weather.getRootAsWeather(this.bb);
@@ -18819,7 +18819,7 @@ class WeatherKit2 {
 			case "airQuality":
 				metadata = airQualityData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"categoryIndex": airQualityData?.categoryIndex(),
 					"index": airQualityData?.index(),
 					"isSignificant": airQualityData?.isSignificant(),
@@ -18837,7 +18837,7 @@ class WeatherKit2 {
 			case "currentWeather":
 				metadata = CurrentWeatherData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"asOf": CurrentWeatherData?.asOf(),
 					"cloudCover": CurrentWeatherData?.cloudCover(),
 					"cloudCoverHighAltPct": CurrentWeatherData?.cloudCoverHighAltPct(),
@@ -18924,7 +18924,7 @@ class WeatherKit2 {
 			case "forecastDaily":
 				metadata = DailyForecastData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"days": [],
 				};
 				for (let i = 0; i < DailyForecastData?.daysLength(); i++) {
@@ -19074,7 +19074,7 @@ class WeatherKit2 {
 			case "forecastHourly":
 				metadata = HourlyForecastData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"hours": [],
 				};
 				for (let i = 0; i < HourlyForecastData?.hoursLength(); i++) data.hours.push({
@@ -19109,7 +19109,7 @@ class WeatherKit2 {
 			case "forecastNextHour":
 				metadata = NextHourForecastData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"condition": [],
 					"forecastEnd": NextHourForecastData?.forecastEnd(),
 					"forecastStart": NextHourForecastData?.forecastStart(),
@@ -19144,7 +19144,7 @@ class WeatherKit2 {
 					"startTime": NextHourForecastData?.summary(i)?.startTime(),
 				});
 				break;
-			case "matadata":
+			case "metadata":
 				data = {
 					"attributionUrl": metadata?.attributionUrl(),
 					"expireTime": metadata?.expireTime(),
@@ -19156,19 +19156,13 @@ class WeatherKit2 {
 					"readTime": metadata?.readTime(),
 					"reportedTime": metadata?.reportedTime(),
 					"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
-					//"unknown9": metadata?.unknown9(),
 					"sourceType": SourceType[metadata?.sourceType()],
-					//"unknown11": metadata?.unknown11(),
-					//"unknown12": metadata?.unknown12(),
-					//"unknown13": metadata?.unknown13(),
-					//"unknown14": metadata?.unknown14(),
-					//"unknown15": metadata?.unknown15(),
 				};
 				break;
 			case "news":
 				metadata = newsData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"placements": [],
 				};
 				for (let i = 0; i < newsData?.placementsLength(); i++) {
@@ -19196,7 +19190,7 @@ class WeatherKit2 {
 			case "weatherAlerts":
 				metadata = WeatherAlertCollectionData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"alerts": [],
 					"detailsUrl": WeatherAlertCollectionData?.detailsUrl(),
 				};
@@ -19235,7 +19229,7 @@ class WeatherKit2 {
 			case "weatherChanges":
 				metadata = weatherChangesData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"changes": [],
 					"forecastEnd": weatherChangesData?.forecastEnd(),
 					"forecastStart": weatherChangesData?.forecastStart(),
@@ -19257,7 +19251,7 @@ class WeatherKit2 {
 			case "historicalComparisons":
 				metadata = historicalComparisonsData?.metadata();
 				data = {
-					"metadata": this.decode("matadata", metadata),
+					"metadata": this.decode("metadata", metadata),
 					"comparisons": [],
 				};
 				for (let i = 0; i < historicalComparisonsData?.comparisonsLength(); i++) {
