@@ -5,7 +5,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.6.10";
+        this.Version = "1.6.12";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -36,7 +36,7 @@ export default class ColorfulClouds {
                         case "ok":
                             body.result.minutely.probability = body.result.minutely.probability.map(probability => Math.round(probability * 100));
                             let minuteStemp = new Date(body?.server_time * 1000).setSeconds(0, 0);
-                            minuteStemp = minuteStemp.valueOf() / 1000;
+                            minuteStemp = minuteStemp.valueOf() / 1000 - 60;
                             forecastNextHour = {
                                 "metadata": {
                                     "attributionUrl": "https://www.caiyunapp.com/h5",
@@ -69,7 +69,7 @@ export default class ColorfulClouds {
                                 }),
                                 "summary": []
                             };
-                            forecastNextHour.minutes.length = 90;
+                            forecastNextHour.minutes.length = 85;
                             forecastNextHour.forecastEnd = minuteStemp + 60 * forecastNextHour.minutes.length;
                             forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.result?.minutely?.description);
                             forecastNextHour.summary = ForecastNextHour.Summary(forecastNextHour.minutes);
