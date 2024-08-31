@@ -1,7 +1,7 @@
 
 export default class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.1.6";
+    Version = "v1.1.10";
     Author = "iRingo";
 
     static #Configs = {
@@ -189,7 +189,7 @@ export default class ForecastNextHour {
                     };
                     break;
                 case Length - 1:
-                    delete Summary.endTime;
+                    Summary.endTime = 0;// ⚠️空值必须写零！
                     switch (Summary.condition) {
                         case "CLEAR":
                             break;
@@ -252,17 +252,16 @@ export default class ForecastNextHour {
                                                 case Condition.endCondition: // ✅与begin相同
                                                     Condition.parameters = [];
                                                     Conditions.push({ ...Condition });
-                                                    // ✅CONSTANT
-                                                    Condition.endCondition = minute.condition;
                                                     break;
                                                 default: // ✅与begin不同
-                                                    Condition.endCondition = minute.condition;
+                                                    Condition.endCondition = previousMinute.condition;
                                                     Condition.parameters = [{ "date": Condition.endTime, "type": "FIRST_AT" }];
                                                     Conditions.push({ ...Condition });
                                                     // ✅CONSTANT
                                                     Condition.beginCondition = minute.condition;
                                                     break;
                                             };
+                                            Condition.endCondition = minute.condition;
                                             Condition.startTime = Condition.endTime; // ✅更新开始时间
                                             Condition.parameters = [];
                                             break;
@@ -333,20 +332,14 @@ export default class ForecastNextHour {
                             Condition.beginCondition = "CLEAR";
                             Condition.endCondition = "CLEAR";
                             Condition.forecastToken = "CLEAR";
-                            delete Condition.endTime;
+                            Condition.endTime = 0; // ⚠️空值必须写零！
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
                         case "CONSTANT": // ✅当前RAIN
                             // ✅确定CONSTANT
-                            //Condition.endTime = minute.startTime; // ✅更新结束时间
-                            //Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
-                            //Conditions.push({ ...Condition });
-                            // ✅补充CONSTANT
-                            //Condition.beginCondition = minute.condition;
                             Condition.endCondition = minute.condition;
-                            //Condition.startTime = Condition.endTime;
-                            delete Condition.endTime;
+                            Condition.endTime = 0; // ⚠️空值必须写零！
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
@@ -356,7 +349,7 @@ export default class ForecastNextHour {
                             // ✅补充CONSTANT
                             Condition.forecastToken = "CONSTANT";
                             Condition.startTime = Condition.endTime;
-                            delete Condition.endTime;
+                            Condition.endTime = 0; // ⚠️空值必须写零！
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
@@ -368,7 +361,7 @@ export default class ForecastNextHour {
                             Condition.endCondition = "CLEAR";
                             Condition.forecastToken = "CLEAR";
                             Condition.startTime = Condition.endTime;
-                            delete Condition.endTime;
+                            Condition.endTime = 0;// ⚠️空值必须写零！
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
                             break;
