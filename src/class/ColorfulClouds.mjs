@@ -5,7 +5,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL() }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.6.12";
+        this.Version = "1.6.13";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = $request.url;
         const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.\d+)\/(?<longitude>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
@@ -41,7 +41,7 @@ export default class ColorfulClouds {
                                 "metadata": {
                                     "attributionUrl": "https://www.caiyunapp.com/h5",
                                     "expireTime": timeStamp + 60 * 60,
-                                    //"language": body?.lang,
+                                    "language": "zh-CN", // body?.lang,
                                     "latitude": body?.location?.[0],
                                     "longitude": body?.location?.[1],
                                     "providerLogo": providerNameToLogo("彩云天气", this.version),
