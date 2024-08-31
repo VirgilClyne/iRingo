@@ -3,7 +3,7 @@ import * as WK2 from "../flatbuffers/wk2.js";
 export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.4";
+		this.Version = "1.0.5";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
 		Object.assign(this, options);
 		this.weatherData = WK2.Weather.getRootAsWeather(this.bb);
@@ -550,8 +550,7 @@ export default class WeatherKit2 {
 					"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
 					//"unknown9": metadata?.unknown9(),
 					"sourceType": WK2.SourceType[metadata?.sourceType()],
-					"unknown11": metadata?.unknown11(),
-					//"temporarilyUnavailable": metadata?.temporarilyUnavailable(),
+					//"unknown11": metadata?.unknown11(),
 					//"unknown12": metadata?.unknown12(),
 					//"unknown13": metadata?.unknown13(),
 					//"unknown14": metadata?.unknown14(),
