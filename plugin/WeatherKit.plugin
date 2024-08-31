@@ -6,7 +6,6 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🌤-天气服务
 #!icon=https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-96x96_2x.png
 #!tag= iRingo
-#!system_version=18.0
 
 [Argument]
 Switch = switch,true,tag=总功能开关,desc=是否启用此APP修改
@@ -19,8 +18,8 @@ API.ColorfulClouds.Token = input,"123456789123456789abcdefghijklmnopqrstuv",tag=
 DOMAIN,weather-analytics-events.apple.com,REJECT-DROP
 
 [Script]
-http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/ requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js, tag=🌤 WeatherKit.api.v1.availability.response, argument=Switch={Switch}
-http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/ requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js, tag=🌤 WeatherKit.api.v2.weather.response, argument=Switch={Switch}&NextHour.Provider={NextHour.Provider}&AQI.Provider={AQI.Provider}&API.WAQI.Token={API.WAQI.Token}&API.ColorfulClouds.Token={API.ColorfulClouds.Token}
+http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/ requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js, tag=🌤 WeatherKit.api.v1.availability.response, argument=
+http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/ requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js, tag=🌤 WeatherKit.api.v2.weather.response, argument=
 
 [MITM]
 hostname = weatherkit.apple.com
