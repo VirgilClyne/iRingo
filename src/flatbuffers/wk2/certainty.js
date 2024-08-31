@@ -3,7 +3,7 @@
 export var Certainty;
 (function (Certainty) {
     Certainty[Certainty["UNKNOWN"] = 0] = "UNKNOWN";
-    Certainty[Certainty["UNKNOWN1"] = 1] = "UNKNOWN1";
+    Certainty[Certainty["OBSERVED"] = 1] = "OBSERVED";
     Certainty[Certainty["LIKELY"] = 2] = "LIKELY";
     Certainty[Certainty["POSSIBLE"] = 3] = "POSSIBLE";
     Certainty[Certainty["UNKNOWN4"] = 4] = "UNKNOWN4";

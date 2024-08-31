@@ -6,7 +6,7 @@ export var ResponseType;
     ResponseType[ResponseType["UNKNOWN1"] = 1] = "UNKNOWN1";
     ResponseType[ResponseType["UNKNOWN2"] = 2] = "UNKNOWN2";
     ResponseType[ResponseType["UNKNOWN3"] = 3] = "UNKNOWN3";
-    ResponseType[ResponseType["UNKNOWN4"] = 4] = "UNKNOWN4";
+    ResponseType[ResponseType["EXECUTE"] = 4] = "EXECUTE";
     ResponseType[ResponseType["UNKNOWN5"] = 5] = "UNKNOWN5";
     ResponseType[ResponseType["MONITOR"] = 6] = "MONITOR";
     ResponseType[ResponseType["UNKNOWN7"] = 7] = "UNKNOWN7";

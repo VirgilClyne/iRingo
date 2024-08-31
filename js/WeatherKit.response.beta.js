@@ -15338,12 +15338,8 @@ class Metadata {
         const offset = this.bb.__offset(this.bb_pos, 24);
         return offset ? this.bb.readInt8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
     }
-    unknown11() {
-        const offset = this.bb.__offset(this.bb_pos, 26);
-        return offset ? this.bb.readInt32(this.bb_pos + offset) : 0;
-    }
     static startMetadata(builder) {
-        builder.startObject(12);
+        builder.startObject(11);
     }
     static addAttributionUrl(builder, attributionUrlOffset) {
         builder.addFieldOffset(0, attributionUrlOffset, 0);
@@ -15378,14 +15374,11 @@ class Metadata {
     static addSourceType(builder, sourceType) {
         builder.addFieldInt8(10, sourceType, SourceType.APPLE_INTERNAL);
     }
-    static addUnknown11(builder, unknown11) {
-        builder.addFieldInt32(11, unknown11, 0);
-    }
     static endMetadata(builder) {
         const offset = builder.endObject();
         return offset;
     }
-    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, temporarilyUnavailable, sourceType, unknown11) {
+    static createMetadata(builder, attributionUrlOffset, expireTime, languageOffset, latitude, longitude, providerLogoOffset, providerNameOffset, readTime, reportedTime, temporarilyUnavailable, sourceType) {
         Metadata.startMetadata(builder);
         Metadata.addAttributionUrl(builder, attributionUrlOffset);
         Metadata.addExpireTime(builder, expireTime);
@@ -15398,7 +15391,6 @@ class Metadata {
         Metadata.addReportedTime(builder, reportedTime);
         Metadata.addTemporarilyUnavailable(builder, temporarilyUnavailable);
         Metadata.addSourceType(builder, sourceType);
-        Metadata.addUnknown11(builder, unknown11);
         return Metadata.endMetadata(builder);
     }
 }
@@ -15730,7 +15722,7 @@ var BaselineType;
 var Certainty;
 (function (Certainty) {
     Certainty[Certainty["UNKNOWN"] = 0] = "UNKNOWN";
-    Certainty[Certainty["UNKNOWN1"] = 1] = "UNKNOWN1";
+    Certainty[Certainty["OBSERVED"] = 1] = "OBSERVED";
     Certainty[Certainty["LIKELY"] = 2] = "LIKELY";
     Certainty[Certainty["POSSIBLE"] = 3] = "POSSIBLE";
     Certainty[Certainty["UNKNOWN4"] = 4] = "UNKNOWN4";
@@ -18096,7 +18088,7 @@ var ResponseType;
     ResponseType[ResponseType["UNKNOWN1"] = 1] = "UNKNOWN1";
     ResponseType[ResponseType["UNKNOWN2"] = 2] = "UNKNOWN2";
     ResponseType[ResponseType["UNKNOWN3"] = 3] = "UNKNOWN3";
-    ResponseType[ResponseType["UNKNOWN4"] = 4] = "UNKNOWN4";
+    ResponseType[ResponseType["EXECUTE"] = 4] = "EXECUTE";
     ResponseType[ResponseType["UNKNOWN5"] = 5] = "UNKNOWN5";
     ResponseType[ResponseType["MONITOR"] = 6] = "MONITOR";
     ResponseType[ResponseType["UNKNOWN7"] = 7] = "UNKNOWN7";

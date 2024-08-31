@@ -4,7 +4,7 @@
 
 export enum Certainty {
   UNKNOWN = 0,
-  UNKNOWN1 = 1,
+  OBSERVED = 1,
   LIKELY = 2,
   POSSIBLE = 3,
   UNKNOWN4 = 4,

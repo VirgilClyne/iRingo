@@ -88,13 +88,8 @@ sourceType():SourceType {
   return offset ? this.bb!.readInt8(this.bb_pos + offset) : SourceType.APPLE_INTERNAL;
 }
 
-unknown11():number {
-  const offset = this.bb!.__offset(this.bb_pos, 26);
-  return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
-}
-
 static startMetadata(builder:flatbuffers.Builder) {
-  builder.startObject(12);
+  builder.startObject(11);
 }
 
 static addAttributionUrl(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset) {
@@ -141,16 +136,12 @@ static addSourceType(builder:flatbuffers.Builder, sourceType:SourceType) {
   builder.addFieldInt8(10, sourceType, SourceType.APPLE_INTERNAL);
 }
 
-static addUnknown11(builder:flatbuffers.Builder, unknown11:number) {
-  builder.addFieldInt32(11, unknown11, 0);
-}
-
 static endMetadata(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, temporarilyUnavailable:boolean, sourceType:SourceType, unknown11:number):flatbuffers.Offset {
+static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuffers.Offset, expireTime:number, languageOffset:flatbuffers.Offset, latitude:number, longitude:number, providerLogoOffset:flatbuffers.Offset, providerNameOffset:flatbuffers.Offset, readTime:number, reportedTime:number, temporarilyUnavailable:boolean, sourceType:SourceType):flatbuffers.Offset {
   Metadata.startMetadata(builder);
   Metadata.addAttributionUrl(builder, attributionUrlOffset);
   Metadata.addExpireTime(builder, expireTime);
@@ -163,7 +154,6 @@ static createMetadata(builder:flatbuffers.Builder, attributionUrlOffset:flatbuff
   Metadata.addReportedTime(builder, reportedTime);
   Metadata.addTemporarilyUnavailable(builder, temporarilyUnavailable);
   Metadata.addSourceType(builder, sourceType);
-  Metadata.addUnknown11(builder, unknown11);
   return Metadata.endMetadata(builder);
 }
 }
