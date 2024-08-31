@@ -1,7 +1,7 @@
 
 export default class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.0.3";
+    Version = "v1.0.4";
     Author = "iRingo";
 
     static #Configs = {
@@ -308,13 +308,13 @@ export default class ForecastNextHour {
                             break;
                         case "CONSTANT": // ✅当前RAIN
                             // ✅确定CONSTANT
-                            Condition.endTime = minute.startTime; // ✅更新结束时间
-                            Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
-                            Conditions.push({ ...Condition });
+                            //Condition.endTime = minute.startTime; // ✅更新结束时间
+                            //Condition.parameters.push({ "date": Condition.endTime, "type": "FIRST_AT" });
+                            //Conditions.push({ ...Condition });
                             // ✅补充CONSTANT
-                            Condition.beginCondition = minute.condition;
+                            //Condition.beginCondition = minute.condition;
                             Condition.endCondition = minute.condition;
-                            Condition.startTime = Condition.endTime;
+                            //Condition.startTime = Condition.endTime;
                             delete Condition.endTime;
                             Condition.parameters = [];
                             Conditions.push({ ...Condition });
@@ -385,7 +385,7 @@ export default class ForecastNextHour {
                 perceivedPrecipitationIntensity = Math.min(10, precipitationIntensity) / 3 * level;
                 break;
         };
-        perceivedPrecipitationIntensity = Math.round(perceivedPrecipitationIntensity * 1000) / 1000; // 三位小数
+        perceivedPrecipitationIntensity = Math.round(Math.min(3, perceivedPrecipitationIntensity) * 1000) / 1000; // 三位小数
         return perceivedPrecipitationIntensity;
     };
 };
