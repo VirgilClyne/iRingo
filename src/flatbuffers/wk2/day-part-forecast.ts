@@ -4,9 +4,9 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { ConditionCode } from '../wk2/condition-code.js';
 import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
+import { WeatherCondition } from '../wk2/weather-condition.js';
 
 
 export class DayPartForecast {
@@ -57,9 +57,9 @@ cloudCoverHighAltPct():number {
   return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
-conditionCode():ConditionCode {
+conditionCode():WeatherCondition {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
 }
 
 humidity():number {
@@ -175,8 +175,8 @@ static addCloudCoverHighAltPct(builder:flatbuffers.Builder, cloudCoverHighAltPct
   builder.addFieldInt8(5, cloudCoverHighAltPct, 0);
 }
 
-static addConditionCode(builder:flatbuffers.Builder, conditionCode:ConditionCode) {
-  builder.addFieldInt8(6, conditionCode, ConditionCode.CLEAR);
+static addConditionCode(builder:flatbuffers.Builder, conditionCode:WeatherCondition) {
+  builder.addFieldInt8(6, conditionCode, WeatherCondition.CLEAR);
 }
 
 static addHumidity(builder:flatbuffers.Builder, humidity:number) {
@@ -260,7 +260,7 @@ static endDayPartForecast(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createDayPartForecast(builder:flatbuffers.Builder, forecastStart:number, forecastEnd:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:ConditionCode, humidity:number, humidityMax:number, humidityMin:number, precipitationAmount:number, precipitationAmountByTypeOffset:flatbuffers.Offset, precipitationChance:number, precipitationType:PrecipitationType, snowfallAmount:number, temperatureMax:number, temperatureMin:number, visibilityMax:number, visibilityMin:number, windDirection:number, windGustSpeedMax:number, windSpeed:number, windSpeedMax:number):flatbuffers.Offset {
+static createDayPartForecast(builder:flatbuffers.Builder, forecastStart:number, forecastEnd:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:WeatherCondition, humidity:number, humidityMax:number, humidityMin:number, precipitationAmount:number, precipitationAmountByTypeOffset:flatbuffers.Offset, precipitationChance:number, precipitationType:PrecipitationType, snowfallAmount:number, temperatureMax:number, temperatureMin:number, visibilityMax:number, visibilityMin:number, windDirection:number, windGustSpeedMax:number, windSpeed:number, windSpeedMax:number):flatbuffers.Offset {
   DayPartForecast.startDayPartForecast(builder);
   DayPartForecast.addForecastStart(builder, forecastStart);
   DayPartForecast.addForecastEnd(builder, forecastEnd);

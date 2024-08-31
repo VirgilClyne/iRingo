@@ -3,7 +3,7 @@ import * as WK2 from "../flatbuffers/wk2.js";
 export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "weatherKit2";
-		this.Version = "1.0.5";
+		this.Version = "1.0.6";
 		console.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
 		Object.assign(this, options);
 		this.weatherData = WK2.Weather.getRootAsWeather(this.bb);
@@ -40,7 +40,7 @@ export default class WeatherKit2 {
 				let precipitationAmountPrevious1hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious1hByTypeVector(this.builder, data?.precipitationAmountPrevious1hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
 				let precipitationAmountPrevious24hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious24hByTypeVector(this.builder, data?.precipitationAmountPrevious24hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
 				let precipitationAmountPrevious6hByTypeOffset = WK2.CurrentWeatherData.createPrecipitationAmountPrevious6hByTypeVector(this.builder, data?.precipitationAmountPrevious6hByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-				offset = WK2.CurrentWeatherData.createCurrentWeatherData(this.builder, metadataOffset, data?.asOf, data?.cloudCover, data?.cloudCoverLowAltPct, data?.cloudCoverMidAltPct, data?.cloudCoverHighAltPct, WK2.ConditionCode[data?.conditionCode], data?.daylight, data?.humidity, data?.perceivedPrecipitationIntensity, data?.precipitationAmount1h, data?.precipitationAmount6h, data?.precipitationAmount24h, data?.precipitationAmountNext1h, data?.precipitationAmountNext6h, data?.precipitationAmountNext24h, precipitationAmountNext1hByTypeOffset, precipitationAmountNext6hByTypeOffset, precipitationAmountNext24hByTypeOffset, precipitationAmountPrevious1hByTypeOffset, precipitationAmountPrevious6hByTypeOffset, precipitationAmountPrevious24hByTypeOffset, data?.precipitationIntensity, data?.pressure, WK2.PressureTrend[data?.pressureTrend], data?.snowfallAmount1h, data?.snowfallAmount6h, data?.snowfallAmount24h, data?.snowfallAmountNext1h, data?.snowfallAmountNext6h, data?.snowfallAmountNext24h, data?.temperature, data?.temperatureApparent, data?.unknown34, data?.temperatureDewPoint, data?.uvIndex, data?.visibility, data?.windDirection, data?.windGust, data?.windSpeed);
+				offset = WK2.CurrentWeatherData.createCurrentWeatherData(this.builder, metadataOffset, data?.asOf, data?.cloudCover, data?.cloudCoverLowAltPct, data?.cloudCoverMidAltPct, data?.cloudCoverHighAltPct, WK2.WeatherCondition[data?.conditionCode], data?.daylight, data?.humidity, data?.perceivedPrecipitationIntensity, data?.precipitationAmount1h, data?.precipitationAmount6h, data?.precipitationAmount24h, data?.precipitationAmountNext1h, data?.precipitationAmountNext6h, data?.precipitationAmountNext24h, precipitationAmountNext1hByTypeOffset, precipitationAmountNext6hByTypeOffset, precipitationAmountNext24hByTypeOffset, precipitationAmountPrevious1hByTypeOffset, precipitationAmountPrevious6hByTypeOffset, precipitationAmountPrevious24hByTypeOffset, data?.precipitationIntensity, data?.pressure, WK2.PressureTrend[data?.pressureTrend], data?.snowfallAmount1h, data?.snowfallAmount6h, data?.snowfallAmount24h, data?.snowfallAmountNext1h, data?.snowfallAmountNext6h, data?.snowfallAmountNext24h, data?.temperature, data?.temperatureApparent, data?.unknown34, data?.temperatureDewPoint, data?.uvIndex, data?.visibility, data?.windDirection, data?.windGust, data?.windSpeed);
 				break;
 			case "forecastDaily":
 				let daysOffsets = data?.days?.map(day => {
@@ -48,20 +48,20 @@ export default class WeatherKit2 {
 					Offsets.precipitationAmountByTypeOffest = WK2.DayWeatherConditions.createPrecipitationAmountByTypeVector(this.builder, day?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
 					if (day?.daytimeForecast) {
 						Offsets.daytimeForecastPrecipitationAmountByTypeOffest = WK2.DayPartForecast.createPrecipitationAmountByTypeVector(this.builder, day?.daytimeForecast?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-						Offsets.daytimeForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.daytimeForecast?.forecastStart, day?.daytimeForecast?.forecastEnd, day?.daytimeForecast?.cloudCover, day?.daytimeForecast?.cloudCoverLowAltPct, day?.daytimeForecast?.cloudCoverMidAltPct, day?.daytimeForecast?.cloudCoverHighAltPct, WK2.ConditionCode[day?.daytimeForecast?.conditionCode], day?.daytimeForecast?.humidity, day?.daytimeForecast?.humidityMax, day?.daytimeForecast?.humidityMin, day?.daytimeForecast?.precipitationAmount, Offsets.daytimeForecastPrecipitationAmountByTypeOffest, day?.daytimeForecast?.precipitationChance, WK2.PrecipitationType[day?.daytimeForecast?.precipitationType], day?.daytimeForecast?.snowfallAmount, day?.daytimeForecast?.temperatureMax, day?.daytimeForecast?.temperatureMin, day?.daytimeForecast?.visibilityMax, day?.daytimeForecast?.visibilityMin, day?.daytimeForecast?.windDirection, day?.daytimeForecast?.windGustSpeedMax, day?.daytimeForecast?.windSpeed, day?.daytimeForecast?.windSpeedMax);
+						Offsets.daytimeForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.daytimeForecast?.forecastStart, day?.daytimeForecast?.forecastEnd, day?.daytimeForecast?.cloudCover, day?.daytimeForecast?.cloudCoverLowAltPct, day?.daytimeForecast?.cloudCoverMidAltPct, day?.daytimeForecast?.cloudCoverHighAltPct, WK2.WeatherCondition[day?.daytimeForecast?.conditionCode], day?.daytimeForecast?.humidity, day?.daytimeForecast?.humidityMax, day?.daytimeForecast?.humidityMin, day?.daytimeForecast?.precipitationAmount, Offsets.daytimeForecastPrecipitationAmountByTypeOffest, day?.daytimeForecast?.precipitationChance, WK2.PrecipitationType[day?.daytimeForecast?.precipitationType], day?.daytimeForecast?.snowfallAmount, day?.daytimeForecast?.temperatureMax, day?.daytimeForecast?.temperatureMin, day?.daytimeForecast?.visibilityMax, day?.daytimeForecast?.visibilityMin, day?.daytimeForecast?.windDirection, day?.daytimeForecast?.windGustSpeedMax, day?.daytimeForecast?.windSpeed, day?.daytimeForecast?.windSpeedMax);
 					};
 					if (day?.overnightForecast) {
 						Offsets.overnightForecastPrecipitationAmountByTypeOffest = WK2.DayPartForecast.createPrecipitationAmountByTypeVector(this.builder, day?.overnightForecast?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-						Offsets.overnightForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.overnightForecast?.forecastStart, day?.overnightForecast?.forecastEnd, day?.overnightForecast?.cloudCover, day?.overnightForecast?.cloudCoverLowAltPct, day?.overnightForecast?.cloudCoverMidAltPct, day?.overnightForecast?.cloudCoverHighAltPct, WK2.ConditionCode[day?.overnightForecast?.conditionCode], day?.overnightForecast?.humidity, day?.overnightForecast?.humidityMax, day?.overnightForecast?.humidityMin, day?.overnightForecast?.precipitationAmount, Offsets.overnightForecastPrecipitationAmountByTypeOffest, day?.overnightForecast?.precipitationChance, WK2.PrecipitationType[day?.overnightForecast?.precipitationType], day?.overnightForecast?.snowfallAmount, day?.overnightForecast?.temperatureMax, day?.overnightForecast?.temperatureMin, day?.overnightForecast?.visibilityMax, day?.overnightForecast?.visibilityMin, day?.overnightForecast?.windDirection, day?.overnightForecast?.windGustSpeedMax, day?.overnightForecast?.windSpeed, day?.overnightForecast?.windSpeedMax);
+						Offsets.overnightForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.overnightForecast?.forecastStart, day?.overnightForecast?.forecastEnd, day?.overnightForecast?.cloudCover, day?.overnightForecast?.cloudCoverLowAltPct, day?.overnightForecast?.cloudCoverMidAltPct, day?.overnightForecast?.cloudCoverHighAltPct, WK2.WeatherCondition[day?.overnightForecast?.conditionCode], day?.overnightForecast?.humidity, day?.overnightForecast?.humidityMax, day?.overnightForecast?.humidityMin, day?.overnightForecast?.precipitationAmount, Offsets.overnightForecastPrecipitationAmountByTypeOffest, day?.overnightForecast?.precipitationChance, WK2.PrecipitationType[day?.overnightForecast?.precipitationType], day?.overnightForecast?.snowfallAmount, day?.overnightForecast?.temperatureMax, day?.overnightForecast?.temperatureMin, day?.overnightForecast?.visibilityMax, day?.overnightForecast?.visibilityMin, day?.overnightForecast?.windDirection, day?.overnightForecast?.windGustSpeedMax, day?.overnightForecast?.windSpeed, day?.overnightForecast?.windSpeedMax);
 					};
 					if (day?.restOfDayForecast) {
 						Offsets.restOfDayForecastPrecipitationAmountByTypeOffest = WK2.DayPartForecast.createPrecipitationAmountByTypeVector(this.builder, day?.restOfDayForecast?.precipitationAmountByType?.map(p => WK2.PrecipitationAmountByType.createPrecipitationAmountByType(this.builder, WK2.PrecipitationType[p.precipitationType], p.expected, p.minimumSnow, p.maximumSnow, p.expectedSnow)));
-						Offsets.restOfDayForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.restOfDayForecast?.forecastStart, day?.restOfDayForecast?.forecastEnd, day?.restOfDayForecast?.cloudCover, day?.restOfDayForecast?.cloudCoverLowAltPct, day?.restOfDayForecast?.cloudCoverMidAltPct, day?.restOfDayForecast?.cloudCoverHighAltPct, WK2.ConditionCode[day?.restOfDayForecast?.conditionCode], day?.restOfDayForecast?.humidity, day?.restOfDayForecast?.humidityMax, day?.restOfDayForecast?.humidityMin, day?.restOfDayForecast?.precipitationAmount, Offsets.restOfDayForecastPrecipitationAmountByTypeOffest, day?.restOfDayForecast?.precipitationChance, WK2.PrecipitationType[day?.restOfDayForecast?.precipitationType], day?.restOfDayForecast?.snowfallAmount, day?.restOfDayForecast?.temperatureMax, day?.restOfDayForecast?.temperatureMin, day?.restOfDayForecast?.visibilityMax, day?.restOfDayForecast?.visibilityMin, day?.restOfDayForecast?.windDirection, day?.restOfDayForecast?.windGustSpeedMax, day?.restOfDayForecast?.windSpeed, day?.restOfDayForecast?.windSpeedMax);
+						Offsets.restOfDayForecastOffset = WK2.DayPartForecast.createDayPartForecast(this.builder, day?.restOfDayForecast?.forecastStart, day?.restOfDayForecast?.forecastEnd, day?.restOfDayForecast?.cloudCover, day?.restOfDayForecast?.cloudCoverLowAltPct, day?.restOfDayForecast?.cloudCoverMidAltPct, day?.restOfDayForecast?.cloudCoverHighAltPct, WK2.WeatherCondition[day?.restOfDayForecast?.conditionCode], day?.restOfDayForecast?.humidity, day?.restOfDayForecast?.humidityMax, day?.restOfDayForecast?.humidityMin, day?.restOfDayForecast?.precipitationAmount, Offsets.restOfDayForecastPrecipitationAmountByTypeOffest, day?.restOfDayForecast?.precipitationChance, WK2.PrecipitationType[day?.restOfDayForecast?.precipitationType], day?.restOfDayForecast?.snowfallAmount, day?.restOfDayForecast?.temperatureMax, day?.restOfDayForecast?.temperatureMin, day?.restOfDayForecast?.visibilityMax, day?.restOfDayForecast?.visibilityMin, day?.restOfDayForecast?.windDirection, day?.restOfDayForecast?.windGustSpeedMax, day?.restOfDayForecast?.windSpeed, day?.restOfDayForecast?.windSpeedMax);
 					};
 					WK2.DayWeatherConditions.startDayWeatherConditions(this.builder);
 					WK2.DayWeatherConditions.addForecastStart(this.builder, day?.forecastStart);
 					WK2.DayWeatherConditions.addForecastEnd(this.builder, day?.forecastEnd);
-					WK2.DayWeatherConditions.addConditionCode(this.builder, WK2.ConditionCode[day?.conditionCode]);
+					WK2.DayWeatherConditions.addConditionCode(this.builder, WK2.WeatherCondition[day?.conditionCode]);
 					WK2.DayWeatherConditions.addHumidityMax(this.builder, day?.humidityMax);
 					WK2.DayWeatherConditions.addHumidityMin(this.builder, day?.humidityMin);
 					WK2.DayWeatherConditions.addMaxUvIndex(this.builder, day?.maxUvIndex);
@@ -101,7 +101,7 @@ export default class WeatherKit2 {
 				offset = WK2.DailyForecastData.createDailyForecastData(this.builder, metadataOffset, daysOffset);
 				break;
 			case "forecastHourly":
-				let hoursOffsets = data?.hours?.map(hour => WK2.HourWeatherConditions.createHourWeatherConditions(this.builder, hour?.forecastStart, hour?.cloudCover, hour?.cloudCoverLowAltPct, hour?.cloudCoverMidAltPct, hour?.cloudCoverHighAltPct, WK2.ConditionCode[hour?.conditionCode], hour?.daylight, hour?.humidity, hour?.perceivedPrecipitationIntensity, hour?.precipitationAmount, hour?.precipitationIntensity, hour?.precipitationChance, WK2.PrecipitationType[hour?.precipitationType], hour?.pressure, WK2.PressureTrend[hour?.pressureTrend], hour?.snowfallAmount, hour?.snowfallIntensity, hour?.temperature, hour?.temperatureApparent, hour?.unknown20, hour?.temperatureDewPoint, hour?.uvIndex, hour?.visibility, hour?.windDirection, hour?.windGust, hour?.windSpeed));
+				let hoursOffsets = data?.hours?.map(hour => WK2.HourWeatherConditions.createHourWeatherConditions(this.builder, hour?.forecastStart, hour?.cloudCover, hour?.cloudCoverLowAltPct, hour?.cloudCoverMidAltPct, hour?.cloudCoverHighAltPct, WK2.WeatherCondition[hour?.conditionCode], hour?.daylight, hour?.humidity, hour?.perceivedPrecipitationIntensity, hour?.precipitationAmount, hour?.precipitationIntensity, hour?.precipitationChance, WK2.PrecipitationType[hour?.precipitationType], hour?.pressure, WK2.PressureTrend[hour?.pressureTrend], hour?.snowfallAmount, hour?.snowfallIntensity, hour?.temperature, hour?.temperatureApparent, hour?.unknown20, hour?.temperatureDewPoint, hour?.uvIndex, hour?.visibility, hour?.windDirection, hour?.windGust, hour?.windSpeed));
 				let hoursOffset = WK2.HourlyForecastData.createHoursVector(this.builder, hoursOffsets);
 				offset = WK2.HourlyForecastData.createHourlyForecastData(this.builder, metadataOffset, hoursOffset);
 				break;
@@ -109,7 +109,7 @@ export default class WeatherKit2 {
 				let conditionOffsets = data?.condition?.map(condition => {
 					let parametersOffsets = condition?.parameters.map(parameter => WK2.Parameter.createParameter(this.builder, WK2.ParameterType[parameter?.type], parameter?.date));
 					let parametersOffset = WK2.Condition.createParametersVector(this.builder, parametersOffsets);
-					return WK2.Condition.createCondition(this.builder, condition?.startTime, condition?.endTime, WK2.ForecastToken[condition?.forecastToken], WK2.WeatherCondition[condition?.beginCondition], WK2.WeatherCondition[condition?.endCondition], parametersOffset);
+					return WK2.Condition.createCondition(this.builder, condition?.startTime, condition?.endTime, WK2.ForecastToken[condition?.forecastToken], WK2.ConditionType[condition?.beginCondition], WK2.ConditionType[condition?.endCondition], parametersOffset);
 				});
 				let conditionOffset = WK2.NextHourForecastData.createConditionVector(this.builder, conditionOffsets);
 				let summaryOffsets = data?.summary?.map(summary => WK2.ForecastPeriodSummary.createForecastPeriodSummary(this.builder, summary?.startTime, summary?.endTime, WK2.PrecipitationType[summary?.condition], summary?.precipitationChance, summary?.precipitationIntensity));
@@ -230,7 +230,7 @@ export default class WeatherKit2 {
 					"cloudCoverHighAltPct": CurrentWeatherData?.cloudCoverHighAltPct(),
 					"cloudCoverLowAltPct": CurrentWeatherData?.cloudCoverLowAltPct(),
 					"cloudCoverMidAltPct": CurrentWeatherData?.cloudCoverMidAltPct(),
-					"conditionCode": WK2.ConditionCode[CurrentWeatherData?.conditionCode()],
+					"conditionCode": WK2.WeatherCondition[CurrentWeatherData?.conditionCode()],
 					"daylight": CurrentWeatherData?.daylight(),
 					"humidity": CurrentWeatherData?.humidity(),
 					"perceivedPrecipitationIntensity": CurrentWeatherData?.perceivedPrecipitationIntensity(),
@@ -316,7 +316,7 @@ export default class WeatherKit2 {
 				};
 				for (let i = 0; i < DailyForecastData?.daysLength(); i++) {
 					let day = {
-						"conditionCode": WK2.ConditionCode[DailyForecastData?.days(i)?.conditionCode()],
+						"conditionCode": WK2.WeatherCondition[DailyForecastData?.days(i)?.conditionCode()],
 						"forecastEnd": DailyForecastData?.days(i)?.forecastEnd(),
 						"forecastStart": DailyForecastData?.days(i)?.forecastStart(),
 						"humidityMax": DailyForecastData?.days(i)?.humidityMax(),
@@ -363,7 +363,7 @@ export default class WeatherKit2 {
 							"cloudCoverHighAltPct": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCoverHighAltPct(),
 							"cloudCoverLowAltPct": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCoverLowAltPct(),
 							"cloudCoverMidAltPct": DailyForecastData?.days(i)?.daytimeForecast()?.cloudCoverMidAltPct(),
-							"conditionCode": WK2.ConditionCode[DailyForecastData?.days(i)?.daytimeForecast()?.conditionCode()],
+							"conditionCode": WK2.WeatherCondition[DailyForecastData?.days(i)?.daytimeForecast()?.conditionCode()],
 							"forecastEnd": DailyForecastData?.days(i)?.daytimeForecast()?.forecastEnd(),
 							"forecastStart": DailyForecastData?.days(i)?.daytimeForecast()?.forecastStart(),
 							"humidity": DailyForecastData?.days(i)?.daytimeForecast()?.humidity(),
@@ -397,7 +397,7 @@ export default class WeatherKit2 {
 							"cloudCoverHighAltPct": DailyForecastData?.days(i)?.overnightForecast()?.cloudCoverHighAltPct(),
 							"cloudCoverLowAltPct": DailyForecastData?.days(i)?.overnightForecast()?.cloudCoverLowAltPct(),
 							"cloudCoverMidAltPct": DailyForecastData?.days(i)?.overnightForecast()?.cloudCoverMidAltPct(),
-							"conditionCode": WK2.ConditionCode[DailyForecastData?.days(i)?.overnightForecast()?.conditionCode()],
+							"conditionCode": WK2.WeatherCondition[DailyForecastData?.days(i)?.overnightForecast()?.conditionCode()],
 							"forecastEnd": DailyForecastData?.days(i)?.overnightForecast()?.forecastEnd(),
 							"forecastStart": DailyForecastData?.days(i)?.overnightForecast()?.forecastStart(),
 							"humidity": DailyForecastData?.days(i)?.overnightForecast()?.humidity(),
@@ -431,7 +431,7 @@ export default class WeatherKit2 {
 							"cloudCoverHighAltPct": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCoverHighAltPct(),
 							"cloudCoverLowAltPct": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCoverLowAltPct(),
 							"cloudCoverMidAltPct": DailyForecastData?.days(i)?.restOfDayForecast()?.cloudCoverMidAltPct(),
-							"conditionCode": WK2.ConditionCode[DailyForecastData?.days(i)?.restOfDayForecast()?.conditionCode()],
+							"conditionCode": WK2.WeatherCondition[DailyForecastData?.days(i)?.restOfDayForecast()?.conditionCode()],
 							"forecastEnd": DailyForecastData?.days(i)?.restOfDayForecast()?.forecastEnd(),
 							"forecastStart": DailyForecastData?.days(i)?.restOfDayForecast()?.forecastStart(),
 							"humidity": DailyForecastData?.days(i)?.restOfDayForecast()?.humidity(),
@@ -473,7 +473,7 @@ export default class WeatherKit2 {
 					"cloudCoverHighAltPct": HourlyForecastData?.hours(i)?.cloudCoverHighAltPct(),
 					"cloudCoverLowAltPct": HourlyForecastData?.hours(i)?.cloudCoverLowAltPct(),
 					"cloudCoverMidAltPct": HourlyForecastData?.hours(i)?.cloudCoverMidAltPct(),
-					"conditionCode": WK2.ConditionCode[HourlyForecastData?.hours(i)?.conditionCode()],
+					"conditionCode": WK2.WeatherCondition[HourlyForecastData?.hours(i)?.conditionCode()],
 					"daylight": HourlyForecastData?.hours(i)?.daylight(),
 					"forecastStart": HourlyForecastData?.hours(i)?.forecastStart(),
 					"humidity": HourlyForecastData?.hours(i)?.humidity(),
@@ -509,8 +509,8 @@ export default class WeatherKit2 {
 				};
 				for (let i = 0; i < NextHourForecastData?.conditionLength(); i++) {
 					let condition = {
-						"beginCondition": WK2.WeatherCondition[NextHourForecastData?.condition(i)?.beginCondition()],
-						"endCondition": WK2.WeatherCondition[NextHourForecastData?.condition(i)?.endCondition()],
+						"beginCondition": WK2.ConditionType[NextHourForecastData?.condition(i)?.beginCondition()],
+						"endCondition": WK2.ConditionType[NextHourForecastData?.condition(i)?.endCondition()],
 						"endTime": NextHourForecastData?.condition(i)?.endTime(),
 						"forecastToken": WK2.ForecastToken[NextHourForecastData?.condition(i)?.forecastToken()],
 						"parameters": [],

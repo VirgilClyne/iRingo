@@ -4,11 +4,11 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { ConditionCode } from '../wk2/condition-code.js';
 import { DayPartForecast } from '../wk2/day-part-forecast.js';
 import { MoonPhase } from '../wk2/moon-phase.js';
 import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
+import { WeatherCondition } from '../wk2/weather-condition.js';
 
 
 export class DayWeatherConditions {
@@ -39,9 +39,9 @@ forecastEnd():number {
   return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
 }
 
-conditionCode():ConditionCode {
+conditionCode():WeatherCondition {
   const offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
 }
 
 humidityMax():number {
@@ -226,8 +226,8 @@ static addForecastEnd(builder:flatbuffers.Builder, forecastEnd:number) {
   builder.addFieldInt32(1, forecastEnd, 0);
 }
 
-static addConditionCode(builder:flatbuffers.Builder, conditionCode:ConditionCode) {
-  builder.addFieldInt8(2, conditionCode, ConditionCode.CLEAR);
+static addConditionCode(builder:flatbuffers.Builder, conditionCode:WeatherCondition) {
+  builder.addFieldInt8(2, conditionCode, WeatherCondition.CLEAR);
 }
 
 static addHumidityMax(builder:flatbuffers.Builder, humidityMax:number) {

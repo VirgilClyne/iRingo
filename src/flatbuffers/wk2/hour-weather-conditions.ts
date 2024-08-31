@@ -4,9 +4,9 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { ConditionCode } from '../wk2/condition-code.js';
 import { PrecipitationType } from '../wk2/precipitation-type.js';
 import { PressureTrend } from '../wk2/pressure-trend.js';
+import { WeatherCondition } from '../wk2/weather-condition.js';
 
 
 export class HourWeatherConditions {
@@ -52,9 +52,9 @@ cloudCoverHighAltPct():number {
   return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
-conditionCode():ConditionCode {
+conditionCode():WeatherCondition {
   const offset = this.bb!.__offset(this.bb_pos, 14);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
 }
 
 daylight():boolean {
@@ -181,8 +181,8 @@ static addCloudCoverHighAltPct(builder:flatbuffers.Builder, cloudCoverHighAltPct
   builder.addFieldInt8(4, cloudCoverHighAltPct, 0);
 }
 
-static addConditionCode(builder:flatbuffers.Builder, conditionCode:ConditionCode) {
-  builder.addFieldInt8(5, conditionCode, ConditionCode.CLEAR);
+static addConditionCode(builder:flatbuffers.Builder, conditionCode:WeatherCondition) {
+  builder.addFieldInt8(5, conditionCode, WeatherCondition.CLEAR);
 }
 
 static addDaylight(builder:flatbuffers.Builder, daylight:boolean) {
@@ -270,7 +270,7 @@ static endHourWeatherConditions(builder:flatbuffers.Builder):flatbuffers.Offset 
   return offset;
 }
 
-static createHourWeatherConditions(builder:flatbuffers.Builder, forecastStart:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:ConditionCode, daylight:boolean, humidity:number, perceivedPrecipitationIntensity:number, precipitationAmount:number, precipitationIntensity:number, precipitationChance:number, precipitationType:PrecipitationType, pressure:number, pressureTrend:PressureTrend, snowfallAmount:number, snowfallIntensity:number, temperature:number, temperatureApparent:number, unknown20:number, temperatureDewPoint:number, uvIndex:number, visibility:number, windDirection:number, windGust:number, windSpeed:number):flatbuffers.Offset {
+static createHourWeatherConditions(builder:flatbuffers.Builder, forecastStart:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:WeatherCondition, daylight:boolean, humidity:number, perceivedPrecipitationIntensity:number, precipitationAmount:number, precipitationIntensity:number, precipitationChance:number, precipitationType:PrecipitationType, pressure:number, pressureTrend:PressureTrend, snowfallAmount:number, snowfallIntensity:number, temperature:number, temperatureApparent:number, unknown20:number, temperatureDewPoint:number, uvIndex:number, visibility:number, windDirection:number, windGust:number, windSpeed:number):flatbuffers.Offset {
   HourWeatherConditions.startHourWeatherConditions(builder);
   HourWeatherConditions.addForecastStart(builder, forecastStart);
   HourWeatherConditions.addCloudCover(builder, cloudCover);

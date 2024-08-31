@@ -11,7 +11,7 @@ export { Comparison } from './wk2/comparison.js';
 export { ComparisonTrend } from './wk2/comparison-trend.js';
 export { ComparisonType } from './wk2/comparison-type.js';
 export { Condition } from './wk2/condition.js';
-export { ConditionCode } from './wk2/condition-code.js';
+export { ConditionType } from './wk2/condition-type.js';
 export { CurrentWeatherData } from './wk2/current-weather-data.js';
 export { DailyForecastData } from './wk2/daily-forecast-data.js';
 export { DayPartForecast } from './wk2/day-part-forecast.js';

@@ -4,9 +4,9 @@
 
 import * as flatbuffers from 'flatbuffers';
 
+import { ConditionType } from '../wk2/condition-type.js';
 import { ForecastToken } from '../wk2/forecast-token.js';
 import { Parameter } from '../wk2/parameter.js';
-import { WeatherCondition } from '../wk2/weather-condition.js';
 
 
 export class Condition {
@@ -42,14 +42,14 @@ forecastToken():ForecastToken {
   return offset ? this.bb!.readInt8(this.bb_pos + offset) : ForecastToken.CLEAR;
 }
 
-beginCondition():WeatherCondition {
+beginCondition():ConditionType {
   const offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionType.CLEAR;
 }
 
-endCondition():WeatherCondition {
+endCondition():ConditionType {
   const offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionType.CLEAR;
 }
 
 parameters(index: number, obj?:Parameter):Parameter|null {
@@ -78,12 +78,12 @@ static addForecastToken(builder:flatbuffers.Builder, forecastToken:ForecastToken
   builder.addFieldInt8(2, forecastToken, ForecastToken.CLEAR);
 }
 
-static addBeginCondition(builder:flatbuffers.Builder, beginCondition:WeatherCondition) {
-  builder.addFieldInt8(3, beginCondition, WeatherCondition.CLEAR);
+static addBeginCondition(builder:flatbuffers.Builder, beginCondition:ConditionType) {
+  builder.addFieldInt8(3, beginCondition, ConditionType.CLEAR);
 }
 
-static addEndCondition(builder:flatbuffers.Builder, endCondition:WeatherCondition) {
-  builder.addFieldInt8(4, endCondition, WeatherCondition.CLEAR);
+static addEndCondition(builder:flatbuffers.Builder, endCondition:ConditionType) {
+  builder.addFieldInt8(4, endCondition, ConditionType.CLEAR);
 }
 
 static addParameters(builder:flatbuffers.Builder, parametersOffset:flatbuffers.Offset) {
@@ -107,7 +107,7 @@ static endCondition(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createCondition(builder:flatbuffers.Builder, startTime:number, endTime:number, forecastToken:ForecastToken, beginCondition:WeatherCondition, endCondition:WeatherCondition, parametersOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createCondition(builder:flatbuffers.Builder, startTime:number, endTime:number, forecastToken:ForecastToken, beginCondition:ConditionType, endCondition:ConditionType, parametersOffset:flatbuffers.Offset):flatbuffers.Offset {
   Condition.startCondition(builder);
   Condition.addStartTime(builder, startTime);
   Condition.addEndTime(builder, endTime);

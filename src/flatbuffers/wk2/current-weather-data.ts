@@ -4,10 +4,10 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-import { ConditionCode } from '../wk2/condition-code.js';
 import { Metadata } from '../wk2/metadata.js';
 import { PrecipitationAmountByType } from '../wk2/precipitation-amount-by-type.js';
 import { PressureTrend } from '../wk2/pressure-trend.js';
+import { WeatherCondition } from '../wk2/weather-condition.js';
 
 
 export class CurrentWeatherData {
@@ -58,9 +58,9 @@ cloudCoverHighAltPct():number {
   return offset ? this.bb!.readInt8(this.bb_pos + offset) : 0;
 }
 
-conditionCode():ConditionCode {
+conditionCode():WeatherCondition {
   const offset = this.bb!.__offset(this.bb_pos, 16);
-  return offset ? this.bb!.readInt8(this.bb_pos + offset) : ConditionCode.CLEAR;
+  return offset ? this.bb!.readInt8(this.bb_pos + offset) : WeatherCondition.CLEAR;
 }
 
 daylight():boolean {
@@ -286,8 +286,8 @@ static addCloudCoverHighAltPct(builder:flatbuffers.Builder, cloudCoverHighAltPct
   builder.addFieldInt8(5, cloudCoverHighAltPct, 0);
 }
 
-static addConditionCode(builder:flatbuffers.Builder, conditionCode:ConditionCode) {
-  builder.addFieldInt8(6, conditionCode, ConditionCode.CLEAR);
+static addConditionCode(builder:flatbuffers.Builder, conditionCode:WeatherCondition) {
+  builder.addFieldInt8(6, conditionCode, WeatherCondition.CLEAR);
 }
 
 static addDaylight(builder:flatbuffers.Builder, daylight:boolean) {
@@ -499,7 +499,7 @@ static endCurrentWeatherData(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createCurrentWeatherData(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, asOf:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:ConditionCode, daylight:boolean, humidity:number, perceivedPrecipitationIntensity:number, precipitationAmount1h:number, precipitationAmount6h:number, precipitationAmount24h:number, precipitationAmountNext1h:number, precipitationAmountNext6h:number, precipitationAmountNext24h:number, precipitationAmountNext1hByTypeOffset:flatbuffers.Offset, precipitationAmountNext6hByTypeOffset:flatbuffers.Offset, precipitationAmountNext24hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious1hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious6hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious24hByTypeOffset:flatbuffers.Offset, precipitationIntensity:number, pressure:number, pressureTrend:PressureTrend, snowfallAmount1h:number, snowfallAmount6h:number, snowfallAmount24h:number, snowfallAmountNext1h:number, snowfallAmountNext6h:number, snowfallAmountNext24h:number, temperature:number, temperatureApparent:number, unknown34:number, temperatureDewPoint:number, uvIndex:number, visibility:number, windDirection:number, windGust:number, windSpeed:number):flatbuffers.Offset {
+static createCurrentWeatherData(builder:flatbuffers.Builder, metadataOffset:flatbuffers.Offset, asOf:number, cloudCover:number, cloudCoverLowAltPct:number, cloudCoverMidAltPct:number, cloudCoverHighAltPct:number, conditionCode:WeatherCondition, daylight:boolean, humidity:number, perceivedPrecipitationIntensity:number, precipitationAmount1h:number, precipitationAmount6h:number, precipitationAmount24h:number, precipitationAmountNext1h:number, precipitationAmountNext6h:number, precipitationAmountNext24h:number, precipitationAmountNext1hByTypeOffset:flatbuffers.Offset, precipitationAmountNext6hByTypeOffset:flatbuffers.Offset, precipitationAmountNext24hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious1hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious6hByTypeOffset:flatbuffers.Offset, precipitationAmountPrevious24hByTypeOffset:flatbuffers.Offset, precipitationIntensity:number, pressure:number, pressureTrend:PressureTrend, snowfallAmount1h:number, snowfallAmount6h:number, snowfallAmount24h:number, snowfallAmountNext1h:number, snowfallAmountNext6h:number, snowfallAmountNext24h:number, temperature:number, temperatureApparent:number, unknown34:number, temperatureDewPoint:number, uvIndex:number, visibility:number, windDirection:number, windGust:number, windSpeed:number):flatbuffers.Offset {
   CurrentWeatherData.startCurrentWeatherData(builder);
   CurrentWeatherData.addMetadata(builder, metadataOffset);
   CurrentWeatherData.addAsOf(builder, asOf);
