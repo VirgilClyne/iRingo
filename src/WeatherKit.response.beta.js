@@ -8,10 +8,11 @@ import providerNameToLogo from "./function/providerNameToLogo.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
 import WAQI from "./class/WAQI.mjs";
 import ColorfulClouds from "./class/ColorfulClouds.mjs";
+import QWeather from "./class/QWeather.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.0(4130) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.1(4131) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -202,17 +203,17 @@ async function InjectForecastNextHour(url, body, Settings) {
 	switch (Settings?.NextHour?.Provider) {
 		case "WeatherKit":
 			break;
-		case "WeatherOL":
-		default:
-			break;
 		case "QWeather":
+			const qWeather = new QWeather($, { "url": url });
+			forecastNextHour = await qWeather.Minutely(Settings?.API?.QWeather?.Token);
 			break;
 		case "ColorfulClouds":
+		default:
 			const colorfulClouds = new ColorfulClouds($, { "url": url });
 			forecastNextHour = await colorfulClouds.Minutely(Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==");
-			metadata = forecastNextHour?.metadata;
 			break;
 	};
+	metadata = forecastNextHour?.metadata;
 	if (metadata) {
 		metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
 		body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
