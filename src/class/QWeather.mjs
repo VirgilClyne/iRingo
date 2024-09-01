@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class QWeather {
     constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url) }) {
         this.Name = "QWeather";
-        this.Version = "1.0.0";
+        this.Version = "1.0.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -78,7 +78,7 @@ export default class QWeather {
                     throw { "status": body?.code, "reason": body?.error };
             };
         } catch (error) {
-            this.logErr(error);
+            this.$.logErr(error);
         } finally {
             //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
             this.$.log(`✅ Minutely`, "");

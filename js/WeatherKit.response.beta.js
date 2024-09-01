@@ -19308,7 +19308,7 @@ function parseWeatherKitURL(url = $request.url) {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.2.0";
+        this.Version = "1.2.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -19557,7 +19557,7 @@ class WAQI {
                     throw { "status": body?.status, "reason": body?.data };
             };
         } catch (error) {
-            this.logErr(error);
+            this.$.logErr(error);
         } finally {
             this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI2`, "");
@@ -19960,7 +19960,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.7.1";
+        this.Version = "1.7.2";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -20034,7 +20034,7 @@ class ColorfulClouds {
                     throw { "status": body?.status, "reason": body?.error };
             };
         } catch (error) {
-            this.logErr(error);
+            this.$.logErr(error);
         } finally {
             //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
             this.$.log(`✅ Minutely`, "");
@@ -20045,7 +20045,7 @@ class ColorfulClouds {
 class QWeather {
     constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url) }) {
         this.Name = "QWeather";
-        this.Version = "1.0.0";
+        this.Version = "1.0.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -20117,7 +20117,7 @@ class QWeather {
                     throw { "status": body?.code, "reason": body?.error };
             };
         } catch (error) {
-            this.logErr(error);
+            this.$.logErr(error);
         } finally {
             //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
             this.$.log(`✅ Minutely`, "");

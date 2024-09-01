@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.7.1";
+        this.Version = "1.7.2";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -80,7 +80,7 @@ export default class ColorfulClouds {
                     throw { "status": body?.status, "reason": body?.error };
             };
         } catch (error) {
-            this.logErr(error);
+            this.$.logErr(error);
         } finally {
             //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
             this.$.log(`✅ Minutely`, "");

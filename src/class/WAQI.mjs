@@ -5,7 +5,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.2.0";
+        this.Version = "1.2.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -257,7 +257,7 @@ export default class WAQI {
                     throw { "status": body?.status, "reason": body?.data };
             };
         } catch (error) {
-            this.logErr(error);
+            this.$.logErr(error);
         } finally {
             this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI2`, "");
