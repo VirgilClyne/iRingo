@@ -124,7 +124,7 @@
 							"label": "彩云天气"
 						}
 					],
-					"desc": "气象在线与彩云天气的数据源相同，但不支持简体中文以外的语言。"
+					"desc": "始终会使用选定的数据源，填补无降水监测地区的数据。"
 				},
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.Provider",

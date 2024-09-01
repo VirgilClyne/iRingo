@@ -120,7 +120,7 @@
 							"label": "WeatherKit"
 						},
 						{
-							"key": " QWeather",
+							"key": "QWeather",
 							"label": "和风天气"
 						},
 						{
@@ -128,7 +128,7 @@
 							"label": "彩云天气"
 						}
 					],
-					"desc": "气象在线与彩云天气的数据源相同，但不支持简体中文以外的语言。"
+					"desc": "始终会使用选定的数据源，填补无降水监测地区的数据。"
 				},
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.Provider",
@@ -141,7 +141,7 @@
 							"label": "WeatherKit"
 						},
 						{
-							"key": " QWeather",
+							"key": "QWeather",
 							"label": "和风天气"
 						},
 						{
@@ -153,7 +153,7 @@
 							"label": "The World Air Quality Project"
 						}
 					],
-					"desc": "始终会使用选定的数据源，填补无空气质量监测地区的数据"
+					"desc": "始终会使用选定的数据源，填补无空气质量监测地区的数据。"
 				},
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.ReplaceProviders",
