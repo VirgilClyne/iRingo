@@ -179,6 +179,48 @@
 					]
 				},
 				{
+					"id": "@iRingo.WeatherKit.Settings.AQI.Local.Switch",
+					"name": "[空气质量]本地替换",
+					"val": true,
+					"type": "boolean",
+					"desc": "使用本地替换算法，将Apple数据转换为特定标准"
+				},
+				{
+					"id": "@iRingo.WeatherKit.Settings.AQI.Local.ReplaceScales",
+					"name": "[空气质量]需要修改的标准",
+					"val": [
+						"HJ6332012"
+					],
+					"type": "checkboxes",
+					"desc": "选中的空气质量标准会被替换。请注意各国监测的污染物种类可能有所不同，转换算法或API未必适合当地。",
+					"items": [
+						{
+							"key": "HJ6332012",
+							"label": "中国（HJ 633—2012）"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.WeatherKit.Settings.AQI.Local.Standard",
+					"name": "[空气质量]本地替换算法",
+					"val": "WAQI_InstantCast",
+					"type": "selects",
+					"desc": "本地替换时使用的算法",
+					"items": [
+						{
+							"key": "WAQI_InstantCast",
+							"label": "WAQI InstantCast"
+						}
+					]
+				},
+				{
+					"id": "@iRingo.WeatherKit.Settings.AQI.Local.UseConvertedUnit",
+					"name": "[空气质量]显示转换单位后的数据",
+					"val": false,
+					"type": "boolean",
+					"desc": "（不推荐。不同单位互转可能会损失精度，导致数值偏大）将污染物数据替换为转换单位后的数据，方便对照转换后的标准。"
+				},
+				{
 					"id": "@iRingo.WeatherKit.Settings.API.WAQI.Token",
 					"name": "[API]WAQI API 令牌",
 					"val": "",

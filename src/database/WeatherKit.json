@@ -8,7 +8,13 @@
 			"Provider": "WAQI",
 			"Location": "Station",
 			"ReplaceProviders": ["QWeather"],
-			"Token": "EPA_NowCast.2302"
+			"Token": "EPA_NowCast.2302",
+			"Local": {
+				"Switch": true,
+				"ReplaceScales": ["HJ6332012"],
+				"Standard": "WAQI_InstantCast",
+				"UseConvertedUnit": false
+			}
 		},
 		"API": {
 			"WAQI": {
