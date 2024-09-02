@@ -74,7 +74,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							// 路径判断
 							if (PATH.startsWith("/api/v1/availability/")) {
 								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
-								body = ["airQuality", "currentWeather", "forecastDaily", "forecastHourly", "forecastPeriodic", "historicalComparisons", "weatherChanges", "forecastNextHour", "weatherAlerts", "weatherAlertNotifications", "news"];
+								body = Configs?.Availability?.v2;
 							};
 							break;
 					};

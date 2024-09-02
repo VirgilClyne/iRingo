@@ -14266,7 +14266,14 @@ var Settings = {
 		ReplaceProviders: [
 			"QWeather"
 		],
-		Token: "EPA_NowCast.2302"
+		Local: {
+			Switch: true,
+			ReplaceScales: [
+				"HJ6332012"
+			],
+			Standard: "WAQI_InstantCast",
+			UseConvertedUnit: false
+		}
 	},
 	API: {
 		WAQI: {
@@ -14297,89 +14304,14 @@ var Configs = {
 			"currentWeather",
 			"forecastDaily",
 			"forecastHourly",
+			"forecastPeriodic",
 			"forecastNextHour",
+			"historicalComparisons",
 			"news",
-			"trendComparison",
 			"weatherAlerts",
+			"weatherAlertNotifications",
 			"weatherChange"
 		]
-	},
-	Pollutants: {
-		co: "CO",
-		no: "NO",
-		no2: "NO2",
-		so2: "SO2",
-		o3: "OZONE",
-		nox: "NOX",
-		pm25: "PM2_5",
-		pm10: "PM10",
-		other: "NOT_AVAILABLE"
-	},
-	Status: {
-		clear: "CLEAR",
-		sleet: "SLEET",
-		drizzle: "RAIN",
-		rain: "RAIN",
-		heavy_rain: "RAIN",
-		flurries: "SNOW",
-		snow: "SNOW",
-		heavy_snow: "SNOW"
-	},
-	Precipitation: {
-		Level: {
-			INVALID: -1,
-			NO: 0,
-			LIGHT: 1,
-			MODERATE: 2,
-			HEAVY: 3,
-			STORM: 4
-		},
-		Range: {
-			RADAR: {
-				NO: [
-					0,
-					0.031
-				],
-				LIGHT: [
-					0.031,
-					0.25
-				],
-				MODERATE: [
-					0.25,
-					0.35
-				],
-				HEAVY: [
-					0.35,
-					0.48
-				],
-				STORM: [
-					0.48,
-					1
-				]
-			},
-			MMPERHR: {
-				NO: [
-					0,
-					0.08
-				],
-				LIGHT: [
-					0.08,
-					3.44
-				],
-				MODERATE: [
-					3.44,
-					11.33
-				],
-				HEAVY: [
-					11.33,
-					51.3
-				],
-				STORM: [
-					51.3,
-					100
-				]
-			}
-		}
 	}
 };
 var WeatherKit = {
