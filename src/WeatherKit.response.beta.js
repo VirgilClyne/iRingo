@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.2(4138) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.2(4139) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -232,7 +232,7 @@ function ConvertAirQuality(body, Settings) {
 	if (airQuality.index) {
 		body.airQuality.metadata.providerName += `\n iRingo (converted from ${body.airQuality.metadata.providerName})`;
 		body.airQuality = { ...body.airQuality, ...airQuality };
-		body.airQuality.pollutants = Settings?.AQI?.Local?.UseConvertedUnit ? airQuality.pollutants : body.airQuality.pollutants;
+		if (Settings?.AQI?.Local?.UseConvertedUnit) body.airQuality.pollutants = airQuality.pollutants;
 		$.log(`🚧 body.airQuality.pollutants: ${JSON.stringify(body.airQuality.pollutants, null, 2)}`, "");
 	};
 	$.log(`✅ ConvertAirQuality`, "");
