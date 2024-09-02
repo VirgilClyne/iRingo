@@ -5,7 +5,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.2.1";
+        this.Version = "1.2.2";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -58,7 +58,7 @@ export default class WAQI {
                                     "stationId": parseInt(body?.d?.[0]?.x, 10),
                                     "stationKey": body?.d?.[0]?.k,
                                 },
-                                "categoryIndex": 1,
+                                "categoryIndex": -1,
                                 "index": parseInt(body?.d?.[0]?.v, 10),
                                 "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
@@ -88,7 +88,7 @@ export default class WAQI {
                                     "sourceType": "STATION",
                                     "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
                                 },
-                                "categoryIndex": 1,
+                                "categoryIndex": -1,
                                 "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
                                 "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
@@ -188,7 +188,7 @@ export default class WAQI {
                                             "sourceType": "STATION",
                                             "stationId": stationId,
                                         },
-                                        "categoryIndex": 1,
+                                        "categoryIndex": -1,
                                         "index": parseInt(body?.rxs?.obs?.[0]?.msg?.aqi, 10),
                                         "isSignificant": true,
                                         //"previousDayComparison": "UNKNOWN",
@@ -244,7 +244,7 @@ export default class WAQI {
                             "sourceType": "STATION",
                             "stationId": stationId || parseInt(body?.data?.idx, 10),
                         },
-                        "categoryIndex": 1,
+                        "categoryIndex": -1,
                         "index": parseInt(body?.data?.aqi, 10),
                         "isSignificant": true,
                         //"previousDayComparison": "UNKNOWN",
