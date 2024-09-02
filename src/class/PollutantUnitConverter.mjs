@@ -14,7 +14,7 @@ export default class PollutantUnitConverter {
                     case 'MILLIGRAMS_PER_CUBIC_METER':
                         return amount * ppxToXGM3Value;
                     case 'MICROGRAMS_PER_CUBIC_METER': {
-                        const inPpb = convert(unit, 'PARTS_PER_BILLION', amount, ppxToXGM3Value);
+                        const inPpb = this.convert(unit, 'PARTS_PER_BILLION', amount, ppxToXGM3Value);
                         return inPpb * ppxToXGM3Value;
                     }
                     default:
@@ -27,7 +27,7 @@ export default class PollutantUnitConverter {
                     case 'PARTS_PER_MILLION':
                         return amount * 0.001;
                     case 'MILLIGRAMS_PER_CUBIC_METER': {
-                        const inPpm = convert(unit, 'PARTS_PER_MILLION', amount, ppxToXGM3Value);
+                        const inPpm = this.convert(unit, 'PARTS_PER_MILLION', amount, ppxToXGM3Value);
                         return inPpm * ppxToXGM3Value;
                     }
                     case 'MICROGRAMS_PER_CUBIC_METER':
@@ -44,7 +44,7 @@ export default class PollutantUnitConverter {
                     case 'PARTS_PER_MILLION':
                         return amount / ppxToXGM3Value;
                     case 'PARTS_PER_BILLION': {
-                        const inUgM3 = convert(unit, 'MICROGRAMS_PER_CUBIC_METER', amount, ppxToXGM3Value);
+                        const inUgM3 = this.convert(unit, 'MICROGRAMS_PER_CUBIC_METER', amount, ppxToXGM3Value);
                         return inUgM3 / ppxToXGM3Value;
                     }
                     default:
@@ -57,7 +57,7 @@ export default class PollutantUnitConverter {
                     case 'MILLIGRAMS_PER_CUBIC_METER':
                         return amount * 0.001;
                     case 'PARTS_PER_MILLION': {
-                        const inMgM3 = convert(unit, 'MILLIGRAMS_PER_CUBIC_METER', amount, ppxToXGM3Value);
+                        const inMgM3 = this.convert(unit, 'MILLIGRAMS_PER_CUBIC_METER', amount, ppxToXGM3Value);
                         return inMgM3 / ppxToXGM3Value;
                     }
                     case 'PARTS_PER_BILLION':
