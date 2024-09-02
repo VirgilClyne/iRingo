@@ -1,6 +1,6 @@
 export default class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.1.10";
+    Version = "v1.1.11";
     Author = "iRingo";
 
     static #Configs = {
@@ -64,8 +64,8 @@ export default class ForecastNextHour {
         //console.log(`☑️ ConditionType`, "");
         //console.log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`, "");
         let condition = "CLEAR";
-        if (precipitationIntensity === 0) condition = "CLEAR"
-        else if (precipitationIntensity > 0 && precipitationIntensity < 0.0606) {
+        if (precipitationIntensity >= 0 && precipitationIntensity < 0.002 ) condition = "CLEAR"
+        else if (precipitationIntensity >= 0.002 && precipitationIntensity < 0.0606) {
             switch (precipitationType) {
                 case "RAIN":
                     condition = "POSSIBLE_DRIZZLE";
@@ -101,7 +101,7 @@ export default class ForecastNextHour {
                     condition = precipitationType;
                     break;
             };
-        } else {
+        } else if (precipitationIntensity >=2.87){
             switch (precipitationType) {
                 case "RAIN":
                     condition = "HEAVY_RAIN";
