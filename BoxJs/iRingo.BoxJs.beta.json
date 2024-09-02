@@ -133,7 +133,7 @@
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.Provider",
 					"name": "[空气质量]数据源",
-					"val": "WAQI",
+					"val": "WeatherKit",
 					"type": "selects",
 					"items": [
 						{
