@@ -14361,7 +14361,7 @@ function setENV(name, platforms, database) {
 function providerNameToLogo(providerName, version) {
     console.log(`☑️ providerNameToLogo, providerName: ${providerName}, version: ${version}`, "");
     let providerLogo;
-    switch (providerName) {
+    switch (providerName?.split("\n")?.[0]) {
         case "WAQI":
         case "World Air Quality Index Project":
             switch (version) {
