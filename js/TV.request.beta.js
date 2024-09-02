@@ -14261,7 +14261,7 @@ var Settings = {
 		Provider: "ColorfulClouds"
 	},
 	AQI: {
-		Provider: "WAQI",
+		Provider: "WeatherKit",
 		Location: "Station",
 		ReplaceProviders: [
 			"QWeather"
