@@ -1,7 +1,7 @@
 import PollutantUnitConverter from "./PollutantUnitConverter.mjs";
 
 export default class InstantCast {
-    #EPA_NowCast_AQI_CATEGORIES = {
+    static #EPA_NowCast_AQI_CATEGORIES = {
         INVALID: { CATEGORY_INDEX: -1, RANGE: { LOWER: Number.MIN_VALUE, UPPER: -1 } },
         GOOD: { CATEGORY_INDEX: 1, RANGE: { LOWER: 0, UPPER: 50 } },
         MODERATE: { CATEGORY_INDEX: 2, RANGE: { LOWER: 51, UPPER: 100 } },
@@ -12,7 +12,7 @@ export default class InstantCast {
         OVER_RANGE: { CATEGORY_INDEX: 7, RANGE: { LOWER: 500, UPPER: Number.MAX_VALUE } },
     };
 
-    #EPA_NowCast_RANGES = {
+    static #EPA_NowCast_RANGES = {
         OZONE_8H: {
             GOOD: {
                 AQI: this.#EPA_NowCast_AQI_CATEGORIES.GOOD.RANGE,
@@ -195,7 +195,7 @@ export default class InstantCast {
         },
     };
 
-    #EPA_NowCast = {
+    static #EPA_NowCast = {
         SCALE: 'EPA_NowCast.2411',
         SIGNIFICANT_LEVEL: this.#EPA_NowCast_AQI_CATEGORIES.UNHEALTHY_FOR_SENSITIVE.CATEGORY_INDEX,
 
@@ -319,7 +319,7 @@ export default class InstantCast {
         },
     };
 
-    #WAQI_INSTANT_CAST_RANGES = {
+    static #WAQI_INSTANT_CAST_RANGES = {
         OZONE: {
             GOOD: {
                 AQI: this.#EPA_NowCast_AQI_CATEGORIES.GOOD.RANGE,
