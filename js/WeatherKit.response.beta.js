@@ -20638,7 +20638,7 @@ class QWeather {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.2(4143) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.2(4144) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20826,7 +20826,7 @@ function ConvertAirQuality(body, Settings) {
 			break;
 	}	if (airQuality.index) {
 		body.airQuality = { ...body.airQuality, ...airQuality };
-		body.airQuality.metadata.providerName += `\n iRingo (converted from ${body.airQuality.metadata.providerName})`;
+		body.airQuality.metadata.providerName += `\nConverted using ${Settings?.AQI?.Local?.Standard}`;
 		$.log(`🚧 body.airQuality.pollutants: ${JSON.stringify(body.airQuality.pollutants, null, 2)}`, "");
 	}	$.log(`✅ ConvertAirQuality`, "");
 	return body;
