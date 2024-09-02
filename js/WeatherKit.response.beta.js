@@ -14205,11 +14205,10 @@ var Settings = {
 			"QWeather"
 		],
 		Local: {
-			Switch: true,
+			Standard: "WAQI_InstantCast",
 			ReplaceScales: [
 				"HJ6332012"
 			],
-			Standard: "WAQI_InstantCast",
 			UseConvertedUnit: false
 		}
 	},
@@ -20445,7 +20444,7 @@ class AirQuality {
         };
     };
 
-    toWAQIInstantCast(pollutants) {
+    toWAQIInstantCast(pollutants = []) {
         console.log(`☑️ toWAQIInstantCast`, "");
         // Convert unit based on standard
         const convertedPollutants = pollutants.map(({ units, amount, pollutantType }) => {
@@ -20503,8 +20502,8 @@ class AirQuality {
 
         console.log(`✅ toWAQIInstantCast`, "");
         return  {
-            index: primaryAqi.aqi,
-            pollutants: convertedPollutants.map((pollutant) => {
+            "index": primaryAqi.aqi,
+            "pollutants": convertedPollutants.map((pollutant) => {
                 // Convert unit that does not supported in Apple Weather
                 switch (pollutant.units) {
                     case 'PARTS_PER_MILLION':
@@ -20535,10 +20534,10 @@ class AirQuality {
                         return pollutant;
                 }
             }),
-            scale: this.Configs.WAQI_InstantCast.scale,
-            primaryPollutant: primaryAqi.pollutantType,
-            categoryIndex: aqiCategory.CATEGORY_INDEX,
-            isSignificant: aqiCategory.CATEGORY_INDEX >= this.Configs.WAQI_InstantCast.SIGNIFICANT_LEVEL,
+            "scale": this.Configs.WAQI_InstantCast.scale,
+            "primaryPollutant": primaryAqi.pollutantType,
+            "categoryIndex": aqiCategory.CATEGORY_INDEX,
+            "isSignificant": aqiCategory.CATEGORY_INDEX >= this.Configs.WAQI_InstantCast.SIGNIFICANT_LEVEL,
         };
     };
 
@@ -20627,7 +20626,7 @@ class AirQuality {
     };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.1(4137) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.2(4138) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20732,11 +20731,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											}											// InjectAirQuality
 											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
 											// ConvertAirQuality
-											switch (Settings?.AQI?.Local?.Switch) {
-												case true:
-													body = ConvertAirQuality(body, Settings);
-													break;
-											}											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
+											if (Settings?.AQI?.Local?.ReplaceScales.includes(body?.airQuality?.scale.split(".")?.[0])) body = ConvertAirQuality(body, Settings);
+											// ProviderLogo
+											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										}										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
 											//$.log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
@@ -20808,25 +20805,20 @@ async function InjectAirQuality(url, body, Settings) {
 }
 function ConvertAirQuality(body, Settings) {
 	$.log(`☑️ ConvertAirQuality`, "");
-	const airQuality = new AirQuality();
-	function scaleToSettings(scale) {
-		const dotIndex = scale?.lastIndexOf('.');
-		if (!scale || !dotIndex) return scale;
-		else return scale.slice(0, dotIndex);
-	}	if (body?.airQuality?.pollutants) {
-		if (Settings?.AQI?.Local?.ReplaceScales.includes(scaleToSettings(body?.airQuality?.scale))) {
-			switch (Settings?.AQI?.Local?.Standard) {
-				case 'WAQI_InstantCast':
-					const convertedAirQuality = airQuality.toWAQIInstantCast(body?.airQuality?.pollutants);
-					body.airQuality.metadata.providerName += `\n iRingo (converted from ${body.airQuality.metadata.providerName})`;
-					body.airQuality = { ...body.airQuality, ...convertedAirQuality };
-					body.airQuality.pollutants = Settings?.AQI?.Local?.UseConvertedUnit ? convertedAirQuality.pollutants : body.airQuality.pollutants;
-					$.log(`🚧 body.airQuality.pollutants: ${JSON.stringify(body.airQuality.pollutants, null, 2)}`, "");
-					break;
-			}
-		}
-	}
-	$.log(`✅ ConvertAirQuality`, "");
+	let airQuality;
+	switch (Settings?.AQI?.Local?.Standard) {
+		case "NONE":
+			break;
+		case 'WAQI_InstantCast':
+		default:
+			airQuality = new AirQuality().toWAQIInstantCast(body?.airQuality?.pollutants);
+			break;
+	}	if (airQuality.index) {
+		body.airQuality.metadata.providerName += `\n iRingo (converted from ${body.airQuality.metadata.providerName})`;
+		body.airQuality = { ...body.airQuality, ...airQuality };
+		body.airQuality.pollutants = Settings?.AQI?.Local?.UseConvertedUnit ? airQuality.pollutants : body.airQuality.pollutants;
+		$.log(`🚧 body.airQuality.pollutants: ${JSON.stringify(body.airQuality.pollutants, null, 2)}`, "");
+	}	$.log(`✅ ConvertAirQuality`, "");
 	return body;
 }
 async function InjectForecastNextHour(url, body, Settings) {

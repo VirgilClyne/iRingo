@@ -9,9 +9,8 @@
 			"Location": "Station",
 			"ReplaceProviders": ["QWeather"],
 			"Local": {
-				"Switch": true,
-				"ReplaceScales": ["HJ6332012"],
 				"Standard": "WAQI_InstantCast",
+				"ReplaceScales": ["HJ6332012"],
 				"UseConvertedUnit": false
 			}
 		},

@@ -14267,11 +14267,10 @@ var Settings = {
 			"QWeather"
 		],
 		Local: {
-			Switch: true,
+			Standard: "WAQI_InstantCast",
 			ReplaceScales: [
 				"HJ6332012"
 			],
-			Standard: "WAQI_InstantCast",
 			UseConvertedUnit: false
 		}
 	},
