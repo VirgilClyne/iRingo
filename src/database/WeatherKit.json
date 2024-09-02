@@ -5,9 +5,9 @@
 			"Provider": "ColorfulClouds"
 		},
 		"AQI": {
-			"Provider": "WeatherKit",
+			"Provider": "WAQI",
 			"Location": "Station",
-			"ReplaceProviders": ["QWeather"],
+			"ReplaceProviders": [],
 			"Local": {
 				"Standard": "WAQI_InstantCast",
 				"ReplaceScales": ["HJ6332012"],

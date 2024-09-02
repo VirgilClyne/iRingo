@@ -14628,10 +14628,9 @@ var Settings = {
 		Provider: "ColorfulClouds"
 	},
 	AQI: {
-		Provider: "WeatherKit",
+		Provider: "WAQI",
 		Location: "Station",
 		ReplaceProviders: [
-			"QWeather"
 		],
 		Local: {
 			Standard: "WAQI_InstantCast",
