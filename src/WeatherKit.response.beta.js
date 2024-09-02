@@ -9,10 +9,10 @@ import WeatherKit2 from "./class/WeatherKit2.mjs";
 import WAQI from "./class/WAQI.mjs";
 import ColorfulClouds from "./class/ColorfulClouds.mjs";
 import QWeather from "./class/QWeather.mjs";
-
-import * as flatbuffers from 'flatbuffers';
 import PollutantUnitConverter from "./class/PollutantUnitConverter.mjs";
 import InstantCast from "./class/InstantCast.mjs";
+
+import * as flatbuffers from 'flatbuffers';
 
 const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.1(4131) response.beta");
 
