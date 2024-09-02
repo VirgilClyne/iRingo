@@ -1,6 +1,6 @@
 export default class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.1.11";
+    Version = "v1.1.12";
     Author = "iRingo";
 
     static #Configs = {
@@ -346,6 +346,7 @@ export default class ForecastNextHour {
                             // ✅确定START
                             Conditions.push({ ...Condition });
                             // ✅补充CONSTANT
+                            Condition.endCondition = previousMinute.condition;
                             Condition.forecastToken = "CONSTANT";
                             Condition.startTime = Condition.endTime;
                             Condition.endTime = 0; // ⚠️空值必须写零！
