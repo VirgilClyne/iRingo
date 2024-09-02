@@ -113,7 +113,7 @@
 					"id": "@iRingo.WeatherKit.Settings.NextHour.Provider",
 					"name": "[未来一小时降水强度]数据源",
 					"val": "ColorfulClouds",
-					"type": "radios",
+					"type": "selects",
 					"items": [
 						{
 							"key": "WeatherKit",
@@ -134,7 +134,7 @@
 					"id": "@iRingo.WeatherKit.Settings.AQI.Provider",
 					"name": "[空气质量]数据源",
 					"val": "WAQI",
-					"type": "radios",
+					"type": "selects",
 					"items": [
 						{
 							"key": "WeatherKit",
