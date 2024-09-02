@@ -20060,7 +20060,7 @@ class QWeather {
 class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "1.0.3";
+        this.Version = "1.0.4";
         this.Author = "Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -20447,16 +20447,12 @@ class AirQuality {
     toWAQIInstantCast(pollutants = []) {
         console.log(`☑️ toWAQIInstantCast`, "");
         // Convert unit based on standard
-        const convertedPollutants = pollutants.map(({ units, amount, pollutantType }) => {
-            const pollutantStandard = this.Configs.WAQI_InstantCast.pollutants[pollutantType];
-
-            return {
-                amount: units !== pollutantStandard.UNIT
-                    ? this.PollutantUnitConverter(units, pollutantStandard.UNIT, amount, pollutantStandard.PPX_TO_XGM3)
-                    : amount,
-                units: pollutantStandard.UNIT,
-                pollutantType,
-            };
+        const convertedPollutants = pollutants.map(pollutant => {
+            const pollutantStandard = this.Configs.WAQI_InstantCast.pollutants[pollutant.pollutantType];
+            if (pollutant.units !== pollutantStandard.UNIT) {
+                pollutant.amount = this.PollutantUnitConverter(pollutant.units, pollutantStandard.UNIT, pollutant.amount, pollutantStandard.PPX_TO_XGM3);
+                pollutant.units = pollutantStandard.UNIT;
+            }            return pollutant;
         });
 
         // Calculate AQI for each pollutant
@@ -20500,8 +20496,7 @@ class AirQuality {
                 primaryAqi.aqi >= category.RANGE.LOWER && primaryAqi.aqi <= category.RANGE.UPPER,
         );
 
-        console.log(`✅ toWAQIInstantCast`, "");
-        return  {
+        let airQuality = {
             "index": primaryAqi.aqi,
             "pollutants": convertedPollutants.map((pollutant) => {
                 // Convert unit that does not supported in Apple Weather
@@ -20539,6 +20534,9 @@ class AirQuality {
             "categoryIndex": aqiCategory.CATEGORY_INDEX,
             "isSignificant": aqiCategory.CATEGORY_INDEX >= this.Configs.WAQI_InstantCast.SIGNIFICANT_LEVEL,
         };
+        console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+        console.log(`✅ toWAQIInstantCast`, "");
+        return airQuality;
     };
 
     static PollutantUnitConverter(unit, unitToConvert, amount, ppxToXGM3Value) {
@@ -20620,8 +20618,7 @@ class AirQuality {
             default:
                 amount = -1;
                 break;
-        }
-        console.log(`✅ PollutantUnitConverter, amount: ${amount}`, "");
+        }        console.log(`✅ PollutantUnitConverter, amount: ${amount}`, "");
         return amount;
     };
 }
