@@ -378,7 +378,7 @@ export default class InstantCast {
     static toWAQIInstantCast = (pollutants) => {
         // Convert unit based on standard
         const convertedPollutants = pollutants.map(({ units, amount, pollutantType }) => {
-            const pollutantStandard = WAQI_INSTANT_CAST.POLLUTANTS[pollutantType];
+            const pollutantStandard = this.WAQI_INSTANT_CAST.POLLUTANTS[pollutantType];
 
             return {
                 amount: units !== pollutantStandard.UNIT
@@ -391,7 +391,7 @@ export default class InstantCast {
 
         // Calculate AQI for each pollutant
         const aqiArray = convertedPollutants.map(({ amount, pollutantType }) => {
-            const ranges = WAQI_INSTANT_CAST.POLLUTANTS[pollutantType].RANGES;
+            const ranges = this.WAQI_INSTANT_CAST.POLLUTANTS[pollutantType].RANGES;
 
             if (amount > ranges.MAX.AMOUNT.UPPER) {
                 console.log(`⚠️ pollutantType ${pollutantType} exceeds the scale!`, "");
@@ -425,7 +425,7 @@ export default class InstantCast {
 
         const primaryAqi = aqiArray.reduce((previous, current) => previous.aqi > current.aqi ? previous : current);
 
-        const aqiCategory = WAQI_INSTANT_CAST.AQI_CATEGORIES.find(
+        const aqiCategory = this.WAQI_INSTANT_CAST.AQI_CATEGORIES.find(
             (category) =>
                 primaryAqi.aqi >= category.RANGE.LOWER && primaryAqi.aqi <= category.RANGE.UPPER,
         );
@@ -463,10 +463,10 @@ export default class InstantCast {
                         return pollutant;
                 }
             }),
-            scale: WAQI_INSTANT_CAST.SCALE,
+            scale: this.WAQI_INSTANT_CAST.SCALE,
             primaryPollutant: primaryAqi.pollutantType,
             categoryIndex: aqiCategory.CATEGORY_INDEX,
-            isSignificant: aqiCategory.CATEGORY_INDEX >= WAQI_INSTANT_CAST.SIGNIFICANT_LEVEL,
+            isSignificant: aqiCategory.CATEGORY_INDEX >= this.WAQI_INSTANT_CAST.SIGNIFICANT_LEVEL,
         };
     };
 }
