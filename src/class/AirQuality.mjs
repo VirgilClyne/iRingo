@@ -385,7 +385,7 @@ export default class AirQuality {
         }
     };
 
-    toWAQIInstantCast(pollutants) {
+    toWAQIInstantCast(pollutants = []) {
         console.log(`☑️ toWAQIInstantCast`, "");
         // Convert unit based on standard
         const convertedPollutants = pollutants.map(({ units, amount, pollutantType }) => {
@@ -443,8 +443,8 @@ export default class AirQuality {
 
         console.log(`✅ toWAQIInstantCast`, "");
         return  {
-            index: primaryAqi.aqi,
-            pollutants: convertedPollutants.map((pollutant) => {
+            "index": primaryAqi.aqi,
+            "pollutants": convertedPollutants.map((pollutant) => {
                 // Convert unit that does not supported in Apple Weather
                 switch (pollutant.units) {
                     case 'PARTS_PER_MILLION':
@@ -475,10 +475,10 @@ export default class AirQuality {
                         return pollutant;
                 }
             }),
-            scale: this.Configs.WAQI_InstantCast.scale,
-            primaryPollutant: primaryAqi.pollutantType,
-            categoryIndex: aqiCategory.CATEGORY_INDEX,
-            isSignificant: aqiCategory.CATEGORY_INDEX >= this.Configs.WAQI_InstantCast.SIGNIFICANT_LEVEL,
+            "scale": this.Configs.WAQI_InstantCast.scale,
+            "primaryPollutant": primaryAqi.pollutantType,
+            "categoryIndex": aqiCategory.CATEGORY_INDEX,
+            "isSignificant": aqiCategory.CATEGORY_INDEX >= this.Configs.WAQI_InstantCast.SIGNIFICANT_LEVEL,
         };
     };
 
