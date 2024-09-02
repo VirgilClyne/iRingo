@@ -229,6 +229,23 @@
 					"desc": "WAQI API 令牌，填写此字段将自动使用WAQI高级API"
 				},
 				{
+					"id": "@iRingo.WeatherKit.Settings.API.QWeather.Host",
+					"name": "[API]和风天气 API 主机",
+					"val": "devapi.qweather.com",
+					"type": "selects",
+					"desc": "和风天气 API 使用的主机名",
+					"items": [
+						{
+							"key": "devapi.qweather.com",
+							"label": "免费订阅"
+						},
+						{
+							"key": "api.qweather.com",
+							"label": "付费订阅"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.WeatherKit.Settings.API.QWeather.Token",
 					"name": "[API]和风天气 API 令牌",
 					"val": "",
