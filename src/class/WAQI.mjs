@@ -1,11 +1,12 @@
 import ENV from "../ENV/ENV.mjs";
+import AirQuality from "../class/AirQuality.mjs";
 import parseWeatherKitURL from "../function/parseWeatherKitURL.mjs"
 import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.3.0";
+        this.Version = "1.3.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -13,16 +14,6 @@ export default class WAQI {
     };
 
     #Configs = {
-        "categoryIndex": {
-            "-1": [Number.MIN_VALUE, -1],
-            "1": [0, 50],
-            "2": [51, 100],
-            "3": [101, 150],
-            "4": [151, 200],
-            "5": [201, 300],
-            "6": [301, 500],
-            "7": [500, Number.MAX_VALUE],
-        },
         "Pollutants": {
             "co": "CO",
             "no": "NO",
@@ -68,7 +59,7 @@ export default class WAQI {
                                     "stationId": parseInt(body?.d?.[0]?.x, 10),
                                     "stationKey": body?.d?.[0]?.k,
                                 },
-                                "categoryIndex": this.calculateCategoryIndex(parseInt(body?.d?.[0]?.v, 10)),
+                                "categoryIndex": AirQuality.CategoryIndex(body?.d?.[0]?.v, "WAQI_InstantCast"),
                                 "index": parseInt(body?.d?.[0]?.v, 10),
                                 "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
@@ -98,7 +89,7 @@ export default class WAQI {
                                     "sourceType": "STATION",
                                     "stationId": parseInt(body?.data?.stations?.[0]?.idx, 10),
                                 },
-                                "categoryIndex": this.calculateCategoryIndex(parseInt(body?.data?.stations?.[0]?.aqi, 10)),
+                                "categoryIndex": AirQuality.CategoryIndex(body?.data?.stations?.[0]?.aqi, "WAQI_InstantCast"),
                                 "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
                                 "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
@@ -198,7 +189,7 @@ export default class WAQI {
                                             "sourceType": "STATION",
                                             "stationId": stationId,
                                         },
-                                        "categoryIndex": this.calculateCategoryIndex(parseInt(body?.rxs?.obs?.[0]?.msg?.aqi, 10)),
+                                        "categoryIndex": AirQuality.CategoryIndex(body?.rxs?.obs?.[0]?.msg?.aqi, "WAQI_InstantCast"),
                                         "index": parseInt(body?.rxs?.obs?.[0]?.msg?.aqi, 10),
                                         "isSignificant": true,
                                         //"previousDayComparison": "UNKNOWN",
@@ -224,7 +215,7 @@ export default class WAQI {
             this.$.log(`✅ AQI`, "");
             return airQuality;
         };
-    }
+    };
 
     async AQI2(token = "na", stationId, header = { "Content-Type": "application/json" }) {
         this.$.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`, "");
@@ -254,7 +245,7 @@ export default class WAQI {
                             "sourceType": "STATION",
                             "stationId": stationId || parseInt(body?.data?.idx, 10),
                         },
-                        "categoryIndex": this.calculateCategoryIndex(parseInt(body?.data?.aqi, 10)),
+                        "categoryIndex": AirQuality.CategoryIndex(body?.data?.aqi, "WAQI_InstantCast"),
                         "index": parseInt(body?.data?.aqi, 10),
                         "isSignificant": true,
                         //"previousDayComparison": "UNKNOWN",
@@ -273,18 +264,5 @@ export default class WAQI {
             this.$.log(`✅ AQI2`, "");
             return airQuality;
         };
-    }
-
-    calculateCategoryIndex(aqi = new Number) {
-        this.$.log(`☑️ calculateCategoryIndex, aqi: ${aqi}`, "");
-        let categoryIndex;
-        for (const [key, value] of Object.entries(this.#Configs.categoryIndex)) {
-            if (aqi >= value[0] && aqi <= value[1]) {
-                categoryIndex = parseInt(key, 10);
-                break;
-            };
-        };
-        this.$.log(`✅ calculateCategoryIndex, categoryIndex: ${categoryIndex}`, "");
-        return categoryIndex;
     };
 };
