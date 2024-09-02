@@ -133,7 +133,7 @@
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.Provider",
 					"name": "[空气质量]数据源",
-					"val": "WeatherKit",
+					"val": "WAQI",
 					"type": "selects",
 					"items": [
 						{
@@ -150,9 +150,7 @@
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.ReplaceProviders",
 					"name": "[空气质量]需要替换的供应商",
-					"val": [
-						"QWeather"
-					],
+					"val": [],
 					"type": "checkboxes",
 					"desc": "选中的空气质量数据源会被替换。",
 					"items": [
