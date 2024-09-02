@@ -19220,7 +19220,7 @@ class WeatherKit2 {
 class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "1.1.5";
+        this.Version = "1.1.6";
         this.Author = "Wordless Echo & Virgil Clyne";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -19651,7 +19651,7 @@ class AirQuality {
 
     Pollutants(pollutants = [], scale = "WAQI_InstantCast") {
         console.log(`☑️ Pollutants, scale: ${scale}`, "");
-        pollutants = pollutants.map(pollutant => {
+        const convertedPollutants = pollutants.map(pollutant => {
             // Convert unit based on standard
             const pollutantStandard = this.Configs[scale].pollutants[pollutant.pollutantType];
             if (pollutant.units !== pollutantStandard.UNIT) {
@@ -19678,7 +19678,7 @@ class AirQuality {
         });
         //console.log(`🚧 pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
         console.log(`✅ Pollutants`, "");
-        return pollutants;
+        return convertedPollutants;
     };
 
     AQI(pollutants = [], scale = "WAQI_InstantCast") {
