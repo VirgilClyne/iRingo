@@ -14649,7 +14649,8 @@ var Settings = {
 		},
 		QWeather: {
 			Token: null,
-			Header: null
+			Header: null,
+			Host: "devapi.qweather.com"
 		},
 		ColorfulClouds: {
 			Token: null,
