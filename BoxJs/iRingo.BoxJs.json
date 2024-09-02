@@ -117,7 +117,7 @@
 					"items": [
 						{
 							"key": "WeatherKit",
-							"label": "WeatherKit"
+							"label": "WeatherKit (不进行替换)"
 						},
 						{
 							"key": "QWeather",
@@ -138,14 +138,14 @@
 					"items": [
 						{
 							"key": "WeatherKit",
-							"label": "WeatherKit"
+							"label": "WeatherKit (不进行替换)"
 						},
 						{
 							"key": "WAQI",
 							"label": "The World Air Quality Project"
 						}
 					],
-					"desc": "始终会使用选定的数据源，填补无空气质量监测地区的数据"
+					"desc": "始终会使用选定的数据源，填补无空气质量监测地区的数据。"
 				},
 				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.ReplaceProviders",
@@ -187,11 +187,11 @@
 					"items": [
 						{
 							"key": "devapi.qweather.com",
-							"label": "免费订阅"
+							"label": "免费订阅 (devapi.qweather.com)"
 						},
 						{
 							"key": "api.qweather.com",
-							"label": "付费订阅"
+							"label": "付费订阅 (api.qweather.com)"
 						}
 					]
 				},

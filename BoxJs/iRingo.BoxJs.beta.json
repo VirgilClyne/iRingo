@@ -117,7 +117,7 @@
 					"items": [
 						{
 							"key": "WeatherKit",
-							"label": "WeatherKit"
+							"label": "WeatherKit (不进行替换)"
 						},
 						{
 							"key": "QWeather",
@@ -138,7 +138,7 @@
 					"items": [
 						{
 							"key": "WeatherKit",
-							"label": "WeatherKit"
+							"label": "WeatherKit (不进行替换)"
 						},
 						{
 							"key": "QWeather",
@@ -179,13 +179,6 @@
 					]
 				},
 				{
-					"id": "@iRingo.WeatherKit.Settings.AQI.Local.Switch",
-					"name": "[空气质量]本地替换",
-					"val": true,
-					"type": "boolean",
-					"desc": "使用本地替换算法，将Apple数据转换为特定标准"
-				},
-				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.Local.ReplaceScales",
 					"name": "[空气质量]需要修改的标准",
 					"val": [
@@ -196,7 +189,7 @@
 					"items": [
 						{
 							"key": "HJ6332012",
-							"label": "中国（HJ 633—2012）"
+							"label": "中国 (HJ 633—2012)"
 						}
 					]
 				},
@@ -207,6 +200,10 @@
 					"type": "selects",
 					"desc": "本地替换时使用的算法",
 					"items": [
+						{
+							"key": "NONE",
+							"label": "None (不进行替换)"
+						},
 						{
 							"key": "WAQI_InstantCast",
 							"label": "WAQI InstantCast"
@@ -237,11 +234,11 @@
 					"items": [
 						{
 							"key": "devapi.qweather.com",
-							"label": "免费订阅"
+							"label": "免费订阅 (devapi.qweather.com)"
 						},
 						{
 							"key": "api.qweather.com",
-							"label": "付费订阅"
+							"label": "付费订阅 (api.qweather.com)"
 						}
 					]
 				},
