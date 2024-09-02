@@ -9,12 +9,11 @@ import WeatherKit2 from "./class/WeatherKit2.mjs";
 import WAQI from "./class/WAQI.mjs";
 import ColorfulClouds from "./class/ColorfulClouds.mjs";
 import QWeather from "./class/QWeather.mjs";
-import PollutantUnitConverter from "./class/PollutantUnitConverter.mjs";
-import InstantCast from "./class/InstantCast.mjs";
+import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.4.1(4131) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.0(4136) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -105,7 +104,34 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
-											if (Settings.AQI.ReplaceProviders.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
+											// PollutantUnitConverter
+											switch (body?.airQuality?.metadata?.providerName) {
+												case "和风天气":
+												case "QWeather":
+													if (body?.airQuality?.pollutants) body.airQuality.pollutants = body.airQuality.pollutants.map((pollutant) => {
+														switch (pollutant.pollutantType) {
+															case "CO": // Fix CO amount from QWeather
+																const mgAmount = AirQuality.PollutantUnitConverter(pollutant.units, 'MILLIGRAMS_PER_CUBIC_METER', pollutant.amount, -1);
+																if (mgAmount < 0.1) pollutant.amount = AirQuality.PollutantUnitConverter('MILLIGRAMS_PER_CUBIC_METER', pollutant.units, pollutant.amount, -1);
+																break;
+															default:
+																break;
+														};
+														return pollutant;
+													});
+													break;
+											};
+											// InjectAirQuality
+											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
+											// ConvertAirQuality
+											switch (Settings?.AQI?.Local?.Switch) {
+												case true:
+													body = ConvertAirQuality(body, Settings);
+													break;
+												case false:
+												default:
+													break;
+											};
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										};
 										if (url.searchParams.get("dataSets").includes("currentWeather")) {
@@ -160,51 +186,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 	.finally(() => $.done($response))
 
 async function InjectAirQuality(url, body, Settings) {
-	const scaleToSettings = (scale) => {
-		const dotIndex = scale?.lastIndexOf('.');
-		if (!scale || !dotIndex) {
-			return scale;
-		}
-
-		return scale.slice(0, dotIndex);
-	};
-
 	$.log(`☑️ InjectAirQuality`, "");
-
-	// Fix CO amount from QWeather
-	const providerName = body?.airQuality?.metadata?.providerName;
-	if (['和风天气', 'QWeather'].includes(providerName) && body?.airQuality?.pollutants) {
-		body.airQuality.pollutants = body.airQuality.pollutants.map((pollutant) => {
-			const { pollutantType } = pollutant;
-			if (pollutantType !== 'CO') {
-				return pollutant;
-			}
-
-			const { amount, units } = pollutant;
-			const mgAmount = PollutantUnitConverter.convert(
-				units,
-				'MILLIGRAMS_PER_CUBIC_METER',
-				amount,
-				-1,
-			);
-
-			if (mgAmount < 0.1) {
-				const convertedAmount = PollutantUnitConverter.convert(
-					'MILLIGRAMS_PER_CUBIC_METER',
-					units,
-					amount,
-					-1,
-				);
-
-				$.log(`☑️ ${pollutantType} amount ${amount} from ${providerName} is fixed to ${convertedAmount}`, "");
-
-				return { ...pollutant, amount: convertedAmount };
-			} else {
-				return pollutant;
-			}
-		});
-	}
-
 	let airQuality;
 	let metadata;
 	switch (Settings?.AQI?.Provider) {
@@ -230,39 +212,7 @@ async function InjectAirQuality(url, body, Settings) {
 				airQuality = { ...Nearest, ...airQuality };
 			}
 			break;
-	}
-
-	if (
-		Settings?.AQI?.Local?.Switch
-		&& Settings?.AQI?.Local?.ReplaceScales.includes(scaleToSettings(body?.airQuality?.scale))
-	) {
-		const pollutants = airQuality?.pollutants || body?.airQuality?.pollutants;
-		if (pollutants) {
-			switch (Settings?.AQI?.Local?.Standard) {
-				case 'WAQI_InstantCast':
-					const convertedAirQuality = InstantCast.toWAQIInstantCast(pollutants);
-
-					metadata = {
-						...body.airQuality.metadata,
-						providerName: ` iRingo (converted from ${body.airQuality.metadata.providerName})`
-					};
-
-					airQuality = {
-						...body.airQuality,
-						...convertedAirQuality,
-						pollutants: Settings?.AQI?.Local?.UseConvertedUnit
-							? convertedAirQuality.pollutants
-							: body.airQuality.pollutants,
-					};
-
-					$.log(`🚧 airQuality.pollutants: ${JSON.stringify(airQuality.pollutants, null, 2)}`, "");
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
+	};
 	if (metadata) {
 		metadata = { ...body?.airQuality?.metadata, ...metadata };
 		body.airQuality = { ...body?.airQuality, ...airQuality };
@@ -271,6 +221,33 @@ async function InjectAirQuality(url, body, Settings) {
 		//$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 	}
 	$.log(`✅ InjectAirQuality`, "");
+	return body;
+};
+
+function ConvertAirQuality(body, Settings) {
+	$.log(`☑️ ConvertAirQuality`, "");
+	const airQuality = new AirQuality();
+	function scaleToSettings(scale) {
+		const dotIndex = scale?.lastIndexOf('.');
+		if (!scale || !dotIndex) return scale;
+		else return scale.slice(0, dotIndex);
+	};
+	if (body?.airQuality?.pollutants) {
+		if (Settings?.AQI?.Local?.ReplaceScales.includes(scaleToSettings(body?.airQuality?.scale))) {
+			switch (Settings?.AQI?.Local?.Standard) {
+				case 'WAQI_InstantCast':
+					const convertedAirQuality = airQuality.toWAQIInstantCast(body?.airQuality?.pollutants);
+					body.airQuality.metadata.providerName += `\n iRingo (converted from ${body.airQuality.metadata.providerName})`;
+					body.airQuality = { ...body.airQuality, ...convertedAirQuality };
+					body.airQuality.pollutants = Settings?.AQI?.Local?.UseConvertedUnit ? convertedAirQuality.pollutants : body.airQuality.pollutants;
+					$.log(`🚧 body.airQuality.pollutants: ${JSON.stringify(body.airQuality.pollutants, null, 2)}`, "");
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	$.log(`✅ ConvertAirQuality`, "");
 	return body;
 };
 
