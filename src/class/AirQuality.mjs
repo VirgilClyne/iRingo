@@ -1,7 +1,7 @@
 export default class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "1.1.4";
+        this.Version = "1.1.5";
         this.Author = "Wordless Echo & Virgil Clyne";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -449,16 +449,16 @@ export default class AirQuality {
             // Convert unit that does not supported in Apple Weather
             switch (pollutant.units) {
                 case "PARTS_PER_MILLION":
-                    pollutant.amount = AirQuality.ConvertUnit("PARTS_PER_MILLION", "PARTS_PER_BILLION", pollutant.amount, -1); // Will not convert to Xg/m3
-                    pollutant.units = "PARTS_PER_MILLION";
+                    pollutant.amount = AirQuality.ConvertUnit(pollutant.units, "PARTS_PER_BILLION", pollutant.amount, -1); // Will not convert to Xg/m3
+                    pollutant.units = "PARTS_PER_BILLION";
                     break
                 case 'MILLIGRAMS_PER_CUBIC_METER':
-                    pollutant.amount = AirQuality.ConvertUnit("PARTS_PER_MILLION", "PARTS_PER_BILLION", pollutant.amount, -1); // Will not convert to Xg/m3
-                    pollutant.units = "PARTS_PER_MILLION";
+                    pollutant.amount = AirQuality.ConvertUnit(pollutant.units, "MICROGRAMS_PER_CUBIC_METER", pollutant.amount, -1); // Will not convert to Xg/m3
+                    pollutant.units = "MICROGRAMS_PER_CUBIC_METER";
                     break;
                 default:
                     break;
-            }
+            };
             return pollutant;
         });
         //console.log(`🚧 pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
