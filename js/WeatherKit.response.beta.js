@@ -14220,7 +14220,8 @@ var Settings = {
 		},
 		QWeather: {
 			Token: null,
-			Header: null
+			Header: null,
+			Host: "devapi.qweather.com"
 		},
 		ColorfulClouds: {
 			Token: null,
@@ -19975,19 +19976,19 @@ class ColorfulClouds {
 }
 
 class QWeather {
-    constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url) }) {
+    constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url), "host": "devapi.qweather.com", "version": "v7" }) {
         this.Name = "QWeather";
-        this.Version = "1.0.1";
+        this.Version = "1.0.2";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
         this.$ = $;
     };
 
-    async Minutely(token = "", version = "v7", header = { "Content-Type": "application/json" }) {
-        this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
+    async Minutely(token = "", header = { "Content-Type": "application/json" }) {
+        this.$.log(`☑️ Minutely, token: ${token}, host: ${this.host}, version: ${this.version}`, "");
         const request = {
-            "url": `https://devapi.qweather.com/${version}/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
+            "url": `https://${this.host}/${this.version}/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": header,
         };
         let forecastNextHour;
@@ -20626,7 +20627,7 @@ class AirQuality {
     };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.0(4136) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.1(4137) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20836,7 +20837,7 @@ async function InjectForecastNextHour(url, body, Settings) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
-			const qWeather = new QWeather($, { "url": url });
+			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "version": "v7" });
 			forecastNextHour = await qWeather.Minutely(Settings?.API?.QWeather?.Token);
 			break;
 		case "ColorfulClouds":

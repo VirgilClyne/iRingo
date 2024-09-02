@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.0(4136) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.1(4137) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -259,7 +259,7 @@ async function InjectForecastNextHour(url, body, Settings) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
-			const qWeather = new QWeather($, { "url": url });
+			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "version": "v7" });
 			forecastNextHour = await qWeather.Minutely(Settings?.API?.QWeather?.Token);
 			break;
 		case "ColorfulClouds":
