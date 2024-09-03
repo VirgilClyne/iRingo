@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.2(4144) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.3(4145) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -225,7 +225,7 @@ function ConvertAirQuality(body, Settings) {
 			break;
 		case 'WAQI_InstantCast':
 		default:
-			airQuality = new AirQuality().AQI(body?.airQuality?.pollutants);
+			airQuality = AirQuality.AQI(body?.airQuality?.pollutants);
 			if (!Settings?.AQI?.Local?.UseConvertedUnit) delete airQuality.pollutants;
 			break;
 	};

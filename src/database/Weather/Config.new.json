@@ -1,0 +1,220 @@
+{
+    "Scales": {
+        "EPA_NowCast": {
+            "scale": 'EPA_NowCast',
+            "categoryIndex": {
+                "-1": [Number.MIN_VALUE, -1], // INVALID
+                "1": [0, 50], // GOOD
+                "2": [51, 100], // MODERATE
+                "3": [101, 150], // UNHEALTHY_FOR_SENSITIVE
+                "4": [151, 200], // UNHEALTHY
+                "5": [201, 300], // VERY_UNHEALTHY
+                "6": [301, 500], // HAZARDOUS
+                "7": [500, Number.MAX_VALUE], // OVER_RANGE
+            },
+            "significant": 3,
+            "pollutants": {
+                "OZONE_8H": {
+                    "units": 'PARTS_PER_MILLION',
+                    "ppxToXGM3": 1.97,
+                    "ranges": {
+                        "1": [0, 0.054], // GOOD
+                        "2": [0.055, 0.070], // MODERATE
+                        "3": [0.071, 0.085], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [0.086, 0.105], // UNHEALTHY
+                        "5": [0.106, 0.200], // VERY_UNHEALTHY
+                    }
+                },
+                "OZONE": {
+                    "units": 'PARTS_PER_MILLION',
+                    "ppxToXGM3": 1.97,
+                    "ranges": {
+                        "3": [0.125, 0.164], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [0.165, 0.204], // UNHEALTHY
+                        "5": [0.205, 0.404], // VERY_UNHEALTHY
+                        "6": [0.405, 0.604], // HAZARDOUS
+                    }
+                },
+                "PM2_5": {
+                    "units": 'MICROGRAMS_PER_CUBIC_METER',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "1": [0.0, 9.0], // GOOD
+                        "2": [9.1, 35.4], // MODERATE
+                        "3": [35.5, 55.4], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [55.5, 125.4], // UNHEALTHY
+                        "5": [125.5, 225.4], // VERY_UNHEALTHY
+                        "6": [225.5, 325.4], // HAZARDOUS
+                    }
+                },
+                "PM10": {
+                    "units": 'MICROGRAMS_PER_CUBIC_METER',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "1": [0, 54], // GOOD
+                        "2": [55, 154], // MODERATE
+                        "3": [155, 254], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [255, 354], // UNHEALTHY
+                        "5": [355, 424], // VERY_UNHEALTHY
+                        "6": [425, 604], // HAZARDOUS
+                    }
+                },
+                "CO": {
+                    "units": 'PARTS_PER_MILLION',
+                    "ppxToXGM3": 1.14,
+                    "ranges": {
+                        "1": [0.0, 4.4], // GOOD
+                        "2": [4.5, 9.4], // MODERATE
+                        "3": [9.5, 12.4], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [12.5, 15.4], // UNHEALTHY
+                        "5": [15.5, 30.4], // VERY_UNHEALTHY
+                        "6": [30.5, 50.4], // HAZARDOUS
+                    }
+                },
+                "SO2": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": 2.62,
+                    "ranges": {
+                        "1": [0, 35], // GOOD
+                        "2": [36, 75], // MODERATE
+                        "3": [76, 185], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [186, 304], // UNHEALTHY
+                    }
+                },
+                "SO2_24H": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "5": [305, 604], // VERY_UNHEALTHY
+                        "6": [605, 1004], // HAZARDOUS
+                    }
+                },
+                "SO2_MAX_1H": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "5": [305, 604], // VERY_UNHEALTHY
+                        "6": [605, Number.MAX_VALUE], // HAZARDOUS
+                    }
+                },
+                "NO2": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": 1.88,
+                    "ranges": {
+                        "1": [0, 53], // GOOD
+                        "2": [54, 100], // MODERATE
+                        "3": [101, 360], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [361, 649], // UNHEALTHY
+                        "5": [650, 1249], // VERY_UNHEALTHY
+                        "6": [1250, 2049], // HAZARDOUS
+                    }
+                },
+            }
+        },
+        "WAQI_InstantCast": {
+            "scale": 'EPA_NowCast',
+            "categoryIndex": {
+                "-1": [Number.MIN_VALUE, -1], // INVALID
+                "1": [0, 50], // GOOD
+                "2": [51, 100], // MODERATE
+                "3": [101, 150], // UNHEALTHY_FOR_SENSITIVE
+                "4": [151, 200], // UNHEALTHY
+                "5": [201, 300], // VERY_UNHEALTHY
+                "6": [301, 500], // HAZARDOUS
+                "7": [500, Number.MAX_VALUE], // OVER_RANGE
+            },
+            "significant": 3,
+            "pollutants": {
+                "OZONE": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": 1.97,
+                    "ranges": {
+                        "1": [0, 61.5], // GOOD
+                        "2": [62.5, 100.5], // MODERATE
+                        "3": [101.5, 151.5], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [152.5, 204], // UNHEALTHY
+                        "5": [205, 404], // VERY_UNHEALTHY
+                        "6": [405, 605], // HAZARDOUS
+                    },
+                },
+                "SO2": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": 2.62,
+                    "ranges": {
+                        "1": [0, 35], // GOOD
+                        "2": [36, 75], // MODERATE
+                        "3": [76, 185], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [186, 304], // UNHEALTHY
+                    },
+                },
+                "SO2_MAX_1H": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "5": [305, 604], // VERY_UNHEALTHY
+                        "6": [605, Number.MAX_VALUE], // HAZARDOUS
+                    },
+                },
+                "NO2": {
+                    "units": 'PARTS_PER_BILLION',
+                    "ppxToXGM3": 1.88,
+                    "ranges": {
+                        "1": [0, 53], // GOOD
+                        "2": [54, 100], // MODERATE
+                        "3": [101, 360], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [361, 649], // UNHEALTHY
+                        "5": [650, 1249], // VERY_UNHEALTHY
+                        "6": [1250, 2049], // HAZARDOUS
+                    },
+                },
+                "PM2_5": {
+                    "units": 'MICROGRAMS_PER_CUBIC_METER',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "1": [0.0, 9.0], // GOOD
+                        "2": [9.1, 35.4], // MODERATE
+                        "3": [35.5, 55.4], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [55.5, 125.4], // UNHEALTHY
+                        "5": [125.5, 225.4], // VERY_UNHEALTHY
+                        "6": [225.5, 325.4], // HAZARDOUS
+                    },
+                },
+                "PM10": {
+                    "units": 'MICROGRAMS_PER_CUBIC_METER',
+                    "ppxToXGM3": -1,
+                    "ranges": {
+                        "1": [0, 54], // GOOD
+                        "2": [55, 154], // MODERATE
+                        "3": [155, 254], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [255, 354], // UNHEALTHY
+                        "5": [355, 424], // VERY_UNHEALTHY
+                        "6": [425, 604], // HAZARDOUS
+                    },
+                },
+                "CO": {
+                    "units": 'PARTS_PER_MILLION',
+                    "ppxToXGM3": 1.14,
+                    "ranges": {
+                        "1": [0.0, 4.4], // GOOD
+                        "2": [4.5, 9.4], // MODERATE
+                        "3": [9.5, 12.4], // UNHEALTHY_FOR_SENSITIVE
+                        "4": [12.5, 15.4], // UNHEALTHY
+                        "5": [15.5, 30.4], // VERY_UNHEALTHY
+                        "6": [30.5, 50.4], // HAZARDOUS
+                    },
+                },
+            }
+        },
+    },
+    "Pollutants": {
+        "co": "CO",
+        "no": "NO",
+        "no2": "NO2",
+        "so2": "SO2",
+        "o3": "OZONE",
+        "nox": "NOX",
+        "pm25": "PM2_5",
+        "pm10": "PM10",
+        "other": "NOT_AVAILABLE"
+    },
+}
