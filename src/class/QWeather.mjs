@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class QWeather {
     constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url), "host": "devapi.qweather.com", "version": "v7" }) {
         this.Name = "QWeather";
-        this.Version = "1.0.2";
+        this.Version = "1.0.3";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -75,7 +75,7 @@ export default class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw { "status": body?.code, "reason": body?.error };
+                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
             };
         } catch (error) {
             this.$.logErr(error);

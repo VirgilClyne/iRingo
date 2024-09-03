@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.3.1";
+        this.Version = "1.3.2";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -68,7 +68,7 @@ export default class WAQI {
                             };
                             break;
                         case "error":
-                            throw { "status": body?.status, "reason": body?.message };
+                            throw JSON.stringify({ "status": body?.status, "reason": body?.message });
                     };
                     break;
                 case "mapq2":
@@ -99,7 +99,7 @@ export default class WAQI {
                             break;
                         case "error":
                         case undefined:
-                            throw { "status": body?.status, "reason": body?.reason };
+                            throw JSON.stringify({ "status": body?.status, "reason": body?.reason });
                     };
                     break;
                 default:
@@ -126,7 +126,7 @@ export default class WAQI {
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
-                    throw { "status": body?.status, "reason": body?.data };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.data });
                 default:
                     switch (body?.rxs?.status) {
                         case "ok":
@@ -136,12 +136,12 @@ export default class WAQI {
                                     //uid = body?.rxs?.obs?.[0]?.uid;
                                     break;
                                 case "error":
-                                    throw { "status": body?.rxs?.obs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg };
+                                    throw JSON.stringify({ "status": body?.rxs?.obs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg });
                             };
                             break;
                         case "error":
                         case undefined:
-                            throw { "status": body?.rxs?.status, "reason": body?.rxs };
+                            throw JSON.stringify({ "status": body?.rxs?.status, "reason": body?.rxs });
                     };
                     break;
             };
@@ -167,7 +167,7 @@ export default class WAQI {
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
-                    throw { "status": body?.status, "reason": body?.data };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.data });
                 default:
                 case undefined:
                     switch (body?.rxs?.status) {
@@ -199,12 +199,12 @@ export default class WAQI {
                                     break;
                                 case "error":
                                 case undefined:
-                                    throw { "status": body?.rxs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg };
+                                    throw JSON.stringify({ "status": body?.rxs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg });
                             };
                             break;
                         case "error":
                         case undefined:
-                            throw { "status": body?.rxs?.status, "reason": body?.rxs };
+                            throw JSON.stringify({ "status": body?.rxs?.status, "reason": body?.rxs });
                     };
                     break;
             };
@@ -255,7 +255,7 @@ export default class WAQI {
                     break;
                 case "error":
                 case undefined:
-                    throw { "status": body?.status, "reason": body?.data };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.data });
             };
         } catch (error) {
             this.$.logErr(error);

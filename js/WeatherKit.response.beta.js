@@ -19639,7 +19639,7 @@ function parseWeatherKitURL(url = $request.url) {
 class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.3.1";
+        this.Version = "1.3.2";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -19701,7 +19701,7 @@ class WAQI {
                             };
                             break;
                         case "error":
-                            throw { "status": body?.status, "reason": body?.message };
+                            throw JSON.stringify({ "status": body?.status, "reason": body?.message });
                     };
                     break;
                 case "mapq2":
@@ -19732,7 +19732,7 @@ class WAQI {
                             break;
                         case "error":
                         case undefined:
-                            throw { "status": body?.status, "reason": body?.reason };
+                            throw JSON.stringify({ "status": body?.status, "reason": body?.reason });
                     };
                     break;
                 default:
@@ -19758,7 +19758,7 @@ class WAQI {
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
-                    throw { "status": body?.status, "reason": body?.data };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.data });
                 default:
                     switch (body?.rxs?.status) {
                         case "ok":
@@ -19768,12 +19768,12 @@ class WAQI {
                                     //uid = body?.rxs?.obs?.[0]?.uid;
                                     break;
                                 case "error":
-                                    throw { "status": body?.rxs?.obs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg };
+                                    throw JSON.stringify({ "status": body?.rxs?.obs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg });
                             };
                             break;
                         case "error":
                         case undefined:
-                            throw { "status": body?.rxs?.status, "reason": body?.rxs };
+                            throw JSON.stringify({ "status": body?.rxs?.status, "reason": body?.rxs });
                     };
                     break;
             };
@@ -19798,7 +19798,7 @@ class WAQI {
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
-                    throw { "status": body?.status, "reason": body?.data };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.data });
                 default:
                 case undefined:
                     switch (body?.rxs?.status) {
@@ -19830,12 +19830,12 @@ class WAQI {
                                     break;
                                 case "error":
                                 case undefined:
-                                    throw { "status": body?.rxs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg };
+                                    throw JSON.stringify({ "status": body?.rxs?.[0]?.status, "reason": body?.rxs?.obs?.[0]?.msg });
                             };
                             break;
                         case "error":
                         case undefined:
-                            throw { "status": body?.rxs?.status, "reason": body?.rxs };
+                            throw JSON.stringify({ "status": body?.rxs?.status, "reason": body?.rxs });
                     };
                     break;
             };
@@ -19885,7 +19885,7 @@ class WAQI {
                     break;
                 case "error":
                 case undefined:
-                    throw { "status": body?.status, "reason": body?.data };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.data });
             };
         } catch (error) {
             this.$.logErr(error);
@@ -20292,7 +20292,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.7.2";
+        this.Version = "1.7.3";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -20357,13 +20357,13 @@ class ColorfulClouds {
                         case "error":
                         case "failed":
                         case undefined:
-                            throw { "status": body?.result?.minutely?.status, "reason": body?.result?.minutely };
+                            throw JSON.stringify({ "status": body?.result?.minutely?.status, "reason": body?.result?.minutely });
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw { "status": body?.status, "reason": body?.error };
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
             };
         } catch (error) {
             this.$.logErr(error);
@@ -20377,7 +20377,7 @@ class ColorfulClouds {
 class QWeather {
     constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url), "host": "devapi.qweather.com", "version": "v7" }) {
         this.Name = "QWeather";
-        this.Version = "1.0.2";
+        this.Version = "1.0.3";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -20446,7 +20446,7 @@ class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw { "status": body?.code, "reason": body?.error };
+                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
             };
         } catch (error) {
             this.$.logErr(error);
