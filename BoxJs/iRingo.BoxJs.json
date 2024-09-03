@@ -141,6 +141,10 @@
 							"label": "WeatherKit (不进行替换)"
 						},
 						{
+							"key": "ColorfulClouds",
+							"label": "彩云天气"
+						},
+						{
 							"key": "WAQI",
 							"label": "The World Air Quality Project"
 						}
