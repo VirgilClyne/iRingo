@@ -14199,7 +14199,7 @@ var Settings = {
 		Provider: "ColorfulClouds"
 	},
 	AQI: {
-		Provider: "WAQI",
+		Provider: "ColorfulClouds",
 		Location: "Station",
 		ReplaceProviders: [
 		],
@@ -14208,7 +14208,7 @@ var Settings = {
 			ReplaceScales: [
 				"HJ6332012"
 			],
-			UseConvertedUnit: false
+			ConvertUnits: false
 		}
 	},
 	API: {
