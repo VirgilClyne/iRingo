@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.7.3";
+        this.Version = "1.7.4";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -64,7 +64,7 @@ export default class ColorfulClouds {
                             };
                             forecastNextHour.minutes.length = Math.min(85, forecastNextHour.minutes.length);
                             forecastNextHour.forecastEnd = minuteStemp + 60 * forecastNextHour.minutes.length;
-                            forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.result?.minutely?.description);
+                            forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.result?.minutely?.description, "mmph");
                             forecastNextHour.summary = ForecastNextHour.Summary(forecastNextHour.minutes);
                             forecastNextHour.condition = ForecastNextHour.Condition(forecastNextHour.minutes);
                             break;

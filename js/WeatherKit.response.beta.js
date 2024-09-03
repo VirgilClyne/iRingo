@@ -19898,44 +19898,70 @@ class WAQI {
 
 class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.1.12";
+    Version = "v1.2.3";
     Author = "iRingo";
 
-    static #Configs = {
-        "Pollutants": {
-            "co": "CO",
-            "no": "NO",
-            "no2": "NO2",
-            "so2": "SO2",
-            "o3": "OZONE",
-            "nox": "NOX",
-            "pm25": "PM2_5",
-            "pm10": "PM10",
-            "other": "NOT_AVAILABLE"
-        },
-        "WeatherCondition": {
-            "晴朗": "CLEAR",
-            "雨夹雪": "SLEET",
-            "小雨": "DRIZZLE",
-            "下雨": "RAIN",
-            "中雨": "RAIN",
-            "大雨": "HEAVY_RAIN",
-            "小雪": "FLURRIES",
-            "下雪": "SNOW",
-            "中雪": "SNOW",
-            "大雪": "HEAVY_SNOW",
-            "冰雹": "HAIL",
-        },
-        "PrecipitationType": {
-            "晴朗": "CLEAR",
-            "雨夹雪": "SLEET",
-            "rain": "RAIN",
-            "雨": "RAIN",
-            "snow": "SNOW",
-            "雪": "SNOW",
-            "冰雹": "HAIL",
-        }
-    };
+	static #Configs = {
+		"Pollutants": {
+			"co": "CO",
+			"no": "NO",
+			"no2": "NO2",
+			"so2": "SO2",
+			"o3": "OZONE",
+			"nox": "NOX",
+			"pm25": "PM2_5",
+			"pm10": "PM10",
+			"other": "NOT_AVAILABLE",
+		},
+		"WeatherCondition": {
+			"晴朗": "CLEAR",
+			"雨夹雪": "SLEET",
+			"小雨": "DRIZZLE",
+			"下雨": "RAIN",
+			"中雨": "RAIN",
+			"大雨": "HEAVY_RAIN",
+			"小雪": "FLURRIES",
+			"下雪": "SNOW",
+			"中雪": "SNOW",
+			"大雪": "HEAVY_SNOW",
+			"冰雹": "HAIL",
+		},
+		"PrecipitationType": {
+			"晴朗": "CLEAR",
+			"雨夹雪": "SLEET",
+			"rain": "RAIN",
+			"雨": "RAIN",
+			"snow": "SNOW",
+			"雪": "SNOW",
+			"冰雹": "HAIL",
+		},
+		"Precipitation": {
+			"Level": {
+				"INVALID": -1,
+				"NO": 0,
+				"LIGHT": 1,
+				"MODERATE": 2,
+				"HEAVY": 3,
+				"STORM": 4,
+			},
+			"Range": {
+				"radar": {
+					"NO": [0, 0.031],
+					"LIGHT": [0.031, 0.25],
+					"MODERATE": [0.25, 0.35],
+					"HEAVY": [0.35, 0.48],
+					"STORM": [0.48, Number.MAX_VALUE],
+				},
+				"mmph": {
+					"NO": [0, 0.0606],
+					"LIGHT": [0.0606, 0.8989],
+					"MODERATE": [0.8989, 2.87],
+					"HEAVY": [2.87, 12.8638],
+					"STORM": [12.8638, Number.MAX_VALUE],
+				},
+			},
+		},
+	};
 
     static WeatherCondition(sentence) {
         console.log(`☑️ WeatherCondition, sentence: ${sentence}`, "");
@@ -19957,13 +19983,14 @@ class ForecastNextHour {
         return precipitationType;
     };
 
-    static ConditionType(precipitationIntensity, precipitationType) {
+    static ConditionType(precipitationIntensity, precipitationType, units = "mmph") {
         // refer: https://docs.caiyunapp.com/weather-api/v2/v2.6/tables/precip.html
         //console.log(`☑️ ConditionType`, "");
         //console.log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`, "");
+        const Range = this.#Configs.Precipitation.Range[units];
         let condition = "CLEAR";
-        if (precipitationIntensity >= 0 && precipitationIntensity < 0.002 ) condition = "CLEAR";
-        else if (precipitationIntensity >= 0.002 && precipitationIntensity < 0.0606) {
+        if (precipitationIntensity >= Range.NO[0] && precipitationIntensity <= 0.001 ) condition = "CLEAR";
+        else if (precipitationIntensity > 0.001 && precipitationIntensity <= Range.NO[1]) {
             switch (precipitationType) {
                 case "RAIN":
                     condition = "POSSIBLE_DRIZZLE";
@@ -19974,7 +20001,7 @@ class ForecastNextHour {
                 default:
                     condition = `POSSIBLE_${precipitationType}`;
                     break;
-            }        } else if (precipitationIntensity >= 0.0606 && precipitationIntensity < 0.8989) {
+            }        } else if (precipitationIntensity > Range.LIGHT[0] && precipitationIntensity <= Range.LIGHT[1]) {
             switch (precipitationType) {
                 case "RAIN":
                     condition = "DRIZZLE";
@@ -19985,7 +20012,7 @@ class ForecastNextHour {
                 default:
                     condition = precipitationType;
                     break;
-            }        } else if (precipitationIntensity >= 0.8989 && precipitationIntensity < 2.87) {
+            }        } else if (precipitationIntensity > Range.MODERATE[0] && precipitationIntensity <= Range.MODERATE[1]) {
             switch (precipitationType) {
                 case "RAIN":
                     condition = "RAIN";
@@ -19996,7 +20023,7 @@ class ForecastNextHour {
                 default:
                     condition = precipitationType;
                     break;
-            }        } else if (precipitationIntensity >=2.87){
+            }        } else if (precipitationIntensity > Range.HEAVY[0]){
             switch (precipitationType) {
                 case "RAIN":
                     condition = "HEAVY_RAIN";
@@ -20011,13 +20038,13 @@ class ForecastNextHour {
         return condition;
     };
 
-    static Minute(minutes = [], description = "") {
+    static Minute(minutes = [], description = "", units = "mmph") {
         console.log(`☑️ #Minute`, "");
         const PrecipitationType = this.PrecipitationType(description);
         minutes = minutes.map(minute => {
-            minute.precipitationIntensity = Math.round(minute.precipitationIntensity * 1000000) / 1000000; // 六位小数
-            minute.condition = this.ConditionType(minute.precipitationIntensity, PrecipitationType);
-            minute.perceivedPrecipitationIntensity = this.toPerceivedPrecipitationIntensity(minute.precipitationIntensity, minute.condition); // 三位小数
+            //minute.precipitationIntensity = Math.round(minute.precipitationIntensity * 1000000) / 1000000; // 六位小数
+            minute.condition = this.ConditionType(minute.precipitationIntensity, PrecipitationType, units);
+            minute.perceivedPrecipitationIntensity = this.ConvertPrecipitationIntensity(minute.precipitationIntensity, minute.condition, units);
             if (minute.perceivedPrecipitationIntensity >= 0.001) minute.precipitationType = PrecipitationType;
             else minute.precipitationType = "CLEAR";
             return minute;
@@ -20256,35 +20283,40 @@ class ForecastNextHour {
         return Conditions;
     };
 
-    static toPerceivedPrecipitationIntensity(precipitationIntensity, condition) {
+    static ConvertPrecipitationIntensity(precipitationIntensity, condition, units = "mmph") {
+        //console.log(`☑️ ConvertPrecipitationIntensity`, "");
         let perceivedPrecipitationIntensity = 0;
-        let level = 0; // full level = 3;
+        const Range = this.#Configs.Precipitation.Range[units];
+        let level = 0;
+        let range = [];
         switch (condition) {
             case "CLEAR":
                 level = 0;
-                perceivedPrecipitationIntensity = Math.min(10, precipitationIntensity) / 3 * level;
+                range = [Range.NO[0], 0.001];
                 break;
             case "POSSIBLE_DRIZZLE":
             case "POSSIBLE_FLURRIES":
-                level = 0.1;
-                perceivedPrecipitationIntensity = Math.min(10, precipitationIntensity) / 3 * level;
+                level = 0;
+                range = [0.001, Range.NO[1]];
                 break;
             case "DRIZZLE":
             case "FLURRIES":
-                level = 0.5;
-                perceivedPrecipitationIntensity = Math.min(10, precipitationIntensity) / 3 * level;
+                level = 0;
+                range = Range.LIGHT;
                 break;
             case "RAIN":
             case "SNOW":
-                level = 1.5;
-                perceivedPrecipitationIntensity = Math.min(10, precipitationIntensity) / 3 * level;
+                level = 1;
+                range = Range.MODERATE;
                 break;
             case "HEAVY_RAIN":
             case "HEAVY_SNOW":
-                level = 2.5;
-                perceivedPrecipitationIntensity = Math.min(10, precipitationIntensity) / 3 * level;
+                level = 2;
+                range = Range.HEAVY;
                 break;
-        }        perceivedPrecipitationIntensity = Math.round(Math.min(3, perceivedPrecipitationIntensity) * 1000) / 1000; // 三位小数
+        }        perceivedPrecipitationIntensity = level + (precipitationIntensity - range[0]) / (range[1] - range[0]);
+        perceivedPrecipitationIntensity = Math.min(3, perceivedPrecipitationIntensity);
+        //console.log(`✅ ConvertPrecipitationIntensity: ${perceivedPrecipitationIntensity}`, "");
         return perceivedPrecipitationIntensity;
     };
 }
@@ -20292,7 +20324,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "1.7.3";
+        this.Version = "1.7.4";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -20350,7 +20382,7 @@ class ColorfulClouds {
                             };
                             forecastNextHour.minutes.length = Math.min(85, forecastNextHour.minutes.length);
                             forecastNextHour.forecastEnd = minuteStemp + 60 * forecastNextHour.minutes.length;
-                            forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.result?.minutely?.description);
+                            forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.result?.minutely?.description, "mmph");
                             forecastNextHour.summary = ForecastNextHour.Summary(forecastNextHour.minutes);
                             forecastNextHour.condition = ForecastNextHour.Condition(forecastNextHour.minutes);
                             break;
@@ -20377,7 +20409,7 @@ class ColorfulClouds {
 class QWeather {
     constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url), "host": "devapi.qweather.com", "version": "v7" }) {
         this.Name = "QWeather";
-        this.Version = "1.0.3";
+        this.Version = "1.0.4";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
@@ -20433,7 +20465,7 @@ class QWeather {
                     };
                     forecastNextHour.minutes.length = Math.min(85, forecastNextHour.minutes.length);
                     forecastNextHour.forecastEnd = minuteStemp + 60 * forecastNextHour.minutes.length;
-                    forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.summary);
+                    forecastNextHour.minutes = ForecastNextHour.Minute(forecastNextHour.minutes, body?.summary, "mmph");
                     forecastNextHour.summary = ForecastNextHour.Summary(forecastNextHour.minutes);
                     forecastNextHour.condition = ForecastNextHour.Condition(forecastNextHour.minutes);
                     break;
