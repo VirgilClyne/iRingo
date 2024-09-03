@@ -7,17 +7,20 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.0.3";
+        this.Version = "2.1.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
+        this.token = this.token || "Y2FpeXVuX25vdGlmeQ==";
+        this.header = this.header || { "Content-Type": "application/json" };
+        this.convertUnits = this.convertUnits || false;
         this.$ = $;
     };
 
-    async AQI(token = "na", useConvertedUnit = false, header = { "Content-Type": "application/json" }) {
-        this.$.log(`☑️ AQI, token: ${token}`, "");
+    async AQI(token = this.token, header = this.header, version = "v2.6", convertUnits = this.convertUnits) {
+        this.$.log(`☑️ AQI, token: ${token}, version: ${version}`, "");
         const request = {
-            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
+            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/realtime`,
             "header": header,
         };
         let airQuality;
@@ -30,7 +33,7 @@ export default class ColorfulClouds {
                         case "ok":
                             const pollutant = AirQuality.CreatePollutants(body?.result?.realtime?.air_quality);
                             airQuality = AirQuality.ConvertScale(pollutant, "EPA_NowCast");
-                            if (!useConvertedUnit) airQuality.pollutants = pollutant;
+                            if (!convertUnits) airQuality.pollutants = pollutant;
                             airQuality.metadata = {
                                 "attributionUrl": "https://www.caiyunapp.com/h5",
                                 "expireTime": timeStamp + 60 * 60,
@@ -58,13 +61,13 @@ export default class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI`, "");
             return airQuality;
         };
     };
 
-    async Minutely(token = "Y2FpeXVuX25vdGlmeQ==", version = "v2.6", header = { "Content-Type": "application/json" }) {
+    async Minutely(token = this.token, header = this.header, version = "v2.6") {
         this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,

@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.3(4147) response");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.1(4150) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -159,6 +159,9 @@ async function InjectAirQuality(url, body, Settings) {
 		case "QWeather":
 			break;
 		case "ColorfulClouds":
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
+			airQuality = await colorfulClouds.AQI();
+			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":
 		default:
@@ -166,7 +169,6 @@ async function InjectAirQuality(url, body, Settings) {
 			if (Settings?.API?.WAQI?.Token) {
 				airQuality = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
 				metadata = airQuality?.metadata;
-				airQuality = airQuality;
 			} else {
 				const Nearest = await Waqi.Nearest();
 				const Token = await Waqi.Token(Nearest?.metadata?.stationId);
@@ -220,8 +222,8 @@ async function InjectForecastNextHour(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url });
-			forecastNextHour = await colorfulClouds.Minutely(Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==");
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token });
+			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	};
 	metadata = forecastNextHour?.metadata;

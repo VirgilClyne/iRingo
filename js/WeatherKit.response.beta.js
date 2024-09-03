@@ -20391,17 +20391,20 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.0.2";
+        this.Version = "2.1.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options, $);
+        this.token = this.token || "Y2FpeXVuX25vdGlmeQ==";
+        this.header = this.header || { "Content-Type": "application/json" };
+        this.convertUnits = this.convertUnits || false;
         this.$ = $;
     };
 
-    async AQI(token = "na", header = { "Content-Type": "application/json" }) {
-        this.$.log(`☑️ AQI, token: ${token}`, "");
+    async AQI(token = this.token, header = this.header, version = "v2.6", convertUnits = this.convertUnits) {
+        this.$.log(`☑️ AQI, token: ${token}, version: ${version}`, "");
         const request = {
-            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
+            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/realtime`,
             "header": header,
         };
         let airQuality;
@@ -20414,6 +20417,7 @@ class ColorfulClouds {
                         case "ok":
                             const pollutant = AirQuality.CreatePollutants(body?.result?.realtime?.air_quality);
                             airQuality = AirQuality.ConvertScale(pollutant, "EPA_NowCast");
+                            if (!convertUnits) airQuality.pollutants = pollutant;
                             airQuality.metadata = {
                                 "attributionUrl": "https://www.caiyunapp.com/h5",
                                 "expireTime": timeStamp + 60 * 60,
@@ -20441,12 +20445,12 @@ class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI`, "");
             return airQuality;
         }    };
 
-    async Minutely(token = "Y2FpeXVuX25vdGlmeQ==", version = "v2.6", header = { "Content-Type": "application/json" }) {
+    async Minutely(token = this.token, header = this.header, version = "v2.6") {
         this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
@@ -20604,7 +20608,7 @@ class QWeather {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.0(4148) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.1(4150) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20753,8 +20757,8 @@ async function InjectAirQuality(url, body, Settings) {
 		case "QWeather":
 			break;
 		case "ColorfulClouds":
-			const colorfulClouds = new ColorfulClouds($, { "url": url });
-			airQuality = await colorfulClouds.AQI(Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==");
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
+			airQuality = await colorfulClouds.AQI();
 			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":
@@ -20812,8 +20816,8 @@ async function InjectForecastNextHour(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url });
-			forecastNextHour = await colorfulClouds.Minutely(Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==");
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token });
+			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	}	metadata = forecastNextHour?.metadata;
 	if (metadata) {
