@@ -1,7 +1,7 @@
 export default class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.0.2";
+        this.Version = "2.0.4";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -238,7 +238,7 @@ export default class AirQuality {
                 pollutant.units = PollutantStandard.units;
             };
             // Calculate AQI for each pollutant
-            const PollutantData = AirQuality.PollutantRanges(pollutant.amount, pollutant.pollutantType, scale);
+            const PollutantData = AirQuality.PollutantRange(pollutant.amount, pollutant.pollutantType, scale);
             pollutant.aqi = Math.round(
                 ((PollutantData.category[1] - PollutantData.category[0]) * (pollutant.amount - PollutantData.range[0])) / (PollutantData.range[1] - PollutantData.range[0])
                 + PollutantData.category[0],
@@ -392,7 +392,7 @@ export default class AirQuality {
         return categoryIndex;
     };
 
-    static PollutantRanges(amount = new Number, pollutantType = new String, scale = "EPA_NowCast") {
+    static PollutantRange(amount = new Number, pollutantType = new String, scale = "EPA_NowCast") {
         switch (typeof amount) {
             case "number":
                 break;
@@ -400,21 +400,18 @@ export default class AirQuality {
                 amount = parseFloat(amount);
                 break;
         };
-        console.log(`☑️ PollutantRanges, amount: ${amount}, pollutantType: ${pollutantType}, scale: ${scale}`, "");
+        console.log(`☑️ PollutantRange, amount: ${amount}, pollutantType: ${pollutantType}, scale: ${scale}`, "");
+        const PollutantData = AirQuality.#Config.Scales[scale].pollutants[pollutantType];
         let categoryIndexKey;
-        for (const [key, value] of Object.entries(AirQuality.#Config.Scales[scale].pollutants[pollutantType].ranges)) {
-            if (amount >= value[0] && amount <= value[1]) {
-                categoryIndexKey = parseInt(key, 10);
-                break;
-            };
+        for (const [key, value] of Object.entries(PollutantData.ranges)) {
+            categoryIndexKey = parseInt(key, 10);
+            if (amount >= value[0] && amount <= value[1]) break;
         };
-        const PollutantData = {
-            "range": AirQuality.#Config.Scales[scale].pollutants[pollutantType].ranges[categoryIndexKey],
-            "categoryIndex": parseInt(categoryIndexKey, 10),
-            "category": AirQuality.#Config.Scales[scale].categoryIndex[categoryIndexKey],
-        };
-        console.log(`🚧 PollutantData: ${JSON.stringify(PollutantData, null, 2)}`, "");
-        console.log(`✅ PollutantRanges, categoryIndex: ${PollutantData.categoryIndex}`, "");
+        PollutantData.range = PollutantData.ranges[categoryIndexKey];
+        PollutantData.categoryIndex = parseInt(categoryIndexKey, 10);
+        PollutantData.category = AirQuality.#Config.Scales[scale].categoryIndex[categoryIndexKey];
+        console.log(`🚧 PollutantData: ${JSON.stringify(PollutantData)}`, "");
+        console.log(`✅ PollutantRange, categoryIndex: ${PollutantData.categoryIndex}`, "");
         return PollutantData;
     };
 };
