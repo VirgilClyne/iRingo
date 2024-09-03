@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
         this.Name = "WAQI";
-        this.Version = "1.3.2";
+        this.Version = "1.3.3";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         const Parameters = parseWeatherKitURL(options.url);
         Object.assign(this, Parameters, options);
@@ -61,11 +61,11 @@ export default class WAQI {
                                 },
                                 "categoryIndex": AirQuality.CategoryIndex(body?.d?.[0]?.v, "WAQI_InstantCast"),
                                 "index": parseInt(body?.d?.[0]?.v, 10),
-                                "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": this.#Configs.Pollutants[body?.d?.[0]?.pol] || "NOT_AVAILABLE",
                                 "scale": "EPA_NowCast"
                             };
+                            airQuality.isSignificant = airQuality.categoryIndex >= 3;
                             break;
                         case "error":
                             throw JSON.stringify({ "status": body?.status, "reason": body?.message });
@@ -91,11 +91,11 @@ export default class WAQI {
                                 },
                                 "categoryIndex": AirQuality.CategoryIndex(body?.data?.stations?.[0]?.aqi, "WAQI_InstantCast"),
                                 "index": parseInt(body?.data?.stations?.[0]?.aqi, 10),
-                                "isSignificant": true,
                                 //"previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": "NOT_AVAILABLE",
                                 "scale": "EPA_NowCast"
                             };
+                            airQuality.isSignificant = airQuality.categoryIndex >= 3;
                             break;
                         case "error":
                         case undefined:
@@ -191,11 +191,11 @@ export default class WAQI {
                                         },
                                         "categoryIndex": AirQuality.CategoryIndex(body?.rxs?.obs?.[0]?.msg?.aqi, "WAQI_InstantCast"),
                                         "index": parseInt(body?.rxs?.obs?.[0]?.msg?.aqi, 10),
-                                        "isSignificant": true,
                                         //"previousDayComparison": "UNKNOWN",
                                         "primaryPollutant": this.#Configs.Pollutants[body?.rxs?.obs?.[0]?.msg?.dominentpol] || "NOT_AVAILABLE",
                                         "scale": "EPA_NowCast"
                                     };
+                                    airQuality.isSignificant = airQuality.categoryIndex >= 3;
                                     break;
                                 case "error":
                                 case undefined:
@@ -247,11 +247,11 @@ export default class WAQI {
                         },
                         "categoryIndex": AirQuality.CategoryIndex(body?.data?.aqi, "WAQI_InstantCast"),
                         "index": parseInt(body?.data?.aqi, 10),
-                        "isSignificant": true,
                         //"previousDayComparison": "UNKNOWN",
                         "primaryPollutant": this.#Configs.Pollutants[body?.data?.dominentpol] || "NOT_AVAILABLE",
                         "scale": "EPA_NowCast"
                     };
+                    airQuality.isSignificant = airQuality.categoryIndex >= 3;
                     break;
                 case "error":
                 case undefined:
