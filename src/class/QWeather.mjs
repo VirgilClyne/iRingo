@@ -6,15 +6,13 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class QWeather {
     constructor($ = new ENV("QWeather"), options) {
         this.Name = "QWeather";
-        this.Version = "1.0.8";
+        this.Version = "1.0.9";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        this.url = options.url || new URL($request.url);
-        this.host = options.host || "devapi.qweather.com";
-        this.token = options.token;
-        this.header = options.header || { "Content-Type": "application/json" };
-        this.convertUnits = options.convertUnits || false;
+        this.url = new URL($request.url);
+        this.host = "devapi.qweather.com";
+        this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
-        Object.assign(this, Parameters);
+        Object.assign(this, Parameters, options);
         this.$ = $;
     };
 

@@ -6,14 +6,12 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options) {
         this.Name = "WAQI";
-        this.Version = "1.3.6";
+        this.Version = "1.3.8";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        this.url = options.url || new URL($request.url);
-        this.token = options.token;
-        this.header = options.header || { "Content-Type": "application/json" };
-        this.convertUnits = options.convertUnits || false;
+        this.url = new URL($request.url);
+        this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
-        Object.assign(this, Parameters);
+        Object.assign(this, Parameters, options);
         this.$ = $;
     };
 
@@ -118,7 +116,7 @@ export default class WAQI {
         };
     };
 
-    async Token(stationId = new Number) {
+    async Token(stationId = Number()) {
         this.$.log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
@@ -158,7 +156,7 @@ export default class WAQI {
         };
     };
 
-    async AQI(stationId = new Number, token = this.token) {
+    async AQI(stationId = Number(), token = this.token) {
         this.$.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
         const request = {
             "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
@@ -221,7 +219,7 @@ export default class WAQI {
         };
     };
 
-    async AQI2(token = this.token, stationId = new Number) {
+    async AQI2(stationId = Number(), token = this.token) {
         this.$.log(`☑️ AQI2, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,

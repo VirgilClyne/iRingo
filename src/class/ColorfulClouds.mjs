@@ -7,18 +7,30 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.4";
+        this.Version = "2.1.10";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        this.url = options.url || new URL($request.url);
-        this.token = options.token || "Y2FpeXVuX25vdGlmeQ==";
-        this.header = options.header || { "Content-Type": "application/json" };
-        this.convertUnits = options.convertUnits || false;
+        this.url = new URL($request.url);
+        this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
-        Object.assign(this, Parameters);
+        Object.assign(this, Parameters, options);
         this.$ = $;
     };
 
-    async RealTime(token = this.token, convertUnits = this.convertUnits) {
+    #Config = {
+        "Pollutants": {
+            "co": "CO",
+            "no": "NO",
+            "no2": "NO2",
+            "so2": "SO2",
+            "o3": "OZONE",
+            "nox": "NOX",
+            "pm25": "PM2_5",
+            "pm10": "PM10",
+            "other": "NOT_AVAILABLE"
+        },
+    };
+
+    async RealTime(token = this.token, convertUnits = false, scale = "WAQI_InstantCast") {
         this.$.log(`☑️ RealTime`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
@@ -32,9 +44,8 @@ export default class ColorfulClouds {
                 case "ok":
                     switch (body?.result?.realtime?.status) {
                         case "ok":
-                            const pollutant = AirQuality.CreatePollutants(body?.result?.realtime?.air_quality);
-                            airQuality = AirQuality.ConvertScale(pollutant, "EPA_NowCast");
-                            if (!convertUnits) airQuality.pollutants = pollutant;
+                            const pollutants = this.#CreatePollutants(body?.result?.realtime?.air_quality);
+                            airQuality = AirQuality.ConvertScale(pollutants, scale, convertUnits);
                             airQuality.metadata = {
                                 "attributionUrl": "https://www.caiyunapp.com/h5",
                                 "expireTime": timeStamp + 60 * 60,
@@ -48,6 +59,7 @@ export default class ColorfulClouds {
                                 "temporarilyUnavailable": false,
                                 "sourceType": "STATION",
                             };
+                            if (convertUnits) airQuality.metadata.providerName += `\nConverted using ${scale}`;
                             break;
                         case "error":
                         case undefined:
@@ -62,7 +74,7 @@ export default class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ RealTime`, "");
             return airQuality;
         };
@@ -141,5 +153,37 @@ export default class ColorfulClouds {
             this.$.log(`✅ Minutely`, "");
             return forecastNextHour;
         };
+    };
+
+    #CreatePollutants(pollutantsObj = {}) {
+        console.log(`☑️ CreatePollutants`, "");
+        let pollutants = [];
+        for (const [key, value] of Object.entries(pollutantsObj)) {
+            switch (key) {
+                case "co":
+                    pollutants.push({
+                        "amount": value ?? -1,
+                        "pollutantType": this.#Config.Pollutants[key],
+                        "units": "MILLIGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "no":
+                case "no2":
+                case "so2":
+                case "o3":
+                case "nox":
+                case "pm25":
+                case "pm10":
+                    pollutants.push({
+                        "amount": value ?? -1,
+                        "pollutantType": this.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+            };
+        };
+        console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        console.log(`✅ CreatePollutants`, "");
+        return pollutants;
     };
 };
