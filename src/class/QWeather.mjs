@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class QWeather {
     constructor($ = new ENV("QWeather"), options) {
         this.Name = "QWeather";
-        this.Version = "1.0.7";
+        this.Version = "1.0.8";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = options.url || new URL($request.url);
         this.host = options.host || "devapi.qweather.com";
@@ -18,10 +18,10 @@ export default class QWeather {
         this.$ = $;
     };
 
-    async Minutely(token = this.token, version = "v7") {
-        this.$.log(`☑️ Minutely, token: ${token}, host: ${this.host}, version: ${version}`, "");
+    async Minutely(token = this.token) {
+        this.$.log(`☑️ Minutely, host: ${this.host}`, "");
         const request = {
-            "url": `https://${this.host}/${version}/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
+            "url": `https://${this.host}/v7/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": this.header,
         };
         let forecastNextHour;

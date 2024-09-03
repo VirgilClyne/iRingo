@@ -19228,7 +19228,7 @@ class WeatherKit2 {
 class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.0.4";
+        this.Version = "2.0.5";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -19610,7 +19610,7 @@ class AirQuality {
             case "string":
                 amount = parseFloat(amount);
                 break;
-        }        console.log(`☑️ PollutantRange, amount: ${amount}, pollutantType: ${pollutantType}, scale: ${scale}`, "");
+        }        //console.log(`☑️ PollutantRange, amount: ${amount}, pollutantType: ${pollutantType}, scale: ${scale}`, "");
         const PollutantData = AirQuality.#Config.Scales[scale].pollutants[pollutantType];
         let categoryIndexKey;
         for (const [key, value] of Object.entries(PollutantData.ranges)) {
@@ -19619,7 +19619,7 @@ class AirQuality {
         }        PollutantData.range = PollutantData.ranges[categoryIndexKey];
         PollutantData.categoryIndex = parseInt(categoryIndexKey, 10);
         PollutantData.category = AirQuality.#Config.Scales[scale].categoryIndex[categoryIndexKey];
-        console.log(`🚧 PollutantData: ${JSON.stringify(PollutantData)}`, "");
+        //console.log(`🚧 PollutantData: ${JSON.stringify(PollutantData)}`, "");
         console.log(`✅ PollutantRange, categoryIndex: ${PollutantData.categoryIndex}`, "");
         return PollutantData;
     };
@@ -19713,7 +19713,7 @@ function parseWeatherKitURL(url = $request.url) {
 class WAQI {
     constructor($ = new ENV("WAQI"), options) {
         this.Name = "WAQI";
-        this.Version = "1.3.5";
+        this.Version = "1.3.6";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = options.url || new URL($request.url);
         this.token = options.token;
@@ -19819,7 +19819,7 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ Nearest`, "");
             return airQuality;
         }    };
@@ -19858,7 +19858,7 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 token: ${token}`, "");
+            //this.$.log(`🚧 token: ${token}`, "");
             this.$.log(`✅ Token`, "");
             return token;
         }    };
@@ -19920,13 +19920,13 @@ class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI`, "");
             return airQuality;
         }    };
 
-    async AQI2(stationId = new Number, token = this.token) {
-        this.$.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`, "");
+    async AQI2(token = this.token, stationId = new Number) {
+        this.$.log(`☑️ AQI2, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
             "header": this.header,
@@ -19968,7 +19968,7 @@ class WAQI {
         } catch (error) {
             this.$.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI2`, "");
             return airQuality;
         }    };
@@ -19976,7 +19976,7 @@ class WAQI {
 
 class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.2.3";
+    Version = "v1.2.4";
     Author = "iRingo";
 
 	static #Configs = {
@@ -20117,7 +20117,7 @@ class ForecastNextHour {
     };
 
     static Minute(minutes = [], description = "", units = "mmph") {
-        console.log(`☑️ #Minute`, "");
+        console.log(`☑️ Minute`, "");
         const PrecipitationType = this.PrecipitationType(description);
         minutes = minutes.map(minute => {
             //minute.precipitationIntensity = Math.round(minute.precipitationIntensity * 1000000) / 1000000; // 六位小数
@@ -20212,7 +20212,7 @@ class ForecastNextHour {
             //console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
             switch (i) {
                 case 0:
-                    console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+                    //console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     Condition.beginCondition = minute.condition;
                     Condition.endCondition = minute.condition;
                     Condition.startTime = minute.startTime;
@@ -20224,7 +20224,7 @@ class ForecastNextHour {
                             Condition.forecastToken = "CONSTANT";
                             break;
                     }                    Condition.parameters = [];
-                    console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+                    //console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     break;
                 default:
                     switch (minute?.precipitationType) {
@@ -20402,7 +20402,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.3";
+        this.Version = "2.1.4";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = options.url || new URL($request.url);
         this.token = options.token || "Y2FpeXVuX25vdGlmeQ==";
@@ -20413,10 +20413,10 @@ class ColorfulClouds {
         this.$ = $;
     };
 
-    async AQI(token = this.token, version = "v2.6", convertUnits = this.convertUnits) {
-        this.$.log(`☑️ AQI, token: ${token}, version: ${version}`, "");
+    async RealTime(token = this.token, convertUnits = this.convertUnits) {
+        this.$.log(`☑️ RealTime`, "");
         const request = {
-            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/realtime`,
+            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
             "header": this.header,
         };
         let airQuality;
@@ -20458,14 +20458,14 @@ class ColorfulClouds {
             this.logErr(error);
         } finally {
             //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AQI`, "");
+            this.$.log(`✅ RealTime`, "");
             return airQuality;
         }    };
 
-    async Minutely(token = this.token, version = "v2.6") {
-        this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
+    async Minutely(token = this.token) {
+        this.$.log(`☑️ Minutely`, "");
         const request = {
-            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
+            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": this.header,
         };
         let forecastNextHour;
@@ -20540,7 +20540,7 @@ class ColorfulClouds {
 class QWeather {
     constructor($ = new ENV("QWeather"), options) {
         this.Name = "QWeather";
-        this.Version = "1.0.7";
+        this.Version = "1.0.8";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = options.url || new URL($request.url);
         this.host = options.host || "devapi.qweather.com";
@@ -20552,10 +20552,10 @@ class QWeather {
         this.$ = $;
     };
 
-    async Minutely(token = this.token, version = "v7") {
-        this.$.log(`☑️ Minutely, token: ${token}, host: ${this.host}, version: ${version}`, "");
+    async Minutely(token = this.token) {
+        this.$.log(`☑️ Minutely, host: ${this.host}`, "");
         const request = {
-            "url": `https://${this.host}/${version}/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
+            "url": `https://${this.host}/v7/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": this.header,
         };
         let forecastNextHour;
@@ -20625,7 +20625,7 @@ class QWeather {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.3(4152) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.4(4153) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20775,7 +20775,7 @@ async function InjectAirQuality(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
-			airQuality = await colorfulClouds.AQI();
+			airQuality = await colorfulClouds.RealTime();
 			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":

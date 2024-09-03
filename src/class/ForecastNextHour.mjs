@@ -1,6 +1,6 @@
 export default class ForecastNextHour {
     Name = "forecastNextHour";
-    Version = "v1.2.3";
+    Version = "v1.2.4";
     Author = "iRingo";
 
 	static #Configs = {
@@ -146,7 +146,7 @@ export default class ForecastNextHour {
     };
 
     static Minute(minutes = [], description = "", units = "mmph") {
-        console.log(`☑️ #Minute`, "");
+        console.log(`☑️ Minute`, "");
         const PrecipitationType = this.PrecipitationType(description);
         minutes = minutes.map(minute => {
             //minute.precipitationIntensity = Math.round(minute.precipitationIntensity * 1000000) / 1000000; // 六位小数
@@ -249,7 +249,7 @@ export default class ForecastNextHour {
             //console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
             switch (i) {
                 case 0:
-                    console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+                    //console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     Condition.beginCondition = minute.condition;
                     Condition.endCondition = minute.condition;
                     Condition.startTime = minute.startTime;
@@ -262,7 +262,7 @@ export default class ForecastNextHour {
                             break;
                     };
                     Condition.parameters = [];
-                    console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+                    //console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
                     break;
                 default:
                     switch (minute?.precipitationType) {

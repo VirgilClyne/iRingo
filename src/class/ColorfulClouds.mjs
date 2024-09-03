@@ -7,7 +7,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.3";
+        this.Version = "2.1.4";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = options.url || new URL($request.url);
         this.token = options.token || "Y2FpeXVuX25vdGlmeQ==";
@@ -18,10 +18,10 @@ export default class ColorfulClouds {
         this.$ = $;
     };
 
-    async AQI(token = this.token, version = "v2.6", convertUnits = this.convertUnits) {
-        this.$.log(`☑️ AQI, token: ${token}, version: ${version}`, "");
+    async RealTime(token = this.token, convertUnits = this.convertUnits) {
+        this.$.log(`☑️ RealTime`, "");
         const request = {
-            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/realtime`,
+            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
             "header": this.header,
         };
         let airQuality;
@@ -63,15 +63,15 @@ export default class ColorfulClouds {
             this.logErr(error);
         } finally {
             //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AQI`, "");
+            this.$.log(`✅ RealTime`, "");
             return airQuality;
         };
     };
 
-    async Minutely(token = this.token, version = "v2.6") {
-        this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
+    async Minutely(token = this.token) {
+        this.$.log(`☑️ Minutely`, "");
         const request = {
-            "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
+            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": this.header,
         };
         let forecastNextHour;

@@ -1,7 +1,7 @@
 export default class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.0.4";
+        this.Version = "2.0.5";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -400,7 +400,7 @@ export default class AirQuality {
                 amount = parseFloat(amount);
                 break;
         };
-        console.log(`☑️ PollutantRange, amount: ${amount}, pollutantType: ${pollutantType}, scale: ${scale}`, "");
+        //console.log(`☑️ PollutantRange, amount: ${amount}, pollutantType: ${pollutantType}, scale: ${scale}`, "");
         const PollutantData = AirQuality.#Config.Scales[scale].pollutants[pollutantType];
         let categoryIndexKey;
         for (const [key, value] of Object.entries(PollutantData.ranges)) {
@@ -410,7 +410,7 @@ export default class AirQuality {
         PollutantData.range = PollutantData.ranges[categoryIndexKey];
         PollutantData.categoryIndex = parseInt(categoryIndexKey, 10);
         PollutantData.category = AirQuality.#Config.Scales[scale].categoryIndex[categoryIndexKey];
-        console.log(`🚧 PollutantData: ${JSON.stringify(PollutantData)}`, "");
+        //console.log(`🚧 PollutantData: ${JSON.stringify(PollutantData)}`, "");
         console.log(`✅ PollutantRange, categoryIndex: ${PollutantData.categoryIndex}`, "");
         return PollutantData;
     };

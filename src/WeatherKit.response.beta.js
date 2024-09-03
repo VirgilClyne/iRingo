@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.3(4152) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.4(4153) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -189,7 +189,7 @@ async function InjectAirQuality(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
-			airQuality = await colorfulClouds.AQI();
+			airQuality = await colorfulClouds.RealTime();
 			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":

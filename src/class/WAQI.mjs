@@ -6,7 +6,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options) {
         this.Name = "WAQI";
-        this.Version = "1.3.5";
+        this.Version = "1.3.6";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = options.url || new URL($request.url);
         this.token = options.token;
@@ -112,7 +112,7 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ Nearest`, "");
             return airQuality;
         };
@@ -152,7 +152,7 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 token: ${token}`, "");
+            //this.$.log(`🚧 token: ${token}`, "");
             this.$.log(`✅ Token`, "");
             return token;
         };
@@ -215,14 +215,14 @@ export default class WAQI {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI`, "");
             return airQuality;
         };
     };
 
-    async AQI2(stationId = new Number, token = this.token) {
-        this.$.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`, "");
+    async AQI2(token = this.token, stationId = new Number) {
+        this.$.log(`☑️ AQI2, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
             "header": this.header,
@@ -264,7 +264,7 @@ export default class WAQI {
         } catch (error) {
             this.$.logErr(error);
         } finally {
-            this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ AQI2`, "");
             return airQuality;
         };
