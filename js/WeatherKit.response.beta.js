@@ -19219,7 +19219,7 @@ class WeatherKit2 {
 class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.0.1";
+        this.Version = "2.0.2";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -19477,8 +19477,8 @@ class AirQuality {
         return convertedPollutants;
     };
 
-    static AQI(pollutants = [], scale = "WAQI_InstantCast") {
-        console.log(`☑️ AQI`, "");
+    static ConvertScale(pollutants = [], scale = "WAQI_InstantCast") {
+        console.log(`☑️ ConvertScale`, "");
         pollutants = this.Pollutants(pollutants, scale);
         const { aqi: index, pollutantType: primaryPollutant } = pollutants.reduce((previous, current) => previous.aqi > current.aqi ? previous : current);
         let airQuality = {
@@ -19490,7 +19490,7 @@ class AirQuality {
         };
         airQuality.isSignificant = airQuality.categoryIndex >= AirQuality.#Config.Scales[scale].significant,
         //console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-        console.log(`✅ AQI`, "");
+        console.log(`✅ ConvertScale`, "");
         return airQuality;
     };
 
@@ -20459,7 +20459,7 @@ class QWeather {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.3(4146) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.3(4147) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20642,7 +20642,7 @@ function ConvertAirQuality(body, Settings) {
 			break;
 		case 'WAQI_InstantCast':
 		default:
-			airQuality = AirQuality.AQI(body?.airQuality?.pollutants);
+			airQuality = AirQuality.ConvertScale(body?.airQuality?.pollutants);
 			if (!Settings?.AQI?.Local?.UseConvertedUnit) delete airQuality.pollutants;
 			break;
 	}	if (airQuality.index) {

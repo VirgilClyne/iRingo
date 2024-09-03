@@ -1,7 +1,7 @@
 export default class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.0.1";
+        this.Version = "2.0.2";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -263,8 +263,8 @@ export default class AirQuality {
         return convertedPollutants;
     };
 
-    static AQI(pollutants = [], scale = "WAQI_InstantCast") {
-        console.log(`☑️ AQI`, "");
+    static ConvertScale(pollutants = [], scale = "WAQI_InstantCast") {
+        console.log(`☑️ ConvertScale`, "");
         pollutants = this.Pollutants(pollutants, scale);
         const { aqi: index, pollutantType: primaryPollutant } = pollutants.reduce((previous, current) => previous.aqi > current.aqi ? previous : current);
         let airQuality = {
@@ -276,7 +276,7 @@ export default class AirQuality {
         };
         airQuality.isSignificant = airQuality.categoryIndex >= AirQuality.#Config.Scales[scale].significant,
         //console.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-        console.log(`✅ AQI`, "");
+        console.log(`✅ ConvertScale`, "");
         return airQuality;
     };
 
