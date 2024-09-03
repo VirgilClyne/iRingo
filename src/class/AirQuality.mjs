@@ -414,4 +414,71 @@ export default class AirQuality {
         console.log(`✅ PollutantRange, categoryIndex: ${PollutantData.categoryIndex}`, "");
         return PollutantData;
     };
+
+    static CreatePollutants(pollutantsObj = {}) {
+        console.log(`☑️ CreatePollutants`, "");
+        const pollutantsArray = [];
+        for (const [key, value] of Object.entries(pollutantsObj)) {
+            switch (key) {
+                case "co":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MILLIGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "no":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "no2":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "so2":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "o3":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "nox":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "pm25":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+                case "pm10":
+                    pollutantsArray.push({
+                        "amount": value?.v ?? value ?? -1,
+                        "pollutantType": AirQuality.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+            };
+        };
+        console.log(`✅ CreatePollutants`, "");
+        return pollutantsArray;
+    };
 };
