@@ -192,7 +192,7 @@ async function InjectAirQuality(url, body, Settings) {
 function ConvertAirQuality(body, Settings) {
 	$.log(`☑️ ConvertAirQuality`, "");
 	let airQuality;
-	switch (Settings?.AQI?.Local?.Standard) {
+	switch (Settings?.AQI?.Local?.Scale) {
 		case "NONE":
 			break;
 		case 'WAQI_InstantCast':
@@ -203,7 +203,7 @@ function ConvertAirQuality(body, Settings) {
 	};
 	if (airQuality.index) {
 		body.airQuality = { ...body.airQuality, ...airQuality };
-		body.airQuality.metadata.providerName += `\nConverted using ${Settings?.AQI?.Local?.Standard}`;
+		body.airQuality.metadata.providerName += `\nConverted using ${Settings?.AQI?.Local?.Scale}`;
 	};
 	$.log(`✅ ConvertAirQuality`, "");
 	return body;
