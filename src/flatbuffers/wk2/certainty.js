@@ -6,6 +6,6 @@ export var Certainty;
     Certainty[Certainty["OBSERVED"] = 1] = "OBSERVED";
     Certainty[Certainty["LIKELY"] = 2] = "LIKELY";
     Certainty[Certainty["POSSIBLE"] = 3] = "POSSIBLE";
-    Certainty[Certainty["UNKNOWN4"] = 4] = "UNKNOWN4";
+    Certainty[Certainty["UNLIKELY"] = 4] = "UNLIKELY";
     Certainty[Certainty["UNKNOWN5"] = 5] = "UNKNOWN5";
 })(Certainty || (Certainty = {}));

@@ -4,11 +4,13 @@
 
 export enum ResponseType {
   UNKNOWN0 = 0,
-  UNKNOWN1 = 1,
-  UNKNOWN2 = 2,
-  UNKNOWN3 = 3,
+  SHELTER = 1,
+  EVACUATE = 2,
+  PREPARE = 3,
   EXECUTE = 4,
-  UNKNOWN5 = 5,
+  AVOID = 5,
   MONITOR = 6,
-  UNKNOWN7 = 7
+  ACCESS = 7,
+  ALLCLEAR = 8,
+  NONE = 9
 }

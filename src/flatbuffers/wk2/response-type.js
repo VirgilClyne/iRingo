@@ -3,11 +3,13 @@
 export var ResponseType;
 (function (ResponseType) {
     ResponseType[ResponseType["UNKNOWN0"] = 0] = "UNKNOWN0";
-    ResponseType[ResponseType["UNKNOWN1"] = 1] = "UNKNOWN1";
-    ResponseType[ResponseType["UNKNOWN2"] = 2] = "UNKNOWN2";
-    ResponseType[ResponseType["UNKNOWN3"] = 3] = "UNKNOWN3";
+    ResponseType[ResponseType["SHELTER"] = 1] = "SHELTER";
+    ResponseType[ResponseType["EVACUATE"] = 2] = "EVACUATE";
+    ResponseType[ResponseType["PREPARE"] = 3] = "PREPARE";
     ResponseType[ResponseType["EXECUTE"] = 4] = "EXECUTE";
-    ResponseType[ResponseType["UNKNOWN5"] = 5] = "UNKNOWN5";
+    ResponseType[ResponseType["AVOID"] = 5] = "AVOID";
     ResponseType[ResponseType["MONITOR"] = 6] = "MONITOR";
-    ResponseType[ResponseType["UNKNOWN7"] = 7] = "UNKNOWN7";
+    ResponseType[ResponseType["ACCESS"] = 7] = "ACCESS";
+    ResponseType[ResponseType["ALLCLEAR"] = 8] = "ALLCLEAR";
+    ResponseType[ResponseType["NONE"] = 9] = "NONE";
 })(ResponseType || (ResponseType = {}));
