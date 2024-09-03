@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.2(4151) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.3(4152) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -194,9 +194,9 @@ async function InjectAirQuality(url, body, Settings) {
 			break;
 		case "WAQI":
 		default:
-			const Waqi = new WAQI($, { "url": url });
+			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
 			if (Settings?.API?.WAQI?.Token) {
-				airQuality = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
+				airQuality = await Waqi.AQI2();
 				metadata = airQuality?.metadata;
 			} else {
 				const Nearest = await Waqi.Nearest();

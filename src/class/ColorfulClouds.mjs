@@ -5,23 +5,24 @@ import parseWeatherKitURL from "../function/parseWeatherKitURL.mjs"
 import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class ColorfulClouds {
-    constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
+    constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.1";
+        this.Version = "2.1.3";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        const Parameters = parseWeatherKitURL(options.url);
-        Object.assign(this, Parameters, options, $);
-        this.token = this.token || "Y2FpeXVuX25vdGlmeQ==";
-        this.header = this.header || { "Content-Type": "application/json" };
-        this.convertUnits = this.convertUnits || false;
+        this.url = options.url || new URL($request.url);
+        this.token = options.token || "Y2FpeXVuX25vdGlmeQ==";
+        this.header = options.header || { "Content-Type": "application/json" };
+        this.convertUnits = options.convertUnits || false;
+        const Parameters = parseWeatherKitURL(this.url);
+        Object.assign(this, Parameters);
         this.$ = $;
     };
 
-    async AQI(token = this.token, header = this.header, version = "v2.6", convertUnits = this.convertUnits) {
+    async AQI(token = this.token, version = "v2.6", convertUnits = this.convertUnits) {
         this.$.log(`☑️ AQI, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/realtime`,
-            "header": header,
+            "header": this.header,
         };
         let airQuality;
         try {
@@ -67,11 +68,11 @@ export default class ColorfulClouds {
         };
     };
 
-    async Minutely(token = this.token, header = this.header, version = "v2.6") {
+    async Minutely(token = this.token, version = "v2.6") {
         this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
-            "header": header,
+            "header": this.header,
         };
         let forecastNextHour;
         try {

@@ -19711,12 +19711,16 @@ function parseWeatherKitURL(url = $request.url) {
 }
 
 class WAQI {
-    constructor($ = new ENV("WAQI"), options = { "url": new URL($request.url) }) {
+    constructor($ = new ENV("WAQI"), options) {
         this.Name = "WAQI";
-        this.Version = "1.3.3";
+        this.Version = "1.3.5";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        const Parameters = parseWeatherKitURL(options.url);
-        Object.assign(this, Parameters, options);
+        this.url = options.url || new URL($request.url);
+        this.token = options.token;
+        this.header = options.header || { "Content-Type": "application/json" };
+        this.convertUnits = options.convertUnits || false;
+        const Parameters = parseWeatherKitURL(this.url);
+        Object.assign(this, Parameters);
         this.$ = $;
     };
 
@@ -19734,12 +19738,12 @@ class WAQI {
         },
     };
 
-    async Nearest(mapqVersion = "mapq", header = { "Content-Type": "application/json" }) {
+    async Nearest(mapqVersion = "mapq") {
         this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
         const request = {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             //"url": `https://mapq.waqi.info/${mapqVersion}/nearest/station/${stationId}?n=1`,
-            "header": header,
+            "header": this.header,
         };
         let airQuality;
         try {
@@ -19820,11 +19824,11 @@ class WAQI {
             return airQuality;
         }    };
 
-    async Token(stationId = new Number, header = { "Content-Type": "application/json" }) {
+    async Token(stationId = new Number) {
         this.$.log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
-            "header": header,
+            "header": this.header,
         };
         let token;
         try {
@@ -19859,11 +19863,11 @@ class WAQI {
             return token;
         }    };
 
-    async AQI(stationId = new Number, token = "na", header = { "Content-Type": "application/json" }) {
+    async AQI(stationId = new Number, token = this.token) {
         this.$.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
         const request = {
             "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
-            "header": header,
+            "header": this.header,
             "body": `token=${token}&id=${stationId}`,
         };
         let airQuality;
@@ -19921,11 +19925,11 @@ class WAQI {
             return airQuality;
         }    };
 
-    async AQI2(token = "na", stationId, header = { "Content-Type": "application/json" }) {
+    async AQI2(stationId = new Number, token = this.token) {
         this.$.log(`☑️ AQI2, token: ${token}, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
-            "header": header,
+            "header": this.header,
         };
         if (stationId) request.url = `https://api2.waqi.info/feed/@${stationId}/?token=${token}`;
         let airQuality;
@@ -20396,23 +20400,24 @@ class ForecastNextHour {
 }
 
 class ColorfulClouds {
-    constructor($ = new ENV("ColorfulClouds"), options = { "url": new URL($request.url) }) {
+    constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.1";
+        this.Version = "2.1.3";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        const Parameters = parseWeatherKitURL(options.url);
-        Object.assign(this, Parameters, options, $);
-        this.token = this.token || "Y2FpeXVuX25vdGlmeQ==";
-        this.header = this.header || { "Content-Type": "application/json" };
-        this.convertUnits = this.convertUnits || false;
+        this.url = options.url || new URL($request.url);
+        this.token = options.token || "Y2FpeXVuX25vdGlmeQ==";
+        this.header = options.header || { "Content-Type": "application/json" };
+        this.convertUnits = options.convertUnits || false;
+        const Parameters = parseWeatherKitURL(this.url);
+        Object.assign(this, Parameters);
         this.$ = $;
     };
 
-    async AQI(token = this.token, header = this.header, version = "v2.6", convertUnits = this.convertUnits) {
+    async AQI(token = this.token, version = "v2.6", convertUnits = this.convertUnits) {
         this.$.log(`☑️ AQI, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/realtime`,
-            "header": header,
+            "header": this.header,
         };
         let airQuality;
         try {
@@ -20457,11 +20462,11 @@ class ColorfulClouds {
             return airQuality;
         }    };
 
-    async Minutely(token = this.token, header = this.header, version = "v2.6") {
+    async Minutely(token = this.token, version = "v2.6") {
         this.$.log(`☑️ Minutely, token: ${token}, version: ${version}`, "");
         const request = {
             "url": `https://api.caiyunapp.com/${version}/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
-            "header": header,
+            "header": this.header,
         };
         let forecastNextHour;
         try {
@@ -20533,23 +20538,25 @@ class ColorfulClouds {
 }
 
 class QWeather {
-    constructor($ = new ENV("QWeather"), options = { "url": new URL($request.url) }) {
+    constructor($ = new ENV("QWeather"), options) {
         this.Name = "QWeather";
-        this.Version = "1.0.5";
+        this.Version = "1.0.7";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
-        const Parameters = parseWeatherKitURL(options.url);
-        Object.assign(this, Parameters, options, $);
-        this.host = this.host || "devapi.qweather.com";
-        this.header = this.header || { "Content-Type": "application/json" };
-        this.convertUnits = this.convertUnits || false;
+        this.url = options.url || new URL($request.url);
+        this.host = options.host || "devapi.qweather.com";
+        this.token = options.token;
+        this.header = options.header || { "Content-Type": "application/json" };
+        this.convertUnits = options.convertUnits || false;
+        const Parameters = parseWeatherKitURL(this.url);
+        Object.assign(this, Parameters);
         this.$ = $;
     };
 
-    async Minutely(token = this.token, header = this.header, version = "v7") {
+    async Minutely(token = this.token, version = "v7") {
         this.$.log(`☑️ Minutely, token: ${token}, host: ${this.host}, version: ${version}`, "");
         const request = {
             "url": `https://${this.host}/${version}/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
-            "header": header,
+            "header": this.header,
         };
         let forecastNextHour;
         try {
@@ -20618,7 +20625,7 @@ class QWeather {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.2(4151) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.3(4152) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20773,9 +20780,9 @@ async function InjectAirQuality(url, body, Settings) {
 			break;
 		case "WAQI":
 		default:
-			const Waqi = new WAQI($, { "url": url });
+			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
 			if (Settings?.API?.WAQI?.Token) {
-				airQuality = await Waqi.AQI2(Settings?.API?.WAQI?.Token);
+				airQuality = await Waqi.AQI2();
 				metadata = airQuality?.metadata;
 			} else {
 				const Nearest = await Waqi.Nearest();
