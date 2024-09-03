@@ -14402,15 +14402,22 @@ function setENV(name, platforms, database) {
 	console.log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
-	if (Settings?.AQI?.ReplaceProviders) {
-		if (!Array.isArray(Settings?.AQI?.ReplaceProviders)) Settings.AQI.ReplaceProviders = (Settings?.AQI?.ReplaceProviders) ? [Settings.AQI.ReplaceProviders] : []; // 只有一个选项时，无逗号分隔
-		if (Settings.AQI.ReplaceProviders.includes("TWC")) Settings.AQI.ReplaceProviders.push("The Weather Channel");
-		if (Settings.AQI.ReplaceProviders.includes("QWeather")) Settings.AQI.ReplaceProviders.push("和风天气");
-		Settings.AQI.ReplaceProviders.push(undefined);
-	}	if (Settings?.Tabs && !Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-	if (Settings?.Domains && !Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-	if (Settings?.Functions && !Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
-	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
+	switch (platforms) {
+		case "WeatherKit":
+			if (!Array.isArray(Settings?.AQI?.ReplaceProviders)) Lodash.set(Settings, "AQI.ReplaceProviders", (Settings?.AQI?.ReplaceProviders) ? [Settings.AQI.ReplaceProviders.toString()] : []);
+			if (Settings.AQI.ReplaceProviders.includes("TWC")) Settings.AQI.ReplaceProviders.push("The Weather Channel");
+			if (Settings.AQI.ReplaceProviders.includes("QWeather")) Settings.AQI.ReplaceProviders.push("和风天气");
+			Settings.AQI.ReplaceProviders.push(undefined);
+			if (!Array.isArray(Settings?.AQI?.Local?.ReplaceScales)) Lodash.set(Settings, "AQI.ReplaceProviders.Local.ReplaceScales", (Settings?.AQI?.Local?.ReplaceScales) ? [Settings.AQI.Local.ReplaceScales.toString()] : []);
+			break;
+		case "Siri":
+			if (!Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+			if (!Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+			break;
+		case "TV":
+			if (!Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+			break;
+	}	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
 	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
