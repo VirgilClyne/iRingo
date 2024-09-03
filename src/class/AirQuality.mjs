@@ -1,7 +1,7 @@
 export default class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.0.0";
+        this.Version = "2.0.1";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -234,7 +234,7 @@ export default class AirQuality {
             // Convert unit based on standard
             const PollutantStandard = AirQuality.#Config.Scales[scale].pollutants[pollutant.pollutantType];
             if (pollutant.units !== PollutantStandard.units) {
-                pollutant.amount = AirQuality.ConvertUnit(pollutant.units, PollutantStandard.units, pollutant.amount, PollutantStandard.ppxToXGM3);
+                pollutant.amount = AirQuality.ConvertUnit(pollutant.amount, pollutant.units, PollutantStandard.units, PollutantStandard.ppxToXGM3);
                 pollutant.units = PollutantStandard.units;
             };
             // Calculate AQI for each pollutant
@@ -246,11 +246,11 @@ export default class AirQuality {
             // Convert unit that does not supported in Apple Weather
             switch (pollutant.units) {
                 case "PARTS_PER_MILLION":
-                    pollutant.amount = AirQuality.ConvertUnit(pollutant.units, "PARTS_PER_BILLION", pollutant.amount, -1); // Will not convert to Xg/m3
+                    pollutant.amount = AirQuality.ConvertUnit(pollutant.amount, pollutant.units, "PARTS_PER_BILLION"); // Will not convert to Xg/m3
                     pollutant.units = "PARTS_PER_BILLION";
                     break
                 case 'MILLIGRAMS_PER_CUBIC_METER':
-                    pollutant.amount = AirQuality.ConvertUnit(pollutant.units, "MICROGRAMS_PER_CUBIC_METER", pollutant.amount, -1); // Will not convert to Xg/m3
+                    pollutant.amount = AirQuality.ConvertUnit(pollutant.amount, pollutant.units, "MICROGRAMS_PER_CUBIC_METER"); // Will not convert to Xg/m3
                     pollutant.units = "MICROGRAMS_PER_CUBIC_METER";
                     break;
                 default:
@@ -280,12 +280,12 @@ export default class AirQuality {
         return airQuality;
     };
 
-    static ConvertUnit(unit, unitToConvert, amount = new Number, ppxToXGM3Value = new Number) {
-        console.log(`☑️ ConvertUnit\nunit: ${unit}\nunitToConvert: ${unitToConvert}\namount: ${amount}\nppxToXGM3Value: ${ppxToXGM3Value}`, "");
+    static ConvertUnit(amount = new Number, unitFrom, unitTo, ppxToXGM3Value = -1) {
+        console.log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
         if (amount < 0) amount = -1;
-        else switch (unit) {
+        else switch (unitFrom) {
             case 'PARTS_PER_MILLION':
-                switch (unitToConvert) {
+                switch (unitTo) {
                     case 'PARTS_PER_MILLION':
                         break;
                     case 'PARTS_PER_BILLION':
@@ -295,7 +295,7 @@ export default class AirQuality {
                         amount = amount * ppxToXGM3Value;
                         break;
                     case 'MICROGRAMS_PER_CUBIC_METER': {
-                        const inPpb = AirQuality.ConvertUnit(unit, 'PARTS_PER_BILLION', amount, ppxToXGM3Value);
+                        const inPpb = AirQuality.ConvertUnit(amount, unitFrom, 'PARTS_PER_BILLION', ppxToXGM3Value);
                         amount = inPpb * ppxToXGM3Value;
                         break;
                     };
@@ -305,14 +305,14 @@ export default class AirQuality {
                 };
                 break;
             case 'PARTS_PER_BILLION':
-                switch (unitToConvert) {
+                switch (unitTo) {
                     case 'PARTS_PER_BILLION':
                         break;
                     case 'PARTS_PER_MILLION':
                         amount = amount * 0.001;
                         break;
                     case 'MILLIGRAMS_PER_CUBIC_METER': {
-                        const inPpm = AirQuality.ConvertUnit(unit, 'PARTS_PER_MILLION', amount, ppxToXGM3Value);
+                        const inPpm = AirQuality.ConvertUnit(amount, unitFrom, 'PARTS_PER_MILLION', ppxToXGM3Value);
                         amount = inPpm * ppxToXGM3Value;
                         break;
                     };
@@ -325,7 +325,7 @@ export default class AirQuality {
                 };
                 break;
             case 'MILLIGRAMS_PER_CUBIC_METER':
-                switch (unitToConvert) {
+                switch (unitTo) {
                     case 'MILLIGRAMS_PER_CUBIC_METER':
                         break;
                     case 'MICROGRAMS_PER_CUBIC_METER':
@@ -335,7 +335,7 @@ export default class AirQuality {
                         amount = amount / ppxToXGM3Value;
                         break;
                     case 'PARTS_PER_BILLION': {
-                        const inUgM3 = AirQuality.ConvertUnit(unit, 'MICROGRAMS_PER_CUBIC_METER', amount, ppxToXGM3Value);
+                        const inUgM3 = AirQuality.ConvertUnit(amount, unitFrom, 'MICROGRAMS_PER_CUBIC_METER', ppxToXGM3Value);
                         amount = inUgM3 / ppxToXGM3Value;
                         break;
                     };
@@ -345,14 +345,14 @@ export default class AirQuality {
                 };
                 break;
             case 'MICROGRAMS_PER_CUBIC_METER':
-                switch (unitToConvert) {
+                switch (unitTo) {
                     case 'MICROGRAMS_PER_CUBIC_METER':
                         break;
                     case 'MILLIGRAMS_PER_CUBIC_METER':
                         amount = amount * 0.001;
                         break;
                     case 'PARTS_PER_MILLION': {
-                        const inMgM3 = AirQuality.ConvertUnit(unit, 'MILLIGRAMS_PER_CUBIC_METER', amount, ppxToXGM3Value);
+                        const inMgM3 = AirQuality.ConvertUnit(amount, unitFrom, 'MILLIGRAMS_PER_CUBIC_METER', ppxToXGM3Value);
                         amount = inMgM3 / ppxToXGM3Value;
                         break;
                     };

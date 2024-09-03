@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.3(4145) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.5.3(4146) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -111,7 +111,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													if (body?.airQuality?.pollutants) body.airQuality.pollutants = body.airQuality.pollutants.map((pollutant) => {
 														switch (pollutant.pollutantType) {
 															case "CO": // Fix CO amount from QWeather
-																pollutant.amount = AirQuality.ConvertUnit("MILLIGRAMS_PER_CUBIC_METER", "MICROGRAMS_PER_CUBIC_METER", pollutant.amount, -1);
+																pollutant.amount = AirQuality.ConvertUnit(pollutant.amount, "MILLIGRAMS_PER_CUBIC_METER", "MICROGRAMS_PER_CUBIC_METER");
 																break;
 															default:
 																break;
