@@ -141,6 +141,10 @@
 							"label": "WeatherKit (不进行替换)"
 						},
 						{
+							"key": "QWeather",
+							"label": "和风天气"
+						},
+						{
 							"key": "ColorfulClouds",
 							"label": "彩云天气"
 						},
