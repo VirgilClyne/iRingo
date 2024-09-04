@@ -158,6 +158,11 @@ export default class AirQuality {
                 },
             },
             "EPA_NowCast": {
+                /**
+                 * US AQI standard, not equal to NowCast.
+                 * [EPA 454/B-18-007]{@link https://www.airnow.gov/sites/default/files/2020-05/aqi-technical-assistance-document-sept2018.pdf}
+                 * @type aqiStandard
+                 */
                 "scale": 'EPA_NowCast',
                 "categoryIndex": {
                     "-1": [Number.MIN_VALUE, -1], // INVALID
@@ -173,19 +178,25 @@ export default class AirQuality {
                 "pollutants": {
                     "OZONE_8H": {
                         "units": 'PARTS_PER_MILLION',
-                        "ppxToXGM3": 1.97,
+                        "ppxToXGM3": 1.97, // 48 g/mol
                         "ranges": {
                             "1": [0, 0.054], // GOOD
                             "2": [0.055, 0.070], // MODERATE
                             "3": [0.071, 0.085], // UNHEALTHY_FOR_SENSITIVE
                             "4": [0.086, 0.105], // UNHEALTHY
                             "5": [0.106, 0.200], // VERY_UNHEALTHY
+                            // 8-hour O3 values do not define higher AQI values (≥ 301).
+                            // AQI values of 301 or higher are calculated with 1-hour O3 concentrations.
                         }
                     },
                     "OZONE": {
                         "units": 'PARTS_PER_MILLION',
-                        "ppxToXGM3": 1.97,
+                        "ppxToXGM3": 1.97, // 48 g/mol
                         "ranges": {
+                            // Areas are generally required to report the AQI based on 8-hour O3 values. However,
+                            // there are a small number of areas where an AQI based on 1-hour O3 values would be more precautionary.
+                            // In these cases, in addition to calculating the 8-hour O3 index value,
+                            // the 1-hour O3 value may be calculated, and the maximum of the two values reported.
                             "3": [0.125, 0.164], // UNHEALTHY_FOR_SENSITIVE
                             "4": [0.165, 0.204], // UNHEALTHY
                             "5": [0.205, 0.404], // VERY_UNHEALTHY
@@ -216,9 +227,21 @@ export default class AirQuality {
                             "6": [425, 604], // HAZARDOUS
                         }
                     },
+                    "CO_8H": {
+                        "units": 'PARTS_PER_MILLION',
+                        "ppxToXGM3": 1.14, // 28 g/mol
+                        "ranges": {
+                            "1": [0.0, 4.4], // GOOD
+                            "2": [4.5, 9.4], // MODERATE
+                            "3": [9.5, 12.4], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [12.5, 15.4], // UNHEALTHY
+                            "5": [15.5, 30.4], // VERY_UNHEALTHY
+                            "6": [30.5, 50.4], // HAZARDOUS
+                        }
+                    },
                     "CO": {
                         "units": 'PARTS_PER_MILLION',
-                        "ppxToXGM3": 1.14,
+                        "ppxToXGM3": 1.14, // 28 g/mol
                         "ranges": {
                             "1": [0.0, 4.4], // GOOD
                             "2": [4.5, 9.4], // MODERATE
@@ -230,12 +253,14 @@ export default class AirQuality {
                     },
                     "SO2": {
                         "units": 'PARTS_PER_BILLION',
-                        "ppxToXGM3": 2.62,
+                        "ppxToXGM3": 2.62, // 64 g/mol
                         "ranges": {
                             "1": [0, 35], // GOOD
                             "2": [36, 75], // MODERATE
                             "3": [76, 185], // UNHEALTHY_FOR_SENSITIVE
                             "4": [186, 304], // UNHEALTHY
+                            // 1-hour SO2 values do not define higher AQI values (≥ 200).
+                            // AQI values of 200 or greater are calculated with 24-hour SO2 concentrations.
                         }
                     },
                     "SO2_24H": {
@@ -246,6 +271,29 @@ export default class AirQuality {
                             "6": [605, 1004], // HAZARDOUS
                         }
                     },
+                    // NOT FOR CALCULATION
+                    //
+                    // EPA strengthened the primary standard for SO2 in 2010.
+                    // Because there was not enough health information to inform changing the upper end of the AQI for SO2,
+                    // the upper end continues to use the 24-hour average SO2 concentration.
+                    // The lower end of the AQI uses the daily max 1-hour SO2 concentration.
+                    //
+                    // If you have a daily max 1-hour SO2 concentration below 305 ppb,
+                    // then use the breakpoints in Table 6 to calculate the AQI value.
+                    //
+                    // If you have a 24-hour average SO2 concentration greater than or equal to 305 ppb,
+                    // then use the breakpoints in Table 6 to calculate the AQI value.
+                    // If you have a 24-hour value in this range,
+                    // it will always result in a higher AQI value than a 1-hour value would.
+                    //
+                    // On rare occasions, you could have a day where the daily max 1-hour concentration is at or above 305 ppb
+                    // but when you try to use the 24-hour average to calculate the AQI value,
+                    // you find that the 24-hour concentration is not above 305 ppb.
+                    // If this happens, use 200 for the lower and upper AQI breakpoints (ILo and IHi) in Equation 1
+                    // to calculate the AQI value based on the daily max 1-hour value.
+                    // This effectively fixes the AQI value at 200 exactly,
+                    // which ensures that you get the highest possible AQI value associated with your 1-hour concentration
+                    // on such days.
                     "SO2_MAX_1H": {
                         "units": 'PARTS_PER_BILLION',
                         "ppxToXGM3": -1,
@@ -256,7 +304,7 @@ export default class AirQuality {
                     },
                     "NO2": {
                         "units": 'PARTS_PER_BILLION',
-                        "ppxToXGM3": 1.88,
+                        "ppxToXGM3": 1.88, // 46 g/mol
                         "ranges": {
                             "1": [0, 53], // GOOD
                             "2": [54, 100], // MODERATE
@@ -269,6 +317,12 @@ export default class AirQuality {
                 }
             },
             "WAQI_InstantCast": {
+                /**
+                 * WAQI InstantCast.
+                 * [A Beginner's Guide to Air Quality Instant-Cast and Now-Cast.]{@link https://aqicn.org/faq/2015-03-15/air-quality-nowcast-a-beginners-guide/}
+                 * [Ozone AQI Scale update]{@link https://aqicn.org/faq/2016-08-10/ozone-aqi-scale-update/}
+                 * @type aqiStandard
+                 */
                 "scale": 'EPA_NowCast',
                 "categoryIndex": {
                     "-1": [Number.MIN_VALUE, -1], // INVALID
