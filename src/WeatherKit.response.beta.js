@@ -12,7 +12,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.8(4161) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.7.0(4162) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -182,37 +182,35 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 async function InjectAirQuality(url, body, Settings) {
 	$.log(`☑️ InjectAirQuality`, "");
 	let airQuality;
-	let metadata;
 	switch (Settings?.AQI?.Provider) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
+			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			airQuality = await qWeather.AirNow();
 			break;
 		case "ColorfulClouds":
 			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			airQuality = await colorfulClouds.RealTime();
-			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":
 		default:
 			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
 			if (Settings?.API?.WAQI?.Token) {
 				airQuality = await Waqi.AQI2();
-				metadata = airQuality?.metadata;
 			} else {
 				const Nearest = await Waqi.Nearest();
 				const Token = await Waqi.Token(Nearest?.metadata?.stationId);
 				//Caches.WAQI.set(stationId, Token);
 				airQuality = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
-				metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
+				airQuality.metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
 				airQuality = { ...Nearest, ...airQuality };
 			}
 			break;
 	};
-	if (metadata) {
-		metadata = { ...body?.airQuality?.metadata, ...metadata };
+	if (airQuality?.metadata) {
+		airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
 		body.airQuality = { ...body?.airQuality, ...airQuality };
-		body.airQuality.metadata = metadata;
 		if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
 		$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 	};
@@ -245,7 +243,6 @@ function ConvertAirQuality(body, Settings) {
 async function InjectForecastNextHour(url, body, Settings) {
 	$.log(`☑️ InjectForecastNextHour`, "");
 	let forecastNextHour;
-	let metadata;
 	switch (Settings?.NextHour?.Provider) {
 		case "WeatherKit":
 			break;
@@ -259,11 +256,9 @@ async function InjectForecastNextHour(url, body, Settings) {
 			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	};
-	metadata = forecastNextHour?.metadata;
-	if (metadata) {
-		metadata = { ...body?.forecastNextHour?.metadata, ...metadata };
+	if (forecastNextHour?.metadata) {
+		forecastNextHour.metadata = { ...body?.forecastNextHour?.metadata, ...forecastNextHour.metadata };
 		body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
-		body.forecastNextHour.metadata = metadata;
 		$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 	};
 	$.log(`✅ InjectForecastNextHour`, "");

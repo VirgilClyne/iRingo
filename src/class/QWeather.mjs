@@ -1,11 +1,12 @@
 import ENV from "../ENV/ENV.mjs";
 import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
+import AirQuality from "../class/AirQuality.mjs";
 import ForecastNextHour from "./ForecastNextHour.mjs";
 
 export default class QWeather {
     constructor($ = new ENV("QWeather"), options) {
         this.Name = "QWeather";
-        this.Version = "1.0.9";
+        this.Version = "2.0.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -13,6 +14,77 @@ export default class QWeather {
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
         this.$ = $;
+    };
+
+    #Config = {
+        "Pollutants": {
+            "co": "CO",
+            "no": "NO",
+            "no2": "NO2",
+            "so2": "SO2",
+            "o3": "OZONE",
+            "nox": "NOX",
+            "pm25": "PM2_5",
+            "pm2p5": "PM2_5",
+            "pm10": "PM10",
+            "other": "NOT_AVAILABLE",
+            "na": "NOT_AVAILABLE"
+        },
+    };
+
+    async AirNow(token = this.token) {
+        this.$.log(`☑️ AirNow`, "");
+        const request = {
+            "url": `https://${this.host}/v7/air/now?location=${this.longitude},${this.latitude}&key=${token}`,
+            "header": this.header,
+        };
+        let airQuality;
+        try {
+            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
+            switch (body?.code) {
+                case "200":
+                    airQuality = {
+                        "metadata": {
+                            "attributionUrl": body?.fxLink,
+                            "expireTime": timeStamp + 60 * 60,
+                            "language": `${this.language}-${this.country}`,
+                            "latitude": this.latitude,
+                            "longitude": this.longitude,
+                            "providerLogo": providerNameToLogo("和风天气", this.version),
+                            "providerName": "和风天气",
+                            "readTime": timeStamp,
+                            "reportedTime": Math.round(new Date(body?.now?.pubTime).valueOf() / 1000),
+                            "temporarilyUnavailable": false,
+                            "sourceType": "STATION",
+                        },
+                        "categoryIndex": parseInt(body?.now?.level, 10),
+                        "index": parseInt(body?.now?.aqi, 10),
+                        "pollutants": this.#CreatePollutants(body?.now),
+                        "previousDayComparison": "UNKNOWN",
+                        "primaryPollutant": this.#Config.Pollutants[body?.now?.primary] || "NOT_AVAILABLE",
+                        "scale": "HJ6332012"
+                    };
+                    if (body?.refer?.sources?.[0]) airQuality.metadata.providerName += `\n数据源: ${body?.refer?.sources?.[0]}`;
+                    break;
+                case "204":
+                case "400":
+                case "401":
+                case "402":
+                case "403":
+                case "404":
+                case "429":
+                case "500":
+                case undefined:
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+            };
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            //this.$.log(`🚧 AirNow airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            this.$.log(`✅ AirNow`, "");
+            return airQuality;
+        };
     };
 
     async Minutely(token = this.token) {
@@ -86,5 +158,32 @@ export default class QWeather {
             this.$.log(`✅ Minutely`, "");
             return forecastNextHour;
         };
+    };
+
+    #CreatePollutants(pollutantsObj = {}) {
+        console.log(`☑️ CreatePollutants`, "");
+        let pollutants = [];
+        for (const [key, value] of Object.entries(pollutantsObj)) {
+            switch (key) {
+                case "co":
+                case "no":
+                case "no2":
+                case "so2":
+                case "o3":
+                case "nox":
+                case "pm25":
+                case "pm2p5":
+                case "pm10":
+                    pollutants.push({
+                        "amount": value ?? -1,
+                        "pollutantType": this.#Config.Pollutants[key],
+                        "units": "MICROGRAMS_PER_CUBIC_METER",
+                    });
+                    break;
+            };
+        };
+        //console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        console.log(`✅ CreatePollutants`, "");
+        return pollutants;
     };
 };
