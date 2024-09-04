@@ -7,7 +7,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.10";
+        this.Version = "2.3.0";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -30,7 +30,7 @@ export default class ColorfulClouds {
         },
     };
 
-    async RealTime(token = this.token, convertUnits = false, scale = "WAQI_InstantCast") {
+    async RealTime(token = this.token) {
         this.$.log(`☑️ RealTime`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
@@ -44,22 +44,27 @@ export default class ColorfulClouds {
                 case "ok":
                     switch (body?.result?.realtime?.status) {
                         case "ok":
-                            const pollutants = this.#CreatePollutants(body?.result?.realtime?.air_quality);
-                            airQuality = AirQuality.ConvertScale(pollutants, scale, convertUnits);
-                            airQuality.metadata = {
-                                "attributionUrl": "https://www.caiyunapp.com/h5",
-                                "expireTime": timeStamp + 60 * 60,
-                                "language": `${this.language}-${this.country}`,
-                                "latitude": body?.location?.[0],
-                                "longitude": body?.location?.[1],
-                                "providerLogo": providerNameToLogo("彩云天气", this.version),
-                                "providerName": "彩云天气",
-                                "readTime": timeStamp,
-                                "reportedTime": body?.server_time,
-                                "temporarilyUnavailable": false,
-                                "sourceType": "STATION",
+                            airQuality = {
+                                "metadata": {
+                                    "attributionUrl": "https://www.caiyunapp.com/h5",
+                                    "expireTime": timeStamp + 60 * 60,
+                                    "language": `${this.language}-${this.country}`,
+                                    "latitude": body?.location?.[0],
+                                    "longitude": body?.location?.[1],
+                                    "providerLogo": providerNameToLogo("彩云天气", this.version),
+                                    "providerName": "彩云天气",
+                                    "readTime": timeStamp,
+                                    "reportedTime": body?.server_time,
+                                    "temporarilyUnavailable": false,
+                                    "sourceType": "STATION",
+                                },
+                                "categoryIndex": AirQuality.CategoryIndex(body?.result?.realtime?.air_quality?.aqi.chn, "HJ_633"),
+                                "index": parseInt(body?.result?.realtime?.air_quality?.aqi.chn, 10),
+                                "pollutants": this.#CreatePollutants(body?.result?.realtime?.air_quality),
+                                "previousDayComparison": "UNKNOWN",
+                                "primaryPollutant": "NOT_AVAILABLE",
+                                "scale": "HJ6332012"
                             };
-                            if (convertUnits) airQuality.metadata.providerName += `\nConverted using ${scale}`;
                             break;
                         case "error":
                         case undefined:

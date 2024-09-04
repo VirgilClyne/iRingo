@@ -19241,6 +19241,154 @@ class AirQuality {
 
     static #Config = {
         "Scales": {
+            "HJ_633": {
+                /**
+                 * China AQI standard.
+                 * [环境空气质量指数（AQI）技术规定（试行）]{@link https://www.mee.gov.cn/ywgz/fgbz/bz/bzwb/jcffbz/201203/W020120410332725219541.pdf}
+                 * @type aqiStandard
+                 */
+                "scale": 'HJ6332012',
+                "categoryIndex": {
+                    "-1": [Number.MIN_VALUE, -1], // INVALID
+                    "1": [0, 50], // GOOD
+                    "2": [51, 100], // MODERATE
+                    "3": [101, 150], // UNHEALTHY_FOR_SENSITIVE
+                    "4": [151, 200], // UNHEALTHY
+                    "5": [201, 300], // VERY_UNHEALTHY
+                    "6": [301, 500], // HAZARDOUS
+                    "7": [500, Number.MAX_VALUE], // OVER_RANGE
+                },
+                "significant": 3,
+                "pollutants": {
+                    "SO2_24H": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 50], // GOOD
+                            "2": [51, 150], // MODERATE
+                            "3": [151, 475], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [476, 800], // UNHEALTHY
+                            "5": [801, 1600], // VERY_UNHEALTHY
+                            "6": [1601, 2100], // HAZARDOUS
+                            "7": [2101, 2602], // OVER_RANGE
+                        },
+                    },
+                    "SO2": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 150], // GOOD
+                            "2": [151, 500], // MODERATE
+                            "3": [501, 650], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [651, 800], // UNHEALTHY
+                            // 二氧化硫（SO2）1小时平均浓度高于800 ug/m3的，不再进行其空气质量分指数计算，二氧化硫（SO2）空气质量分指数按24小时平均浓度计算的分指数报告。
+                        },
+                    },
+                    "NO2_24H": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 40], // GOOD
+                            "2": [41, 80], // MODERATE
+                            "3": [81, 180], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [181, 280], // UNHEALTHY
+                            "5": [281, 565], // VERY_UNHEALTHY
+                            "6": [566, 750], // HAZARDOUS
+                            "7": [751, 940], // OVER_RANGE
+                        },
+                    },
+                    "NO2": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 100], // GOOD
+                            "2": [101, 200], // MODERATE
+                            "3": [201, 700], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [701, 1200], // UNHEALTHY
+                            "5": [1201, 2340], // VERY_UNHEALTHY
+                            "6": [2341, 3090], // HAZARDOUS
+                            "7": [3091, 3840], // OVER_RANGE
+                        },
+                    },
+                    "PM10_24H": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 50], // GOOD
+                            "2": [51, 150], // MODERATE
+                            "3": [151, 250], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [251, 350], // UNHEALTHY
+                            "5": [351, 420], // VERY_UNHEALTHY
+                            "6": [421, 500], // HAZARDOUS
+                            "7": [501, 600], // OVER_RANGE
+                        },
+                    },
+                    "CO_24H": {
+                        "units": 'MILLIGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 2], // GOOD
+                            "2": [3, 4], // MODERATE
+                            "3": [5, 14], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [15, 24], // UNHEALTHY
+                            "5": [25, 36], // VERY_UNHEALTHY
+                            "6": [37, 48], // HAZARDOUS
+                            "7": [49, 60], // OVER_RANGE
+                        },
+                    },
+                    "CO": {
+                        "units": 'MILLIGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 5], // GOOD
+                            "2": [6, 10], // MODERATE
+                            "3": [11, 35], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [36, 60], // UNHEALTHY
+                            "5": [61, 90], // VERY_UNHEALTHY
+                            "6": [91, 120], // HAZARDOUS
+                            "7": [121, 150], // OVER_RANGE
+                        },
+                    },
+                    "OZONE": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 160], // GOOD
+                            "2": [161, 200], // MODERATE
+                            "3": [201, 300], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [301, 400], // UNHEALTHY
+                            "5": [401, 800], // VERY_UNHEALTHY
+                            "6": [801, 1000], // HAZARDOUS
+                            "7": [1001, 1200], // OVER_RANGE
+                        },
+                    },
+                    "OZONE_8H": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 100], // GOOD
+                            "2": [101, 160], // MODERATE
+                            "3": [161, 215], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [216, 265], // UNHEALTHY
+                            "5": [266, 800], // VERY_UNHEALTHY
+                            // 臭氧（O3）8小时平均浓度值高于800 ug/m3的，不再进行其空气质量分指数计算，臭氧（O3）空气质量分指数按1小时平均浓度计算的分指数报告。
+                        },
+                    },
+                    "PM2_5_24H": {
+                        "units": 'MICROGRAMS_PER_CUBIC_METER',
+                        "ppxToXGM3": -1,
+                        "ranges": {
+                            "1": [0, 35], // GOOD
+                            "2": [36, 75], // MODERATE
+                            "3": [76, 115], // UNHEALTHY_FOR_SENSITIVE
+                            "4": [116, 150], // UNHEALTHY
+                            "5": [151, 250], // VERY_UNHEALTHY
+                            "6": [251, 350], // HAZARDOUS
+                            "7": [351, 500], // OVER_RANGE
+                        },
+                    },
+                },
+            },
             "EPA_NowCast": {
                 "scale": 'EPA_NowCast',
                 "categoryIndex": {
@@ -20334,7 +20482,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.1.10";
+        this.Version = "2.3.0";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -20357,7 +20505,7 @@ class ColorfulClouds {
         },
     };
 
-    async RealTime(token = this.token, convertUnits = false, scale = "WAQI_InstantCast") {
+    async RealTime(token = this.token) {
         this.$.log(`☑️ RealTime`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
@@ -20371,22 +20519,27 @@ class ColorfulClouds {
                 case "ok":
                     switch (body?.result?.realtime?.status) {
                         case "ok":
-                            const pollutants = this.#CreatePollutants(body?.result?.realtime?.air_quality);
-                            airQuality = AirQuality.ConvertScale(pollutants, scale, convertUnits);
-                            airQuality.metadata = {
-                                "attributionUrl": "https://www.caiyunapp.com/h5",
-                                "expireTime": timeStamp + 60 * 60,
-                                "language": `${this.language}-${this.country}`,
-                                "latitude": body?.location?.[0],
-                                "longitude": body?.location?.[1],
-                                "providerLogo": providerNameToLogo("彩云天气", this.version),
-                                "providerName": "彩云天气",
-                                "readTime": timeStamp,
-                                "reportedTime": body?.server_time,
-                                "temporarilyUnavailable": false,
-                                "sourceType": "STATION",
+                            airQuality = {
+                                "metadata": {
+                                    "attributionUrl": "https://www.caiyunapp.com/h5",
+                                    "expireTime": timeStamp + 60 * 60,
+                                    "language": `${this.language}-${this.country}`,
+                                    "latitude": body?.location?.[0],
+                                    "longitude": body?.location?.[1],
+                                    "providerLogo": providerNameToLogo("彩云天气", this.version),
+                                    "providerName": "彩云天气",
+                                    "readTime": timeStamp,
+                                    "reportedTime": body?.server_time,
+                                    "temporarilyUnavailable": false,
+                                    "sourceType": "STATION",
+                                },
+                                "categoryIndex": AirQuality.CategoryIndex(body?.result?.realtime?.air_quality?.aqi.chn, "HJ_633"),
+                                "index": parseInt(body?.result?.realtime?.air_quality?.aqi.chn, 10),
+                                "pollutants": this.#CreatePollutants(body?.result?.realtime?.air_quality),
+                                "previousDayComparison": "UNKNOWN",
+                                "primaryPollutant": "NOT_AVAILABLE",
+                                "scale": "HJ6332012"
                             };
-                            if (convertUnits) airQuality.metadata.providerName += `\nConverted using ${scale}`;
                             break;
                         case "error":
                         case undefined:
