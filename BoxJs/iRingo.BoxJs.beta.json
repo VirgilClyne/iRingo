@@ -203,6 +203,14 @@
 							"label": "None (不进行替换)"
 						},
 						{
+							"key": "HJ_633",
+							"label": "HJ6332012"
+						},
+						{
+							"key": "EPA_NowCast",
+							"label": "EPA NowCast"
+						},
+						{
 							"key": "WAQI_InstantCast",
 							"label": "WAQI InstantCast"
 						}
