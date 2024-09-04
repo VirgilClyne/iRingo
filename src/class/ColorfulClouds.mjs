@@ -7,7 +7,7 @@ import providerNameToLogo from "../function/providerNameToLogo.mjs";
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.3.0";
+        this.Version = "2.3.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -79,7 +79,7 @@ export default class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ RealTime`, "");
             return airQuality;
         };
@@ -187,7 +187,7 @@ export default class ColorfulClouds {
                     break;
             };
         };
-        console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        //console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
         console.log(`✅ CreatePollutants`, "");
         return pollutants;
     };

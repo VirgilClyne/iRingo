@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.6(4158) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.7(4159) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -190,8 +190,8 @@ async function InjectAirQuality(url, body, Settings) {
 		case "QWeather":
 			break;
 		case "ColorfulClouds":
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ=="});
-			airQuality = await colorfulClouds.RealTime(undefined, Settings?.AQI?.Local?.ConvertUnits, Settings?.AQI?.Local?.Scale);
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			airQuality = await colorfulClouds.RealTime();
 			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":
@@ -227,6 +227,8 @@ function ConvertAirQuality(body, Settings) {
 	switch (Settings?.AQI?.Local?.Scale) {
 		case "NONE":
 			break;
+		case 'HJ_633':
+		case 'EPA_NowCast':
 		case 'WAQI_InstantCast':
 		default:
 			airQuality = AirQuality.ConvertScale(body?.airQuality?.pollutants, Settings?.AQI?.Local?.Scale, Settings?.AQI?.Local?.ConvertUnits);
@@ -254,7 +256,7 @@ async function InjectForecastNextHour(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ=="});
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	};

@@ -19233,7 +19233,7 @@ class WeatherKit2 {
 class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.2.2";
+        this.Version = "2.2.3";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -19630,7 +19630,7 @@ class AirQuality {
             );
             return pollutant;
         });
-        console.log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        //console.log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
         console.log(`✅ Pollutants`, "");
         return pollutants;
     };
@@ -19652,12 +19652,13 @@ class AirQuality {
             pollutant.units = pollutant.convertedUnits;
             return pollutant;
         });
-        console.log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+        //console.log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
         console.log(`✅ ConvertScale`, "");
         return airQuality;
     };
 
     static ConvertUnit(amount = Number(), unitFrom, unitTo, ppxToXGM3Value = -1) {
+        //console.log(`☑️ ConvertUnit`, "");
         //console.log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
         if (amount < 0) amount = -1;
         else switch (unitFrom) {
@@ -19757,6 +19758,7 @@ class AirQuality {
     };
 
     static FixUnits(pollutants = []) {
+        console.log(`☑️ FixUnits`, "");
         return pollutants.map(pollutant => {
             switch (pollutant.units) {
                 case "PARTS_PER_MILLION":
@@ -19767,7 +19769,9 @@ class AirQuality {
                     pollutant.amount = AirQuality.ConvertUnit(pollutant.amount, pollutant.units, "MICROGRAMS_PER_CUBIC_METER"); // Will not convert to Xg/m3
                     pollutant.units = "MICROGRAMS_PER_CUBIC_METER";
                     break;
-            }            return pollutant;
+            }            //console.log(`🚧 FixUnits, pollutant: ${JSON.stringify(pollutant, null, 2)}`, "");
+            console.log(`✅ FixUnits`, "");
+            return pollutant;
         });
     };
 }
@@ -20482,7 +20486,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.3.0";
+        this.Version = "2.3.1";
         $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -20554,7 +20558,7 @@ class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            //this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             this.$.log(`✅ RealTime`, "");
             return airQuality;
         }    };
@@ -20658,7 +20662,7 @@ class ColorfulClouds {
                         "units": "MICROGRAMS_PER_CUBIC_METER",
                     });
                     break;
-            }        }        console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+            }        }        //console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
         console.log(`✅ CreatePollutants`, "");
         return pollutants;
     };
@@ -20750,7 +20754,7 @@ class QWeather {
         }    };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.6(4158) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.7(4159) response.beta");
 
 /***************** Processing *****************/
 // 解构URL
@@ -20901,8 +20905,8 @@ async function InjectAirQuality(url, body, Settings) {
 		case "QWeather":
 			break;
 		case "ColorfulClouds":
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ=="});
-			airQuality = await colorfulClouds.RealTime(undefined, Settings?.AQI?.Local?.ConvertUnits, Settings?.AQI?.Local?.Scale);
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			airQuality = await colorfulClouds.RealTime();
 			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":
@@ -20935,6 +20939,8 @@ function ConvertAirQuality(body, Settings) {
 	switch (Settings?.AQI?.Local?.Scale) {
 		case "NONE":
 			break;
+		case 'HJ_633':
+		case 'EPA_NowCast':
 		case 'WAQI_InstantCast':
 		default:
 			airQuality = AirQuality.ConvertScale(body?.airQuality?.pollutants, Settings?.AQI?.Local?.Scale, Settings?.AQI?.Local?.ConvertUnits);
@@ -20959,7 +20965,7 @@ async function InjectForecastNextHour(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ=="});
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	}	metadata = forecastNextHour?.metadata;

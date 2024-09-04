@@ -1,7 +1,7 @@
 export default class AirQuality {
     constructor(options = {}) {
 		this.Name = "AirQuality";
-        this.Version = "2.2.2";
+        this.Version = "2.2.3";
         this.Author = "Virgil Clyne & Wordless Echo";
 		console.log(`\n🟧 ${this.Name} v${this.Version} by ${this.Author}\n`, "");
         Object.assign(this, options);
@@ -399,7 +399,7 @@ export default class AirQuality {
             );
             return pollutant;
         });
-        console.log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        //console.log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
         console.log(`✅ Pollutants`, "");
         return pollutants;
     };
@@ -421,12 +421,13 @@ export default class AirQuality {
             pollutant.units = pollutant.convertedUnits;
             return pollutant;
         });
-        console.log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+        //console.log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
         console.log(`✅ ConvertScale`, "");
         return airQuality;
     };
 
     static ConvertUnit(amount = Number(), unitFrom, unitTo, ppxToXGM3Value = -1) {
+        //console.log(`☑️ ConvertUnit`, "");
         //console.log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
         if (amount < 0) amount = -1;
         else switch (unitFrom) {
@@ -537,6 +538,7 @@ export default class AirQuality {
     };
 
     static FixUnits(pollutants = []) {
+        console.log(`☑️ FixUnits`, "");
         return pollutants.map(pollutant => {
             switch (pollutant.units) {
                 case "PARTS_PER_MILLION":
@@ -550,6 +552,8 @@ export default class AirQuality {
                 default:
                     break;
             };
+            //console.log(`🚧 FixUnits, pollutant: ${JSON.stringify(pollutant, null, 2)}`, "");
+            console.log(`✅ FixUnits`, "");
             return pollutant;
         });
     };
