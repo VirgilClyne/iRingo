@@ -1,7 +1,6 @@
 import ENV from "../ENV/ENV.mjs";
+import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
 import AirQuality from "../class/AirQuality.mjs";
-import parseWeatherKitURL from "../function/parseWeatherKitURL.mjs"
-import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class WAQI {
     constructor($ = new ENV("WAQI"), options) {

@@ -1,8 +1,7 @@
 import ENV from "../ENV/ENV.mjs";
+import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
 import AirQuality from "../class/AirQuality.mjs";
 import ForecastNextHour from "./ForecastNextHour.mjs";
-import parseWeatherKitURL from "../function/parseWeatherKitURL.mjs"
-import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class ColorfulClouds {
     constructor($ = new ENV("ColorfulClouds"), options) {

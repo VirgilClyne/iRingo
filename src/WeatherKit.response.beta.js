@@ -3,8 +3,7 @@ import $Storage from './ENV/$Storage.mjs'
 import ENV from "./ENV/ENV.mjs";
 
 import Database from "./database/index.mjs";
-import setENV from "./function/setENV.mjs";
-import providerNameToLogo from "./function/providerNameToLogo.mjs";
+import { setENV, providerNameToLogo } from "./function/WeatherKitUtils.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
 import WAQI from "./class/WAQI.mjs";
 import ColorfulClouds from "./class/ColorfulClouds.mjs";
@@ -13,7 +12,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.7(4159) response.beta");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.8(4161) response.beta");
 
 /***************** Processing *****************/
 // 解构URL

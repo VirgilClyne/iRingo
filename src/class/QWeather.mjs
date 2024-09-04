@@ -1,7 +1,6 @@
 import ENV from "../ENV/ENV.mjs";
-import parseWeatherKitURL from "../function/parseWeatherKitURL.mjs"
+import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
 import ForecastNextHour from "./ForecastNextHour.mjs";
-import providerNameToLogo from "../function/providerNameToLogo.mjs";
 
 export default class QWeather {
     constructor($ = new ENV("QWeather"), options) {
