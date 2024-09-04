@@ -13,7 +13,7 @@ import AirQuality from "./class/AirQuality.mjs";
 
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.4(4153) response");
+const $ = new ENV(" iRingo: 🌤 WeatherKit v1.6.7(4159) response");
 
 /***************** Processing *****************/
 // 解构URL
@@ -91,14 +91,16 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
+											// InjectAirQuality
+											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
 											// PollutantUnitConverter
-											switch (body?.airQuality?.metadata?.providerName) {
+											switch (body?.airQuality?.metadata?.providerName?.split("\n")?.[0]) {
 												case "和风天气":
 												case "QWeather":
 													if (body?.airQuality?.pollutants) body.airQuality.pollutants = body.airQuality.pollutants.map((pollutant) => {
 														switch (pollutant.pollutantType) {
-															case "CO": // Fix CO amount from QWeather
-																pollutant.amount = AirQuality.ConvertUnit(pollutant.amount, "MILLIGRAMS_PER_CUBIC_METER", "MICROGRAMS_PER_CUBIC_METER");
+															case "CO": // Fix CO amount units
+																pollutant.units = "MILLIGRAMS_PER_CUBIC_METER";
 																break;
 															default:
 																break;
@@ -107,10 +109,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													});
 													break;
 											};
-											// InjectAirQuality
-											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
 											// ConvertAirQuality
 											if (Settings?.AQI?.Local?.ReplaceScales.includes(body?.airQuality?.scale.split(".")?.[0])) body = ConvertAirQuality(body, Settings);
+											// Fix Convert units that does not supported in Apple Weather
+											if (body?.airQuality?.pollutants) body.airQuality.pollutants = AirQuality.FixUnits(body.airQuality.pollutants);
 											// ProviderLogo
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										};
@@ -159,13 +161,13 @@ async function InjectAirQuality(url, body, Settings) {
 		case "QWeather":
 			break;
 		case "ColorfulClouds":
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			airQuality = await colorfulClouds.RealTime();
 			metadata = airQuality?.metadata;
 			break;
 		case "WAQI":
 		default:
-			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token, "convertUnits": Settings?.AQI?.Local?.UseConvertedUnit });
+			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
 			if (Settings?.API?.WAQI?.Token) {
 				airQuality = await Waqi.AQI2();
 				metadata = airQuality?.metadata;
@@ -195,10 +197,11 @@ function ConvertAirQuality(body, Settings) {
 	switch (Settings?.AQI?.Local?.Scale) {
 		case "NONE":
 			break;
+		case 'HJ_633':
+		case 'EPA_NowCast':
 		case 'WAQI_InstantCast':
 		default:
-			airQuality = AirQuality.ConvertScale(body?.airQuality?.pollutants);
-			if (!Settings?.AQI?.Local?.UseConvertedUnit) delete airQuality.pollutants;
+			airQuality = AirQuality.ConvertScale(body?.airQuality?.pollutants, Settings?.AQI?.Local?.Scale, Settings?.AQI?.Local?.ConvertUnits);
 			break;
 	};
 	if (airQuality.index) {
@@ -222,7 +225,7 @@ async function InjectForecastNextHour(url, body, Settings) {
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token });
+			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	};
