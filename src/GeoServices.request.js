@@ -1,12 +1,8 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-import URL from "./URL/URL.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.1.0(1) request");
+log("v3.1.0(2)");
 
 // 构造回复数据
 let $response = undefined;
@@ -14,16 +10,16 @@ let $response = undefined;
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", ["Location", "Maps"], Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -48,7 +44,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/vnd.apple.mpegurl":
 						case "audio/mpegurl":
 							//body = M3U8.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
@@ -58,19 +54,19 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/plist":
 						case "application/x-plist":
 							//body = XML.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = XML.stringify(body);
 							break;
 						case "text/vtt":
 						case "application/vtt":
 							//body = VTT.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = VTT.stringify(body);
 							break;
 						case "text/json":
 						case "application/json":
 							//body = JSON.parse($request.body ?? "{}");
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = JSON.stringify(body);
 							break;
 						case "application/protobuf":
@@ -79,9 +75,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/grpc":
 						case "application/grpc+proto":
 						case "application/octet-stream":
-							$.log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
-							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
-							$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
+							log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
+							let rawBody = ($platform === "Quantumult X") ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
+							log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
 							// 写入二进制数据
 							$request.body = rawBody;
 							break;
@@ -116,7 +112,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										},
 										body: Settings.PEP.GCC,
 									};
-									$.log(JSON.stringify($response));
+									log(JSON.stringify($response));
 									*/
 									break;
 							};
@@ -210,30 +206,30 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 			};
 			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
-				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
+				//log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";			
-				if ($.isQuanX()) {
+				if ($platform === "Quantumult X") {
 					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
 					delete $response.headers?.["Content-Length"];
 					delete $response.headers?.["content-length"];
 					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+					done($response);
+				} else done({ response: $response });
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
-				$.done($request);
+				//log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
+				done($request);
 				break;
 		};
 	})
