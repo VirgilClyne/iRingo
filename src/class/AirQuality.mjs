@@ -1,6 +1,7 @@
+import { log } from "../utils/utils.mjs";
 export default class AirQuality {
 	static Name = "AirQuality";
-	static Version = "2.2.4";
+	static Version = "2.2.5";
 	static Author = "Virgil Clyne & Wordless Echo";
 
 	static #Config = {
@@ -427,7 +428,7 @@ export default class AirQuality {
 	};
 
 	static Pollutants(pollutants = [], scale = "WAQI_InstantCast") {
-		console.log(`☑️ Pollutants, scale: ${scale}`, "");
+		log(`☑️ Pollutants, scale: ${scale}`, "");
 		pollutants = pollutants.map(pollutant => {
 			// Convert unit based on standard
 			const PollutantStandard = this.#Config.Scales[scale].pollutants[pollutant.pollutantType];
@@ -449,13 +450,13 @@ export default class AirQuality {
 			);
 			return pollutant;
 		});
-		//console.log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
-		console.log(`✅ Pollutants`, "");
+		//log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+		log(`✅ Pollutants`, "");
 		return pollutants;
 	};
 
 	static ConvertScale(pollutants = [], scale = "WAQI_InstantCast", convertUnits = false) {
-		console.log(`☑️ ConvertScale`, "");
+		log(`☑️ ConvertScale`, "");
 		pollutants = this.Pollutants(pollutants, scale);
 		const { AQI: index, pollutantType: primaryPollutant } = pollutants.reduce((previous, current) => previous.AQI > current.AQI ? previous : current);
 		let airQuality = {
@@ -471,14 +472,14 @@ export default class AirQuality {
 			pollutant.units = pollutant.convertedUnits;
 			return pollutant;
 		});
-		//console.log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-		console.log(`✅ ConvertScale`, "");
+		//log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+		log(`✅ ConvertScale`, "");
 		return airQuality;
 	};
 
 	static ConvertUnit(amount = Number(), unitFrom, unitTo, ppxToXGM3Value = -1) {
-		//console.log(`☑️ ConvertUnit`, "");
-		//console.log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
+		//log(`☑️ ConvertUnit`, "");
+		//log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
 		if (amount < 0) amount = -1;
 		else switch (unitFrom) {
 			case 'PARTS_PER_MILLION':
@@ -565,7 +566,7 @@ export default class AirQuality {
 				amount = -1;
 				break;
 		};
-		//console.log(`✅ ConvertUnit, amount: ${amount}`, "");
+		//log(`✅ ConvertUnit, amount: ${amount}`, "");
 		return amount;
 	};
 
@@ -577,18 +578,18 @@ export default class AirQuality {
 				aqi = parseInt(aqi, 10);
 				break;
 		};
-		console.log(`☑️ CategoryIndex, aqi: ${aqi}`, "");
+		log(`☑️ CategoryIndex, aqi: ${aqi}`, "");
 		let categoryIndex;
 		for (const [key, value] of Object.entries(this.#Config.Scales[scale].categoryIndex)) {
 			categoryIndex = parseInt(key, 10);
 			if (aqi >= value[0] && aqi <= value[1]) break;
 		};
-		console.log(`✅ CategoryIndex, categoryIndex: ${categoryIndex}`, "");
+		log(`✅ CategoryIndex, categoryIndex: ${categoryIndex}`, "");
 		return categoryIndex;
 	};
 
 	static FixUnits(pollutants = []) {
-		console.log(`☑️ FixUnits`, "");
+		log(`☑️ FixUnits`, "");
 		pollutants = pollutants.map(pollutant => {
 			switch (pollutant.units) {
 				case "PARTS_PER_MILLION":
@@ -604,8 +605,8 @@ export default class AirQuality {
 			};
 			return pollutant;
 		});
-		//console.log(`🚧 FixUnits, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
-		console.log(`✅ FixUnits`, "");
+		//log(`🚧 FixUnits, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+		log(`✅ FixUnits`, "");
 		return pollutants;
 	};
 };

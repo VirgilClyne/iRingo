@@ -1,19 +1,18 @@
-import ENV from "../ENV/ENV.mjs";
+import { fetch, log, logError } from "../utils/utils.mjs";
 import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
 import AirQuality from "../class/AirQuality.mjs";
 import ForecastNextHour from "./ForecastNextHour.mjs";
 
 export default class QWeather {
-    constructor($ = new ENV("QWeather"), options) {
+    constructor(options) {
         this.Name = "QWeather";
-        this.Version = "2.0.1";
-        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+        this.Version = "2.0.2";
+        log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
         this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
-        this.$ = $;
     };
 
     #Config = {
@@ -33,14 +32,14 @@ export default class QWeather {
     };
 
     async AirNow(token = this.token) {
-        this.$.log(`☑️ AirNow`, "");
+        log(`☑️ AirNow`, "");
         const request = {
             "url": `https://${this.host}/v7/air/now?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": this.header,
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.code) {
                 case "200":
@@ -79,23 +78,23 @@ export default class QWeather {
                     throw JSON.stringify({ "status": body?.status, "reason": body?.error });
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 AirNow airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AirNow`, "");
+            //log(`🚧 AirNow airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AirNow`, "");
             return airQuality;
         };
     };
 
     async Minutely(token = this.token) {
-        this.$.log(`☑️ Minutely, host: ${this.host}`, "");
+        log(`☑️ Minutely, host: ${this.host}`, "");
         const request = {
             "url": `https://${this.host}/v7/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": this.header,
         };
         let forecastNextHour;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.code) {
                 case "200":
@@ -152,16 +151,16 @@ export default class QWeather {
                     throw JSON.stringify({ "status": body?.code, "reason": body?.error });
             };
         } catch (error) {
-            this.$.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
-            this.$.log(`✅ Minutely`, "");
+            //log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+            log(`✅ Minutely`, "");
             return forecastNextHour;
         };
     };
 
     #CreatePollutants(pollutantsObj = {}) {
-        console.log(`☑️ CreatePollutants`, "");
+        log(`☑️ CreatePollutants`, "");
         let pollutants = [];
         for (const [key, value] of Object.entries(pollutantsObj)) {
             switch (key) {
@@ -182,8 +181,8 @@ export default class QWeather {
                     break;
             };
         };
-        //console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
-        console.log(`✅ CreatePollutants`, "");
+        //log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        log(`✅ CreatePollutants`, "");
         return pollutants;
     };
 };

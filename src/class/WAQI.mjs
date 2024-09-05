@@ -1,17 +1,16 @@
-import ENV from "../ENV/ENV.mjs";
+import { fetch, log, logError } from "../utils/utils.mjs";
 import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
 import AirQuality from "../class/AirQuality.mjs";
 
 export default class WAQI {
-    constructor($ = new ENV("WAQI"), options) {
+    constructor(options) {
         this.Name = "WAQI";
-        this.Version = "1.3.8";
-        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+        this.Version = "1.3.9";
+        log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
-        this.$ = $;
     };
 
     #Configs = {
@@ -29,7 +28,7 @@ export default class WAQI {
     };
 
     async Nearest(mapqVersion = "mapq") {
-        this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
+        log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
         const request = {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             //"url": `https://mapq.waqi.info/${mapqVersion}/nearest/station/${stationId}?n=1`,
@@ -37,7 +36,7 @@ export default class WAQI {
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (mapqVersion) {
                 case "mapq":
@@ -107,23 +106,23 @@ export default class WAQI {
                     break;
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ Nearest`, "");
+            //log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ Nearest`, "");
             return airQuality;
         };
     };
 
     async Token(stationId = Number()) {
-        this.$.log(`☑️ Token, stationId: ${stationId}`, "");
+        log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
             "header": this.header,
         };
         let token;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
@@ -147,16 +146,16 @@ export default class WAQI {
                     break;
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 token: ${token}`, "");
-            this.$.log(`✅ Token`, "");
+            //log(`🚧 token: ${token}`, "");
+            log(`✅ Token`, "");
             return token;
         };
     };
 
     async AQI(stationId = Number(), token = this.token) {
-        this.$.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
+        log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
         const request = {
             "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
             "header": this.header,
@@ -164,7 +163,7 @@ export default class WAQI {
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
@@ -210,16 +209,16 @@ export default class WAQI {
                     break;
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AQI`, "");
+            //log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AQI`, "");
             return airQuality;
         };
     };
 
     async AQI2(stationId = Number(), token = this.token) {
-        this.$.log(`☑️ AQI2, stationId: ${stationId}`, "");
+        log(`☑️ AQI2, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
             "header": this.header,
@@ -227,7 +226,7 @@ export default class WAQI {
         if (stationId) request.url = `https://api2.waqi.info/feed/@${stationId}/?token=${token}`;
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
@@ -259,10 +258,10 @@ export default class WAQI {
                     throw JSON.stringify({ "status": body?.status, "reason": body?.data });
             };
         } catch (error) {
-            this.$.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AQI2`, "");
+            //log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AQI2`, "");
             return airQuality;
         };
     };

@@ -1,16 +1,17 @@
+import { log } from "../utils/utils.mjs";
 import * as WK2 from "../flatbuffers/wk2.js";
 
 export default class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "WeatherKit2";
-		this.Version = "1.0.7";
-		console.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+		this.Version = "1.0.8";
+		log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
 		Object.assign(this, options);
 		this.weatherData = WK2.Weather.getRootAsWeather(this.bb);
 	};
 
 	encode(dataSet = "", data = {}) {
-		console.log(`☑️ encode, dataSet: ${dataSet}`, "");
+		log(`☑️ encode, dataSet: ${dataSet}`, "");
 		let offset;
 		let metadataOffset;
 		if (data?.metadata) metadataOffset = WK2.Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.temporarilyUnavailable, WK2.SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
@@ -175,12 +176,12 @@ export default class WeatherKit2 {
 				offset = WK2.HistoricalComparison.createHistoricalComparison(this.builder, metadataOffset, comparisonsOffset);
 				break;
 		};
-		console.log(`✅ encode, dataSet: ${dataSet}`, "");
+		log(`✅ encode, dataSet: ${dataSet}`, "");
 		return offset;
 	};
 
 	decode(dataSet = "", metadata) {
-		console.log(`☑️ decode, dataSet: ${dataSet}`, "");
+		log(`☑️ decode, dataSet: ${dataSet}`, "");
 		let data = {};
 		const airQualityData = this.weatherData?.airQuality();
 		const CurrentWeatherData = this.weatherData?.currentWeather();
@@ -663,7 +664,7 @@ export default class WeatherKit2 {
 				};
 				break;
 		};
-		console.log(`✅ decode, dataSet: ${dataSet}`, "");
+		log(`✅ decode, dataSet: ${dataSet}`, "");
 		return data;
 	};
 

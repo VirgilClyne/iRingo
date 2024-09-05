@@ -8,7 +8,7 @@ export default [
 		output: {
 			file: 'js/WeatherKit.response.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🌤 WeatherKit β Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},

@@ -1,18 +1,17 @@
-import ENV from "../ENV/ENV.mjs";
+import { _, fetch, log, logError } from "../utils/utils.mjs";
 import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
 import AirQuality from "../class/AirQuality.mjs";
 import ForecastNextHour from "./ForecastNextHour.mjs";
 
 export default class ColorfulClouds {
-    constructor($ = new ENV("ColorfulClouds"), options) {
+    constructor(options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.3.1";
-        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+        this.Version = "2.3.2";
+        log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
-        this.$ = $;
     };
 
     #Config = {
@@ -30,14 +29,14 @@ export default class ColorfulClouds {
     };
 
     async RealTime(token = this.token) {
-        this.$.log(`☑️ RealTime`, "");
+        log(`☑️ RealTime`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
             "header": this.header,
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
@@ -78,21 +77,21 @@ export default class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            //this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ RealTime`, "");
+            //log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ RealTime`, "");
             return airQuality;
         };
     };
 
     async Minutely(token = this.token) {
-        this.$.log(`☑️ Minutely`, "");
+        log(`☑️ Minutely`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": this.header,
         };
         let forecastNextHour;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
@@ -151,10 +150,10 @@ export default class ColorfulClouds {
                     throw JSON.stringify({ "status": body?.status, "reason": body?.error });
             };
         } catch (error) {
-            this.$.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
-            this.$.log(`✅ Minutely`, "");
+            //log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+            log(`✅ Minutely`, "");
             return forecastNextHour;
         };
     };

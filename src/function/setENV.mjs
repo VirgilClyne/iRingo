@@ -1,5 +1,5 @@
-import getStorage from '../ENV/getStorage.mjs'
-import _ from '../ENV/Lodash.mjs'
+import getStorage from '../utils/getStorage.mjs'
+import { _ } from "../utils/utils.mjs";
 
 /**
  * Set Environment Variables

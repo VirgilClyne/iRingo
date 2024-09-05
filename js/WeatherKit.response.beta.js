@@ -1,4 +1,18 @@
 /* README: https://github.com/VirgilClyne/iRingo */
+console.log(' iRingo: 🌤 WeatherKit β Response')
+const $platform = platform();
+function platform() {
+    if ("undefined" !== typeof $environment && $environment["surge-version"])
+        return "Surge"
+    if ("undefined" !== typeof $environment && $environment["stash-version"])
+        return "Stash"
+    if ("undefined" !== typeof module && !!module.exports) return "Node.js"
+    if ("undefined" !== typeof $task) return "Quantumult X"
+    if ("undefined" !== typeof $loon) return "Loon"
+    if ("undefined" !== typeof $rocket) return "Shadowrocket"
+    if ("undefined" !== typeof Egern) return "Egern"
+}
+
 /* https://www.lodashjs.com */
 class Lodash {
 	static name = "Lodash";
@@ -71,25 +85,13 @@ class Lodash {
 }
 
 /* https://developer.mozilla.org/zh-CN/docs/Web/API/Storage/setItem */
-class $Storage {
-	static name = "$Storage";
-	static version = "1.0.9";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static data = null
-	static dataFile = 'box.dat'
+class Storage {
+	static name = "Storage";
+	static version = "1.1.0";
+	static about () { return log("", `🟧 ${this.name} v${this.version}`, "") };
+	static data = null;
+	static dataFile = 'box.dat';
 	static #nameRegex = /^@(?<key>[^.]+)(?:\.(?<path>.*))?$/;
-
-	static #platform() {
-		if ('undefined' !== typeof $environment && $environment['surge-version'])
-			return 'Surge'
-		if ('undefined' !== typeof $environment && $environment['stash-version'])
-			return 'Stash'
-		if ('undefined' !== typeof module && !!module.exports) return 'Node.js'
-		if ('undefined' !== typeof $task) return 'Quantumult X'
-		if ('undefined' !== typeof $loon) return 'Loon'
-		if ('undefined' !== typeof $rocket) return 'Shadowrocket'
-		if ('undefined' !== typeof Egern) return 'Egern'
-	}
 
     static getItem(keyName = new String, defaultValue = null) {
         let keyValue = defaultValue;
@@ -97,22 +99,22 @@ class $Storage {
 		switch (keyName.startsWith('@')) {
 			case true:
 				const { key, path } = keyName.match(this.#nameRegex)?.groups;
-				//console.log(`1: ${key}, ${path}`);
+				//log(`1: ${key}, ${path}`);
 				keyName = key;
 				let value = this.getItem(keyName, {});
-				//console.log(`2: ${JSON.stringify(value)}`)
+				//log(`2: ${JSON.stringify(value)}`)
 				if (typeof value !== "object") value = {};
-				//console.log(`3: ${JSON.stringify(value)}`)
+				//log(`3: ${JSON.stringify(value)}`)
 				keyValue = Lodash.get(value, path);
-				//console.log(`4: ${JSON.stringify(keyValue)}`)
+				//log(`4: ${JSON.stringify(keyValue)}`)
 				try {
 					keyValue = JSON.parse(keyValue);
 				} catch (e) {
 					// do nothing
-				}				//console.log(`5: ${JSON.stringify(keyValue)}`)
+				}				//log(`5: ${JSON.stringify(keyValue)}`)
 				break;
 			default:
-				switch (this.#platform()) {
+				switch ($platform) {
 					case 'Surge':
 					case 'Loon':
 					case 'Stash':
@@ -140,7 +142,7 @@ class $Storage {
 
 	static setItem(keyName = new String, keyValue = new String) {
 		let result = false;
-		//console.log(`0: ${typeof keyValue}`);
+		//log(`0: ${typeof keyValue}`);
 		switch (typeof keyValue) {
 			case "object":
 				keyValue = JSON.stringify(keyValue);
@@ -151,19 +153,19 @@ class $Storage {
 		}		switch (keyName.startsWith('@')) {
 			case true:
 				const { key, path } = keyName.match(this.#nameRegex)?.groups;
-				//console.log(`1: ${key}, ${path}`);
+				//log(`1: ${key}, ${path}`);
 				keyName = key;
 				let value = this.getItem(keyName, {});
-				//console.log(`2: ${JSON.stringify(value)}`)
+				//log(`2: ${JSON.stringify(value)}`)
 				if (typeof value !== "object") value = {};
-				//console.log(`3: ${JSON.stringify(value)}`)
+				//log(`3: ${JSON.stringify(value)}`)
 				Lodash.set(value, path, keyValue);
-				//console.log(`4: ${JSON.stringify(value)}`)
+				//log(`4: ${JSON.stringify(value)}`)
 				result = this.setItem(keyName, value);
-				//console.log(`5: ${result}`)
+				//log(`5: ${result}`)
 				break;
 			default:
-				switch (this.#platform()) {
+				switch ($platform) {
 					case 'Surge':
 					case 'Loon':
 					case 'Stash':
@@ -199,7 +201,7 @@ class $Storage {
 				result = this.setItem(keyName, value);
 				break;
 			default:
-				switch (this.#platform()) {
+				switch ($platform) {
 					case 'Surge':
 					case 'Loon':
 					case 'Stash':
@@ -222,7 +224,7 @@ class $Storage {
 
     static clear() {
 		let result = false;
-		switch (this.#platform()) {
+		switch ($platform) {
 			case 'Surge':
 			case 'Loon':
 			case 'Stash':
@@ -292,458 +294,211 @@ class $Storage {
 
 }
 
-class ENV {
-	static name = "ENV"
-	static version = '1.8.3'
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) }
+function initGotEnv(opts) {
+    this.got = this.got ? this.got : require("got");
+    this.cktough = this.cktough ? this.cktough : require("tough-cookie");
+    this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar();
+    if (opts) {
+        opts.headers = opts.headers ? opts.headers : {};
+        if (undefined === opts.headers.Cookie && undefined === opts.cookieJar) {
+            opts.cookieJar = this.ckjar;
+        }
+    }}
 
-	constructor(name, opts) {
-		console.log(`\n🟧 ${ENV.name} v${ENV.version}\n`);
-		this.name = name;
-		this.logs = [];
-		this.isMute = false;
-		this.isMuteLog = false;
-		this.logSeparator = '\n';
-		this.encoding = 'utf-8';
-		this.startTime = new Date().getTime();
-		Object.assign(this, opts);
-		this.log(`\n🚩 开始!\n${name}\n`);
-	}
-	
-	environment() {
-		switch (this.platform()) {
-			case 'Surge':
-				$environment.app = 'Surge';
-				return $environment
-			case 'Stash':
-				$environment.app = 'Stash';
-				return $environment
-			case 'Egern':
-				$environment.app = 'Egern';
-				return $environment
-			case 'Loon':
-				let environment = $loon.split(' ');
-				return {
-					"device": environment[0],
-					"ios": environment[1],
-					"loon-version": environment[2],
-					"app": "Loon"
-				};
-			case 'Quantumult X':
-				return {
-					"app": "Quantumult X"
-				};
-			case 'Node.js':
-				process.env.app = 'Node.js';
-				return process.env
-			default:
-				return {}
-		}
-	}
+async function fetch(request = {} || "", option = {}) {
+    // 初始化参数
+    switch (request.constructor) {
+        case Object:
+            request = { ...option, ...request };
+            break;
+        case String:
+            request = { ...option, "url": request };
+            break;
+    }    // 自动判断请求方法
+    if (!request.method) {
+        request.method = "GET";
+        if (request.body ?? request.bodyBytes) request.method = "POST";
+    }    // 移除请求头中的部分参数, 让其自动生成
+    delete request.headers?.Host;
+    delete request.headers?.[":authority"];
+    delete request.headers?.["Content-Length"];
+    delete request.headers?.["content-length"];
+    // 定义请求方法（小写）
+    const method = request.method.toLocaleLowerCase();
+    // 判断平台
+    switch ($platform) {
+        case "Loon":
+        case "Surge":
+        case "Stash":
+        case "Egern":
+        case "Shadowrocket":
+        default:
+            // 转换请求参数
+            if (request.timeout) {
+                request.timeout = parseInt(request.timeout, 10);
+                switch ($platform) {
+                    case "Loon":
+                    case "Shadowrocket":
+                    case "Stash":
+                    case "Egern":
+                    default:
+                        request.timeout = request.timeout / 1000;
+                        break;
+                    case "Surge":
+                        break;
+                }            }            if (request.policy) {
+                switch ($platform) {
+                    case "Loon":
+                        request.node = request.policy;
+                        break;
+                    case "Stash":
+                        Lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
+                        break;
+                    case "Shadowrocket":
+                        Lodash.set(request, "headers.X-Surge-Proxy", request.policy);
+                        break;
+                }            }            if (typeof request.redirection === "boolean") request["auto-redirect"] = request.redirection;
+            // 转换请求体
+            if (request.bodyBytes && !request.body) {
+                request.body = request.bodyBytes;
+                delete request.bodyBytes;
+            }            // 发送请求
+            return await new Promise((resolve, reject) => {
+                $httpClient[method](request, (error, response, body) => {
+                    if (error) reject(error);
+                    else {
+                        response.ok = /^2\d\d$/.test(response.status);
+                        response.statusCode = response.status;
+                        if (body) {
+                            response.body = body;
+                            if (request["binary-mode"] == true) response.bodyBytes = body;
+                        }                        resolve(response);
+                    }
+                });
+            });
+        case "Quantumult X":
+            // 转换请求参数
+            if (request.policy) Lodash.set(request, "opts.policy", request.policy);
+            if (typeof request["auto-redirect"] === "boolean") Lodash.set(request, "opts.redirection", request["auto-redirect"]);
+            // 转换请求体
+            if (request.body instanceof ArrayBuffer) {
+                request.bodyBytes = request.body;
+                delete request.body;
+            } else if (ArrayBuffer.isView(request.body)) {
+                request.bodyBytes = request.body.buffer.slice(request.body.byteOffset, request.body.byteLength + request.body.byteOffset);
+                delete object.body;
+            } else if (request.body) delete request.bodyBytes;
+            // 发送请求
+            return await $task.fetch(request).then(
+                response => {
+                    response.ok = /^2\d\d$/.test(response.statusCode);
+                    response.status = response.statusCode;
+                    return response;
+                },
+                reason => Promise.reject(reason.error));
+        case "Node.js":
+            let iconv = require("iconv-lite");
+            initGotEnv(request);
+            const { url, ...option } = request;
+            return await this.got[method](url, option)
+                .on("redirect", (response, nextOpts) => {
+                    try {
+                        if (response.headers["set-cookie"]) {
+                            const ck = response.headers["set-cookie"]
+                                .map(this.cktough.Cookie.parse)
+                                .toString();
+                            if (ck) {
+                                this.ckjar.setCookieSync(ck, null);
+                            }
+                            nextOpts.cookieJar = this.ckjar;
+                        }
+                    } catch (e) {
+                        this.logErr(e);
+                    }
+                    // this.ckjar.setCookieSync(response.headers["set-cookie"].map(Cookie.parse).toString())
+                })
+                .then(
+                    response => {
+                        response.statusCode = response.status;
+                        response.body = iconv.decode(response.rawBody, "utf-8");
+                        response.bodyBytes = response.rawBody;
+                        return response;
+                    },
+                    error => Promise.reject(error.message));
+    }}
 
-	platform() {
-		if ('undefined' !== typeof $environment && $environment['surge-version'])
-			return 'Surge'
-		if ('undefined' !== typeof $environment && $environment['stash-version'])
-			return 'Stash'
-		if ('undefined' !== typeof module && !!module.exports) return 'Node.js'
-		if ('undefined' !== typeof $task) return 'Quantumult X'
-		if ('undefined' !== typeof $loon) return 'Loon'
-		if ('undefined' !== typeof $rocket) return 'Shadowrocket'
-		if ('undefined' !== typeof Egern) return 'Egern'
-	}
+function logError(error) {
+    switch ($platform) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Egern":
+        case "Shadowrocket":
+        case "Quantumult X":
+        default:
+            log("", `❗️执行错误!`, error, "");
+            break
+        case "Node.js":
+            log("", `❗️执行错误!`, error.stack, "");
+            break
+    }}
 
-	isNode() {
-		return 'Node.js' === this.platform()
-	}
-
-	isQuanX() {
-		return 'Quantumult X' === this.platform()
-	}
-
-	isSurge() {
-		return 'Surge' === this.platform()
-	}
-
-	isLoon() {
-		return 'Loon' === this.platform()
-	}
-
-	isShadowrocket() {
-		return 'Shadowrocket' === this.platform()
-	}
-
-	isStash() {
-		return 'Stash' === this.platform()
-	}
-
-	isEgern() {
-		return 'Egern' === this.platform()
-	}
-
-	async getScript(url) {
-		return await this.fetch(url).then(response => response.body);
-	}
-
-	async runScript(script, runOpts) {
-		let httpapi = $Storage.getItem('@chavy_boxjs_userCfgs.httpapi');
-		httpapi = httpapi?.replace?.(/\n/g, '')?.trim();
-		let httpapi_timeout = $Storage.getItem('@chavy_boxjs_userCfgs.httpapi_timeout');
-		httpapi_timeout = (httpapi_timeout * 1) ?? 20;
-		httpapi_timeout = runOpts?.timeout ?? httpapi_timeout;
-		const [password, address] = httpapi.split('@');
-		const request = {
-			url: `http://${address}/v1/scripting/evaluate`,
-			body: {
-				script_text: script,
-				mock_type: 'cron',
-				timeout: httpapi_timeout
-			},
-			headers: { 'X-Key': password, 'Accept': '*/*' },
-			timeout: httpapi_timeout
-		};
-		await this.fetch(request).then(response => response.body, error => this.logErr(error));
-	}
-
-	initGotEnv(opts) {
-		this.got = this.got ? this.got : require('got');
-		this.cktough = this.cktough ? this.cktough : require('tough-cookie');
-		this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar();
-		if (opts) {
-			opts.headers = opts.headers ? opts.headers : {};
-			if (undefined === opts.headers.Cookie && undefined === opts.cookieJar) {
-				opts.cookieJar = this.ckjar;
-			}
-		}
-	}
-
-	async fetch(request = {} || "", option = {}) {
-		// 初始化参数
-		switch (request.constructor) {
-			case Object:
-				request = { ...option, ...request };
-				break;
-			case String:
-				request = { ...option, "url": request };
-				break;
-		}		// 自动判断请求方法
-		if (!request.method) {
-			request.method = "GET";
-			if (request.body ?? request.bodyBytes) request.method = "POST";
-		}		// 移除请求头中的部分参数, 让其自动生成
-		delete request.headers?.Host;
-		delete request.headers?.[":authority"];
-		delete request.headers?.['Content-Length'];
-		delete request.headers?.['content-length'];
-		// 定义请求方法（小写）
-		const method = request.method.toLocaleLowerCase();
-		// 判断平台
-		switch (this.platform()) {
-			case 'Loon':
-			case 'Surge':
-			case 'Stash':
-			case 'Egern':
-			case 'Shadowrocket':
-			default:
-				// 转换请求参数
-				if (request.timeout) {
-					request.timeout = parseInt(request.timeout, 10);
-					if (this.isSurge()) ; else request.timeout = request.timeout * 1000;
-				}				if (request.policy) {
-					if (this.isLoon()) request.node = request.policy;
-					if (this.isStash()) Lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
-					if (this.isShadowrocket()) Lodash.set(request, "headers.X-Surge-Proxy", request.policy);
-				}				if (typeof request.redirection === "boolean") request["auto-redirect"] = request.redirection;
-				// 转换请求体
-				if (request.bodyBytes && !request.body) {
-					request.body = request.bodyBytes;
-					delete request.bodyBytes;
-				}				// 发送请求
-				return await new Promise((resolve, reject) => {
-					$httpClient[method](request, (error, response, body) => {
-						if (error) reject(error);
-						else {
-							response.ok = /^2\d\d$/.test(response.status);
-							response.statusCode = response.status;
-							if (body) {
-								response.body = body;
-								if (request["binary-mode"] == true) response.bodyBytes = body;
-							}							resolve(response);
-						}
-					});
-				});
-			case 'Quantumult X':
-				// 转换请求参数
-				if (request.policy) Lodash.set(request, "opts.policy", request.policy);
-				if (typeof request["auto-redirect"] === "boolean") Lodash.set(request, "opts.redirection", request["auto-redirect"]);
-				// 转换请求体
-				if (request.body instanceof ArrayBuffer) {
-					request.bodyBytes = request.body;
-					delete request.body;
-				} else if (ArrayBuffer.isView(request.body)) {
-					request.bodyBytes = request.body.buffer.slice(request.body.byteOffset, request.body.byteLength + request.body.byteOffset);
-					delete object.body;
-				} else if (request.body) delete request.bodyBytes;
-				// 发送请求
-				return await $task.fetch(request).then(
-					response => {
-						response.ok = /^2\d\d$/.test(response.statusCode);
-						response.status = response.statusCode;
-						return response;
-					},
-					reason => Promise.reject(reason.error));
-			case 'Node.js':
-				let iconv = require('iconv-lite');
-				this.initGotEnv(request);
-				const { url, ...option } = request;
-				return await this.got[method](url, option)
-					.on('redirect', (response, nextOpts) => {
-						try {
-							if (response.headers['set-cookie']) {
-								const ck = response.headers['set-cookie']
-									.map(this.cktough.Cookie.parse)
-									.toString();
-								if (ck) {
-									this.ckjar.setCookieSync(ck, null);
-								}
-								nextOpts.cookieJar = this.ckjar;
-							}
-						} catch (e) {
-							this.logErr(e);
-						}
-						// this.ckjar.setCookieSync(response.headers['set-cookie'].map(Cookie.parse).toString())
-					})
-					.then(
-						response => {
-							response.statusCode = response.status;
-							response.body = iconv.decode(response.rawBody, this.encoding);
-							response.bodyBytes = response.rawBody;
-							return response;
-						},
-						error => Promise.reject(error.message));
-		}	};
-
-	/**
-	 *
-	 * 示例:$.time('yyyy-MM-dd qq HH:mm:ss.S')
-	 *    :$.time('yyyyMMddHHmmssS')
-	 *    y:年 M:月 d:日 q:季 H:时 m:分 s:秒 S:毫秒
-	 *    其中y可选0-4位占位符、S可选0-1位占位符，其余可选0-2位占位符
-	 * @param {string} format 格式化参数
-	 * @param {number} ts 可选: 根据指定时间戳返回格式化日期
-	 *
-	 */
-	time(format, ts = null) {
-		const date = ts ? new Date(ts) : new Date();
-		let o = {
-			'M+': date.getMonth() + 1,
-			'd+': date.getDate(),
-			'H+': date.getHours(),
-			'm+': date.getMinutes(),
-			's+': date.getSeconds(),
-			'q+': Math.floor((date.getMonth() + 3) / 3),
-			'S': date.getMilliseconds()
-		};
-		if (/(y+)/.test(format))
-			format = format.replace(
-				RegExp.$1,
-				(date.getFullYear() + '').substr(4 - RegExp.$1.length)
-			);
-		for (let k in o)
-			if (new RegExp('(' + k + ')').test(format))
-				format = format.replace(
-					RegExp.$1,
-					RegExp.$1.length == 1
-						? o[k]
-						: ('00' + o[k]).substr(('' + o[k]).length)
-				);
-		return format
-	}
-
-	/**
-	 * 系统通知
-	 *
-	 * > 通知参数: 同时支持 QuanX 和 Loon 两种格式, EnvJs根据运行环境自动转换, Surge 环境不支持多媒体通知
-	 *
-	 * 示例:
-	 * $.msg(title, subt, desc, 'twitter://')
-	 * $.msg(title, subt, desc, { 'open-url': 'twitter://', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
-	 * $.msg(title, subt, desc, { 'open-url': 'https://bing.com', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
-	 *
-	 * @param {*} title 标题
-	 * @param {*} subt 副标题
-	 * @param {*} desc 通知详情
-	 * @param {*} opts 通知参数
-	 *
-	 */
-	msg(title = name, subt = '', desc = '', opts) {
-		const toEnvOpts = (rawopts) => {
-			switch (typeof rawopts) {
-				case undefined:
-					return rawopts
-				case 'string':
-					switch (this.platform()) {
-						case 'Surge':
-						case 'Stash':
-						case 'Egern':
-						default:
-							return { url: rawopts }
-						case 'Loon':
-						case 'Shadowrocket':
-							return rawopts
-						case 'Quantumult X':
-							return { 'open-url': rawopts }
-						case 'Node.js':
-							return undefined
-					}
-				case 'object':
-					switch (this.platform()) {
-						case 'Surge':
-						case 'Stash':
-						case 'Egern':
-						case 'Shadowrocket':
-						default: {
-							let openUrl =
-								rawopts.url || rawopts.openUrl || rawopts['open-url'];
-							return { url: openUrl }
-						}
-						case 'Loon': {
-							let openUrl =
-								rawopts.openUrl || rawopts.url || rawopts['open-url'];
-							let mediaUrl = rawopts.mediaUrl || rawopts['media-url'];
-							return { openUrl, mediaUrl }
-						}
-						case 'Quantumult X': {
-							let openUrl =
-								rawopts['open-url'] || rawopts.url || rawopts.openUrl;
-							let mediaUrl = rawopts['media-url'] || rawopts.mediaUrl;
-							let updatePasteboard =
-								rawopts['update-pasteboard'] || rawopts.updatePasteboard;
-							return {
-								'open-url': openUrl,
-								'media-url': mediaUrl,
-								'update-pasteboard': updatePasteboard
-							}
-						}
-						case 'Node.js':
-							return undefined
-					}
-				default:
-					return undefined
-			}
-		};
-		if (!this.isMute) {
-			switch (this.platform()) {
-				case 'Surge':
-				case 'Loon':
-				case 'Stash':
-				case 'Egern':
-				case 'Shadowrocket':
-				default:
-					$notification.post(title, subt, desc, toEnvOpts(opts));
-					break
-				case 'Quantumult X':
-					$notify(title, subt, desc, toEnvOpts(opts));
-					break
-				case 'Node.js':
-					break
-			}
-		}
-		if (!this.isMuteLog) {
-			let logs = ['', '==============📣系统通知📣=============='];
-			logs.push(title);
-			subt ? logs.push(subt) : '';
-			desc ? logs.push(desc) : '';
-			console.log(logs.join('\n'));
-			this.logs = this.logs.concat(logs);
-		}
-	}
-
-	log(...logs) {
-		if (logs.length > 0) {
-			this.logs = [...this.logs, ...logs];
-		}
-		console.log(logs.join(this.logSeparator));
-	}
-
-	logErr(error) {
-		switch (this.platform()) {
-			case 'Surge':
-			case 'Loon':
-			case 'Stash':
-			case 'Egern':
-			case 'Shadowrocket':
-			case 'Quantumult X':
-			default:
-				this.log('', `❗️ ${this.name}, 错误!`, error);
-				break
-			case 'Node.js':
-				this.log('', `❗️${this.name}, 错误!`, error.stack);
-				break
-		}
-	}
-
-	wait(time) {
-		return new Promise((resolve) => setTimeout(resolve, time))
-	}
-
-	done(object = {}) {
-		const endTime = new Date().getTime();
-		const costTime = (endTime - this.startTime) / 1000;
-		this.log("", `🚩 ${this.name}, 结束! 🕛 ${costTime} 秒`, "");
-		switch (this.platform()) {
-			case 'Surge':
-				if (object.policy) Lodash.set(object, "headers.X-Surge-Policy", object.policy);
-				$done(object);
-				break;
-			case 'Loon':
-				if (object.policy) object.node = object.policy;
-				$done(object);
-				break;
-			case 'Stash':
-				if (object.policy) Lodash.set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy));
-				$done(object);
-				break;
-			case 'Egern':
-				$done(object);
-				break;
-			case 'Shadowrocket':
-			default:
-				$done(object);
-				break;
-			case 'Quantumult X':
-				if (object.policy) Lodash.set(object, "opts.policy", object.policy);
-				// 移除不可写字段
-				delete object["auto-redirect"];
-				delete object["auto-cookie"];
-				delete object["binary-mode"];
-				delete object.charset;
-				delete object.host;
-				delete object.insecure;
-				delete object.method; // 1.4.x 不可写
-				delete object.opt; // $task.fetch() 参数, 不可写
-				delete object.path; // 可写, 但会与 url 冲突
-				delete object.policy;
-				delete object["policy-descriptor"];
-				delete object.scheme;
-				delete object.sessionIndex;
-				delete object.statusCode;
-				delete object.timeout;
-				if (object.body instanceof ArrayBuffer) {
-					object.bodyBytes = object.body;
-					delete object.body;
-				} else if (ArrayBuffer.isView(object.body)) {
-					object.bodyBytes = object.body.buffer.slice(object.body.byteOffset, object.body.byteLength + object.body.byteOffset);
-					delete object.body;
-				} else if (object.body) delete object.bodyBytes;
-				$done(object);
-				break;
-			case 'Node.js':
-				process.exit(1);
-				break;
-		}
-	}
+function done(object = {}) {
+    log("", `🚩 执行结束!`, "");
+    switch ($platform) {
+        case "Surge":
+            if (object.policy) Lodash.set(object, "headers.X-Surge-Policy", object.policy);
+            $done(object);
+            break;
+        case "Loon":
+            if (object.policy) object.node = object.policy;
+            $done(object);
+            break;
+        case "Stash":
+            if (object.policy) Lodash.set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy));
+            $done(object);
+            break;
+        case "Egern":
+            $done(object);
+            break;
+        case "Shadowrocket":
+        default:
+            $done(object);
+            break;
+        case "Quantumult X":
+            if (object.policy) Lodash.set(object, "opts.policy", object.policy);
+            // 移除不可写字段
+            delete object["auto-redirect"];
+            delete object["auto-cookie"];
+            delete object["binary-mode"];
+            delete object.charset;
+            delete object.host;
+            delete object.insecure;
+            delete object.method; // 1.4.x 不可写
+            delete object.opt; // $task.fetch() 参数, 不可写
+            delete object.path; // 可写, 但会与 url 冲突
+            delete object.policy;
+            delete object["policy-descriptor"];
+            delete object.scheme;
+            delete object.sessionIndex;
+            delete object.statusCode;
+            delete object.timeout;
+            if (object.body instanceof ArrayBuffer) {
+                object.bodyBytes = object.body;
+                delete object.body;
+            } else if (ArrayBuffer.isView(object.body)) {
+                object.bodyBytes = object.body.buffer.slice(object.body.byteOffset, object.body.byteLength + object.body.byteOffset);
+                delete object.body;
+            } else if (object.body) delete object.bodyBytes;
+            $done(object);
+            break;
+        case "Node.js":
+            process.exit(1);
+            break;
+    }
 }
+
+const log = (...logs) => console.log(logs.join("\n"));
 
 var Settings$8 = {
 	Switch: true
@@ -1470,10 +1225,10 @@ var Default = {
 };
 
 var Default$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$4,
-	Settings: Settings$8,
-	default: Default
+    __proto__: null,
+    Configs: Configs$4,
+    Settings: Settings$8,
+    default: Default
 });
 
 var Settings$7 = {
@@ -1487,9 +1242,9 @@ var Location = {
 };
 
 var Location$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$7,
-	default: Location
+    __proto__: null,
+    Settings: Settings$7,
+    default: Location
 });
 
 var Settings$6 = {
@@ -13671,10 +13426,10 @@ var Maps = {
 };
 
 var Maps$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$3,
-	Settings: Settings$6,
-	default: Maps
+    __proto__: null,
+    Configs: Configs$3,
+    Settings: Settings$6,
+    default: Maps
 });
 
 var Settings$5 = {
@@ -13687,9 +13442,9 @@ var News$1 = {
 };
 
 var News$2 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$5,
-	default: News$1
+    __proto__: null,
+    Settings: Settings$5,
+    default: News$1
 });
 
 var Settings$4 = {
@@ -13702,9 +13457,9 @@ var PrivateRelay = {
 };
 
 var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$4,
-	default: PrivateRelay
+    __proto__: null,
+    Settings: Settings$4,
+    default: PrivateRelay
 });
 
 var Settings$3 = {
@@ -13773,10 +13528,10 @@ var Siri = {
 };
 
 var Siri$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$2,
-	Settings: Settings$3,
-	default: Siri
+    __proto__: null,
+    Configs: Configs$2,
+    Settings: Settings$3,
+    default: Siri
 });
 
 var Settings$2 = {
@@ -13790,9 +13545,9 @@ var TestFlight = {
 };
 
 var TestFlight$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$2,
-	default: TestFlight
+    __proto__: null,
+    Settings: Settings$2,
+    default: TestFlight
 });
 
 var Settings$1 = {
@@ -14187,10 +13942,10 @@ var TV = {
 };
 
 var TV$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$1,
-	Settings: Settings$1,
-	default: TV
+    __proto__: null,
+    Configs: Configs$1,
+    Settings: Settings$1,
+    default: TV
 });
 
 var Settings = {
@@ -14262,10 +14017,10 @@ var WeatherKit = {
 };
 
 var WeatherKit$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs,
-	Settings: Settings,
-	default: WeatherKit
+    __proto__: null,
+    Configs: Configs,
+    Settings: Settings,
+    default: WeatherKit
 });
 
 var Database$1 = Database = {
@@ -14282,7 +14037,7 @@ var Database$1 = Database = {
 
 /**
  * Get Storage Variables
- * @link https://github.com/NanoCat-Me/ENV/blob/main/getStorage.mjs
+ * @link https://github.com/NanoCat-Me/utils/blob/main/getStorage.mjs
  * @author VirgilClyne
  * @param {String} key - Persistent Store Key
  * @param {Array} names - Platform Names
@@ -14290,41 +14045,41 @@ var Database$1 = Database = {
  * @return {Object} { Settings, Caches, Configs }
  */
 function getStorage(key, names, database) {
-    //console.log(`☑️ ${this.name}, Get Environment Variables`, "");
+    //log(`☑️ ${this.name}, Get Environment Variables`, "");
     /***************** BoxJs *****************/
     // 包装为局部变量，用完释放内存
     // BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
-    let BoxJs = $Storage.getItem(key, database);
-    //console.log(`🚧 ${this.name}, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
+    let BoxJs = Storage.getItem(key, database);
+    //log(`🚧 ${this.name}, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
     /***************** Argument *****************/
     let Argument = {};
     if (typeof $argument !== "undefined") {
         if (Boolean($argument)) {
-            //console.log(`🎉 ${this.name}, $Argument`);
+            //log(`🎉 ${this.name}, $Argument`);
             let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
-            //console.log(JSON.stringify(arg));
+            //log(JSON.stringify(arg));
             for (let item in arg) Lodash.set(Argument, item, arg[item]);
-            //console.log(JSON.stringify(Argument));
-        }        //console.log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
+            //log(JSON.stringify(Argument));
+        }        //log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
     }    /***************** Store *****************/
     const Store = { Settings: database?.Default?.Settings || {}, Configs: database?.Default?.Configs || {}, Caches: {} };
     if (!Array.isArray(names)) names = [names];
-    //console.log(`🚧 ${this.name}, Get Environment Variables`, `names类型: ${typeof names}`, `names内容: ${JSON.stringify(names)}`, "");
+    //log(`🚧 ${this.name}, Get Environment Variables`, `names类型: ${typeof names}`, `names内容: ${JSON.stringify(names)}`, "");
     for (let name of names) {
         Store.Settings = { ...Store.Settings, ...database?.[name]?.Settings, ...Argument, ...BoxJs?.[name]?.Settings };
         Store.Configs = { ...Store.Configs, ...database?.[name]?.Configs };
         if (BoxJs?.[name]?.Caches && typeof BoxJs?.[name]?.Caches === "string") BoxJs[name].Caches = JSON.parse(BoxJs?.[name]?.Caches);
         Store.Caches = { ...Store.Caches, ...BoxJs?.[name]?.Caches };
-    }    //console.log(`🚧 ${this.name}, Get Environment Variables`, `Store.Settings类型: ${typeof Store.Settings}`, `Store.Settings: ${JSON.stringify(Store.Settings)}`, "");
+    }    //log(`🚧 ${this.name}, Get Environment Variables`, `Store.Settings类型: ${typeof Store.Settings}`, `Store.Settings: ${JSON.stringify(Store.Settings)}`, "");
     traverseObject(Store.Settings, (key, value) => {
-        //console.log(`🚧 ${this.name}, traverseObject`, `${key}: ${typeof value}`, `${key}: ${JSON.stringify(value)}`, "");
+        //log(`🚧 ${this.name}, traverseObject`, `${key}: ${typeof value}`, `${key}: ${JSON.stringify(value)}`, "");
         if (value === "true" || value === "false") value = JSON.parse(value); // 字符串转Boolean
         else if (typeof value === "string") {
             if (value.includes(",")) value = value.split(",").map(item => string2number(item)); // 字符串转数组转数字
             else value = string2number(value); // 字符串转数字
         }        return value;
     });
-    //console.log(`✅ ${this.name}, Get Environment Variables`, `Store: ${typeof Store.Caches}`, `Store内容: ${JSON.stringify(Store)}`, "");
+    //log(`✅ ${this.name}, Get Environment Variables`, `Store: ${typeof Store.Caches}`, `Store内容: ${JSON.stringify(Store)}`, "");
     return Store;
 
     /***************** function *****************/
@@ -18585,14 +18340,14 @@ class Weather {
 class WeatherKit2 {
 	constructor(options = {}) {
 		this.Name = "WeatherKit2";
-		this.Version = "1.0.7";
-		console.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+		this.Version = "1.0.8";
+		log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
 		Object.assign(this, options);
 		this.weatherData = Weather.getRootAsWeather(this.bb);
 	};
 
 	encode(dataSet = "", data = {}) {
-		console.log(`☑️ encode, dataSet: ${dataSet}`, "");
+		log(`☑️ encode, dataSet: ${dataSet}`, "");
 		let offset;
 		let metadataOffset;
 		if (data?.metadata) metadataOffset = Metadata.createMetadata(this.builder, this.builder.createString(data?.metadata?.attributionUrl), data?.metadata?.expireTime, this.builder.createString(data?.metadata?.language), data?.metadata?.latitude, data?.metadata?.longitude, this.builder.createString(data?.metadata?.providerLogo), this.builder.createString(data?.metadata?.providerName), data?.metadata?.readTime, data?.metadata?.reportedTime, data?.metadata?.temporarilyUnavailable, SourceType[data?.metadata?.sourceType], data?.metadata?.unknown11, data?.metadata?.unknown12, data?.metadata?.unknown13, data?.metadata?.unknown14, data?.metadata?.unknown15);
@@ -18753,12 +18508,12 @@ class WeatherKit2 {
 				let comparisonsOffset = HistoricalComparison.createComparisonsVector(this.builder, comparisonsOffsets);
 				offset = HistoricalComparison.createHistoricalComparison(this.builder, metadataOffset, comparisonsOffset);
 				break;
-		}		console.log(`✅ encode, dataSet: ${dataSet}`, "");
+		}		log(`✅ encode, dataSet: ${dataSet}`, "");
 		return offset;
 	};
 
 	decode(dataSet = "", metadata) {
-		console.log(`☑️ decode, dataSet: ${dataSet}`, "");
+		log(`☑️ decode, dataSet: ${dataSet}`, "");
 		let data = {};
 		const airQualityData = this.weatherData?.airQuality();
 		const CurrentWeatherData = this.weatherData?.currentWeather();
@@ -19230,7 +18985,7 @@ class WeatherKit2 {
 					};
 					data.comparisons.push(comparison);
 				}				break;
-		}		console.log(`✅ decode, dataSet: ${dataSet}`, "");
+		}		log(`✅ decode, dataSet: ${dataSet}`, "");
 		return data;
 	};
 
@@ -19252,7 +19007,7 @@ class WeatherKit2 {
 
 class AirQuality {
 	static Name = "AirQuality";
-	static Version = "2.2.4";
+	static Version = "2.2.5";
 	static Author = "Virgil Clyne & Wordless Echo";
 
 	static #Config = {
@@ -19679,7 +19434,7 @@ class AirQuality {
 	};
 
 	static Pollutants(pollutants = [], scale = "WAQI_InstantCast") {
-		console.log(`☑️ Pollutants, scale: ${scale}`, "");
+		log(`☑️ Pollutants, scale: ${scale}`, "");
 		pollutants = pollutants.map(pollutant => {
 			// Convert unit based on standard
 			const PollutantStandard = this.#Config.Scales[scale].pollutants[pollutant.pollutantType];
@@ -19700,13 +19455,13 @@ class AirQuality {
 			);
 			return pollutant;
 		});
-		//console.log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
-		console.log(`✅ Pollutants`, "");
+		//log(`🚧 Pollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+		log(`✅ Pollutants`, "");
 		return pollutants;
 	};
 
 	static ConvertScale(pollutants = [], scale = "WAQI_InstantCast", convertUnits = false) {
-		console.log(`☑️ ConvertScale`, "");
+		log(`☑️ ConvertScale`, "");
 		pollutants = this.Pollutants(pollutants, scale);
 		const { AQI: index, pollutantType: primaryPollutant } = pollutants.reduce((previous, current) => previous.AQI > current.AQI ? previous : current);
 		let airQuality = {
@@ -19722,14 +19477,14 @@ class AirQuality {
 			pollutant.units = pollutant.convertedUnits;
 			return pollutant;
 		});
-		//console.log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-		console.log(`✅ ConvertScale`, "");
+		//log(`🚧 ConvertScale, airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+		log(`✅ ConvertScale`, "");
 		return airQuality;
 	};
 
 	static ConvertUnit(amount = Number(), unitFrom, unitTo, ppxToXGM3Value = -1) {
-		//console.log(`☑️ ConvertUnit`, "");
-		//console.log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
+		//log(`☑️ ConvertUnit`, "");
+		//log(`☑️ ConvertUnit\namount: ${amount}   ppxToXGM3Value: ${ppxToXGM3Value}\nunitFrom: ${unitFrom}   unitTo: ${unitTo}`, "");
 		if (amount < 0) amount = -1;
 		else switch (unitFrom) {
 			case 'PARTS_PER_MILLION':
@@ -19807,7 +19562,7 @@ class AirQuality {
 			default:
 				amount = -1;
 				break;
-		}		//console.log(`✅ ConvertUnit, amount: ${amount}`, "");
+		}		//log(`✅ ConvertUnit, amount: ${amount}`, "");
 		return amount;
 	};
 
@@ -19818,17 +19573,17 @@ class AirQuality {
 			case "string":
 				aqi = parseInt(aqi, 10);
 				break;
-		}		console.log(`☑️ CategoryIndex, aqi: ${aqi}`, "");
+		}		log(`☑️ CategoryIndex, aqi: ${aqi}`, "");
 		let categoryIndex;
 		for (const [key, value] of Object.entries(this.#Config.Scales[scale].categoryIndex)) {
 			categoryIndex = parseInt(key, 10);
 			if (aqi >= value[0] && aqi <= value[1]) break;
-		}		console.log(`✅ CategoryIndex, categoryIndex: ${categoryIndex}`, "");
+		}		log(`✅ CategoryIndex, categoryIndex: ${categoryIndex}`, "");
 		return categoryIndex;
 	};
 
 	static FixUnits(pollutants = []) {
-		console.log(`☑️ FixUnits`, "");
+		log(`☑️ FixUnits`, "");
 		pollutants = pollutants.map(pollutant => {
 			switch (pollutant.units) {
 				case "PARTS_PER_MILLION":
@@ -19841,22 +19596,21 @@ class AirQuality {
 					break;
 			}			return pollutant;
 		});
-		//console.log(`🚧 FixUnits, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
-		console.log(`✅ FixUnits`, "");
+		//log(`🚧 FixUnits, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+		log(`✅ FixUnits`, "");
 		return pollutants;
 	};
 }
 
 class WAQI {
-    constructor($ = new ENV("WAQI"), options) {
+    constructor(options) {
         this.Name = "WAQI";
-        this.Version = "1.3.8";
-        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+        this.Version = "1.3.9";
+        log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
-        this.$ = $;
     };
 
     #Configs = {
@@ -19874,7 +19628,7 @@ class WAQI {
     };
 
     async Nearest(mapqVersion = "mapq") {
-        this.$.log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
+        log(`☑️ Nearest, mapqVersion: ${mapqVersion}`, "");
         const request = {
             "url": `https://api.waqi.info/${mapqVersion}/nearest?n=1&geo=1/${this.latitude}/${this.longitude}`,
             //"url": `https://mapq.waqi.info/${mapqVersion}/nearest/station/${stationId}?n=1`,
@@ -19882,7 +19636,7 @@ class WAQI {
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (mapqVersion) {
                 case "mapq":
@@ -19952,22 +19706,22 @@ class WAQI {
                     break;
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ Nearest`, "");
+            //log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ Nearest`, "");
             return airQuality;
         }    };
 
     async Token(stationId = Number()) {
-        this.$.log(`☑️ Token, stationId: ${stationId}`, "");
+        log(`☑️ Token, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api.waqi.info/api/token/${stationId}`,
             "header": this.header,
         };
         let token;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
@@ -19991,15 +19745,15 @@ class WAQI {
                     break;
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 token: ${token}`, "");
-            this.$.log(`✅ Token`, "");
+            //log(`🚧 token: ${token}`, "");
+            log(`✅ Token`, "");
             return token;
         }    };
 
     async AQI(stationId = Number(), token = this.token) {
-        this.$.log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
+        log(`☑️ AQI, stationId: ${stationId}, token: ${token}`, "");
         const request = {
             "url": `https://api.waqi.info/api/feed/@${stationId}/aqi.json`,
             "header": this.header,
@@ -20007,7 +19761,7 @@ class WAQI {
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "error":
@@ -20053,15 +19807,15 @@ class WAQI {
                     break;
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AQI`, "");
+            //log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AQI`, "");
             return airQuality;
         }    };
 
     async AQI2(stationId = Number(), token = this.token) {
-        this.$.log(`☑️ AQI2, stationId: ${stationId}`, "");
+        log(`☑️ AQI2, stationId: ${stationId}`, "");
         const request = {
             "url": `https://api2.waqi.info/feed/geo:${this.latitude};${this.longitude}/?token=${token}`,
             "header": this.header,
@@ -20069,7 +19823,7 @@ class WAQI {
         if (stationId) request.url = `https://api2.waqi.info/feed/@${stationId}/?token=${token}`;
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
@@ -20101,17 +19855,17 @@ class WAQI {
                     throw JSON.stringify({ "status": body?.status, "reason": body?.data });
             };
         } catch (error) {
-            this.$.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AQI2`, "");
+            //log(`🚧 airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AQI2`, "");
             return airQuality;
         }    };
 }
 
 class ForecastNextHour {
 	Name = "forecastNextHour";
-	Version = "v1.2.4";
+	Version = "v1.2.5";
 	Author = "iRingo";
 
 	static #Configs = {
@@ -20180,29 +19934,29 @@ class ForecastNextHour {
 	};
 
 	static WeatherCondition(sentence) {
-		console.log(`☑️ WeatherCondition, sentence: ${sentence}`, "");
+		log(`☑️ WeatherCondition, sentence: ${sentence}`, "");
 		let weatherCondition = "CLEAR";
 		Object.keys(this.#Configs.WeatherCondition).forEach(key => {
 			if (sentence.includes(key)) weatherCondition = this.#Configs.WeatherCondition[key];
 		});
-		console.log(`✅ WeatherCondition: ${weatherCondition}`, "");
+		log(`✅ WeatherCondition: ${weatherCondition}`, "");
 		return weatherCondition;
 	};
 
 	static PrecipitationType(sentence) {
-		console.log(`☑️ PrecipitationType, sentence: ${sentence}`, "");
+		log(`☑️ PrecipitationType, sentence: ${sentence}`, "");
 		let precipitationType = "CLEAR";
 		Object.keys(this.#Configs.PrecipitationType).forEach(key => {
 			if (sentence.includes(key)) precipitationType = this.#Configs.PrecipitationType[key];
 		});
-		console.log(`✅ PrecipitationType: ${precipitationType}`, "");
+		log(`✅ PrecipitationType: ${precipitationType}`, "");
 		return precipitationType;
 	};
 
 	static ConditionType(precipitationIntensity, precipitationType, units = "mmph") {
 		// refer: https://docs.caiyunapp.com/weather-api/v2/v2.6/tables/precip.html
-		//console.log(`☑️ ConditionType`, "");
-		//console.log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`, "");
+		//log(`☑️ ConditionType`, "");
+		//log(`☑️ ConditionType, precipitationIntensity: ${precipitationIntensity}, precipitationChance: ${precipitationChance}, precipitationType: ${precipitationType}`, "");
 		const Range = this.#Configs.Precipitation.Range[units];
 		let condition = "CLEAR";
 		if (precipitationIntensity >= Range.NO[0] && precipitationIntensity <= 0.001) condition = "CLEAR";
@@ -20250,12 +20004,12 @@ class ForecastNextHour {
 				default:
 					condition = precipitationType;
 					break;
-			}		}		//console.log(`✅ #ConditionType: ${condition}`, "");
+			}		}		//log(`✅ #ConditionType: ${condition}`, "");
 		return condition;
 	};
 
 	static Minute(minutes = [], description = "", units = "mmph") {
-		console.log(`☑️ Minute`, "");
+		log(`☑️ Minute`, "");
 		const PrecipitationType = this.PrecipitationType(description);
 		minutes = minutes.map(minute => {
 			//minute.precipitationIntensity = Math.round(minute.precipitationIntensity * 1000000) / 1000000; // 六位小数
@@ -20265,12 +20019,12 @@ class ForecastNextHour {
 			else minute.precipitationType = "CLEAR";
 			return minute;
 		});
-		console.log(`✅ Minute`, "");
+		log(`✅ Minute`, "");
 		return minutes;
 	};
 
 	static Summary(minutes = []) {
-		console.log(`☑️ Summary`, "");
+		log(`☑️ Summary`, "");
 		const Summaries = [];
 		const Summary = {
 			"condition": "CLEAR",
@@ -20329,12 +20083,12 @@ class ForecastNextHour {
 							break;
 					}					Summaries.push({ ...Summary });
 					break;
-			}		}		console.log(`✅ Summary`, "");
+			}		}		log(`✅ Summary`, "");
 		return Summaries;
 	};
 
 	static Condition(minutes = []) {
-		console.log(`☑️ Condition`, "");
+		log(`☑️ Condition`, "");
 		const Conditions = [];
 		const Condition = {
 			"beginCondition": "CLEAR",
@@ -20347,10 +20101,10 @@ class ForecastNextHour {
 		for (let i = 0; i < Length; i++) {
 			const minute = minutes[i];
 			const previousMinute = minutes[i - 1];
-			//console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+			//log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
 			switch (i) {
 				case 0:
-					//console.log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+					//log(`⚠️ ${i}, before, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
 					Condition.beginCondition = minute.condition;
 					Condition.endCondition = minute.condition;
 					Condition.startTime = minute.startTime;
@@ -20362,7 +20116,7 @@ class ForecastNextHour {
 							Condition.forecastToken = "CONSTANT";
 							break;
 					}					Condition.parameters = [];
-					//console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+					//log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
 					break;
 				default:
 					switch (minute?.precipitationType) {
@@ -20439,10 +20193,10 @@ class ForecastNextHour {
 									Condition.parameters = [{ "date": Condition.endTime, "type": "FIRST_AT" }];
 									break;
 								case "START_STOP": // ✅当前RAIN
-									console.log(`⚠️ START_STOP\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+									log(`⚠️ START_STOP\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
 									break;
 								case "STOP_START": // ✅当前CLEAR
-									console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+									log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
 									break;
 							}							break;
 					}					break;
@@ -20488,19 +20242,19 @@ class ForecastNextHour {
 							Conditions.push({ ...Condition });
 							break;
 						case "START_STOP": // ✅当前CLEAR
-							console.log(`⚠️ START_STOP\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
+							log(`⚠️ START_STOP\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
 							break;
 						case "STOP_START": // ✅当前RAIN
-							console.log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
+							log(`⚠️ STOP_START\nminute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`);
 							break;
 					}					break;
-			}			//console.log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
-		}		console.log(`✅ Condition`, "");
+			}			//log(`⚠️ ${i}, after, minute: ${JSON.stringify(minute, null, 2)}\nCondition: ${JSON.stringify(Condition, null, 2)}`, "");
+		}		log(`✅ Condition`, "");
 		return Conditions;
 	};
 
 	static ConvertPrecipitationIntensity(precipitationIntensity, condition, units = "mmph") {
-		//console.log(`☑️ ConvertPrecipitationIntensity`, "");
+		//log(`☑️ ConvertPrecipitationIntensity`, "");
 		let perceivedPrecipitationIntensity = 0;
 		const Range = this.#Configs.Precipitation.Range[units];
 		let level = 0;
@@ -20532,21 +20286,20 @@ class ForecastNextHour {
 				break;
 		}		perceivedPrecipitationIntensity = level + (precipitationIntensity - range[0]) / (range[1] - range[0]);
 		perceivedPrecipitationIntensity = Math.min(3, perceivedPrecipitationIntensity);
-		//console.log(`✅ ConvertPrecipitationIntensity: ${perceivedPrecipitationIntensity}`, "");
+		//log(`✅ ConvertPrecipitationIntensity: ${perceivedPrecipitationIntensity}`, "");
 		return perceivedPrecipitationIntensity;
 	};
 }
 
 class ColorfulClouds {
-    constructor($ = new ENV("ColorfulClouds"), options) {
+    constructor(options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.3.1";
-        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+        this.Version = "2.3.2";
+        log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
-        this.$ = $;
     };
 
     #Config = {
@@ -20564,14 +20317,14 @@ class ColorfulClouds {
     };
 
     async RealTime(token = this.token) {
-        this.$.log(`☑️ RealTime`, "");
+        log(`☑️ RealTime`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/realtime`,
             "header": this.header,
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
@@ -20612,20 +20365,20 @@ class ColorfulClouds {
         } catch (error) {
             this.logErr(error);
         } finally {
-            //this.$.log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ RealTime`, "");
+            //log(`🚧 RealTime airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ RealTime`, "");
             return airQuality;
         }    };
 
     async Minutely(token = this.token) {
-        this.$.log(`☑️ Minutely`, "");
+        log(`☑️ Minutely`, "");
         const request = {
             "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/minutely?unit=metric:v2`,
             "header": this.header,
         };
         let forecastNextHour;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.status) {
                 case "ok":
@@ -20684,10 +20437,10 @@ class ColorfulClouds {
                     throw JSON.stringify({ "status": body?.status, "reason": body?.error });
             };
         } catch (error) {
-            this.$.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
-            this.$.log(`✅ Minutely`, "");
+            //log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+            log(`✅ Minutely`, "");
             return forecastNextHour;
         }    };
 
@@ -20723,16 +20476,15 @@ class ColorfulClouds {
 }
 
 class QWeather {
-    constructor($ = new ENV("QWeather"), options) {
+    constructor(options) {
         this.Name = "QWeather";
-        this.Version = "2.0.1";
-        $.log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
+        this.Version = "2.0.2";
+        log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
         this.header = { "Content-Type": "application/json" };
         const Parameters = parseWeatherKitURL(this.url);
         Object.assign(this, Parameters, options);
-        this.$ = $;
     };
 
     #Config = {
@@ -20752,14 +20504,14 @@ class QWeather {
     };
 
     async AirNow(token = this.token) {
-        this.$.log(`☑️ AirNow`, "");
+        log(`☑️ AirNow`, "");
         const request = {
             "url": `https://${this.host}/v7/air/now?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": this.header,
         };
         let airQuality;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.code) {
                 case "200":
@@ -20798,22 +20550,22 @@ class QWeather {
                     throw JSON.stringify({ "status": body?.status, "reason": body?.error });
             };
         } catch (error) {
-            this.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 AirNow airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
-            this.$.log(`✅ AirNow`, "");
+            //log(`🚧 AirNow airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AirNow`, "");
             return airQuality;
         }    };
 
     async Minutely(token = this.token) {
-        this.$.log(`☑️ Minutely, host: ${this.host}`, "");
+        log(`☑️ Minutely, host: ${this.host}`, "");
         const request = {
             "url": `https://${this.host}/v7/minutely/5m?location=${this.longitude},${this.latitude}&key=${token}`,
             "header": this.header,
         };
         let forecastNextHour;
         try {
-            const body = await this.$.fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
             const timeStamp = Math.round(Date.now() / 1000);
             switch (body?.code) {
                 case "200":
@@ -20870,15 +20622,15 @@ class QWeather {
                     throw JSON.stringify({ "status": body?.code, "reason": body?.error });
             };
         } catch (error) {
-            this.$.logErr(error);
+            logError(error);
         } finally {
-            //this.$.log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
-            this.$.log(`✅ Minutely`, "");
+            //log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
+            log(`✅ Minutely`, "");
             return forecastNextHour;
         }    };
 
     #CreatePollutants(pollutantsObj = {}) {
-        console.log(`☑️ CreatePollutants`, "");
+        log(`☑️ CreatePollutants`, "");
         let pollutants = [];
         for (const [key, value] of Object.entries(pollutantsObj)) {
             switch (key) {
@@ -20897,27 +20649,27 @@ class QWeather {
                         "units": "MICROGRAMS_PER_CUBIC_METER",
                     });
                     break;
-            }        }        //console.log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
-        console.log(`✅ CreatePollutants`, "");
+            }        }        //log(`🚧 CreatePollutants, pollutants: ${JSON.stringify(pollutants, null, 2)}`, "");
+        log(`✅ CreatePollutants`, "");
         return pollutants;
     };
 }
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.7.0(4162) response.beta");
+log("v1.7.1(4163)");
 
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.pathname.split("/").filter(Boolean);
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}, PATHs: ${PATHs}`, "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}, PATHs: ${PATHs}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "WeatherKit", Database$1);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -20930,14 +20682,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
-					//$.log(`🚧 body: ${body}`, "");
+					//log(`🚧 body: ${body}`, "");
 					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -20947,13 +20699,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/plist":
 				case "application/x-plist":
 					//body = XML.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
@@ -20963,7 +20715,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "weatherkit.apple.com":
 							// 路径判断
 							if (PATH.startsWith("/api/v1/availability/")) {
-								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+								log(`🚧 body: ${JSON.stringify(body)}`, "");
 								body = Configs?.Availability?.v2;
 							}							break;
 					}					$response.body = JSON.stringify(body);
@@ -20975,9 +20727,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/grpc":
 				case "application/grpc+proto":
 				case "application/octet-stream":
-					//$.log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
-					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
-					//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+					//log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
+					let rawBody = ($platform === "Quantumult X") ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
+					//log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
 					switch (FORMAT) {
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
@@ -20991,7 +20743,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer$1, "builder": Builder$1 });
 										body = weatherKit2.decode("all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
-											$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+											log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											// InjectAirQuality
 											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
 											// PollutantUnitConverter
@@ -21014,20 +20766,20 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										}										if (url.searchParams.get("dataSets").includes("currentWeather")) {
 											if (body?.currentWeather?.metadata?.providerName && !body?.currentWeather?.metadata?.providerLogo) body.currentWeather.metadata.providerLogo = providerNameToLogo(body?.currentWeather?.metadata?.providerName, "v2");
-											//$.log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
+											//log(`🚧 body.currentWeather: ${JSON.stringify(body?.currentWeather, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
-											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+											log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 											if (!body?.forecastNextHour) body = await InjectForecastNextHour(url, body, Settings);
 											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 										}										if (url.searchParams.get("dataSets").includes("weatherAlerts")) {
 											if (body?.weatherAlerts?.metadata?.providerName && !body?.weatherAlerts?.metadata?.providerLogo) body.weatherAlerts.metadata.providerLogo = providerNameToLogo(body?.weatherAlerts?.metadata?.providerName, "v2");
-											$.log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
+											log(`🚧 body.weatherAlerts: ${JSON.stringify(body?.weatherAlerts, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("WeatherChange")) {
 											if (body?.WeatherChanges?.metadata?.providerName && !body?.WeatherChanges?.metadata?.providerLogo) body.WeatherChanges.metadata.providerLogo = providerNameToLogo(body?.WeatherChanges?.metadata?.providerName, "v2");
-											$.log(`🚧 body.WeatherChanges: ${JSON.stringify(body?.WeatherChanges, null, 2)}`, "");
+											log(`🚧 body.WeatherChanges: ${JSON.stringify(body?.WeatherChanges, null, 2)}`, "");
 										}										if (url.searchParams.get("dataSets").includes("trendComparison")) {
 											if (body?.historicalComparisons?.metadata?.providerName && !body?.historicalComparisons?.metadata?.providerLogo) body.historicalComparisons.metadata.providerLogo = providerNameToLogo(body?.historicalComparisons?.metadata?.providerName, "v2");
-											$.log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
+											log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
 										}										const WeatherData = weatherKit2.encode("all", body);
 										Builder$1.finish(WeatherData);
 										break;
@@ -21041,26 +20793,26 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 		case false:
 			break;
 	}})()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response));
+	.catch((e) => logError(e))
+	.finally(() => done($response));
 
 async function InjectAirQuality(url, body, Settings) {
-	$.log(`☑️ InjectAirQuality`, "");
+	log(`☑️ InjectAirQuality`, "");
 	let airQuality;
 	switch (Settings?.AQI?.Provider) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
-			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
 			airQuality = await qWeather.AirNow();
 			break;
 		case "ColorfulClouds":
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			airQuality = await colorfulClouds.RealTime();
 			break;
 		case "WAQI":
 		default:
-			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
+			const Waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
 			if (Settings?.API?.WAQI?.Token) {
 				airQuality = await Waqi.AQI2();
 			} else {
@@ -21076,12 +20828,12 @@ async function InjectAirQuality(url, body, Settings) {
 		airQuality.metadata = { ...body?.airQuality?.metadata, ...airQuality.metadata };
 		body.airQuality = { ...body?.airQuality, ...airQuality };
 		if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
-		$.log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
-	}	$.log(`✅ InjectAirQuality`, "");
+		log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
+	}	log(`✅ InjectAirQuality`, "");
 	return body;
 }
 function ConvertAirQuality(body, Settings) {
-	$.log(`☑️ ConvertAirQuality`, "");
+	log(`☑️ ConvertAirQuality`, "");
 	let airQuality;
 	switch (Settings?.AQI?.Local?.Scale) {
 		case "NONE":
@@ -21095,29 +20847,29 @@ function ConvertAirQuality(body, Settings) {
 	}	if (airQuality.index) {
 		body.airQuality = { ...body.airQuality, ...airQuality };
 		body.airQuality.metadata.providerName += `\nConverted using ${Settings?.AQI?.Local?.Scale}`;
-		$.log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
-	}	$.log(`✅ ConvertAirQuality`, "");
+		log(`🚧 body.airQuality: ${JSON.stringify(body.airQuality, null, 2)}`, "");
+	}	log(`✅ ConvertAirQuality`, "");
 	return body;
 }
 async function InjectForecastNextHour(url, body, Settings) {
-	$.log(`☑️ InjectForecastNextHour`, "");
+	log(`☑️ InjectForecastNextHour`, "");
 	let forecastNextHour;
 	switch (Settings?.NextHour?.Provider) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
-			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
 			forecastNextHour = await qWeather.Minutely();
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	}	if (forecastNextHour?.metadata) {
 		forecastNextHour.metadata = { ...body?.forecastNextHour?.metadata, ...forecastNextHour.metadata };
 		body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
-		$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
-	}	$.log(`✅ InjectForecastNextHour`, "");
+		log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
+	}	log(`✅ InjectForecastNextHour`, "");
 	return body;
 }
