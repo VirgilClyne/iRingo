@@ -10,3 +10,6 @@
 [submodule "src/pako"]
 	path = src/pako
 	url = https://github.com/nodeca/pako.git
+[submodule "src/utils"]
+	path = src/utils
+	url = https://github.com/NanoCat-Me/utils.git
