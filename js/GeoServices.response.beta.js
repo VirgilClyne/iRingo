@@ -1,4 +1,18 @@
 /* README: https://github.com/VirgilClyne/iRingo */
+console.log(' iRingo: 📍 GeoServices.framework β Response')
+const $platform = platform();
+function platform() {
+    if ("undefined" !== typeof $environment && $environment["surge-version"])
+        return "Surge"
+    if ("undefined" !== typeof $environment && $environment["stash-version"])
+        return "Stash"
+    if ("undefined" !== typeof module && !!module.exports) return "Node.js"
+    if ("undefined" !== typeof $task) return "Quantumult X"
+    if ("undefined" !== typeof $loon) return "Loon"
+    if ("undefined" !== typeof $rocket) return "Shadowrocket"
+    if ("undefined" !== typeof Egern) return "Egern"
+}
+
 /* https://www.lodashjs.com */
 class Lodash {
 	static name = "Lodash";
@@ -71,25 +85,13 @@ class Lodash {
 }
 
 /* https://developer.mozilla.org/zh-CN/docs/Web/API/Storage/setItem */
-class $Storage {
-	static name = "$Storage";
-	static version = "1.0.9";
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) };
-	static data = null
-	static dataFile = 'box.dat'
+class Storage {
+	static name = "Storage";
+	static version = "1.1.0";
+	static about () { return log("", `🟧 ${this.name} v${this.version}`, "") };
+	static data = null;
+	static dataFile = 'box.dat';
 	static #nameRegex = /^@(?<key>[^.]+)(?:\.(?<path>.*))?$/;
-
-	static #platform() {
-		if ('undefined' !== typeof $environment && $environment['surge-version'])
-			return 'Surge'
-		if ('undefined' !== typeof $environment && $environment['stash-version'])
-			return 'Stash'
-		if ('undefined' !== typeof module && !!module.exports) return 'Node.js'
-		if ('undefined' !== typeof $task) return 'Quantumult X'
-		if ('undefined' !== typeof $loon) return 'Loon'
-		if ('undefined' !== typeof $rocket) return 'Shadowrocket'
-		if ('undefined' !== typeof Egern) return 'Egern'
-	}
 
     static getItem(keyName = new String, defaultValue = null) {
         let keyValue = defaultValue;
@@ -97,22 +99,22 @@ class $Storage {
 		switch (keyName.startsWith('@')) {
 			case true:
 				const { key, path } = keyName.match(this.#nameRegex)?.groups;
-				//console.log(`1: ${key}, ${path}`);
+				//log(`1: ${key}, ${path}`);
 				keyName = key;
 				let value = this.getItem(keyName, {});
-				//console.log(`2: ${JSON.stringify(value)}`)
+				//log(`2: ${JSON.stringify(value)}`)
 				if (typeof value !== "object") value = {};
-				//console.log(`3: ${JSON.stringify(value)}`)
+				//log(`3: ${JSON.stringify(value)}`)
 				keyValue = Lodash.get(value, path);
-				//console.log(`4: ${JSON.stringify(keyValue)}`)
+				//log(`4: ${JSON.stringify(keyValue)}`)
 				try {
 					keyValue = JSON.parse(keyValue);
 				} catch (e) {
 					// do nothing
-				}				//console.log(`5: ${JSON.stringify(keyValue)}`)
+				}				//log(`5: ${JSON.stringify(keyValue)}`)
 				break;
 			default:
-				switch (this.#platform()) {
+				switch ($platform) {
 					case 'Surge':
 					case 'Loon':
 					case 'Stash':
@@ -140,7 +142,7 @@ class $Storage {
 
 	static setItem(keyName = new String, keyValue = new String) {
 		let result = false;
-		//console.log(`0: ${typeof keyValue}`);
+		//log(`0: ${typeof keyValue}`);
 		switch (typeof keyValue) {
 			case "object":
 				keyValue = JSON.stringify(keyValue);
@@ -151,19 +153,19 @@ class $Storage {
 		}		switch (keyName.startsWith('@')) {
 			case true:
 				const { key, path } = keyName.match(this.#nameRegex)?.groups;
-				//console.log(`1: ${key}, ${path}`);
+				//log(`1: ${key}, ${path}`);
 				keyName = key;
 				let value = this.getItem(keyName, {});
-				//console.log(`2: ${JSON.stringify(value)}`)
+				//log(`2: ${JSON.stringify(value)}`)
 				if (typeof value !== "object") value = {};
-				//console.log(`3: ${JSON.stringify(value)}`)
+				//log(`3: ${JSON.stringify(value)}`)
 				Lodash.set(value, path, keyValue);
-				//console.log(`4: ${JSON.stringify(value)}`)
+				//log(`4: ${JSON.stringify(value)}`)
 				result = this.setItem(keyName, value);
-				//console.log(`5: ${result}`)
+				//log(`5: ${result}`)
 				break;
 			default:
-				switch (this.#platform()) {
+				switch ($platform) {
 					case 'Surge':
 					case 'Loon':
 					case 'Stash':
@@ -199,7 +201,7 @@ class $Storage {
 				result = this.setItem(keyName, value);
 				break;
 			default:
-				switch (this.#platform()) {
+				switch ($platform) {
 					case 'Surge':
 					case 'Loon':
 					case 'Stash':
@@ -222,7 +224,7 @@ class $Storage {
 
     static clear() {
 		let result = false;
-		switch (this.#platform()) {
+		switch ($platform) {
 			case 'Surge':
 			case 'Loon':
 			case 'Stash':
@@ -292,458 +294,78 @@ class $Storage {
 
 }
 
-class ENV {
-	static name = "ENV"
-	static version = '1.8.3'
-	static about() { return console.log(`\n🟧 ${this.name} v${this.version}\n`) }
+function logError(error) {
+    switch ($platform) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Egern":
+        case "Shadowrocket":
+        case "Quantumult X":
+        default:
+            log("", `❗️执行错误!`, error, "");
+            break
+        case "Node.js":
+            log("", `❗️执行错误!`, error.stack, "");
+            break
+    }}
 
-	constructor(name, opts) {
-		console.log(`\n🟧 ${ENV.name} v${ENV.version}\n`);
-		this.name = name;
-		this.logs = [];
-		this.isMute = false;
-		this.isMuteLog = false;
-		this.logSeparator = '\n';
-		this.encoding = 'utf-8';
-		this.startTime = new Date().getTime();
-		Object.assign(this, opts);
-		this.log(`\n🚩 开始!\n${name}\n`);
-	}
-	
-	environment() {
-		switch (this.platform()) {
-			case 'Surge':
-				$environment.app = 'Surge';
-				return $environment
-			case 'Stash':
-				$environment.app = 'Stash';
-				return $environment
-			case 'Egern':
-				$environment.app = 'Egern';
-				return $environment
-			case 'Loon':
-				let environment = $loon.split(' ');
-				return {
-					"device": environment[0],
-					"ios": environment[1],
-					"loon-version": environment[2],
-					"app": "Loon"
-				};
-			case 'Quantumult X':
-				return {
-					"app": "Quantumult X"
-				};
-			case 'Node.js':
-				process.env.app = 'Node.js';
-				return process.env
-			default:
-				return {}
-		}
-	}
-
-	platform() {
-		if ('undefined' !== typeof $environment && $environment['surge-version'])
-			return 'Surge'
-		if ('undefined' !== typeof $environment && $environment['stash-version'])
-			return 'Stash'
-		if ('undefined' !== typeof module && !!module.exports) return 'Node.js'
-		if ('undefined' !== typeof $task) return 'Quantumult X'
-		if ('undefined' !== typeof $loon) return 'Loon'
-		if ('undefined' !== typeof $rocket) return 'Shadowrocket'
-		if ('undefined' !== typeof Egern) return 'Egern'
-	}
-
-	isNode() {
-		return 'Node.js' === this.platform()
-	}
-
-	isQuanX() {
-		return 'Quantumult X' === this.platform()
-	}
-
-	isSurge() {
-		return 'Surge' === this.platform()
-	}
-
-	isLoon() {
-		return 'Loon' === this.platform()
-	}
-
-	isShadowrocket() {
-		return 'Shadowrocket' === this.platform()
-	}
-
-	isStash() {
-		return 'Stash' === this.platform()
-	}
-
-	isEgern() {
-		return 'Egern' === this.platform()
-	}
-
-	async getScript(url) {
-		return await this.fetch(url).then(response => response.body);
-	}
-
-	async runScript(script, runOpts) {
-		let httpapi = $Storage.getItem('@chavy_boxjs_userCfgs.httpapi');
-		httpapi = httpapi?.replace?.(/\n/g, '')?.trim();
-		let httpapi_timeout = $Storage.getItem('@chavy_boxjs_userCfgs.httpapi_timeout');
-		httpapi_timeout = (httpapi_timeout * 1) ?? 20;
-		httpapi_timeout = runOpts?.timeout ?? httpapi_timeout;
-		const [password, address] = httpapi.split('@');
-		const request = {
-			url: `http://${address}/v1/scripting/evaluate`,
-			body: {
-				script_text: script,
-				mock_type: 'cron',
-				timeout: httpapi_timeout
-			},
-			headers: { 'X-Key': password, 'Accept': '*/*' },
-			timeout: httpapi_timeout
-		};
-		await this.fetch(request).then(response => response.body, error => this.logErr(error));
-	}
-
-	initGotEnv(opts) {
-		this.got = this.got ? this.got : require('got');
-		this.cktough = this.cktough ? this.cktough : require('tough-cookie');
-		this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar();
-		if (opts) {
-			opts.headers = opts.headers ? opts.headers : {};
-			if (undefined === opts.headers.Cookie && undefined === opts.cookieJar) {
-				opts.cookieJar = this.ckjar;
-			}
-		}
-	}
-
-	async fetch(request = {} || "", option = {}) {
-		// 初始化参数
-		switch (request.constructor) {
-			case Object:
-				request = { ...option, ...request };
-				break;
-			case String:
-				request = { ...option, "url": request };
-				break;
-		}		// 自动判断请求方法
-		if (!request.method) {
-			request.method = "GET";
-			if (request.body ?? request.bodyBytes) request.method = "POST";
-		}		// 移除请求头中的部分参数, 让其自动生成
-		delete request.headers?.Host;
-		delete request.headers?.[":authority"];
-		delete request.headers?.['Content-Length'];
-		delete request.headers?.['content-length'];
-		// 定义请求方法（小写）
-		const method = request.method.toLocaleLowerCase();
-		// 判断平台
-		switch (this.platform()) {
-			case 'Loon':
-			case 'Surge':
-			case 'Stash':
-			case 'Egern':
-			case 'Shadowrocket':
-			default:
-				// 转换请求参数
-				if (request.timeout) {
-					request.timeout = parseInt(request.timeout, 10);
-					if (this.isSurge()) ; else request.timeout = request.timeout * 1000;
-				}				if (request.policy) {
-					if (this.isLoon()) request.node = request.policy;
-					if (this.isStash()) Lodash.set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy));
-					if (this.isShadowrocket()) Lodash.set(request, "headers.X-Surge-Proxy", request.policy);
-				}				if (typeof request.redirection === "boolean") request["auto-redirect"] = request.redirection;
-				// 转换请求体
-				if (request.bodyBytes && !request.body) {
-					request.body = request.bodyBytes;
-					delete request.bodyBytes;
-				}				// 发送请求
-				return await new Promise((resolve, reject) => {
-					$httpClient[method](request, (error, response, body) => {
-						if (error) reject(error);
-						else {
-							response.ok = /^2\d\d$/.test(response.status);
-							response.statusCode = response.status;
-							if (body) {
-								response.body = body;
-								if (request["binary-mode"] == true) response.bodyBytes = body;
-							}							resolve(response);
-						}
-					});
-				});
-			case 'Quantumult X':
-				// 转换请求参数
-				if (request.policy) Lodash.set(request, "opts.policy", request.policy);
-				if (typeof request["auto-redirect"] === "boolean") Lodash.set(request, "opts.redirection", request["auto-redirect"]);
-				// 转换请求体
-				if (request.body instanceof ArrayBuffer) {
-					request.bodyBytes = request.body;
-					delete request.body;
-				} else if (ArrayBuffer.isView(request.body)) {
-					request.bodyBytes = request.body.buffer.slice(request.body.byteOffset, request.body.byteLength + request.body.byteOffset);
-					delete object.body;
-				} else if (request.body) delete request.bodyBytes;
-				// 发送请求
-				return await $task.fetch(request).then(
-					response => {
-						response.ok = /^2\d\d$/.test(response.statusCode);
-						response.status = response.statusCode;
-						return response;
-					},
-					reason => Promise.reject(reason.error));
-			case 'Node.js':
-				let iconv = require('iconv-lite');
-				this.initGotEnv(request);
-				const { url, ...option } = request;
-				return await this.got[method](url, option)
-					.on('redirect', (response, nextOpts) => {
-						try {
-							if (response.headers['set-cookie']) {
-								const ck = response.headers['set-cookie']
-									.map(this.cktough.Cookie.parse)
-									.toString();
-								if (ck) {
-									this.ckjar.setCookieSync(ck, null);
-								}
-								nextOpts.cookieJar = this.ckjar;
-							}
-						} catch (e) {
-							this.logErr(e);
-						}
-						// this.ckjar.setCookieSync(response.headers['set-cookie'].map(Cookie.parse).toString())
-					})
-					.then(
-						response => {
-							response.statusCode = response.status;
-							response.body = iconv.decode(response.rawBody, this.encoding);
-							response.bodyBytes = response.rawBody;
-							return response;
-						},
-						error => Promise.reject(error.message));
-		}	};
-
-	/**
-	 *
-	 * 示例:$.time('yyyy-MM-dd qq HH:mm:ss.S')
-	 *    :$.time('yyyyMMddHHmmssS')
-	 *    y:年 M:月 d:日 q:季 H:时 m:分 s:秒 S:毫秒
-	 *    其中y可选0-4位占位符、S可选0-1位占位符，其余可选0-2位占位符
-	 * @param {string} format 格式化参数
-	 * @param {number} ts 可选: 根据指定时间戳返回格式化日期
-	 *
-	 */
-	time(format, ts = null) {
-		const date = ts ? new Date(ts) : new Date();
-		let o = {
-			'M+': date.getMonth() + 1,
-			'd+': date.getDate(),
-			'H+': date.getHours(),
-			'm+': date.getMinutes(),
-			's+': date.getSeconds(),
-			'q+': Math.floor((date.getMonth() + 3) / 3),
-			'S': date.getMilliseconds()
-		};
-		if (/(y+)/.test(format))
-			format = format.replace(
-				RegExp.$1,
-				(date.getFullYear() + '').substr(4 - RegExp.$1.length)
-			);
-		for (let k in o)
-			if (new RegExp('(' + k + ')').test(format))
-				format = format.replace(
-					RegExp.$1,
-					RegExp.$1.length == 1
-						? o[k]
-						: ('00' + o[k]).substr(('' + o[k]).length)
-				);
-		return format
-	}
-
-	/**
-	 * 系统通知
-	 *
-	 * > 通知参数: 同时支持 QuanX 和 Loon 两种格式, EnvJs根据运行环境自动转换, Surge 环境不支持多媒体通知
-	 *
-	 * 示例:
-	 * $.msg(title, subt, desc, 'twitter://')
-	 * $.msg(title, subt, desc, { 'open-url': 'twitter://', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
-	 * $.msg(title, subt, desc, { 'open-url': 'https://bing.com', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
-	 *
-	 * @param {*} title 标题
-	 * @param {*} subt 副标题
-	 * @param {*} desc 通知详情
-	 * @param {*} opts 通知参数
-	 *
-	 */
-	msg(title = name, subt = '', desc = '', opts) {
-		const toEnvOpts = (rawopts) => {
-			switch (typeof rawopts) {
-				case undefined:
-					return rawopts
-				case 'string':
-					switch (this.platform()) {
-						case 'Surge':
-						case 'Stash':
-						case 'Egern':
-						default:
-							return { url: rawopts }
-						case 'Loon':
-						case 'Shadowrocket':
-							return rawopts
-						case 'Quantumult X':
-							return { 'open-url': rawopts }
-						case 'Node.js':
-							return undefined
-					}
-				case 'object':
-					switch (this.platform()) {
-						case 'Surge':
-						case 'Stash':
-						case 'Egern':
-						case 'Shadowrocket':
-						default: {
-							let openUrl =
-								rawopts.url || rawopts.openUrl || rawopts['open-url'];
-							return { url: openUrl }
-						}
-						case 'Loon': {
-							let openUrl =
-								rawopts.openUrl || rawopts.url || rawopts['open-url'];
-							let mediaUrl = rawopts.mediaUrl || rawopts['media-url'];
-							return { openUrl, mediaUrl }
-						}
-						case 'Quantumult X': {
-							let openUrl =
-								rawopts['open-url'] || rawopts.url || rawopts.openUrl;
-							let mediaUrl = rawopts['media-url'] || rawopts.mediaUrl;
-							let updatePasteboard =
-								rawopts['update-pasteboard'] || rawopts.updatePasteboard;
-							return {
-								'open-url': openUrl,
-								'media-url': mediaUrl,
-								'update-pasteboard': updatePasteboard
-							}
-						}
-						case 'Node.js':
-							return undefined
-					}
-				default:
-					return undefined
-			}
-		};
-		if (!this.isMute) {
-			switch (this.platform()) {
-				case 'Surge':
-				case 'Loon':
-				case 'Stash':
-				case 'Egern':
-				case 'Shadowrocket':
-				default:
-					$notification.post(title, subt, desc, toEnvOpts(opts));
-					break
-				case 'Quantumult X':
-					$notify(title, subt, desc, toEnvOpts(opts));
-					break
-				case 'Node.js':
-					break
-			}
-		}
-		if (!this.isMuteLog) {
-			let logs = ['', '==============📣系统通知📣=============='];
-			logs.push(title);
-			subt ? logs.push(subt) : '';
-			desc ? logs.push(desc) : '';
-			console.log(logs.join('\n'));
-			this.logs = this.logs.concat(logs);
-		}
-	}
-
-	log(...logs) {
-		if (logs.length > 0) {
-			this.logs = [...this.logs, ...logs];
-		}
-		console.log(logs.join(this.logSeparator));
-	}
-
-	logErr(error) {
-		switch (this.platform()) {
-			case 'Surge':
-			case 'Loon':
-			case 'Stash':
-			case 'Egern':
-			case 'Shadowrocket':
-			case 'Quantumult X':
-			default:
-				this.log('', `❗️ ${this.name}, 错误!`, error);
-				break
-			case 'Node.js':
-				this.log('', `❗️${this.name}, 错误!`, error.stack);
-				break
-		}
-	}
-
-	wait(time) {
-		return new Promise((resolve) => setTimeout(resolve, time))
-	}
-
-	done(object = {}) {
-		const endTime = new Date().getTime();
-		const costTime = (endTime - this.startTime) / 1000;
-		this.log("", `🚩 ${this.name}, 结束! 🕛 ${costTime} 秒`, "");
-		switch (this.platform()) {
-			case 'Surge':
-				if (object.policy) Lodash.set(object, "headers.X-Surge-Policy", object.policy);
-				$done(object);
-				break;
-			case 'Loon':
-				if (object.policy) object.node = object.policy;
-				$done(object);
-				break;
-			case 'Stash':
-				if (object.policy) Lodash.set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy));
-				$done(object);
-				break;
-			case 'Egern':
-				$done(object);
-				break;
-			case 'Shadowrocket':
-			default:
-				$done(object);
-				break;
-			case 'Quantumult X':
-				if (object.policy) Lodash.set(object, "opts.policy", object.policy);
-				// 移除不可写字段
-				delete object["auto-redirect"];
-				delete object["auto-cookie"];
-				delete object["binary-mode"];
-				delete object.charset;
-				delete object.host;
-				delete object.insecure;
-				delete object.method; // 1.4.x 不可写
-				delete object.opt; // $task.fetch() 参数, 不可写
-				delete object.path; // 可写, 但会与 url 冲突
-				delete object.policy;
-				delete object["policy-descriptor"];
-				delete object.scheme;
-				delete object.sessionIndex;
-				delete object.statusCode;
-				delete object.timeout;
-				if (object.body instanceof ArrayBuffer) {
-					object.bodyBytes = object.body;
-					delete object.body;
-				} else if (ArrayBuffer.isView(object.body)) {
-					object.bodyBytes = object.body.buffer.slice(object.body.byteOffset, object.body.byteLength + object.body.byteOffset);
-					delete object.body;
-				} else if (object.body) delete object.bodyBytes;
-				$done(object);
-				break;
-			case 'Node.js':
-				process.exit(1);
-				break;
-		}
-	}
+function done(object = {}) {
+    log("", `🚩 执行结束!`, "");
+    switch ($platform) {
+        case "Surge":
+            if (object.policy) Lodash.set(object, "headers.X-Surge-Policy", object.policy);
+            $done(object);
+            break;
+        case "Loon":
+            if (object.policy) object.node = object.policy;
+            $done(object);
+            break;
+        case "Stash":
+            if (object.policy) Lodash.set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy));
+            $done(object);
+            break;
+        case "Egern":
+            $done(object);
+            break;
+        case "Shadowrocket":
+        default:
+            $done(object);
+            break;
+        case "Quantumult X":
+            if (object.policy) Lodash.set(object, "opts.policy", object.policy);
+            // 移除不可写字段
+            delete object["auto-redirect"];
+            delete object["auto-cookie"];
+            delete object["binary-mode"];
+            delete object.charset;
+            delete object.host;
+            delete object.insecure;
+            delete object.method; // 1.4.x 不可写
+            delete object.opt; // $task.fetch() 参数, 不可写
+            delete object.path; // 可写, 但会与 url 冲突
+            delete object.policy;
+            delete object["policy-descriptor"];
+            delete object.scheme;
+            delete object.sessionIndex;
+            delete object.statusCode;
+            delete object.timeout;
+            if (object.body instanceof ArrayBuffer) {
+                object.bodyBytes = object.body;
+                delete object.body;
+            } else if (ArrayBuffer.isView(object.body)) {
+                object.bodyBytes = object.body.buffer.slice(object.body.byteOffset, object.body.byteLength + object.body.byteOffset);
+                delete object.body;
+            } else if (object.body) delete object.bodyBytes;
+            $done(object);
+            break;
+        case "Node.js":
+            process.exit(1);
+            break;
+    }
 }
+
+const log = (...logs) => console.log(logs.join("\n"));
 
 // refer: https://github.com/Peng-YM/QuanX/blob/master/Tools/XMLParser/xml-parser.js
 // refer: https://goessner.net/download/prj/jsonxml/
@@ -1899,10 +1521,10 @@ var Default = {
 };
 
 var Default$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$4,
-	Settings: Settings$8,
-	default: Default
+    __proto__: null,
+    Configs: Configs$4,
+    Settings: Settings$8,
+    default: Default
 });
 
 var Settings$7 = {
@@ -1916,9 +1538,9 @@ var Location = {
 };
 
 var Location$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$7,
-	default: Location
+    __proto__: null,
+    Settings: Settings$7,
+    default: Location
 });
 
 var Settings$6 = {
@@ -14100,10 +13722,10 @@ var Maps = {
 };
 
 var Maps$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$3,
-	Settings: Settings$6,
-	default: Maps
+    __proto__: null,
+    Configs: Configs$3,
+    Settings: Settings$6,
+    default: Maps
 });
 
 var Settings$5 = {
@@ -14116,9 +13738,9 @@ var News = {
 };
 
 var News$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$5,
-	default: News
+    __proto__: null,
+    Settings: Settings$5,
+    default: News
 });
 
 var Settings$4 = {
@@ -14131,9 +13753,9 @@ var PrivateRelay = {
 };
 
 var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$4,
-	default: PrivateRelay
+    __proto__: null,
+    Settings: Settings$4,
+    default: PrivateRelay
 });
 
 var Settings$3 = {
@@ -14202,10 +13824,10 @@ var Siri = {
 };
 
 var Siri$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$2,
-	Settings: Settings$3,
-	default: Siri
+    __proto__: null,
+    Configs: Configs$2,
+    Settings: Settings$3,
+    default: Siri
 });
 
 var Settings$2 = {
@@ -14219,9 +13841,9 @@ var TestFlight = {
 };
 
 var TestFlight$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Settings: Settings$2,
-	default: TestFlight
+    __proto__: null,
+    Settings: Settings$2,
+    default: TestFlight
 });
 
 var Settings$1 = {
@@ -14616,10 +14238,10 @@ var TV = {
 };
 
 var TV$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs$1,
-	Settings: Settings$1,
-	default: TV
+    __proto__: null,
+    Configs: Configs$1,
+    Settings: Settings$1,
+    default: TV
 });
 
 var Settings = {
@@ -14691,10 +14313,10 @@ var WeatherKit = {
 };
 
 var WeatherKit$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Configs: Configs,
-	Settings: Settings,
-	default: WeatherKit
+    __proto__: null,
+    Configs: Configs,
+    Settings: Settings,
+    default: WeatherKit
 });
 
 var Database$1 = Database = {
@@ -14711,7 +14333,7 @@ var Database$1 = Database = {
 
 /**
  * Get Storage Variables
- * @link https://github.com/NanoCat-Me/ENV/blob/main/getStorage.mjs
+ * @link https://github.com/NanoCat-Me/utils/blob/main/getStorage.mjs
  * @author VirgilClyne
  * @param {String} key - Persistent Store Key
  * @param {Array} names - Platform Names
@@ -14719,41 +14341,41 @@ var Database$1 = Database = {
  * @return {Object} { Settings, Caches, Configs }
  */
 function getStorage(key, names, database) {
-    //console.log(`☑️ ${this.name}, Get Environment Variables`, "");
+    //log(`☑️ ${this.name}, Get Environment Variables`, "");
     /***************** BoxJs *****************/
     // 包装为局部变量，用完释放内存
     // BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
-    let BoxJs = $Storage.getItem(key, database);
-    //console.log(`🚧 ${this.name}, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
+    let BoxJs = Storage.getItem(key, database);
+    //log(`🚧 ${this.name}, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
     /***************** Argument *****************/
     let Argument = {};
     if (typeof $argument !== "undefined") {
         if (Boolean($argument)) {
-            //console.log(`🎉 ${this.name}, $Argument`);
+            //log(`🎉 ${this.name}, $Argument`);
             let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
-            //console.log(JSON.stringify(arg));
+            //log(JSON.stringify(arg));
             for (let item in arg) Lodash.set(Argument, item, arg[item]);
-            //console.log(JSON.stringify(Argument));
-        }        //console.log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
+            //log(JSON.stringify(Argument));
+        }        //log(`✅ ${this.name}, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
     }    /***************** Store *****************/
     const Store = { Settings: database?.Default?.Settings || {}, Configs: database?.Default?.Configs || {}, Caches: {} };
     if (!Array.isArray(names)) names = [names];
-    //console.log(`🚧 ${this.name}, Get Environment Variables`, `names类型: ${typeof names}`, `names内容: ${JSON.stringify(names)}`, "");
+    //log(`🚧 ${this.name}, Get Environment Variables`, `names类型: ${typeof names}`, `names内容: ${JSON.stringify(names)}`, "");
     for (let name of names) {
         Store.Settings = { ...Store.Settings, ...database?.[name]?.Settings, ...Argument, ...BoxJs?.[name]?.Settings };
         Store.Configs = { ...Store.Configs, ...database?.[name]?.Configs };
         if (BoxJs?.[name]?.Caches && typeof BoxJs?.[name]?.Caches === "string") BoxJs[name].Caches = JSON.parse(BoxJs?.[name]?.Caches);
         Store.Caches = { ...Store.Caches, ...BoxJs?.[name]?.Caches };
-    }    //console.log(`🚧 ${this.name}, Get Environment Variables`, `Store.Settings类型: ${typeof Store.Settings}`, `Store.Settings: ${JSON.stringify(Store.Settings)}`, "");
+    }    //log(`🚧 ${this.name}, Get Environment Variables`, `Store.Settings类型: ${typeof Store.Settings}`, `Store.Settings: ${JSON.stringify(Store.Settings)}`, "");
     traverseObject(Store.Settings, (key, value) => {
-        //console.log(`🚧 ${this.name}, traverseObject`, `${key}: ${typeof value}`, `${key}: ${JSON.stringify(value)}`, "");
+        //log(`🚧 ${this.name}, traverseObject`, `${key}: ${typeof value}`, `${key}: ${JSON.stringify(value)}`, "");
         if (value === "true" || value === "false") value = JSON.parse(value); // 字符串转Boolean
         else if (typeof value === "string") {
             if (value.includes(",")) value = value.split(",").map(item => string2number(item)); // 字符串转数组转数字
             else value = string2number(value); // 字符串转数字
         }        return value;
     });
-    //console.log(`✅ ${this.name}, Get Environment Variables`, `Store: ${typeof Store.Caches}`, `Store内容: ${JSON.stringify(Store)}`, "");
+    //log(`✅ ${this.name}, Get Environment Variables`, `Store: ${typeof Store.Caches}`, `Store内容: ${JSON.stringify(Store)}`, "");
     return Store;
 
     /***************** function *****************/
@@ -14764,14 +14386,13 @@ function getStorage(key, names, database) {
 /**
  * Set Environment Variables
  * @author VirgilClyne
- * @param {Object} $ - ENV
  * @param {String} name - Persistent Store Key
  * @param {Array} platforms - Platform Names
  * @param {Object} database - Default DataBase
  * @return {Object} { Settings, Caches, Configs }
  */
 function setENV(name, platforms, database) {
-	console.log(`☑️ Set Environment Variables`, "");
+	log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
 	switch (platforms) {
@@ -14789,9 +14410,9 @@ function setENV(name, platforms, database) {
 		case "TV":
 			if (!Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
 			break;
-	}	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
+	}	log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
-	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
+	//log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
 	Configs.Storefront = new Map(Configs.Storefront);
 	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);
@@ -17745,21 +17366,20 @@ class MessageType {
     }
 }
 
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.5.0(4) response.beta");
-
+log("v3.5.0(5)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", ["Location", "Maps"], Database$1);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -17772,14 +17392,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
-					//$.log(`🚧 body: ${body}`, "");
+					//log(`🚧 body: ${body}`, "");
 					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -17796,7 +17416,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							switch (PATH) {
 								case "/pep/gcc":
 									Lodash.set(Caches, "pep.gcc", $response.body);
-									$Storage.setItem("@iRingo.Location.Caches", Caches);
+									Storage.setItem("@iRingo.Location.Caches", Caches);
 									switch (Settings.PEP.GCC) {
 										case "AUTO":
 											break;
@@ -17810,7 +17430,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//body = await PLISTs("plist2json", $response.body);
 							BigInt.prototype.toJSON = function () { return this.toString() };
 							body = XML.parse($response.body);
-							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							log(`🚧 body: ${JSON.stringify(body)}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "/config/defaults":
@@ -17842,7 +17462,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										PLIST["com.apple.GEO"].CountryProviders.CN.OpticalHeadingEnabled = true; // 举起以查看
 										PLIST["com.apple.GEO"].CountryProviders.CN.UseCLPedestrianMapMatchedLocations = true; // 导航准确性-增强
 									}									break;
-							}							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							}							log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$response.body = await PLISTs("json2plist", body); // json2plist
 							$response.body = XML.stringify(body);
 							break;
@@ -17850,13 +17470,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
 				case "application/json":
 					body = JSON.parse($response.body ?? "{}");
-					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					log(`🚧 body: ${JSON.stringify(body)}`, "");
 					$response.body = JSON.stringify(body);
 					break;
 				case "application/protobuf":
@@ -17865,9 +17485,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/grpc":
 				case "application/grpc+proto":
 				case "application/octet-stream":
-					//$.log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
-					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
-					//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+					//log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
+					let rawBody = ($platform === "Quantumult X") ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
+					//log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
 					switch (FORMAT) {
 						case "application/protobuf":
 						case "application/x-protobuf":
@@ -19095,10 +18715,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											new ResourceManifestDownload$Type();
 											/******************  initialization finish  *******************/
 											body = Resources.fromBinary(rawBody);
-											//$.log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
+											//log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
 											/*
 											let UF = UnknownFieldHandler.list(body);
-											//$.log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
+											//log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
 											if (UF) {
 												UF = UF.map(uf => {
 													//uf.no; // 22
@@ -19106,7 +18726,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													// use the binary reader to decode the raw data:
 													let reader = new BinaryReader(uf.data);
 													let addedNumber = reader.int32(); // 7777
-													$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
+													log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
 												});
 											};
 											*/
@@ -19133,9 +18753,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
 											// releaseInfo
 											//body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
-											$.log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
+											log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
 											body = SetTileGroup(body);
-											//$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
+											//log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
 											rawBody = Resources.toBinary(body);
 											break;
 									}									break;
@@ -19147,28 +18767,28 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 		case false:
 			break;
 	}})()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response));
+	.catch((e) => logError(e))
+	.finally(() => done($response));
 
 /***************** Function *****************/
 function setCache(cache, path, body) {
-	$.log(`☑️ Set Cache, path: ${path}`, "");
+	log(`☑️ Set Cache, path: ${path}`, "");
 	if (Date.now() - Lodash.get(cache, `${path}.timeStamp`, 0) > 86400000) {
 		Lodash.set(cache, `${path}.tileSet`, body.tileSet);
 		Lodash.set(cache, `${path}.attribution`, body.attribution);
 		Lodash.set(cache, `${path}.urlInfoSet`, body.urlInfoSet);
 		Lodash.set(cache, `${path}.muninBucket`, body.muninBucket);
 		Lodash.set(cache, `${path}.timeStamp`, Date.now());
-		$Storage.setItem("@iRingo.Maps.Caches", cache);
-		$.log(`✅ Set Cache`, "");
-	} else $.log(`❎ Set Cache`, "");
+		Storage.setItem("@iRingo.Maps.Caches", cache);
+		log(`✅ Set Cache`, "");
+	} else log(`❎ Set Cache`, "");
 }
 function SetTileGroup(body = {}) {
-	$.log(`☑️ Set TileGroups`, "");
+	log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {
-		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
 		tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
-		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
 		tileGroup.tileSet = body.tileSet.map((tileSet, index) => {
 			return {
 				"tileSetIndex": index,
@@ -19183,11 +18803,11 @@ function SetTileGroup(body = {}) {
 		});
 		return tileGroup;
 	});
-	$.log(`✅ Set TileGroups`, "");
+	log(`✅ Set TileGroups`, "");
 	return body;
 }
 function tileSets(tileSets = [], settings = {}, caches = {}) {
-	$.log(`☑️ Set TileSets`, "");
+	log(`☑️ Set TileSets`, "");
 	/*
 	// 填补数据组
 	if (caches?.CN?.tileSet) caches.CN.tileSet = caches.CN.tileSet.map(tile => {
@@ -19346,11 +18966,11 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 				*/
 		}		return tileSet;
 	}).flat(Infinity).filter(Boolean);
-	$.log(`✅ Set TileSets`, "");
+	log(`✅ Set TileSets`, "");
 	return tileSets;
 }
 function attributions(attributions = [], url = {}, caches = {}) {
-	$.log(`☑️ Set Attributions`, "");
+	log(`☑️ Set Attributions`, "");
 	switch (url.searchParams.get("country_code")) {
 		case "CN":
 			caches?.XX?.attribution?.forEach(attribution => {
@@ -19379,7 +18999,7 @@ function attributions(attributions = [], url = {}, caches = {}) {
 	attributions = attributions.map((attribution, index) => {
 		switch (attribution.name) {
 			case "‎":
-				attribution.name = `${$.name}\n${new Date()}`;
+				attribution.name = ` iRingo: 📍 GeoServices.framework β Response\n${new Date()}`;
 				delete attribution.plainTextURLSHA256Checksum;
 				break;
 			case "AutoNavi":
@@ -19433,11 +19053,11 @@ function attributions(attributions = [], url = {}, caches = {}) {
 				break;
 		}		return attribution;
 	}).flat(Infinity).filter(Boolean);
-	$.log(`✅ Set Attributions`, "");
+	log(`✅ Set Attributions`, "");
 	return attributions;
 }
 function urlInfoSets(urlInfoSets = [], url = {}, settings = {}, caches = {}) {
-	$.log(`☑️ Set UrlInfoSets`, "");
+	log(`☑️ Set UrlInfoSets`, "");
 	urlInfoSets = urlInfoSets.map((urlInfoSet, index) => {
 		switch (url.searchParams.get("country_code")) {
 			case "CN":
@@ -19557,11 +19177,11 @@ function urlInfoSets(urlInfoSets = [], url = {}, settings = {}, caches = {}) {
 				break;
 		}		return urlInfoSet;
 	});
-	$.log(`✅ Set UrlInfoSets`, "");
+	log(`✅ Set UrlInfoSets`, "");
 	return urlInfoSets;
 }
 function muninBuckets(muninBuckets = [], settings = {}, caches = {}) {
-	$.log(`☑️ Set MuninBuckets`, "");
+	log(`☑️ Set MuninBuckets`, "");
 	switch (settings.TileSet.Munin) {
 		case "AUTO":
 		default:
@@ -19572,6 +19192,6 @@ function muninBuckets(muninBuckets = [], settings = {}, caches = {}) {
 		case "XX":
 			muninBuckets = caches.XX.muninBucket;
 			break;
-	}	$.log(`✅ Set MuninBuckets`, "");
+	}	log(`✅ Set MuninBuckets`, "");
 	return muninBuckets;
 }

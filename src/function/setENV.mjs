@@ -1,17 +1,16 @@
 import getStorage from '../utils/getStorage.mjs'
-import { _ } from "../utils/utils.mjs";
+import { _, log } from "../utils/utils.mjs";
 
 /**
  * Set Environment Variables
  * @author VirgilClyne
- * @param {Object} $ - ENV
  * @param {String} name - Persistent Store Key
  * @param {Array} platforms - Platform Names
  * @param {Object} database - Default DataBase
  * @return {Object} { Settings, Caches, Configs }
  */
 export default function setENV(name, platforms, database) {
-	console.log(`☑️ Set Environment Variables`, "");
+	log(`☑️ Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
 	/***************** Settings *****************/
 	switch (platforms) {
@@ -30,9 +29,9 @@ export default function setENV(name, platforms, database) {
 			if (!Array.isArray(Settings?.Tabs)) _.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
 			break;
 	};
-	console.log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
+	log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
 	/***************** Caches *****************/
-	//console.log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
+	//log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
 	/***************** Configs *****************/
 	Configs.Storefront = new Map(Configs.Storefront);
 	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);

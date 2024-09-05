@@ -1,28 +1,22 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
+import { $platform, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import XML from "./XML/XML.mjs";
-
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
 import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
-
-const $ = new ENV(" iRingo: 📍 GeoServices.framework v3.5.0(4) response.beta");
-
+log("v3.5.0(5)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", ["Location", "Maps"], Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -35,14 +29,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/x-www-form-urlencoded":
 				case "text/plain":
 				default:
-					//$.log(`🚧 body: ${body}`, "");
+					//log(`🚧 body: ${body}`, "");
 					break;
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -59,7 +53,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							switch (PATH) {
 								case "/pep/gcc":
 									_.set(Caches, "pep.gcc", $response.body);
-									$Storage.setItem("@iRingo.Location.Caches", Caches);
+									Storage.setItem("@iRingo.Location.Caches", Caches);
 									switch (Settings.PEP.GCC) {
 										case "AUTO":
 											break;
@@ -75,7 +69,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							//body = await PLISTs("plist2json", $response.body);
 							BigInt.prototype.toJSON = function () { return this.toString() };
 							body = XML.parse($response.body);
-							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							log(`🚧 body: ${JSON.stringify(body)}`, "");
 							// 路径判断
 							switch (PATH) {
 								case "/config/defaults":
@@ -109,7 +103,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									};
 									break;
 							};
-							$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$response.body = await PLISTs("json2plist", body); // json2plist
 							$response.body = XML.stringify(body);
 							break;
@@ -118,13 +112,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
 				case "application/json":
 					body = JSON.parse($response.body ?? "{}");
-					$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					log(`🚧 body: ${JSON.stringify(body)}`, "");
 					$response.body = JSON.stringify(body);
 					break;
 				case "application/protobuf":
@@ -133,9 +127,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/grpc":
 				case "application/grpc+proto":
 				case "application/octet-stream":
-					//$.log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
-					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
-					//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+					//log(`🚧 $response: ${JSON.stringify($response, null, 2)}`, "");
+					let rawBody = ($platform === "Quantumult X") ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
+					//log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
 					switch (FORMAT) {
 						case "application/protobuf":
 						case "application/x-protobuf":
@@ -1363,10 +1357,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											const ResourceManifestDownload = new ResourceManifestDownload$Type();
 											/******************  initialization finish  *******************/
 											body = Resources.fromBinary(rawBody);
-											//$.log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
+											//log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
 											/*
 											let UF = UnknownFieldHandler.list(body);
-											//$.log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
+											//log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
 											if (UF) {
 												UF = UF.map(uf => {
 													//uf.no; // 22
@@ -1374,7 +1368,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													// use the binary reader to decode the raw data:
 													let reader = new BinaryReader(uf.data);
 													let addedNumber = reader.int32(); // 7777
-													$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
+													log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
 												});
 											};
 											*/
@@ -1402,9 +1396,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											body.muninBucket = muninBuckets(body.muninBucket, Settings, Caches);
 											// releaseInfo
 											//body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
-											$.log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
+											log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
 											body = SetTileGroup(body);
-											//$.log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
+											//log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
 											rawBody = Resources.toBinary(body);
 											break;
 									};
@@ -1424,29 +1418,29 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response))
+	.catch((e) => logError(e))
+	.finally(() => done($response))
 
 /***************** Function *****************/
 function setCache(cache, path, body) {
-	$.log(`☑️ Set Cache, path: ${path}`, "");
+	log(`☑️ Set Cache, path: ${path}`, "");
 	if (Date.now() - _.get(cache, `${path}.timeStamp`, 0) > 86400000) {
 		_.set(cache, `${path}.tileSet`, body.tileSet);
 		_.set(cache, `${path}.attribution`, body.attribution);
 		_.set(cache, `${path}.urlInfoSet`, body.urlInfoSet);
 		_.set(cache, `${path}.muninBucket`, body.muninBucket);
 		_.set(cache, `${path}.timeStamp`, Date.now());
-		$Storage.setItem("@iRingo.Maps.Caches", cache);
-		$.log(`✅ Set Cache`, "");
-	} else $.log(`❎ Set Cache`, "");
+		Storage.setItem("@iRingo.Maps.Caches", cache);
+		log(`✅ Set Cache`, "");
+	} else log(`❎ Set Cache`, "");
 };
 
 function SetTileGroup(body = {}) {
-	$.log(`☑️ Set TileGroups`, "");
+	log(`☑️ Set TileGroups`, "");
 	body.tileGroup = body.tileGroup.map(tileGroup => {
-		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
 		tileGroup.identifier += Math.floor(Math.random() * 100) + 1;
-		$.log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
+		log(`🚧 tileGroup.identifier: ${tileGroup.identifier}`);
 		tileGroup.tileSet = body.tileSet.map((tileSet, index) => {
 			return {
 				"tileSetIndex": index,
@@ -1461,12 +1455,12 @@ function SetTileGroup(body = {}) {
 		});
 		return tileGroup;
 	});
-	$.log(`✅ Set TileGroups`, "");
+	log(`✅ Set TileGroups`, "");
 	return body;
 };
 
 function tileSets(tileSets = [], settings = {}, caches = {}) {
-	$.log(`☑️ Set TileSets`, "");
+	log(`☑️ Set TileSets`, "");
 	/*
 	// 填补数据组
 	if (caches?.CN?.tileSet) caches.CN.tileSet = caches.CN.tileSet.map(tile => {
@@ -1634,12 +1628,12 @@ function tileSets(tileSets = [], settings = {}, caches = {}) {
 		};
 		return tileSet;
 	}).flat(Infinity).filter(Boolean);
-	$.log(`✅ Set TileSets`, "");
+	log(`✅ Set TileSets`, "");
 	return tileSets;
 };
 
 function attributions(attributions = [], url = {}, caches = {}) {
-	$.log(`☑️ Set Attributions`, "");
+	log(`☑️ Set Attributions`, "");
 	switch (url.searchParams.get("country_code")) {
 		case "CN":
 			caches?.XX?.attribution?.forEach(attribution => {
@@ -1670,7 +1664,7 @@ function attributions(attributions = [], url = {}, caches = {}) {
 	attributions = attributions.map((attribution, index) => {
 		switch (attribution.name) {
 			case "‎":
-				attribution.name = `${$.name}\n${new Date()}`;
+				attribution.name = ` iRingo: 📍 GeoServices.framework β Response\n${new Date()}`;
 				delete attribution.plainTextURLSHA256Checksum;
 				break;
 			case "AutoNavi":
@@ -1725,12 +1719,12 @@ function attributions(attributions = [], url = {}, caches = {}) {
 		};
 		return attribution;
 	}).flat(Infinity).filter(Boolean);
-	$.log(`✅ Set Attributions`, "");
+	log(`✅ Set Attributions`, "");
 	return attributions;
 };
 
 function dataSets(dataSets = [], settings = {}, caches = {}) {
-	$.log(`☑️ Set DataSets`, "");
+	log(`☑️ Set DataSets`, "");
 	dataSets = dataSets.map((dataSet, index) => {
 		switch (dataSet.identifier) {
 			case 0:
@@ -1745,12 +1739,12 @@ function dataSets(dataSets = [], settings = {}, caches = {}) {
 		};
 		return dataSet;
 	});
-	$.log(`✅ Set DataSets`, "");
+	log(`✅ Set DataSets`, "");
 	return body;
 };
 
 function urlInfoSets(urlInfoSets = [], url = {}, settings = {}, caches = {}) {
-	$.log(`☑️ Set UrlInfoSets`, "");
+	log(`☑️ Set UrlInfoSets`, "");
 	urlInfoSets = urlInfoSets.map((urlInfoSet, index) => {
 		switch (url.searchParams.get("country_code")) {
 			case "CN":
@@ -1876,12 +1870,12 @@ function urlInfoSets(urlInfoSets = [], url = {}, settings = {}, caches = {}) {
 		};
 		return urlInfoSet;
 	});
-	$.log(`✅ Set UrlInfoSets`, "");
+	log(`✅ Set UrlInfoSets`, "");
 	return urlInfoSets;
 };
 
 function muninBuckets(muninBuckets = [], settings = {}, caches = {}) {
-	$.log(`☑️ Set MuninBuckets`, "");
+	log(`☑️ Set MuninBuckets`, "");
 	switch (settings.TileSet.Munin) {
 		case "AUTO":
 		default:
@@ -1893,6 +1887,6 @@ function muninBuckets(muninBuckets = [], settings = {}, caches = {}) {
 			muninBuckets = caches.XX.muninBucket;
 			break;
 	};
-	$.log(`✅ Set MuninBuckets`, "");
+	log(`✅ Set MuninBuckets`, "");
 	return muninBuckets;
 };
