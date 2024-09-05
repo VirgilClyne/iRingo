@@ -9,7 +9,7 @@ export default [
 		output: {
 			file: 'js/WeatherKit.response.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🌤 WeatherKit Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},

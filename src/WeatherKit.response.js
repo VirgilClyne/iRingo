@@ -1,7 +1,4 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-
+import { $platform, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import { setENV, providerNameToLogo } from "./function/WeatherKitUtils.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
@@ -9,24 +6,23 @@ import WAQI from "./class/WAQI.mjs";
 import ColorfulClouds from "./class/ColorfulClouds.mjs";
 import QWeather from "./class/QWeather.mjs";
 import AirQuality from "./class/AirQuality.mjs";
-
 import * as flatbuffers from 'flatbuffers';
 
-const $ = new ENV(" iRingo: 🌤 WeatherKit v1.7.0(4162) response");
+log("v1.7.1(4163)");
 
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.pathname.split("/").filter(Boolean);
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}, PATHs: ${PATHs}`, "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}, PATHs: ${PATHs}`, "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "WeatherKit", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -62,7 +58,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "weatherkit.apple.com":
 							// 路径判断
 							if (PATH.startsWith("/api/v1/availability/")) {
-								$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+								log(`🚧 body: ${JSON.stringify(body)}`, "");
 								body = Configs?.Availability?.v2;
 							};
 							break;
@@ -76,7 +72,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/grpc":
 				case "application/grpc+proto":
 				case "application/octet-stream":
-					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
+					let rawBody = ($platform === "Quantumult X") ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
 					switch (FORMAT) {
 						case "application/vnd.apple.flatbuffer":
 							// 解析FlatBuffer
@@ -116,7 +112,6 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											if (body?.airQuality?.metadata?.providerName && !body?.airQuality?.metadata?.providerLogo) body.airQuality.metadata.providerLogo = providerNameToLogo(body?.airQuality?.metadata?.providerName, "v2");
 										};
 										if (url.searchParams.get("dataSets").includes("forecastNextHour")) {
-											$.log(`🚧 body.forecastNextHour: ${JSON.stringify(body?.forecastNextHour, null, 2)}`, "");
 											if (!body?.forecastNextHour) body = await InjectForecastNextHour(url, body, Settings);
 											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 										};
@@ -147,26 +142,26 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response))
+	.catch((e) => logError(e))
+	.finally(() => done($response))
 
 async function InjectAirQuality(url, body, Settings) {
-	$.log(`☑️ InjectAirQuality`, "");
+	log(`☑️ InjectAirQuality`, "");
 	let airQuality;
 	switch (Settings?.AQI?.Provider) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
-			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
 			airQuality = await qWeather.AirNow();
 			break;
 		case "ColorfulClouds":
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			airQuality = await colorfulClouds.RealTime();
 			break;
 		case "WAQI":
 		default:
-			const Waqi = new WAQI($, { "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
+			const Waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
 			if (Settings?.API?.WAQI?.Token) {
 				airQuality = await Waqi.AQI2();
 			} else {
@@ -184,12 +179,12 @@ async function InjectAirQuality(url, body, Settings) {
 		body.airQuality = { ...body?.airQuality, ...airQuality };
 		if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
 	};
-	$.log(`✅ InjectAirQuality`, "");
+	log(`✅ InjectAirQuality`, "");
 	return body;
 };
 
 function ConvertAirQuality(body, Settings) {
-	$.log(`☑️ ConvertAirQuality`, "");
+	log(`☑️ ConvertAirQuality`, "");
 	let airQuality;
 	switch (Settings?.AQI?.Local?.Scale) {
 		case "NONE":
@@ -205,23 +200,23 @@ function ConvertAirQuality(body, Settings) {
 		body.airQuality = { ...body.airQuality, ...airQuality };
 		body.airQuality.metadata.providerName += `\nConverted using ${Settings?.AQI?.Local?.Scale}`;
 	};
-	$.log(`✅ ConvertAirQuality`, "");
+	log(`✅ ConvertAirQuality`, "");
 	return body;
 };
 
 async function InjectForecastNextHour(url, body, Settings) {
-	$.log(`☑️ InjectForecastNextHour`, "");
+	log(`☑️ InjectForecastNextHour`, "");
 	let forecastNextHour;
 	switch (Settings?.NextHour?.Provider) {
 		case "WeatherKit":
 			break;
 		case "QWeather":
-			const qWeather = new QWeather($, { "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
 			forecastNextHour = await qWeather.Minutely();
 			break;
 		case "ColorfulClouds":
 		default:
-			const colorfulClouds = new ColorfulClouds($, { "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			forecastNextHour = await colorfulClouds.Minutely();
 			break;
 	};
@@ -229,6 +224,6 @@ async function InjectForecastNextHour(url, body, Settings) {
 		forecastNextHour.metadata = { ...body?.forecastNextHour?.metadata, ...forecastNextHour.metadata };
 		body.forecastNextHour = { ...body?.forecastNextHour, ...forecastNextHour };
 	};
-	$.log(`✅ InjectForecastNextHour`, "");
+	log(`✅ InjectForecastNextHour`, "");
 	return body;
 };
