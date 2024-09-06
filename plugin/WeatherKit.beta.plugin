@@ -1,6 +1,6 @@
-#!name= iRingo: 🌤 WeatherKit
-#!desc=iOS 18 & macOS 15 & watchOS 11\n1.解锁全部天气功能\n2.替换空气质量数据\n3.添加下一小时降水数据
-#!openUrl=http://boxjs.com/#/app/iRingo.WeatherKit
+#!name= iRingo: 🌤 WeatherKit β
+#!desc=BETA: iOS 18 & macOS 15 & watchOS 11\n1.解锁全部天气功能\n2.替换空气质量数据\n3.添加下一小时降水数据
+#!openUrl=http://boxjs.com/#/app/iRingo.WeatherKit.beta
 #!author=Virgil Clyne & Wordless Echo
 #!homepage=https://github.com/VirgilClyne/iRingo/wiki
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🌤-天气服务
@@ -23,8 +23,8 @@ API.WAQI.Token = input,"",tag=[API]WAQI API 令牌,desc=填写此字段将自动
 DOMAIN,weather-analytics-events.apple.com,REJECT-DROP
 
 [Script]
-http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/ requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js, tag=🌤 WeatherKit.api.v1.availability.response, argument=
-http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/ requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/WeatherKit.response.js, tag=🌤 WeatherKit.api.v2.weather.response, argument=[{NextHour.Provider},{AQI.Provider},{AQI.ReplaceProviders},{AQI.Local.Scale},{AQI.Local.ReplaceScales},{AQI.Local.ConvertUnits},{API.ColorfulClouds.Token},{API.QWeather.Host},{API.QWeather.Token},{API.WAQI.Token}]
+http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/ requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/WeatherKit.response.beta.js, tag=🌤 WeatherKit.api.v1.availability.response, argument=
+http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/ requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/WeatherKit.response.beta.js, tag=🌤 WeatherKit.api.v2.weather.response, argument=[{NextHour.Provider},{AQI.Provider},{AQI.ReplaceProviders},{AQI.Local.Scale},{AQI.Local.ReplaceScales},{AQI.Local.ConvertUnits},{API.ColorfulClouds.Token},{API.QWeather.Host},{API.QWeather.Token},{API.WAQI.Token}]
 
 [MITM]
-hostname = weatherkit.apple.com
+hostname = weatherkit.apple.com, *.waqi.info
