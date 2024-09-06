@@ -3,7 +3,7 @@ import GEOResourceManifestDownload from "./GEOResourceManifestDownload.mjs";
 
 export default class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.0.9";
+    static Version = "1.0.10";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -186,6 +186,9 @@ export default class GEOResourceManifest {
                 case "VECTOR_SPR_METADATA": // 61
                 case "VECTOR_SPR_ROADS": // 66
                 case "VECTOR_SPR_STANDARD": // 67
+                case "SPR_ASSET_METADATA": // 78?
+                case "VECTOR_SPR_POLAR": // 79?
+                case "VECTOR_SPR_MODELS_OCCLUSION": // 82?
                     switch (settings.TileSet.Munin) {
                         case "AUTO":
                         default:
