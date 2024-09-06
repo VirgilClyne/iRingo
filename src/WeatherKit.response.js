@@ -8,7 +8,7 @@ import QWeather from "./class/QWeather.mjs";
 import AirQuality from "./class/AirQuality.mjs";
 import * as flatbuffers from 'flatbuffers';
 
-log("v1.7.1(4163)");
+log("v1.7.2(4164)");
 
 /***************** Processing *****************/
 // 解构URL
@@ -83,8 +83,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "weatherkit.apple.com":
 									// 路径判断
 									if (PATH.startsWith("/api/v2/weather/")) {
-										const weatherKit2 = new WeatherKit2({ "bb": ByteBuffer, "builder": Builder });
-										body = weatherKit2.decode("all");
+										body = WeatherKit2.decode(ByteBuffer, "all");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											// InjectAirQuality
 											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
@@ -115,7 +114,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											if (!body?.forecastNextHour) body = await InjectForecastNextHour(url, body, Settings);
 											if (body?.forecastNextHour?.metadata?.providerName && !body?.forecastNextHour?.metadata?.providerLogo) body.forecastNextHour.metadata.providerLogo = providerNameToLogo(body?.forecastNextHour?.metadata?.providerName, "v2");
 										};
-										const WeatherData = weatherKit2.encode("all", body);
+										const WeatherData = WeatherKit2.encode(Builder, "all", body);
 										Builder.finish(WeatherData);
 										break;
 									};
