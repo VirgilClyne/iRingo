@@ -1,5 +1,5 @@
 /* README: https://github.com/VirgilClyne/iRingo */
-console.log(' iRingo: 📍 GeoServices.framework β Request')
+console.log(' iRingo: 📍 GeoServices β Request')
 const $platform = platform();
 function platform() {
     if ("undefined" !== typeof $environment && $environment["surge-version"])

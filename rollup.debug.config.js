@@ -17,7 +17,7 @@ export default [
 		output: {
 			file: 'js/GeoServices.request.beta.js',
 			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices.framework β Request')",
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices β Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
@@ -26,7 +26,7 @@ export default [
 		output: {
 			file: 'js/GeoServices.response.beta.js',
 			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices.framework β Response')",
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices β Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
