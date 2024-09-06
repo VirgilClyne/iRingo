@@ -120,12 +120,12 @@
 							"label": "WeatherKit (不进行替换)"
 						},
 						{
-							"key": "QWeather",
-							"label": "和风天气"
-						},
-						{
 							"key": "ColorfulClouds",
 							"label": "彩云天气"
+						},
+						{
+							"key": "QWeather",
+							"label": "和风天气"
 						}
 					],
 					"desc": "始终会使用选定的数据源，填补无降水监测地区的数据。"
@@ -141,12 +141,12 @@
 							"label": "WeatherKit (不进行替换)"
 						},
 						{
-							"key": "QWeather",
-							"label": "和风天气"
-						},
-						{
 							"key": "ColorfulClouds",
 							"label": "彩云天气"
+						},
+						{
+							"key": "QWeather",
+							"label": "和风天气"
 						},
 						{
 							"key": "WAQI",
@@ -163,31 +163,16 @@
 					"desc": "选中的空气质量数据源会被替换。",
 					"items": [
 						{
-							"key": "TWC",
-							"label": "The Weather Channel"
+							"key": "QWeather",
+							"label": "和风天气"
 						},
 						{
 							"key": "BreezoMeter",
 							"label": "BreezoMeter"
 						},
 						{
-							"key": "QWeather",
-							"label": "和风天气"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.WeatherKit.Settings.AQI.Local.ReplaceScales",
-					"name": "[空气质量]需要修改的标准",
-					"val": [
-						"HJ6332012"
-					],
-					"type": "checkboxes",
-					"desc": "选中的空气质量标准会被替换。请注意各国监测的污染物种类可能有所不同，转换算法或API未必适合当地。",
-					"items": [
-						{
-							"key": "HJ6332012",
-							"label": "中国 (HJ 633—2012)"
+							"key": "TWC",
+							"label": "The Weather Channel"
 						}
 					]
 				},
@@ -217,6 +202,21 @@
 					]
 				},
 				{
+					"id": "@iRingo.WeatherKit.Settings.AQI.Local.ReplaceScales",
+					"name": "[空气质量]需要修改的标准",
+					"val": [
+						"HJ6332012"
+					],
+					"type": "checkboxes",
+					"desc": "选中的空气质量标准会被替换。请注意各国监测的污染物种类可能有所不同，转换算法或API未必适合当地。",
+					"items": [
+						{
+							"key": "HJ6332012",
+							"label": "中国 (HJ 633—2012)"
+						}
+					]
+				},
+				{
 					"id": "@iRingo.WeatherKit.Settings.AQI.Local.ConvertUnits",
 					"name": "[空气质量]转换污染物计量单位",
 					"val": false,
@@ -224,12 +224,12 @@
 					"desc": "（不推荐。不同单位互转可能会损失精度，导致数值偏大）将污染物数据替换为转换单位后的数据，方便对照转换后的标准。"
 				},
 				{
-					"id": "@iRingo.WeatherKit.Settings.API.WAQI.Token",
-					"name": "[API]WAQI API 令牌",
+					"id": "@iRingo.WeatherKit.Settings.API.ColorfulClouds.Token",
+					"name": "[API]彩云天气 API 令牌",
 					"val": "",
 					"type": "text",
 					"placeholder": "123456789123456789abcdefghijklmnopqrstuv",
-					"desc": "WAQI API 令牌，填写此字段将自动使用WAQI高级API"
+					"desc": "彩云天气 API 令牌"
 				},
 				{
 					"id": "@iRingo.WeatherKit.Settings.API.QWeather.Host",
@@ -257,12 +257,12 @@
 					"desc": "和风天气 API 令牌"
 				},
 				{
-					"id": "@iRingo.WeatherKit.Settings.API.ColorfulClouds.Token",
-					"name": "[API]彩云天气 API 令牌",
+					"id": "@iRingo.WeatherKit.Settings.API.WAQI.Token",
+					"name": "[API]WAQI API 令牌",
 					"val": "",
 					"type": "text",
 					"placeholder": "123456789123456789abcdefghijklmnopqrstuv",
-					"desc": "彩云天气 API 令牌"
+					"desc": "WAQI API 令牌，填写此字段将自动使用WAQI高级API"
 				}
 			],
 			"author": "@VirgilClyne",
