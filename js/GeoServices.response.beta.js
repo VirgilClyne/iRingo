@@ -7140,7 +7140,7 @@ class GEOResourceManifestDownload {
 
 class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.0.10";
+    static Version = "1.0.11";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -7222,7 +7222,7 @@ class GEOResourceManifest {
                             break;
                         case "HYBRID":
                             tileSet = caches?.CN?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
-                            if (tileSet.validVersion?.[0]) tileSet.validVersion[0].availableTiles = [{ "minX": 0, "minY": 0, "maxX": 1, "maxY": 1, "minZ": 1, "maxZ": 22 }];
+                            if (tileSet?.validVersion?.[0]) tileSet.validVersion[0].availableTiles = [{ "minX": 0, "minY": 0, "maxX": 1, "maxY": 1, "minZ": 1, "maxZ": 22 }];
                             break;
                         case "CN":
                             tileSet = caches?.CN?.tileSet?.find(i => (i.style === tileSet.style && i.scale === tileSet.scale && i.size === tileSet.size));
