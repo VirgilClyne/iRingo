@@ -1,7 +1,7 @@
 import { log } from "../utils/utils.mjs";
 export default class ForecastNextHour {
-	Name = "forecastNextHour";
-	Version = "v1.2.5";
+	Name = "ForecastNextHour";
+	Version = "v1.2.6";
 	Author = "iRingo";
 
 	static #Configs = {
@@ -59,12 +59,21 @@ export default class ForecastNextHour {
 					"STORM": [0.48, Number.MAX_VALUE],
 				},
 				"mmph": {
+					"NO": [0, 0.08],
+					"LIGHT": [0.08, 3.44],
+					"MODERATE": [3.44, 11.33],
+					"HEAVY": [11.33, 51.30],
+					"STORM": [51.30, Number.MAX_VALUE],
+				},
+				/* 新标准不好用
+				"mmph": {
 					"NO": [0, 0.0606],
 					"LIGHT": [0.0606, 0.8989],
 					"MODERATE": [0.8989, 2.87],
 					"HEAVY": [2.87, 12.8638],
 					"STORM": [12.8638, Number.MAX_VALUE],
 				},
+				*/
 			},
 		},
 	};
