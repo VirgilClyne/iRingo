@@ -14,6 +14,6 @@ export var SignificanceType;
     SignificanceType[SignificanceType["UNKNOWN9"] = 9] = "UNKNOWN9";
     SignificanceType[SignificanceType["STATEMENT"] = 10] = "STATEMENT";
     SignificanceType[SignificanceType["UNKNOWN11"] = 11] = "UNKNOWN11";
-    SignificanceType[SignificanceType["UNKNOWN12"] = 12] = "UNKNOWN12";
+    SignificanceType[SignificanceType["ADVISORY"] = 12] = "ADVISORY";
     SignificanceType[SignificanceType["UNKNOWN13"] = 13] = "UNKNOWN13";
 })(SignificanceType || (SignificanceType = {}));

@@ -15,6 +15,6 @@ export enum SignificanceType {
   UNKNOWN9 = 9,
   STATEMENT = 10,
   UNKNOWN11 = 11,
-  UNKNOWN12 = 12,
+  ADVISORY = 12,
   UNKNOWN13 = 13
 }
