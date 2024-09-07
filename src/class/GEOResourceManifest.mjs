@@ -3,7 +3,7 @@ import GEOResourceManifestDownload from "./GEOResourceManifestDownload.mjs";
 
 export default class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.0.11";
+    static Version = "1.1.0";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -509,6 +509,22 @@ export default class GEOResourceManifest {
         return muninBuckets;
     };
 
+    static displayStrings(displayStrings = [], caches = {}, countryCode = "CN") {
+        log(`☑️ Set DisplayStrings`, "");
+        switch (countryCode) {
+            case "CN":
+                displayStrings = caches.XX.displayStrings;
+                break;
+            case "KR":
+                //displayStrings = caches.KR.displayStrings;
+                break;
+            default:
+                //displayStrings = caches.XX.displayStrings;
+                break;
+        };
+        log(`✅ Set DisplayStrings`, "");
+        return displayStrings;
+    };
     static SetTileGroup(body = {}) {
         log(`☑️ Set TileGroups`, "");
         body.tileGroup = body.tileGroup.map(tileGroup => {

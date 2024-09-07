@@ -5,7 +5,7 @@ import setENV from "./function/setENV.mjs";
 import GEOResourceManifest from "./class/GEOResourceManifest.mjs";
 import GEOResourceManifestDownload from "./class/GEOResourceManifestDownload.mjs";
 import { BinaryReader, UnknownFieldHandler } from "@protobuf-ts/runtime";
-log("v4.0.3(1015)");
+log("v4.0.4(1016)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -194,6 +194,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											body.dataSet = GEOResourceManifest.dataSets(body.dataSet, Caches, Settings);
 											body.urlInfoSet = GEOResourceManifest.urlInfoSets(body.urlInfoSet, Caches, Settings, CountryCode);
 											body.muninBucket = GEOResourceManifest.muninBuckets(body.muninBucket, Caches, Settings);
+											body.displayString = GEOResourceManifest.displayStrings(body.displayString, Caches, CountryCode);
 											// releaseInfo
 											//body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
 											log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
