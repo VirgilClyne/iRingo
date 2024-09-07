@@ -5,7 +5,7 @@ import setENV from "./function/setENV.mjs";
 import GEOResourceManifest from "./class/GEOResourceManifest.mjs";
 import GEOResourceManifestDownload from "./class/GEOResourceManifestDownload.mjs";
 import { BinaryReader, UnknownFieldHandler } from "@protobuf-ts/runtime";
-log("v4.0.4(1016)");
+log("v4.0.4(1023)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -144,10 +144,10 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											break;
 										case "/geo_manifest/dynamic/config":
 											body = GEOResourceManifestDownload.decode(rawBody);
-											log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
-											
+											//log(`🚧 调试信息`, `body before: ${JSON.stringify(body)}`, "");
+											/*
 											let UF = UnknownFieldHandler.list(body);
-											log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
+											//log(`🚧 调试信息`, `UF: ${JSON.stringify(UF)}`, "");
 											if (UF) {
 												UF = UF.map(uf => {
 													uf.no; // 22
@@ -158,6 +158,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
 												});
 											};
+											*/
 											const CountryCode = url.searchParams.get("country_code");
 											const ETag = $response.headers?.["Etag"] ?? $response.headers?.["etag"];
 											switch (CountryCode) {
@@ -190,16 +191,16 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											};
 											body.tileSet = GEOResourceManifest.tileSets(body.tileSet, Caches, Settings);
 											body.attribution = GEOResourceManifest.attributions(body.attribution, Caches, CountryCode);
-											body.resource = GEOResourceManifest.resources(body.resource, Caches, Settings, CountryCode);
-											body.dataSet = GEOResourceManifest.dataSets(body.dataSet, Caches, Settings);
+											body.resource = GEOResourceManifest.resources(body.resource, Caches, CountryCode);
+											//body.dataSet = GEOResourceManifest.dataSets(body.dataSet, Caches, CountryCode);
 											body.urlInfoSet = GEOResourceManifest.urlInfoSets(body.urlInfoSet, Caches, Settings, CountryCode);
 											body.muninBucket = GEOResourceManifest.muninBuckets(body.muninBucket, Caches, Settings);
-											body.displayString = GEOResourceManifest.displayStrings(body.displayString, Caches, CountryCode);
+											//body.displayString = GEOResourceManifest.displayStrings(body.displayString, Caches, CountryCode);
 											// releaseInfo
 											//body.releaseInfo = body.releaseInfo.replace(/(\d+\.\d+)/, `$1.${String(Date.now()/1000)}`);
 											log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
-											body = GEOResourceManifest.SetTileGroup(body);
-											log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
+											body = GEOResourceManifest.SetTileGroups(body);
+											//log(`🚧 调试信息`, `body after: ${JSON.stringify(body)}`, "");
 											rawBody = GEOResourceManifestDownload.encode(body);
 											break;
 									};

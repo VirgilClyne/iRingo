@@ -50,7 +50,7 @@ export default class GEOResourceManifestDownload {
             if (typeof resource.updateMethod !== "undefined") resource.updateMethod = Resource_UpdateMethod[resource.updateMethod];
             return resource;
         });
-        log("☑️ GEOResourceManifestDownload.decode", "");
+        log("✅ GEOResourceManifestDownload.decode", "");
         return body;
     };
 
@@ -97,7 +97,7 @@ export default class GEOResourceManifestDownload {
             return resource;
         });
         const rawBody = Resources.toBinary(body);
-        log("☑️ GEOResourceManifestDownload.encode", "");
+        log("✅ GEOResourceManifestDownload.encode", "");
         return rawBody;
     };
 };
