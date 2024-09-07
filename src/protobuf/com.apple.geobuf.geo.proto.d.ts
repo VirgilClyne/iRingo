@@ -234,6 +234,8 @@ export interface SupportedTileSets {
  */
 export declare enum TileSetStyle {
     /**
+     * option allow_alias = true;
+     *
      * @generated from protobuf enum value: RASTER_STANDARD = 0;
      */
     RASTER_STANDARD = 0,
@@ -622,49 +624,20 @@ export declare enum TileSetStyle {
      */
     UNUSED_98 = 98,
     /**
+     * DAVINCI_DEV1 = 58;
+     * DAVINCI_DEV2 = 59;
+     * DAVINCI_DEV3 = 60;
+     * DAVINCI_DEV4 = 61;
+     * DAVINCI_DEV6 = 63;
+     * DAVINCI_DEV7 = 66;
+     * DAVINCI_DEV8 = 67;
+     * DAVINCI_DEV9 = 68;
+     * DAVINCI_BUILDINGS = 73;
+     * VECTOR_RESERVED_1 = 62;
+     *
      * @generated from protobuf enum value: UNUSED_99 = 99;
      */
-    UNUSED_99 = 99,
-    /**
-     * @generated from protobuf enum value: VECTOR_SPR_MERCATOR = 58;
-     */
-    DAVINCI_DEV1 = 58,
-    /**
-     * @generated from protobuf enum value: VECTOR_SPR_MODELS = 59;
-     */
-    DAVINCI_DEV2 = 59,
-    /**
-     * @generated from protobuf enum value: VECTOR_SPR_MATERIALS = 60;
-     */
-    DAVINCI_DEV3 = 60,
-    /**
-     * @generated from protobuf enum value: VECTOR_SPR_METADATA = 61;
-     */
-    DAVINCI_DEV4 = 61,
-    /**
-     * @generated from protobuf enum value: VECTOR_RESERVED_2 = 63;
-     */
-    DAVINCI_DEV6 = 63,
-    /**
-     * @generated from protobuf enum value: VECTOR_SPR_ROADS = 66;
-     */
-    DAVINCI_DEV7 = 66,
-    /**
-     * @generated from protobuf enum value: VECTOR_SPR_STANDARD = 67;
-     */
-    DAVINCI_DEV8 = 67,
-    /**
-     * @generated from protobuf enum value: VECTOR_POI_V2 = 68;
-     */
-    DAVINCI_DEV9 = 68,
-    /**
-     * @generated from protobuf enum value: VECTOR_BUILDINGS_V2 = 73;
-     */
-    DAVINCI_BUILDINGS = 73,
-    /**
-     * @generated from protobuf enum value: VECTOR_TRACKS = 62;
-     */
-    VECTOR_RESERVED_1 = 62
+    UNUSED_99 = 99
 }
 /**
  * @generated from protobuf enum com.apple.geo.protobuf.geo.TileScale

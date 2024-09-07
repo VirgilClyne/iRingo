@@ -3,7 +3,7 @@ import GEOResourceManifestDownload from "./GEOResourceManifestDownload.mjs";
 
 export default class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.1.28";
+    static Version = "1.2.0";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -47,8 +47,12 @@ export default class GEOResourceManifest {
         };
     };
 
-    static tileSets(tileSet = [], caches = {}, settings = {}) {
-        log(`☑️ Set TileSets`, "");
+    static tileSets(tileSet = [], caches = {}, settings = {}, countryCode = "CN") {
+        log(`☑️ Set TileSets 0009`, "");
+        //let tileNames = [];
+        //caches.XX.tileSet.forEach(tile => tileNames.push(tile.style));
+        //caches.CN.tileSet.forEach(tile => tileNames.push(tile.style));
+        //tileNames = [...new Set(tileNames)];
         /*
         // 填补数据组
         caches.CN.tileSet = caches.CN.tileSet.map(tile => {
@@ -87,13 +91,13 @@ export default class GEOResourceManifest {
                         default:
                             break;
                         case "CN":
-                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                         case "XX":
-                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                     };
-                    log(`⚠️ Satellite baseURL: ${tile?.style}`, "");
+                    log(`⚠️ Satellite baseURL: ${tile?.baseURL}`, "");
                     break;
                 case "VECTOR_TRAFFIC_SEGMENTS_FOR_RASTER": // 2 交通状况分段（卫星地图:显示交通状况）?
                 case "VECTOR_TRAFFIC_INCIDENTS_FOR_RASTER": // 3 交通状况事件（卫星地图:显示交通状况）?
@@ -104,17 +108,22 @@ export default class GEOResourceManifest {
                 case "VECTOR_TRAFFIC_STATIC": // 26 交通状况静态?
                 case "VECTOR_TRAFFIC_SKELETON_WITH_HISTORICAL": // 28 交通状况骨架（卫星地图:显示历史交通状况）?
                 case "VECTOR_TRAFFIC_V2": // 86 交通状况V2
+                    log(`⚠️ Traffic style: ${tile?.style}`, "");
+                    //tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
+                    /*
                     switch (settings.TileSet.Traffic) {
                         case "HYBRID":
                         default:
                             break;
                         case "CN":
-                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                         case "XX":
-                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                     };
+                    */
+                    log(`⚠️ Traffic baseURL: ${tile?.baseURL}`, "");
                     break;
                 case "VECTOR_POI": // 13 兴趣点
                 case "VECTOR_POI_V2": // 68 兴趣点V2
@@ -123,17 +132,20 @@ export default class GEOResourceManifest {
                 case "POI_DP_BUSYNESS": // 75 兴趣点DP繁忙程度?
                 case "VECTOR_POI_V2_UPDATE": // 84 兴趣点V2更新
                     log(`⚠️ POI style: ${tile?.style}`, "");
+                    //tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
+                    /*
                     switch (settings.TileSet.POI) {
                         case "HYBRID":
                         default:
                             break;
                         case "CN":
-                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                         case "XX":
-                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                     };
+                    */
                     log(`⚠️ POI baseURL: ${tile?.baseURL}`, "");
                     break;
                 case "SPUTNIK_METADATA": // 14 卫星地图（3D/俯瞰）元数据
@@ -154,10 +166,10 @@ export default class GEOResourceManifest {
                         default:
                             break;
                         case "CN":
-                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                         case "XX":
-                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                     };
                     log(`⚠️ Flyover baseURL: ${tile?.baseURL}`, "");
@@ -181,32 +193,49 @@ export default class GEOResourceManifest {
                         default:
                             break;
                         case "CN":
-                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                         case "XX":
-                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                     };
                     log(`⚠️ Munin baseURL: ${tile?.baseURL}`, "");
                     break;
-                case "VECTOR_TOPOGRAPHIC": // 83 地形图? 
-                case "VECTOR_REGION_METADATA": // 88 区域元数据? 
+                case "COARSE_LOCATION_POLYGONS": // 65 粗略位置多边形?
+                case "VL_METADATA": // 70 VL 元数据?
+                case "VL_DATA": // 71 VL 数据?
+                case "PROACTIVE_APP_CLIP": // 72 主动式App剪辑?
+                case "SMART_INTERFACE_SELECTION": // 76 智能界面选区?
+                case "SMART_DATA_MODE": // 80 智能数据模式?
+                case "VECTOR_TOPOGRAPHIC": // 83 地形图?
+                case "VECTOR_LIVE_DATA_UPDATES": // 85 实时数据更新?
+                case "VECTOR_ROAD_SELECTION": // 87 道路选区?
+                case "VECTOR_REGION_METADATA": // 88 区域元数据?
+                case "RAY_TRACING": // 89 光线追踪?
+                case "VECTOR_CONTOURS": // 90 等高线?
+                case "UNUSED_91": // 91 未使用
+                case "UNUSED_92": // 92 未使用
+                case "UNUSED_93": // 93 未使用
+                case "UNUSED_94": // 94 未使用
+                case "UNUSED_95": // 95 未使用
                 case "UNUSED_99": // 99 未使用
                     log(`⚠️ Others style: ${tile?.style}`, "");
                     /*
-                    switch (settings.TileSet.Map) {
-                        case "HYBRID":
-                        default:
-                            break;
+                    switch (countryCode) {
                         case "CN":
-                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style));
+                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
-                        case "XX":
-                            tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style));
+                        case "KR":
+                        default:
+                            tile = caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.CN?.tileSet?.find(i => (i.style === tile.style)) || tile;
                             break;
                     };
                     */
                     log(`⚠️ Others baseURL: ${tile?.baseURL}`, "");
+                    break;
+                default:
+                    log(`⚠️ default style: ${tile?.style}`, "");
+                    log(`⚠️ default baseURL: ${tile?.baseURL}`, "");
                     break;
             };
             return tile;

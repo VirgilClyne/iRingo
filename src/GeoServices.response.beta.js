@@ -190,7 +190,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 												};
 											};
-											body.tileSet = GEOResourceManifest.tileSets(body.tileSet, Caches, Settings);
+											body.tileSet = GEOResourceManifest.tileSets(body.tileSet, Caches, Settings, CountryCode);
 											body.attribution = GEOResourceManifest.attributions(body.attribution, Caches, CountryCode);
 											body.resource = GEOResourceManifest.resources(body.resource, Caches, CountryCode);
 											//body.dataSet = GEOResourceManifest.dataSets(body.dataSet, Caches, CountryCode);

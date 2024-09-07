@@ -5,12 +5,12 @@ import { TileSetStyle, TileScale, TileSize, GenericTileType, TileSet_TileSetVers
 
 export default class GEOResourceManifestDownload {
     static Name = "GEOResourceManifestDownload";
-    static Version = "1.0.6";
+    static Version = "1.0.7";
 	static Author = "Virgil Clyne";
     static decode(rawBody = new Uint8Array([])) {
         log("☑️ GEOResourceManifestDownload.decode", "");
         const body = Resources.fromBinary(rawBody);
-        if (body.tileSet) body.tileSet = body.tileSet.map((tile) => {
+        if (typeof body.tileSet !== "undefined") body.tileSet = body.tileSet.map((tile) => {
             if (typeof tile.style !== "undefined") tile.style = TileSetStyle[tile.style];
             if (typeof tile.validVersion !== "undefined") tile.validVersion = tile.validVersion.map(version => {
                 if (typeof version.genericTile?.tileType !== "undefined") version.genericTile.tileType = GenericTileType[version.genericTile.tileType];
@@ -56,7 +56,7 @@ export default class GEOResourceManifestDownload {
 
     static encode(body = {}) {
         log("☑️ GEOResourceManifestDownload.encode", "");
-        if (body.tileSet) body.tileSet = body.tileSet.map((tile) => {
+        if (typeof body.tileSet !== "undefined") body.tileSet = body.tileSet.map((tile) => {
             if (typeof tile.style !== "undefined") tile.style = TileSetStyle[tile.style];
             if (typeof tile.validVersion !== "undefined") tile.validVersion = tile.validVersion.map(version => {
                 if (typeof version.genericTile?.tileType !== "undefined") version.genericTile.tileType = GenericTileType[version.genericTile.tileType];
