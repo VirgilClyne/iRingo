@@ -4,7 +4,8 @@ import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 import GEOResourceManifest from "./class/GEOResourceManifest.mjs";
 import GEOResourceManifestDownload from "./class/GEOResourceManifestDownload.mjs";
-log("v4.0.3(1015)");
+log("v4.0.3(1016)");
+Storage.setItem("@iRingo.Maps.Caches", "");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
