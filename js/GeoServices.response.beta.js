@@ -7648,7 +7648,7 @@ class GEOResourceManifest {
 
 }
 
-log("v4.0.2(1012)");
+log("v4.0.3(1015)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -7796,25 +7796,31 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
 												});
 											}											const CountryCode = url.searchParams.get("country_code");
-											const ETag = $response.headers?.["Etag"] ?? $response.headers?.["etag"];
+											$response.headers?.["Etag"] ?? $response.headers?.["etag"];
 											switch (CountryCode) {
 												case "CN":
-													GEOResourceManifest.cacheResourceManifest(body, Caches, "CN", ETag);
+													//GEOResourceManifest.cacheResourceManifest(body, Caches, "CN", ETag);
+													Caches.CN = body;
 													const { ETag: XXETag, body: XXBody } = await GEOResourceManifest.downloadResourceManifest($request, "US");
-													GEOResourceManifest.cacheResourceManifest(XXBody, Caches, "XX", XXETag);
+													Caches.XX = XXBody;
+													//GEOResourceManifest.cacheResourceManifest(XXBody, Caches, "XX", XXETag);
 													// announcementsSupportedLanguage
 													//body.announcementsSupportedLanguage?.push?.("zh-CN");
 													//body.announcementsSupportedLanguage?.push?.("zh-TW");
 													break;
 												case "KR": {
-													GEOResourceManifest.cacheResourceManifest(body, Caches, "KR", ETag);
+													//GEOResourceManifest.cacheResourceManifest(body, Caches, "KR", ETag);
+													Caches.KR = body;
 													const { ETag: CNETag, body: CNBody } = await GEOResourceManifest.downloadResourceManifest($request, "CN");
-													GEOResourceManifest.cacheResourceManifest(CNBody, Caches, "CN", CNETag);
+													Caches.CN = CNBody;
+													//GEOResourceManifest.cacheResourceManifest(CNBody, Caches, "CN", CNETag);
 													break;
 												}												default: {
-													GEOResourceManifest.cacheResourceManifest(body, Caches, "XX", ETag);
+													//GEOResourceManifest.cacheResourceManifest(body, Caches, "XX", ETag);
+													Caches.XX = body;
 													const { ETag: CNETag, body: CNBody } = await GEOResourceManifest.downloadResourceManifest($request, "CN");
-													GEOResourceManifest.cacheResourceManifest(CNBody, Caches, "CN", CNETag);
+													Caches.CN = CNBody;
+													//GEOResourceManifest.cacheResourceManifest(CNBody, Caches, "CN", CNETag);
 													break;
 												}											}											body.tileSet = GEOResourceManifest.tileSets(body.tileSet, Caches, Settings);
 											body.attribution = GEOResourceManifest.attributions(body.attribution, Caches, CountryCode);
