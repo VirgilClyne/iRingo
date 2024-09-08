@@ -5,7 +5,7 @@ import { TileSetStyle, TileScale, TileSize, GenericTileType, TileSet_TileSetVers
 
 export default class GEOResourceManifestDownload {
     static Name = "GEOResourceManifestDownload";
-    static Version = "1.0.7";
+    static Version = "1.0.9";
 	static Author = "Virgil Clyne";
     static decode(rawBody = new Uint8Array([])) {
         log("☑️ GEOResourceManifestDownload.decode", "");
@@ -13,7 +13,10 @@ export default class GEOResourceManifestDownload {
         if (typeof body.tileSet !== "undefined") body.tileSet = body.tileSet.map((tile) => {
             if (typeof tile.style !== "undefined") tile.style = TileSetStyle[tile.style];
             if (typeof tile.validVersion !== "undefined") tile.validVersion = tile.validVersion.map(version => {
-                if (typeof version.genericTile?.tileType !== "undefined") version.genericTile.tileType = GenericTileType[version.genericTile.tileType];
+                if (typeof version.genericTile !== "undefined") version.genericTile = version.genericTile.map(genericTile => {
+                    if (typeof genericTile.tileType !== "undefined") genericTile.tileType = GenericTileType[genericTile.tileType];
+                    return genericTile;
+                });
                 return version;
             });
             if (typeof tile.scale !== "undefined") tile.scale = TileScale[tile.scale];
@@ -59,7 +62,10 @@ export default class GEOResourceManifestDownload {
         if (typeof body.tileSet !== "undefined") body.tileSet = body.tileSet.map((tile) => {
             if (typeof tile.style !== "undefined") tile.style = TileSetStyle[tile.style];
             if (typeof tile.validVersion !== "undefined") tile.validVersion = tile.validVersion.map(version => {
-                if (typeof version.genericTile?.tileType !== "undefined") version.genericTile.tileType = GenericTileType[version.genericTile.tileType];
+                if (typeof version.genericTile !== "undefined") version.genericTile = version.genericTile.map(genericTile => {
+                    if (typeof genericTile.tileType !== "undefined") genericTile.tileType = GenericTileType[genericTile.tileType];
+                    return genericTile;
+                });
                 return version;
             });
             if (typeof tile.scale !== "undefined") tile.scale = TileScale[tile.scale];
