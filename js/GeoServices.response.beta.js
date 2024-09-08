@@ -7119,7 +7119,7 @@ class GEOResourceManifestDownload {
 
 class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.2.0";
+    static Version = "1.2.2";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -7160,7 +7160,7 @@ class GEOResourceManifest {
         }    };
 
     static tileSets(tileSet = [], caches = {}, settings = {}, countryCode = "CN") {
-        log(`☑️ Set TileSets 0025`, "");
+        log(`☑️ Set TileSets`, "");
         //let tileNames = [];
         //caches.XX.tileSet.forEach(tile => tileNames.push(tile.style));
         //caches.CN.tileSet.forEach(tile => tileNames.push(tile.style));
@@ -7330,9 +7330,9 @@ class GEOResourceManifest {
                 case "VECTOR_TOPOGRAPHIC": // 83 地形图?
                 case "VECTOR_ROAD_SELECTION": // 87 道路选区?
                 case "VECTOR_REGION_METADATA": // 88 区域元数据?
-                    log(`⚠️ TEST style: ${tile?.style}`, "");
+                    //log(`⚠️ TEST style: ${tile?.style}`, "");
                     //tile = caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale && i.size === tile.size)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style && i.scale === tile.scale)) || caches?.XX?.tileSet?.find(i => (i.style === tile.style)) || tile;
-                    log(`⚠️ TEST baseURL: ${tile?.baseURL}`, "");
+                    //log(`⚠️ TEST baseURL: ${tile?.baseURL}`, "");
                     break;
                 case "VECTOR_TRACKS": // 62 轨道?
                 case "COARSE_LOCATION_POLYGONS": // 65 粗略位置多边形?
@@ -7349,7 +7349,8 @@ class GEOResourceManifest {
                 case "UNUSED_94": // 94 未使用
                 case "UNUSED_95": // 95 未使用
                 case "UNUSED_99": // 99 未使用
-                    log(`⚠️ Others style: ${tile?.style}`, "");
+                default:
+                    log(`⚠️ default style: ${tile?.style}`, "");
                     /*
                     switch (countryCode) {
                         case "CN":
@@ -7361,10 +7362,6 @@ class GEOResourceManifest {
                             break;
                     };
                     */
-                    //log(`⚠️ Others baseURL: ${tile?.baseURL}`, "");
-                    break;
-                default:
-                    log(`⚠️ default style: ${tile?.style}`, "");
                     log(`⚠️ default baseURL: ${tile?.baseURL}`, "");
                     break;
             }            return tile;

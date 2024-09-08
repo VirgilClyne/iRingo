@@ -4,7 +4,7 @@ import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 import GEOResourceManifest from "./class/GEOResourceManifest.mjs";
 import GEOResourceManifestDownload from "./class/GEOResourceManifestDownload.mjs";
-log("v4.0.3(1016)");
+log("v4.0.4(1024)");
 Storage.setItem("@iRingo.Maps.Caches", "");
 /***************** Processing *****************/
 // 解构URL
@@ -154,14 +154,14 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 												};
 											};
-											body.tileSet = GEOResourceManifest.tileSets(body.tileSet, Caches, Settings);
+											body.tileSet = GEOResourceManifest.tileSets(body.tileSet, Caches, Settings, CountryCode);
 											body.attribution = GEOResourceManifest.attributions(body.attribution, Caches, CountryCode);
-											body.resource = GEOResourceManifest.resources(body.resource, Caches, Settings, CountryCode);
-											body.dataSet = GEOResourceManifest.dataSets(body.dataSet, Caches, Settings);
+											body.resource = GEOResourceManifest.resources(body.resource, Caches, CountryCode);
+											//body.dataSet = GEOResourceManifest.dataSets(body.dataSet, Caches, CountryCode);
 											body.urlInfoSet = GEOResourceManifest.urlInfoSets(body.urlInfoSet, Caches, Settings, CountryCode);
 											body.muninBucket = GEOResourceManifest.muninBuckets(body.muninBucket, Caches, Settings);
 											log(`🚧 releaseInfo: ${body.releaseInfo}`, "");
-											body = GEOResourceManifest.SetTileGroup(body);
+											body = GEOResourceManifest.SetTileGroups(body);
 											rawBody = GEOResourceManifestDownload.encode(body);
 											break;
 									};
