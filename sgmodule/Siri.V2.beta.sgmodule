@@ -1,10 +1,10 @@
-#!name= iRingo: Apple Intelligence & Siri V2 β
-#!desc=V2 & iOS 17.6⬆️ & BETA\n全面自定义「Apple Intelligence与Siri」的功能。\n⚠️从iOS 18起，「Siri与搜索」已拆分为「搜索」和「Apple Intelligence与Siri」两个功能\n⚠️本模块不含自定义「搜索」功能
+#!name= iRingo: Siri β
+#!desc=BETA: iOS 18\n全面自定义「Siri」的功能。\n⚠️本模块不含自定义「搜索」功能
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri.Beta
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索
-#!icon=https://developer.apple.com/assets/elements/icons/apple-intelligence/apple-intelligence-96x96_2x.png
+#!icon=https://upload.wikimedia.org/wikipedia/commons/d/de/Logo_Apple_Siri_iOS_2024.svg
 #!category= iRingo
 #!arguments=CountryCode:US
 #!arguments-desc=CountryCode: 国家或地区代码
