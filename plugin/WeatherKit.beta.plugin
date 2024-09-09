@@ -27,4 +27,4 @@ http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/ requir
 http-response ^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/ requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/WeatherKit.response.beta.js, tag=🌤 WeatherKit.api.v2.weather.response, argument=[{NextHour.Provider},{AQI.Provider},{AQI.ReplaceProviders},{AQI.Local.Scale},{AQI.Local.ReplaceScales},{AQI.Local.ConvertUnits},{API.ColorfulClouds.Token},{API.QWeather.Host},{API.QWeather.Token},{API.WAQI.Token}]
 
 [MITM]
-hostname = weatherkit.apple.com, *.waqi.info
+hostname = weatherkit.apple.com, weather-*.apple.com, *api.qweather.com, api.caiyunapp.com, *.waqi.info

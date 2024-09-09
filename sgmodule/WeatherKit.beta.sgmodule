@@ -17,4 +17,4 @@ DOMAIN,weather-analytics-events.apple.com,REJECT-DROP
 🌤 WeatherKit.api.v2.weather.response = type=http-response, pattern=^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/, requires-body=1, binary-body-mode=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/WeatherKit.response.beta.js, argument=NextHour.Provider={{{NextHour.Provider}}}&AQI.Provider={{{AQI.Provider}}}&AQI.ReplaceProviders={{{AQI.ReplaceProviders}}}&AQI.Local.Scale={{{AQI.Local.Scale}}}&AQI.Local.ReplaceScales={{{AQI.Local.ReplaceScales}}}&AQI.Local.ConvertUnits={{{AQI.Local.ConvertUnits}}}&API.ColorfulClouds.Token={{{API.ColorfulClouds.Token}}}&API.QWeather.Host={{{API.QWeather.Host}}}&API.QWeather.Token={{{API.QWeather.Token}}}&API.WAQI.Token={{{API.WAQI.Token}}}
 
 [MITM]
-hostname = %APPEND% weatherkit.apple.com, *.waqi.info
+hostname = %APPEND% weatherkit.apple.com, weather-*.apple.com, *api.qweather.com, api.caiyunapp.com, *.waqi.info
