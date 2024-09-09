@@ -1,29 +1,25 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 import pako from "./pako/dist/pako.esm.mjs";
 import addgRPCHeader from "./function/addgRPCHeader.mjs";
 
-import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
-
-const $ = new ENV(" iRingo: 🔍 Siri & Search v4.0.0(4001) response.beta");
+log("v4.0.1(4002)");
 
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.pathname.split("/").filter(Boolean);
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -42,7 +38,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -52,12 +48,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/plist":
 				case "application/x-plist":
 					//body = XML.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					break;
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
@@ -76,16 +72,16 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									//body.feedback_url = body?.feedback_url || "https:\/\/fbs.smoot.apple.com\/fb";
 									if (body?.enabled_domains) {
 										body.enabled_domains = [...new Set([...body?.enabled_domains ?? [], ...Settings.Domains])];
-										$.log(`🎉 领域列表`, `enabled_domains: ${JSON.stringify(body.enabled_domains)}`, "");
+										log(`🎉 领域列表`, `enabled_domains: ${JSON.stringify(body.enabled_domains)}`, "");
 									}
 									if (body?.scene_aware_lookup_enabled_domains) {
 										body.scene_aware_lookup_enabled_domains = [...new Set([...body?.scene_aware_lookup_enabled_domains ?? [], ...Settings.Domains])];
-										$.log(`🎉 领域列表`, `scene_aware_lookup_enabled_domains: ${JSON.stringify(body.scene_aware_lookup_enabled_domains)}`, "");
+										log(`🎉 领域列表`, `scene_aware_lookup_enabled_domains: ${JSON.stringify(body.scene_aware_lookup_enabled_domains)}`, "");
 									}
 									body.min_query_len = 3;
 									let Overrides = body?.overrides;
 									if (Overrides) [...new Set([...Object.keys(Overrides), ...Settings.Functions])].forEach(Function => {
-										$.log(`🎉 覆盖列表`, `Function: ${Function}`, "");
+										log(`🎉 覆盖列表`, `Function: ${Function}`, "");
 										//_.set(Overrides, `${Function}.enabled`, true);
 										//_.set(Overrides, `${Function}.feedback_enabled`, true);
 										switch (Function) {
@@ -183,9 +179,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/grpc":
 				case "application/grpc+proto":
 				case "application/octet-stream":
-					//$.log(`🚧 $response.body: ${JSON.stringify($response.body)}`, "");
-					let rawBody = $.isQuanX() ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
-					//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+					//log(`🚧 $response.body: ${JSON.stringify($response.body)}`, "");
+					let rawBody = ($platform === "Quantumult X") ? new Uint8Array($response.bodyBytes ?? []) : $response.body ?? new Uint8Array();
+					//log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
 					switch (FORMAT) {
 						case "application/protobuf":
 						case "application/x-protobuf":
@@ -240,5 +236,5 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response))
+	.catch((e) => logError(e))
+	.finally(() => done($response))

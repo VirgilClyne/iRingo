@@ -1,6 +1,4 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
@@ -10,7 +8,7 @@ import modifyPegasusQueryContext from "./function/modifyPegasusQueryContext.mjs"
 
 import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 
-const $ = new ENV(" iRingo: 🔍 Siri v4.0.8(4036) request.beta");
+log("v4.0.9(4037)");
 
 // 构造回复数据
 let $response = undefined;
@@ -18,16 +16,16 @@ let $response = undefined;
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.pathname.split("/").filter(Boolean);
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -47,14 +45,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/x-www-form-urlencoded":
 						case "text/plain":
 						default:
-							//$.log(`🚧 body: ${body}`, "");
+							//log(`🚧 body: ${body}`, "");
 							break;
 						case "application/x-mpegURL":
 						case "application/x-mpegurl":
 						case "application/vnd.apple.mpegurl":
 						case "audio/mpegurl":
 							//body = M3U8.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
@@ -64,19 +62,19 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/plist":
 						case "application/x-plist":
 							//body = XML.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = XML.stringify(body);
 							break;
 						case "text/vtt":
 						case "application/vtt":
 							//body = VTT.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = VTT.stringify(body);
 							break;
 						case "text/json":
 						case "application/json":
 							//body = JSON.parse($request.body ?? "{}");
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = JSON.stringify(body);
 							break;
 						case "application/protobuf":
@@ -85,9 +83,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/grpc":
 						case "application/grpc+proto":
 						case "applecation/octet-stream":
-							//$.log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
-							let rawBody = $.isQuanX() ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
-							//$.log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
+							//log(`🚧 $request.body: ${JSON.stringify($request.body)}`, "");
+							let rawBody = ($platform === "Quantumult X") ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
+							//log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody)}`, "");
 							/******************  initialization start  *******************/
 							class Any$Type extends MessageType {
 								constructor() {
@@ -379,9 +377,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const M5M14 = new M5M14$Type();
 													/******************  initialization finish  *******************/
 													let data = SiriPegasusRequest.fromBinary(body);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													let UF = UnknownFieldHandler.list(data);
-													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													//log(`🚧 UF: ${JSON.stringify(UF)}`, "");
 													if (UF) {
 														UF = UF.map(uf => {
 															//uf.no; // 22
@@ -389,7 +387,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															// use the binary reader to decode the raw data:
 															let reader = new BinaryReader(uf.data);
 															let addedNumber = reader.int32(); // 7777
-															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+															log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													};
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
@@ -409,7 +407,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																const ApplicationInfomationRequest = new ApplicationInfomationRequest$Type();
 																/******************  initialization finish  *******************/
 																const AppInfo = ApplicationInfomationRequest.fromBinary(executableQueryString?.m2?.supplement?.value);
-																$.log(`🚧 AppInfo: ${JSON.stringify(AppInfo)}`, "");
+																log(`🚧 AppInfo: ${JSON.stringify(AppInfo)}`, "");
 																switch (AppInfo?.bundleID) {
 																	case "com.apple.weather":
 																	case "com.heweather.weatherapp":
@@ -433,7 +431,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														};
 													});
 													if (fixLocation) delete data?.queryContext?.location;
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = SiriPegasusRequest.toBinary(data);
 													break;
 												};
@@ -450,9 +448,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const LookupSearchRequest = new LookupSearchRequest$Type();
 													/******************  initialization finish  *******************/
 													let data = LookupSearchRequest.fromBinary(body);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													let UF = UnknownFieldHandler.list(data);
-													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													//log(`🚧 UF: ${JSON.stringify(UF)}`, "");
 													if (UF) {
 														UF = UF.map(uf => {
 															//uf.no; // 22
@@ -460,11 +458,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															// use the binary reader to decode the raw data:
 															let reader = new BinaryReader(uf.data);
 															let addedNumber = reader.int32(); // 7777
-															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+															log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													};
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = LookupSearchRequest.toBinary(data);
 													break;
 												};
@@ -480,9 +478,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const EngagementRequest = new EngagementRequest$Type();
 													/******************  initialization finish  *******************/
 													let data = EngagementRequest.fromBinary(body);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													let UF = UnknownFieldHandler.list(data);
-													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													//log(`🚧 UF: ${JSON.stringify(UF)}`, "");
 													if (UF) {
 														UF = UF.map(uf => {
 															//uf.no; // 22
@@ -490,11 +488,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															// use the binary reader to decode the raw data:
 															let reader = new BinaryReader(uf.data);
 															let addedNumber = reader.int32(); // 7777
-															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+															log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													};
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = EngagementRequest.toBinary(data);
 													break;
 												};
@@ -511,9 +509,9 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													const ZkwSuggestRequest = new ZkwSuggestRequest$Type();
 													/******************  initialization finish  *******************/
 													let data = ZkwSuggestRequest.fromBinary(body);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													let UF = UnknownFieldHandler.list(data);
-													//$.log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													//log(`🚧 UF: ${JSON.stringify(UF)}`, "");
 													if (UF) {
 														UF = UF.map(uf => {
 															//uf.no; // 22
@@ -521,11 +519,11 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 															// use the binary reader to decode the raw data:
 															let reader = new BinaryReader(uf.data);
 															let addedNumber = reader.int32(); // 7777
-															$.log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+															log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
 														});
 													};
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
-													$.log(`🚧 data: ${JSON.stringify(data)}`, "");
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = ZkwSuggestRequest.toBinary(data);
 													break;
 												};
@@ -547,7 +545,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				default:
 					Locale = Locale ?? url.searchParams.get("locale");
 					[Language, CountryCode] = Locale?.split("_") ?? [];
-					$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
+					log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
 					switch (Settings.CountryCode) {
 						case "AUTO":
 							Settings.CountryCode = CountryCode;
@@ -665,30 +663,35 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 			};
 			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
-				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
+				//log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+				switch ($platform) {
+					default:
+						done($response);
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = 200;
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done({ response: $response });
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
-				$.done($request);
+				//log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
+				done($request);
 				break;
 		};
 	})

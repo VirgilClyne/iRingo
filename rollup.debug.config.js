@@ -72,7 +72,7 @@ export default [
 		output: {
 			file: 'js/Siri.request.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🔍 Siri β Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
@@ -81,7 +81,7 @@ export default [
 		output: {
 			file: 'js/Siri.response.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🔍 Siri β Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
