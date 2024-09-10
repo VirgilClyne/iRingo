@@ -7,90 +7,6 @@
 	"repo": "https://github.com/VirgilClyne/iRingo",
 	"apps": [
 		{
-			"id": "iRingo.Location.beta",
-			"name": "📍 定位服务 β",
-			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
-				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
-			],
-			"keys": [
-				"@iRingo.Location.Settings",
-				"@iRingo.Location.Caches"
-			],
-			"settings": [
-				{
-					"id": "@iRingo.Location.Settings.Switch",
-					"name": "总功能开关",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用此APP修改"
-				},
-				{
-					"id": "@iRingo.Location.Settings.PEP.GCC",
-					"name": "[地区检测]地理国家或地区代码",
-					"val": "US",
-					"type": "selects",
-					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "🇺🇳自动（跟随地区检测结果）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "🇭🇰香港"
-						},
-						{
-							"key": "TW",
-							"label": "🇹🇼台湾"
-						},
-						{
-							"key": "SG",
-							"label": "🇸🇬新加坡"
-						},
-						{
-							"key": "US",
-							"label": "🇺🇸美国"
-						},
-						{
-							"key": "JP",
-							"label": "🇯🇵日本"
-						},
-						{
-							"key": "AU",
-							"label": "🇦🇺澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "🇬🇧英国"
-						},
-						{
-							"key": "KR",
-							"label": "🇰🇷韩国"
-						},
-						{
-							"key": "CA",
-							"label": "🇨🇦加拿大"
-						},
-						{
-							"key": "IE",
-							"label": "🇮🇪爱尔兰"
-						}
-					]
-				}
-			],
-			"author": "@VirgilClyne",
-			"repo": "https://github.com/VirgilClyne/iRingo/",
-			"icons": [
-				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png",
-				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png"
-			]
-		},
-		{
 			"id": "iRingo.WeatherKit.beta",
 			"name": "🌤 天气服务 β",
 			"descs_html": [
@@ -270,6 +186,90 @@
 			"icons": [
 				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp",
 				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp"
+			]
+		},
+		{
+			"id": "iRingo.Location.beta",
+			"name": "📍 定位服务 β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
+				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
+			],
+			"keys": [
+				"@iRingo.Location.Settings",
+				"@iRingo.Location.Caches"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.Location.Settings.Switch",
+					"name": "总功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此APP修改"
+				},
+				{
+					"id": "@iRingo.Location.Settings.PEP.GCC",
+					"name": "[地区检测]地理国家或地区代码",
+					"val": "US",
+					"type": "selects",
+					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "🇺🇳自动（跟随地区检测结果）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "🇭🇰香港"
+						},
+						{
+							"key": "TW",
+							"label": "🇹🇼台湾"
+						},
+						{
+							"key": "SG",
+							"label": "🇸🇬新加坡"
+						},
+						{
+							"key": "US",
+							"label": "🇺🇸美国"
+						},
+						{
+							"key": "JP",
+							"label": "🇯🇵日本"
+						},
+						{
+							"key": "AU",
+							"label": "🇦🇺澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "🇬🇧英国"
+						},
+						{
+							"key": "KR",
+							"label": "🇰🇷韩国"
+						},
+						{
+							"key": "CA",
+							"label": "🇨🇦加拿大"
+						},
+						{
+							"key": "IE",
+							"label": "🇮🇪爱尔兰"
+						}
+					]
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/",
+			"icons": [
+				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png",
+				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png"
 			]
 		},
 		{
