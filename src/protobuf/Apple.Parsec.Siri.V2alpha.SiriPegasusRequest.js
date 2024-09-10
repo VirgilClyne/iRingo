@@ -30,7 +30,6 @@ class QueryFeatures$Type extends MessageType {
         super("QueryFeatures", [
             { no: 1, name: "query", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "qsyn", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: "executedDomain", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => DomainResult },
             { no: 2002, name: "executableQueryString", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => ExecutableQueryString }
         ]);
     }
@@ -43,7 +42,6 @@ export const QueryFeatures = new QueryFeatures$Type();
 class DomainResult$Type extends MessageType {
     constructor() {
         super("DomainResult", [
-            { no: 1, name: "snippet", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "canonicalID", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "resultEntities", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 7, name: "entityType", kind: "scalar", T: 5 /*ScalarType.INT32*/ }

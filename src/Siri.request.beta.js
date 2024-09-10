@@ -11,7 +11,7 @@ import { SiriPegasusRequest } from "./protobuf/Apple.Parsec.Siri.V2alpha.SiriPeg
 import { SiriPegasusContext } from "./protobuf/Apple.Parsec.Siri.V2alpha.SiriPegasusContext";
 import { PegasusQueryContext } from "./protobuf/Apple.Parsec.Search.PegasusQueryContext";
 
-log("v4.1.0(4039)");
+log("v4.1.0(4040)");
 
 // 构造回复数据
 let $response = undefined;
@@ -169,6 +169,8 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 															case "type.googleapis.com/apple.parsec.siri.v2alpha.SiriKitAppInfo":
 																break;
 															case "type.googleapis.com/apple.parsec.siri.v2alpha.AmpUserState":
+																break;
+															case "type.googleapis.com/apple.parsec.siri.v2alpha.AudioQueueStateInfo":
 																break;
 														};
 													});

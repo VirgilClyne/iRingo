@@ -12111,7 +12111,6 @@ class QueryFeatures$Type extends MessageType {
         super("QueryFeatures", [
             { no: 1, name: "query", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "qsyn", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: "executedDomain", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => DomainResult },
             { no: 2002, name: "executableQueryString", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => ExecutableQueryString }
         ]);
     }
@@ -12124,7 +12123,6 @@ const QueryFeatures = new QueryFeatures$Type();
 class DomainResult$Type extends MessageType {
     constructor() {
         super("DomainResult", [
-            { no: 1, name: "snippet", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "canonicalID", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "resultEntities", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 7, name: "entityType", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
@@ -12134,7 +12132,7 @@ class DomainResult$Type extends MessageType {
 /**
  * @generated MessageType for protobuf message DomainResult
  */
-const DomainResult = new DomainResult$Type();
+new DomainResult$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class ExecutableQueryString$Type extends MessageType {
     constructor() {
@@ -12160,7 +12158,7 @@ class M2$Type extends MessageType {
  */
 const M2 = new M2$Type();
 
-log("v4.1.0(4039)");
+log("v4.1.0(4040)");
 
 // 构造回复数据
 let $response = undefined;

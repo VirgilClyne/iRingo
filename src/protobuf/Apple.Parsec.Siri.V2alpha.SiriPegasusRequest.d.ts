@@ -45,10 +45,11 @@ export interface QueryFeatures {
      */
     qsyn: string;
     /**
-     * @generated from protobuf field: repeated DomainResult executedDomain = 6;
-     */
-    executedDomain: DomainResult[];
-    /**
+     * pattern = 3; //?
+     * algo = 4; //?
+     * flowDomain = 5; //?
+     * repeated DomainResult executedDomain = 6;
+     *
      * @generated from protobuf field: repeated ExecutableQueryString executableQueryString = 2002;
      */
     executableQueryString: ExecutableQueryString[];
@@ -58,11 +59,8 @@ export interface QueryFeatures {
  */
 export interface DomainResult {
     /**
-     * @generated from protobuf field: string snippet = 1;
-     */
-    snippet: string;
-    /**
-     * string tophit = 2;
+     * repeated SnippetResult snippet = 1; //?
+     * repeated TopHitResult topHit = 2;
      *
      * @generated from protobuf field: string canonicalID = 3;
      */
@@ -72,6 +70,9 @@ export interface DomainResult {
      */
     resultEntities: string;
     /**
+     * alternativeResult = 6;; //?
+     * layoutInfo = 7;; //?
+     *
      * @generated from protobuf field: int32 entityType = 7;
      */
     entityType: number;
