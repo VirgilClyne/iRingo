@@ -6,6 +6,8 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🌤-天气服务
 #!icon=https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-96x96_2x.png
 #!tag= iRingo
+#!system = iOS, iPadOS, tvOS, macOS
+#!system_version = 18
 
 [Argument]
 NextHour.Provider = select,"ColorfulClouds","WeatherKit","QWeather",tag=[未来一小时降水强度]数据源,desc=选择WeatherKit等同于不做修改
