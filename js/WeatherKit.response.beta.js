@@ -1997,7 +1997,7 @@ function setENV(name, platforms, database) {
 function parseWeatherKitURL(url = $request.url) {
     console.log(`☑️ parseWeatherKitURL`, "");
     const RegExp = /^\/api\/(?<version>v1|v2|v3)\/(availability|weather)\/(?<language>[\w-_]+)\/(?<latitude>-?\d+\.?\d*)\/(?<longitude>-?\d+\.?\d*)(\?.*(?<country>country=[A-Z]{2})?.*)?/i;
-    const LanguageRegExp = /^(?<language>\w{2})(-\w+)?-(?<country>[A-Z]{2})$/i;
+    const LanguageRegExp = /^(?<language>\w+(-\w+)?)-(?<country>[A-Z]{2})$/i;
     const Parameters = (url?.pathname || url).match(RegExp)?.groups;
     let result = {
         "version": Parameters?.version,
