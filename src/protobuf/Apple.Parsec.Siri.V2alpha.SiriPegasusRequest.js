@@ -42,8 +42,6 @@ export const QueryFeatures = new QueryFeatures$Type();
 class DomainResult$Type extends MessageType {
     constructor() {
         super("DomainResult", [
-            { no: 3, name: "canonicalID", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "resultEntities", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 7, name: "entityType", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
         ]);
     }
@@ -52,6 +50,16 @@ class DomainResult$Type extends MessageType {
  * @generated MessageType for protobuf message DomainResult
  */
 export const DomainResult = new DomainResult$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class ResultEntity$Type extends MessageType {
+    constructor() {
+        super("ResultEntity", []);
+    }
+}
+/**
+ * @generated MessageType for protobuf message ResultEntity
+ */
+export const ResultEntity = new ResultEntity$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class ExecutableQueryString$Type extends MessageType {
     constructor() {

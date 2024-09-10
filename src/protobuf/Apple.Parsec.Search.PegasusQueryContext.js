@@ -17,13 +17,16 @@ class PegasusQueryContext$Type extends MessageType {
             { no: 6, name: "storeFront", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 8, name: "timeZone", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 9, name: "skuRegion", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 11, name: "temperatureUnit", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 12, name: "measurementSystem", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 13, name: "hourFormat", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 14, name: "location", kind: "message", T: () => Location },
-            { no: 18, name: "installedAppsSignature", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 18, name: "installedAppsSignature", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
             { no: 19, name: "uiScale", kind: "scalar", opt: true, T: 2 /*ScalarType.FLOAT*/ },
-            { no: 21, name: "seedBuild", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 21, name: "seedBuild", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ },
             { no: 22, name: "hsEnabled", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 26, name: "region", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 28, name: "trialIdentifiers", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 28, name: "trialIdentifiers", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
 }

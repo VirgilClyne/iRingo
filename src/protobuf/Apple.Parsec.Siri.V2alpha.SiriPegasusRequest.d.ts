@@ -60,22 +60,28 @@ export interface QueryFeatures {
 export interface DomainResult {
     /**
      * repeated SnippetResult snippet = 1; //?
-     * repeated TopHitResult topHit = 2;
-     *
-     * @generated from protobuf field: string canonicalID = 3;
-     */
-    canonicalID: string;
-    /**
-     * @generated from protobuf field: string resultEntities = 4;
-     */
-    resultEntities: string;
-    /**
+     * repeated TopHitResult topHit = 2; //?
+     * string canonicalID = 3; //?
+     * repeated ResultEntity resultEntities = 4; //?
      * alternativeResult = 6;; //?
      * layoutInfo = 7;; //?
      *
      * @generated from protobuf field: int32 entityType = 7;
      */
     entityType: number;
+}
+/**
+ * id = 1; //?
+ * name = 2; //?
+ * domain = 3; //?
+ * metadata = 4; //?
+ * usoEntity = 5; //?
+ * kgID = 6; //?
+ * mapsEncryptedMuid = 7; //?
+ *
+ * @generated from protobuf message ResultEntity
+ */
+export interface ResultEntity {
 }
 /**
  * @generated from protobuf message ExecutableQueryString
@@ -116,6 +122,13 @@ declare class DomainResult$Type extends MessageType<DomainResult> {
  * @generated MessageType for protobuf message DomainResult
  */
 export declare const DomainResult: DomainResult$Type;
+declare class ResultEntity$Type extends MessageType<ResultEntity> {
+    constructor();
+}
+/**
+ * @generated MessageType for protobuf message ResultEntity
+ */
+export declare const ResultEntity: ResultEntity$Type;
 declare class ExecutableQueryString$Type extends MessageType<ExecutableQueryString> {
     constructor();
 }
