@@ -1,8 +1,8 @@
 import { log } from "../utils/utils.mjs";
 //import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
-import { SiriPegasusRequest } from "../protobuf/Apple.Parsec.Siri.V2alpha.SiriPegasusRequest.js";
-import { SiriPegasusContext } from "../protobuf/Apple.Parsec.Siri.V2alpha.SiriPegasusContext";
-import { PegasusQueryContext } from "../protobuf/Apple.Parsec.Search.PegasusQueryContext";
+import { SiriPegasusRequest } from "../protobuf/apple.parsec.siri.v2alpha.SiriPegasusRequest";
+import { SiriPegasusContext } from "../protobuf/apple.parsec.siri.v2alpha.SiriPegasusContext";
+import { PegasusQueryContext } from "../protobuf/apple.parsec.search.PegasusQueryContext";
 export default class PegasusAPI {
     static Name = "PegasusAPI";
     static Version = "1.0.0";

@@ -5,18 +5,17 @@
 // @generated from protobuf file "Apple.Parsec.Siri.V2alpha.SiriPegasusRequest.proto" (syntax proto3)
 // tslint:disable
 import { MessageType } from "@protobuf-ts/runtime";
-import { Any } from "./google/protobuf/any";
-import { SiriPegasusContext } from "./Apple.Parsec.Siri.V2alpha.SiriPegasusContext";
-import { PegasusQueryContext } from "./Apple.Parsec.Search.PegasusQueryContext";
+import { SiriPegasusContext } from "./apple.parsec.siri.v2alpha.SiriPegasusContext";
+import { PegasusQueryContext } from "./apple.parsec.search.PegasusQueryContext";
+import { PegasusSearchQuery } from "./apple.parsec.siri.v2alpha.PegasusSearchQuery";
 // @generated message type with reflection information, may provide speed optimized methods
 class SiriPegasusRequest$Type extends MessageType {
     constructor() {
         super("SiriPegasusRequest", [
-            { no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => QueryFeatures },
+            { no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PegasusSearchQuery },
             { no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext },
             { no: 3, name: "userDataShareOptIn", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
-            { no: 5, name: "siriPegasusContext", kind: "message", T: () => SiriPegasusContext },
-            { no: 6, name: "siriEnvironment", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ }
+            { no: 5, name: "siriPegasusContext", kind: "message", T: () => SiriPegasusContext }
         ]);
     }
 }
@@ -24,63 +23,3 @@ class SiriPegasusRequest$Type extends MessageType {
  * @generated MessageType for protobuf message SiriPegasusRequest
  */
 export const SiriPegasusRequest = new SiriPegasusRequest$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class QueryFeatures$Type extends MessageType {
-    constructor() {
-        super("QueryFeatures", [
-            { no: 1, name: "query", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "qsyn", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2002, name: "executableQueryString", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => ExecutableQueryString }
-        ]);
-    }
-}
-/**
- * @generated MessageType for protobuf message QueryFeatures
- */
-export const QueryFeatures = new QueryFeatures$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class DomainResult$Type extends MessageType {
-    constructor() {
-        super("DomainResult", [
-            { no: 7, name: "entityType", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
-        ]);
-    }
-}
-/**
- * @generated MessageType for protobuf message DomainResult
- */
-export const DomainResult = new DomainResult$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class ResultEntity$Type extends MessageType {
-    constructor() {
-        super("ResultEntity", []);
-    }
-}
-/**
- * @generated MessageType for protobuf message ResultEntity
- */
-export const ResultEntity = new ResultEntity$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class ExecutableQueryString$Type extends MessageType {
-    constructor() {
-        super("ExecutableQueryString", [
-            { no: 2, name: "m2", kind: "message", T: () => M2 }
-        ]);
-    }
-}
-/**
- * @generated MessageType for protobuf message ExecutableQueryString
- */
-export const ExecutableQueryString = new ExecutableQueryString$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class M2$Type extends MessageType {
-    constructor() {
-        super("M2", [
-            { no: 2, name: "supplement", kind: "message", T: () => Any }
-        ]);
-    }
-}
-/**
- * @generated MessageType for protobuf message M2
- */
-export const M2 = new M2$Type();

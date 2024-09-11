@@ -2,17 +2,17 @@
 // @generated from protobuf file "Apple.Parsec.Siri.V2alpha.SiriPegasusRequest.proto" (syntax proto3)
 // tslint:disable
 import { MessageType } from "@protobuf-ts/runtime";
-import { Any } from "./google/protobuf/any";
-import { SiriPegasusContext } from "./Apple.Parsec.Siri.V2alpha.SiriPegasusContext";
-import { PegasusQueryContext } from "./Apple.Parsec.Search.PegasusQueryContext";
+import { SiriPegasusContext } from "./apple.parsec.siri.v2alpha.SiriPegasusContext";
+import { PegasusQueryContext } from "./apple.parsec.search.PegasusQueryContext";
+import { PegasusSearchQuery } from "./apple.parsec.siri.v2alpha.PegasusSearchQuery";
 /**
  * @generated from protobuf message SiriPegasusRequest
  */
 export interface SiriPegasusRequest {
     /**
-     * @generated from protobuf field: repeated QueryFeatures queries = 1;
+     * @generated from protobuf field: repeated PegasusSearchQuery queries = 1;
      */
-    queries: QueryFeatures[];
+    queries: PegasusSearchQuery[];
     /**
      * @generated from protobuf field: PegasusQueryContext queryContext = 2;
      */
@@ -27,79 +27,6 @@ export interface SiriPegasusRequest {
      * @generated from protobuf field: optional SiriPegasusContext siriPegasusContext = 5;
      */
     siriPegasusContext?: SiriPegasusContext;
-    /**
-     * @generated from protobuf field: optional int32 siriEnvironment = 6;
-     */
-    siriEnvironment?: number;
-}
-/**
- * @generated from protobuf message QueryFeatures
- */
-export interface QueryFeatures {
-    /**
-     * @generated from protobuf field: string query = 1;
-     */
-    query: string;
-    /**
-     * @generated from protobuf field: string qsyn = 2;
-     */
-    qsyn: string;
-    /**
-     * pattern = 3; //?
-     * algo = 4; //?
-     * flowDomain = 5; //?
-     * repeated DomainResult executedDomain = 6;
-     *
-     * @generated from protobuf field: repeated ExecutableQueryString executableQueryString = 2002;
-     */
-    executableQueryString: ExecutableQueryString[];
-}
-/**
- * @generated from protobuf message DomainResult
- */
-export interface DomainResult {
-    /**
-     * repeated SnippetResult snippet = 1; //?
-     * repeated TopHitResult topHit = 2; //?
-     * string canonicalID = 3; //?
-     * repeated ResultEntity resultEntities = 4; //?
-     * alternativeResult = 6;; //?
-     * layoutInfo = 7;; //?
-     *
-     * @generated from protobuf field: int32 entityType = 7;
-     */
-    entityType: number;
-}
-/**
- * id = 1; //?
- * name = 2; //?
- * domain = 3; //?
- * metadata = 4; //?
- * usoEntity = 5; //?
- * kgID = 6; //?
- * mapsEncryptedMuid = 7; //?
- *
- * @generated from protobuf message ResultEntity
- */
-export interface ResultEntity {
-}
-/**
- * @generated from protobuf message ExecutableQueryString
- */
-export interface ExecutableQueryString {
-    /**
-     * @generated from protobuf field: M2 m2 = 2;
-     */
-    m2?: M2;
-}
-/**
- * @generated from protobuf message M2
- */
-export interface M2 {
-    /**
-     * @generated from protobuf field: google.protobuf.Any supplement = 2;
-     */
-    supplement?: Any;
 }
 declare class SiriPegasusRequest$Type extends MessageType<SiriPegasusRequest> {
     constructor();
@@ -108,39 +35,4 @@ declare class SiriPegasusRequest$Type extends MessageType<SiriPegasusRequest> {
  * @generated MessageType for protobuf message SiriPegasusRequest
  */
 export declare const SiriPegasusRequest: SiriPegasusRequest$Type;
-declare class QueryFeatures$Type extends MessageType<QueryFeatures> {
-    constructor();
-}
-/**
- * @generated MessageType for protobuf message QueryFeatures
- */
-export declare const QueryFeatures: QueryFeatures$Type;
-declare class DomainResult$Type extends MessageType<DomainResult> {
-    constructor();
-}
-/**
- * @generated MessageType for protobuf message DomainResult
- */
-export declare const DomainResult: DomainResult$Type;
-declare class ResultEntity$Type extends MessageType<ResultEntity> {
-    constructor();
-}
-/**
- * @generated MessageType for protobuf message ResultEntity
- */
-export declare const ResultEntity: ResultEntity$Type;
-declare class ExecutableQueryString$Type extends MessageType<ExecutableQueryString> {
-    constructor();
-}
-/**
- * @generated MessageType for protobuf message ExecutableQueryString
- */
-export declare const ExecutableQueryString: ExecutableQueryString$Type;
-declare class M2$Type extends MessageType<M2> {
-    constructor();
-}
-/**
- * @generated MessageType for protobuf message M2
- */
-export declare const M2: M2$Type;
 export {};

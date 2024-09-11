@@ -7,11 +7,11 @@ import addgRPCHeader from "./function/addgRPCHeader.mjs";
 import modifyPegasusQueryContext from "./function/modifyPegasusQueryContext.mjs";
 
 import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
-import { SiriPegasusRequest } from "./protobuf/Apple.Parsec.Siri.V2alpha.SiriPegasusRequest.js";
-import { SiriPegasusContext } from "./protobuf/Apple.Parsec.Siri.V2alpha.SiriPegasusContext";
-import { PegasusQueryContext } from "./protobuf/Apple.Parsec.Search.PegasusQueryContext";
+import { SiriPegasusRequest } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusRequest";
+import { SiriPegasusContext } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusContext";
+import { PegasusQueryContext } from "./protobuf/apple.parsec.search.PegasusQueryContext";
 
-log("v4.1.0(4040)");
+log("v4.1.1(4041)");
 
 // 构造回复数据
 let $response = undefined;
@@ -134,8 +134,8 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													};
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
 													let fixLocation = true;
-													data?.queries?.[0]?.executableQueryString.forEach((executableQueryString, index) => {
-														switch (executableQueryString?.m2?.supplement?.typeUrl) {
+													data?.queries?.[0]?.unknown2002.forEach((unknown2002, index) => {
+														switch (unknown2002?.n2?.supplement?.typeUrl) {
 															case "type.googleapis.com/apple.parsec.siri.v2alpha.AppInfo":
 																/******************  initialization start  *******************/
 																class ApplicationInfomationRequest$Type extends MessageType {
@@ -148,7 +148,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 																}
 																const ApplicationInfomationRequest = new ApplicationInfomationRequest$Type();
 																/******************  initialization finish  *******************/
-																const AppInfo = ApplicationInfomationRequest.fromBinary(executableQueryString?.m2?.supplement?.value);
+																const AppInfo = ApplicationInfomationRequest.fromBinary(unknown2002?.n2?.supplement?.value);
 																log(`🚧 AppInfo: ${JSON.stringify(AppInfo)}`, "");
 																switch (AppInfo?.bundleID) {
 																	case "com.apple.weather":
