@@ -2301,12 +2301,12 @@ var Configs = {
 			"forecastDaily",
 			"forecastHourly",
 			"forecastPeriodic",
-			"forecastNextHour",
 			"historicalComparisons",
-			"news",
+			"weatherChanges",
+			"forecastNextHour",
 			"weatherAlerts",
 			"weatherAlertNotifications",
-			"weatherChange"
+			"news"
 		]
 	}
 };
