@@ -5778,25 +5778,25 @@ var TileSetStyle;
      */
     TileSetStyle[TileSetStyle["VECTOR_CONTOURS"] = 90] = "VECTOR_CONTOURS";
     /**
-     * @generated from protobuf enum value: UNUSED_91 = 91;
+     * @generated from protobuf enum value: RASTER_SATELLITE_POLAR = 91;
      */
-    TileSetStyle[TileSetStyle["UNUSED_91"] = 91] = "UNUSED_91";
+    TileSetStyle[TileSetStyle["RASTER_SATELLITE_POLAR"] = 91] = "RASTER_SATELLITE_POLAR";
     /**
-     * @generated from protobuf enum value: UNUSED_92 = 92;
+     * @generated from protobuf enum value: VMAP4_ELEVATION = 92;
      */
-    TileSetStyle[TileSetStyle["UNUSED_92"] = 92] = "UNUSED_92";
+    TileSetStyle[TileSetStyle["VMAP4_ELEVATION"] = 92] = "VMAP4_ELEVATION";
     /**
-     * @generated from protobuf enum value: UNUSED_93 = 93;
+     * @generated from protobuf enum value: VMAP4_ELEVATION_POLAR = 93;
      */
-    TileSetStyle[TileSetStyle["UNUSED_93"] = 93] = "UNUSED_93";
+    TileSetStyle[TileSetStyle["VMAP4_ELEVATION_POLAR"] = 93] = "VMAP4_ELEVATION_POLAR";
     /**
-     * @generated from protobuf enum value: UNUSED_94 = 94;
+     * @generated from protobuf enum value: CELLULAR_COVERAGE_PLMN = 94;
      */
-    TileSetStyle[TileSetStyle["UNUSED_94"] = 94] = "UNUSED_94";
+    TileSetStyle[TileSetStyle["CELLULAR_COVERAGE_PLMN"] = 94] = "CELLULAR_COVERAGE_PLMN";
     /**
-     * @generated from protobuf enum value: UNUSED_95 = 95;
+     * @generated from protobuf enum value: RASTER_SATELLITE_POLAR_NIGHT = 95;
      */
-    TileSetStyle[TileSetStyle["UNUSED_95"] = 95] = "UNUSED_95";
+    TileSetStyle[TileSetStyle["RASTER_SATELLITE_POLAR_NIGHT"] = 95] = "RASTER_SATELLITE_POLAR_NIGHT";
     /**
      * @generated from protobuf enum value: UNUSED_96 = 96;
      */
@@ -7119,7 +7119,7 @@ class GEOResourceManifestDownload {
 
 class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.2.2";
+    static Version = "1.2.3";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -7212,6 +7212,8 @@ class GEOResourceManifest {
                 case "RASTER_SATELLITE_NIGHT": // 33 卫星地图（2D/夜间）
                 case "RASTER_SATELLITE_DIGITIZE": // 35 卫星地图（2D/数字化）
                 case "RASTER_SATELLITE_ASTC": // 45 卫星地图（2D/ASTC）
+                case "RASTER_SATELLITE_POLAR": // 91 卫星地图（2D/极地）
+                case "RASTER_SATELLITE_POLAR_NIGHT": // 95 卫星地图（2D/极地/夜间）
                     //log(`⚠️ Satellite style: ${tile?.style}`, "");
                     switch (settings.TileSet.Satellite) {
                         case "HYBRID":

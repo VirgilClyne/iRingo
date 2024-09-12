@@ -411,25 +411,25 @@ export var TileSetStyle;
      */
     TileSetStyle[TileSetStyle["VECTOR_CONTOURS"] = 90] = "VECTOR_CONTOURS";
     /**
-     * @generated from protobuf enum value: UNUSED_91 = 91;
+     * @generated from protobuf enum value: RASTER_SATELLITE_POLAR = 91;
      */
-    TileSetStyle[TileSetStyle["UNUSED_91"] = 91] = "UNUSED_91";
+    TileSetStyle[TileSetStyle["RASTER_SATELLITE_POLAR"] = 91] = "RASTER_SATELLITE_POLAR";
     /**
-     * @generated from protobuf enum value: UNUSED_92 = 92;
+     * @generated from protobuf enum value: VMAP4_ELEVATION = 92;
      */
-    TileSetStyle[TileSetStyle["UNUSED_92"] = 92] = "UNUSED_92";
+    TileSetStyle[TileSetStyle["VMAP4_ELEVATION"] = 92] = "VMAP4_ELEVATION";
     /**
-     * @generated from protobuf enum value: UNUSED_93 = 93;
+     * @generated from protobuf enum value: VMAP4_ELEVATION_POLAR = 93;
      */
-    TileSetStyle[TileSetStyle["UNUSED_93"] = 93] = "UNUSED_93";
+    TileSetStyle[TileSetStyle["VMAP4_ELEVATION_POLAR"] = 93] = "VMAP4_ELEVATION_POLAR";
     /**
-     * @generated from protobuf enum value: UNUSED_94 = 94;
+     * @generated from protobuf enum value: CELLULAR_COVERAGE_PLMN = 94;
      */
-    TileSetStyle[TileSetStyle["UNUSED_94"] = 94] = "UNUSED_94";
+    TileSetStyle[TileSetStyle["CELLULAR_COVERAGE_PLMN"] = 94] = "CELLULAR_COVERAGE_PLMN";
     /**
-     * @generated from protobuf enum value: UNUSED_95 = 95;
+     * @generated from protobuf enum value: RASTER_SATELLITE_POLAR_NIGHT = 95;
      */
-    TileSetStyle[TileSetStyle["UNUSED_95"] = 95] = "UNUSED_95";
+    TileSetStyle[TileSetStyle["RASTER_SATELLITE_POLAR_NIGHT"] = 95] = "RASTER_SATELLITE_POLAR_NIGHT";
     /**
      * @generated from protobuf enum value: UNUSED_96 = 96;
      */

@@ -3,7 +3,7 @@ import GEOResourceManifestDownload from "./GEOResourceManifestDownload.mjs";
 
 export default class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.2.2";
+    static Version = "1.2.3";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -103,6 +103,8 @@ export default class GEOResourceManifest {
                 case "RASTER_SATELLITE_NIGHT": // 33 卫星地图（2D/夜间）
                 case "RASTER_SATELLITE_DIGITIZE": // 35 卫星地图（2D/数字化）
                 case "RASTER_SATELLITE_ASTC": // 45 卫星地图（2D/ASTC）
+                case "RASTER_SATELLITE_POLAR": // 91 卫星地图（2D/极地）
+                case "RASTER_SATELLITE_POLAR_NIGHT": // 95 卫星地图（2D/极地/夜间）
                     //log(`⚠️ Satellite style: ${tile?.style}`, "");
                     switch (settings.TileSet.Satellite) {
                         case "HYBRID":
