@@ -1922,7 +1922,7 @@ function setENV(name, platforms, database) {
 	return { Settings, Caches, Configs };
 }
 
-log("v3.1.0(2)");
+log("v3.2.0(1003)");
 
 // 构造回复数据
 let $response = undefined;
@@ -1996,7 +1996,22 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 							log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
 							let rawBody = ($platform === "Quantumult X") ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
 							log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
-							// 写入二进制数据
+							switch (HOST) {
+								case "gsp-ssl.ls.apple.com":
+								case "dispatcher.is.autonavi.com":
+									switch (PATH) {
+										case "/dispatcher.arpc":
+										case "/dispatcher":
+											/******************  initialization start  *******************/
+											// 先拆分aRPC校验头和protobuf数据体
+											const headerIndex = rawBody.findIndex((element, index) => element === 0x0A && index > 47);
+											log(`🚧 headerIndex: ${headerIndex}`, "");
+											rawBody.slice(0, headerIndex);
+											rawBody.slice(headerIndex);
+											/******************  initialization finish  *******************/
+											break;
+									}									break;
+							}							// 写入二进制数据
 							$request.body = rawBody;
 							break;
 					}					//break; // 不中断，继续处理URL

@@ -16,6 +16,9 @@ DOMAIN,gspe1-ssl.ls.apple.com,DIRECT
 [Script]
 # 📍 Country Code
 📍 Location.pep.gcc.response = type=http-response, pattern=^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc, requires-body=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/GeoServices.response.beta.js, argument=PEP.GCC={{{GeoCountryCode}}}
+# 📍 Dispatcher
+📍 Location.Dispatcher.request = type=http-request, pattern=^https?:\/\/gspe-ssl\.ls\.apple\.com\/dispatcher\.arpc, requires-body=1, binary-body-mode=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/GeoServices.request.beta.js, argument=
+📍 Location.Dispatcher.request = type=http-request, pattern=^https?:\/\/dispatcher\.is\.autonavi\.com\/dispatcher, requires-body=1, binary-body-mode=1, engine=webview, debug=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/GeoServices.request.beta.js, argument=
 
 [MITM]
-hostname = %APPEND% gspe1-ssl.ls.apple.com
+hostname = %APPEND% gspe1-ssl.ls.apple.com, gsp-ssl.ls.apple.com, dispatcher.is.autonavi.com
