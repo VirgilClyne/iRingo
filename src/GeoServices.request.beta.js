@@ -1,12 +1,10 @@
 import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-log("v3.2.0(1003)");
-
+import GEOPDPlaceRequest from "./class/GEOPDPlaceRequest.mjs";
+log("v3.2.2(1011)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -75,9 +73,9 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/grpc":
 						case "application/grpc+proto":
 						case "application/octet-stream":
-							log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
+							//log(`🚧 $request: ${JSON.stringify($request, null, 2)}`, "");
 							let rawBody = ($platform === "Quantumult X") ? new Uint8Array($request.bodyBytes ?? []) : $request.body ?? new Uint8Array();
-							log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
+							//log(`🚧 isBuffer? ${ArrayBuffer.isView(rawBody)}: ${JSON.stringify(rawBody, null, 2)}`, "");
 							switch (HOST) {
 								case "gsp-ssl.ls.apple.com":
 								case "dispatcher.is.autonavi.com":
@@ -90,6 +88,19 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											log(`🚧 headerIndex: ${headerIndex}`, "");
 											const Header = rawBody.slice(0, headerIndex);
 											body = rawBody.slice(headerIndex);
+											/******************  initialization finish  *******************/
+											body = GEOPDPlaceRequest.decode(body);
+											log(`🚧 body: ${JSON.stringify(body, null, 2)}`, "");
+											switch (body.requestType) {
+												case "REQUEST_TYPE_REVERSE_GEOCODING":
+													break;
+											};
+											//body.clientMetadata.deviceCountryCode = "US";
+											body = GEOPDPlaceRequest.encode(body);
+											/******************  initialization start  *******************/
+											//rawBody = new Uint8Array(Header.length + body.length);
+											//rawBody.set(Header, 0);
+											//rawBody.set(body, Header.length);
 											/******************  initialization finish  *******************/
 											break;
 									};
