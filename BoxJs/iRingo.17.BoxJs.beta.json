@@ -1,95 +1,11 @@
 {
 	"id": "iRingo.beta.app.sub",
-	"name": " iRingo β",
+	"name": " iRingo β (iOS 17)",
 	"author": "@VirgilClyne",
 	"description": "解锁完整的 Apple功能和集成服务",
 	"icon": "https://avatars.githubusercontent.com/u/2111377?s=100&v=4",
 	"repo": "https://github.com/VirgilClyne/iRingo",
 	"apps": [
-		{
-			"id": "iRingo.Location.beta",
-			"name": "📍 定位服务 β",
-			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
-				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
-			],
-			"keys": [
-				"@iRingo.Location.Settings",
-				"@iRingo.Location.Caches"
-			],
-			"settings": [
-				{
-					"id": "@iRingo.Location.Settings.Switch",
-					"name": "总功能开关",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用此APP修改"
-				},
-				{
-					"id": "@iRingo.Location.Settings.PEP.GCC",
-					"name": "[地区检测]地理国家或地区代码",
-					"val": "US",
-					"type": "selects",
-					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "🇺🇳自动（跟随地区检测结果）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "🇭🇰香港"
-						},
-						{
-							"key": "TW",
-							"label": "🇹🇼台湾"
-						},
-						{
-							"key": "SG",
-							"label": "🇸🇬新加坡"
-						},
-						{
-							"key": "US",
-							"label": "🇺🇸美国"
-						},
-						{
-							"key": "JP",
-							"label": "🇯🇵日本"
-						},
-						{
-							"key": "AU",
-							"label": "🇦🇺澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "🇬🇧英国"
-						},
-						{
-							"key": "KR",
-							"label": "🇰🇷韩国"
-						},
-						{
-							"key": "CA",
-							"label": "🇨🇦加拿大"
-						},
-						{
-							"key": "IE",
-							"label": "🇮🇪爱尔兰"
-						}
-					]
-				}
-			],
-			"author": "@VirgilClyne",
-			"repo": "https://github.com/VirgilClyne/iRingo/",
-			"icons": [
-				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png",
-				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png"
-			]
-		},
 		{
 			"id": "iRingo.Weather.beta",
 			"name": "🌤 天气 β",
@@ -443,6 +359,90 @@
 			]
 		},
 		{
+			"id": "iRingo.Location.beta",
+			"name": "📍 定位服务 β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务\">📍 定位服务</a>的使用说明进行配置",
+				"影响功能范围包括但不限于“地图”、“Apple News”、“指南针”等"
+			],
+			"keys": [
+				"@iRingo.Location.Settings",
+				"@iRingo.Location.Caches"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.Location.Settings.Switch",
+					"name": "总功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此APP修改"
+				},
+				{
+					"id": "@iRingo.Location.Settings.PEP.GCC",
+					"name": "[地区检测]地理国家或地区代码",
+					"val": "US",
+					"type": "selects",
+					"desc": "要更改为的地区或国家，此选项影响Wi-Fi或有线网络下国家和地区检测的结果",
+					"items": [
+						{
+							"key": "AUTO",
+							"label": "🇺🇳自动（跟随地区检测结果）"
+						},
+						{
+							"key": "CN",
+							"label": "🇨🇳中国大陆"
+						},
+						{
+							"key": "HK",
+							"label": "🇭🇰香港"
+						},
+						{
+							"key": "TW",
+							"label": "🇹🇼台湾"
+						},
+						{
+							"key": "SG",
+							"label": "🇸🇬新加坡"
+						},
+						{
+							"key": "US",
+							"label": "🇺🇸美国"
+						},
+						{
+							"key": "JP",
+							"label": "🇯🇵日本"
+						},
+						{
+							"key": "AU",
+							"label": "🇦🇺澳大利亚"
+						},
+						{
+							"key": "GB",
+							"label": "🇬🇧英国"
+						},
+						{
+							"key": "KR",
+							"label": "🇰🇷韩国"
+						},
+						{
+							"key": "CA",
+							"label": "🇨🇦加拿大"
+						},
+						{
+							"key": "IE",
+							"label": "🇮🇪爱尔兰"
+						}
+					]
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/",
+			"icons": [
+				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png",
+				"https://support.apple.com/library/content/dam/edam/applecare/images/en_US/iOS/ios15-location-arrow-status-icon.png"
+			]
+		},
+		{
 			"id": "iRingo.Maps.beta",
 			"name": "🗺️ 地图 β",
 			"descs_html": [
@@ -624,27 +624,6 @@
 					]
 				},
 				{
-					"id": "@iRingo.Maps.Settings.TileSet.Map",
-					"name": "[地图]数据源",
-					"val": "CN",
-					"type": "selects",
-					"desc": "‘探索’、‘驾车’、‘公共交通’地图的数据源，此选项影响所列瓦片地图数据",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳Apple（🇨🇳:高德 | 🇺🇳:OpenStreetMap等）"
-						},
-						{
-							"key": "XX",
-							"label": "🇺🇳Apple（OpenStreetMap等）"
-						}
-					]
-				},
-				{
 					"id": "@iRingo.Maps.Settings.TileSet.Satellite",
 					"name": "[卫星图像]数据源",
 					"val": "HYBRID",
@@ -666,48 +645,6 @@
 						{
 							"key": "XX",
 							"label": "🇺🇳DigitalGlobe（🇨🇳:2D较旧 | 🇺🇳:2D+主要城市3D）"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Maps.Settings.TileSet.Traffic",
-					"name": "[交通状况]数据源",
-					"val": "CN",
-					"type": "selects",
-					"desc": "交通状况服务的数据源，此选项影响交通状况与道路信息服务",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳Apple（🇨🇳:🈶️ | 🇺🇳:🈚️）"
-						},
-						{
-							"key": "XX",
-							"label": "🇺🇳Apple（🇨🇳:🈚️ | 🇺🇳:🈶️TomTom等）"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Maps.Settings.TileSet.POI",
-					"name": "[兴趣点]数据源",
-					"val": "CN",
-					"type": "selects",
-					"desc": "兴趣点(POI)的数据源，此选项影响景点店面建筑等地点数据",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "自动（随[动态配置]版本自动选择）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳Apple（🇨🇳:互动百科/大众点评/携程等 | 🇺🇳:维基百科/Yelp/Booking等）"
-						},
-						{
-							"key": "XX",
-							"label": "🇺🇳Apple（维基百科/Yelp/Booking等）"
 						}
 					]
 				},

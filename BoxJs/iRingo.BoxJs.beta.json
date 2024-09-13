@@ -184,8 +184,8 @@
 			"author": "@VirgilClyne",
 			"repo": "https://github.com/VirgilClyne/iRingo/",
 			"icons": [
-				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp",
-				"https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp"
+				"https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-96x96_2x.png",
+				"https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-96x96_2x.png"
 			]
 		},
 		{
@@ -529,11 +529,38 @@
 			]
 		},
 		{
-			"id": "iRingo.Siri.beta",
-			"name": "🔍 Siri与搜索 β",
+			"id": "iRingo.AppleIntelligence.beta",
+			"name": "🟥 Apple Intelligence β",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索\">🔍 Siri与搜索</a>的使用说明进行配置",
-				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🟥-Apple-Intelligence\">🟥 Apple Intelligence</a>的使用说明进行配置",
+				"影响功能范围不包括“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
+			],
+			"keys": [
+				"@iRingo.AppleIntelligence.Settings",
+				"@iRingo.AppleIntelligence.Caches"
+			],
+			"settings": [
+				{
+					"id": "@iRingo.AppleIntelligence.Settings.Switch",
+					"name": "总功能开关",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否启用此APP修改"
+				}
+			],
+			"author": "@VirgilClyne",
+			"repo": "https://github.com/VirgilClyne/iRingo/",
+			"icons": [
+				"https://developer.apple.com/assets/elements/icons/apple-intelligence/apple-intelligence-96x96_2x.png",
+				"https://developer.apple.com/assets/elements/icons/apple-intelligence/apple-intelligence-96x96_2x.png"
+			]
+		},
+		{
+			"id": "iRingo.Siri.beta",
+			"name": "⭕ Siri β",
+			"descs_html": [
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/⭕-Siri\">⭕ Siri</a>的使用说明进行配置",
+				"影响功能范围不包括“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
 			],
 			"keys": [
 				"@iRingo.Siri.Settings",
@@ -605,113 +632,72 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Settings.Domains",
-					"name": "启用领域",
-					"val": [
-						"web",
-						"itunes",
-						"app_store",
-						"movies",
-						"restaurants",
-						"maps"
-					],
-					"type": "checkboxes",
-					"desc": "启用搜索的领域，未选项领域将被关闭，启用领域数据由国家和地区决定，此选项仅代表功能上的开启，不代表对应地区一定有数据和服务",
+					"id": "@iRingo.Siri.Settings.Region",
+					"name": "Siri 区域",
+					"val": "AUTO",
+					"type": "selects",
+					"desc": "忽略系统中“Siri”的“语言”设置，强制采用这里的设置。",
 					"items": [
 						{
-							"key": "web",
-							"label": "网页"
+							"key": "AUTO",
+							"label": "🇺🇳自动 (跟随“Siri”的“语言”设置)"
 						},
 						{
-							"key": "itunes",
-							"label": "iTunes"
+							"key": "zh_CN",
+							"label": "🇨🇳中文 (普通话 - 中国大陆)"
 						},
 						{
-							"key": "app_store",
-							"label": "App Store"
+							"key": "zh_TW",
+							"label": "🇹🇼中文 (普通话 - 台湾)"
 						},
 						{
-							"key": "movies",
-							"label": "电影"
+							"key": "yue_CN",
+							"label": "🇨🇳中文 (粤语 - 中国大陆)"
 						},
 						{
-							"key": "restaurants",
-							"label": "餐厅"
+							"key": "zh_HK",
+							"label": "🇭🇰中文 (粤语 - 香港)"
 						},
 						{
-							"key": "maps",
-							"label": "地图"
+							"key": "ja_JP",
+							"label": "🇯🇵日语"
+						},
+						{
+							"key": "en_CA",
+							"label": "🇨🇦英语 (加拿大)"
+						},
+						{
+							"key": "en_SG",
+							"label": "🇸🇬英语 (新加坡)"
+						},
+						{
+							"key": "en_AU",
+							"label": "🇦🇺英语 (澳大利亚)"
+						},
+						{
+							"key": "IE",
+							"label": "🇮🇪英语 (爱尔兰)"
+						},
+						{
+							"key": "en_US",
+							"label": "🇺🇸英语 (美国)"
+						},
+						{
+							"key": "en_GB",
+							"label": "🇬🇧英语 (英国)"
+						},
+						{
+							"key": "ko_KR",
+							"label": "🇰🇷韩语"
 						}
 					]
-				},
-				{
-					"id": "@iRingo.Siri.Settings.Functions",
-					"name": "强制启用的功能",
-					"val": [
-						"flightutilities",
-						"lookup",
-						"mail",
-						"messages",
-						"news",
-						"safari",
-						"siri",
-						"spotlight",
-						"visualintelligence"
-					],
-					"type": "checkboxes",
-					"desc": "强制启用Siri建议的APP，被选项的功能会被强制开启，但是未选不代表关闭对应的功能，仅代表还原到该地区默认设置状态",
-					"items": [
-						{
-							"key": "flightutilities",
-							"label": "航班工具"
-						},
-						{
-							"key": "lookup",
-							"label": "查询"
-						},
-						{
-							"key": "mail",
-							"label": "邮件"
-						},
-						{
-							"key": "messages",
-							"label": "信息"
-						},
-						{
-							"key": "news",
-							"label": "新闻"
-						},
-						{
-							"key": "safari",
-							"label": "Safari浏览器"
-						},
-						{
-							"key": "siri",
-							"label": "Siri"
-						},
-						{
-							"key": "spotlight",
-							"label": "聚焦搜索"
-						},
-						{
-							"key": "visualintelligence",
-							"label": "视觉智能"
-						}
-					]
-				},
-				{
-					"id": "@iRingo.Siri.Settings.Safari_Smart_History",
-					"name": "Safari智能历史记录",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否在Safari浏览器中启用基于历史记录的Siri建议功能，启用后将在Safari浏览器起始页推荐基于时间地点跨设备等的相关浏览记录"
 				}
 			],
 			"author": "@VirgilClyne",
 			"repo": "https://github.com/VirgilClyne/iRingo/",
 			"icons": [
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Siri.png",
-				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png"
+				"https://upload.wikimedia.org/wikipedia/commons/d/de/Logo_Apple_Siri_iOS_2024.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/d/de/Logo_Apple_Siri_iOS_2024.svg"
 			]
 		},
 		{
@@ -1779,90 +1765,6 @@
 			"icons": [
 				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/TestFlight_2.png",
 				"https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TestFlight_2.png"
-			]
-		},
-		{
-			"id": "iRingo.PrivateRelay.beta",
-			"name": "☁️ iCloud Private Relay β",
-			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理\">🌐专用代理</a>的使用说明进行配置",
-				"影响功能范围……等"
-			],
-			"keys": [
-				"@iRingo.PrivateRelay.Settings",
-				"@iRingo.PrivateRelay.Caches"
-			],
-			"settings": [
-				{
-					"id": "@iRingo.PrivateRelay.Settings.Switch",
-					"name": "总功能开关",
-					"val": true,
-					"type": "boolean",
-					"desc": "是否启用此APP修改"
-				},
-				{
-					"id": "@iRingo.PrivateRelay.Settings.CountryCode",
-					"name": "国家或地区代码",
-					"val": "US",
-					"type": "selects",
-					"desc": "不同国家或地区提供的内容或有差别",
-					"items": [
-						{
-							"key": "AUTO",
-							"label": "🇺🇳自动（跟随地区检测结果）"
-						},
-						{
-							"key": "CN",
-							"label": "🇨🇳中国大陆"
-						},
-						{
-							"key": "HK",
-							"label": "🇭🇰香港"
-						},
-						{
-							"key": "TW",
-							"label": "🇹🇼台湾"
-						},
-						{
-							"key": "SG",
-							"label": "🇸🇬新加坡"
-						},
-						{
-							"key": "US",
-							"label": "🇺🇸美国"
-						},
-						{
-							"key": "JP",
-							"label": "🇯🇵日本"
-						},
-						{
-							"key": "AU",
-							"label": "🇦🇺澳大利亚"
-						},
-						{
-							"key": "GB",
-							"label": "🇬🇧英国"
-						},
-						{
-							"key": "KR",
-							"label": "🇰🇷韩国"
-						},
-						{
-							"key": "CA",
-							"label": "🇨🇦加拿大"
-						},
-						{
-							"key": "IE",
-							"label": "🇮🇪爱尔兰"
-						}
-					]
-				}
-			],
-			"author": "@VirgilClyne",
-			"repo": "https://github.com/VirgilClyne/iRingo/",
-			"icons": [
-				"https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png",
-				"https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png"
 			]
 		},
 		{
