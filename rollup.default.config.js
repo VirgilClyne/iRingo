@@ -9,7 +9,7 @@ export default [
 		output: {
 			file: 'js/WeatherKit.response.js',
 			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🌤 WeatherKit Response')",
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🌤 WeatherKit Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
@@ -18,7 +18,7 @@ export default [
 		output: {
 			file: 'js/GeoServices.request.js',
 			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
@@ -27,44 +27,7 @@ export default [
 		output: {
 			file: 'js/GeoServices.response.js',
 			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
-		input: 'src/News.request.js',
-		output: {
-			file: 'js/News.request.js',
-			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	/*
-	{
-		input: 'src/News.response.js',
-		output: {
-			file: 'js/News.response.js',
-			format: 'es'
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	*/
-	{
-		input: 'src/PrivateRelay.request.js',
-		output: {
-			file: 'js/PrivateRelay.request.js',
-			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
-		input: 'src/PrivateRelay.response.js',
-		output: {
-			file: 'js/PrivateRelay.response.js',
-			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
@@ -73,7 +36,7 @@ export default [
 		output: {
 			file: 'js/Siri.request.js',
 			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ⭕ Siri Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
@@ -82,7 +45,7 @@ export default [
 		output: {
 			file: 'js/Siri.response.js',
 			format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ⭕ Siri Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
@@ -122,4 +85,39 @@ export default [
 		},
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
+	{
+		input: 'src/News.request.js',
+		output: {
+			file: 'js/News.request.js',
+			format: 'es',
+			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+		},
+		plugins: [json(), commonjs(), nodeResolve(), terser()]
+	},
+	/*
+	{
+		input: 'src/News.response.js',
+		output: {
+			file: 'js/News.response.js',
+			format: 'es'
+		},
+		plugins: [json(), commonjs(), nodeResolve(), terser()]
+	},
+	{
+		input: 'src/PrivateRelay.request.js',
+		output: {
+			file: 'js/PrivateRelay.request.js',
+			format: 'es',
+		},
+		plugins: [json(), commonjs(), nodeResolve(), terser()]
+	},
+	{
+		input: 'src/PrivateRelay.response.js',
+		output: {
+			file: 'js/PrivateRelay.response.js',
+			format: 'es',
+		},
+		plugins: [json(), commonjs(), nodeResolve(), terser()]
+	},
+	*/
 ];
