@@ -12,10 +12,8 @@ import { MessageType } from "@protobuf-ts/runtime";
  */
 export interface PDPlaceRequest {
     /**
-     * @generated from protobuf field: PDAnalyticMetadata analyticMetadata = 1;
-     */
-    analyticMetadata?: PDAnalyticMetadata;
-    /**
+     * PDAnalyticMetadata analyticMetadata = 1;
+     *
      * @generated from protobuf field: PDClientMetadata clientMetadata = 2;
      */
     clientMetadata?: PDClientMetadata;
@@ -529,7 +527,107 @@ export declare enum GeoServiceTag_ServiceType {
     /**
      * @generated from protobuf enum value: AUTONAVI_FRONTDOOR = 25;
      */
-    AUTONAVI_FRONTDOOR = 25
+    AUTONAVI_FRONTDOOR = 25,
+    /**
+     * @generated from protobuf enum value: UNKNOWN26 = 26;
+     */
+    UNKNOWN26 = 26,
+    /**
+     * @generated from protobuf enum value: UNKNOWN27 = 27;
+     */
+    UNKNOWN27 = 27,
+    /**
+     * @generated from protobuf enum value: UNKNOWN28 = 28;
+     */
+    UNKNOWN28 = 28,
+    /**
+     * @generated from protobuf enum value: UNKNOWN29 = 29;
+     */
+    UNKNOWN29 = 29,
+    /**
+     * @generated from protobuf enum value: UNKNOWN30 = 30;
+     */
+    UNKNOWN30 = 30,
+    /**
+     * @generated from protobuf enum value: UNKNOWN31 = 31;
+     */
+    UNKNOWN31 = 31,
+    /**
+     * @generated from protobuf enum value: UNKNOWN32 = 32;
+     */
+    UNKNOWN32 = 32,
+    /**
+     * @generated from protobuf enum value: UNKNOWN33 = 33;
+     */
+    UNKNOWN33 = 33,
+    /**
+     * @generated from protobuf enum value: UNKNOWN34 = 34;
+     */
+    UNKNOWN34 = 34,
+    /**
+     * @generated from protobuf enum value: UNKNOWN35 = 35;
+     */
+    UNKNOWN35 = 35,
+    /**
+     * @generated from protobuf enum value: UNKNOWN36 = 36;
+     */
+    UNKNOWN36 = 36,
+    /**
+     * @generated from protobuf enum value: UNKNOWN37 = 37;
+     */
+    UNKNOWN37 = 37,
+    /**
+     * @generated from protobuf enum value: UNKNOWN38 = 38;
+     */
+    UNKNOWN38 = 38,
+    /**
+     * @generated from protobuf enum value: UNKNOWN39 = 39;
+     */
+    UNKNOWN39 = 39,
+    /**
+     * @generated from protobuf enum value: UNKNOWN40 = 40;
+     */
+    UNKNOWN40 = 40,
+    /**
+     * @generated from protobuf enum value: UNKNOWN41 = 41;
+     */
+    UNKNOWN41 = 41,
+    /**
+     * @generated from protobuf enum value: UNKNOWN42 = 42;
+     */
+    UNKNOWN42 = 42,
+    /**
+     * @generated from protobuf enum value: UNKNOWN43 = 43;
+     */
+    UNKNOWN43 = 43,
+    /**
+     * @generated from protobuf enum value: UNKNOWN44 = 44;
+     */
+    UNKNOWN44 = 44,
+    /**
+     * @generated from protobuf enum value: UNKNOWN45 = 45;
+     */
+    UNKNOWN45 = 45,
+    /**
+     * @generated from protobuf enum value: UNKNOWN46 = 46;
+     */
+    UNKNOWN46 = 46,
+    /**
+     * @generated from protobuf enum value: UNKNOWN47 = 47;
+     */
+    UNKNOWN47 = 47,
+    /**
+     * @generated from protobuf enum value: UNKNOWN48 = 48;
+     */
+    UNKNOWN48 = 48,
+    /**
+     * @generated from protobuf enum value: UNKNOWN49 = 49;
+     */
+    UNKNOWN49 = 49,
+    /**
+     * @generated from protobuf enum value: UNKNOWN50 = 50;
+     */
+    UNKNOWN50 = 50
 }
 /**
  * @generated from protobuf message PDClientMetadata
@@ -552,16 +650,19 @@ export interface PDClientMetadata {
      */
     deviceSpokenLanguage?: string;
     /**
-     * optional uint32 timeSinceMapEnteredForeground = 8;
+     * @generated from protobuf field: optional uint32 timeSinceMapEnteredForeground = 8;
+     */
+    timeSinceMapEnteredForeground?: number;
+    /**
      * AdditionalEnabledMarkets additionalEnabledMarkets = 9;
      *
      * @generated from protobuf field: int32 resultListAttributionSupport = 10;
      */
     resultListAttributionSupport: number;
     /**
-     * @generated from protobuf field: uint32 hourOfDay = 11;
+     * @generated from protobuf field: optional uint32 hourOfDay = 11;
      */
-    hourOfDay: number;
+    hourOfDay?: number;
     /**
      * @generated from protobuf field: uint32 dayOfWeek = 12;
      */
@@ -578,20 +679,15 @@ export interface PDClientMetadata {
      */
     debugApiKey?: string;
     /**
-     * repeated int32 knownClientResolvedTypeDeprecated = 18;
+     * @deprecated
+     * @generated from protobuf field: repeated int32 knownClientResolvedTypeDeprecated = 18 [deprecated = true];
+     */
+    knownClientResolvedTypeDeprecated: number[];
+    /**
+     * bool enablePreflightVenues = 19; // 有问题, 不能序列化这个值，可能是deprecated导致的。
+     * repeated int32 knownClientResolvedType = 20;
+     * repeated string businessChatPreflightIdentifier = 21;
      *
-     * @generated from protobuf field: optional bool enablePreflightVenues = 19;
-     */
-    enablePreflightVenues?: boolean;
-    /**
-     * @generated from protobuf field: repeated int32 knownClientResolvedType = 20;
-     */
-    knownClientResolvedType: number[];
-    /**
-     * @generated from protobuf field: repeated string businessChatPreflightIdentifier = 21;
-     */
-    businessChatPreflightIdentifier: string[];
-    /**
      * @generated from protobuf field: optional int32 clientRevision = 22;
      */
     clientRevision?: number;
@@ -601,14 +697,6 @@ export interface PDClientMetadata {
      * @generated from protobuf field: optional string deviceSku = 24;
      */
     deviceSku?: string;
-    /**
-     * @generated from protobuf field: optional bool siriUserConsentsForAnalysis = 25;
-     */
-    siriUserConsentsForAnalysis?: boolean;
-    /**
-     * @generated from protobuf field: repeated int32 supportedMapsResultType = 26;
-     */
-    supportedMapsResultType: number[];
 }
 declare class PDPlaceRequest$Type extends MessageType<PDPlaceRequest> {
     constructor();

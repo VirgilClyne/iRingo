@@ -404,12 +404,111 @@ export var GeoServiceTag_ServiceType;
      * @generated from protobuf enum value: AUTONAVI_FRONTDOOR = 25;
      */
     GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["AUTONAVI_FRONTDOOR"] = 25] = "AUTONAVI_FRONTDOOR";
+    /**
+     * @generated from protobuf enum value: UNKNOWN26 = 26;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN26"] = 26] = "UNKNOWN26";
+    /**
+     * @generated from protobuf enum value: UNKNOWN27 = 27;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN27"] = 27] = "UNKNOWN27";
+    /**
+     * @generated from protobuf enum value: UNKNOWN28 = 28;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN28"] = 28] = "UNKNOWN28";
+    /**
+     * @generated from protobuf enum value: UNKNOWN29 = 29;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN29"] = 29] = "UNKNOWN29";
+    /**
+     * @generated from protobuf enum value: UNKNOWN30 = 30;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN30"] = 30] = "UNKNOWN30";
+    /**
+     * @generated from protobuf enum value: UNKNOWN31 = 31;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN31"] = 31] = "UNKNOWN31";
+    /**
+     * @generated from protobuf enum value: UNKNOWN32 = 32;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN32"] = 32] = "UNKNOWN32";
+    /**
+     * @generated from protobuf enum value: UNKNOWN33 = 33;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN33"] = 33] = "UNKNOWN33";
+    /**
+     * @generated from protobuf enum value: UNKNOWN34 = 34;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN34"] = 34] = "UNKNOWN34";
+    /**
+     * @generated from protobuf enum value: UNKNOWN35 = 35;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN35"] = 35] = "UNKNOWN35";
+    /**
+     * @generated from protobuf enum value: UNKNOWN36 = 36;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN36"] = 36] = "UNKNOWN36";
+    /**
+     * @generated from protobuf enum value: UNKNOWN37 = 37;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN37"] = 37] = "UNKNOWN37";
+    /**
+     * @generated from protobuf enum value: UNKNOWN38 = 38;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN38"] = 38] = "UNKNOWN38";
+    /**
+     * @generated from protobuf enum value: UNKNOWN39 = 39;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN39"] = 39] = "UNKNOWN39";
+    /**
+     * @generated from protobuf enum value: UNKNOWN40 = 40;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN40"] = 40] = "UNKNOWN40";
+    /**
+     * @generated from protobuf enum value: UNKNOWN41 = 41;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN41"] = 41] = "UNKNOWN41";
+    /**
+     * @generated from protobuf enum value: UNKNOWN42 = 42;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN42"] = 42] = "UNKNOWN42";
+    /**
+     * @generated from protobuf enum value: UNKNOWN43 = 43;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN43"] = 43] = "UNKNOWN43";
+    /**
+     * @generated from protobuf enum value: UNKNOWN44 = 44;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN44"] = 44] = "UNKNOWN44";
+    /**
+     * @generated from protobuf enum value: UNKNOWN45 = 45;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN45"] = 45] = "UNKNOWN45";
+    /**
+     * @generated from protobuf enum value: UNKNOWN46 = 46;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN46"] = 46] = "UNKNOWN46";
+    /**
+     * @generated from protobuf enum value: UNKNOWN47 = 47;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN47"] = 47] = "UNKNOWN47";
+    /**
+     * @generated from protobuf enum value: UNKNOWN48 = 48;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN48"] = 48] = "UNKNOWN48";
+    /**
+     * @generated from protobuf enum value: UNKNOWN49 = 49;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN49"] = 49] = "UNKNOWN49";
+    /**
+     * @generated from protobuf enum value: UNKNOWN50 = 50;
+     */
+    GeoServiceTag_ServiceType[GeoServiceTag_ServiceType["UNKNOWN50"] = 50] = "UNKNOWN50";
 })(GeoServiceTag_ServiceType || (GeoServiceTag_ServiceType = {}));
 // @generated message type with reflection information, may provide speed optimized methods
 class PDPlaceRequest$Type extends MessageType {
     constructor() {
         super("PDPlaceRequest", [
-            { no: 1, name: "analyticMetadata", kind: "message", T: () => PDAnalyticMetadata },
             { no: 2, name: "clientMetadata", kind: "message", T: () => PDClientMetadata },
             { no: 3, name: "displayLanguage", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "spokenLanguage", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
@@ -433,9 +532,6 @@ class PDPlaceRequest$Type extends MessageType {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* PDAnalyticMetadata analyticMetadata */ 1:
-                    message.analyticMetadata = PDAnalyticMetadata.internalBinaryRead(reader, reader.uint32(), options, message.analyticMetadata);
-                    break;
                 case /* PDClientMetadata clientMetadata */ 2:
                     message.clientMetadata = PDClientMetadata.internalBinaryRead(reader, reader.uint32(), options, message.clientMetadata);
                     break;
@@ -466,9 +562,6 @@ class PDPlaceRequest$Type extends MessageType {
         return message;
     }
     internalBinaryWrite(message, writer, options) {
-        /* PDAnalyticMetadata analyticMetadata = 1; */
-        if (message.analyticMetadata)
-            PDAnalyticMetadata.internalBinaryWrite(message.analyticMetadata, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* PDClientMetadata clientMetadata = 2; */
         if (message.clientMetadata)
             PDClientMetadata.internalBinaryWrite(message.clientMetadata, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
@@ -713,18 +806,15 @@ class PDClientMetadata$Type extends MessageType {
             { no: 3, name: "deviceDisplayLanguage", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "deviceKeyboardLanguage", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
             { no: 5, name: "deviceSpokenLanguage", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 8, name: "timeSinceMapEnteredForeground", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
             { no: 10, name: "resultListAttributionSupport", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
-            { no: 11, name: "hourOfDay", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 11, name: "hourOfDay", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
             { no: 12, name: "dayOfWeek", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 16, name: "requiredVersion", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 17, name: "debugApiKey", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
-            { no: 19, name: "enablePreflightVenues", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
-            { no: 20, name: "knownClientResolvedType", kind: "scalar", repeat: 1 /*RepeatType.PACKED*/, T: 5 /*ScalarType.INT32*/ },
-            { no: 21, name: "businessChatPreflightIdentifier", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 18, name: "knownClientResolvedTypeDeprecated", kind: "scalar", repeat: 1 /*RepeatType.PACKED*/, T: 5 /*ScalarType.INT32*/ },
             { no: 22, name: "clientRevision", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ },
-            { no: 24, name: "deviceSku", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
-            { no: 25, name: "siriUserConsentsForAnalysis", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
-            { no: 26, name: "supportedMapsResultType", kind: "scalar", repeat: 1 /*RepeatType.PACKED*/, T: 5 /*ScalarType.INT32*/ }
+            { no: 24, name: "deviceSku", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value) {
@@ -732,12 +822,9 @@ class PDClientMetadata$Type extends MessageType {
         message.deviceCountryCode = "";
         message.deviceDisplayLanguage = "";
         message.resultListAttributionSupport = 0;
-        message.hourOfDay = 0;
         message.dayOfWeek = 0;
         message.requiredVersion = 0;
-        message.knownClientResolvedType = [];
-        message.businessChatPreflightIdentifier = [];
-        message.supportedMapsResultType = [];
+        message.knownClientResolvedTypeDeprecated = [];
         if (value !== undefined)
             reflectionMergePartial(this, message, value);
         return message;
@@ -759,10 +846,13 @@ class PDClientMetadata$Type extends MessageType {
                 case /* optional string deviceSpokenLanguage */ 5:
                     message.deviceSpokenLanguage = reader.string();
                     break;
+                case /* optional uint32 timeSinceMapEnteredForeground */ 8:
+                    message.timeSinceMapEnteredForeground = reader.uint32();
+                    break;
                 case /* int32 resultListAttributionSupport */ 10:
                     message.resultListAttributionSupport = reader.int32();
                     break;
-                case /* uint32 hourOfDay */ 11:
+                case /* optional uint32 hourOfDay */ 11:
                     message.hourOfDay = reader.uint32();
                     break;
                 case /* uint32 dayOfWeek */ 12:
@@ -774,34 +864,18 @@ class PDClientMetadata$Type extends MessageType {
                 case /* optional string debugApiKey */ 17:
                     message.debugApiKey = reader.string();
                     break;
-                case /* optional bool enablePreflightVenues */ 19:
-                    message.enablePreflightVenues = reader.bool();
-                    break;
-                case /* repeated int32 knownClientResolvedType */ 20:
+                case /* repeated int32 knownClientResolvedTypeDeprecated = 18 [deprecated = true];*/ 18:
                     if (wireType === WireType.LengthDelimited)
                         for (let e = reader.int32() + reader.pos; reader.pos < e;)
-                            message.knownClientResolvedType.push(reader.int32());
+                            message.knownClientResolvedTypeDeprecated.push(reader.int32());
                     else
-                        message.knownClientResolvedType.push(reader.int32());
-                    break;
-                case /* repeated string businessChatPreflightIdentifier */ 21:
-                    message.businessChatPreflightIdentifier.push(reader.string());
+                        message.knownClientResolvedTypeDeprecated.push(reader.int32());
                     break;
                 case /* optional int32 clientRevision */ 22:
                     message.clientRevision = reader.int32();
                     break;
                 case /* optional string deviceSku */ 24:
                     message.deviceSku = reader.string();
-                    break;
-                case /* optional bool siriUserConsentsForAnalysis */ 25:
-                    message.siriUserConsentsForAnalysis = reader.bool();
-                    break;
-                case /* repeated int32 supportedMapsResultType */ 26:
-                    if (wireType === WireType.LengthDelimited)
-                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
-                            message.supportedMapsResultType.push(reader.int32());
-                    else
-                        message.supportedMapsResultType.push(reader.int32());
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -827,11 +901,14 @@ class PDClientMetadata$Type extends MessageType {
         /* optional string deviceSpokenLanguage = 5; */
         if (message.deviceSpokenLanguage !== undefined)
             writer.tag(5, WireType.LengthDelimited).string(message.deviceSpokenLanguage);
+        /* optional uint32 timeSinceMapEnteredForeground = 8; */
+        if (message.timeSinceMapEnteredForeground !== undefined)
+            writer.tag(8, WireType.Varint).uint32(message.timeSinceMapEnteredForeground);
         /* int32 resultListAttributionSupport = 10; */
         if (message.resultListAttributionSupport !== 0)
             writer.tag(10, WireType.Varint).int32(message.resultListAttributionSupport);
-        /* uint32 hourOfDay = 11; */
-        if (message.hourOfDay !== 0)
+        /* optional uint32 hourOfDay = 11; */
+        if (message.hourOfDay !== undefined)
             writer.tag(11, WireType.Varint).uint32(message.hourOfDay);
         /* uint32 dayOfWeek = 12; */
         if (message.dayOfWeek !== 0)
@@ -842,35 +919,19 @@ class PDClientMetadata$Type extends MessageType {
         /* optional string debugApiKey = 17; */
         if (message.debugApiKey !== undefined)
             writer.tag(17, WireType.LengthDelimited).string(message.debugApiKey);
-        /* optional bool enablePreflightVenues = 19; */
-        if (message.enablePreflightVenues !== undefined)
-            writer.tag(19, WireType.Varint).bool(message.enablePreflightVenues);
-        /* repeated int32 knownClientResolvedType = 20; */
-        if (message.knownClientResolvedType.length) {
-            writer.tag(20, WireType.LengthDelimited).fork();
-            for (let i = 0; i < message.knownClientResolvedType.length; i++)
-                writer.int32(message.knownClientResolvedType[i]);
+        /* repeated int32 knownClientResolvedTypeDeprecated = 18 [deprecated = true]; */
+        if (message.knownClientResolvedTypeDeprecated.length) {
+            writer.tag(18, WireType.LengthDelimited).fork();
+            for (let i = 0; i < message.knownClientResolvedTypeDeprecated.length; i++)
+                writer.int32(message.knownClientResolvedTypeDeprecated[i]);
             writer.join();
         }
-        /* repeated string businessChatPreflightIdentifier = 21; */
-        for (let i = 0; i < message.businessChatPreflightIdentifier.length; i++)
-            writer.tag(21, WireType.LengthDelimited).string(message.businessChatPreflightIdentifier[i]);
         /* optional int32 clientRevision = 22; */
         if (message.clientRevision !== undefined)
             writer.tag(22, WireType.Varint).int32(message.clientRevision);
         /* optional string deviceSku = 24; */
         if (message.deviceSku !== undefined)
             writer.tag(24, WireType.LengthDelimited).string(message.deviceSku);
-        /* optional bool siriUserConsentsForAnalysis = 25; */
-        if (message.siriUserConsentsForAnalysis !== undefined)
-            writer.tag(25, WireType.Varint).bool(message.siriUserConsentsForAnalysis);
-        /* repeated int32 supportedMapsResultType = 26; */
-        if (message.supportedMapsResultType.length) {
-            writer.tag(26, WireType.LengthDelimited).fork();
-            for (let i = 0; i < message.supportedMapsResultType.length; i++)
-                writer.int32(message.supportedMapsResultType[i]);
-            writer.join();
-        }
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
