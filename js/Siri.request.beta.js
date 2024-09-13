@@ -1,5 +1,5 @@
 /* README: https://github.com/VirgilClyne/iRingo */
-console.log(' iRingo: 🔍 Siri β Request')
+console.log(' iRingo: ⭕ Siri β Request')
 const $platform = platform();
 function platform() {
     if ("undefined" !== typeof $environment && $environment["surge-version"])
