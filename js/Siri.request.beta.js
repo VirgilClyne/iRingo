@@ -1263,6 +1263,7 @@ var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
 var Settings$3 = {
 	Switch: true,
 	CountryCode: "SG",
+	Region: "AUTO",
 	Domains: [
 		"web",
 		"itunes",
@@ -8844,7 +8845,7 @@ function modifyPegasusQueryContext(queryContext, Settings) {
         case "AUTO":
             break;
         default:
-            if (queryContext?.region) queryContext.region = "zh_CN"; //Settings.Region;
+            if (queryContext?.region) queryContext.region = Settings.Region;
             break;
     }    if (queryContext?.skuRegion === "CH") queryContext.skuRegion = "LL";
     //delete queryContext?.location;

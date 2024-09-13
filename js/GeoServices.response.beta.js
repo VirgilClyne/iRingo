@@ -1764,6 +1764,7 @@ var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
 var Settings$3 = {
 	Switch: true,
 	CountryCode: "SG",
+	Region: "AUTO",
 	Domains: [
 		"web",
 		"itunes",
