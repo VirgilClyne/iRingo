@@ -9,8 +9,14 @@ export default function modifyPegasusQueryContext(queryContext, Settings) {
         //break;
         default:
             if (queryContext?.countryCode) queryContext.countryCode = Settings.CountryCode;
-            //if (queryContext?.region) queryContext.region = `${Language}_${Settings.CountryCode}`;
             //if (data?.siriPegasusContext?.conversationContext?.cc) data.siriPegasusContext.conversationContext.cc = Settings.CountryCode;
+            break;
+    };
+    switch (Settings.Region) {
+        case "AUTO":
+            break;
+        default:
+            if (queryContext?.region) queryContext.region = Settings.Region;
             break;
     };
     if (queryContext?.skuRegion === "CH") queryContext.skuRegion = "LL";
