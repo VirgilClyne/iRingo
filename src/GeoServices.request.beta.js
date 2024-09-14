@@ -2,7 +2,7 @@ import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, d
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
 import GEOPDPlaceRequest from "./class/GEOPDPlaceRequest.mjs";
-log("v3.2.5(1014)");
+log("v3.2.5(1016)");
 // 构造回复数据
 let $response = undefined;
 /***************** Processing *****************/
@@ -89,16 +89,15 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											const Header = rawBody.slice(0, headerIndex);
 											body = rawBody.slice(headerIndex);
 											/******************  initialization finish  *******************/
-											
 											body = GEOPDPlaceRequest.decode(body);
 											log(`🚧 body: ${JSON.stringify(body, null, 2)}`, "");
 											switch (body.requestType) {
 												case "REQUEST_TYPE_REVERSE_GEOCODING":
 													break;
 											};
-											//body.clientMetadata.deviceCountryCode = "US";
+											body.displayRegion = "US";
+											body.clientMetadata.deviceCountryCode = "US";
 											body = GEOPDPlaceRequest.encode(body);
-											
 											/******************  initialization start  *******************/
 											rawBody = new Uint8Array(Header.length + body.length);
 											rawBody.set(Header, 0);
