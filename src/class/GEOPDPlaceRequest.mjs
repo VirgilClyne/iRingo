@@ -2,7 +2,7 @@ import { log } from "../utils/utils.mjs";
 //import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 import { PDPlaceRequest, RequestType } from "../protobuf/GEOPDPlaceRequest.js";
 //import { GeoServiceTag_ServiceType } from "../protobuf/GEOPDAnalyticMetadata.js";
-//import { PDComponentInfo_ComponentType } from "../protobuf/GEOPDComponentInfo.js";
+import { ComponentType } from "../protobuf/GEOPDComponentInfo.js";
 export default class GEOPDPlaceRequest {
     static Name = "GEOPDPlaceRequest";
     static Version = "1.0.4";
@@ -14,8 +14,8 @@ export default class GEOPDPlaceRequest {
             if (typeof serviceTag.serviceType !== "undefined") serviceTag.serviceType = GeoServiceTag_ServiceType[serviceTag.serviceType];
             return serviceTag;
         });
-        if (typeof body?.requestedComponent !== "undefined") body.requestedComponent.map(requestedComponent => {
-            if (typeof requestedComponent.type !== "undefined") requestedComponent.type = PDComponentInfo_ComponentType[requestedComponent.type];
+        if (typeof body?.requestedComponents !== "undefined") body.requestedComponents.map(requestedComponent => {
+            if (typeof requestedComponent.type !== "undefined") requestedComponent.type = ComponentType[requestedComponent.type];
             return requestedComponent;
         });
         if (typeof body.requestType !== "undefined") body.requestType = RequestType[body.requestType];
@@ -29,8 +29,8 @@ export default class GEOPDPlaceRequest {
             if (typeof serviceTag.serviceType !== "undefined") serviceTag.serviceType = GeoServiceTag_ServiceType[serviceTag.serviceType];
             return serviceTag;
         });
-        if (typeof body?.requestedComponent !== "undefined") body.requestedComponent.map(requestedComponent => {
-            if (typeof requestedComponent.type !== "undefined") requestedComponent.type = PDComponentInfo_ComponentType[requestedComponent.type];
+        if (typeof body?.requestedComponents !== "undefined") body.requestedComponents.map(requestedComponent => {
+            if (typeof requestedComponent.type !== "undefined") requestedComponent.type = ComponentType[requestedComponent.type];
             return requestedComponent;
         });
         if (typeof body.requestType !== "undefined") body.requestType = RequestType[body.requestType];

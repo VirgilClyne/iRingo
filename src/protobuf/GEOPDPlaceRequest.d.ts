@@ -7,6 +7,7 @@ import type { BinaryReadOptions } from "@protobuf-ts/runtime";
 import type { IBinaryReader } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { GEOPDComponentInfo } from "./GEOPDComponentInfo";
 import { GEOPDClientMetadata } from "./GEOPDClientMetadata";
 /**
  * @generated from protobuf message PDPlaceRequest
@@ -27,8 +28,10 @@ export interface PDPlaceRequest {
      */
     spokenLanguages: string[];
     /**
-     * repeated PDComponentInfo requestedComponents = 5;
-     *
+     * @generated from protobuf field: repeated GEOPDComponentInfo requestedComponents = 5;
+     */
+    requestedComponents: GEOPDComponentInfo[];
+    /**
      * @generated from protobuf field: optional bool suppressResultsRequiringAttribution = 6;
      */
     suppressResultsRequiringAttribution?: boolean;
@@ -284,53 +287,53 @@ export declare enum RequestType {
      */
     REQUEST_TYPE_PLACECARD_ENRICHMENT = 58,
     /**
-     * @generated from protobuf enum value: UNKNOWN59 = 59;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN59 = 59;
      */
-    UNKNOWN59 = 59,
+    REQUEST_TYPE_UNKNOWN59 = 59,
     /**
-     * @generated from protobuf enum value: UNKNOWN60 = 60;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN60 = 60;
      */
-    UNKNOWN60 = 60,
+    REQUEST_TYPE_UNKNOWN60 = 60,
     /**
-     * @generated from protobuf enum value: UNKNOWN61 = 61;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN61 = 61;
      */
-    UNKNOWN61 = 61,
+    REQUEST_TYPE_UNKNOWN61 = 61,
     /**
-     * @generated from protobuf enum value: UNKNOWN62 = 62;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN62 = 62;
      */
-    UNKNOWN62 = 62,
+    REQUEST_TYPE_UNKNOWN62 = 62,
     /**
-     * @generated from protobuf enum value: UNKNOWN63 = 63;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN63 = 63;
      */
-    UNKNOWN63 = 63,
+    REQUEST_TYPE_UNKNOWN63 = 63,
     /**
-     * @generated from protobuf enum value: UNKNOWN64 = 64;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN64 = 64;
      */
-    UNKNOWN64 = 64,
+    REQUEST_TYPE_UNKNOWN64 = 64,
     /**
-     * @generated from protobuf enum value: UNKNOWN65 = 65;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN65 = 65;
      */
-    UNKNOWN65 = 65,
+    REQUEST_TYPE_UNKNOWN65 = 65,
     /**
-     * @generated from protobuf enum value: UNKNOWN66 = 66;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN66 = 66;
      */
-    UNKNOWN66 = 66,
+    REQUEST_TYPE_UNKNOWN66 = 66,
     /**
-     * @generated from protobuf enum value: UNKNOWN67 = 67;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN67 = 67;
      */
-    UNKNOWN67 = 67,
+    REQUEST_TYPE_UNKNOWN67 = 67,
     /**
-     * @generated from protobuf enum value: UNKNOWN68 = 68;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN68 = 68;
      */
-    UNKNOWN68 = 68,
+    REQUEST_TYPE_UNKNOWN68 = 68,
     /**
-     * @generated from protobuf enum value: UNKNOWN69 = 69;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN69 = 69;
      */
-    UNKNOWN69 = 69,
+    REQUEST_TYPE_UNKNOWN69 = 69,
     /**
-     * @generated from protobuf enum value: UNKNOWN70 = 70;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN70 = 70;
      */
-    UNKNOWN70 = 70
+    REQUEST_TYPE_UNKNOWN70 = 70
 }
 declare class PDPlaceRequest$Type extends MessageType<PDPlaceRequest> {
     constructor();

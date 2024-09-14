@@ -5,6 +5,7 @@ import { WireType } from "@protobuf-ts/runtime";
 import { UnknownFieldHandler } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { GEOPDComponentInfo } from "./GEOPDComponentInfo";
 import { GEOPDClientMetadata } from "./GEOPDClientMetadata";
 /**
  * @generated from protobuf enum RequestType
@@ -248,53 +249,53 @@ export var RequestType;
      */
     RequestType[RequestType["REQUEST_TYPE_PLACECARD_ENRICHMENT"] = 58] = "REQUEST_TYPE_PLACECARD_ENRICHMENT";
     /**
-     * @generated from protobuf enum value: UNKNOWN59 = 59;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN59 = 59;
      */
-    RequestType[RequestType["UNKNOWN59"] = 59] = "UNKNOWN59";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN59"] = 59] = "REQUEST_TYPE_UNKNOWN59";
     /**
-     * @generated from protobuf enum value: UNKNOWN60 = 60;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN60 = 60;
      */
-    RequestType[RequestType["UNKNOWN60"] = 60] = "UNKNOWN60";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN60"] = 60] = "REQUEST_TYPE_UNKNOWN60";
     /**
-     * @generated from protobuf enum value: UNKNOWN61 = 61;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN61 = 61;
      */
-    RequestType[RequestType["UNKNOWN61"] = 61] = "UNKNOWN61";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN61"] = 61] = "REQUEST_TYPE_UNKNOWN61";
     /**
-     * @generated from protobuf enum value: UNKNOWN62 = 62;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN62 = 62;
      */
-    RequestType[RequestType["UNKNOWN62"] = 62] = "UNKNOWN62";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN62"] = 62] = "REQUEST_TYPE_UNKNOWN62";
     /**
-     * @generated from protobuf enum value: UNKNOWN63 = 63;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN63 = 63;
      */
-    RequestType[RequestType["UNKNOWN63"] = 63] = "UNKNOWN63";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN63"] = 63] = "REQUEST_TYPE_UNKNOWN63";
     /**
-     * @generated from protobuf enum value: UNKNOWN64 = 64;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN64 = 64;
      */
-    RequestType[RequestType["UNKNOWN64"] = 64] = "UNKNOWN64";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN64"] = 64] = "REQUEST_TYPE_UNKNOWN64";
     /**
-     * @generated from protobuf enum value: UNKNOWN65 = 65;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN65 = 65;
      */
-    RequestType[RequestType["UNKNOWN65"] = 65] = "UNKNOWN65";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN65"] = 65] = "REQUEST_TYPE_UNKNOWN65";
     /**
-     * @generated from protobuf enum value: UNKNOWN66 = 66;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN66 = 66;
      */
-    RequestType[RequestType["UNKNOWN66"] = 66] = "UNKNOWN66";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN66"] = 66] = "REQUEST_TYPE_UNKNOWN66";
     /**
-     * @generated from protobuf enum value: UNKNOWN67 = 67;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN67 = 67;
      */
-    RequestType[RequestType["UNKNOWN67"] = 67] = "UNKNOWN67";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN67"] = 67] = "REQUEST_TYPE_UNKNOWN67";
     /**
-     * @generated from protobuf enum value: UNKNOWN68 = 68;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN68 = 68;
      */
-    RequestType[RequestType["UNKNOWN68"] = 68] = "UNKNOWN68";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN68"] = 68] = "REQUEST_TYPE_UNKNOWN68";
     /**
-     * @generated from protobuf enum value: UNKNOWN69 = 69;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN69 = 69;
      */
-    RequestType[RequestType["UNKNOWN69"] = 69] = "UNKNOWN69";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN69"] = 69] = "REQUEST_TYPE_UNKNOWN69";
     /**
-     * @generated from protobuf enum value: UNKNOWN70 = 70;
+     * @generated from protobuf enum value: REQUEST_TYPE_UNKNOWN70 = 70;
      */
-    RequestType[RequestType["UNKNOWN70"] = 70] = "UNKNOWN70";
+    RequestType[RequestType["REQUEST_TYPE_UNKNOWN70"] = 70] = "REQUEST_TYPE_UNKNOWN70";
 })(RequestType || (RequestType = {}));
 // @generated message type with reflection information, may provide speed optimized methods
 class PDPlaceRequest$Type extends MessageType {
@@ -303,6 +304,7 @@ class PDPlaceRequest$Type extends MessageType {
             { no: 2, name: "clientMetadata", kind: "message", T: () => GEOPDClientMetadata },
             { no: 3, name: "displayLanguages", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "spokenLanguages", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "requestedComponents", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => GEOPDComponentInfo },
             { no: 6, name: "suppressResultsRequiringAttribution", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
             { no: 7, name: "requestType", kind: "enum", T: () => ["RequestType", RequestType] },
             { no: 9, name: "displayRegion", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
@@ -312,6 +314,7 @@ class PDPlaceRequest$Type extends MessageType {
         const message = globalThis.Object.create((this.messagePrototype));
         message.displayLanguages = [];
         message.spokenLanguages = [];
+        message.requestedComponents = [];
         message.requestType = 0;
         message.displayRegion = "";
         if (value !== undefined)
@@ -331,6 +334,9 @@ class PDPlaceRequest$Type extends MessageType {
                     break;
                 case /* repeated string spokenLanguages */ 4:
                     message.spokenLanguages.push(reader.string());
+                    break;
+                case /* repeated GEOPDComponentInfo requestedComponents */ 5:
+                    message.requestedComponents.push(GEOPDComponentInfo.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 case /* optional bool suppressResultsRequiringAttribution */ 6:
                     message.suppressResultsRequiringAttribution = reader.bool();
@@ -362,6 +368,9 @@ class PDPlaceRequest$Type extends MessageType {
         /* repeated string spokenLanguages = 4; */
         for (let i = 0; i < message.spokenLanguages.length; i++)
             writer.tag(4, WireType.LengthDelimited).string(message.spokenLanguages[i]);
+        /* repeated GEOPDComponentInfo requestedComponents = 5; */
+        for (let i = 0; i < message.requestedComponents.length; i++)
+            GEOPDComponentInfo.internalBinaryWrite(message.requestedComponents[i], writer.tag(5, WireType.LengthDelimited).fork(), options).join();
         /* optional bool suppressResultsRequiringAttribution = 6; */
         if (message.suppressResultsRequiringAttribution !== undefined)
             writer.tag(6, WireType.Varint).bool(message.suppressResultsRequiringAttribution);
