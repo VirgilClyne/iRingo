@@ -2,6 +2,7 @@
 // @generated from protobuf file "Apple.Parsec.Siri.V2alpha.SiriPegasusRequest.proto" (syntax proto3)
 // tslint:disable
 import { MessageType } from "@protobuf-ts/runtime";
+import { ClientConversationContextInfo } from "./apple.parsec.siri.context.ClientConversationContextInfo";
 import { SiriPegasusContext } from "./apple.parsec.siri.v2alpha.SiriPegasusContext";
 import { PegasusQueryContext } from "./apple.parsec.search.PegasusQueryContext";
 import { PegasusSearchQuery } from "./apple.parsec.siri.v2alpha.PegasusSearchQuery";
@@ -27,6 +28,15 @@ export interface SiriPegasusRequest {
      * @generated from protobuf field: optional SiriPegasusContext siriPegasusContext = 5;
      */
     siriPegasusContext?: SiriPegasusContext;
+    /**
+     * optional SiriEnvironment siriEnvironment = 6;
+     * optional bool isSiriInternalRequest = 7; //?
+     * optional bool isDataOnlyRequest = 8; //?
+     * optional string trialIdentifiers = 9; //?
+     *
+     * @generated from protobuf field: ClientConversationContextInfo clientConversationContextInfo = 10;
+     */
+    clientConversationContextInfo?: ClientConversationContextInfo;
 }
 declare class SiriPegasusRequest$Type extends MessageType<SiriPegasusRequest> {
     constructor();

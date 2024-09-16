@@ -11,6 +11,7 @@ class SiriPegasusContext$Type extends MessageType {
     constructor() {
         super("SiriPegasusContext", [
             { no: 1, name: "deviceState", kind: "message", T: () => DeviceState },
+            { no: 2, name: "siriInteractionType", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 8, name: "restrictions", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 14, name: "conversationContext", kind: "message", T: () => N14 }
         ]);

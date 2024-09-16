@@ -12,12 +12,25 @@ export interface SiriPegasusContext {
      */
     deviceState?: DeviceState;
     /**
+     * @generated from protobuf field: int32 siriInteractionType = 2;
+     */
+    siriInteractionType: number;
+    /**
+     * _isNavigationMode = 3;
+     * _treatRandomAsFirst = 4;
+     * _assistantID = 5;
+     * _person = 6;
+     * _interactionID = 7;
+     *
      * @generated from protobuf field: string restrictions = 8;
      */
     restrictions: string;
     /**
-     * multiUserContext = 9;
+     * multiUserContext = 9 [deprecated = true];
      * contentRatingRestrictions = 10;
+     * _userGroundingNeeded = 11 [deprecated = true];
+     * _resultCandidateID = 12;
+     * _isPhoneCallActive = 13 [deprecated = true];
      *
      * @generated from protobuf field: N14 conversationContext = 14;
      */
@@ -31,6 +44,14 @@ export interface N14 {
      * @generated from protobuf field: string cc = 1;
      */
     cc: string;
+    /**
+     * @generated from protobuf field: int32 unknown2 = 2;
+     */
+    unknown2: number;
+    /**
+     * @generated from protobuf field: int32 unknown3 = 3;
+     */
+    unknown3: number;
 }
 declare class SiriPegasusContext$Type extends MessageType<SiriPegasusContext> {
     constructor();

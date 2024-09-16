@@ -37,9 +37,9 @@ export interface PegasusQueryContext {
      */
     timeZone: string;
     /**
-     * @generated from protobuf field: string skuRegion = 9;
+     * @generated from protobuf field: optional string skuRegion = 9;
      */
-    skuRegion: string;
+    skuRegion?: string;
     /**
      * calendar = 10;
      *
@@ -85,9 +85,9 @@ export interface PegasusQueryContext {
      * string abTestSeed = 24; //?
      * string siriLocale = 25; //?
      *
-     * @generated from protobuf field: string region = 26;
+     * @generated from protobuf field: optional string region = 26;
      */
-    region: string;
+    region?: string;
     /**
      * string sil = 27; //?
      *
@@ -108,9 +108,9 @@ export interface Location {
      */
     longitude?: number;
     /**
-     * @generated from protobuf field: optional int32 source = 3;
+     * @generated from protobuf field: optional Source source = 3;
      */
-    source?: number;
+    source?: Source;
     /**
      * @generated from protobuf field: optional float horizontalAccuracy = 4;
      */
@@ -125,10 +125,14 @@ export declare enum TemperatureUnit {
      */
     TemperatureUnitUnknown = 0,
     /**
+     * celsius
+     *
      * @generated from protobuf enum value: TemperatureUnitCelsius = 1;
      */
     TemperatureUnitCelsius = 1,
     /**
+     * fahrenheit
+     *
      * @generated from protobuf enum value: TemperatureUnitFahrenheit = 2;
      */
     TemperatureUnitFahrenheit = 2
@@ -163,13 +167,64 @@ export declare enum HourFormat {
      */
     HourFormatUnknown = 0,
     /**
+     * twelve
+     *
      * @generated from protobuf enum value: HourFormatTwelve = 1;
      */
     HourFormatTwelve = 1,
     /**
+     * twentyFour
+     *
      * @generated from protobuf enum value: HourFormatTwentyFour = 2;
      */
     HourFormatTwentyFour = 2
+}
+/**
+ * @generated from protobuf enum Source
+ */
+export declare enum Source {
+    /**
+     * @generated from protobuf enum value: SourceUnknown = 0;
+     */
+    SourceUnknown = 0,
+    /**
+     * disabledByUser
+     *
+     * @generated from protobuf enum value: SourceDisabledByUser = 1;
+     */
+    SourceDisabledByUser = 1,
+    /**
+     * disabledByBag
+     *
+     * @generated from protobuf enum value: SourceDisabledByBag = 2;
+     */
+    SourceDisabledByBag = 2,
+    /**
+     * tooSlow
+     *
+     * @generated from protobuf enum value: SourceTooSlow = 3;
+     */
+    SourceTooSlow = 3,
+    /**
+     * @generated from protobuf enum value: SourceError = 4;
+     */
+    SourceError = 4,
+    /**
+     * @generated from protobuf enum value: SourceGPS = 5;
+     */
+    SourceGPS = 5,
+    /**
+     * cellular
+     *
+     * @generated from protobuf enum value: SourceCellular = 6;
+     */
+    SourceCellular = 6,
+    /**
+     * wiFi
+     *
+     * @generated from protobuf enum value: SourceWiFi = 7;
+     */
+    SourceWiFi = 7
 }
 declare class PegasusQueryContext$Type extends MessageType<PegasusQueryContext> {
     constructor();
