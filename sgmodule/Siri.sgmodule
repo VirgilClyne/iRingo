@@ -1,5 +1,5 @@
 #!name= iRingo: 🔍 Siri & Search
-#!desc=V1 & iOS 17.5⬇️\n全面自定义「Siri与搜索」的功能。
+#!desc=V1️⃣ & iOS 17.5⬇️\n全面自定义「Siri与搜索」中的「Siri 建议」功能。\n⚠️本模块不含自定义「Siri与搜索」中的「询问 Siri」功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
@@ -7,21 +7,21 @@
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 #!category= iRingo
 #!system=ios
-#!arguments=CountryCode: SG
+#!arguments=CountryCode:SG
 #!arguments-desc=CountryCode: 国家或地区代码
 
 [Script]
 # Bag (iOS/macOS)
-🔍 Siri.bag.request = type=http-request, pattern=^https?:\/\/api\.smoot\.apple\.(com|cn)\/bag, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
-🔍 Siri.bag.response = type=http-response, pattern=^https?:\/\/api\.smoot\.apple\.(com|cn)\/bag, requires-body=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=CountryCode={{{CountryCode}}}
-# Siri Suggestion & Look Up Search (iOS/macOS)
-🔍 Siri.search.request = type=http-request, pattern=^https?:\/\/api-(.*)\.smoot\.apple\.com\/search, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
-🔍 Siri.search.response = type=http-response, pattern=^https?:\/\/api-(.*)\.smoot\.apple\.com\/search, requires-body=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=CountryCode={{{CountryCode}}}
+🔍 Siri.Bag.request = type=http-request, pattern=^https?:\/\/api2?\.smoot\.apple\.(com|cn)\/bag, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
+🔍 Siri.Bag.response = type=http-response, pattern=^https?:\/\/api2?\.smoot\.apple\.(com|cn)\/bag, requires-body=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=CountryCode={{{CountryCode}}}
+# Siri Suggestions & Look Up Search (iOS/macOS)
+🔍 Siri.Search.request = type=http-request, pattern=^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/search, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
+🔍 Siri.Search.response = type=http-response, pattern=^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/search, requires-body=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=CountryCode={{{CountryCode}}}
 # Siri Infomation Card (macOS)
-🔍 Siri.card.request = type=http-request, pattern=^https?:\/\/api-(.*)\.smoot\.apple\.com\/card, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
-🔍 Siri.card.response = type=http-response, pattern=^https?:\/\/api-(.*)\.smoot\.apple\.com\/card, requires-body=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=CountryCode={{{CountryCode}}}
+🔍 Siri.Card.request = type=http-request, pattern=^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/card, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
+🔍 Siri.Card.response = type=http-response, pattern=^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/card, requires-body=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.response.js, argument=CountryCode={{{CountryCode}}}
 # Flight Search (iOS/macOS)
-🔍 Siri.flight.request = type=http-request, pattern=^https?:\/\/api-(.*)\.smoot\.apple\.com\/flight, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
+🔍 Siri.Flight.request = type=http-request, pattern=^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/flight, requires-body=0, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Siri.request.js, argument=CountryCode={{{CountryCode}}}
 
 [MITM]
 hostname = %APPEND% api*.smoot.apple.com, api.smoot.apple.cn

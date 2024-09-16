@@ -1,12 +1,19 @@
-#!name= iRingo: 🔍 Siri & Search
-#!desc=V1️⃣ & iOS 17.5⬇️\n全面自定义「Siri与搜索」中的「Siri 建议」功能。\n⚠️本模块不含自定义「Siri与搜索」中的「询问 Siri」功能。
+#!name= iRingo: 🔍 Siri & Spotlight
+#!desc=V1️⃣ & iOS 17.5⬇️\n全面自定义「Siri与聚焦」中的「Siri 建议」功能。\n⚠️本模块不含自定义「Siri与聚焦」中的「询问 Siri」功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Siri
 #!author=VirgilClyne
 #!homepage=https://github.com/VirgilClyne
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索
 #!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png
 #!tag= iRingo
-#!system=iOS,iPadOS,watchOS
+#!system=macOS
+
+[Rule]
+# > Look Up (Only for Wikipedia@macOS, TUN Mode enabled required)
+PROCESS-NAME,LookupViewService
+DOMAIN,lookup-api.apple.com
+DOMAIN,lookup-api.apple.com.edgekey.net
+DOMAIN,e16991.b.akamaiedge.net
 
 [Script]
 # Bag (iOS/macOS)

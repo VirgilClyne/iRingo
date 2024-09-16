@@ -1,7 +1,8 @@
 name: " iRingo: 🔍 Siri & Search β"
 desc: |-
-  V1 & iOS 17.5⬇️ & BETA
-  全面自定义「Siri与搜索」的功能。
+  V1️⃣ & iOS 17.5⬇️ & BETA
+  全面自定义「Siri与搜索」中的「Siri 建议」功能。
+  本模块不含自定义「Siri与搜索」中的「询问 Siri」功能。
   注：该覆写包含代理规则。
 openUrl: "http://boxjs.com/#/app/iRingo.Siri.beta"
 author: "VirgilClyne"
@@ -32,43 +33,43 @@ http:
       require-body: true
       timeout: 10
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/search
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/search
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/search
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/search
       name: Siri.response
       type: response
       require-body: true
       timeout: 10
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/card
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/card
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/card
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/card
       name: Siri.response
       type: request
       require-body: true
       timeout: 10
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/warm
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/warm
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/render
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/render
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api-(.*)\.smoot\.apple\.com\/flight
+    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/flight
       name: Siri.request
       type: request
       require-body: false
