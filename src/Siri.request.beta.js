@@ -11,7 +11,7 @@ import { SiriPegasusRequest } from "./protobuf/apple.parsec.siri.v2alpha.SiriPeg
 import { SiriPegasusContext } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusContext";
 import { PegasusQueryContext } from "./protobuf/apple.parsec.search.PegasusQueryContext";
 
-log("v4.1.1(4041)");
+log("v4.1.2(4042)");
 
 // 构造回复数据
 let $response = undefined;
@@ -300,25 +300,16 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 					};
 					// 主机判断
 					switch (HOST) {
-						case "api.smoot.apple.com":
 						case "api.smoot.apple.cn":
-							// 路径判断
-							switch (PATH) {
-								case "/bag": // 配置
-									break;
-							};
-							break;
-						case "guzzoni.smoot.apple.com":
-							break;
-						case "fbs.smoot.apple.com":
-							break;
-						case "cdn.smoot.apple.com":
-							break;
+						case "api.smoot.apple.com":
+						case "api2.smoot.apple.com":
 						case "api-siri.smoot.apple.com":
 						default: // 其他主机
 							let q = url.searchParams.get("q");
 							// 路径判断
 							switch (PATH) {
+								case "/bag": // 配置
+									break;
 								case "/search": // 搜索
 									switch (url.searchParams.get("qtype")) {
 										case "zkw": // 处理"新闻"小组件
@@ -399,6 +390,12 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "/flight": // 航班
 									break;
 							};
+							break;
+						case "guzzoni.smoot.apple.com":
+							break;
+						case "fbs.smoot.apple.com":
+							break;
+						case "cdn.smoot.apple.com":
 							break;
 					};
 					break;

@@ -12286,7 +12286,7 @@ class SiriPegasusRequest$Type extends MessageType {
  */
 const SiriPegasusRequest = new SiriPegasusRequest$Type();
 
-log("v4.1.1(4041)");
+log("v4.1.2(4042)");
 
 // 构造回复数据
 let $response = undefined;
@@ -12551,20 +12551,16 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 							break;
 					}					// 主机判断
 					switch (HOST) {
-						case "api.smoot.apple.com":
 						case "api.smoot.apple.cn":
-							break;
-						case "guzzoni.smoot.apple.com":
-							break;
-						case "fbs.smoot.apple.com":
-							break;
-						case "cdn.smoot.apple.com":
-							break;
+						case "api.smoot.apple.com":
+						case "api2.smoot.apple.com":
 						case "api-siri.smoot.apple.com":
 						default: // 其他主机
 							let q = url.searchParams.get("q");
 							// 路径判断
 							switch (PATH) {
+								case "/bag": // 配置
+									break;
 								case "/search": // 搜索
 									switch (url.searchParams.get("qtype")) {
 										case "zkw": // 处理"新闻"小组件
@@ -12633,6 +12629,12 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											break;
 									}									break;
 							}							break;
+						case "guzzoni.smoot.apple.com":
+							break;
+						case "fbs.smoot.apple.com":
+							break;
+						case "cdn.smoot.apple.com":
+							break;
 					}					break;
 				case "CONNECT":
 				case "TRACE":
