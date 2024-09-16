@@ -8,10 +8,11 @@ import modifyPegasusQueryContext from "./function/modifyPegasusQueryContext.mjs"
 
 import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 import { SiriPegasusRequest } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusRequest";
+import { LookupSearchRequest } from "./protobuf/apple.parsec.lookup.v1alpha.LookupSearchRequest";
 import { SiriPegasusContext } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusContext";
 import { PegasusQueryContext } from "./protobuf/apple.parsec.search.PegasusQueryContext";
 
-log("v4.1.2(4042)");
+log("v4.1.3(4043)");
 
 // 构造回复数据
 let $response = undefined;
@@ -180,17 +181,6 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													break;
 												};
 												case "/apple.parsec.lookup.v1alpha.LookupSearch/LookupSearch": { // 查询搜索
-													/******************  initialization start  *******************/
-													class LookupSearchRequest$Type extends MessageType {
-														constructor() {
-															super("LookupSearchRequest", [
-																//{ no: 1, name: "queries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Query },
-																{ no: 2, name: "queryContext", kind: "message", T: () => PegasusQueryContext }
-															]);
-														}
-													}
-													const LookupSearchRequest = new LookupSearchRequest$Type();
-													/******************  initialization finish  *******************/
 													let data = LookupSearchRequest.fromBinary(body);
 													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													let UF = UnknownFieldHandler.list(data);
