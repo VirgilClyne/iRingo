@@ -428,1501 +428,6 @@ function done(object = {}) {
 
 const log = (...logs) => console.log(logs.join("\n"));
 
-var Settings$8 = {
-	Switch: true
-};
-var Configs$4 = {
-	Storefront: [
-		[
-			"AE",
-			"143481"
-		],
-		[
-			"AF",
-			"143610"
-		],
-		[
-			"AG",
-			"143540"
-		],
-		[
-			"AI",
-			"143538"
-		],
-		[
-			"AL",
-			"143575"
-		],
-		[
-			"AM",
-			"143524"
-		],
-		[
-			"AO",
-			"143564"
-		],
-		[
-			"AR",
-			"143505"
-		],
-		[
-			"AT",
-			"143445"
-		],
-		[
-			"AU",
-			"143460"
-		],
-		[
-			"AZ",
-			"143568"
-		],
-		[
-			"BA",
-			"143612"
-		],
-		[
-			"BB",
-			"143541"
-		],
-		[
-			"BD",
-			"143490"
-		],
-		[
-			"BE",
-			"143446"
-		],
-		[
-			"BF",
-			"143578"
-		],
-		[
-			"BG",
-			"143526"
-		],
-		[
-			"BH",
-			"143559"
-		],
-		[
-			"BJ",
-			"143576"
-		],
-		[
-			"BM",
-			"143542"
-		],
-		[
-			"BN",
-			"143560"
-		],
-		[
-			"BO",
-			"143556"
-		],
-		[
-			"BR",
-			"143503"
-		],
-		[
-			"BS",
-			"143539"
-		],
-		[
-			"BT",
-			"143577"
-		],
-		[
-			"BW",
-			"143525"
-		],
-		[
-			"BY",
-			"143565"
-		],
-		[
-			"BZ",
-			"143555"
-		],
-		[
-			"CA",
-			"143455"
-		],
-		[
-			"CD",
-			"143613"
-		],
-		[
-			"CG",
-			"143582"
-		],
-		[
-			"CH",
-			"143459"
-		],
-		[
-			"CI",
-			"143527"
-		],
-		[
-			"CL",
-			"143483"
-		],
-		[
-			"CM",
-			"143574"
-		],
-		[
-			"CN",
-			"143465"
-		],
-		[
-			"CO",
-			"143501"
-		],
-		[
-			"CR",
-			"143495"
-		],
-		[
-			"CV",
-			"143580"
-		],
-		[
-			"CY",
-			"143557"
-		],
-		[
-			"CZ",
-			"143489"
-		],
-		[
-			"DE",
-			"143443"
-		],
-		[
-			"DK",
-			"143458"
-		],
-		[
-			"DM",
-			"143545"
-		],
-		[
-			"DO",
-			"143508"
-		],
-		[
-			"DZ",
-			"143563"
-		],
-		[
-			"EC",
-			"143509"
-		],
-		[
-			"EE",
-			"143518"
-		],
-		[
-			"EG",
-			"143516"
-		],
-		[
-			"ES",
-			"143454"
-		],
-		[
-			"FI",
-			"143447"
-		],
-		[
-			"FJ",
-			"143583"
-		],
-		[
-			"FM",
-			"143591"
-		],
-		[
-			"FR",
-			"143442"
-		],
-		[
-			"GA",
-			"143614"
-		],
-		[
-			"GB",
-			"143444"
-		],
-		[
-			"GD",
-			"143546"
-		],
-		[
-			"GF",
-			"143615"
-		],
-		[
-			"GH",
-			"143573"
-		],
-		[
-			"GM",
-			"143584"
-		],
-		[
-			"GR",
-			"143448"
-		],
-		[
-			"GT",
-			"143504"
-		],
-		[
-			"GW",
-			"143585"
-		],
-		[
-			"GY",
-			"143553"
-		],
-		[
-			"HK",
-			"143463"
-		],
-		[
-			"HN",
-			"143510"
-		],
-		[
-			"HR",
-			"143494"
-		],
-		[
-			"HU",
-			"143482"
-		],
-		[
-			"ID",
-			"143476"
-		],
-		[
-			"IE",
-			"143449"
-		],
-		[
-			"IL",
-			"143491"
-		],
-		[
-			"IN",
-			"143467"
-		],
-		[
-			"IQ",
-			"143617"
-		],
-		[
-			"IS",
-			"143558"
-		],
-		[
-			"IT",
-			"143450"
-		],
-		[
-			"JM",
-			"143511"
-		],
-		[
-			"JO",
-			"143528"
-		],
-		[
-			"JP",
-			"143462"
-		],
-		[
-			"KE",
-			"143529"
-		],
-		[
-			"KG",
-			"143586"
-		],
-		[
-			"KH",
-			"143579"
-		],
-		[
-			"KN",
-			"143548"
-		],
-		[
-			"KP",
-			"143466"
-		],
-		[
-			"KR",
-			"143466"
-		],
-		[
-			"KW",
-			"143493"
-		],
-		[
-			"KY",
-			"143544"
-		],
-		[
-			"KZ",
-			"143517"
-		],
-		[
-			"TC",
-			"143552"
-		],
-		[
-			"TD",
-			"143581"
-		],
-		[
-			"TJ",
-			"143603"
-		],
-		[
-			"TH",
-			"143475"
-		],
-		[
-			"TM",
-			"143604"
-		],
-		[
-			"TN",
-			"143536"
-		],
-		[
-			"TO",
-			"143608"
-		],
-		[
-			"TR",
-			"143480"
-		],
-		[
-			"TT",
-			"143551"
-		],
-		[
-			"TW",
-			"143470"
-		],
-		[
-			"TZ",
-			"143572"
-		],
-		[
-			"LA",
-			"143587"
-		],
-		[
-			"LB",
-			"143497"
-		],
-		[
-			"LC",
-			"143549"
-		],
-		[
-			"LI",
-			"143522"
-		],
-		[
-			"LK",
-			"143486"
-		],
-		[
-			"LR",
-			"143588"
-		],
-		[
-			"LT",
-			"143520"
-		],
-		[
-			"LU",
-			"143451"
-		],
-		[
-			"LV",
-			"143519"
-		],
-		[
-			"LY",
-			"143567"
-		],
-		[
-			"MA",
-			"143620"
-		],
-		[
-			"MD",
-			"143523"
-		],
-		[
-			"ME",
-			"143619"
-		],
-		[
-			"MG",
-			"143531"
-		],
-		[
-			"MK",
-			"143530"
-		],
-		[
-			"ML",
-			"143532"
-		],
-		[
-			"MM",
-			"143570"
-		],
-		[
-			"MN",
-			"143592"
-		],
-		[
-			"MO",
-			"143515"
-		],
-		[
-			"MR",
-			"143590"
-		],
-		[
-			"MS",
-			"143547"
-		],
-		[
-			"MT",
-			"143521"
-		],
-		[
-			"MU",
-			"143533"
-		],
-		[
-			"MV",
-			"143488"
-		],
-		[
-			"MW",
-			"143589"
-		],
-		[
-			"MX",
-			"143468"
-		],
-		[
-			"MY",
-			"143473"
-		],
-		[
-			"MZ",
-			"143593"
-		],
-		[
-			"NA",
-			"143594"
-		],
-		[
-			"NE",
-			"143534"
-		],
-		[
-			"NG",
-			"143561"
-		],
-		[
-			"NI",
-			"143512"
-		],
-		[
-			"NL",
-			"143452"
-		],
-		[
-			"NO",
-			"143457"
-		],
-		[
-			"NP",
-			"143484"
-		],
-		[
-			"NR",
-			"143606"
-		],
-		[
-			"NZ",
-			"143461"
-		],
-		[
-			"OM",
-			"143562"
-		],
-		[
-			"PA",
-			"143485"
-		],
-		[
-			"PE",
-			"143507"
-		],
-		[
-			"PG",
-			"143597"
-		],
-		[
-			"PH",
-			"143474"
-		],
-		[
-			"PK",
-			"143477"
-		],
-		[
-			"PL",
-			"143478"
-		],
-		[
-			"PT",
-			"143453"
-		],
-		[
-			"PW",
-			"143595"
-		],
-		[
-			"PY",
-			"143513"
-		],
-		[
-			"QA",
-			"143498"
-		],
-		[
-			"RO",
-			"143487"
-		],
-		[
-			"RS",
-			"143500"
-		],
-		[
-			"RU",
-			"143469"
-		],
-		[
-			"RW",
-			"143621"
-		],
-		[
-			"SA",
-			"143479"
-		],
-		[
-			"SB",
-			"143601"
-		],
-		[
-			"SC",
-			"143599"
-		],
-		[
-			"SE",
-			"143456"
-		],
-		[
-			"SG",
-			"143464"
-		],
-		[
-			"SI",
-			"143499"
-		],
-		[
-			"SK",
-			"143496"
-		],
-		[
-			"SL",
-			"143600"
-		],
-		[
-			"SN",
-			"143535"
-		],
-		[
-			"SR",
-			"143554"
-		],
-		[
-			"ST",
-			"143598"
-		],
-		[
-			"SV",
-			"143506"
-		],
-		[
-			"SZ",
-			"143602"
-		],
-		[
-			"UA",
-			"143492"
-		],
-		[
-			"UG",
-			"143537"
-		],
-		[
-			"US",
-			"143441"
-		],
-		[
-			"UY",
-			"143514"
-		],
-		[
-			"UZ",
-			"143566"
-		],
-		[
-			"VC",
-			"143550"
-		],
-		[
-			"VE",
-			"143502"
-		],
-		[
-			"VG",
-			"143543"
-		],
-		[
-			"VN",
-			"143471"
-		],
-		[
-			"VU",
-			"143609"
-		],
-		[
-			"XK",
-			"143624"
-		],
-		[
-			"YE",
-			"143571"
-		],
-		[
-			"ZA",
-			"143472"
-		],
-		[
-			"ZM",
-			"143622"
-		],
-		[
-			"ZW",
-			"143605"
-		]
-	]
-};
-var Default = {
-	Settings: Settings$8,
-	Configs: Configs$4
-};
-
-var Default$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Configs: Configs$4,
-    Settings: Settings$8,
-    default: Default
-});
-
-var Settings$7 = {
-	Switch: true,
-	PEP: {
-		GCC: "US"
-	}
-};
-var Location = {
-	Settings: Settings$7
-};
-
-var Location$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Settings: Settings$7,
-    default: Location
-});
-
-var Settings$6 = {
-	Switch: true,
-	UrlInfoSet: {
-		Dispatcher: "AutoNavi",
-		Directions: "AutoNavi",
-		RAP: "Apple",
-		LocationShift: "AUTO"
-	},
-	TileSet: {
-		"Map": "CN",
-		Satellite: "HYBRID",
-		Traffic: "CN",
-		POI: "CN",
-		Flyover: "XX",
-		Munin: "XX"
-	},
-	GeoManifest: {
-		Dynamic: {
-			Config: {
-				CountryCode: {
-					"default": "CN",
-					iOS: "AUTO",
-					iPadOS: "AUTO",
-					watchOS: "US",
-					macOS: "AUTO"
-				}
-			}
-		}
-	},
-	Config: {
-		Announcements: {
-			"Environment:": {
-				"default": "AUTO",
-				iOS: "AUTO",
-				iPadOS: "AUTO",
-				watchOS: "AUTO",
-				macOS: "AUTO"
-			}
-		}
-	}
-};
-var Configs$3 = {
-};
-var Maps = {
-	Settings: Settings$6,
-	Configs: Configs$3
-};
-
-var Maps$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Configs: Configs$3,
-    Settings: Settings$6,
-    default: Maps
-});
-
-var Settings$5 = {
-	Switch: true,
-	CountryCode: "US",
-	NewsPlusUser: true
-};
-var News = {
-	Settings: Settings$5
-};
-
-var News$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Settings: Settings$5,
-    default: News
-});
-
-var Settings$4 = {
-	Switch: true,
-	CountryCode: "US",
-	canUse: true
-};
-var PrivateRelay = {
-	Settings: Settings$4
-};
-
-var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Settings: Settings$4,
-    default: PrivateRelay
-});
-
-var Settings$3 = {
-	Switch: true,
-	CountryCode: "SG",
-	Region: "AUTO",
-	Domains: [
-		"web",
-		"itunes",
-		"app_store",
-		"movies",
-		"restaurants",
-		"maps"
-	],
-	Functions: [
-		"flightutilities",
-		"lookup",
-		"mail",
-		"messages",
-		"news",
-		"safari",
-		"siri",
-		"spotlight",
-		"visualintelligence"
-	],
-	Safari_Smart_History: true
-};
-var Configs$2 = {
-	VisualIntelligence: {
-		enabled_domains: [
-			"pets",
-			"media",
-			"books",
-			"art",
-			"nature",
-			"landmarks"
-		],
-		supported_domains: [
-			"ART",
-			"BOOK",
-			"MEDIA",
-			"LANDMARK",
-			"ANIMALS",
-			"BIRDS",
-			"FOOD",
-			"SIGN_SYMBOL",
-			"AUTO_SYMBOL",
-			"DOGS",
-			"NATURE",
-			"NATURAL_LANDMARK",
-			"INSECTS",
-			"REPTILES",
-			"ALBUM",
-			"STOREFRONT",
-			"LAUNDRY_CARE_SYMBOL",
-			"CATS",
-			"OBJECT_2D",
-			"SCULPTURE",
-			"SKYLINE",
-			"MAMMALS"
-		]
-	}
-};
-var Siri = {
-	Settings: Settings$3,
-	Configs: Configs$2
-};
-
-var Siri$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Configs: Configs$2,
-    Settings: Settings$3,
-    default: Siri
-});
-
-var Settings$2 = {
-	Switch: "true",
-	CountryCode: "US",
-	MultiAccount: "false",
-	Universal: "true"
-};
-var TestFlight = {
-	Settings: Settings$2
-};
-
-var TestFlight$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Settings: Settings$2,
-    default: TestFlight
-});
-
-var Settings$1 = {
-	Switch: true,
-	"Third-Party": false,
-	HLSUrl: "play-edge.itunes.apple.com",
-	ServerUrl: "play.itunes.apple.com",
-	Tabs: [
-		"WatchNow",
-		"Originals",
-		"MLS",
-		"Sports",
-		"Kids",
-		"Store",
-		"Movies",
-		"TV",
-		"ChannelsAndApps",
-		"Library",
-		"Search"
-	],
-	CountryCode: {
-		Configs: "AUTO",
-		Settings: "AUTO",
-		View: [
-			"SG",
-			"TW"
-		],
-		WatchNow: "AUTO",
-		Channels: "AUTO",
-		Originals: "AUTO",
-		Sports: "US",
-		Kids: "US",
-		Store: "AUTO",
-		Movies: "AUTO",
-		TV: "AUTO",
-		Persons: "SG",
-		Search: "AUTO",
-		Others: "AUTO"
-	}
-};
-var Configs$1 = {
-	Locale: [
-		[
-			"AU",
-			"en-AU"
-		],
-		[
-			"CA",
-			"en-CA"
-		],
-		[
-			"GB",
-			"en-GB"
-		],
-		[
-			"KR",
-			"ko-KR"
-		],
-		[
-			"HK",
-			"yue-Hant"
-		],
-		[
-			"JP",
-			"ja-JP"
-		],
-		[
-			"MO",
-			"zh-Hant"
-		],
-		[
-			"TW",
-			"zh-Hant"
-		],
-		[
-			"US",
-			"en-US"
-		],
-		[
-			"SG",
-			"zh-Hans"
-		]
-	],
-	Tabs: [
-		{
-			title: "主页",
-			type: "WatchNow",
-			universalLinks: [
-				"https://tv.apple.com/watch-now",
-				"https://tv.apple.com/home"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tahoma_watchnow",
-				type: "Root",
-				url: "https://tv.apple.com/watch-now"
-			},
-			isSelected: true
-		},
-		{
-			title: "Apple TV+",
-			type: "Originals",
-			universalLinks: [
-				"https://tv.apple.com/channel/tvs.sbd.4000",
-				"https://tv.apple.com/atv"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tvs.sbd.4000",
-				type: "Brand",
-				url: "https://tv.apple.com/us/channel/tvs.sbd.4000"
-			}
-		},
-		{
-			title: "MLS Season Pass",
-			type: "MLS",
-			universalLinks: [
-				"https://tv.apple.com/mls"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tvs.sbd.7000",
-				type: "Brand",
-				url: "https://tv.apple.com/us/channel/tvs.sbd.7000"
-			}
-		},
-		{
-			title: "体育节目",
-			type: "Sports",
-			universalLinks: [
-				"https://tv.apple.com/sports"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tahoma_sports",
-				type: "Root",
-				url: "https://tv.apple.com/sports"
-			}
-		},
-		{
-			title: "儿童",
-			type: "Kids",
-			universalLinks: [
-				"https://tv.apple.com/kids"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tahoma_kids",
-				type: "Root",
-				url: "https://tv.apple.com/kids"
-			}
-		},
-		{
-			title: "电影",
-			type: "Movies",
-			universalLinks: [
-				"https://tv.apple.com/movies"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tahoma_movies",
-				type: "Root",
-				url: "https://tv.apple.com/movies"
-			}
-		},
-		{
-			title: "电视节目",
-			type: "TV",
-			universalLinks: [
-				"https://tv.apple.com/tv-shows"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tahoma_tvshows",
-				type: "Root",
-				url: "https://tv.apple.com/tv-shows"
-			}
-		},
-		{
-			title: "商店",
-			type: "Store",
-			universalLinks: [
-				"https://tv.apple.com/store"
-			],
-			destinationType: "SubTabs",
-			subTabs: [
-				{
-					title: "电影",
-					type: "Movies",
-					universalLinks: [
-						"https://tv.apple.com/movies"
-					],
-					destinationType: "Target",
-					target: {
-						id: "tahoma_movies",
-						type: "Root",
-						url: "https://tv.apple.com/movies"
-					}
-				},
-				{
-					title: "电视节目",
-					type: "TV",
-					universalLinks: [
-						"https://tv.apple.com/tv-shows"
-					],
-					destinationType: "Target",
-					target: {
-						id: "tahoma_tvshows",
-						type: "Root",
-						url: "https://tv.apple.com/tv-shows"
-					}
-				}
-			]
-		},
-		{
-			title: "频道和 App",
-			destinationType: "SubTabs",
-			subTabsPlacementType: "ExpandedList",
-			type: "ChannelsAndApps",
-			subTabs: [
-			]
-		},
-		{
-			title: "资料库",
-			type: "Library",
-			destinationType: "Client"
-		},
-		{
-			title: "搜索",
-			type: "Search",
-			universalLinks: [
-				"https://tv.apple.com/search"
-			],
-			destinationType: "Target",
-			target: {
-				id: "tahoma_search",
-				type: "Root",
-				url: "https://tv.apple.com/search"
-			}
-		}
-	],
-	i18n: {
-		WatchNow: [
-			[
-				"en",
-				"Home"
-			],
-			[
-				"zh",
-				"主页"
-			],
-			[
-				"zh-Hans",
-				"主頁"
-			],
-			[
-				"zh-Hant",
-				"主頁"
-			]
-		],
-		Movies: [
-			[
-				"en",
-				"Movies"
-			],
-			[
-				"zh",
-				"电影"
-			],
-			[
-				"zh-Hans",
-				"电影"
-			],
-			[
-				"zh-Hant",
-				"電影"
-			]
-		],
-		TV: [
-			[
-				"en",
-				"TV"
-			],
-			[
-				"zh",
-				"电视节目"
-			],
-			[
-				"zh-Hans",
-				"电视节目"
-			],
-			[
-				"zh-Hant",
-				"電視節目"
-			]
-		],
-		Store: [
-			[
-				"en",
-				"Store"
-			],
-			[
-				"zh",
-				"商店"
-			],
-			[
-				"zh-Hans",
-				"商店"
-			],
-			[
-				"zh-Hant",
-				"商店"
-			]
-		],
-		Sports: [
-			[
-				"en",
-				"Sports"
-			],
-			[
-				"zh",
-				"体育节目"
-			],
-			[
-				"zh-Hans",
-				"体育节目"
-			],
-			[
-				"zh-Hant",
-				"體育節目"
-			]
-		],
-		Kids: [
-			[
-				"en",
-				"Kids"
-			],
-			[
-				"zh",
-				"儿童"
-			],
-			[
-				"zh-Hans",
-				"儿童"
-			],
-			[
-				"zh-Hant",
-				"兒童"
-			]
-		],
-		Library: [
-			[
-				"en",
-				"Library"
-			],
-			[
-				"zh",
-				"资料库"
-			],
-			[
-				"zh-Hans",
-				"资料库"
-			],
-			[
-				"zh-Hant",
-				"資料庫"
-			]
-		],
-		Search: [
-			[
-				"en",
-				"Search"
-			],
-			[
-				"zh",
-				"搜索"
-			],
-			[
-				"zh-Hans",
-				"搜索"
-			],
-			[
-				"zh-Hant",
-				"蒐索"
-			]
-		]
-	}
-};
-var TV = {
-	Settings: Settings$1,
-	Configs: Configs$1
-};
-
-var TV$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Configs: Configs$1,
-    Settings: Settings$1,
-    default: TV
-});
-
-var Settings = {
-	Switch: true,
-	NextHour: {
-		Provider: "ColorfulClouds"
-	},
-	AQI: {
-		Provider: "ColorfulClouds",
-		ReplaceProviders: [
-		],
-		Local: {
-			Scale: "WAQI_InstantCast",
-			ReplaceScales: [
-				"HJ6332012"
-			],
-			ConvertUnits: false
-		}
-	},
-	API: {
-		WAQI: {
-			Token: null,
-			Header: {
-				"Content-Type": "application/json"
-			}
-		},
-		QWeather: {
-			Token: null,
-			Header: {
-				"Content-Type": "application/json"
-			},
-			Host: "devapi.qweather.com"
-		},
-		ColorfulClouds: {
-			Token: null,
-			Header: {
-				"Content-Type": "application/json"
-			}
-		}
-	}
-};
-var Configs = {
-	Availability: {
-		v1: [
-			"currentWeather",
-			"dailyForecast",
-			"hourlyForecast",
-			"minuteForecast",
-			"weatherAlerts"
-		],
-		v2: [
-			"airQuality",
-			"currentWeather",
-			"forecastDaily",
-			"forecastHourly",
-			"forecastPeriodic",
-			"historicalComparisons",
-			"weatherChanges",
-			"forecastNextHour",
-			"weatherAlerts",
-			"weatherAlertNotifications",
-			"news"
-		]
-	}
-};
-var WeatherKit = {
-	Settings: Settings,
-	Configs: Configs
-};
-
-var WeatherKit$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Configs: Configs,
-    Settings: Settings,
-    default: WeatherKit
-});
-
-var Database$1 = Database = {
-	"Default": Default$1,
-	"Location": Location$1,
-	"Maps": Maps$1,
-	"News": News$1,
-	"PrivateRelay": PrivateRelay$1,
-	"Siri": Siri$1,
-	"TestFlight": TestFlight$1,
-	"TV": TV$1,
-	"WeatherKit": WeatherKit$1
-};
-
-/**
- * Get Storage Variables
- * @link https://github.com/NanoCat-Me/utils/blob/main/getStorage.mjs
- * @author VirgilClyne
- * @param {String} key - Persistent Store Key
- * @param {Array} names - Platform Names
- * @param {Object} database - Default Database
- * @return {Object} { Settings, Caches, Configs }
- */
-function getStorage(key, names, database) {
-    //log(`☑️ getStorage, Get Environment Variables`, "");
-    /***************** BoxJs *****************/
-    // 包装为局部变量，用完释放内存
-    // BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
-    let BoxJs = Storage.getItem(key, database);
-    //log(`🚧 getStorage, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
-    /***************** Argument *****************/
-    let Argument = {};
-    switch (typeof $argument) {
-        case "string":
-            let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
-            for (let item in arg) Lodash.set(Argument, item, arg[item]);
-            break;
-        case "object":
-            for (let item in $argument) Lodash.set(Argument, item, $argument[item]);
-            break;
-    }    //log(`✅ getStorage, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
-    /***************** Store *****************/
-    const Store = { Settings: database?.Default?.Settings || {}, Configs: database?.Default?.Configs || {}, Caches: {} };
-    if (!Array.isArray(names)) names = [names];
-    //log(`🚧 getStorage, Get Environment Variables`, `names类型: ${typeof names}`, `names内容: ${JSON.stringify(names)}`, "");
-    for (let name of names) {
-        Store.Settings = { ...Store.Settings, ...database?.[name]?.Settings, ...Argument, ...BoxJs?.[name]?.Settings };
-        Store.Configs = { ...Store.Configs, ...database?.[name]?.Configs };
-        if (BoxJs?.[name]?.Caches && typeof BoxJs?.[name]?.Caches === "string") BoxJs[name].Caches = JSON.parse(BoxJs?.[name]?.Caches);
-        Store.Caches = { ...Store.Caches, ...BoxJs?.[name]?.Caches };
-    }    //log(`🚧 getStorage, Get Environment Variables`, `Store.Settings类型: ${typeof Store.Settings}`, `Store.Settings: ${JSON.stringify(Store.Settings)}`, "");
-    traverseObject(Store.Settings, (key, value) => {
-        //log(`🚧 getStorage, traverseObject`, `${key}: ${typeof value}`, `${key}: ${JSON.stringify(value)}`, "");
-        if (value === "true" || value === "false") value = JSON.parse(value); // 字符串转Boolean
-        else if (typeof value === "string") {
-            if (value.includes(",")) value = value.split(",").map(item => string2number(item)); // 字符串转数组转数字
-            else value = string2number(value); // 字符串转数字
-        }        return value;
-    });
-    //log(`✅ getStorage, Get Environment Variables`, `Store: ${typeof Store.Caches}`, `Store内容: ${JSON.stringify(Store)}`, "");
-    return Store;
-    /***************** function *****************/
-    function traverseObject(o, c) { for (var t in o) { var n = o[t]; o[t] = "object" == typeof n && null !== n ? traverseObject(n, c) : c(t, n); } return o }
-    function string2number(string) { if (string && !isNaN(string)) string = parseInt(string, 10); return string }
-}
-
-/**
- * Set Environment Variables
- * @author VirgilClyne
- * @param {String} name - Persistent Store Key
- * @param {Array} platforms - Platform Names
- * @param {Object} database - Default DataBase
- * @return {Object} { Settings, Caches, Configs }
- */
-function setENV(name, platforms, database) {
-	log(`☑️ Set Environment Variables`, "");
-	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
-	/***************** Settings *****************/
-	switch (platforms) {
-		case "WeatherKit":
-			if (!Array.isArray(Settings?.AQI?.ReplaceProviders)) Lodash.set(Settings, "AQI.ReplaceProviders", (Settings?.AQI?.ReplaceProviders) ? [Settings.AQI.ReplaceProviders.toString()] : []);
-			if (Settings.AQI.ReplaceProviders.includes("TWC")) Settings.AQI.ReplaceProviders.push("The Weather Channel");
-			if (Settings.AQI.ReplaceProviders.includes("QWeather")) Settings.AQI.ReplaceProviders.push("和风天气");
-			Settings.AQI.ReplaceProviders.push(undefined);
-			if (!Array.isArray(Settings?.AQI?.Local?.ReplaceScales)) Lodash.set(Settings, "AQI.Local.ReplaceScales", (Settings?.AQI?.Local?.ReplaceScales) ? [Settings.AQI.Local.ReplaceScales.toString()] : []);
-			break;
-		case "Siri":
-			if (!Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
-			if (!Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
-			break;
-		case "TV":
-			if (!Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
-			break;
-	}	log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
-	/***************** Caches *****************/
-	//log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
-	/***************** Configs *****************/
-	Configs.Storefront = new Map(Configs.Storefront);
-	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);
-	if (Configs.i18n) for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
-	return { Settings, Caches, Configs };
-}
-
 /*! pako 2.1.0 https://github.com/nodeca/pako @license (MIT AND Zlib) */
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
 // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -8798,37 +7303,1564 @@ var pako = {
 	constants: constants_1
 };
 
-/**
- * Add gRPC Header
- * @author app2smile
- * @param {ArrayBuffer} header - unGzip Header
- * @param {ArrayBuffer} body - unGzip Body
- * @param {String} type - encoding type
- * @return {ArrayBuffer} new raw Body with Checksum Header
- */
-function addgRPCHeader({ header, body }, encoding = undefined) {
-	console.log(`☑️ Add gRPC Header`, "");
-	// Header: 1位：是否校验数据 （0或者1） + 4位:校验值（数据长度）
-	const flag = (encoding == "gzip") ? 1 : (encoding == "identity") ? 0 : (encoding == undefined) ? 0 : header?.[0] ?? 0; // encoding flag
-	const checksum = Checksum(body.length); // 校验值为未压缩情况下的数据长度, 不是压缩后的长度
-	if (encoding == "gzip") body = pako.gzip(body); // gzip压缩（有问题，别压）
-	let rawBody = new Uint8Array(header.length + body.length);
-	rawBody.set([flag], 0); // 0位：Encoding类型，当为1的时候, app会校验1-4位的校验值是否正确
-	rawBody.set(checksum, 1); // 1-4位： 校验值(4位)
-	rawBody.set(body, 5); // 5-end位：protobuf数据
-	console.log(`✅ Add gRPC Header`, "");
-	return rawBody;
+/* https://grpc.io/ */
+class GRPC {
+    static name = "gRPC";
+    static version = "1.0.3";
+    static about = () => log("", `🟧 ${this.name} v${this.version}`, "");
+
+    static decode(bytesBody = new Uint8Array([])) {
+        log(`☑️ gRPC.decode`, "");
+        // 先拆分gRPC校验头和protobuf数据体
+        const Header = bytesBody.slice(0, 5);
+        let body = bytesBody.slice(5);
+        switch (Header[0]) {
+            case 0: // unGzip
+            default:
+                break;
+            case 1: // Gzip
+                switch ($platform) {
+                    case "Surge":
+                        body = $utils.ungzip(body);
+                        break;
+                    default:
+                        body = pako.ungzip(body); // 解压缩protobuf数据体
+                        break;
+                }                Header[0] = 0; // unGzip
+                break;
+        }        log(`✅ gRPC.decode`, "");
+        return body;
+    };
+
+    static encode(body = new Uint8Array([]), encoding = "identity") {
+        log(`☑️ gRPC.encode`, "");
+        // Header: 1位：是否校验数据 （0或者1） + 4位:校验值（数据长度）
+        const Header = new Uint8Array(5);
+        const Checksum = this.#Checksum(body.length); // 校验值为未压缩情况下的数据长度, 不是压缩后的长度
+        Header.set(Checksum, 1); // 1-4位： 校验值(4位)
+        switch (encoding) {
+            case "gzip":
+                Header.set([1], 0); // 0位：Encoding类型，当为1的时候, app会校验1-4位的校验值是否正确
+                body = pako.gzip(body);
+                break;
+            case "identity":
+            case undefined:
+            default:
+                Header.set([0], 0); // 0位：Encoding类型，当为1的时候, app会校验1-4位的校验值是否正确
+                break;
+        }        const BytesBody = new Uint8Array(Header.length + body.length);
+        BytesBody.set(Header, 0); // 0-4位：gRPC校验头
+        BytesBody.set(body, 5); // 5-end位：protobuf数据
+        log(`✅ gRPC.encode`, "");
+        return BytesBody;
+    };
 
 	// 计算校验和 (B站为数据本体字节数)
-	function Checksum(num) {
-		let arr = new ArrayBuffer(4); // an Int32 takes 4 bytes
-		let view = new DataView(arr);
+	static #Checksum(num = 0) {
+		let array = new ArrayBuffer(4); // an Int32 takes 4 bytes
+		let view = new DataView(array);
 		// 首位填充计算过的新数据长度
 		view.setUint32(0, num, false); // byteOffset = 0; litteEndian = false
-		return new Uint8Array(arr);
-	}}
+		return new Uint8Array(array);
+	};
+}
 
-log("v4.0.1(4002)");
+var Settings$8 = {
+	Switch: true
+};
+var Configs$4 = {
+	Storefront: [
+		[
+			"AE",
+			"143481"
+		],
+		[
+			"AF",
+			"143610"
+		],
+		[
+			"AG",
+			"143540"
+		],
+		[
+			"AI",
+			"143538"
+		],
+		[
+			"AL",
+			"143575"
+		],
+		[
+			"AM",
+			"143524"
+		],
+		[
+			"AO",
+			"143564"
+		],
+		[
+			"AR",
+			"143505"
+		],
+		[
+			"AT",
+			"143445"
+		],
+		[
+			"AU",
+			"143460"
+		],
+		[
+			"AZ",
+			"143568"
+		],
+		[
+			"BA",
+			"143612"
+		],
+		[
+			"BB",
+			"143541"
+		],
+		[
+			"BD",
+			"143490"
+		],
+		[
+			"BE",
+			"143446"
+		],
+		[
+			"BF",
+			"143578"
+		],
+		[
+			"BG",
+			"143526"
+		],
+		[
+			"BH",
+			"143559"
+		],
+		[
+			"BJ",
+			"143576"
+		],
+		[
+			"BM",
+			"143542"
+		],
+		[
+			"BN",
+			"143560"
+		],
+		[
+			"BO",
+			"143556"
+		],
+		[
+			"BR",
+			"143503"
+		],
+		[
+			"BS",
+			"143539"
+		],
+		[
+			"BT",
+			"143577"
+		],
+		[
+			"BW",
+			"143525"
+		],
+		[
+			"BY",
+			"143565"
+		],
+		[
+			"BZ",
+			"143555"
+		],
+		[
+			"CA",
+			"143455"
+		],
+		[
+			"CD",
+			"143613"
+		],
+		[
+			"CG",
+			"143582"
+		],
+		[
+			"CH",
+			"143459"
+		],
+		[
+			"CI",
+			"143527"
+		],
+		[
+			"CL",
+			"143483"
+		],
+		[
+			"CM",
+			"143574"
+		],
+		[
+			"CN",
+			"143465"
+		],
+		[
+			"CO",
+			"143501"
+		],
+		[
+			"CR",
+			"143495"
+		],
+		[
+			"CV",
+			"143580"
+		],
+		[
+			"CY",
+			"143557"
+		],
+		[
+			"CZ",
+			"143489"
+		],
+		[
+			"DE",
+			"143443"
+		],
+		[
+			"DK",
+			"143458"
+		],
+		[
+			"DM",
+			"143545"
+		],
+		[
+			"DO",
+			"143508"
+		],
+		[
+			"DZ",
+			"143563"
+		],
+		[
+			"EC",
+			"143509"
+		],
+		[
+			"EE",
+			"143518"
+		],
+		[
+			"EG",
+			"143516"
+		],
+		[
+			"ES",
+			"143454"
+		],
+		[
+			"FI",
+			"143447"
+		],
+		[
+			"FJ",
+			"143583"
+		],
+		[
+			"FM",
+			"143591"
+		],
+		[
+			"FR",
+			"143442"
+		],
+		[
+			"GA",
+			"143614"
+		],
+		[
+			"GB",
+			"143444"
+		],
+		[
+			"GD",
+			"143546"
+		],
+		[
+			"GF",
+			"143615"
+		],
+		[
+			"GH",
+			"143573"
+		],
+		[
+			"GM",
+			"143584"
+		],
+		[
+			"GR",
+			"143448"
+		],
+		[
+			"GT",
+			"143504"
+		],
+		[
+			"GW",
+			"143585"
+		],
+		[
+			"GY",
+			"143553"
+		],
+		[
+			"HK",
+			"143463"
+		],
+		[
+			"HN",
+			"143510"
+		],
+		[
+			"HR",
+			"143494"
+		],
+		[
+			"HU",
+			"143482"
+		],
+		[
+			"ID",
+			"143476"
+		],
+		[
+			"IE",
+			"143449"
+		],
+		[
+			"IL",
+			"143491"
+		],
+		[
+			"IN",
+			"143467"
+		],
+		[
+			"IQ",
+			"143617"
+		],
+		[
+			"IS",
+			"143558"
+		],
+		[
+			"IT",
+			"143450"
+		],
+		[
+			"JM",
+			"143511"
+		],
+		[
+			"JO",
+			"143528"
+		],
+		[
+			"JP",
+			"143462"
+		],
+		[
+			"KE",
+			"143529"
+		],
+		[
+			"KG",
+			"143586"
+		],
+		[
+			"KH",
+			"143579"
+		],
+		[
+			"KN",
+			"143548"
+		],
+		[
+			"KP",
+			"143466"
+		],
+		[
+			"KR",
+			"143466"
+		],
+		[
+			"KW",
+			"143493"
+		],
+		[
+			"KY",
+			"143544"
+		],
+		[
+			"KZ",
+			"143517"
+		],
+		[
+			"TC",
+			"143552"
+		],
+		[
+			"TD",
+			"143581"
+		],
+		[
+			"TJ",
+			"143603"
+		],
+		[
+			"TH",
+			"143475"
+		],
+		[
+			"TM",
+			"143604"
+		],
+		[
+			"TN",
+			"143536"
+		],
+		[
+			"TO",
+			"143608"
+		],
+		[
+			"TR",
+			"143480"
+		],
+		[
+			"TT",
+			"143551"
+		],
+		[
+			"TW",
+			"143470"
+		],
+		[
+			"TZ",
+			"143572"
+		],
+		[
+			"LA",
+			"143587"
+		],
+		[
+			"LB",
+			"143497"
+		],
+		[
+			"LC",
+			"143549"
+		],
+		[
+			"LI",
+			"143522"
+		],
+		[
+			"LK",
+			"143486"
+		],
+		[
+			"LR",
+			"143588"
+		],
+		[
+			"LT",
+			"143520"
+		],
+		[
+			"LU",
+			"143451"
+		],
+		[
+			"LV",
+			"143519"
+		],
+		[
+			"LY",
+			"143567"
+		],
+		[
+			"MA",
+			"143620"
+		],
+		[
+			"MD",
+			"143523"
+		],
+		[
+			"ME",
+			"143619"
+		],
+		[
+			"MG",
+			"143531"
+		],
+		[
+			"MK",
+			"143530"
+		],
+		[
+			"ML",
+			"143532"
+		],
+		[
+			"MM",
+			"143570"
+		],
+		[
+			"MN",
+			"143592"
+		],
+		[
+			"MO",
+			"143515"
+		],
+		[
+			"MR",
+			"143590"
+		],
+		[
+			"MS",
+			"143547"
+		],
+		[
+			"MT",
+			"143521"
+		],
+		[
+			"MU",
+			"143533"
+		],
+		[
+			"MV",
+			"143488"
+		],
+		[
+			"MW",
+			"143589"
+		],
+		[
+			"MX",
+			"143468"
+		],
+		[
+			"MY",
+			"143473"
+		],
+		[
+			"MZ",
+			"143593"
+		],
+		[
+			"NA",
+			"143594"
+		],
+		[
+			"NE",
+			"143534"
+		],
+		[
+			"NG",
+			"143561"
+		],
+		[
+			"NI",
+			"143512"
+		],
+		[
+			"NL",
+			"143452"
+		],
+		[
+			"NO",
+			"143457"
+		],
+		[
+			"NP",
+			"143484"
+		],
+		[
+			"NR",
+			"143606"
+		],
+		[
+			"NZ",
+			"143461"
+		],
+		[
+			"OM",
+			"143562"
+		],
+		[
+			"PA",
+			"143485"
+		],
+		[
+			"PE",
+			"143507"
+		],
+		[
+			"PG",
+			"143597"
+		],
+		[
+			"PH",
+			"143474"
+		],
+		[
+			"PK",
+			"143477"
+		],
+		[
+			"PL",
+			"143478"
+		],
+		[
+			"PT",
+			"143453"
+		],
+		[
+			"PW",
+			"143595"
+		],
+		[
+			"PY",
+			"143513"
+		],
+		[
+			"QA",
+			"143498"
+		],
+		[
+			"RO",
+			"143487"
+		],
+		[
+			"RS",
+			"143500"
+		],
+		[
+			"RU",
+			"143469"
+		],
+		[
+			"RW",
+			"143621"
+		],
+		[
+			"SA",
+			"143479"
+		],
+		[
+			"SB",
+			"143601"
+		],
+		[
+			"SC",
+			"143599"
+		],
+		[
+			"SE",
+			"143456"
+		],
+		[
+			"SG",
+			"143464"
+		],
+		[
+			"SI",
+			"143499"
+		],
+		[
+			"SK",
+			"143496"
+		],
+		[
+			"SL",
+			"143600"
+		],
+		[
+			"SN",
+			"143535"
+		],
+		[
+			"SR",
+			"143554"
+		],
+		[
+			"ST",
+			"143598"
+		],
+		[
+			"SV",
+			"143506"
+		],
+		[
+			"SZ",
+			"143602"
+		],
+		[
+			"UA",
+			"143492"
+		],
+		[
+			"UG",
+			"143537"
+		],
+		[
+			"US",
+			"143441"
+		],
+		[
+			"UY",
+			"143514"
+		],
+		[
+			"UZ",
+			"143566"
+		],
+		[
+			"VC",
+			"143550"
+		],
+		[
+			"VE",
+			"143502"
+		],
+		[
+			"VG",
+			"143543"
+		],
+		[
+			"VN",
+			"143471"
+		],
+		[
+			"VU",
+			"143609"
+		],
+		[
+			"XK",
+			"143624"
+		],
+		[
+			"YE",
+			"143571"
+		],
+		[
+			"ZA",
+			"143472"
+		],
+		[
+			"ZM",
+			"143622"
+		],
+		[
+			"ZW",
+			"143605"
+		]
+	]
+};
+var Default = {
+	Settings: Settings$8,
+	Configs: Configs$4
+};
+
+var Default$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Configs: Configs$4,
+    Settings: Settings$8,
+    default: Default
+});
+
+var Settings$7 = {
+	Switch: true,
+	PEP: {
+		GCC: "US"
+	}
+};
+var Location = {
+	Settings: Settings$7
+};
+
+var Location$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Settings: Settings$7,
+    default: Location
+});
+
+var Settings$6 = {
+	Switch: true,
+	UrlInfoSet: {
+		Dispatcher: "AutoNavi",
+		Directions: "AutoNavi",
+		RAP: "Apple",
+		LocationShift: "AUTO"
+	},
+	TileSet: {
+		"Map": "CN",
+		Satellite: "HYBRID",
+		Traffic: "CN",
+		POI: "CN",
+		Flyover: "XX",
+		Munin: "XX"
+	},
+	GeoManifest: {
+		Dynamic: {
+			Config: {
+				CountryCode: {
+					"default": "CN",
+					iOS: "AUTO",
+					iPadOS: "AUTO",
+					watchOS: "US",
+					macOS: "AUTO"
+				}
+			}
+		}
+	},
+	Config: {
+		Announcements: {
+			"Environment:": {
+				"default": "AUTO",
+				iOS: "AUTO",
+				iPadOS: "AUTO",
+				watchOS: "AUTO",
+				macOS: "AUTO"
+			}
+		}
+	}
+};
+var Configs$3 = {
+};
+var Maps = {
+	Settings: Settings$6,
+	Configs: Configs$3
+};
+
+var Maps$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Configs: Configs$3,
+    Settings: Settings$6,
+    default: Maps
+});
+
+var Settings$5 = {
+	Switch: true,
+	CountryCode: "US",
+	NewsPlusUser: true
+};
+var News = {
+	Settings: Settings$5
+};
+
+var News$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Settings: Settings$5,
+    default: News
+});
+
+var Settings$4 = {
+	Switch: true,
+	CountryCode: "US",
+	canUse: true
+};
+var PrivateRelay = {
+	Settings: Settings$4
+};
+
+var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Settings: Settings$4,
+    default: PrivateRelay
+});
+
+var Settings$3 = {
+	Switch: true,
+	CountryCode: "SG",
+	Region: "AUTO",
+	Domains: [
+		"web",
+		"itunes",
+		"app_store",
+		"movies",
+		"restaurants",
+		"maps"
+	],
+	Functions: [
+		"flightutilities",
+		"lookup",
+		"mail",
+		"messages",
+		"news",
+		"safari",
+		"siri",
+		"spotlight",
+		"visualintelligence"
+	],
+	Safari_Smart_History: true
+};
+var Configs$2 = {
+	VisualIntelligence: {
+		enabled_domains: [
+			"pets",
+			"media",
+			"books",
+			"art",
+			"nature",
+			"landmarks"
+		],
+		supported_domains: [
+			"ART",
+			"BOOK",
+			"MEDIA",
+			"LANDMARK",
+			"ANIMALS",
+			"BIRDS",
+			"FOOD",
+			"SIGN_SYMBOL",
+			"AUTO_SYMBOL",
+			"DOGS",
+			"NATURE",
+			"NATURAL_LANDMARK",
+			"INSECTS",
+			"REPTILES",
+			"ALBUM",
+			"STOREFRONT",
+			"LAUNDRY_CARE_SYMBOL",
+			"CATS",
+			"OBJECT_2D",
+			"SCULPTURE",
+			"SKYLINE",
+			"MAMMALS"
+		]
+	}
+};
+var Siri = {
+	Settings: Settings$3,
+	Configs: Configs$2
+};
+
+var Siri$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Configs: Configs$2,
+    Settings: Settings$3,
+    default: Siri
+});
+
+var Settings$2 = {
+	Switch: "true",
+	CountryCode: "US",
+	MultiAccount: "false",
+	Universal: "true"
+};
+var TestFlight = {
+	Settings: Settings$2
+};
+
+var TestFlight$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Settings: Settings$2,
+    default: TestFlight
+});
+
+var Settings$1 = {
+	Switch: true,
+	"Third-Party": false,
+	HLSUrl: "play-edge.itunes.apple.com",
+	ServerUrl: "play.itunes.apple.com",
+	Tabs: [
+		"WatchNow",
+		"Originals",
+		"MLS",
+		"Sports",
+		"Kids",
+		"Store",
+		"Movies",
+		"TV",
+		"ChannelsAndApps",
+		"Library",
+		"Search"
+	],
+	CountryCode: {
+		Configs: "AUTO",
+		Settings: "AUTO",
+		View: [
+			"SG",
+			"TW"
+		],
+		WatchNow: "AUTO",
+		Channels: "AUTO",
+		Originals: "AUTO",
+		Sports: "US",
+		Kids: "US",
+		Store: "AUTO",
+		Movies: "AUTO",
+		TV: "AUTO",
+		Persons: "SG",
+		Search: "AUTO",
+		Others: "AUTO"
+	}
+};
+var Configs$1 = {
+	Locale: [
+		[
+			"AU",
+			"en-AU"
+		],
+		[
+			"CA",
+			"en-CA"
+		],
+		[
+			"GB",
+			"en-GB"
+		],
+		[
+			"KR",
+			"ko-KR"
+		],
+		[
+			"HK",
+			"yue-Hant"
+		],
+		[
+			"JP",
+			"ja-JP"
+		],
+		[
+			"MO",
+			"zh-Hant"
+		],
+		[
+			"TW",
+			"zh-Hant"
+		],
+		[
+			"US",
+			"en-US"
+		],
+		[
+			"SG",
+			"zh-Hans"
+		]
+	],
+	Tabs: [
+		{
+			title: "主页",
+			type: "WatchNow",
+			universalLinks: [
+				"https://tv.apple.com/watch-now",
+				"https://tv.apple.com/home"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tahoma_watchnow",
+				type: "Root",
+				url: "https://tv.apple.com/watch-now"
+			},
+			isSelected: true
+		},
+		{
+			title: "Apple TV+",
+			type: "Originals",
+			universalLinks: [
+				"https://tv.apple.com/channel/tvs.sbd.4000",
+				"https://tv.apple.com/atv"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tvs.sbd.4000",
+				type: "Brand",
+				url: "https://tv.apple.com/us/channel/tvs.sbd.4000"
+			}
+		},
+		{
+			title: "MLS Season Pass",
+			type: "MLS",
+			universalLinks: [
+				"https://tv.apple.com/mls"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tvs.sbd.7000",
+				type: "Brand",
+				url: "https://tv.apple.com/us/channel/tvs.sbd.7000"
+			}
+		},
+		{
+			title: "体育节目",
+			type: "Sports",
+			universalLinks: [
+				"https://tv.apple.com/sports"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tahoma_sports",
+				type: "Root",
+				url: "https://tv.apple.com/sports"
+			}
+		},
+		{
+			title: "儿童",
+			type: "Kids",
+			universalLinks: [
+				"https://tv.apple.com/kids"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tahoma_kids",
+				type: "Root",
+				url: "https://tv.apple.com/kids"
+			}
+		},
+		{
+			title: "电影",
+			type: "Movies",
+			universalLinks: [
+				"https://tv.apple.com/movies"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tahoma_movies",
+				type: "Root",
+				url: "https://tv.apple.com/movies"
+			}
+		},
+		{
+			title: "电视节目",
+			type: "TV",
+			universalLinks: [
+				"https://tv.apple.com/tv-shows"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tahoma_tvshows",
+				type: "Root",
+				url: "https://tv.apple.com/tv-shows"
+			}
+		},
+		{
+			title: "商店",
+			type: "Store",
+			universalLinks: [
+				"https://tv.apple.com/store"
+			],
+			destinationType: "SubTabs",
+			subTabs: [
+				{
+					title: "电影",
+					type: "Movies",
+					universalLinks: [
+						"https://tv.apple.com/movies"
+					],
+					destinationType: "Target",
+					target: {
+						id: "tahoma_movies",
+						type: "Root",
+						url: "https://tv.apple.com/movies"
+					}
+				},
+				{
+					title: "电视节目",
+					type: "TV",
+					universalLinks: [
+						"https://tv.apple.com/tv-shows"
+					],
+					destinationType: "Target",
+					target: {
+						id: "tahoma_tvshows",
+						type: "Root",
+						url: "https://tv.apple.com/tv-shows"
+					}
+				}
+			]
+		},
+		{
+			title: "频道和 App",
+			destinationType: "SubTabs",
+			subTabsPlacementType: "ExpandedList",
+			type: "ChannelsAndApps",
+			subTabs: [
+			]
+		},
+		{
+			title: "资料库",
+			type: "Library",
+			destinationType: "Client"
+		},
+		{
+			title: "搜索",
+			type: "Search",
+			universalLinks: [
+				"https://tv.apple.com/search"
+			],
+			destinationType: "Target",
+			target: {
+				id: "tahoma_search",
+				type: "Root",
+				url: "https://tv.apple.com/search"
+			}
+		}
+	],
+	i18n: {
+		WatchNow: [
+			[
+				"en",
+				"Home"
+			],
+			[
+				"zh",
+				"主页"
+			],
+			[
+				"zh-Hans",
+				"主頁"
+			],
+			[
+				"zh-Hant",
+				"主頁"
+			]
+		],
+		Movies: [
+			[
+				"en",
+				"Movies"
+			],
+			[
+				"zh",
+				"电影"
+			],
+			[
+				"zh-Hans",
+				"电影"
+			],
+			[
+				"zh-Hant",
+				"電影"
+			]
+		],
+		TV: [
+			[
+				"en",
+				"TV"
+			],
+			[
+				"zh",
+				"电视节目"
+			],
+			[
+				"zh-Hans",
+				"电视节目"
+			],
+			[
+				"zh-Hant",
+				"電視節目"
+			]
+		],
+		Store: [
+			[
+				"en",
+				"Store"
+			],
+			[
+				"zh",
+				"商店"
+			],
+			[
+				"zh-Hans",
+				"商店"
+			],
+			[
+				"zh-Hant",
+				"商店"
+			]
+		],
+		Sports: [
+			[
+				"en",
+				"Sports"
+			],
+			[
+				"zh",
+				"体育节目"
+			],
+			[
+				"zh-Hans",
+				"体育节目"
+			],
+			[
+				"zh-Hant",
+				"體育節目"
+			]
+		],
+		Kids: [
+			[
+				"en",
+				"Kids"
+			],
+			[
+				"zh",
+				"儿童"
+			],
+			[
+				"zh-Hans",
+				"儿童"
+			],
+			[
+				"zh-Hant",
+				"兒童"
+			]
+		],
+		Library: [
+			[
+				"en",
+				"Library"
+			],
+			[
+				"zh",
+				"资料库"
+			],
+			[
+				"zh-Hans",
+				"资料库"
+			],
+			[
+				"zh-Hant",
+				"資料庫"
+			]
+		],
+		Search: [
+			[
+				"en",
+				"Search"
+			],
+			[
+				"zh",
+				"搜索"
+			],
+			[
+				"zh-Hans",
+				"搜索"
+			],
+			[
+				"zh-Hant",
+				"蒐索"
+			]
+		]
+	}
+};
+var TV = {
+	Settings: Settings$1,
+	Configs: Configs$1
+};
+
+var TV$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Configs: Configs$1,
+    Settings: Settings$1,
+    default: TV
+});
+
+var Settings = {
+	Switch: true,
+	NextHour: {
+		Provider: "ColorfulClouds"
+	},
+	AQI: {
+		Provider: "ColorfulClouds",
+		ReplaceProviders: [
+		],
+		Local: {
+			Scale: "WAQI_InstantCast",
+			ReplaceScales: [
+				"HJ6332012"
+			],
+			ConvertUnits: false
+		}
+	},
+	API: {
+		WAQI: {
+			Token: null,
+			Header: {
+				"Content-Type": "application/json"
+			}
+		},
+		QWeather: {
+			Token: null,
+			Header: {
+				"Content-Type": "application/json"
+			},
+			Host: "devapi.qweather.com"
+		},
+		ColorfulClouds: {
+			Token: null,
+			Header: {
+				"Content-Type": "application/json"
+			}
+		}
+	}
+};
+var Configs = {
+	Availability: {
+		v1: [
+			"currentWeather",
+			"dailyForecast",
+			"hourlyForecast",
+			"minuteForecast",
+			"weatherAlerts"
+		],
+		v2: [
+			"airQuality",
+			"currentWeather",
+			"forecastDaily",
+			"forecastHourly",
+			"forecastPeriodic",
+			"historicalComparisons",
+			"weatherChanges",
+			"forecastNextHour",
+			"weatherAlerts",
+			"weatherAlertNotifications",
+			"news"
+		]
+	}
+};
+var WeatherKit = {
+	Settings: Settings,
+	Configs: Configs
+};
+
+var WeatherKit$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Configs: Configs,
+    Settings: Settings,
+    default: WeatherKit
+});
+
+var Database$1 = Database = {
+	"Default": Default$1,
+	"Location": Location$1,
+	"Maps": Maps$1,
+	"News": News$1,
+	"PrivateRelay": PrivateRelay$1,
+	"Siri": Siri$1,
+	"TestFlight": TestFlight$1,
+	"TV": TV$1,
+	"WeatherKit": WeatherKit$1
+};
+
+/**
+ * Get Storage Variables
+ * @link https://github.com/NanoCat-Me/utils/blob/main/getStorage.mjs
+ * @author VirgilClyne
+ * @param {String} key - Persistent Store Key
+ * @param {Array} names - Platform Names
+ * @param {Object} database - Default Database
+ * @return {Object} { Settings, Caches, Configs }
+ */
+function getStorage(key, names, database) {
+    //log(`☑️ getStorage, Get Environment Variables`, "");
+    /***************** BoxJs *****************/
+    // 包装为局部变量，用完释放内存
+    // BoxJs的清空操作返回假值空字符串, 逻辑或操作符会在左侧操作数为假值时返回右侧操作数。
+    let BoxJs = Storage.getItem(key, database);
+    //log(`🚧 getStorage, Get Environment Variables`, `BoxJs类型: ${typeof BoxJs}`, `BoxJs内容: ${JSON.stringify(BoxJs)}`, "");
+    /***************** Argument *****************/
+    let Argument = {};
+    switch (typeof $argument) {
+        case "string":
+            let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=").map(i => i.replace(/\"/g, ''))));
+            for (let item in arg) Lodash.set(Argument, item, arg[item]);
+            break;
+        case "object":
+            for (let item in $argument) Lodash.set(Argument, item, $argument[item]);
+            break;
+    }    //log(`✅ getStorage, Get Environment Variables`, `Argument类型: ${typeof Argument}`, `Argument内容: ${JSON.stringify(Argument)}`, "");
+    /***************** Store *****************/
+    const Store = { Settings: database?.Default?.Settings || {}, Configs: database?.Default?.Configs || {}, Caches: {} };
+    if (!Array.isArray(names)) names = [names];
+    //log(`🚧 getStorage, Get Environment Variables`, `names类型: ${typeof names}`, `names内容: ${JSON.stringify(names)}`, "");
+    for (let name of names) {
+        Store.Settings = { ...Store.Settings, ...database?.[name]?.Settings, ...Argument, ...BoxJs?.[name]?.Settings };
+        Store.Configs = { ...Store.Configs, ...database?.[name]?.Configs };
+        if (BoxJs?.[name]?.Caches && typeof BoxJs?.[name]?.Caches === "string") BoxJs[name].Caches = JSON.parse(BoxJs?.[name]?.Caches);
+        Store.Caches = { ...Store.Caches, ...BoxJs?.[name]?.Caches };
+    }    //log(`🚧 getStorage, Get Environment Variables`, `Store.Settings类型: ${typeof Store.Settings}`, `Store.Settings: ${JSON.stringify(Store.Settings)}`, "");
+    traverseObject(Store.Settings, (key, value) => {
+        //log(`🚧 getStorage, traverseObject`, `${key}: ${typeof value}`, `${key}: ${JSON.stringify(value)}`, "");
+        if (value === "true" || value === "false") value = JSON.parse(value); // 字符串转Boolean
+        else if (typeof value === "string") {
+            if (value.includes(",")) value = value.split(",").map(item => string2number(item)); // 字符串转数组转数字
+            else value = string2number(value); // 字符串转数字
+        }        return value;
+    });
+    //log(`✅ getStorage, Get Environment Variables`, `Store: ${typeof Store.Caches}`, `Store内容: ${JSON.stringify(Store)}`, "");
+    return Store;
+    /***************** function *****************/
+    function traverseObject(o, c) { for (var t in o) { var n = o[t]; o[t] = "object" == typeof n && null !== n ? traverseObject(n, c) : c(t, n); } return o }
+    function string2number(string) { if (string && !isNaN(string)) string = parseInt(string, 10); return string }
+}
+
+/**
+ * Set Environment Variables
+ * @author VirgilClyne
+ * @param {String} name - Persistent Store Key
+ * @param {Array} platforms - Platform Names
+ * @param {Object} database - Default DataBase
+ * @return {Object} { Settings, Caches, Configs }
+ */
+function setENV(name, platforms, database) {
+	log(`☑️ Set Environment Variables`, "");
+	let { Settings, Caches, Configs } = getStorage(name, platforms, database);
+	/***************** Settings *****************/
+	switch (platforms) {
+		case "WeatherKit":
+			if (!Array.isArray(Settings?.AQI?.ReplaceProviders)) Lodash.set(Settings, "AQI.ReplaceProviders", (Settings?.AQI?.ReplaceProviders) ? [Settings.AQI.ReplaceProviders.toString()] : []);
+			if (Settings.AQI.ReplaceProviders.includes("TWC")) Settings.AQI.ReplaceProviders.push("The Weather Channel");
+			if (Settings.AQI.ReplaceProviders.includes("QWeather")) Settings.AQI.ReplaceProviders.push("和风天气");
+			Settings.AQI.ReplaceProviders.push(undefined);
+			if (!Array.isArray(Settings?.AQI?.Local?.ReplaceScales)) Lodash.set(Settings, "AQI.Local.ReplaceScales", (Settings?.AQI?.Local?.ReplaceScales) ? [Settings.AQI.Local.ReplaceScales.toString()] : []);
+			break;
+		case "Siri":
+			if (!Array.isArray(Settings?.Domains)) Lodash.set(Settings, "Domains", (Settings?.Domains) ? [Settings.Domains.toString()] : []);
+			if (!Array.isArray(Settings?.Functions)) Lodash.set(Settings, "Functions", (Settings?.Functions) ? [Settings.Functions.toString()] : []);
+			break;
+		case "TV":
+			if (!Array.isArray(Settings?.Tabs)) Lodash.set(Settings, "Tabs", (Settings?.Tabs) ? [Settings.Tabs.toString()] : []);
+			break;
+	}	log(`✅ Set Environment Variables, Settings: ${typeof Settings}, Settings内容: ${JSON.stringify(Settings)}`, "");
+	/***************** Caches *****************/
+	//log(`✅ Set Environment Variables, Caches: ${typeof Caches}, Caches内容: ${JSON.stringify(Caches)}`, "");
+	/***************** Configs *****************/
+	Configs.Storefront = new Map(Configs.Storefront);
+	if (Configs.Locale) Configs.Locale = new Map(Configs.Locale);
+	if (Configs.i18n) for (let type in Configs.i18n) Configs.i18n[type] = new Map(Configs.i18n[type]);
+	return { Settings, Caches, Configs };
+}
+
+log("v4.0.2(4003)");
 
 /***************** Processing *****************/
 // 解构URL
@@ -8993,19 +9025,8 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 							break;
 						case "application/grpc":
 						case "application/grpc+proto":
-							// 先拆分B站gRPC校验头和protobuf数据体
-							let header = rawBody.slice(0, 5);
-							body = rawBody.slice(5);
-							// 处理response压缩protobuf数据体
-							switch (header?.[0]) {
-								case 0: // unGzip
-									break;
-								case 1: // Gzip
-									body = pako.ungzip(body);
-									header[0] = 0; // unGzip
-									break;
-							}							rawBody = addgRPCHeader({ header, body }); // gzip压缩有问题，别用
-							//rawBody = body;
+							rawBody = GRPC.decode(rawBody);
+							rawBody = GRPC.encode(rawBody);
 							break;
 					}					// 写入二进制数据
 					$response.body = rawBody;
