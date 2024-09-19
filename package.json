@@ -1,7 +1,4 @@
 {
-	"name": "iringo",
-	"version": "1.0.0",
-	"description": "解锁完整的Apple功能和集成服务",
 	"type": "module",
 	"repository": {
 		"type": "git",
@@ -21,7 +18,7 @@
 	"author": "VirgilClyne",
 	"license": "Apache-2.0",
 	"devDependencies": {
-		"@protobuf-ts/runtime": "^2.9.3",
+		"@protobuf-ts/plugin": "^2.9.4",
 		"@rollup/plugin-commonjs": "^25.0.7",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^15.2.3",
@@ -30,7 +27,8 @@
 		"typescript": "^5.5.4"
 	},
 	"dependencies": {
-		"@protobuf-ts/plugin": "^2.9.4",
-		"flatbuffers": "^24.3.25"
+		"@protobuf-ts/runtime": "^2.9.3",
+		"flatbuffers": "^24.3.25",
+		"pako": "^2.1.0"
 	}
 }
