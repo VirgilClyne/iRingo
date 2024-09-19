@@ -1,36 +1,29 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-import URL from "./URL/URL.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: 📺 TV v3.3.0(3) request");
-
+log("v3.3.1(1004)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
 			// 解析参数
 			const StoreFront = url.searchParams.get("sf");
 			const Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
-			$.log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
+			log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
 			// 创建空数据
 			let body = {};
 			// 设置默认类型
@@ -246,7 +239,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							};
 							break;
 					};
-					$.log(`⚠ Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
+					log(`⚠ Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
 					break;
 				case "CONNECT":
 				case "TRACE":
@@ -262,22 +255,27 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				$.done($request);
+				done($request);
 				break;
 		};
 	})

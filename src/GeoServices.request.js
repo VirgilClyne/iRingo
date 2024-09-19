@@ -1,12 +1,9 @@
 import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-log("v3.1.0(2)");
-
+log("v3.1.0(1003)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -219,13 +216,18 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 				//log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";			
-				if ($platform === "Quantumult X") {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					done($response);
-				} else done({ response: $response });
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
 				//log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");

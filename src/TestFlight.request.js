@@ -1,29 +1,22 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-import URL from "./URL/URL.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: ✈ TestFlight v3.2.0(1) request");
-
+log("v3.2.1(1001)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TestFlight", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -152,13 +145,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									// headers auth mod
 									switch (Settings.MultiAccount) { // MultiAccount
 										case true:
-											$.log(`⚠ 启用多账号支持`, "");
+											log(`⚠ 启用多账号支持`, "");
 											const IfNoneMatch = $request?.headers?.["If-None-Match"] ?? $request?.headers?.["if-none-match"];
 											const XRequestId = $request?.headers?.["X-Request-Id"] ?? $request?.headers?.["x-request-id"];
 											const XSessionId = $request?.headers?.["X-Session-Id"] ?? $request?.headers?.["x-session-id"];
 											const XSessionDigest = $request?.headers?.["X-Session-Digest"] ?? $request?.headers?.["x-session-digest"];
 											if (Caches.data) { // Caches.data存在
-												$.log(`⚠ Caches.data存在，读取`, "");
+												log(`⚠ Caches.data存在，读取`, "");
 												switch (PATHs[0]) {
 													case "v1":
 													case "v2":
@@ -174,12 +167,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																	default:
 																		switch (/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.test(PATHs[2])) {
 																			case true: // PATHs[2]是UUID
-																				$.log(`⚠ PATHs[2]是UUID，替换url.pathname`, "");
+																				log(`⚠ PATHs[2]是UUID，替换url.pathname`, "");
 																				url.pathname = PATH.replace(/\/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\//i, `/${Caches.data.accountId}/`);
 																				//break; // 不中断，继续处理
 																			case false: // PATHs[2]不是UUID
 																				if (XSessionId !== Caches.headers["X-Session-Id"]) { // sessionId不同
-																					$.log(`⚠ sessionId不同，替换$request.headers`, "");
+																					log(`⚠ sessionId不同，替换$request.headers`, "");
 																					if (IfNoneMatch) {
 																						delete $request.headers?.["If-None-Match"];
 																						delete $request.headers?.["if-none-match"];
@@ -200,13 +193,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 																		};
 																		break;
 																	case Caches?.data?.accountId: // PATHs[2]有UUID且与accountId相同
-																		$.log(`⚠ PATHs[2]与accountId相同，更新Caches`, "");
+																		log(`⚠ PATHs[2]与accountId相同，更新Caches`, "");
 																		Caches.headers = {
 																			"X-Request-Id": XRequestId,
 																			"X-Session-Id": XSessionId,
 																			"X-Session-Digest": XSessionDigest
 																		};
-																		$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
+																		Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 																		break;
 																};
 																break;
@@ -217,7 +210,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 												};
 												break;
 											} else { // Caches空
-												$.log(`⚠ Caches空，新写入`, "");
+												log(`⚠ Caches空，新写入`, "");
 												Caches.headers = {
 													"X-Request-Id": XRequestId,
 													"X-Session-Id": XSessionId,
@@ -229,7 +222,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 														"sessionId": XSessionId
 													};
 												};
-												$Storage.setItem("@iRingo.TestFlight.Caches", Caches);
+												Storage.setItem("@iRingo.TestFlight.Caches", Caches);
 											};
 											break;
 										case false:
@@ -246,28 +239,33 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 			};
 			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				$.done($request);
+				done($request);
 				break;
 		};
 	})

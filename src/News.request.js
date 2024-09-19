@@ -1,28 +1,22 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: 📰 News v3.1.0(1) request");
-
+log("v3.1.1(1002)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "News", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -155,28 +149,33 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 			};
 			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				$.done($request);
+				done($request);
 				break;
 		};
 	})

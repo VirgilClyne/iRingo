@@ -1,26 +1,20 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-import URL from "./URL/URL.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: 📺 TV v3.3.0(1005) response");
-
+log("v3.3.1(1006)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -248,7 +242,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "/v3/register":
 								case "/v3/channels/scoreboard":
 								case "/v3/channels/scoreboard/":
-									$.log(JSON.stringify(body));
+									log(JSON.stringify(body));
 									break;
 								default:
 									break;
@@ -270,23 +264,23 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response))
+	.catch((e) => logError(e))
+	.finally(() => done($response))
 
 /***************** Function *****************/
 function setPlayable(playable, HLSUrl, ServerUrl) {
-	$.log(`☑️ Set Playable Content`, "");
+	log(`☑️ Set Playable Content`, "");
 	let assets = playable?.assets;
 	let itunesMediaApiData = playable?.itunesMediaApiData;
 	if (assets) assets = setUrl(assets, HLSUrl, ServerUrl);
 	if (itunesMediaApiData?.movieClips) itunesMediaApiData.movieClips = itunesMediaApiData.movieClips.map(movieClip => setUrl(movieClip, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.offers) itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => setUrl(offer, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.personalizedOffers) itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => setUrl(personalizedOffer, HLSUrl, ServerUrl));
-	$.log(`✅ Set Playable Content`, "");
+	log(`✅ Set Playable Content`, "");
 	return playable;
 
 	function setUrl(asset, HLSUrl, ServerUrl) {
-		$.log(`☑️ Set Url`, "");
+		log(`☑️ Set Url`, "");
 		if (asset?.hlsUrl) {
 			let hlsUrl = new URL(asset.hlsUrl);
 			switch (hlsUrl.pathname) {
@@ -310,7 +304,7 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 			fpsNonceServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
 			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
 		};
-		$.log(`✅ Set Url`, "");
+		log(`✅ Set Url`, "");
 		return asset;
 	};
 };

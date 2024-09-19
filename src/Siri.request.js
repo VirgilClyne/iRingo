@@ -1,43 +1,27 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: 🔍 Siri v3.2.1(1009) request");
-
+log("v4.0.0(4010)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
-const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}`, "");
+const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.pathname.split("/").filter(Boolean);
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}`, "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "Siri", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
-			const Locale = url.searchParams.get("locale");
-			const [Language, CountryCode] = Locale?.split("_") ?? [];
-			$.log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
-			switch (Settings.CountryCode) {
-				case "AUTO":
-					Settings.CountryCode = CountryCode;
-					break;
-				default:
-					if (url.searchParams.has("cc")) url.searchParams.set("cc", Settings.CountryCode);
-					break;
-			};
 			// 创建空数据
+			let Locale, Language, CountryCode;
 			let body = {};
 			// 方法判断
 			switch (METHOD) {
@@ -91,24 +75,29 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "HEAD":
 				case "OPTIONS":
 				default:
+					Locale = Locale ?? url.searchParams.get("locale");
+					[Language, CountryCode] = Locale?.split("_") ?? [];
+					log(`🚧 Locale: ${Locale}, Language: ${Language}, CountryCode: ${CountryCode}`, "");
+					switch (Settings.CountryCode) {
+						case "AUTO":
+							Settings.CountryCode = CountryCode;
+							break;
+						default:
+							if (url.searchParams.has("cc")) url.searchParams.set("cc", Settings.CountryCode);
+							break;
+					};
 					// 主机判断
 					switch (HOST) {
-						case "api.smoot.apple.com":
 						case "api.smoot.apple.cn":
-							// 路径判断
-							switch (PATH) {
-								case "/bag": // 配置
-									break;
-							};
-							break;
-						case "fbs.smoot.apple.com":
-							break;
-						case "cdn.smoot.apple.com":
-							break;
+						case "api.smoot.apple.com":
+						case "api2.smoot.apple.com":
+						case "api-siri.smoot.apple.com":
 						default: // 其他主机
 							let q = url.searchParams.get("q");
 							// 路径判断
 							switch (PATH) {
+								case "/bag": // 配置
+									break;
 								case "/search": // 搜索
 									switch (url.searchParams.get("qtype")) {
 										case "zkw": // 处理"新闻"小组件
@@ -190,6 +179,12 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									break;
 							};
 							break;
+							case "guzzoni.smoot.apple.com":
+								break;
+							case "fbs.smoot.apple.com":
+								break;
+							case "cdn.smoot.apple.com":
+								break;
 					};
 					break;
 				case "CONNECT":
@@ -197,28 +192,33 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					break;
 			};
 			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				$.done($request);
+				done($request);
 				break;
 		};
 	})
