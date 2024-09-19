@@ -7668,8 +7668,7 @@ class GEOResourceManifest {
 
 }
 
-log("v4.0.4(1024)");
-Storage.setItem("@iRingo.Maps.Caches", "");
+log("v4.0.4(1025)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
