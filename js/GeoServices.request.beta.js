@@ -6002,7 +6002,7 @@ class GEOPDPlaceRequest {
     };
 }
 
-log("v3.2.5(1016)");
+log("v3.2.6(1017)");
 // 构造回复数据
 let $response = undefined;
 /***************** Processing *****************/
@@ -6230,14 +6230,18 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 				//log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
 				if ($response.headers?.["Content-Encoding"]) ;
 				if ($response.headers?.["content-encoding"]) ;			
-				if ($platform === "Quantumult X") {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					done($response);
-				} else done({ response: $response });
-				break;
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				}				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
 				//log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
 				done($request);

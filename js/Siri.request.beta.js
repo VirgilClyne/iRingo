@@ -12382,18 +12382,16 @@ class VisualSearchRequest$Type extends MessageType {
  */
 const VisualSearchRequest = new VisualSearchRequest$Type();
 
-log("v4.2.1(4046)");
-
+log("v4.2.2(4047)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
 log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname; url.pathname.split("/").filter(Boolean);
-log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}`, "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
 log(`⚠ FORMAT: ${FORMAT}`, "");
@@ -12691,14 +12689,14 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 				if ($response.headers?.["content-encoding"]) ;
 				switch ($platform) {
 					default:
-						done($response);
+						done({ response: $response });
 						break;
 					case "Quantumult X":
-						if (!$response.status) $response.status = 200;
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
 						delete $response.headers?.["Content-Length"];
 						delete $response.headers?.["content-length"];
 						delete $response.headers?.["Transfer-Encoding"];
-						done({ response: $response });
+						done($response);
 						break;
 				}				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据

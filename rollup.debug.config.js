@@ -53,7 +53,7 @@ export default [
 		output: {
 			file: 'js/TestFlight.request.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ✈ TestFlight β Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
@@ -62,7 +62,7 @@ export default [
 		output: {
 			file: 'js/TestFlight.response.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ✈ TestFlight β Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
@@ -71,7 +71,7 @@ export default [
 		output: {
 			file: 'js/TV.request.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📺 TV β Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
@@ -80,7 +80,7 @@ export default [
 		output: {
 			file: 'js/TV.response.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📺 TV β Response')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
@@ -89,7 +89,7 @@ export default [
 		output: {
 			file: 'js/News.request.beta.js',
 			//format: 'es',
-			banner: '/* README: https://github.com/VirgilClyne/iRingo */',
+			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📰 News β Request')",
 		},
 		plugins: [json(), commonjs(), nodeResolve()]
 	},

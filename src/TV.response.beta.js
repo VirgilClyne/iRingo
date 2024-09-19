@@ -1,26 +1,20 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-import URL from "./URL/URL.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: 📺 TV v3.3.0(1005) response.beta");
-
+log("v3.3.1(1006)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname, PATHs = url.paths;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($response.headers?.["Content-Type"] ?? $response.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
@@ -39,7 +33,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/vnd.apple.mpegurl":
 				case "audio/mpegurl":
 					//body = M3U8.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
@@ -49,13 +43,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 				case "application/plist":
 				case "application/x-plist":
 					//body = XML.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
 					//body = VTT.parse($response.body);
-					//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+					//log(`🚧 body: ${JSON.stringify(body)}`, "");
 					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
@@ -65,10 +59,10 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					switch (HOST) {
 						case "uts-api.itunes.apple.com":
 							const Version = parseInt(url.searchParams.get("v"), 10), Platform = url.searchParams.get("pfm"), Caller = url.searchParams.get("caller");
-							$.log(`🚧 调试信息, Version = ${Version}, Platform = ${Platform}, Caller = ${Caller}`, "")
+							log(`🚧 调试信息, Version = ${Version}, Platform = ${Platform}, Caller = ${Caller}`, "")
 							const StoreFront = url.searchParams.get("sf");
 							const Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
-							$.log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
+							log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
 							// 路径判断
 							switch (PATH) {
 								case "/uts/v3/configurations":
@@ -80,14 +74,14 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 											Settings.Tabs.forEach((type) => {
 												if (body.data.applicationProps.tabs.some(Tab => Tab?.type === type)) {
 													let tab = body.data.applicationProps.tabs.find(Tab => Tab?.type === type);
-													$.log(`🚧 oTab: ${JSON.stringify(tab)}`, "");
+													log(`🚧 oTab: ${JSON.stringify(tab)}`, "");
 													let index = body.data.applicationProps.tabs.findIndex(Tab => Tab?.type === type);
-													$.log(`🚧 oIndex: ${index}`, "");
+													log(`🚧 oIndex: ${index}`, "");
 													if (index === 0) newTabs.unshift(tab);
 													else newTabs.push(tab);
 												} else if (Configs.Tabs.some(Tab => Tab?.type === type)) {
 													let tab = Configs.Tabs.find(Tab => Tab?.type === type);
-													$.log(`🚧 aTab: ${JSON.stringify(tab)}`, "");
+													log(`🚧 aTab: ${JSON.stringify(tab)}`, "");
 													switch (tab?.destinationType) {
 														case "SubTabs":
 															tab.subTabs = tab.subTabs.map(subTab => {
@@ -178,13 +172,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 													};
 												};
 											});
-											$.log(`🚧 newTabs: ${JSON.stringify(newTabs)}`, "");
+											log(`🚧 newTabs: ${JSON.stringify(newTabs)}`, "");
 											body.data.applicationProps.tabs = newTabs;
 											/*
 											body.data.applicationProps.tabs = Configs.Tabs.map((tab, index) => {
 												if (Settings.Tabs.includes(tab?.type)) {
 													tab = body.data.applicationProps.tabs.find(Tab => Tab?.type === tab?.type);
-													$.log(JSON.stringify(tab));
+													log(JSON.stringify(tab));
 													if (!tab) tab = Configs.Tabs.find(Tab => Tab?.type === tab?.type);
 												} else {
 													tab = Configs.Tabs.find(Tab => Tab?.type === tab?.type);
@@ -370,7 +364,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "/v3/register":
 								case "/v3/channels/scoreboard":
 								case "/v3/channels/scoreboard/":
-									$.log(JSON.stringify(body));
+									log(JSON.stringify(body));
 									//body.channels.storeFront = "UNITED_STATES";
 									//body.channels.storeFront = "TAIWAN";
 									break;
@@ -395,23 +389,23 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done($response))
+	.catch((e) => logError(e))
+	.finally(() => done($response))
 
 /***************** Function *****************/
 function setPlayable(playable, HLSUrl, ServerUrl) {
-	$.log(`☑️ Set Playable Content`, "");
+	log(`☑️ Set Playable Content`, "");
 	let assets = playable?.assets;
 	let itunesMediaApiData = playable?.itunesMediaApiData;
 	if (assets) assets = setUrl(assets, HLSUrl, ServerUrl);
 	if (itunesMediaApiData?.movieClips) itunesMediaApiData.movieClips = itunesMediaApiData.movieClips.map(movieClip => setUrl(movieClip, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.offers) itunesMediaApiData.offers = itunesMediaApiData.offers.map(offer => setUrl(offer, HLSUrl, ServerUrl));
 	if (itunesMediaApiData?.personalizedOffers) itunesMediaApiData.personalizedOffers = itunesMediaApiData.personalizedOffers.map(personalizedOffer => setUrl(personalizedOffer, HLSUrl, ServerUrl));
-	$.log(`✅ Set Playable Content`, "");
+	log(`✅ Set Playable Content`, "");
 	return playable;
 
 	function setUrl(asset, HLSUrl, ServerUrl) {
-		$.log(`☑️ Set Url`, "");
+		log(`☑️ Set Url`, "");
 		if (asset?.hlsUrl) {
 			let hlsUrl = new URL(asset.hlsUrl);
 			switch (hlsUrl.pathname) {
@@ -437,15 +431,15 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 			fpsNonceServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
 			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
 		};
-		$.log(`✅ Set Url`, "");
+		log(`✅ Set Url`, "");
 		return asset;
 	};
 };
 
 async function getData(type, settings, database) {
-	$.log(`⚠ Get View Data`, "");
+	log(`⚠ Get View Data`, "");
 	let CCs = [settings.CountryCode[type], "US", "GB"].flat(Infinity);
-	$.log(`CCs=${CCs}`)
+	log(`CCs=${CCs}`)
 	//查询是否有符合语言的字幕
 	let data = [];
 	for await (const CC of CCs) {
@@ -455,16 +449,16 @@ async function getData(type, settings, database) {
 		}
 		request.url = new URL(request.url);
 		request.url.searchParams.set("sf", database.Storefront[CC]);
-		$.log(`sf=${request.url.searchParams.get("sf")}`)
+		log(`sf=${request.url.searchParams.get("sf")}`)
 		request.url.searchParams.set("locale", database.Locale[CC]);
-		$.log(`locale=${request.url.searchParams.get("locale")}`)
+		log(`locale=${request.url.searchParams.get("locale")}`)
 		request.url = request.url.toString();
-		$.log(`request.url=${request.url}`)
+		log(`request.url=${request.url}`)
 		request.headers["X-Surge-Skip-Scripting"] = "true"
-		data = await $.fetch(request).then(data => data);
-		$.log(`data=${JSON.stringify(data)}`)
+		data = await fetch(request).then(data => data);
+		log(`data=${JSON.stringify(data)}`)
 		if (data.statusCode === 200 || data.status === 200 ) break;
 	};
-	$.log(`🎉 调试信息`, "Get EXT-X-MEDIA Data", `datas: ${JSON.stringify(data.body)}`, "");
+	log(`🎉 调试信息`, "Get EXT-X-MEDIA Data", `datas: ${JSON.stringify(data.body)}`, "");
 	return data.body
 };

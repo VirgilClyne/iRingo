@@ -1,36 +1,29 @@
-import _ from './ENV/Lodash.mjs'
-import $Storage from './ENV/$Storage.mjs'
-import ENV from "./ENV/ENV.mjs";
-import URL from "./URL/URL.mjs";
-
+import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-
-const $ = new ENV(" iRingo: 📺 TV v3.3.0(3) request.beta");
-
+log("v3.3.1(1004)");
 // 构造回复数据
 let $response = undefined;
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
-$.log(`⚠ url: ${url.toJSON()}`, "");
+log(`⚠ url: ${url.toJSON()}`, "");
 // 获取连接参数
 const METHOD = $request.method, HOST = url.hostname, PATH = url.pathname;
-$.log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
+log(`⚠ METHOD: ${METHOD}, HOST: ${HOST}, PATH: ${PATH}` , "");
 // 解析格式
 const FORMAT = ($request.headers?.["Content-Type"] ?? $request.headers?.["content-type"])?.split(";")?.[0];
-$.log(`⚠ FORMAT: ${FORMAT}`, "");
+log(`⚠ FORMAT: ${FORMAT}`, "");
 !(async () => {
 	const { Settings, Caches, Configs } = setENV("iRingo", "TV", Database);
-	$.log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
+	log(`⚠ Settings.Switch: ${Settings?.Switch}`, "");
 	switch (Settings.Switch) {
 		case true:
 		default:
 			// 解析参数
 			const StoreFront = url.searchParams.get("sf");
 			const Locale = ($request.headers?.["X-Apple-I-Locale"] ?? $request.headers?.["x-apple-i-locale"])?.split('_')?.[0] ?? "zh";
-			$.log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
+			log(`🚧 调试信息, StoreFront = ${StoreFront}, Locale = ${Locale}`, "")
 			// 创建空数据
 			let body = {};
 			// 设置默认类型
@@ -70,7 +63,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/vnd.apple.mpegurl":
 						case "audio/mpegurl":
 							//body = M3U8.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = M3U8.stringify(body);
 							break;
 						case "text/xml":
@@ -80,13 +73,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 						case "application/plist":
 						case "application/x-plist":
 							//body = XML.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = XML.stringify(body);
 							break;
 						case "text/vtt":
 						case "application/vtt":
 							//body = VTT.parse($request.body);
-							//$.log(`🚧 body: ${JSON.stringify(body)}`, "");
+							//log(`🚧 body: ${JSON.stringify(body)}`, "");
 							//$request.body = VTT.stringify(body);
 							break;
 						case "text/json":
@@ -99,7 +92,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 									switch (PATH) {
 										case "/uts/v3/user/settings":
 											Type = "Settings";
-											$.log(`🚧 调试信息`, JSON.stringify(body), "")
+											log(`🚧 调试信息`, JSON.stringify(body), "")
 											break;
 									};
 									break;
@@ -109,7 +102,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "/v3/channels/scoreboard":
 										case "/v3/channels/scoreboard/":
 											Type = "Sports";
-											$.log(`🚧 调试信息`, JSON.stringify(body), "")
+											log(`🚧 调试信息`, JSON.stringify(body), "")
 											break;
 									};
 									break;
@@ -134,13 +127,13 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 					switch (HOST) {
 						case "uts-api.itunes.apple.com":
 							const Version = parseInt(url.searchParams.get("v"), 10), Platform = url.searchParams.get("pfm"), Caller = url.searchParams.get("caller");
-							$.log(`🚧 调试信息, Version = ${Version}, Platform = ${Platform}, Caller = ${Caller}`, "")
+							log(`🚧 调试信息, Version = ${Version}, Platform = ${Platform}, Caller = ${Caller}`, "")
 							// 路径判断
 							switch (PATH) {
 								case "/uts/v3/configurations":
 									Type = "Configs";
 									const Region = url.searchParams.get("region"), Country = url.searchParams.get("country"), StoreFrontH = url.searchParams.get("sfh");
-									$.log(`🚧 调试信息`, `Region = ${Region}, Country = ${Country}, StoreFrontH = ${StoreFrontH}`, "")
+									log(`🚧 调试信息`, `Region = ${Region}, Country = ${Country}, StoreFrontH = ${StoreFrontH}`, "")
 									if (Settings.CountryCode[Type] !== "AUTO") {
 										if (Region) url.searchParams.set("region", Settings.CountryCode[Type] ?? Region);
 										if (Country) url.searchParams.set("country", Settings.CountryCode[Type] ?? Country);
@@ -259,7 +252,7 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 							};
 							break;
 					};
-					$.log(`⚠ Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
+					log(`⚠ Type = ${Type}, CC = ${Settings.CountryCode[Type]}`);
 					break;
 				case "CONNECT":
 				case "TRACE":
@@ -269,32 +262,37 @@ $.log(`⚠ FORMAT: ${FORMAT}`, "");
 			if ($request.headers?.["x-apple-store-front"]) $request.headers["x-apple-store-front"] = (Configs.Storefront.get(Settings.CountryCode[Type])) ? $request.headers["x-apple-store-front"].replace(/\d{6}/, Configs.Storefront.get(Settings.CountryCode[Type])) : $request.headers["x-apple-store-front"];
 			if (StoreFront) url.searchParams.set("sf", Configs.Storefront.get(Settings.CountryCode[Type]) ?? StoreFront);
 			if (Locale) url.searchParams.set("locale", Configs.Locale.get(Settings.CountryCode[Type]) ?? Locale);
-			$.log(`🚧 调试信息`, `StoreFront = ${url.searchParams.get("sf")}, Locale = ${url.searchParams.get("locale")}`, "")
+			log(`🚧 调试信息`, `StoreFront = ${url.searchParams.get("sf")}, Locale = ${url.searchParams.get("locale")}`, "")
 			$request.url = url.toString();
-			$.log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
+			log(`🚧 调试信息`, `$request.url: ${$request.url}`, "");
 			break;
 		case false:
 			break;
 	};
 })()
-	.catch((e) => $.logErr(e))
+	.catch((e) => logError(e))
 	.finally(() => {
 		switch ($response) {
 			default: // 有构造回复数据，返回构造的回复数据
-				//$.log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
+				//log(`🚧 finally`, `echo $response: ${JSON.stringify($response, null, 2)}`, "");
 				if ($response.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
 				if ($response.headers?.["content-encoding"]) $response.headers["content-encoding"] = "identity";
-				if ($.isQuanX()) {
-					if (!$response.status) $response.status = "HTTP/1.1 200 OK";
-					delete $response.headers?.["Content-Length"];
-					delete $response.headers?.["content-length"];
-					delete $response.headers?.["Transfer-Encoding"];
-					$.done($response);
-				} else $.done({ response: $response });
+				switch ($platform) {
+					default:
+						done({ response: $response });
+						break;
+					case "Quantumult X":
+						if (!$response.status) $response.status = "HTTP/1.1 200 OK";
+						delete $response.headers?.["Content-Length"];
+						delete $response.headers?.["content-length"];
+						delete $response.headers?.["Transfer-Encoding"];
+						done($response);
+						break;
+				};
 				break;
 			case undefined: // 无构造回复数据，发送修改的请求数据
-				//$.log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
-				$.done($request);
+				//log(`🚧 finally`, `$request: ${JSON.stringify($request, null, 2)}`, "");
+				done($request);
 				break;
 		};
 	})

@@ -1,15 +1,14 @@
 import { $platform, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
-import { setENV, providerNameToLogo } from "./function/WeatherKitUtils.mjs";
+import setENV from "./function/setENV.mjs";
+import providerNameToLogo from "./function/providerNameToLogo.mjs";
 import WeatherKit2 from "./class/WeatherKit2.mjs";
 import WAQI from "./class/WAQI.mjs";
 import ColorfulClouds from "./class/ColorfulClouds.mjs";
 import QWeather from "./class/QWeather.mjs";
 import AirQuality from "./class/AirQuality.mjs";
 import * as flatbuffers from 'flatbuffers';
-
 log("v1.7.2(4164)");
-
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
