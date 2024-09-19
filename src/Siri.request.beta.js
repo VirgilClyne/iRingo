@@ -9,10 +9,10 @@ import modifyPegasusQueryContext from "./function/modifyPegasusQueryContext.mjs"
 import { MESSAGE_TYPE, reflectionMergePartial, BinaryReader, WireType, UnknownFieldHandler, isJsonObject, typeofJsonValue, jsonWriteOptions, MessageType } from "@protobuf-ts/runtime";
 import { SiriPegasusRequest } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusRequest";
 import { LookupSearchRequest } from "./protobuf/apple.parsec.lookup.v1alpha.LookupSearchRequest";
-import { SiriPegasusContext } from "./protobuf/apple.parsec.siri.v2alpha.SiriPegasusContext";
+import { VisualSearchRequest } from "./protobuf/apple.parsec.visualsearch.v2.VisualSearchRequest";
 import { PegasusQueryContext } from "./protobuf/apple.parsec.search.PegasusQueryContext";
 
-log("v4.1.3(4043)");
+log("v4.2.0(4044)");
 
 // 构造回复数据
 let $response = undefined;
@@ -198,6 +198,26 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
 													log(`🚧 data: ${JSON.stringify(data)}`, "");
 													body = LookupSearchRequest.toBinary(data);
+													break;
+												};
+												case "/apple.parsec.visualsearch.v2.VisualSearch/VisualSearch": { // 视觉搜索
+													let data = VisualSearchRequest.fromBinary(body);
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
+													let UF = UnknownFieldHandler.list(data);
+													//log(`🚧 UF: ${JSON.stringify(UF)}`, "");
+													if (UF) {
+														UF = UF.map(uf => {
+															//uf.no; // 22
+															//uf.wireType; // WireType.Varint
+															// use the binary reader to decode the raw data:
+															let reader = new BinaryReader(uf.data);
+															let addedNumber = reader.int32(); // 7777
+															log(`🚧 no: ${uf.no}, wireType: ${uf.wireType}, addedNumber: ${addedNumber}`, "");
+														});
+													};
+													data.queryContext = modifyPegasusQueryContext(data.queryContext, Settings);
+													log(`🚧 data: ${JSON.stringify(data)}`, "");
+													body = VisualSearchRequest.toBinary(data);
 													break;
 												};
 												case "/apple.parsec.responseframework.engagement.v1alpha.EngagementSearch/EngagementSearch": { //
