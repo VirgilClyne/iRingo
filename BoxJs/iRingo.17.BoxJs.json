@@ -584,10 +584,10 @@
 		},
 		{
 			"id": "iRingo.Siri",
-			"name": "🔍 Siri与搜索",
+			"name": "⭕ Siri与搜索",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🔍-Siri与搜索\">🔍 Siri与搜索</a>的使用说明进行配置",
-				"影响功能范围包括但不限于“Siri建议”、“来自APPLE的内容”、“来自APPLE的建议”等"
+				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/⭕-Siri与搜索\">⭕ Siri与搜索</a>的使用说明进行配置",
+				"影响功能范围包括但不限于「Siri建议」「来自APPLE的内容」「来自APPLE的建议」等"
 			],
 			"keys": [
 				"@iRingo.Siri.Settings",
