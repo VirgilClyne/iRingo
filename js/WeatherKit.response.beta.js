@@ -444,25 +444,29 @@ function logError(error) {
     }}
 
 function done(object = {}) {
-    log("", `🚩 执行结束!`, "");
     switch ($platform) {
         case "Surge":
             if (object.policy) Lodash.set(object, "headers.X-Surge-Policy", object.policy);
+            log("", `🚩 执行结束! 🕛 ${(new Date().getTime() / 1000 - $script.startTime)} 秒`, "");
             $done(object);
             break;
         case "Loon":
             if (object.policy) object.node = object.policy;
+            log("", `🚩 执行结束! 🕛 ${(new Date() - $script.startTime) / 1000} 秒`, "");
             $done(object);
             break;
         case "Stash":
             if (object.policy) Lodash.set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy));
+            log("", `🚩 执行结束! 🕛 ${(new Date() - $script.startTime) / 1000} 秒`, "");
             $done(object);
             break;
         case "Egern":
+            log("", `🚩 执行结束!`, "");
             $done(object);
             break;
         case "Shadowrocket":
         default:
+            log("", `🚩 执行结束!`, "");
             $done(object);
             break;
         case "Quantumult X":
@@ -490,9 +494,11 @@ function done(object = {}) {
                 object.bodyBytes = object.body.buffer.slice(object.body.byteOffset, object.body.byteLength + object.body.byteOffset);
                 delete object.body;
             } else if (object.body) delete object.bodyBytes;
+            log("", `🚩 执行结束!`, "");
             $done(object);
             break;
         case "Node.js":
+            log("", `🚩 执行结束!`, "");
             process.exit(1);
             break;
     }
