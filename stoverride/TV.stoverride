@@ -24,6 +24,12 @@ http:
       name: TV.request
       type: request
       require-body: true
+    - match: ^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8
+      name: TV.request
+      type: request
+    - match: ^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest)
+      name: TV.request
+      type: request
 
 script-providers:
   TV.request:

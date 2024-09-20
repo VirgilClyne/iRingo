@@ -1,7 +1,7 @@
 import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-log("v3.3.1(1006)");
+log("v3.3.2(1007)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -284,24 +284,66 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 		if (asset?.hlsUrl) {
 			let hlsUrl = new URL(asset.hlsUrl);
 			switch (hlsUrl.pathname) {
-				case "WebObjects/MZPlay.woa/hls/playlist.m3u8":
+				case "/WebObjects/MZPlay.woa/hls/playlist.m3u8":
+					hlsUrl.hostname = HLSUrl || "play.itunes.apple.com";
+					switch (hlsUrl.hostname) {
+						case "play.itunes.apple.com":
+							hlsUrl.pathname = "/WebObjects/MZPlay.woa/hls/playlist.m3u8";
+							break;
+						case "play-edge.itunes.apple.com":
+							hlsUrl.pathname = "/WebObjects/MZPlayLocal.woa/hls/playlist.m3u8";
+							break;
+					};
 					break;
-				case "WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8":
+				case "/WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8":
 					hlsUrl.hostname = HLSUrl || "play-edge.itunes.apple.com";
+					switch (hlsUrl.hostname) {
+						case "play.itunes.apple.com":
+							hlsUrl.pathname = "/WebObjects/MZPlay.woa/hls/subscription/playlist.m3u8";
+							break;
+						case "play-edge.itunes.apple.com":
+							hlsUrl.pathname = "/WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8";
+							break;
+					};
 					break;
-				case "WebObjects/MZPlay.woa/hls/workout/playlist.m3u8":
+				case "/WebObjects/MZPlay.woa/hls/workout/playlist.m3u8":
+					hlsUrl.hostname = HLSUrl || "play.itunes.apple.com";
+					switch (hlsUrl.hostname) {
+						case "play.itunes.apple.com":
+							hlsUrl.pathname = "/WebObjects/MZPlay.woa/hls/workout/playlist.m3u8";
+							break;
+						case "play-edge.itunes.apple.com":
+							hlsUrl.pathname = "/WebObjects/MZPlayLocal.woa/hls/workout/playlist.m3u8";
+							break;
+					};
 					break;
 			};
 			asset.hlsUrl = hlsUrl.toString();
 		};
 		if (asset?.fpsKeyServerUrl) {
 			let fpsKeyServerUrl = new URL(asset.fpsKeyServerUrl);
-			fpsKeyServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			fpsKeyServerUrl.hostname = ServerUrl || "play-edge.itunes.apple.com";
+			switch (fpsKeyServerUrl.hostname) {
+				case "play.itunes.apple.com":
+					fpsKeyServerUrl.pathname = "/WebObjects/MZPlay.woa/wa/fpsRequest";
+					break;
+				case "play-edge.itunes.apple.com":
+					fpsKeyServerUrl.pathname = "/WebObjects/MZPlayLocal.woa/wa/fpsRequest";
+					break;
+			};
 			asset.fpsKeyServerUrl = fpsKeyServerUrl.toString();
 		};
 		if (asset?.fpsNonceServerUrl) {
 			let fpsNonceServerUrl = new URL(asset.fpsNonceServerUrl);
 			fpsNonceServerUrl.hostname = ServerUrl || "play.itunes.apple.com";
+			switch (fpsNonceServerUrl.hostname) {
+				case "play.itunes.apple.com":
+					fpsNonceServerUrl.pathname = "/WebObjects/MZPlay.woa/wa/checkInNonceRequest";
+					break;
+				case "play-edge.itunes.apple.com":
+					fpsNonceServerUrl.pathname = "/WebObjects/MZPlayLocal.woa/wa/checkInNonceRequest";
+					break;
+			};
 			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
 		};
 		log(`✅ Set Url`, "");

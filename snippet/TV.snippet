@@ -13,6 +13,10 @@
 ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
 # 📺 TV UMC
 ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+# 📺 TV.hls
+^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8 url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+# 📺 TV.wa
+^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
 
 #[mitm]
 hostname = uts-api.itunes.apple.com, umc-tempo-api.apple.com
