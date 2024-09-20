@@ -1,7 +1,7 @@
 import { $platform, URL, _, Storage, fetch, notification, log, logError, wait, done, getScript, runScript } from "./utils/utils.mjs";
 import Database from "./database/index.mjs";
 import setENV from "./function/setENV.mjs";
-log("v3.3.1(1004)");
+log("v3.3.4(1007)");
 // 构造回复数据
 let $response = undefined;
 /***************** Processing *****************/
@@ -55,6 +55,17 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											if ($request.body) $request.body = $request.body.replace(/sf=[\d]{6}/, `sf=${Configs.Storefront.get(Settings.CountryCode[Type])}`);
 											break;
 									};
+									break;
+								case "play.itunes.apple.com":
+									// 路径判断
+									switch (PATH) {
+										case "/WebObjects/MZPlay.woa/wa/fpsRequest": // 仅存在于 play-edge.itunes.apple.com
+											url.hostname = "play-edge.itunes.apple.com";
+											url.pathname = "/WebObjects/MZPlayLocal.woa/wa/fpsRequest";
+											break;
+									};
+									break;
+								case "play-edge.itunes.apple.com":
 									break;
 							};
 							break;
@@ -158,7 +169,7 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 								case "/uts/v3/shelves/uts.col.ChannelUpNext.tvs.sbd.7000":
 								case "/uts/v3/shelves/edt.col.63bf2052-50b9-44c8-a67e-30e196e19c60":
 									Type = "Originals";
-									break;	
+									break;
 								case "/uts/v3/channels":
 								case "/uts/v2/brands":
 									Type = "Channels";
@@ -248,6 +259,24 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 									break;
 								default:
 									if (PATH.includes("/v3/register/")) Type = "Sports";
+									break;
+							};
+							break;
+						case "play.itunes.apple.com":
+							// 路径判断
+							switch (PATH) {
+								case "/WebObjects/MZPlay.woa/hls/subscription/playlist.m3u8": // 仅存在于 play-edge.itunes.apple.com
+									url.hostname = "play-edge.itunes.apple.com";
+									url.pathname = "/WebObjects/MZPlayLocal.woa/hls/subscription/playlist.m3u8";
+									break;
+							};
+							break;
+						case "play-edge.itunes.apple.com":
+							// 路径判断
+							switch (PATH) {
+								case "/WebObjects/MZPlayLocal.woa/hls/playlist.m3u8": // 仅存在于 play.itunes.apple.com
+									url.hostname = "play.itunes.apple.com";
+									url.pathname = "/WebObjects/MZPlay.woa/hls/playlist.m3u8";
 									break;
 							};
 							break;
