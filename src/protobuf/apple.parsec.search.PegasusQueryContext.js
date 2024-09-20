@@ -143,7 +143,10 @@ class PegasusQueryContext$Type extends MessageType {
             { no: 21, name: "seedBuild", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
             { no: 22, name: "hsEnabled", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
             { no: 26, name: "region", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
-            { no: 28, name: "trialIdentifiers", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
+            { no: 28, name: "trialIdentifiers", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 33, name: "deviceModel", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 34, name: "isGenerativeModelDevice", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+            { no: 38, name: "longSecretKey", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
 }
