@@ -6,7 +6,7 @@
 #!manual=https://github.com/VirgilClyne/iRingo/wiki/🗺-地图
 #!icon=https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg
 #!category= iRingo
-#!arguments=GeoManifest.default:CN,GeoManifest.watchOS:US,Dispatcher:AutoNavi,Directions:AutoNavi,RAP:Apple,LocationShift:AUTO,TileSet.Map:CN,TileSet.Satellite:XX,TileSet.Traffic:CN,TileSet.POI:CN,TileSet.Flyover:XX,TileSet.Munin:XX
+#!arguments=GeoManifest.default:CN,GeoManifest.watchOS:US,Dispatcher:AutoNavi,Directions:AutoNavi,RAP:Apple,LocationShift:AUTO,TileSet.Map:CN,TileSet.Satellite:HYBRID,TileSet.Traffic:CN,TileSet.POI:CN,TileSet.Flyover:XX,TileSet.Munin:XX
 #!arguments-desc=GeoManifest.default: [动态配置]国家或地区代码(默认设置)\nGeoManifest.watchOS: [动态配置]国家或地区代码(watchOS)\nDispatcher: [调度器]API\nDirections: [导航与ETA]API\nRAP: [评分和照片]API\nLocationShift: [定位漂移]API\nTileSet.Map: [地图]数据源\nTileSet.Satellite: [卫星图像]数据源\nTileSet.Traffic: [交通状况]数据源\nTileSet.POI: [兴趣点]数据源\nTileSet.Flyover: [飞行俯瞰]数据源\nTileSet.Munin: [四处看看]数据源
 
 [Rule]
