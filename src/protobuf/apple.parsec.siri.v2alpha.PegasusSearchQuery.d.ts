@@ -4,6 +4,8 @@
 import { MessageType } from "@protobuf-ts/runtime";
 import { Any } from "./google/protobuf/any";
 /**
+ * @interface POMMESSchemaPOMMESPegasusSearchQuery : SISchemaInstrumentationMessage
+ *
  * @generated from protobuf message PegasusSearchQuery
  */
 export interface PegasusSearchQuery {

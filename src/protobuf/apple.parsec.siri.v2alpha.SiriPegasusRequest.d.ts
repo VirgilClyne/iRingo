@@ -4,12 +4,18 @@
 import { MessageType } from "@protobuf-ts/runtime";
 import { SiriPegasusContext } from "./apple.parsec.siri.v2alpha.SiriPegasusContext";
 import { PegasusQueryContext } from "./apple.parsec.search.PegasusQueryContext";
+import { PegasusSearchQuery } from "./apple.parsec.siri.v2alpha.PegasusSearchQuery";
 /**
+ * @interface POMMESSchemaPOMMESPegasusRequestArguments : SISchemaInstrumentationMessage
+ *
  * @generated from protobuf message SiriPegasusRequest
  */
 export interface SiriPegasusRequest {
     /**
-     * repeated PegasusSearchQuery queries = 1 [deprecated = true];
+     * @generated from protobuf field: repeated PegasusSearchQuery queries = 1;
+     */
+    queries: PegasusSearchQuery[];
+    /**
      * PegasusSearchQuery query = 1;
      *
      * @generated from protobuf field: PegasusQueryContext queryContext = 2;
@@ -20,11 +26,20 @@ export interface SiriPegasusRequest {
      */
     userDataShareOptIn?: boolean;
     /**
-     * optional  featureFlag = 4;
-     *
+     * @generated from protobuf field: optional string featureFlag = 4;
+     */
+    featureFlag?: string;
+    /**
      * @generated from protobuf field: optional SiriPegasusContext siriPegasusContext = 5;
      */
     siriPegasusContext?: SiriPegasusContext;
+    /**
+     * optional SiriEnvironment siriEnvironment = 6;
+     * optional bool isSiriInternalRequest = 7; //?
+     *
+     * @generated from protobuf field: optional bool isDataOnlyRequest = 8;
+     */
+    isDataOnlyRequest?: boolean;
 }
 declare class SiriPegasusRequest$Type extends MessageType<SiriPegasusRequest> {
     constructor();
