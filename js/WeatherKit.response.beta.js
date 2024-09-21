@@ -8348,7 +8348,7 @@ class ColorfulClouds {
 class QWeather {
     constructor(options) {
         this.Name = "QWeather";
-        this.Version = "2.0.2";
+        this.Version = "2.0.3";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -8446,8 +8446,8 @@ class QWeather {
                             "attributionUrl": body?.fxLink,
                             "expireTime": timeStamp + 60 * 60,
                             "language": `${this.language}-${this.country}`, // body?.lang,
-                            "latitude": body?.location?.[0],
-                            "longitude": body?.location?.[1],
+                            "latitude": this.latitude,
+                            "longitude": this.longitude,
                             "providerLogo": providerNameToLogo("和风天气", this.version),
                             "providerName": "和风天气",
                             "readTime": timeStamp,
