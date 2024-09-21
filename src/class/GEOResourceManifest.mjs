@@ -3,7 +3,7 @@ import GEOResourceManifestDownload from "./GEOResourceManifestDownload.mjs";
 
 export default class GEOResourceManifest {
     static Name = "GEOResourceManifest";
-    static Version = "1.2.3";
+    static Version = "1.2.4";
     static Author = "Virgil Clyne";
 
     static async downloadResourceManifest(request = $request, countryCode = "CN") {
@@ -239,11 +239,9 @@ export default class GEOResourceManifest {
                 case "VECTOR_LIVE_DATA_UPDATES": // 85 实时数据更新?
                 case "RAY_TRACING": // 89 光线追踪?
                 case "VECTOR_CONTOURS": // 90 等高线?
-                case "UNUSED_91": // 91 未使用
-                case "UNUSED_92": // 92 未使用
-                case "UNUSED_93": // 93 未使用
-                case "UNUSED_94": // 94 未使用
-                case "UNUSED_95": // 95 未使用
+                case "VMAP4_ELEVATION": // 92 VMAP4 高程?
+                case "VMAP4_ELEVATION_POLAR": // 93 VMAP4 高程（极地）?
+                case "CELLULAR_COVERAGE_PLMN": // 94 蜂窝覆盖 PLMN?
                 case "UNUSED_99": // 99 未使用
                 default:
                     log(`⚠️ default style: ${tile?.style}`, "");
