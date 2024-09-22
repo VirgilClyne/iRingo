@@ -19,77 +19,81 @@ export interface DeviceState {
      */
     inputOrigin?: string;
     /**
-     * @generated from protobuf field: optional bool isAppleTv = 4;
+     * @generated from protobuf field: optional bool isAppleTv = 6;
      */
     isAppleTv?: boolean;
     /**
-     * @generated from protobuf field: optional bool isCarDnd = 5;
+     * @generated from protobuf field: optional bool isCarDnd = 7;
      */
     isCarDnd?: boolean;
     /**
-     * @generated from protobuf field: optional bool isCarPlay = 6;
+     * @generated from protobuf field: optional bool isCarPlay = 8;
      */
     isCarPlay?: boolean;
     /**
-     * @generated from protobuf field: optional bool isEyesFree = 7;
+     * @generated from protobuf field: optional bool isEyesFree = 9;
      */
     isEyesFree?: boolean;
     /**
-     * @generated from protobuf field: optional bool isHomePod = 8;
+     * @generated from protobuf field: optional bool isHomePod = 10;
      */
     isHomePod?: boolean;
     /**
-     * @generated from protobuf field: optional bool isLockedWithPasscode = 9;
+     * @generated from protobuf field: optional bool isLockedWithPasscode = 11;
      */
     isLockedWithPasscode?: boolean;
     /**
-     * @generated from protobuf field: optional bool isMac = 10;
+     * @generated from protobuf field: optional bool isMac = 12;
      */
     isMac?: boolean;
     /**
-     * @generated from protobuf field: optional bool isMultiUser = 11;
+     * @generated from protobuf field: optional bool isMultiUser = 13;
      */
     isMultiUser?: boolean;
     /**
-     * @generated from protobuf field: optional bool isPad = 12;
+     * @generated from protobuf field: optional bool isPad = 14;
      */
     isPad?: boolean;
     /**
-     * @generated from protobuf field: optional bool isPhone = 13;
+     * @generated from protobuf field: optional bool isPhone = 15;
      */
     isPhone?: boolean;
     /**
-     * @generated from protobuf field: optional bool isTextToSpeechEnabled = 14;
+     * @generated from protobuf field: optional bool isTextToSpeechEnabled = 16;
      */
     isTextToSpeechEnabled?: boolean;
     /**
-     * @generated from protobuf field: optional bool isVox = 15;
+     * @generated from protobuf field: optional bool isVox = 17;
      */
     isVox?: boolean;
     /**
-     * @generated from protobuf field: optional bool isVoiceGenderFemale = 16;
+     * @generated from protobuf field: optional bool isVoiceGenderFemale = 18;
      */
     isVoiceGenderFemale?: boolean;
     /**
-     * @generated from protobuf field: optional bool isVoiceGenderMale = 17;
+     * @generated from protobuf field: optional bool isVoiceGenderMale = 19;
      */
     isVoiceGenderMale?: boolean;
     /**
-     * @generated from protobuf field: optional bool isVoiceGenderUnknown = 18;
+     * @generated from protobuf field: optional bool isVoiceGenderUnknown = 20;
      */
     isVoiceGenderUnknown?: boolean;
     /**
-     * @generated from protobuf field: optional bool isVoiceTriggerEnabled = 19;
+     * @generated from protobuf field: optional bool isVoiceTriggerEnabled = 21;
      */
     isVoiceTriggerEnabled?: boolean;
     /**
-     * @generated from protobuf field: optional bool isWatch = 20;
+     * @generated from protobuf field: optional bool isWatch = 22;
      */
     isWatch?: boolean;
     /**
-     * @generated from protobuf field: optional int32 siriLocale = 21;
+     * @generated from protobuf field: optional string siriLocale = 23;
      */
-    siriLocale?: number;
+    siriLocale?: string;
+    /**
+     * @generated from protobuf field: optional string userAssignedDeviceName = 24;
+     */
+    userAssignedDeviceName?: string;
 }
 declare class DeviceState$Type extends MessageType<DeviceState> {
     constructor();
