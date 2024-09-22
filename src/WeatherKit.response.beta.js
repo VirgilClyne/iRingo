@@ -8,7 +8,7 @@ import ColorfulClouds from "./class/ColorfulClouds.mjs";
 import QWeather from "./class/QWeather.mjs";
 import AirQuality from "./class/AirQuality.mjs";
 import * as flatbuffers from 'flatbuffers';
-log("v1.7.2(4164)");
+log("v1.7.3(4165)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -142,6 +142,10 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 										if (url.searchParams.get("dataSets").includes("trendComparison")) {
 											if (body?.historicalComparisons?.metadata?.providerName && !body?.historicalComparisons?.metadata?.providerLogo) body.historicalComparisons.metadata.providerLogo = providerNameToLogo(body?.historicalComparisons?.metadata?.providerName, "v2");
 											log(`🚧 body.historicalComparisons: ${JSON.stringify(body?.historicalComparisons, null, 2)}`, "");
+										};
+										if (url.searchParams.get("dataSets").includes("locationInfo")) {
+											if (body?.locationInfo?.metadata?.providerName && !body?.locationInfo?.metadata?.providerLogo) body.locationInfo.metadata.providerLogo = providerNameToLogo(body?.locationInfo?.metadata?.providerName, "v2");
+											log(`🚧 body.locationInfo: ${JSON.stringify(body?.locationInfo, null, 2)}`, "");
 										};
 										const WeatherData = WeatherKit2.encode(Builder, "all", body);
 										Builder.finish(WeatherData);

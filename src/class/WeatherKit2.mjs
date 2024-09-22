@@ -3,7 +3,7 @@ import * as WK2 from "../flatbuffers/wk2.js";
 
 export default class WeatherKit2 {
 	static Name = "WeatherKit2";
-	static Version = "1.1.4";
+	static Version = "1.2.0";
 	static encode(builder, dataSet = "all", data = {}) {
 		log(`☑️ WeatherKit2.encode, dataSet: ${dataSet}`, "");
 		let offset;
@@ -21,7 +21,8 @@ export default class WeatherKit2 {
 				if (data?.weatherAlerts) Offsets.weatherAlertsOffset = this.encode(builder, "weatherAlerts", data.weatherAlerts);
 				if (data?.weatherChanges) Offsets.weatherChangesOffset = this.encode(builder, "weatherChanges", data.weatherChanges);
 				if (data?.historicalComparisons) Offsets.historicalComparisonsOffset = this.encode(builder, "historicalComparisons", data.historicalComparisons);
-				offset = WeatherKit2.createWeather(builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset);
+				if (data?.locationInfo) Offsets.locationInfoOffset = this.encode(builder, "locationInfo", data.locationInfo);
+				offset = WeatherKit2.createWeather(builder, Offsets.airQualityOffset, Offsets.currentWeatherOffset, Offsets.forecastDailyOffset, Offsets.forecastHourlyOffset, Offsets.forecastNextHourOffset, Offsets.newsOffset, Offsets.weatherAlertsOffset, Offsets.weatherChangesOffset, Offsets.historicalComparisonsOffset, Offsets.locationInfoOffset);
 				break;
 			case "airQuality":
 				let pollutantsOffset = WK2.AirQuality.createPollutantsVector(builder, data?.pollutants?.map(p => WK2.Pollutant.createPollutant(builder, WK2.PollutantType[p.pollutantType], p.amount, WK2.UnitType[p.units])));
@@ -169,6 +170,9 @@ export default class WeatherKit2 {
 				let comparisonsOffset = WK2.HistoricalComparison.createComparisonsVector(builder, comparisonsOffsets);
 				offset = WK2.HistoricalComparison.createHistoricalComparison(builder, metadataOffset, comparisonsOffset);
 				break;
+			case "locationInfo":
+				offset = WK2.LocationInfo.createLocationInfo(builder, metadataOffset, builder.createString(data?.preciseName), builder.createString(data?.countryCode), builder.createString(data?.timeZone), builder.createString(data?.primaryName));
+				break;
 		};
 		log(`✅ WeatherKit2.encode, dataSet: ${dataSet}`, "");
 		return offset;
@@ -177,42 +181,44 @@ export default class WeatherKit2 {
 	static decode(byteBuffer, dataSet = "all", data = {}) {
 		log(`☑️ WeatherKit2.decode, dataSet: ${dataSet}`, "");
 		const Weather = WK2.Weather.getRootAsWeather(byteBuffer);
-		const airQualityData = Weather?.airQuality();
+		const AirQualityData = Weather?.airQuality();
 		const CurrentWeatherData = Weather?.currentWeather();
 		const DailyForecastData = Weather?.forecastDaily();
 		const HourlyForecastData = Weather?.forecastHourly();
 		const NextHourForecastData = Weather?.forecastNextHour();
-		const newsData = Weather?.news();
+		const NewsData = Weather?.news();
 		const WeatherAlertCollectionData = Weather?.weatherAlerts();
-		const weatherChangesData = Weather?.weatherChanges();
-		const historicalComparisonsData = Weather?.historicalComparisons();
+		const WeatherChangesData = Weather?.weatherChanges();
+		const HistoricalComparisonsData = Weather?.historicalComparisons();
+		const LocationInfoData = Weather?.locationInfo();
 		switch (dataSet) {
 			case "all":
-				if (airQualityData) data.airQuality = this.decode(byteBuffer, "airQuality", airQualityData);
+				if (AirQualityData) data.airQuality = this.decode(byteBuffer, "airQuality", AirQualityData);
 				if (CurrentWeatherData) data.currentWeather = this.decode(byteBuffer, "currentWeather", CurrentWeatherData);
 				if (DailyForecastData) data.forecastDaily = this.decode(byteBuffer, "forecastDaily", DailyForecastData);
 				if (HourlyForecastData) data.forecastHourly = this.decode(byteBuffer, "forecastHourly", HourlyForecastData);
 				if (NextHourForecastData) data.forecastNextHour = this.decode(byteBuffer, "forecastNextHour", NextHourForecastData);
-				if (newsData) data.news = this.decode(byteBuffer, "news", newsData);
+				if (NewsData) data.news = this.decode(byteBuffer, "news", NewsData);
 				if (WeatherAlertCollectionData) data.weatherAlerts = this.decode(byteBuffer, "weatherAlerts", WeatherAlertCollectionData);
-				if (weatherChangesData) data.weatherChanges = this.decode(byteBuffer, "weatherChange", weatherChangesData);
-				if (historicalComparisonsData) data.historicalComparisons = this.decode(byteBuffer, "trendComparison", historicalComparisonsData);
+				if (WeatherChangesData) data.weatherChanges = this.decode(byteBuffer, "weatherChange", WeatherChangesData);
+				if (HistoricalComparisonsData) data.historicalComparisons = this.decode(byteBuffer, "trendComparison", HistoricalComparisonsData);
+				if (LocationInfoData) data.locationInfo = this.decode(byteBuffer, "locationInfo", LocationInfoData);
 				break;
 			case "airQuality":
 				data = {
-					"metadata": this.decode(byteBuffer, "metadata", airQualityData?.metadata()),
-					"categoryIndex": airQualityData?.categoryIndex(),
-					"index": airQualityData?.index(),
-					"isSignificant": airQualityData?.isSignificant(),
+					"metadata": this.decode(byteBuffer, "metadata", AirQualityData?.metadata()),
+					"categoryIndex": AirQualityData?.categoryIndex(),
+					"index": AirQualityData?.index(),
+					"isSignificant": AirQualityData?.isSignificant(),
 					"pollutants": [],
-					"previousDayComparison": WK2.ComparisonTrend[airQualityData?.previousDayComparison()],
-					"primaryPollutant": WK2.PollutantType[airQualityData?.primaryPollutant()],
-					"scale": airQualityData?.scale(),
+					"previousDayComparison": WK2.ComparisonTrend[AirQualityData?.previousDayComparison()],
+					"primaryPollutant": WK2.PollutantType[AirQualityData?.primaryPollutant()],
+					"scale": AirQualityData?.scale(),
 				};
-				for (let i = 0; i < airQualityData?.pollutantsLength(); i++) data.pollutants.push({
-					"amount": airQualityData?.pollutants(i)?.amount(),
-					"pollutantType": WK2.PollutantType[airQualityData?.pollutants(i)?.pollutantType()],
-					"units": WK2.UnitType[airQualityData?.pollutants(i)?.units()],
+				for (let i = 0; i < AirQualityData?.pollutantsLength(); i++) data.pollutants.push({
+					"amount": AirQualityData?.pollutants(i)?.amount(),
+					"pollutantType": WK2.PollutantType[AirQualityData?.pollutants(i)?.pollutantType()],
+					"units": WK2.UnitType[AirQualityData?.pollutants(i)?.units()],
 				});
 				break;
 			case "currentWeather":
@@ -543,27 +549,27 @@ export default class WeatherKit2 {
 				break;
 			case "news":
 				data = {
-					"metadata": this.decode(byteBuffer, "metadata", newsData?.metadata()),
+					"metadata": this.decode(byteBuffer, "metadata", NewsData?.metadata()),
 					"placements": [],
 				};
-				for (let i = 0; i < newsData?.placementsLength(); i++) {
+				for (let i = 0; i < NewsData?.placementsLength(); i++) {
 					let placement = {
 						"articles": [],
-						"placement": WK2.PlacementType[newsData?.placements(i)?.placement()],
-						"priority": newsData?.placements(i)?.priority(),
+						"placement": WK2.PlacementType[NewsData?.placements(i)?.placement()],
+						"priority": NewsData?.placements(i)?.priority(),
 					};
-					for (let j = 0; j < newsData?.placements(i)?.articlesLength(); j++) {
+					for (let j = 0; j < NewsData?.placements(i)?.articlesLength(); j++) {
 						let article = {
 							"alertIds": [],
-							"headlineOverride": newsData?.placements(i)?.articles(j)?.headlineOverride(),
-							"id": newsData?.placements(i)?.articles(j)?.id(),
-							"locale": newsData?.placements(i)?.articles(j)?.locale(),
+							"headlineOverride": NewsData?.placements(i)?.articles(j)?.headlineOverride(),
+							"id": NewsData?.placements(i)?.articles(j)?.id(),
+							"locale": NewsData?.placements(i)?.articles(j)?.locale(),
 							"phenomena": [],
 							"supportedStorefronts": [],
 						};
-						for (let k = 0; k < newsData?.placements(i)?.articles(j)?.alertIdsLength(); k++) article.alertIds.push(newsData?.placements(i)?.articles(j)?.alertIds(k));
-						for (let k = 0; k < newsData?.placements(i)?.articles(j)?.phenomenaLength(); k++) article.phenomena.push(newsData?.placements(i)?.articles(j)?.phenomena(k));
-						for (let k = 0; k < newsData?.placements(i)?.articles(j)?.supportedStorefrontsLength(); k++) article.supportedStorefronts.push(newsData?.placements(i)?.articles(j)?.supportedStorefronts(k));
+						for (let k = 0; k < NewsData?.placements(i)?.articles(j)?.alertIdsLength(); k++) article.alertIds.push(NewsData?.placements(i)?.articles(j)?.alertIds(k));
+						for (let k = 0; k < NewsData?.placements(i)?.articles(j)?.phenomenaLength(); k++) article.phenomena.push(NewsData?.placements(i)?.articles(j)?.phenomena(k));
+						for (let k = 0; k < NewsData?.placements(i)?.articles(j)?.supportedStorefrontsLength(); k++) article.supportedStorefronts.push(NewsData?.placements(i)?.articles(j)?.supportedStorefronts(k));
 						placement.articles.push(article);
 					};
 					data.placements.push(placement);
@@ -611,19 +617,19 @@ export default class WeatherKit2 {
 			case "weatherChange":
 			case "weatherChanges":
 				data = {
-					"metadata": this.decode(byteBuffer, "metadata", weatherChangesData?.metadata()),
+					"metadata": this.decode(byteBuffer, "metadata", WeatherChangesData?.metadata()),
 					"changes": [],
-					"forecastEnd": weatherChangesData?.forecastEnd(),
-					"forecastStart": weatherChangesData?.forecastStart(),
+					"forecastEnd": WeatherChangesData?.forecastEnd(),
+					"forecastStart": WeatherChangesData?.forecastStart(),
 				};
-				for (let i = 0; i < weatherChangesData?.changesLength(); i++) {
+				for (let i = 0; i < WeatherChangesData?.changesLength(); i++) {
 					let change = {
-						"dayPrecipitationChange": WK2.Direction[weatherChangesData?.changes(i)?.dayPrecipitationChange()],
-						"forecastEnd": weatherChangesData?.changes(i)?.forecastEnd(),
-						"forecastStart": weatherChangesData?.changes(i)?.forecastStart(),
-						"maxTemperatureChange": WK2.Direction[weatherChangesData?.changes(i)?.maxTemperatureChange()],
-						"minTemperatureChange": WK2.Direction[weatherChangesData?.changes(i)?.minTemperatureChange()],
-						"nightPrecipitationChange": WK2.Direction[weatherChangesData?.changes(i)?.nightPrecipitationChange()],
+						"dayPrecipitationChange": WK2.Direction[WeatherChangesData?.changes(i)?.dayPrecipitationChange()],
+						"forecastEnd": WeatherChangesData?.changes(i)?.forecastEnd(),
+						"forecastStart": WeatherChangesData?.changes(i)?.forecastStart(),
+						"maxTemperatureChange": WK2.Direction[WeatherChangesData?.changes(i)?.maxTemperatureChange()],
+						"minTemperatureChange": WK2.Direction[WeatherChangesData?.changes(i)?.minTemperatureChange()],
+						"nightPrecipitationChange": WK2.Direction[WeatherChangesData?.changes(i)?.nightPrecipitationChange()],
 					};
 					data.changes.push(change);
 				};
@@ -633,27 +639,35 @@ export default class WeatherKit2 {
 			case "historicalComparison":
 			case "historicalComparisons":
 				data = {
-					"metadata": this.decode(byteBuffer, "metadata", historicalComparisonsData?.metadata()),
+					"metadata": this.decode(byteBuffer, "metadata", HistoricalComparisonsData?.metadata()),
 					"comparisons": [],
 				};
-				for (let i = 0; i < historicalComparisonsData?.comparisonsLength(); i++) {
+				for (let i = 0; i < HistoricalComparisonsData?.comparisonsLength(); i++) {
 					let comparison = {
-						"baselineStartDate": historicalComparisonsData?.comparisons(i)?.baselineStartDate(),
-						"baselineType": historicalComparisonsData?.comparisons(i)?.baselineType(),
-						"baselineValue": historicalComparisonsData?.comparisons(i)?.baselineValue(),
-						"condition": WK2.ComparisonType[historicalComparisonsData?.comparisons(i)?.condition()],
-						"currentValue": historicalComparisonsData?.comparisons(i)?.currentValue(),
-						"deviation": WK2.Deviation[historicalComparisonsData?.comparisons(i)?.deviation()],
+						"baselineStartDate": HistoricalComparisonsData?.comparisons(i)?.baselineStartDate(),
+						"baselineType": HistoricalComparisonsData?.comparisons(i)?.baselineType(),
+						"baselineValue": HistoricalComparisonsData?.comparisons(i)?.baselineValue(),
+						"condition": WK2.ComparisonType[HistoricalComparisonsData?.comparisons(i)?.condition()],
+						"currentValue": HistoricalComparisonsData?.comparisons(i)?.currentValue(),
+						"deviation": WK2.Deviation[HistoricalComparisonsData?.comparisons(i)?.deviation()],
 					};
 					data.comparisons.push(comparison);
 				};
 				break;
+			case "locationInfo":
+				data = {
+					"metadata": this.decode(byteBuffer, "metadata", LocationInfoData?.metadata()),
+					"countryCode": LocationInfoData?.countryCode(),
+					"preciseName": LocationInfoData?.preciseName(),
+					"primaryName": LocationInfoData?.primaryName(),
+					"timeZone": LocationInfoData?.timeZone(),
+				};
 		};
 		log(`✅ WeatherKit2.decode, dataSet: ${dataSet}`, "");
 		return data;
 	};
 
-	static createWeather(builder, airQualityOffset, currentWeatherOffset, forecastDailyOffset, forecastHourlyOffset, forecastNextHourOffset, newsOffset, weatherAlertsOffset, weatherChangesOffset, historicalComparisonsOffset) {
+	static createWeather(builder, airQualityOffset, currentWeatherOffset, forecastDailyOffset, forecastHourlyOffset, forecastNextHourOffset, newsOffset, weatherAlertsOffset, weatherChangesOffset, historicalComparisonsOffset, locationInfoOffset) {
 		WK2.Weather.startWeather(builder);
 		if (airQualityOffset) WK2.Weather.addAirQuality(builder, airQualityOffset);
 		if (currentWeatherOffset) WK2.Weather.addCurrentWeather(builder, currentWeatherOffset);
@@ -664,6 +678,7 @@ export default class WeatherKit2 {
 		if (weatherAlertsOffset) WK2.Weather.addWeatherAlerts(builder, weatherAlertsOffset);
 		if (weatherChangesOffset) WK2.Weather.addWeatherChanges(builder, weatherChangesOffset);
 		if (historicalComparisonsOffset) WK2.Weather.addHistoricalComparisons(builder, historicalComparisonsOffset);
+		if (locationInfoOffset) WK2.Weather.addLocationInfo(builder, locationInfoOffset);
 		return WK2.Weather.endWeather(builder);
 	}
 

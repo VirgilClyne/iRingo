@@ -9,6 +9,7 @@ import { CurrentWeatherData } from '../wk2/current-weather-data.js';
 import { DailyForecastData } from '../wk2/daily-forecast-data.js';
 import { HistoricalComparison } from '../wk2/historical-comparison.js';
 import { HourlyForecastData } from '../wk2/hourly-forecast-data.js';
+import { LocationInfo } from '../wk2/location-info.js';
 import { News } from '../wk2/news.js';
 import { NextHourForecastData } from '../wk2/next-hour-forecast-data.js';
 import { WeatherAlertCollectionData } from '../wk2/weather-alert-collection-data.js';
@@ -78,8 +79,13 @@ historicalComparisons(obj?:HistoricalComparison):HistoricalComparison|null {
   return offset ? (obj || new HistoricalComparison()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 }
 
+locationInfo(obj?:LocationInfo):LocationInfo|null {
+  const offset = this.bb!.__offset(this.bb_pos, 22);
+  return offset ? (obj || new LocationInfo()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+}
+
 static startWeather(builder:flatbuffers.Builder) {
-  builder.startObject(9);
+  builder.startObject(10);
 }
 
 static addAirQuality(builder:flatbuffers.Builder, airQualityOffset:flatbuffers.Offset) {
@@ -116,6 +122,10 @@ static addWeatherChanges(builder:flatbuffers.Builder, weatherChangesOffset:flatb
 
 static addHistoricalComparisons(builder:flatbuffers.Builder, historicalComparisonsOffset:flatbuffers.Offset) {
   builder.addFieldOffset(8, historicalComparisonsOffset, 0);
+}
+
+static addLocationInfo(builder:flatbuffers.Builder, locationInfoOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(9, locationInfoOffset, 0);
 }
 
 static endWeather(builder:flatbuffers.Builder):flatbuffers.Offset {

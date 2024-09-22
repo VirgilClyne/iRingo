@@ -6,6 +6,7 @@ import { CurrentWeatherData } from '../wk2/current-weather-data.js';
 import { DailyForecastData } from '../wk2/daily-forecast-data.js';
 import { HistoricalComparison } from '../wk2/historical-comparison.js';
 import { HourlyForecastData } from '../wk2/hourly-forecast-data.js';
+import { LocationInfo } from '../wk2/location-info.js';
 import { News } from '../wk2/news.js';
 import { NextHourForecastData } from '../wk2/next-hour-forecast-data.js';
 import { WeatherAlertCollectionData } from '../wk2/weather-alert-collection-data.js';
@@ -61,8 +62,12 @@ export class Weather {
         const offset = this.bb.__offset(this.bb_pos, 20);
         return offset ? (obj || new HistoricalComparison()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
     }
+    locationInfo(obj) {
+        const offset = this.bb.__offset(this.bb_pos, 22);
+        return offset ? (obj || new LocationInfo()).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+    }
     static startWeather(builder) {
-        builder.startObject(9);
+        builder.startObject(10);
     }
     static addAirQuality(builder, airQualityOffset) {
         builder.addFieldOffset(0, airQualityOffset, 0);
@@ -90,6 +95,9 @@ export class Weather {
     }
     static addHistoricalComparisons(builder, historicalComparisonsOffset) {
         builder.addFieldOffset(8, historicalComparisonsOffset, 0);
+    }
+    static addLocationInfo(builder, locationInfoOffset) {
+        builder.addFieldOffset(9, locationInfoOffset, 0);
     }
     static endWeather(builder) {
         const offset = builder.endObject();
