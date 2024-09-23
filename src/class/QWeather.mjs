@@ -6,7 +6,7 @@ import ForecastNextHour from "./ForecastNextHour.mjs";
 export default class QWeather {
     constructor(options) {
         this.Name = "QWeather";
-        this.Version = "4.1.1";
+        this.Version = "4.1.4";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -59,7 +59,7 @@ export default class QWeather {
                     };
                     break;
                 default:
-                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
@@ -115,7 +115,7 @@ export default class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
@@ -169,7 +169,7 @@ export default class QWeather {
                     if (body?.stations?.[0]?.name) airQuality.metadata.providerName += `\n数据源: ${body?.stations?.[0]?.name}检测站`;
                     break;
                 default:
-                    throw JSON.stringify({ "status": body?.error?.status, "reason": body?.error?.detail });
+                    throw Error(JSON.stringify(body?.error, null, 2));
             };
         } catch (error) {
             logError(error);
@@ -242,7 +242,7 @@ export default class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
@@ -288,7 +288,7 @@ export default class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);

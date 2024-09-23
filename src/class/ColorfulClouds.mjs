@@ -6,7 +6,7 @@ import ForecastNextHour from "./ForecastNextHour.mjs";
 export default class ColorfulClouds {
     constructor(options) {
         this.Name = "ColorfulClouds";
-        this.Version = "3.0.4";
+        this.Version = "3.0.5";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -67,13 +67,13 @@ export default class ColorfulClouds {
                             break;
                         case "error":
                         case undefined:
-                            throw JSON.stringify({ "status": body?.result?.realtime?.status, "reason": body?.result?.realtime });
+                            throw Error(JSON.stringify({ "status": body?.result?.realtime?.status, "reason": body?.result?.realtime }));
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(JSON.stringify(body ?? {}));
             };
         } catch (error) {
             this.logErr(error);
@@ -142,13 +142,13 @@ export default class ColorfulClouds {
                         case "error":
                         case "failed":
                         case undefined:
-                            throw JSON.stringify({ "status": body?.result?.minutely?.status, "reason": body?.result?.minutely });
+                            throw Error(JSON.stringify({ "status": body?.result?.minutely?.status, "reason": body?.result?.minutely }));
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(JSON.stringify(body ?? {}));
             };
         } catch (error) {
             logError(error);
@@ -198,13 +198,13 @@ export default class ColorfulClouds {
                             break;
                         case "error":
                         case undefined:
-                            throw JSON.stringify({ "status": body?.result?.hourly?.status, "reason": body?.result?.hourly });
+                            throw Error(JSON.stringify({ "status": body?.result?.hourly?.status, "reason": body?.result?.hourly }));
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(JSON.stringify(body ?? {}));
             };
         } catch (error) {
             this.logErr(error);

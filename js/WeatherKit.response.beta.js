@@ -8335,7 +8335,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor(options) {
         this.Name = "ColorfulClouds";
-        this.Version = "3.0.4";
+        this.Version = "3.0.5";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -8396,13 +8396,13 @@ class ColorfulClouds {
                             break;
                         case "error":
                         case undefined:
-                            throw JSON.stringify({ "status": body?.result?.realtime?.status, "reason": body?.result?.realtime });
+                            throw Error(JSON.stringify({ "status": body?.result?.realtime?.status, "reason": body?.result?.realtime }));
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(JSON.stringify(body ?? {}));
             };
         } catch (error) {
             this.logErr(error);
@@ -8470,13 +8470,13 @@ class ColorfulClouds {
                         case "error":
                         case "failed":
                         case undefined:
-                            throw JSON.stringify({ "status": body?.result?.minutely?.status, "reason": body?.result?.minutely });
+                            throw Error(JSON.stringify({ "status": body?.result?.minutely?.status, "reason": body?.result?.minutely }));
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(JSON.stringify(body ?? {}));
             };
         } catch (error) {
             logError(error);
@@ -8525,13 +8525,13 @@ class ColorfulClouds {
                             break;
                         case "error":
                         case undefined:
-                            throw JSON.stringify({ "status": body?.result?.hourly?.status, "reason": body?.result?.hourly });
+                            throw Error(JSON.stringify({ "status": body?.result?.hourly?.status, "reason": body?.result?.hourly }));
                     };
                     break;
                 case "error":
                 case "failed":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(JSON.stringify(body ?? {}));
             };
         } catch (error) {
             this.logErr(error);
@@ -8575,7 +8575,7 @@ class ColorfulClouds {
 class QWeather {
     constructor(options) {
         this.Name = "QWeather";
-        this.Version = "4.1.1";
+        this.Version = "4.1.4";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -8628,7 +8628,7 @@ class QWeather {
                     };
                     break;
                 default:
-                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
@@ -8683,7 +8683,7 @@ class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
@@ -8736,7 +8736,7 @@ class QWeather {
                     if (body?.stations?.[0]?.name) airQuality.metadata.providerName += `\n数据源: ${body?.stations?.[0]?.name}检测站`;
                     break;
                 default:
-                    throw JSON.stringify({ "status": body?.error?.status, "reason": body?.error?.detail });
+                    throw Error(JSON.stringify(body?.error, null, 2));
             };
         } catch (error) {
             logError(error);
@@ -8808,7 +8808,7 @@ class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
@@ -8853,7 +8853,7 @@ class QWeather {
                 case "429":
                 case "500":
                 case undefined:
-                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+                    throw Error(body?.code);
             };
         } catch (error) {
             logError(error);
