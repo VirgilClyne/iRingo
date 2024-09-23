@@ -1,7 +1,7 @@
 import { log } from "../utils/utils.mjs";
 export default class AirQuality {
 	static Name = "AirQuality";
-	static Version = "2.2.5";
+	static Version = "2.3.3";
 	static Author = "Virgil Clyne & Wordless Echo";
 
 	static #Config = {
@@ -586,6 +586,56 @@ export default class AirQuality {
 		};
 		log(`✅ CategoryIndex, categoryIndex: ${categoryIndex}`, "");
 		return categoryIndex;
+	};
+
+	static ComparisonTrend(todayAQI, yesterdayAQI) {
+		log(`☑️ ComparisonTrend, todayAQI: ${todayAQI}, yesterdayAQI: ${yesterdayAQI}`, "");
+		let trend = "UNKNOWN";
+		switch (todayAQI - yesterdayAQI) {
+			case 10:
+			case 9:
+			case 8:
+			case 7:
+			case 6:
+			case 5:
+			case 4:
+				trend= "WORSE";
+				break;
+			case 3:
+			case 2:
+			case 1:
+			case 0:
+			case -1:
+			case -2:
+			case -3:
+				trend = "SAME";
+				break;
+			case -4:
+			case -5:
+			case -6:
+			case -7:
+			case -8:
+			case -9:
+			case -10:
+				trend = "BETTER";
+				break;
+			case null:
+			case NaN:
+				trend = "UNKNOWN";
+				break;
+			default:
+				switch (Boolean(todayAQI - yesterdayAQI)) {
+					case true:
+						trend = "UNKNOWN1";
+						break;
+					case false:
+						trend = "UNKNOWN5";
+						break;
+				};
+				break;
+		};
+		log(`✅ ComparisonTrend, trend: ${trend}`, "");
+		return trend;
 	};
 
 	static FixUnits(pollutants = []) {

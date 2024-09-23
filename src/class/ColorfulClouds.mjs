@@ -1,12 +1,12 @@
 import { _, fetch, log, logError } from "../utils/utils.mjs";
 import { parseWeatherKitURL, providerNameToLogo } from "../function/WeatherKitUtils.mjs";
-import AirQuality from "../class/AirQuality.mjs";
+import AirQuality from "./AirQuality.mjs";
 import ForecastNextHour from "./ForecastNextHour.mjs";
 
 export default class ColorfulClouds {
     constructor(options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.3.2";
+        this.Version = "3.0.4";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -58,6 +58,7 @@ export default class ColorfulClouds {
                                 },
                                 "categoryIndex": AirQuality.CategoryIndex(body?.result?.realtime?.air_quality?.aqi.chn, "HJ_633"),
                                 "index": parseInt(body?.result?.realtime?.air_quality?.aqi.chn, 10),
+                                "isSignificant": true,
                                 "pollutants": this.#CreatePollutants(body?.result?.realtime?.air_quality),
                                 "previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": "NOT_AVAILABLE",
@@ -155,6 +156,62 @@ export default class ColorfulClouds {
             //log(`🚧 forecastNextHour: ${JSON.stringify(forecastNextHour, null, 2)}`, "");
             log(`✅ Minutely`, "");
             return forecastNextHour;
+        };
+    };
+
+    async Hourly(token = this.token, hourlysteps = 1, begin = Date.now()) {
+        log(`☑️ Hourly`, "");
+        const request = {
+            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/hourly?hourlysteps=${hourlysteps}&begin=${parseInt(begin / 1000, 10)}`,
+            "header": this.header,
+        };
+        let airQuality;
+        try {
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
+            switch (body?.status) {
+                case "ok":
+                    switch (body?.result?.hourly?.status) {
+                        case "ok":
+                            airQuality = {
+                                "metadata": {
+                                    "attributionUrl": "https://www.caiyunapp.com/h5",
+                                    "expireTime": timeStamp + 60 * 60,
+                                    "language": `${this.language}-${this.country}`,
+                                    "latitude": body?.location?.[0],
+                                    "longitude": body?.location?.[1],
+                                    "providerLogo": providerNameToLogo("彩云天气", this.version),
+                                    "providerName": "彩云天气",
+                                    "readTime": timeStamp,
+                                    "reportedTime": body?.server_time,
+                                    "temporarilyUnavailable": false,
+                                    "sourceType": "STATION",
+                                },
+                                "categoryIndex": AirQuality.CategoryIndex(body?.result?.hourly?.air_quality?.aqi?.[0]?.value?.chn, "HJ_633"),
+                                "index": parseInt(body?.result?.hourly?.air_quality?.aqi?.[0]?.value?.chn, 10),
+                                "isSignificant": true,
+                                "pollutants": [],
+                                "previousDayComparison": "UNKNOWN",
+                                "primaryPollutant": "NOT_AVAILABLE",
+                                "scale": "HJ6332012"
+                            };
+                            break;
+                        case "error":
+                        case undefined:
+                            throw JSON.stringify({ "status": body?.result?.hourly?.status, "reason": body?.result?.hourly });
+                    };
+                    break;
+                case "error":
+                case "failed":
+                case undefined:
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+            };
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            //log(`🚧 Hourly airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ Hourly`, "");
+            return airQuality;
         };
     };
 

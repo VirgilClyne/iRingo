@@ -427,6 +427,35 @@ async function fetch(request = {} || "", option = {}) {
                     error => Promise.reject(error.message));
     }}
 
+/**
+ * [version of ISO8601]{@link https://262.ecma-international.org/5.1/#sec-15.9.1.15}
+ * 示例:time("yyyy-MM-dd qq HH:mm:ss.S") YYYY-MM-DDTHH:mm:ss.sssZ
+ *    :time("yyyyMMddHHmmssS")
+ *    YY:年 MM:月 dd:日 S:季 HH:时 m:分 ss:秒 sss:毫秒 Z:时区
+ *    其中y可选0-4位占位符、S可选0-1位占位符，其余可选0-2位占位符
+ * @param {string} format 格式化参数
+ * @param {number} ts 可选: 根据指定时间戳返回格式化日期
+ *
+ */
+function time(format, ts) {
+    const date = ts ? new Date(ts) : new Date();
+    const Time = {
+        "YY": date.getFullYear().toString().substring(3),
+        "yyyy": date.getFullYear().toString(),
+        "MM": (date.getMonth() + 1).toString().padStart(2, "0"),
+        "dd": date.getDate().toString().padStart(2, "0"),
+        "HH": date.getHours().toString().padStart(2, "0"),
+        "mm": date.getMinutes().toString().padStart(2, "0"),
+        "sss": date.getMilliseconds().toString().padStart(3, "0"),
+        "ss": date.getSeconds().toString().padStart(2, "0"),
+        "S": `${Math.floor((date.getMonth()) / 3) + 1}`,
+    };
+    log(JSON.stringify(Time, null, 2));
+    for (const [key, value] of Object.entries(Time)) {
+        format = format.replace(key, value);
+    }    return format;
+}
+
 function logError(error) {
     switch ($platform) {
         case "Surge":
@@ -6960,7 +6989,7 @@ function parseWeatherKitURL(url = new URL($request.url)) {
 
 class AirQuality {
 	static Name = "AirQuality";
-	static Version = "2.2.5";
+	static Version = "2.3.3";
 	static Author = "Virgil Clyne & Wordless Echo";
 
 	static #Config = {
@@ -7533,6 +7562,54 @@ class AirQuality {
 			if (aqi >= value[0] && aqi <= value[1]) break;
 		}		log(`✅ CategoryIndex, categoryIndex: ${categoryIndex}`, "");
 		return categoryIndex;
+	};
+
+	static ComparisonTrend(todayAQI, yesterdayAQI) {
+		log(`☑️ ComparisonTrend, todayAQI: ${todayAQI}, yesterdayAQI: ${yesterdayAQI}`, "");
+		let trend = "UNKNOWN";
+		switch (todayAQI - yesterdayAQI) {
+			case 10:
+			case 9:
+			case 8:
+			case 7:
+			case 6:
+			case 5:
+			case 4:
+				trend= "WORSE";
+				break;
+			case 3:
+			case 2:
+			case 1:
+			case 0:
+			case -1:
+			case -2:
+			case -3:
+				trend = "SAME";
+				break;
+			case -4:
+			case -5:
+			case -6:
+			case -7:
+			case -8:
+			case -9:
+			case -10:
+				trend = "BETTER";
+				break;
+			case null:
+			case NaN:
+				trend = "UNKNOWN";
+				break;
+			default:
+				switch (Boolean(todayAQI - yesterdayAQI)) {
+					case true:
+						trend = "UNKNOWN1";
+						break;
+					case false:
+						trend = "UNKNOWN5";
+						break;
+				}				break;
+		}		log(`✅ ComparisonTrend, trend: ${trend}`, "");
+		return trend;
 	};
 
 	static FixUnits(pollutants = []) {
@@ -8256,7 +8333,7 @@ class ForecastNextHour {
 class ColorfulClouds {
     constructor(options) {
         this.Name = "ColorfulClouds";
-        this.Version = "2.3.2";
+        this.Version = "3.0.4";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.header = { "Content-Type": "application/json" };
@@ -8308,6 +8385,7 @@ class ColorfulClouds {
                                 },
                                 "categoryIndex": AirQuality.CategoryIndex(body?.result?.realtime?.air_quality?.aqi.chn, "HJ_633"),
                                 "index": parseInt(body?.result?.realtime?.air_quality?.aqi.chn, 10),
+                                "isSignificant": true,
                                 "pollutants": this.#CreatePollutants(body?.result?.realtime?.air_quality),
                                 "previousDayComparison": "UNKNOWN",
                                 "primaryPollutant": "NOT_AVAILABLE",
@@ -8406,6 +8484,61 @@ class ColorfulClouds {
             return forecastNextHour;
         }    };
 
+    async Hourly(token = this.token, hourlysteps = 1, begin = Date.now()) {
+        log(`☑️ Hourly`, "");
+        const request = {
+            "url": `https://api.caiyunapp.com/v2.6/${token}/${this.longitude},${this.latitude}/hourly?hourlysteps=${hourlysteps}&begin=${parseInt(begin / 1000, 10)}`,
+            "header": this.header,
+        };
+        let airQuality;
+        try {
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
+            switch (body?.status) {
+                case "ok":
+                    switch (body?.result?.hourly?.status) {
+                        case "ok":
+                            airQuality = {
+                                "metadata": {
+                                    "attributionUrl": "https://www.caiyunapp.com/h5",
+                                    "expireTime": timeStamp + 60 * 60,
+                                    "language": `${this.language}-${this.country}`,
+                                    "latitude": body?.location?.[0],
+                                    "longitude": body?.location?.[1],
+                                    "providerLogo": providerNameToLogo("彩云天气", this.version),
+                                    "providerName": "彩云天气",
+                                    "readTime": timeStamp,
+                                    "reportedTime": body?.server_time,
+                                    "temporarilyUnavailable": false,
+                                    "sourceType": "STATION",
+                                },
+                                "categoryIndex": AirQuality.CategoryIndex(body?.result?.hourly?.air_quality?.aqi?.[0]?.value?.chn, "HJ_633"),
+                                "index": parseInt(body?.result?.hourly?.air_quality?.aqi?.[0]?.value?.chn, 10),
+                                "isSignificant": true,
+                                "pollutants": [],
+                                "previousDayComparison": "UNKNOWN",
+                                "primaryPollutant": "NOT_AVAILABLE",
+                                "scale": "HJ6332012"
+                            };
+                            break;
+                        case "error":
+                        case undefined:
+                            throw JSON.stringify({ "status": body?.result?.hourly?.status, "reason": body?.result?.hourly });
+                    };
+                    break;
+                case "error":
+                case "failed":
+                case undefined:
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+            };
+        } catch (error) {
+            this.logErr(error);
+        } finally {
+            //log(`🚧 Hourly airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ Hourly`, "");
+            return airQuality;
+        }    };
+
     #CreatePollutants(pollutantsObj = {}) {
         console.log(`☑️ CreatePollutants`, "");
         let pollutants = [];
@@ -8440,7 +8573,7 @@ class ColorfulClouds {
 class QWeather {
     constructor(options) {
         this.Name = "QWeather";
-        this.Version = "2.0.3";
+        this.Version = "4.1.0";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -8461,9 +8594,47 @@ class QWeather {
             "pm2p5": "PM2_5",
             "pm10": "PM10",
             "other": "NOT_AVAILABLE",
-            "na": "NOT_AVAILABLE"
+            "na": "NOT_AVAILABLE",
+            undefined: "NOT_AVAILABLE",
+            null: "NOT_AVAILABLE",
         },
+        "Units": {
+            "μg/m3": "MICROGRAMS_PER_CUBIC_METER",
+            "ug/m3": "MILLIGRAMS_PER_CUBIC_METER",
+            "ppb": "PARTS_PER_BILLION",
+            "ppm": "PARTS_PER_MILLION",
+        }
     };
+
+    async GeoAPI(token = this.token, path = "city/lookup") {
+        log(`☑️ GeoAPI`, "");
+        const request = {
+            "url": `https://geoapi.qweather.com/v2/${path}?location=${this.longitude},${this.latitude}&key=${token}`,
+            "header": this.header,
+        };
+        let metadata;
+        try {
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            switch (body?.code) {
+                case "200":
+                    metadata = {
+                        "attributionUrl": body?.location?.[0]?.fxLink,
+                        "latitude": body?.location?.[0]?.lat,
+                        "longitude": body?.location?.[0]?.lon,
+                        "providerName": "和风天气",
+                        "locationID": body?.location?.[0]?.id,
+                    };
+                    break;
+                default:
+                    throw JSON.stringify({ "status": body?.code, "reason": body?.error });
+            };
+        } catch (error) {
+            logError(error);
+        } finally {
+            log(`🚧 GeoAPI metadata: ${JSON.stringify(metadata, null, 2)}`, "");
+            log(`✅ GeoAPI`, "");
+            return metadata;
+        }    };
 
     async AirNow(token = this.token) {
         log(`☑️ AirNow`, "");
@@ -8493,6 +8664,7 @@ class QWeather {
                         },
                         "categoryIndex": parseInt(body?.now?.level, 10),
                         "index": parseInt(body?.now?.aqi, 10),
+                        "isSignificant": true,
                         "pollutants": this.#CreatePollutants(body?.now),
                         "previousDayComparison": "UNKNOWN",
                         "primaryPollutant": this.#Config.Pollutants[body?.now?.primary] || "NOT_AVAILABLE",
@@ -8516,6 +8688,59 @@ class QWeather {
         } finally {
             //log(`🚧 AirNow airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
             log(`✅ AirNow`, "");
+            return airQuality;
+        }    };
+
+    async AirQualityCurrent(token = this.token) {
+        log(`☑️ AirQualityCurrent`, "");
+        const request = {
+            "url": `https://${this.host}/airquality/v1/current/${this.latitude}/${this.longitude}?key=${token}`,
+            "header": this.header,
+        };
+        let airQuality;
+        try {
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const timeStamp = Math.round(Date.now() / 1000);
+            switch (body?.error) {
+                case undefined:
+                    airQuality = {
+                        "metadata": {
+                            "attributionUrl": request.url,
+                            "expireTime": timeStamp + 60 * 60,
+                            "language": `${this.language}-${this.country}`,
+                            "latitude": this.latitude,
+                            "longitude": this.longitude,
+                            "providerLogo": providerNameToLogo("和风天气", this.version),
+                            "providerName": "和风天气",
+                            "readTime": timeStamp,
+                            "reportedTime": timeStamp,
+                            "temporarilyUnavailable": false,
+                            "sourceType": "STATION",
+                            "stationID": body?.stations?.[0]?.id,
+                        },
+                        "categoryIndex": parseInt(body?.indexes?.[0]?.level, 10),
+                        "index": body?.indexes?.[0]?.aqi,
+                        "isSignificant": true,
+                        "pollutants": body?.pollutants?.map(pollutant => {
+                            pollutant.pollutantType = this.#Config.Pollutants[pollutant?.code];
+                            pollutant.amount = pollutant?.concentration?.value;
+                            pollutant.units = this.#Config.Units[pollutant?.concentration?.unit];
+                            return pollutant;
+                        }),
+                        "previousDayComparison": "UNKNOWN",
+                        "primaryPollutant": this.#Config.Pollutants[body?.indexes?.[0]?.primaryPollutant?.code] || "NOT_AVAILABLE",
+                        "scale": "HJ6332012"
+                    };
+                    if (body?.stations?.[0]?.name) airQuality.metadata.providerName += `\n数据源: ${body?.stations?.[0]?.name}检测站`;
+                    break;
+                default:
+                    throw JSON.stringify({ "status": body?.error?.status, "reason": body?.error?.detail });
+            };
+        } catch (error) {
+            logError(error);
+        } finally {
+            //log(`🚧 AirQualityCurrent airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ AirQualityCurrent`, "");
             return airQuality;
         }    };
 
@@ -8591,6 +8816,52 @@ class QWeather {
             return forecastNextHour;
         }    };
 
+    async HistoricalAir(token = this.token, locationID = new Number, date = time("yyyyMMdd", Date.now() - 24 * 60 * 60 * 1000)) {
+        log(`☑️ HistoricalAir, locationID:${locationID}, date: ${date}`, "");
+        const request = {
+            "url": `https://${this.host}/v7/historical/air/?location=${locationID}&date=${date}&key=${token}`,
+            "header": this.header,
+        };
+        let airQuality;
+        try {
+            const body = await fetch(request).then(response => JSON.parse(response?.body ?? "{}"));
+            const Hour = new Date().getHours();
+            switch (body?.code) {
+                case "200":
+                    airQuality = {
+                        "metadata": {
+                            "attributionUrl": body?.fxLink,
+                            "providerLogo": providerNameToLogo("和风天气", this.version),
+                            "providerName": "和风天气",
+                            "sourceType": "STATION",
+                        },
+                        "categoryIndex": parseInt(body?.airHourly?.[Hour]?.level, 10),
+                        "index": parseInt(body?.airHourly?.[Hour]?.aqi, 10),
+                        "pollutants": this.#CreatePollutants(body?.airHourly?.[Hour]),
+                        "primaryPollutant": this.#Config.Pollutants[body?.airHourly?.[Hour]?.primary] || "NOT_AVAILABLE",
+                        "scale": "HJ6332012"
+                    };
+                    if (body?.refer?.sources?.[0]) airQuality.metadata.providerName += `\n数据源: ${body?.refer?.sources?.[0]}`;
+                    break;
+                case "204":
+                case "400":
+                case "401":
+                case "402":
+                case "403":
+                case "404":
+                case "429":
+                case "500":
+                case undefined:
+                    throw JSON.stringify({ "status": body?.status, "reason": body?.error });
+            };
+        } catch (error) {
+            logError(error);
+        } finally {
+            log(`🚧 HistoricalAir airQuality: ${JSON.stringify(airQuality, null, 2)}`, "");
+            log(`✅ HistoricalAir`, "");
+            return airQuality;
+        }    };
+
     #CreatePollutants(pollutantsObj = {}) {
         log(`☑️ CreatePollutants`, "");
         let pollutants = [];
@@ -8606,7 +8877,7 @@ class QWeather {
                 case "pm2p5":
                 case "pm10":
                     pollutants.push({
-                        "amount": value ?? -1,
+                        "amount": parseFloat(value ?? -1),
                         "pollutantType": this.#Config.Pollutants[key],
                         "units": "MICROGRAMS_PER_CUBIC_METER",
                     });
@@ -8617,7 +8888,7 @@ class QWeather {
     };
 }
 
-log("v1.7.3(4165)");
+log("v1.8.5(4171)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -8706,6 +8977,8 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 											log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 											// InjectAirQuality
 											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
+											// CompareAirQuality
+											body = await CompareAirQuality(url, body, Settings);
 											// PollutantUnitConverter
 											switch (body?.airQuality?.metadata?.providerName?.split("\n")?.[0]) {
 												case "和风天气":
@@ -8768,21 +9041,22 @@ async function InjectAirQuality(url, body, Settings) {
 		case "QWeather":
 			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
 			airQuality = await qWeather.AirNow();
+			//airQuality = await qWeather.AirQualityCurrent();
 			break;
 		case "ColorfulClouds":
+		default:
 			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			airQuality = await colorfulClouds.RealTime();
 			break;
 		case "WAQI":
-		default:
-			const Waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
+			const waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
 			if (Settings?.API?.WAQI?.Token) {
-				airQuality = await Waqi.AQI2();
+				airQuality = await waqi.AQI2();
 			} else {
-				const Nearest = await Waqi.Nearest();
-				const Token = await Waqi.Token(Nearest?.metadata?.stationId);
+				const Nearest = await waqi.Nearest();
+				const Token = await waqi.Token(Nearest?.metadata?.stationId);
 				//Caches.WAQI.set(stationId, Token);
-				airQuality = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
+				airQuality = await waqi.AQI(Nearest?.metadata?.stationId, Token);
 				airQuality.metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
 				airQuality = { ...Nearest, ...airQuality };
 			}
@@ -8793,6 +9067,38 @@ async function InjectAirQuality(url, body, Settings) {
 		if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
 		log(`🚧 body.airQuality: ${JSON.stringify(body?.airQuality, null, 2)}`, "");
 	}	log(`✅ InjectAirQuality`, "");
+	return body;
+}
+async function CompareAirQuality(url, body, Settings) {
+	log(`☑️ CompareAirQuality`, "");
+	switch (body?.airQuality?.metadata?.providerName?.split("\n")?.[0]) {
+		case null:
+		case undefined:
+		case "BreezoMeter":
+		case "The Weather Channel":
+		default:
+			break;
+		case "和风天气":
+		case "QWeather":
+			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			if (!body?.airQuality?.metadata?.locationID) {
+				const metadata = await qWeather.GeoAPI();
+				if (!body?.airQuality?.metadata?.attributionUrl) body.airQuality.metadata.attributionUrl = metadata.attributionUrl;
+				body.airQuality.metadata.locationID = metadata.locationID;
+			}			const HistoricalAirQuality = await qWeather.HistoricalAir(undefined, body.airQuality?.metadata?.locationID);
+			body.airQuality.previousDayComparison = AirQuality.ComparisonTrend(body.airQuality?.index, HistoricalAirQuality?.index);
+			break;
+		case "彩云天气":
+		case "ColorfulClouds":
+			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			const Hourly = await colorfulClouds.Hourly(undefined, 1, Date.now() - 24 * 60 * 60 * 1000);
+			body.airQuality.previousDayComparison = AirQuality.ComparisonTrend(body.airQuality.index, Hourly.index);
+			break;
+		case "WAQI":
+		case "World Air Quality Index Project":
+			new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
+			break;
+	}	log(`✅ CompareAirQuality`, "");
 	return body;
 }
 function ConvertAirQuality(body, Settings) {
