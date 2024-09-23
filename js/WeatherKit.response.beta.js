@@ -427,6 +427,7 @@ async function fetch(request = {} || "", option = {}) {
                     error => Promise.reject(error.message));
     }}
 
+//import { log } from "./utils.mjs";
 /**
  * [version of ISO8601]{@link https://262.ecma-international.org/5.1/#sec-15.9.1.15}
  * 示例:time("yyyy-MM-dd qq HH:mm:ss.S") YYYY-MM-DDTHH:mm:ss.sssZ
@@ -450,7 +451,7 @@ function time(format, ts) {
         "ss": date.getSeconds().toString().padStart(2, "0"),
         "S": `${Math.floor((date.getMonth()) / 3) + 1}`,
     };
-    log(JSON.stringify(Time, null, 2));
+    //log(JSON.stringify(Time, null, 2));
     for (const [key, value] of Object.entries(Time)) {
         format = format.replace(key, value);
     }    return format;
@@ -8573,7 +8574,7 @@ class ColorfulClouds {
 class QWeather {
     constructor(options) {
         this.Name = "QWeather";
-        this.Version = "4.1.0";
+        this.Version = "4.1.1";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -8841,7 +8842,6 @@ class QWeather {
                         "primaryPollutant": this.#Config.Pollutants[body?.airHourly?.[Hour]?.primary] || "NOT_AVAILABLE",
                         "scale": "HJ6332012"
                     };
-                    if (body?.refer?.sources?.[0]) airQuality.metadata.providerName += `\n数据源: ${body?.refer?.sources?.[0]}`;
                     break;
                 case "204":
                 case "400":

@@ -6,7 +6,7 @@ import ForecastNextHour from "./ForecastNextHour.mjs";
 export default class QWeather {
     constructor(options) {
         this.Name = "QWeather";
-        this.Version = "4.1.0";
+        this.Version = "4.1.1";
         log(`\n🟧 ${this.Name} v${this.Version}\n`, "");
         this.url = new URL($request.url);
         this.host = "devapi.qweather.com";
@@ -278,7 +278,6 @@ export default class QWeather {
                         "primaryPollutant": this.#Config.Pollutants[body?.airHourly?.[Hour]?.primary] || "NOT_AVAILABLE",
                         "scale": "HJ6332012"
                     };
-                    if (body?.refer?.sources?.[0]) airQuality.metadata.providerName += `\n数据源: ${body?.refer?.sources?.[0]}`;
                     break;
                 case "204":
                 case "400":
