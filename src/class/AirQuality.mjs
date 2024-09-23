@@ -1,7 +1,7 @@
 import { log } from "../utils/utils.mjs";
 export default class AirQuality {
 	static Name = "AirQuality";
-	static Version = "2.3.3";
+	static Version = "2.3.4";
 	static Author = "Virgil Clyne & Wordless Echo";
 
 	static #Config = {
@@ -591,7 +591,8 @@ export default class AirQuality {
 	static ComparisonTrend(todayAQI, yesterdayAQI) {
 		log(`☑️ ComparisonTrend, todayAQI: ${todayAQI}, yesterdayAQI: ${yesterdayAQI}`, "");
 		let trend = "UNKNOWN";
-		switch (todayAQI - yesterdayAQI) {
+		if (isNaN(todayAQI - yesterdayAQI)) trend = "UNKNOWN";
+		else switch (todayAQI - yesterdayAQI) {
 			case 10:
 			case 9:
 			case 8:
