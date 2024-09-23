@@ -8,7 +8,7 @@ import ColorfulClouds from "./class/ColorfulClouds.mjs";
 import QWeather from "./class/QWeather.mjs";
 import AirQuality from "./class/AirQuality.mjs";
 import * as flatbuffers from 'flatbuffers';
-log("v1.7.3(4165)");
+log("v1.8.5(4171)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -86,6 +86,8 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 										if (url.searchParams.get("dataSets").includes("airQuality")) {
 											// InjectAirQuality
 											if (Settings?.AQI?.ReplaceProviders?.includes(body?.airQuality?.metadata?.providerName)) body = await InjectAirQuality(url, body, Settings);
+											// CompareAirQuality
+											body = await CompareAirQuality(url, body, Settings);
 											// PollutantUnitConverter
 											switch (body?.airQuality?.metadata?.providerName?.split("\n")?.[0]) {
 												case "和风天气":
@@ -154,19 +156,19 @@ async function InjectAirQuality(url, body, Settings) {
 			airQuality = await qWeather.AirNow();
 			break;
 		case "ColorfulClouds":
+		default:
 			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
 			airQuality = await colorfulClouds.RealTime();
 			break;
 		case "WAQI":
-		default:
-			const Waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
+			const waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
 			if (Settings?.API?.WAQI?.Token) {
-				airQuality = await Waqi.AQI2();
+				airQuality = await waqi.AQI2();
 			} else {
-				const Nearest = await Waqi.Nearest();
-				const Token = await Waqi.Token(Nearest?.metadata?.stationId);
+				const Nearest = await waqi.Nearest();
+				const Token = await waqi.Token(Nearest?.metadata?.stationId);
 				//Caches.WAQI.set(stationId, Token);
-				airQuality = await Waqi.AQI(Nearest?.metadata?.stationId, Token);
+				airQuality = await waqi.AQI(Nearest?.metadata?.stationId, Token);
 				airQuality.metadata = { ...Nearest?.metadata, ...airQuality?.metadata };
 				airQuality = { ...Nearest, ...airQuality };
 			}
@@ -178,6 +180,41 @@ async function InjectAirQuality(url, body, Settings) {
 		if (!body?.airQuality?.pollutants) body.airQuality.pollutants = [];
 	};
 	log(`✅ InjectAirQuality`, "");
+	return body;
+};
+
+async function CompareAirQuality(url, body, Settings) {
+	log(`☑️ CompareAirQuality`, "");
+	switch (body?.airQuality?.metadata?.providerName?.split("\n")?.[0]) {
+		case null:
+		case undefined:
+		case "BreezoMeter":
+		case "The Weather Channel":
+		default:
+			break;
+		case "和风天气":
+		case "QWeather":
+			const qWeather = new QWeather({ "url": url, "host": Settings?.API?.QWeather?.Host, "header": Settings?.API?.QWeather?.Header, "token": Settings?.API?.QWeather?.Token });
+			if (!body?.airQuality?.metadata?.locationID) {
+				const metadata = await qWeather.GeoAPI();
+				if (!body?.airQuality?.metadata?.attributionUrl) body.airQuality.metadata.attributionUrl = metadata.attributionUrl;
+				body.airQuality.metadata.locationID = metadata.locationID;
+			};
+			const HistoricalAirQuality = await qWeather.HistoricalAir(undefined, body.airQuality?.metadata?.locationID);
+			body.airQuality.previousDayComparison = AirQuality.ComparisonTrend(body.airQuality?.index, HistoricalAirQuality?.index);
+			break;
+		case "彩云天气":
+		case "ColorfulClouds":
+			const colorfulClouds = new ColorfulClouds({ "url": url, "header": Settings?.API?.ColorfulClouds?.Header, "token": Settings?.API?.ColorfulClouds?.Token || "Y2FpeXVuX25vdGlmeQ==" });
+			const Hourly = await colorfulClouds.Hourly(undefined, 1, Date.now() - 24 * 60 * 60 * 1000);
+			body.airQuality.previousDayComparison = AirQuality.ComparisonTrend(body.airQuality.index, Hourly.index);
+			break;
+		case "WAQI":
+		case "World Air Quality Index Project":
+			const waqi = new WAQI({ "url": url, "header": Settings?.API?.WAQI?.Header, "token": Settings?.API?.WAQI?.Token });
+			break;
+	};
+	log(`✅ CompareAirQuality`, "");
 	return body;
 };
 
