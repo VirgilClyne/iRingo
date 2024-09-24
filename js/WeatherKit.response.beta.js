@@ -8889,7 +8889,7 @@ class QWeather {
     };
 }
 
-log("v1.8.5(4171)");
+log("v1.8.6(4172)");
 /***************** Processing *****************/
 // 解构URL
 const url = new URL($request.url);
@@ -9085,7 +9085,7 @@ async function CompareAirQuality(url, body, Settings) {
 			if (!body?.airQuality?.metadata?.locationID) {
 				const metadata = await qWeather.GeoAPI();
 				if (!body?.airQuality?.metadata?.attributionUrl) body.airQuality.metadata.attributionUrl = metadata.attributionUrl;
-				body.airQuality.metadata.locationID = metadata.locationID;
+				body.airQuality.metadata.locationID = metadata?.locationID;
 			}			const HistoricalAirQuality = await qWeather.HistoricalAir(undefined, body.airQuality?.metadata?.locationID);
 			body.airQuality.previousDayComparison = AirQuality.ComparisonTrend(body.airQuality?.index, HistoricalAirQuality?.index);
 			break;
