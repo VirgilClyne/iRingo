@@ -8,7 +8,7 @@ import { SiriPegasusRequest } from "./protobuf/apple.parsec.siri.v2alpha.SiriPeg
 import { LookupSearchRequest } from "./protobuf/apple.parsec.lookup.v1alpha.LookupSearchRequest";
 import { VisualSearchRequest } from "./protobuf/apple.parsec.visualsearch.v2.VisualSearchRequest";
 import { PegasusQueryContext } from "./protobuf/apple.parsec.search.PegasusQueryContext";
-log("v4.2.2(4047)");
+log("v4.2.3(4049)");
 // 构造回复数据
 let $response = undefined;
 /***************** Processing *****************/
@@ -99,6 +99,8 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 										case "api-siri.smoot.apple.com":
 										case "api2.smoot.apple.com":
 										default:
+											//$request.headers["content-type"] = "application/grpc+proto";
+											if ($request.headers["user-agent"]?.includes("grpc-node-js")) $request.headers["user-agent"] = "PegasusKit/1 (iPhone14,3; iPhone OS 18.1 22B5054e) siri/1";
 											// 路径判断
 											switch (PATH) {
 												case "/apple.parsec.siri.v2alpha.SiriSearch/SiriSearch": // Siri搜索
