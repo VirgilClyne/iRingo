@@ -4,15 +4,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
 	{
-		input: 'src/WeatherKit.response.beta.js',
-		output: {
-			file: 'js/WeatherKit.response.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 🌤 WeatherKit β Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
 		input: 'src/GeoServices.request.beta.js',
 		output: {
 			file: 'js/GeoServices.request.beta.js',

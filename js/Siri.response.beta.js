@@ -7371,10 +7371,10 @@ class GRPC {
 	};
 }
 
-var Settings$8 = {
+var Settings$7 = {
 	Switch: true
 };
-var Configs$4 = {
+var Configs$3 = {
 	Storefront: [
 		[
 			"AE",
@@ -8091,34 +8091,34 @@ var Configs$4 = {
 	]
 };
 var Default = {
-	Settings: Settings$8,
-	Configs: Configs$4
+	Settings: Settings$7,
+	Configs: Configs$3
 };
 
 var Default$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Configs: Configs$4,
-    Settings: Settings$8,
+    Configs: Configs$3,
+    Settings: Settings$7,
     default: Default
 });
 
-var Settings$7 = {
+var Settings$6 = {
 	Switch: true,
 	PEP: {
 		GCC: "US"
 	}
 };
 var Location = {
-	Settings: Settings$7
+	Settings: Settings$6
 };
 
 var Location$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Settings: Settings$7,
+    Settings: Settings$6,
     default: Location
 });
 
-var Settings$6 = {
+var Settings$5 = {
 	Switch: true,
 	UrlInfoSet: {
 		Dispatcher: "AutoNavi",
@@ -8159,51 +8159,51 @@ var Settings$6 = {
 		}
 	}
 };
-var Configs$3 = {
+var Configs$2 = {
 };
 var Maps = {
-	Settings: Settings$6,
-	Configs: Configs$3
+	Settings: Settings$5,
+	Configs: Configs$2
 };
 
 var Maps$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Configs: Configs$3,
-    Settings: Settings$6,
-    default: Maps
-});
-
-var Settings$5 = {
-	Switch: true,
-	CountryCode: "US",
-	NewsPlusUser: true
-};
-var News = {
-	Settings: Settings$5
-};
-
-var News$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
+    Configs: Configs$2,
     Settings: Settings$5,
-    default: News
+    default: Maps
 });
 
 var Settings$4 = {
 	Switch: true,
 	CountryCode: "US",
+	NewsPlusUser: true
+};
+var News = {
+	Settings: Settings$4
+};
+
+var News$1 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Settings: Settings$4,
+    default: News
+});
+
+var Settings$3 = {
+	Switch: true,
+	CountryCode: "US",
 	canUse: true
 };
 var PrivateRelay = {
-	Settings: Settings$4
+	Settings: Settings$3
 };
 
 var PrivateRelay$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Settings: Settings$4,
+    Settings: Settings$3,
     default: PrivateRelay
 });
 
-var Settings$3 = {
+var Settings$2 = {
 	Switch: true,
 	CountryCode: "SG",
 	Region: "AUTO",
@@ -8228,7 +8228,7 @@ var Settings$3 = {
 	],
 	Safari_Smart_History: true
 };
-var Configs$2 = {
+var Configs$1 = {
 	VisualIntelligence: {
 		enabled_domains: [
 			"pets",
@@ -8265,34 +8265,34 @@ var Configs$2 = {
 	}
 };
 var Siri = {
-	Settings: Settings$3,
-	Configs: Configs$2
+	Settings: Settings$2,
+	Configs: Configs$1
 };
 
 var Siri$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Configs: Configs$2,
-    Settings: Settings$3,
+    Configs: Configs$1,
+    Settings: Settings$2,
     default: Siri
 });
 
-var Settings$2 = {
+var Settings$1 = {
 	Switch: "true",
 	CountryCode: "US",
 	MultiAccount: "false",
 	Universal: "true"
 };
 var TestFlight = {
-	Settings: Settings$2
+	Settings: Settings$1
 };
 
 var TestFlight$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    Settings: Settings$2,
+    Settings: Settings$1,
     default: TestFlight
 });
 
-var Settings$1 = {
+var Settings = {
 	Switch: true,
 	"Third-Party": false,
 	HLSUrl: "play-edge.itunes.apple.com",
@@ -8330,7 +8330,7 @@ var Settings$1 = {
 		Others: "AUTO"
 	}
 };
-var Configs$1 = {
+var Configs = {
 	Locale: [
 		[
 			"AU",
@@ -8679,90 +8679,15 @@ var Configs$1 = {
 	}
 };
 var TV = {
-	Settings: Settings$1,
-	Configs: Configs$1
-};
-
-var TV$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    Configs: Configs$1,
-    Settings: Settings$1,
-    default: TV
-});
-
-var Settings = {
-	Switch: true,
-	NextHour: {
-		Provider: "ColorfulClouds"
-	},
-	AQI: {
-		Provider: "ColorfulClouds",
-		ReplaceProviders: [
-		],
-		Local: {
-			Scale: "WAQI_InstantCast",
-			ReplaceScales: [
-				"HJ6332012"
-			],
-			ConvertUnits: false
-		}
-	},
-	API: {
-		WAQI: {
-			Token: null,
-			Header: {
-				"Content-Type": "application/json"
-			}
-		},
-		QWeather: {
-			Token: null,
-			Header: {
-				"Content-Type": "application/json"
-			},
-			Host: "devapi.qweather.com"
-		},
-		ColorfulClouds: {
-			Token: null,
-			Header: {
-				"Content-Type": "application/json"
-			}
-		}
-	}
-};
-var Configs = {
-	Availability: {
-		v1: [
-			"currentWeather",
-			"dailyForecast",
-			"hourlyForecast",
-			"minuteForecast",
-			"weatherAlerts"
-		],
-		v2: [
-			"airQuality",
-			"currentWeather",
-			"forecastDaily",
-			"forecastHourly",
-			"forecastPeriodic",
-			"historicalComparisons",
-			"weatherChanges",
-			"forecastNextHour",
-			"weatherAlerts",
-			"weatherAlertNotifications",
-			"news"
-		]
-	}
-};
-var WeatherKit = {
 	Settings: Settings,
 	Configs: Configs
 };
 
-var WeatherKit$1 = /*#__PURE__*/Object.freeze({
+var TV$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     Configs: Configs,
     Settings: Settings,
-    default: WeatherKit
+    default: TV
 });
 
 var Database$1 = Database = {
@@ -8773,8 +8698,7 @@ var Database$1 = Database = {
 	"PrivateRelay": PrivateRelay$1,
 	"Siri": Siri$1,
 	"TestFlight": TestFlight$1,
-	"TV": TV$1,
-	"WeatherKit": WeatherKit$1
+	"TV": TV$1
 };
 
 /**

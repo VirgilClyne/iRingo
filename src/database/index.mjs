@@ -6,7 +6,6 @@ import * as PrivateRelay from "./PrivateRelay.json";
 import * as Siri from "./Siri.json";
 import * as TestFlight from "./TestFlight.json";
 import * as TV from "./TV.json";
-import * as WeatherKit from "./WeatherKit.json";
 
 export default Database = {
 	"Default": Default,
@@ -16,6 +15,5 @@ export default Database = {
 	"PrivateRelay": PrivateRelay,
 	"Siri": Siri,
 	"TestFlight": TestFlight,
-	"TV": TV,
-	"WeatherKit": WeatherKit
+	"TV": TV
 };
