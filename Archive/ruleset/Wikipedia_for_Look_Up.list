@@ -1,6 +1,0 @@
-# > Look Up (Only for Wikipedia@macOS, Surge Enhance Mode enabled required)
-PROCESS-NAME,LookupViewService
-PROCESS-NAME,/System/Library/PrivateFrameworks/Lookup.framework/Versions/A/XPCServices/LookupViewService.xpc/Contents/MacOS/LookupViewService
-DOMAIN,lookup-api.apple.com
-DOMAIN,lookup-api.apple.com.edgekey.net
-DOMAIN,e16991.b.akamaiedge.net

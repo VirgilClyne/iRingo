@@ -2,8 +2,8 @@
 #!desc=1.自定义解锁News的地区 2.Coming Soon… 注：该插件包含代理规则，安装过程中需要匹配代理策略组为🇺🇸🇬🇧🇨🇦🇦🇺线路，使用过程中gateway.icloud.com会走与News相同的代理线路。
 #!openUrl=http://boxjs.com/#/app/iRingo.News
 #!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📰News
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/Siri/wiki/📰News
 #!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
 #!category= iRingo
 

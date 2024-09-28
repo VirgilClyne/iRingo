@@ -1,14 +1,14 @@
-name: " iRingo: ⭕ Siri & Search β"
+name: " iRingo: ⭕ Siri & Spotlight"
 desc: |-
-  V1️⃣ & iOS 17.6⬇️ & BETA
-  全面自定义「Siri与搜索」中的「Siri 建议」功能。
-  本模块不含自定义「Siri与搜索」中的「询问 Siri」功能。
-  注：该覆写包含代理规则。
-openUrl: "http://boxjs.com/#/app/iRingo.Siri.beta"
-author: "VirgilClyne"
-homepage: "https://github.com/VirgilClyne"
-manual: "https://github.com/VirgilClyne/iRingo/wiki/⭕-Siri与搜索"
-icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Siri.png"
+  V1️⃣ & iOS 17.6⬇️
+  全面自定义「Siri与聚焦」中的「Siri 建议」功能。
+  本模块不含自定义「Siri与聚焦」中的「询问 Siri」功能。
+  注：该覆写包含代理规则。"
+openUrl: "http://boxjs.com/#/app/iRingo.Siri"
+author: "VirgilClyne[https://github.com/VirgilClyne]"
+homepage: "https://github.com/NSRingo"
+manual: "https://github.com/NSRingo/Siri/wiki/⭕-Siri与搜索"
+icon: "https://raw.githubusercontent.com/NSRingo/Siri/main/images/icon/v1/Siri%20-%20Icon.png"
 category: " iRingo"
 
 rules:
@@ -21,13 +21,13 @@ http:
     - "api*.smoot.apple.com"
     - "api.smoot.apple.cn"
   script:
-    - match: ^https?:\/\/api\.smoot\.apple\.(com|cn)\/bag
+    - match: ^https?:\/\/api2?\.smoot\.apple\.(com|cn)\/bag
       name: Siri.request
       type: request
       require-body: false
       timeout: 5
       argument:
-    - match: ^https?:\/\/api\.smoot\.apple\.(com|cn)\/bag
+    - match: ^https?:\/\/api2?\.smoot\.apple\.(com|cn)\/bag
       name: Siri.response
       type: response
       require-body: true
@@ -56,18 +56,6 @@ http:
       type: request
       require-body: true
       timeout: 10
-      argument:
-    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/warm
-      name: Siri.request
-      type: request
-      require-body: false
-      timeout: 5
-      argument:
-    - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/render
-      name: Siri.request
-      type: request
-      require-body: false
-      timeout: 5
       argument:
     - match: ^https?:\/\/api(2|-.+)\.smoot\.apple\.com\/flight
       name: Siri.request
@@ -78,8 +66,8 @@ http:
 
 script-providers:
   Siri.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.request.beta.js
+    url: https://github.com/NSRingo/Siri/releases/latest/download/request.js
     interval: 86400
   Siri.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/js/Siri.response.beta.js
+    url: https://github.com/NSRingo/Siri/releases/latest/download/response.js
     interval: 86400
