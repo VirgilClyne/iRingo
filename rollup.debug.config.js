@@ -22,24 +22,6 @@ export default [
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
-		input: 'src/Siri.request.beta.js',
-		output: {
-			file: 'js/Siri.request.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ⭕ Siri β Request')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
-		input: 'src/Siri.response.beta.js',
-		output: {
-			file: 'js/Siri.response.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ⭕ Siri β Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
 		input: 'src/TestFlight.request.beta.js',
 		output: {
 			file: 'js/TestFlight.request.beta.js',

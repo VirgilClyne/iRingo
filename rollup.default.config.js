@@ -23,24 +23,6 @@ export default [
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
 	{
-		input: 'src/Siri.request.js',
-		output: {
-			file: 'js/Siri.request.js',
-			format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ⭕ Siri Request')",
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
-		input: 'src/Siri.response.js',
-		output: {
-			file: 'js/Siri.response.js',
-			format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ⭕ Siri Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
 		input: 'src/TestFlight.request.js',
 		output: {
 			file: 'js/TestFlight.request.js',
