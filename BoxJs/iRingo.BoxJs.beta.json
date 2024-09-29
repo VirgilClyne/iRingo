@@ -631,11 +631,11 @@
 					]
 				},
 				{
-					"id": "@iRingo.Siri.Settings.Region",
-					"name": "Siri 区域",
-					"val": "AUTO",
+					"id": "@iRingo.Siri.Settings.SiriResponseLanguageVariant",
+					"name": "Siri 响应语言",
+					"val": "zh_CN",
 					"type": "selects",
-					"desc": "忽略系统中“Siri”的“语言”设置，强制采用这里的设置。",
+					"desc": "自定义 Siri 回复使用的语言。",
 					"items": [
 						{
 							"key": "AUTO",
