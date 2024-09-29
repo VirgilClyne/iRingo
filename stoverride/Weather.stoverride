@@ -1,14 +1,19 @@
-name:  iRingo for 🌤 Weather
-desc: (V4) 1.解锁全部天气功能 2.替换空气质量数据 3.添加下一小时降水数据 4.替换空气质量地图
+name:  iRingo: 🌤 Weather
+desc:  |-
+  V4️⃣ & iOS 16⬇️
+  1.解锁全部天气功能
+  2.替换空气质量数据
+  3.添加下一小时降水数据
+  4.替换空气质量地图
 openUrl: http://boxjs.com/#/app/iRingo.Weather
-author: Wordless Echo
-homepage: https://github.com/WordlessEcho
-manual: https://github.com/VirgilClyne/iRingo/wiki/🌤天气
-icon: https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/c8/76/87/c8768792-b7ab-7de4-9c70-1888096b7ae9/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/108x0w.webp
+author: WordlessEcho[https://github.com/WordlessEcho]
+homepage: https://github.com/NSRingo
+manual: "https://github.com/NSRingo/Weather/wiki"
+icon: "https://developer.apple.com/assets/elements/icons/weather/weather-128x128.png"
 category: " iRingo"
 
 rules:
-  - DOMAIN,weather-analytics-events.apple.com,REJECT
+  - DOMAIN,weather-analytics-events.apple.com,REJECT-DROP
 
 http:
   mitm:
@@ -42,14 +47,14 @@ http:
 
 script-providers:
   Weather.Availability.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.request.js
+    url: https://raw.githubusercontent.com/NSRingo/Weather/main/js/Availability.request.js
     interval: 86400
   Weather.Availability.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Availability.response.js
+    url: https://raw.githubusercontent.com/NSRingo/Weather/main/js/Availability.response.js
     interval: 86400
   Weather.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.response.js
+    url: https://raw.githubusercontent.com/NSRingo/Weather/main/js/response.js
     interval: 86400
   Weather.Map.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/Weather.Map.request.js
+    url: https://raw.githubusercontent.com/NSRingo/Weather/main/js/Map.request.js
     interval: 86400
