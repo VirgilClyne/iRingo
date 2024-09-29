@@ -1,9 +1,0 @@
-#!name= Replace Apple Weather Map with 🇺🇸US @waqi.info
-#!desc=(V2) 切换空气质量地图数据源为waqi.info，并更改标准为AQI(US)
-
-[URL Rewrite]
-# Rewrite Apple Weather Air Quality Map
-^https?:\/\/weather-map\.apple\.com\/(v1|v2)\/mapOverlay\/airQuality\?x=(-?\d+)&y=(-?\d+)&z=(-?\d+).*(country=CN)?.* https://tiles.waqi.info/tiles/usepa-aqi/$4/$2/$3.png?&scale=2&country=US&colorFormat=agr header
-
-[MITM]
-hostname = %APPEND% weather-map.apple.com, tiles.waqi.info

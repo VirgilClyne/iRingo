@@ -1,9 +1,0 @@
-#!name= iRingo for Apple Weather AQI data with waqi.info
-#!desc=(BETA) 解锁全部类型天气数据可用性，切换空气质量数据源为waqi.info，并更改标准为AQI(US)
-
-[Script]
-Apple Weather = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/weather.*(?!dataSets=forecastNextHour)(include=.*air_quality.*|dataSets=.*airQuality.*).*(country=[A-Z]{2})?.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Apple_Weather.beta.js
-Apple Weather Availability = type=http-response, pattern=^https?:\/\/weather-data\.apple\.com\/(v1|v2)\/availability\/.*, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/archive/js/Apple_Weather.beta.js
-
-[MITM]
-hostname = %APPEND% weather-data.apple.com, api.waqi.info
