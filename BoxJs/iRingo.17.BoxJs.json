@@ -4,13 +4,13 @@
 	"author": "@VirgilClyne",
 	"description": "解锁完整的 Apple功能和集成服务",
 	"icon": "https://avatars.githubusercontent.com/u/2111377?s=100&v=4",
-	"repo": "https://github.com/VirgilClyne/iRingo",
+	"repo": "https://github.com/NSRingo",
 	"apps": [
 		{
 			"id": "iRingo.Weather",
 			"name": "🌤 天气",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/🌤-天气\">🌤 天气</a>的使用说明进行配置",
+				"请参照<a href=\"https://github.com/NSRingo/Weather/wiki\">🌤 天气</a>的使用说明进行配置",
 				"填写完成后别忘点击此页面底端右下角的\"保存\"。",
 				"查询速度:\"私有API+城市\" > \"私有API+观测站\" > \"公共API+观测站\"",
 				"定位精度:\"观测站\" > \"城市\""
@@ -586,7 +586,7 @@
 			"id": "iRingo.Siri",
 			"name": "⭕ Siri与搜索",
 			"descs_html": [
-				"请参照<a href=\"https://github.com/VirgilClyne/iRingo/wiki/⭕-Siri与搜索\">⭕ Siri与搜索</a>的使用说明进行配置",
+				"请参照<a href=\"https://github.com/NSRingo/Siri/wiki/⭕-Siri与搜索\">⭕ Siri与搜索</a>的使用说明进行配置",
 				"影响功能范围包括但不限于「Siri建议」「来自APPLE的内容」「来自APPLE的建议」等"
 			],
 			"keys": [
