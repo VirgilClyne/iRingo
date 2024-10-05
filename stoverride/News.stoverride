@@ -5,9 +5,9 @@ desc: |-
   注：该覆写包含代理规则，使用过程中gateway.icloud.com会走与News相同的代理线路。
 openUrl: "http://boxjs.com/#/app/iRingo.News"
 author: "VirgilClyne"
-homepage: "https://github.com/VirgilClyne"
-manual: "https://github.com/VirgilClyne/iRingo/wiki/📰News"
-icon: "https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png"
+homepage: "https://github.com/NSRingo"
+manual: "https://github.com/NSRingo/News/wiki"
+icon: "https://developer.apple.com/assets/elements/icons/news/news-128x128.png"
 category: " iRingo"
 
 rules:
@@ -41,5 +41,5 @@ http:
 
 script-providers:
   News.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+    url: https://github.com/NSRingo/News/releases/latest/download/request.js
     interval: 86400

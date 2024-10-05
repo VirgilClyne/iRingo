@@ -1,19 +1,19 @@
 #!name= iRingo: 📰 News
-#!desc=1.自定义解锁News的地区 2.Coming Soon… 注：该模块不包含代理规则组，代理规则组需要匹配代理策略组为🇺🇸🇬🇧🇨🇦🇦🇺线路，使用过程中gateway.icloud.com应该走与News相同的代理线路。
+#!desc=1.自定义解锁News的地区\n2.Coming Soon…\n注：该模块不包含代理规则组，代理规则组需要匹配代理策略组为🇺🇸🇬🇧🇨🇦🇦🇺线路，使用过程中gateway.icloud.com应该走与News相同的代理线路。
 #!openUrl=http://boxjs.com/#/app/iRingo.News
-#!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📰News
-#!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
+#!author=VirgilClyne[https://github.com/VirgilClyne]
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/News/wiki
+#!icon=https://developer.apple.com/assets/elements/icons/news/news-128x128.png
 #!category= iRingo
 
 #[rewrite_local]
 # 📰 News Configs
-^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs url script-request-body https://github.com/NSRingo/News/releases/latest/download/request.js
 # 📰 News Event
-^https?:\/\/news(-sports)?-events\.apple\.com\/analyticseventsv2\/async url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+^https?:\/\/news(-sports)?-events\.apple\.com\/analyticseventsv2\/async url script-request-body https://github.com/NSRingo/News/releases/latest/download/request.js
 # 📰 News Search
-^https?:\/\/news-client-search\.apple\.com\/v1\/search url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js
+^https?:\/\/news-client-search\.apple\.com\/v1\/search url script-request-header https://github.com/NSRingo/News/releases/latest/download/request.js
 
 #[mitm]
 hostname = news-edge.apple.com, news-todayconfig-edge.apple.com, news-events.apple.com, news-sports-events.apple.com, news-client.apple.com, news-client-search.apple.com

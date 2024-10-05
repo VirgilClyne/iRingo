@@ -1,11 +1,11 @@
 #!name= iRingo: 📰 News
-#!desc=1.自定义解锁News的地区 2.Coming Soon… 注：该插件包含代理规则，安装过程中需要匹配代理策略组为🇺🇸🇬🇧🇨🇦🇦🇺线路，使用过程中gateway.icloud.com会走与News相同的代理线路。
+#!desc=1.自定义解锁News的地区\n2.Coming Soon…\n注：该插件包含代理规则，安装过程中需要匹配代理策略组为🇺🇸🇬🇧🇨🇦🇦🇺线路，使用过程中gateway.icloud.com会走与News相同的代理线路。
 #!openUrl=http://boxjs.com/#/app/iRingo.News
-#!author=VirgilClyne
+#!author=VirgilClyne[https://github.com/VirgilClyne]
 #!homepage=https://github.com/NSRingo
-#!manual=https://github.com/NSRingo/Siri/wiki/📰News
-#!icon=https://www.apple.com/v/apple-news/i/images/shared/icon_news_plus__c9r2qvl6xfqu_large.png
-#!category= iRingo
+#!manual=https://github.com/NSRingo/News/wiki
+#!icon=https://developer.apple.com/assets/elements/icons/news/news-128x128.png
+#!tag= iRingo
 
 [Rule]
 # > iCloud
@@ -19,9 +19,9 @@ DOMAIN,apple.comscoreresearch.com,PROXY
 URL-REGEX,^https?:\/\/news-assets\.apple\.com\/(audio-narrative|podcast\/audio)\/.*,PROXY
 
 [Script]
-http-request ^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js, requires-body=true, tag=📰 News.v1.configs.request
-http-request ^https?:\/\/news(-sports)?-events\.apple\.com\/analyticseventsv2\/async script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js, tag=📰 News.analyticseventsv2.async.request
-http-request ^https?:\/\/news-client-search\.apple\.com\/v1\/search script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/News.request.js, tag=📰 News.v1.search.request
+http-request ^https?:\/\/news(-todayconfig)?-edge\.apple\.com\/v1\/configs script-path=https://github.com/NSRingo/News/releases/latest/download/request.js, requires-body=true, tag=📰 News.v1.configs.request
+http-request ^https?:\/\/news(-sports)?-events\.apple\.com\/analyticseventsv2\/async script-path=https://github.com/NSRingo/News/releases/latest/download/request.js, tag=📰 News.analyticseventsv2.async.request
+http-request ^https?:\/\/news-client-search\.apple\.com\/v1\/search script-path=https://github.com/NSRingo/News/releases/latest/download/request.js, tag=📰 News.v1.search.request
 
 [MITM]
 hostname = news-edge.apple.com, news-todayconfig-edge.apple.com, news-events.apple.com, news-sports-events.apple.com, news-client.apple.com, news-client-search.apple.com
