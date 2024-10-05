@@ -1568,6 +1568,23 @@
 							"label": "加拿大"
 						}
 					]
+				},
+				{
+					"id": "@iRingo.TV.Settings.CountryCode.restoreLowPriceRegion",
+					"name": "[修复低价区]国家或地区代码",
+					"val": "DISABLED",
+					"type": "selects",
+					"desc": "修复低价区，解决低价区换区后无法播放的问题，仅限低价区用户使用",
+					"items": [
+						{
+							"key": "DISABLED",
+							"label": "默认不使能"
+						},
+						{
+							"key": "IN",
+							"label": "印度"
+						}
+					]
 				}
 			],
 			"author": "@VirgilClyne",
