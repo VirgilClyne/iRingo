@@ -1,22 +1,22 @@
 #!name= iRingo: 📺 TV app
 #!desc=全面自定义「TV app」功能
 #!openUrl=http://boxjs.com/#/app/iRingo.TV
-#!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📺TV-app
-#!icon=https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5y3uwaibjm_large.png
+#!author=VirgilClyne[https://github.com/VirgilClyne]
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/TV/wiki
+#!icon=https://developer.apple.com/assets/elements/icons/apple-tv/apple-tv-128x128.png
 #!category= iRingo
 
 #[rewrite_local]
 # 📺 TV UTS
-^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
-^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ url script-request-body https://github.com/NSRingo/TV/releases/latest/download/request.js
+^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ url script-response-body https://github.com/NSRingo/TV/releases/latest/download/response.js
 # 📺 TV UMC
-^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/ url script-request-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/ url script-request-body https://github.com/NSRingo/TV/releases/latest/download/request.js
 # 📺 TV.hls
-^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8 url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8 url script-request-header https://github.com/NSRingo/TV/releases/latest/download/request.js
 # 📺 TV.wa
-^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest) url script-request-header https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js
+^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest) url script-request-header https://github.com/NSRingo/TV/releases/latest/download/request.js
 
 #[mitm]
 hostname = uts-api.itunes.apple.com, umc-tempo-api.apple.com

@@ -4,7 +4,6 @@ import * as Maps from "./Maps.json";
 import * as News from "./News.json";
 import * as PrivateRelay from "./PrivateRelay.json";
 import * as TestFlight from "./TestFlight.json";
-import * as TV from "./TV.json";
 
 export default Database = {
 	"Default": Default,
@@ -12,6 +11,5 @@ export default Database = {
 	"Maps": Maps,
 	"News": News,
 	"PrivateRelay": PrivateRelay,
-	"TestFlight": TestFlight,
-	"TV": TV
+	"TestFlight": TestFlight
 };

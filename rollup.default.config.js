@@ -41,24 +41,6 @@ export default [
 		plugins: [json(), commonjs(), nodeResolve(), terser()]
 	},
 	{
-		input: 'src/TV.request.js',
-		output: {
-			file: 'js/TV.request.js',
-			format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📺 TV Request')",
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
-		input: 'src/TV.response.js',
-		output: {
-			file: 'js/TV.response.js',
-			format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📺 TV Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
 		input: 'src/News.request.js',
 		output: {
 			file: 'js/News.request.js',

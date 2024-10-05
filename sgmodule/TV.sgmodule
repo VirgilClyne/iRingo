@@ -1,21 +1,21 @@
 #!name= iRingo: 📺 TV app
 #!desc=全面自定义「TV app」功能
 #!openUrl=http://boxjs.com/#/app/iRingo.TV
-#!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📺TV-app
-#!icon=https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5y3uwaibjm_large.png
+#!author=VirgilClyne[https://github.com/VirgilClyne]
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/TV/wiki
+#!icon=https://developer.apple.com/assets/elements/icons/apple-tv/apple-tv-128x128.png
 #!category= iRingo
 #!arguments=Third-Party:true,HLSUrl:play-edge.itunes.apple.com,ServerUrl:play.itunes.apple.com
 #!arguments-desc=Third-Party: 启用第三方App与TV app关联功能\n  * 是否将桌面版/macOS版/app版等平台的TV app转换至iPad版\n  * 以启用第三方App与TV app关联功能(如: Disney+,Prime Video等)\nHLSUrl: 播放服务地址\n    ├ play-edge.itunes.apple.com: 默认\n    ├ play.itunes.apple.com: 不推荐，与播放服务域名重叠\n    └ 不填写(留空): 不修改\nServerUrl: 密钥服务地址\n    ├ play.itunes.apple.com: 默认\n    ├ play-edge.itunes.apple.com: 不推荐，与密钥服务域名重叠\n    └ 不填写(留空): 不修改
 
 [Script]
-📺 TV.uts.request = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, argument=Third-Party={{{Third-Party}}}&HLSUrl={{{HLSUrl}}}&ServerUrl={{{ServerUrl}}}
-📺 TV.uts.response = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js, argument=Third-Party={{{Third-Party}}}&HLSUrl={{{HLSUrl}}}&ServerUrl={{{ServerUrl}}}
-📺 TV.umc.request = type=http-request, pattern=^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, argument=
+📺 TV.uts.request = type=http-request, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/, requires-body=1, script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, argument=Third-Party={{{Third-Party}}}&HLSUrl={{{HLSUrl}}}&ServerUrl={{{ServerUrl}}}
+📺 TV.uts.response = type=http-response, pattern=^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/, requires-body=1, script-path=https://github.com/NSRingo/TV/releases/latest/download/response.js, argument=Third-Party={{{Third-Party}}}&HLSUrl={{{HLSUrl}}}&ServerUrl={{{ServerUrl}}}
+📺 TV.umc.request = type=http-request, pattern=^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/, requires-body=1, script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, argument=
 
-📺 TV.hls.request = type=http-request, pattern=^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, argument=
-📺 TV.wa.request = type=http-request, pattern=^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest), script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, argument=
+📺 TV.hls.request = type=http-request, pattern=^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8, script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, argument=
+📺 TV.wa.request = type=http-request, pattern=^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest), script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, argument=
 
 [MITM]
 hostname = %APPEND% uts-api.itunes.apple.com, umc-tempo-api.apple.com

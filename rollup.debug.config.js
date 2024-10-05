@@ -40,24 +40,6 @@ export default [
 		plugins: [json(), commonjs(), nodeResolve()]
 	},
 	{
-		input: 'src/TV.request.beta.js',
-		output: {
-			file: 'js/TV.request.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📺 TV β Request')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
-		input: 'src/TV.response.beta.js',
-		output: {
-			file: 'js/TV.response.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📺 TV β Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
 		input: 'src/News.request.beta.js',
 		output: {
 			file: 'js/News.request.beta.js',

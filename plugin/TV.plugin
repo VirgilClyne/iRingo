@@ -2,9 +2,9 @@
 #!desc=全面自定义「TV app」功能
 #!openUrl=http://boxjs.com/#/app/iRingo.TV
 #!author=VirgilClyne[https://github.com/VirgilClyne]
-#!homepage=https://github.com/VirgilClyne/iRingo/wiki
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📺TV-app
-#!icon=https://www.apple.com/v/apple-tv-app/p/images/overview/apple_tv_icon__br5y3uwaibjm_large.png
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/TV/wiki
+#!icon=https://developer.apple.com/assets/elements/icons/apple-tv/apple-tv-128x128.png
 #!tag= iRingo
 #!system = iOS, iPadOS, tvOS, macOS
 
@@ -14,12 +14,12 @@ HLSUrl = select,"play-edge.itunes.apple.com","","play.itunes.apple.com",tag=播�
 ServerUrl = select,"play.itunes.apple.com","","play-edge.itunes.apple.com",tag=密钥服务地址(ServerUrl),desc=因为密钥服务域名禁止MitM，修改密钥服务地址可以分离HLS与Key的MitM域名，从而恢复如对DualSubs的双语字幕支持
 
 [Script]
-http-request ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, requires-body=1, tag=📺 TV.uts.request, argument=[{Third-Party},{HLSUrl},{ServerUrl}]
-http-response ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.response.js, requires-body=1, tag=📺 TV.uts.response, argument=[{Third-Party},{HLSUrl},{ServerUrl}]
-http-request ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/ script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, requires-body=1, tag=📺 TV.umc.request
+http-request ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, requires-body=1, tag=📺 TV.uts.request, argument=[{Third-Party},{HLSUrl},{ServerUrl}]
+http-response ^https?:\/\/uts-api\.itunes\.apple\.com\/uts\/(v1|v2|v3)\/ script-path=https://github.com/NSRingo/TV/releases/latest/download/response.js, requires-body=1, tag=📺 TV.uts.response, argument=[{Third-Party},{HLSUrl},{ServerUrl}]
+http-request ^https?:\/\/umc-tempo-api\.apple\.com\/(v1|v2|v3)\/ script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, requires-body=1, tag=📺 TV.umc.request
 
-http-request ^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8 script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, tag=📺 TV.hls.request
-http-request ^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest) script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TV.request.js, tag=📺 TV.wa.request
+http-request ^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/hls(\/(subscription|workout))?\/playlist\.m3u8 script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, tag=📺 TV.hls.request
+http-request ^https?:\/\/play(-edge)?\.itunes\.apple\.com\/WebObjects\/MZPlay(Local)?\.woa\/wa\/(fpsRequest|checkInNonceRequest) script-path=https://github.com/NSRingo/TV/releases/latest/download/request.js, tag=📺 TV.wa.request
 
 [MITM]
 hostname = uts-api.itunes.apple.com, umc-tempo-api.apple.com
