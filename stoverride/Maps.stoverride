@@ -4,9 +4,9 @@ desc: |-
   注：该覆写包含代理规则。
 openUrl: "http://boxjs.com/#/app/iRingo.Maps"
 author: "VirgilClyne"
-homepage: "https://github.com/VirgilClyne"
-manual: "https://github.com/VirgilClyne/iRingo/wiki/🗺-地图"
-icon: "https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg"
+homepage: "https://github.com/NSRingo"
+manual: "https://github.com/NSRingo/GeoServices/wiki/🗺-地图"
+icon: "https://developer.apple.com/assets/elements/icons/maps/maps-128x128.png"
 category: " iRingo"
 
 rules:
@@ -57,8 +57,8 @@ http:
 
 script-providers:
   GeoServices.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js
+    url: https://github.com/NSRingo/GeoServices/releases/latest/download/request.js
     interval: 86400
   GeoServices.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+    url: https://github.com/NSRingo/GeoServices/releases/latest/download/response.js
     interval: 86400

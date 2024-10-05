@@ -1,10 +1,10 @@
 #!name= iRingo: 🗺️ Maps
 #!desc=全面自定义「地图」的功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Maps
-#!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/🗺-地图
-#!icon=https://www.apple.com.cn/v/maps/d/images/overview/intro_icon__dfyvjc1ohbcm_small_2x.jpg
+#!author=VirgilClyne[https://github.com/VirgilClyne]
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/GeoServices/wiki/🗺-地图
+#!icon=https://developer.apple.com/assets/elements/icons/maps/maps-128x128.png
 #!category= iRingo
 
 [Rule]
@@ -17,14 +17,14 @@ DOMAIN,gspe19-cn-ssl.ls.apple.com,DIRECT
 
 [Script]
 # 🗺️ Network Defaults
-🗺️ Maps.config.defaults.request = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js, argument=
-🗺️ Maps.config.defaults.response = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults, requires-body=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/GeoServices.response.js, argument=
+🗺️ Maps.config.defaults.request = type=http-request, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults, requires-body=0, script-path=https://github.com/NSRingo/GeoServices/releases/latest/download/request.js, argument=
+🗺️ Maps.config.defaults.response = type=http-response, pattern=^https?:\/\/configuration\.ls\.apple\.com\/config\/defaults, requires-body=1, script-path=https://raw.githubusercontent.com/NSRingo/GeoServices/main/archive/js/response.js, argument=
 # 🗺️ Announcements
-🗺️ Maps.config.announcements.request = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js, argument=
-🗺️ Maps.config.announcements.response = type=http-response, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements, requires-body=1, binary-body-mode=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/GeoServices.response.js, argument=
+🗺️ Maps.config.announcements.request = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements, requires-body=0, script-path=https://github.com/NSRingo/GeoServices/releases/latest/download/request.js, argument=
+🗺️ Maps.config.announcements.response = type=http-response, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/config\/announcements, requires-body=1, binary-body-mode=1, engine=webview, script-path=https://raw.githubusercontent.com/NSRingo/GeoServices/main/archive/js/response.js, argument=
 # 🗺️ Resource Manifest
-🗺️ Maps.geo_manifest.dynamic.config.request = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.request.js, argument=
-🗺️ Maps.geo_manifest.dynamic.config.response = type=http-response, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config, requires-body=1, binary-body-mode=1, engine=webview, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/archive/GeoServices.response.js, argument=
+🗺️ Maps.geo_manifest.dynamic.config.request = type=http-request, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config, requires-body=0, script-path=https://github.com/NSRingo/GeoServices/releases/latest/download/request.js, argument=
+🗺️ Maps.geo_manifest.dynamic.config.response = type=http-response, pattern=^https?:\/\/gspe35-ssl\.ls\.apple\.(com|cn)\/geo_manifest\/dynamic\/config, requires-body=1, binary-body-mode=1, engine=webview, script-path=https://raw.githubusercontent.com/NSRingo/GeoServices/main/archive/js/response.js, argument=
 
 [MITM]
 hostname = %APPEND% configuration.ls.apple.com, gspe35-ssl.ls.apple.com

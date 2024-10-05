@@ -1,8 +1,0 @@
-#!name= Redirect Geo Services to 🇯🇵JP
-#!version=V1
-#!desc=只作用于检测地区，不修改Apple Maps和Apple News，可以通过搭配使用其他模块达成混合效果。
-
-# Redirect Geo Services to JP
-^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/archive/js/Geo_Services_JP.js
-
-hostname = gspe1-ssl.ls.apple.com

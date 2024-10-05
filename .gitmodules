@@ -1,9 +1,3 @@
-[submodule "src/URL"]
-	path = src/URL
-	url = https://github.com/NanoCat-Me/URL.git
-[submodule "src/XML"]
-	path = src/XML
-	url = https://github.com/NanoCat-Me/XML.git
 [submodule "src/utils"]
 	path = src/utils
 	url = https://github.com/NanoCat-Me/utils.git

@@ -4,24 +4,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
 	{
-		input: 'src/GeoServices.request.beta.js',
-		output: {
-			file: 'js/GeoServices.request.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices β Request')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
-		input: 'src/GeoServices.response.beta.js',
-		output: {
-			file: 'js/GeoServices.response.beta.js',
-			//format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: 📍 GeoServices β Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve()]
-	},
-	{
 		input: 'src/TestFlight.request.beta.js',
 		output: {
 			file: 'js/TestFlight.request.beta.js',

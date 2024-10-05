@@ -1,15 +1,15 @@
 #!name= iRingo: 📍 Location
 #!desc=全面自定义「定位服务」的功能。
 #!openUrl=http://boxjs.com/#/app/iRingo.Location
-#!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务
+#!author=VirgilClyne[https://github.com/VirgilClyne]
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/GeoServices/wiki/📍-定位服务
 #!icon=https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg
 #!category= iRingo
 
 #[rewrite_local]
 # 📍 Country Code
-^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc url script-response-body https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+^https?:\/\/gspe1-ssl\.ls\.apple\.com\/pep\/gcc url script-response-body https://github.com/NSRingo/GeoServices/releases/latest/download/response.js
 
 #[mitm]
 hostname = gspe1-ssl.ls.apple.com

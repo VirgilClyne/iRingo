@@ -4,8 +4,8 @@ desc: |-
   注：该覆写包含代理规则。
 openUrl: "http://boxjs.com/#/app/iRingo.Location"
 author: "VirgilClyne"
-homepage: "https://github.com/VirgilClyne"
-manual: "https://github.com/VirgilClyne/iRingo/wiki/📍-定位服务"
+homepage: "https://github.com/NSRingo"
+manual: "https://github.com/NSRingo/GeoServices/wiki/📍-定位服务"
 icon: "https://images.macrumors.com/article-new/2019/07/ios_location_services-250x250.jpg"
 category: " iRingo"
 
@@ -25,5 +25,5 @@ http:
 
 script-providers:
   GeoServices.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/GeoServices.response.js
+    url: https://github.com/NSRingo/GeoServices/releases/latest/download/response.js
     interval: 86400
