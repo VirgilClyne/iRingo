@@ -5,9 +5,9 @@ desc: |-
   3.让通用应用在任意苹果处理器设备上可安装
 openUrl: "http://boxjs.com/#/app/iRingo.TestFlight"
 author: "VirgilClyne"
-homepage: "https://github.com/VirgilClyne"
-manual: "https://github.com/VirgilClyne/iRingo/wiki/✈-TestFlight"
-icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TestFlight_2.png"
+homepage: "https://github.com/NSRingo"
+manual: "https://github.com/NSRingo/TestFlight"
+icon: "https://developer.apple.com/assets/elements/icons/testflight/testflight-128x128.png"
 category: " iRingo"
 
 http:
@@ -18,19 +18,17 @@ http:
       name: TestFlight.request
       type: request
       require-body: true
-      timeout: 10
       argument:
     - match: ^https?:\/\/testflight\.apple\.com\/
       name: TestFlight.response
       type: response
       require-body: true
-      timeout: 10
       argument:
 
 script-providers:
   TestFlight.request:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.request.js
+    url: https://github.com/NSRingo/TestFlight/releases/latest/download/request.js
     interval: 86400
   TestFlight.response:
-    url: https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/TestFlight.response.js
+    url: https://github.com/NSRingo/TestFlight/releases/latest/download/response.js
     interval: 86400

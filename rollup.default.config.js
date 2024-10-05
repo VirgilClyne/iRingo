@@ -5,24 +5,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
 	{
-		input: 'src/TestFlight.request.js',
-		output: {
-			file: 'js/TestFlight.request.js',
-			format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ✈ TestFlight Request')",
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
-		input: 'src/TestFlight.response.js',
-		output: {
-			file: 'js/TestFlight.response.js',
-			format: 'es',
-			banner: "/* README: https://github.com/VirgilClyne/iRingo */\nconsole.log(' iRingo: ✈ TestFlight Response')",
-		},
-		plugins: [json(), commonjs(), nodeResolve(), terser()]
-	},
-	{
 		input: 'src/News.request.js',
 		output: {
 			file: 'js/News.request.js',
