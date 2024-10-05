@@ -2155,6 +2155,160 @@ log(`⚠ FORMAT: ${FORMAT}`, "");
 														case "shows": // uts/v3/shows/
 														case "episodes": // uts/v3/episodes/
 														case "sporting-events": // uts/v3/sporting-events/
+															let Type = "restoreLowPriceRegion";
+															if (Settings[Type] !== "DISABLED") {
+																let sf_ = Configs.Storefront.get(Settings.CountryCode[Type]);
+																console.log("ss sf_:" + sf_);
+																let requestUrl = $request.url;
+																let requestHeaders = $request.headers;
+																let url1 = new URL(requestUrl);
+
+																let sf = url1.searchParams.get("sf");
+																console.log("ss sf:" + sf);
+																url1.searchParams.set("sf", "143467");
+																requestUrl = url1.toString();
+
+																try {
+																	let bodyModify = body;
+																	let result = await makeRequest(requestUrl, requestHeaders);
+																	let newBody = JSON.parse(result.data);
+
+																	if (newBody.data && newBody.data.content && newBody.data.content) {
+																		if (bodyModify.data.content.caption) {
+																			console.log("bodyModify.data.content.caption: " + bodyModify.data.content.caption);
+																			console.log("newBody.data.content.caption: " + newBody.data.content.caption);
+																			newBody.data.content.caption = bodyModify.data.content.caption;
+																		}
+																		if (bodyModify.data.content.title) {
+																			console.log("bodyModify.data.content.title: " + bodyModify.data.content.title);
+																			console.log("newBody.data.content.title: " + newBody.data.content.title);
+																			newBody.data.content.title = bodyModify.data.content.title;
+																		}
+																		if (bodyModify.data.content.description) {
+																			console.log("bodyModify.data.content.description: " + bodyModify.data.content.description);
+																			console.log("newBody.data.content.description: " + newBody.data.content.description);
+																			newBody.data.content.description = bodyModify.data.content.description;
+																		}
+																	}
+																	if (newBody.data && newBody.data.content && newBody.data.content.images) {
+																		newBody.data.content.images = bodyModify.data.content.images;
+																	}
+																	if (newBody.data && newBody.data.smartEpisode && newBody.data.smartEpisode.description) {
+																		newBody.data.smartEpisode.description = bodyModify.data.smartEpisode.description;
+																	}
+																	if (newBody.data && newBody.data.content && newBody.data.content.genres) {
+																		newBody.data.content.genres = bodyModify.data.content.genres;
+																	}
+																	let newPlayablesKeys = newBody.data && newBody.data.playables ? Object.keys(newBody.data.playables) : [];
+																	console.log("newBody.data.playables 的键: " + newPlayablesKeys.join(", "));
+
+																	let oldPlayablesKeys = bodyModify.data && bodyModify.data.playables ? Object.keys(bodyModify.data.playables) : [];
+
+																	if (newBody.data && newBody.data.playables && Object.keys(newBody.data.playables).length > 0) {
+																		newPlayablesKeys.forEach(newKey => {
+																			let newPlayable = newBody.data.playables[newKey];
+																			// 使用正则表达式匹配键，忽略最后的哈希部分
+																			let matchingOldKey = oldPlayablesKeys.find(oldKey => {
+																				return oldKey.replace(/:[^:]+$/, '') === newKey.replace(/:[^:]+$/, '');
+																			});
+
+																			if (matchingOldKey && bodyModify.data.playables[matchingOldKey]) {
+																				if (newPlayable.canonicalMetadata && newPlayable.canonicalMetadata.episodeTitle) {
+																					newBody.data.playables[newKey].canonicalMetadata.episodeTitle = bodyModify.data.playables[matchingOldKey].canonicalMetadata.episodeTitle;
+																				}
+																				if (newPlayable.title) {
+																					newBody.data.playables[newKey].title = bodyModify.data.playables[matchingOldKey].title;
+																				}
+																			}
+																		});
+																	}
+
+																	if (newBody.data && newBody.data.smartEpisode && newBody.data.smartEpisode.description) {
+																		newBody.data.smartEpisode.description = bodyModify.data.smartEpisode.description;
+																		newBody.data.smartEpisode.title = bodyModify.data.smartEpisode.title;
+																	}
+
+																	if (newBody.data && newBody.data.episodes && newBody.data.episodes.title) {
+																		console.log("newBody.data.episodes.title: " + newBody.data.episodes.title);
+																		console.log("bodyModify.data.episodes.title: " + bodyModify.data.episodes.title);
+																		newBody.data.episodes.title = bodyModify.data.episodes.title;
+																	}
+
+																	if (newBody.data && newBody.data.episodes && Array.isArray(newBody.data.episodes)) {
+																		bodyModify.data.episodes = bodyModify.data.episodes || [];
+																		let updatedEpisodes = newBody.data.episodes.map((newEpisode, index) => {
+																			let modifiedEpisode = { ...newEpisode };
+																			if (index < bodyModify.data.episodes.length) {
+																				// 保留原始的标题和描述
+																				if (bodyModify.data.episodes[index].title) {
+																					modifiedEpisode.title = bodyModify.data.episodes[index].title;
+																				}
+																				if (bodyModify.data.episodes[index].description) {
+																					modifiedEpisode.description = bodyModify.data.episodes[index].description;
+																				}
+
+																			}
+																			return modifiedEpisode;
+																		});
+																		newBody.data.episodes = updatedEpisodes;
+																	}
+
+																	if (newBody.data && newBody.data.seasonSummaries && Array.isArray(newBody.data.seasonSummaries)) {
+																		bodyModify.data.seasonSummaries = bodyModify.data.seasonSummaries || [];
+																		let updatedSeasonSummaries = newBody.data.seasonSummaries.map((newSeasonSummary, index) => {
+																			let modifiedSeasonSummary = { ...newSeasonSummary };
+																			if (index < bodyModify.data.seasonSummaries.length) {
+																				// 保留原始的标题
+																				if (bodyModify.data.seasonSummaries[index].title) {
+																					modifiedSeasonSummary.title = bodyModify.data.seasonSummaries[index].title;
+																				}
+																			}
+																			return modifiedSeasonSummary;
+																		});
+																		newBody.data.seasonSummaries = updatedSeasonSummaries;
+																	}
+
+																	// shelves title
+																	if (newBody.data && newBody.data.canvas && newBody.data.canvas.shelves && Array.isArray(newBody.data.canvas.shelves)) {
+																		newBody.data.canvas.shelves.forEach((newShelf, index) => {
+																			if (index < bodyModify.data.canvas.shelves.length) {
+																				// 保留原始的标题
+																				if (bodyModify.data.canvas.shelves[index].title) {
+																					newBody.data.canvas.shelves[index].title = bodyModify.data.canvas.shelves[index].title;
+																				}
+																				if (bodyModify.data.canvas.shelves[index].items && Array.isArray(bodyModify.data.canvas.shelves[index].items)) {
+																					bodyModify.data.canvas.shelves[index].items.forEach((newItem, itemIndex) => {
+																						if (itemIndex < newBody.data.canvas.shelves[index].items.length) {
+																							// 保留原始的标题和描述
+																							if (newItem.title) {
+																								newBody.data.canvas.shelves[index].items[itemIndex].title = newItem.title;
+																							}
+																							if (newItem.images) {
+																								newBody.data.canvas.shelves[index].items[itemIndex].images = newItem.images;
+																							}
+																							if (newItem.description) {
+																								newBody.data.canvas.shelves[index].items[itemIndex].description = newItem.description;
+																							}
+																							if (newItem.shortNote) {
+																								newBody.data.canvas.shelves[index].items[itemIndex].shortNote = newItem.shortNote;
+																							}
+																							if (newItem.characterName) {
+																								newBody.data.canvas.shelves[index].items[itemIndex].characterName = newItem.characterName;
+																							}
+																						}
+																					});
+																				}
+																			}
+																		});
+																	}
+
+																	body = newBody;
+																} catch (e) {
+																	console.log(e);
+																}
+															}
+															console.log("ccccccccccccccccccccccccccccc");
+
 															let shelves = body?.data?.canvas?.shelves;
 															let backgroundVideo = body?.data?.content?.backgroundVideo;
 															let playables = body?.data?.playables;
@@ -2281,6 +2435,19 @@ function setPlayable(playable, HLSUrl, ServerUrl) {
 					fpsNonceServerUrl.pathname = "/WebObjects/MZPlayLocal.woa/wa/checkInNonceRequest";
 					break;
 			}			asset.fpsNonceServerUrl = fpsNonceServerUrl.toString();
-		}		log(`✅ Set Url`, "");
+		} log(`✅ Set Url`, "");
 		return asset;
 	}}
+
+
+function makeRequest(url, headers) {
+	return new Promise((resolve, reject) => {
+		$httpClient.get({ url: url, headers: headers }, function (error, response, data) {
+			if (error) {
+				reject("请求失败: " + error);
+			} else {
+				resolve({ response: response, data: data });
+			}
+		});
+	});
+}
