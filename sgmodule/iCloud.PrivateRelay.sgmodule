@@ -1,10 +1,10 @@
 #!name= iRingo: ☁️ iCloud Private Relay
 #!desc=启用和自定义「iCloud专用代理」\n注:本模块包含专用代理直连策略
 #!openUrl=http://boxjs.com/#/app/iRingo.PrivateRelay
-#!author=VirgilClyne
-#!homepage=https://github.com/VirgilClyne
-#!manual=https://github.com/VirgilClyne/iRingo/wiki/🌐专用代理
-#!icon=https://help.apple.com/assets/622BDFD810622B2B9C0BD80A/622BDFDA10622B2B9C0BD82D/zh_CN/0771d70c4da0c9d96a31bcb28bb3e3f3.png
+#!author=VirgilClyne[https://github.com/VirgilClyne]
+#!homepage=https://github.com/NSRingo
+#!manual=https://github.com/NSRingo/PrivateRelay/wiki
+#!icon=https://raw.githubusercontent.com/NSRingo/PrivateRelay/main/images/icon/Private%20Relay%20-%20Icon.png
 #!system=mac
 #!category= iRingo
 #!arguments=CountryCode:US,Proxy: DIRECT
@@ -18,15 +18,15 @@ USER-AGENT,Transparent%20network%20proxy%20for%20Apple%20system%20services*,{{{P
 DOMAIN,mask-api.icloud.com,{{{Proxy}}}
 DOMAIN,mask-api.fe.apple-dns.net,{{{Proxy}}}
 # Optimize for Private Relay connections
-RULE-SET,https://raw.githubusercontent.com/VirgilClyne/iRingo/main/RuleSet/iCloud.PrivateRelay.list,{{{Proxy}}}
+RULE-SET,https://raw.githubusercontent.com/NSRingo/PrivateRelay/main/rulesets/iCloud.PrivateRelay.list,{{{Proxy}}}
 
 [Script]
 # fetchAuthTokens
-☁️ iCloud.mask.fetchAuthTokens.request = type=http-request, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchAuthTokens$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.request.js, argument=
-☁️ iCloud.mask.fetchAuthTokens.response = type=http-response, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchAuthTokens$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.response.js, argument=
+☁️ iCloud.mask.fetchAuthTokens.request = type=http-request, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchAuthTokens$, script-path=https://raw.githubusercontent.com/NSRingo/PrivateRelay/main/js/request.js, argument=
+☁️ iCloud.mask.fetchAuthTokens.response = type=http-response, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchAuthTokens$, script-path=https://raw.githubusercontent.com/NSRingo/PrivateRelay/main/js/response.js, argument=
 # fetchConfigFile
-☁️ iCloud.mask.fetchConfigFile.request = type=http-request, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchConfigFile$, requires-body=0, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.request.js, argument=
-☁️ iCloud.mask.fetchConfigFile.response = type=http-response, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchConfigFile$, requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/VirgilClyne/iRingo/main/js/PrivateRelay.response.js, argument=
+☁️ iCloud.mask.fetchConfigFile.request = type=http-request, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchConfigFile$, script-path=https://raw.githubusercontent.com/NSRingo/PrivateRelay/main/js/request.js, argument=
+☁️ iCloud.mask.fetchConfigFile.response = type=http-response, pattern=^https?:\/\/mask-api\.icloud\.com\/v[0-9_]+\/fetchConfigFile$, requires-body=1, binary-body-mode=1, script-path=https://raw.githubusercontent.com/NSRingo/PrivateRelay/main/js/response.js, argument=
 
 [MITM]
 hostname = %APPEND% mask-api.icloud.com
