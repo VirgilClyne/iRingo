@@ -1,7 +1,0 @@
-# > Apple Content caching
-# https://support.apple.com/en-us/HT210060
-IP-CIDR,17.57.21.63/32, no-resolve
-# Server registration
-DOMAIN,lcdn-registration.apple.com
-# Content caching locator service
-DOMAIN,lcdn-locator.apple.com
