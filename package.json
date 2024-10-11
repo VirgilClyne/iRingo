@@ -1,4 +1,5 @@
 {
+	"name": "iringo",
 	"type": "module",
 	"repository": {
 		"type": "git",
