@@ -1,4 +1,4 @@
-#  iRingo
+# [ iRingo](https://NSRingo.github.io/)
   * 解锁完整的Apple功能和集成服务
   * **Powered by [Chavy](https://github.com/chavyleung)‘s [BoxJs](https://chavyleung.gitbook.io/boxjs/)**
   * 有问题请至[Issue页面](https://github.com/VirgilClyne/iRingo/issues)反馈
@@ -35,18 +35,25 @@
   * 手机等竖屏设备可以👈左右👉划动下列表格查看更多模块
 
 ## 支持的 app
-| 🌊<br>Surge | 🎈<br>Loon | ☘️<br>Stash |🐿️<br>Egern | 🌀<br>Quantumult X | 🚀<br>Shadowrocket |
+| 🎈<br>Loon | 🌊<br>Surge | ☘️<br>Stash |🐿️<br>Egern | 🌀<br>Quantumult X | 🚀<br>Shadowrocket |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | 推荐 | 推荐 | 推荐 | 兼容 | 兼容 | 部分兼容 |
-| [nssurge.com](https://nssurge.com/) | [nsloon.app](https://nsloon.app/) | [stash.ws](https://stash.ws/) | [egernapp.com](https://egernapp.com/) | N/A | N/A |
+| [nsloon.app](https://nsloon.app/) | [nssurge.com](https://nssurge.com/) | [stash.ws](https://stash.ws/) | [egernapp.com](https://egernapp.com/) | N/A | N/A |
+
+## 官方网站
+[NSRingo.github.io](https://NSRingo.github.io/)
+
+<details>
+<summary>Wiki 链接</summary>
 
 # iOS 18、macOS 15、watchOS 11 及以上
-| [🌤<br>天气服务](../../wiki/🌤-天气服务) | [📍<br>定位服务](../../wiki/📍-定位服务) | [🗺️<br>地图](../../wiki/🗺-地图) | [🟥<br>Apple智能与Siri](../../wiki/🟥-Apple智能与Siri) | [📺<br>TV](../../wiki/📺-TV) | [📰<br>News](../../wiki/📰-News) | [✈<br>TestFlight](../../wiki/✈-TestFlight) | [⌚️<br>WATCH](../../wiki/⌚️-WATCH) | [🧰<br>BoxJs](../../wiki/🧰-BoxJs) |
+| [🌤<br>WeatherKit](../../wiki/🌤-WeatherKit) | [📍<br>定位](../../wiki/📍-定位) | [🗺️<br>地图](../../wiki/🗺-地图) | [🟥<br>Apple智能与Siri](../../wiki/🟥-Apple智能与Siri) | [📺<br>TV](../../wiki/📺-TV) | [📰<br>News](../../wiki/📰-News) | [✈<br>TestFlight](../../wiki/✈-TestFlight) | [⌚️<br>WATCH](../../wiki/⌚️-WATCH) | [🧰<br>BoxJs](../../wiki/🧰-BoxJs) |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 
 # iOS 17、macOS 14、watchOS 10 及以下
-| [~~🌤<br>天气~~](../../wiki/🌤-天气) | [📍<br>定位服务](../../wiki/📍-定位服务) | [🗺️<br>地图](../../wiki/🗺-地图) | [~~⭕<br>Siri与搜索~~](../../wiki/⭕-Siri与搜索) | [📺<br>TV](../../wiki/📺-TV) | [📰<br>News](../../wiki/📰-News) | [~~🌐<br>专用代理~~](../../wiki/🌐-专用代理) | [✈<br>TestFlight](../../wiki/✈-TestFlight) | [⌚️<br>WATCH](../../wiki/⌚️-WATCH) | [🧰<br>BoxJs](../../wiki/🧰-BoxJs) |
+| [~~🌤<br>天气~~](../../wiki/🌤-天气) | [📍<br>定位](../../wiki/📍-定位) | [🗺️<br>地图](../../wiki/🗺-地图) | [~~⭕<br>Siri与搜索~~](../../wiki/⭕-Siri与搜索) | [📺<br>TV](../../wiki/📺-TV) | [📰<br>News](../../wiki/📰-News) | [~~🌐<br>专用代理~~](../../wiki/🌐-专用代理) | [✈<br>TestFlight](../../wiki/✈-TestFlight) | [⌚️<br>WATCH](../../wiki/⌚️-WATCH) | [🧰<br>BoxJs](../../wiki/🧰-BoxJs) |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+</details>
 
 ---
 # 鸣谢
