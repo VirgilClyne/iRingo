@@ -19,11 +19,14 @@
   * 感谢视频作者的分享和贡献
   * 点击图片即可跳转视频教程
   * 如有意见或建议可至`说明&讨论`反馈
+<details>
+<summary>已过时，其中的内容已不符合最新版本，仅供参考<br>最新版本请参阅官方网站: https://NSRingo.github.io</summary>
 
 | [Hell Cell](https://www.youtube.com/c/HellCell) | [Time](https://www.youtube.com/channel/UChfq00yeRrW4pB3idAypPVw) |
 | :---: | :---: |
 | [说明&讨论](https://t.me/HellCellZC123/1802) | [说明&讨论](https://t.me/GetSomeFriesChannel/119) |
 | [![iRingo教程01：给你的苹果前所未有的Siri与搜索体验](https://res.cloudinary.com/marcomontalbano/image/upload/v1656898276/video_to_markdown/images/youtube--zNWVT08Hju0-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=zNWVT08Hju0 "iRingo教程01：给你的苹果前所未有的Siri与搜索体验") | [![iRingo Siri建议,天气激活](https://res.cloudinary.com/marcomontalbano/image/upload/v1656898353/video_to_markdown/images/youtube--G-RH7icI9Wc-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=G-RH7icI9Wc "iRingo Siri建议,天气激活") |
+</details>
 
 ---
 # 快速导航
